@@ -1,0 +1,10 @@
+<nav search_view="search">
+  <view name="cs_overview" default="true" />
+  <view name="cs_detailed" />
+  <collection label="Reports">
+    <view name="cs_windows_ad_reports" />
+    <view name="cs_o365_reports" />
+  </collection>
+  <a href="/manager/crossrealms_security_splunk_app/saved/searches?app=crossrealms_security_splunk_app&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">All Reports and Alerts</a>
+  <view name="search" />
+</nav>

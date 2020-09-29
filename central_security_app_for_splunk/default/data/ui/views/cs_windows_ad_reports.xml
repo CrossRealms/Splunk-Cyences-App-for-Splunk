@@ -1,0 +1,57 @@
+<form>
+  <label>Windows/AD Reports</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>AD - User Modification (added/removed/disabled/enabled)</title>
+      <table>
+        <search>
+          <query>`wineventlog_security` EventCode IN (4722, 4725, 4720, 4726) user!=*$$   | table _time, host, user, name, EventCode | rename subject as Action</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - User Previlege Escalation (Member added/removed to/from a group)</title>
+      <table>
+        <search>
+          <query>`wineventlog_security` EventCode IN (4728, 4729) | rename name as change_action | table host, change_action, Group_Name, member_id</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Password change outside working hour</title>
+      <table>
+        <search>
+          <query>`wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794)
+| eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour&lt;6 OR date_hour&gt;19 | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
