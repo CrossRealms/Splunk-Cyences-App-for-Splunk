@@ -5,6 +5,6 @@
     <view name="cs_windows_ad_reports" />
     <view name="cs_o365_reports" />
   </collection>
-  <a href="/manager/crossrealms_security_splunk_app/saved/searches?app=crossrealms_security_splunk_app&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">All Reports and Alerts</a>
+  <a href="/manager/central_security_app_for_splunk/saved/searches?app=central_security_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">All Reports and Alerts</a>
   <view name="search" />
 </nav>

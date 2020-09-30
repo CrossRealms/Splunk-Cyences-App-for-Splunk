@@ -1,15 +1,15 @@
 <form theme="light">
   <label>Detailed</label>
   <search id="basesearch">
-    <query>index=_internal sourcetype="scheduler" status="success" app="crossrealms_security_splunk_app"
+    <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"
 | where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
-| append [| search index=_internal sourcetype="scheduler" status="success" app="crossrealms_security_splunk_app"
+| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name]
 | stats avg(avg_runtime) as avg_runtime, first(*) as * by savedsearch_name
 | eval avg_runtime=round(avg_runtime, 2), last_alert_fired_time=strftime(last_alert_fired_time, "%F %T"), last_execution=strftime(last_execution, "%F %T")
-| append [| rest /servicesNS/-/crossrealms_security_splunk_app/saved/searches count=0 splunk_server=local | search "eai:acl.app"="crossrealms_security_splunk_app" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
+| append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
 | stats first(*) as * by savedsearch_name
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
@@ -112,15 +112,15 @@
       </input>
       <table>
         <search>
-          <query>index=_internal sourcetype="scheduler" status="success" app="crossrealms_security_splunk_app" savedsearch_name IN ("Windows - Hosts Missing Update")
+          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" savedsearch_name IN ("Windows - Hosts Missing Update")
 | where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
-| append [| search index=_internal sourcetype="scheduler" status="success" app="crossrealms_security_splunk_app"  savedsearch_name IN ("Windows - Hosts Missing Update")
+| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"  savedsearch_name IN ("Windows - Hosts Missing Update")
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name]
 | stats avg(avg_runtime) as avg_runtime, first(*) as * by savedsearch_name
 | eval avg_runtime=round(avg_runtime, 2), last_alert_fired_time=strftime(last_alert_fired_time, "%F %T"), last_execution=strftime(last_execution, "%F %T")
-| append [| rest /servicesNS/-/crossrealms_security_splunk_app/saved/searches count=0 splunk_server=local | search "eai:acl.app"="crossrealms_security_splunk_app" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
+| append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
 | stats first(*) as * by savedsearch_name
 | search savedsearch_name IN ("Windows - Hosts Missing Update")
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
