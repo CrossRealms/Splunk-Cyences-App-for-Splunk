@@ -36,7 +36,7 @@
         <search base="basesearch">
           <query>| search savedsearch_name="Ransomware*"</query>
         </search>
-        <option name="count">20</option>
+        <option name="count">10</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="disabled">
@@ -52,12 +52,35 @@
       </table>
     </panel>
     <panel>
+      <title>Scanning</title>
+      <table>
+        <search base="basesearch">
+          <query>| search savedsearch_name="Scanning*"</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Windows &amp; AD</title>
       <table>
         <search base="basesearch">
           <query>| search (savedsearch_name="Windows*" OR savedsearch_name="AD*")</query>
         </search>
-        <option name="count">20</option>
+        <option name="count">10</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="disabled">
@@ -78,7 +101,7 @@
         <search base="basesearch">
           <query>| search savedsearch_name="O365*"</query>
         </search>
-        <option name="count">20</option>
+        <option name="count">10</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="disabled">
@@ -125,7 +148,7 @@
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
-        <option name="count">20</option>
+        <option name="count">10</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="disabled">
