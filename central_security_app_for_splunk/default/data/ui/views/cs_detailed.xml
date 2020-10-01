@@ -31,10 +31,56 @@
   </fieldset>
   <row>
     <panel>
+      <title>Network Compromise</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Network Compromise")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Endpoint Compromise</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Endpoint Compromise")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Ransomware</title>
       <table>
         <search base="basesearch">
-          <query>| search savedsearch_name="Ransomware*"</query>
+          <query>| `cs_filter_savedsearches("Ransomware")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
@@ -57,7 +103,7 @@
       <title>Scanning</title>
       <table>
         <search base="basesearch">
-          <query>| search savedsearch_name="Scanning*"</query>
+          <query>| `cs_filter_savedsearches("Scanning")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
@@ -80,7 +126,7 @@
       <title>Windows &amp; AD</title>
       <table>
         <search base="basesearch">
-          <query>| search (savedsearch_name="Windows*" OR savedsearch_name="AD*")</query>
+          <query>| `cs_filter_savedsearches("Windows|AD")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
@@ -103,7 +149,7 @@
       <title>O365</title>
       <table>
         <search base="basesearch">
-          <query>| search savedsearch_name="O365*"</query>
+          <query>| `cs_filter_savedsearches("O365")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
