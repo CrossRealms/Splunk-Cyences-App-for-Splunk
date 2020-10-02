@@ -50,7 +50,7 @@ This App requires certain dependencies to work.
 * [Splunk Add-on for Windows](https://splunkbase.splunk.com/app/742/) - Requires for field extraction.
 * [Sysmon Add-on for Splunk](https://splunkbase.splunk.com/app/1914/) - Requires for field extraction.
 * [Splunk Add-on for O365](https://splunkbase.splunk.com/app/4055/) - Requires for field extraction.
-* All the other Add-ons for data available in your environment for field extraction.
+* All the other Add-ons for data collection and field extraction.
 
 
 CONFIGURATION
