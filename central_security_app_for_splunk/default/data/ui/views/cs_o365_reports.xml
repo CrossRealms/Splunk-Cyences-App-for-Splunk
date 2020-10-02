@@ -20,10 +20,26 @@
   </search>
   <row>
     <panel>
-      <title>O365/Azure - Logins outside $tkn_country$</title>
+      <title>O365/Azure - Success logins outside $tkn_country$</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_o365_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_o365_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>O365/Azure - Failed logins outside $tkn_country$</title>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_o365_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
