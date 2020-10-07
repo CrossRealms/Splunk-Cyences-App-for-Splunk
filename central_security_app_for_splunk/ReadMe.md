@@ -42,7 +42,7 @@ Follow the below-listed steps to install an App from the bundle:
 * Select `Upload` and follow the prompts.
 
 
-DEPENDENCIES
+DEPENDENCIES   
 ------------
 This App requires certain dependencies to work.
 

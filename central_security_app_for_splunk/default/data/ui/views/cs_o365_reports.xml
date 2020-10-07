@@ -55,7 +55,7 @@
       <title>O365/Azure - Login by Unknown UserId</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown | iplocation ClientIP | eval time=strftime(_time, "%F %T") | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown | iplocation ClientIP | eval time=strftime(_time, "%F %T") | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
