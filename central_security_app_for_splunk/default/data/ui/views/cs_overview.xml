@@ -1,10 +1,10 @@
 <form theme="light">
   <label>Overview</label>
   <search id="basesearch">
-    <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"
+    <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local
 | where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
-| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"
+| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name]
 | stats avg(avg_runtime) as avg_runtime, first(*) as * by savedsearch_name
@@ -173,10 +173,10 @@
       </input>
       <table>
         <search>
-          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" savedsearch_name IN ("Windows - Hosts Missing Update")
+          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name IN ("Windows - Hosts Missing Update")
 | where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
-| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk"  savedsearch_name IN ("Windows - Hosts Missing Update")
+| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name IN ("Windows - Hosts Missing Update")
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name]
 | stats avg(avg_runtime) as avg_runtime, first(*) as * by savedsearch_name
