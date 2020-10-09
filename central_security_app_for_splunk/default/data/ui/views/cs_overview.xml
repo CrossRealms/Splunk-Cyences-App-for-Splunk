@@ -14,7 +14,7 @@
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
 | search disabled=0 is_scheduled=1 
-| search NOT savedsearch_name IN ("Windows - Hosts Missing Update", "Windows - Hosts Lookup Gen")
+| search NOT savedsearch_name IN ("Windows - Hosts Missing Update", "Windows - Hosts Lookup Gen", "Ransomware - Calculate UpperBound for Spike in File Writes")
 | table savedsearch_name, alert_count</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
