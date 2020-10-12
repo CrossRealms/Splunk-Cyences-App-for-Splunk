@@ -1,0 +1,84 @@
+<form>
+  <label>Detail</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="tkn_savedsearch">
+      <label>Search</label>
+      <fieldForLabel>title</fieldForLabel>
+      <fieldForValue>title</fieldForValue>
+      <search>
+        <query>| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | fields title</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Full Details</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
+| where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
+| stats count as total_execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
+| append [| search index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
+| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
+| stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name | eval total_execution_count=alert_count, last_execution=last_alert_fired_time]
+| stats avg(avg_runtime) as avg_runtime, sum(total_execution_count) as total_execution_count, max(last_execution) as last_execution, first(*) as * by savedsearch_name
+| eval avg_runtime=round(avg_runtime, 2), last_alert_fired_time=strftime(last_alert_fired_time, "%F %T"), last_execution=strftime(last_execution, "%F %T")
+| append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" title=$tkn_savedsearch|s$ | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
+| stats first(*) as * by savedsearch_name
+| eval alert_count=if(isnull(alert_count), 0, alert_count)
+| table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, total_execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
+| table disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, description, total_execution_count, last_execution, avg_runtime, cron_schedule</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>All the Fired Alerts</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" savedsearch_name=$tkn_savedsearch|s$
+| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
+| sort - scheduled_time
+| eval scheduled_time=strftime(scheduled_time, "%F %T")
+| table sid, scheduled_time, result_count, run_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">row</option>
+        <fields>["scheduled_time","result_count","run_time"]</fields>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20loadjob%20$row.sid$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel>
+      <html>
+        <div>
+          <p>
+            <br/>
+          </p>
+          <p>
+            <br/>
+          </p>
+          <p>Click on any row to see all the results that were generated.</p>
+          <p>Anything before last 24 hours, result will not be searchable.</p>
+          <p>To increase the expiration time of alert's result set, increase the expiration time for the alert.</p>
+        </div>
+      </html>
+    </panel>
+  </row>
+</form>
