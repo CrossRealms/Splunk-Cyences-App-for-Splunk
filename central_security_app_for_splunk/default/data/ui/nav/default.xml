@@ -6,8 +6,8 @@
     <view name="cs_o365_reports" />
   </collection>
   <collection label="All Alerts/Reports">
-    <a name="cs_detailed" />
-    <a href="/manager/central_security_app_for_splunk/saved/searches?app=central_security_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">All Reports and Alerts</a>
+    <view name="cs_detailed" />
+    <a href="/manager/central_security_app_for_splunk/saved/searches?app=central_security_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
   </collection>
   <view name="search" />
 </nav>
