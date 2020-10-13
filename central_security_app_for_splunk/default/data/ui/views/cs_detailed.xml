@@ -171,6 +171,31 @@
   </row>
   <row>
     <panel>
+      <title>PaloAlto Firewall</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("PaloAlto Firewall")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="wrap">true</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Monthly Alerts</title>
       <input type="time" token="timeRange_long">
         <label>Time Range</label>
