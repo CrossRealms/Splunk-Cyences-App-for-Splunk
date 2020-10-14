@@ -27,4 +27,18 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>PaloAlto Firewall Login Failures</title>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype="pan:system" signature="auth-fail" object IN ("Local", "Local_Users") | rex "failed authentication for user \'(?&lt;user&gt;.*)\'\." | rex " From: (?&lt;src&gt;\d+\.\d+\.\d+\.\d+)" | table _time, dvc, dvc_name, user, src | `cs_palo_firewall_login_failure_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
