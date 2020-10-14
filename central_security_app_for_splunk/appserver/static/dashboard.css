@@ -1,0 +1,9 @@
+
+.dashboard-row {
+    margin-top: 15px;
+}
+
+.dashboard-row .dashboard-panel h2.panel-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}

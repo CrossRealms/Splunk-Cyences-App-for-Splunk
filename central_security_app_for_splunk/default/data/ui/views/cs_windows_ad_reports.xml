@@ -1,4 +1,4 @@
-<form>
+<form theme="light">
   <label>Windows/AD Reports</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
@@ -11,23 +11,26 @@
   </fieldset>
   <row>
     <panel>
-      <title>AD - User Modification (added/removed/disabled/enabled)</title>
+      <title>AD - User Modification</title>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode IN (4722, 4725, 4720, 4726) user!=*$$   | table _time, host, user, name, EventCode | rename subject as Action | `cs_ad_user_modification_filter`</query>
+          <query>`cs_wineventlog_security` EventCode IN (4722, 4725, 4720, 4726) user!=*$$ | table _time, host, user, name, EventCode | rename subject as Action | `cs_ad_user_modification_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: User added/removed/disabled/enabled events.</p>
+        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+      </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>AD - User Privilege Escalation (Member added/removed to/from a group)</title>
+      <title>AD - User Previlege Escalation</title>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode IN (4728, 4729) | rename name as change_action | table host, change_action, Group_Name, member_id | `cs_ad_user_privilege_escalation_filter`</query>
@@ -36,8 +39,11 @@
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: Member added/removed to/from a group events.</p>
+        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+      </html>
     </panel>
   </row>
   <row>
@@ -45,8 +51,9 @@
       <title>AD - Password change outside working hour</title>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794)
-| eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour&lt;6 OR date_hour&gt;19 | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription | `cs_ad_password_change_outside_working_hour_filter`</query>
+          <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
+          | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
+          | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription | `cs_ad_password_change_outside_working_hour_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -54,6 +61,10 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: Outside working hour is Saturday, Sunday and any day before 6 AM and after 7 PM. You can change the outside working hour definition with cs_ad_password_change_outside_working_hour_definition macro.</p>
+        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+      </html>
     </panel>
   </row>
 </form>

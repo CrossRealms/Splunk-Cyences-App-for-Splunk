@@ -1,4 +1,4 @@
-<form>
+<form theme="light">
   <label>Detail</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
@@ -64,20 +64,26 @@
           <link target="_blank">search?q=%7C%20loadjob%20$row.sid$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </table>
+      <html>
+          <p>Description: Click on any row to see all the results that were generated. Anything before last 24 hours, result will not be searchable.</p>
+      </html>
     </panel>
     <panel>
+      <title>Run Search Query</title>
+      <table>
+        <search>
+          <query>| makeresults | eval "Saved Search"=$tkn_savedsearch|s$ | eval Run="Run" | table "Saved Search", Run</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">row</option>
+        <drilldown>
+          <link target="_blank">/app/central_security_app_for_splunk/search?s=/servicesNS/nobody/central_security_app_for_splunk/saved/searches/$tkn_savedsearch$</link>
+        </drilldown>
+        <option name="refresh.display">progressbar</option>
+      </table>
       <html>
-        <div>
-          <p>
-            <br/>
-          </p>
-          <p>
-            <br/>
-          </p>
-          <p>Click on any row to see all the results that were generated.</p>
-          <p>Anything before last 24 hours, result will not be searchable.</p>
-          <p>To increase the expiration time of alert's result set, increase the expiration time for the alert.</p>
-        </div>
+          <p>Description: Click on the result row to run the search now. On newly opened search windows you can see the search query and results, you can also change the time-range.</p>
       </html>
     </panel>
   </row>

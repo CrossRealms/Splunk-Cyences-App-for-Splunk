@@ -1,4 +1,4 @@
-<form>
+<form theme="light">
   <label>O365 Reports</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
@@ -32,6 +32,10 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: Successful logins outside country. You can change your contry with cs_o365_country macro.</p>
+        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+      </html>
     </panel>
   </row>
   <row>
@@ -48,6 +52,10 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: Failed logins outside country. You can change your contry with cs_o365_country macro.</p>
+        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+      </html>
     </panel>
   </row>
   <row>
@@ -63,6 +71,10 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>Description: Successful logins with Unknown user ID.</p>
+        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+      </html>
     </panel>
   </row>
 </form>
