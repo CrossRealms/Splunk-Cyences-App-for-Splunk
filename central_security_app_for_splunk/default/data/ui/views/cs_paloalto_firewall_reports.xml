@@ -47,4 +47,46 @@
       </html>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Inbound Traffic from Blocked IPs</title>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype="pan:traffic" action="allowed" `cs_filter_private_ips` packets_in&gt;0 | lookup ip_blocked_list ip as src_ip OUTPUT blocked | search blocked=1 | stats count, values(dvc) as dvc, values(dvc_name) as dvc_name, dc(src_port) as dc_src_port, dc(dest_ip) as dc_dest_ip, values(dest_port) as dest_port by src_ip | sort -count | `cs_palo_blocked_ip_inbound_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20src_ip=$row.src_ip$%20%7C%20stats%20count,%20values(dvc)%20as%20dvc,%20values(dvc_name)%20as%20dvc_name,%20dc(src_port)%20as%20dc_src_port,%20values(src_location)%20as%20src_location,%20sum(packets_in)%20as%20packets_in,%20sum(packets_out)%20as%20packets_out,%20dc(dest_ip)%20as%20dc_dest_ip,%20values(dest_port)%20as%20dest_port,%20dc(dest_location)%20as%20dc_dest_location,%20values(app)%20as%20app,%20values(http_category)%20as%20http_category,%20values(rule)%20as%20firewall_rule%20by%20src_ip%20%7C%20sort%20-count%20%7C%20%60cs_palo_blocked_ip_inbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </table>
+      <html>
+        <p>Description: Traffic coming from blocked IPs. The ip_blocked_list lookup is being used to identify the blocked IPs.</p>
+        <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+      </html>
+    </panel>
+    <panel>
+      <title>Outbound Traffic to Blocked IPs</title>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype="pan:traffic" action="allowed" `cs_filter_private_ips` packets_out&gt;0 | lookup ip_blocked_list ip as src_ip OUTPUT blocked | search blocked=1 | stats count, values(dvc) as dvc, values(dvc_name) as dvc_name, dc(dest_port) as dc_dest_port, dc(src_ip) as dc_src_ip, dc(src_port) as dc_src_port by dest_ip | sort -count | `cs_palo_blocked_ip_outbound_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20dest_ip=$row.dest_ip$%20%7C%20stats%20count,%20values(dvc)%20as%20dvc,%20values(dvc_name)%20as%20dvc_name,%20dc(dest_port)%20as%20dc_dest_port,%20values(dest_location)%20as%20dest_location,%20sum(packets_out)%20as%20packets_out,%20sum(packets_in)%20as%20packets_in,%20dc(src_ip)%20as%20dc_src_ip,%20dc(src_port)%20as%20dc_src_port,%20dc(src_location)%20as%20dc_src_location,%20values(app)%20as%20app,%20values(http_category)%20as%20http_category,%20values(rule)%20as%20firewall_rule%20by%20dest_ip%20%7C%20sort%20-count%20%7C%20%60cs_palo_blocked_ip_outbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </table>
+      <html>
+        <p>Description: Traffic going to blocked IPs. The ip_blocked_list lookup is being used to identify the blocked IPs.</p>
+        <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+      </html>
+    </panel>
+  </row>
 </form>
