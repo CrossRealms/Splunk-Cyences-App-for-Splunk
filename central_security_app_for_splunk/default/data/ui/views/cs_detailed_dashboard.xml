@@ -1,5 +1,5 @@
 <form theme="light">
-  <label>Detail</label>
+  <label>Details</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -21,7 +21,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>Full Details</title>
+      <title>Details</title>
       <table>
         <search>
           <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
@@ -47,7 +47,7 @@
   </row>
   <row>
     <panel>
-      <title>All the Fired Alerts</title>
+      <title>Triggered Alerts</title>
       <table>
         <search>
           <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" savedsearch_name=$tkn_savedsearch|s$

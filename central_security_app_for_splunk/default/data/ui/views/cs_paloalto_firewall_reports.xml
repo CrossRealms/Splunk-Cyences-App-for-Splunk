@@ -14,13 +14,14 @@
       <title>DDoS Attack Prevented by PaloAlto Firewall</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype="pan:threat" log_subtype=packet | table _time, signature, dvc, dvc_name, src, src_location, dest, dest_location, action | `cs_palo_ddos_prevented_filter`</query>
+          <query>`cs_palo` sourcetype="pan:threat" log_subtype=packet | stats count, values(signature) as signature, values(dvc) as dvc, values(dvc_name) as dvc_name, values(src_location) as src_location, dc(dest) as dc_dest, values(action) as action by src | sort - count | `cs_palo_ddos_prevented_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
       </table>
       <html>
@@ -34,11 +35,12 @@
       <title>PaloAlto Firewall Login Failures</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype="pan:system" signature="auth-fail" object IN ("Local", "Local_Users") | rex "failed authentication for user \'(?&lt;user&gt;.*)\'\." | rex " From: (?&lt;src&gt;\d+\.\d+\.\d+\.\d+)" | table _time, dvc, dvc_name, user, src | `cs_palo_firewall_login_failure_filter`</query>
+          <query>`cs_palo` sourcetype="pan:system" signature="auth-fail" object IN ("Local", "Local_Users") | rex "failed authentication for user \'(?&lt;user&gt;.*)\'\." | rex " From: (?&lt;src&gt;\d+\.\d+\.\d+\.\d+)" | stats count values(dvc) as dvc, values(dvc_name) as dvc_name, values(src) as src by user | sort - count | `cs_palo_firewall_login_failure_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
       </table>
       <html>
