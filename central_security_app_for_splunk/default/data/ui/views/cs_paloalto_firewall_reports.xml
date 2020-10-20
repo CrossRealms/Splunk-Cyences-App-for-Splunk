@@ -14,7 +14,7 @@
       <title>DDoS Attack Prevented by PaloAlto Firewall</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype="pan:threat" log_subtype=packet | stats count, values(signature) as signature, values(dvc) as dvc, values(dvc_name) as dvc_name, values(src_location) as src_location, dc(dest) as dc_dest, values(action) as action by src | sort - count | `cs_palo_ddos_prevented_filter`</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -25,8 +25,8 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Description: PaloAlto Firewall prevented DDoS attack. It searches for log_subtype=packet.</p>
-        <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+        <p>Description: PaloAlto Firewall prevented DDoS attack events. It searches for log_subtype=packet. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented", enable the report to use this panel.)</p>
+        <p>Data Collection - Palo Alto Networks firewalls threat data. (Palo Alto Networks Add-on for Splunk)</p>
       </html>
     </panel>
   </row>
@@ -54,7 +54,7 @@
       <title>Inbound Traffic from Blocked IPs</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype="pan:traffic" action="allowed" `cs_filter_private_ips` packets_in&gt;0 | lookup ip_blocked_list ip as src_ip OUTPUT blocked | search blocked=1 | stats count, values(dvc) as dvc, values(dvc_name) as dvc_name, dc(src_port) as dc_src_port, dc(dest_ip) as dc_dest_ip, values(dest_port) as dest_port by src_ip | sort -count | `cs_palo_blocked_ip_inbound_filter`</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -66,7 +66,7 @@
         </drilldown>
       </table>
       <html>
-        <p>Description: Traffic coming from blocked IPs. The ip_blocked_list lookup is being used to identify the blocked IPs.</p>
+        <p>Description: Traffic coming from blocked IPs. The ip_blocked_list lookup (`cs_palo_search_blocked_ip_lookup_name`) is being used to identify the blocked IPs. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs", enable the report to use this panel.)</p>
         <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
       </html>
     </panel>
@@ -74,7 +74,7 @@
       <title>Outbound Traffic to Blocked IPs</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype="pan:traffic" action="allowed" `cs_filter_private_ips` packets_out&gt;0 | lookup ip_blocked_list ip as src_ip OUTPUT blocked | search blocked=1 | stats count, values(dvc) as dvc, values(dvc_name) as dvc_name, dc(dest_port) as dc_dest_port, dc(src_ip) as dc_src_ip, dc(src_port) as dc_src_port by dest_ip | sort -count | `cs_palo_blocked_ip_outbound_filter`</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -86,7 +86,7 @@
         </drilldown>
       </table>
       <html>
-        <p>Description: Traffic going to blocked IPs. The ip_blocked_list lookup is being used to identify the blocked IPs.</p>
+        <p>Description: Traffic going to blocked IPs. The ip_blocked_list lookup (`cs_palo_search_blocked_ip_lookup_name`) is being used to identify the blocked IPs. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs", enable the report to use this panel.)</p>
         <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
       </html>
     </panel>
