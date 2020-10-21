@@ -8,7 +8,7 @@
 | stats first(*) as * by savedsearch_name
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | search disabled=0 is_scheduled=1 
-| search NOT savedsearch_name IN ("Windows - Hosts Missing Update", "Windows - Hosts Lookup Gen", "Ransomware - Calculate UpperBound for Spike in File Writes")
+| `cs_daily_alerts`
 | table savedsearch_name, alert_count </query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
@@ -219,7 +219,7 @@
 | stats count as alert_count by savedsearch_name 
 | append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | rename title as savedsearch_name | fields savedsearch_name, disabled, is_scheduled]
 | stats first(*) as * by savedsearch_name
-| search savedsearch_name IN ("Windows - Hosts Missing Update")
+| search savedsearch_name IN `cs_monthly_alerts`
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | search disabled=0 is_scheduled=1
 | table savedsearch_name, alert_count

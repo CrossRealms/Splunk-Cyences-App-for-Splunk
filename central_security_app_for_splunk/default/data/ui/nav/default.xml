@@ -5,9 +5,10 @@
     <view name="cs_windows_ad_reports" />
     <view name="cs_o365_reports" />
     <view name="cs_paloalto_firewall_reports" />
+    <view name="cs_gold_list" />
   </collection>
   <collection label="All Alerts/Reports">
-    <view name="cs_detailed" />
+    <view name="cs_all_alerts" />
     <a href="/manager/central_security_app_for_splunk/saved/searches?app=central_security_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
   </collection>
   <view name="search" />

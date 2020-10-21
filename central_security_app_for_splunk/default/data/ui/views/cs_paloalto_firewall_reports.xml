@@ -14,7 +14,9 @@
       <title>DDoS Attack Prevented by PaloAlto Firewall</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented"</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented"
+| eval last_seen=strftime(last_seen, "%F %T")
+| fields - dc_src_port</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -54,7 +56,9 @@
       <title>Inbound Traffic from Blocked IPs</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"
+| eval last_seen=strftime(last_seen, "%F %T")
+| fields - dc_dvc_name, dc_src_port, packets_in, packets_out, dc_dest_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -62,7 +66,7 @@
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20src_ip=$row.src_ip$%20%7C%20stats%20count,%20values(dvc)%20as%20dvc,%20values(dvc_name)%20as%20dvc_name,%20dc(src_port)%20as%20dc_src_port,%20values(src_location)%20as%20src_location,%20sum(packets_in)%20as%20packets_in,%20sum(packets_out)%20as%20packets_out,%20dc(dest_ip)%20as%20dc_dest_ip,%20values(dest_port)%20as%20dest_port,%20dc(dest_location)%20as%20dc_dest_location,%20values(app)%20as%20app,%20values(http_category)%20as%20http_category,%20values(rule)%20as%20firewall_rule%20by%20src_ip%20%7C%20sort%20-count%20%7C%20%60cs_palo_blocked_ip_inbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20src_ip=$row.src_ip$%20%7C%20stats%20count%2C%20latest(_time)%20as%20last_seen%2C%20dc(src_port)%20as%20dc_src_port%2C%20values(src_location)%20as%20src_location%2C%20sum(packets_in)%20as%20packets_in%2C%20sum(packets_out)%20as%20packets_out%2C%20dc(dest_ip)%20as%20dc_dest_ip%2C%20values(dest_port)%20as%20dest_port%2C%20dc(dest_location)%20as%20dc_dest_location%2C%20values(app)%20as%20app%2C%20values(http_category)%20as%20http_category%2C%20values(rule)%20as%20firewall_rule%20by%20src_ip%2C%20dvc%2C%20dvc_name%20%7C%20sort%20-count%20%7C%20eval%20last_seen%3Dstrftime(last_seen%2C%20%22%25F%20%25T%22)%20%7C%20%60cs_palo_blocked_ip_inbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </table>
       <html>
@@ -74,7 +78,9 @@
       <title>Outbound Traffic to Blocked IPs</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"</query>
+          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"
+| eval last_seen=strftime(last_seen, "%F %T")
+| fields - dc_dvc_name, dc_dest_port, packets_in, packets_out, dc_src_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -82,7 +88,7 @@
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20dest_ip=$row.dest_ip$%20%7C%20stats%20count,%20values(dvc)%20as%20dvc,%20values(dvc_name)%20as%20dvc_name,%20dc(dest_port)%20as%20dc_dest_port,%20values(dest_location)%20as%20dest_location,%20sum(packets_out)%20as%20packets_out,%20sum(packets_in)%20as%20packets_in,%20dc(src_ip)%20as%20dc_src_ip,%20dc(src_port)%20as%20dc_src_port,%20dc(src_location)%20as%20dc_src_location,%20values(app)%20as%20app,%20values(http_category)%20as%20http_category,%20values(rule)%20as%20firewall_rule%20by%20dest_ip%20%7C%20sort%20-count%20%7C%20%60cs_palo_blocked_ip_outbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%60cs_palo%60%20sourcetype=%22pan:traffic%22%20action=%22allowed%22%20dest_ip=$row.dest_ip$%20%7C%20stats%20count%2C%20latest(_time)%20as%20last_seen%2C%20dc(dest_port)%20as%20dc_dest_port%2C%20values(dest_location)%20as%20dest_location%2C%20sum(packets_in)%20as%20packets_in%2C%20sum(packets_out)%20as%20packets_out%2C%20dc(src_ip)%20as%20dc_src_ip%2C%20dc(src_port)%20as%20dc_src_port%2C%20dc(src_location)%20as%20dc_src_location%2C%20values(app)%20as%20app%2C%20values(http_category)%20as%20http_category%2C%20values(rule)%20as%20firewall_rule%20by%20dest_ip%2C%20dvc%2C%20dvc_name%20%7C%20sort%20-count%20%7C%20eval%20last_seen%3Dstrftime(last_seen%2C%20%22%25F%20%25T%22)%20%7C%20%60cs_palo_blocked_ip_outbound_filter%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </table>
       <html>
