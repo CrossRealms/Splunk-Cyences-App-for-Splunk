@@ -5,7 +5,7 @@
     <view name="cs_windows_ad_reports" />
     <view name="cs_o365_reports" />
     <view name="cs_paloalto_firewall_reports" />
-    <view name="cs_gold_list" />
+    <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="All Alerts/Reports">
     <view name="cs_all_alerts" />
