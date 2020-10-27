@@ -1,4 +1,4 @@
-# Central Security App for Splunk
+# Cyences App for Splunk
 
 ### Download from Splunkbase
 The Splunkbase link is not available yet.
@@ -6,7 +6,7 @@ The Splunkbase link is not available yet.
 
 OVERVIEW
 --------
-The Central Security App for Splunk is an Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contains useful security alerts/reports and dashboards.
+The Cyences App for Splunk is an Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contains useful security alerts/reports and dashboards.
 
 
 * Author - CrossRealms International Inc.
@@ -24,9 +24,9 @@ TOPOLOGY AND SETTING UP SPLUNK ENVIRONMENT
 ------------------------------------------
 This app can be set up in two ways: 
   1. Standalone Mode: 
-     * Install the `Central Security App for Splunk`.
+     * Install the `Cyences App for Splunk`.
   2. Distributed Mode: 
-     * Install the `Central Security App for Splunk` on the search head.
+     * Install the `Cyences App for Splunk` on the search head.
      * App do not require on the Indexer or on the forwarder.
 
 
@@ -61,7 +61,7 @@ Find and update all the macro definition:
 
 #### View/Update from UI
 * Splunk UI > Settings > Advanced Search > Search macros
-* Select `Central Security App for Splunk` from the `App` list.
+* Select `Cyences App for Splunk` from the `App` list.
 * Select `Any` in `Owner` list.
 * Select `Created in App` option.
 
@@ -70,8 +70,8 @@ OR
 #### View/Update from macros.conf (Backend)
 
 * SSH to the Search Head backend.
-* Navigate to `$SPLUNK_HOME/etc/apps/central_security_app_for_splunk/default/macros.conf`.
-* For updating the macro, copy paste the macro stanza in the `$SPLUNK_HOME/etc/apps/central_security_app_for_splunk/local/macros.conf`. (Create the file in the local directory if not present already.)
+* Navigate to `$SPLUNK_HOME/etc/apps/cyences_app_for_splunk/default/macros.conf`.
+* For updating the macro, copy paste the macro stanza in the `$SPLUNK_HOME/etc/apps/cyences_app_for_splunk/local/macros.conf`. (Create the file in the local directory if not present already.)
 
 
 
@@ -88,7 +88,7 @@ UNINSTALL APP
 To uninstall app, user can follow below steps:
 * SSH to the Splunk instance
 * Go to folder apps($SPLUNK_HOME/etc/apps).
-* Remove the `central_security_app_for_splunk` folder from apps directory
+* Remove the `cyences_app_for_splunk` folder from apps directory
 * Restart Splunk
 
 

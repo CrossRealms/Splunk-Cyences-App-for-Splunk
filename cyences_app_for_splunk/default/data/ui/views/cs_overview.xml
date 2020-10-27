@@ -1,10 +1,10 @@
 <form theme="light">
   <label>Overview</label>
   <search id="basesearch">
-    <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local
+    <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count by savedsearch_name
-| append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | fields title, disabled, is_scheduled | rename title as savedsearch_name]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | fields title, disabled, is_scheduled | rename title as savedsearch_name]
 | stats first(*) as * by savedsearch_name
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | search disabled=0 is_scheduled=1 
@@ -45,7 +45,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -70,7 +70,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -95,7 +95,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -120,7 +120,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -147,7 +147,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -172,7 +172,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -197,7 +197,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -222,7 +222,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
@@ -239,10 +239,10 @@
       </input>
       <table>
         <search>
-          <query>index=_internal sourcetype="scheduler" status="success" app="central_security_app_for_splunk" splunk_server=local savedsearch_name IN ("Windows - Hosts Missing Update")
+          <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name IN ("Windows - Hosts Missing Update")
 | where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
 | stats count as alert_count by savedsearch_name 
-| append [| rest /servicesNS/-/central_security_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="central_security_app_for_splunk" | rename title as savedsearch_name | fields savedsearch_name, disabled, is_scheduled]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | rename title as savedsearch_name | fields savedsearch_name, disabled, is_scheduled]
 | stats first(*) as * by savedsearch_name
 | search savedsearch_name IN `cs_monthly_alerts`
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
@@ -267,7 +267,7 @@
         </format>
         <fields>["Name","alert_count"]</fields>
         <drilldown>
-          <link target="_blank">/app/central_security_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
         </drilldown>
       </table>
     </panel>

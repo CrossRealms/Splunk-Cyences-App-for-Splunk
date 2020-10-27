@@ -1,8 +1,8 @@
-# Splunk-Central-Security-App
-Splunk Central Security App built by CrossRealms International
+# Cyences App for Splunk
+Cyences App for Splunk built by CrossRealms International
 
 ### Documentation
-Please read App's documentation [here](central_security_app_for_splunk/ReadMe.md).
+Please read App's documentation [here](cyences_app_for_splunk/ReadMe.md).
 
 ### Feedback
 To provide the feedback open issue in this repo.
