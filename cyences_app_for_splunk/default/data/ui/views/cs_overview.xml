@@ -299,4 +299,26 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Malicious IP List</title>
+      <table>
+        <search>
+          <query>| inputlookup cs_malicious_ip_list.csv
+| eval last_seen=strftime(last_seen, "%F %T") 
+| sort - no_of_victims
+| table ip, last_seen, no_of_victims, ip_location, description</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="count">8</option>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <div>
+          <p>Please find the more details of Malicious List <a href="/app/cyences_app_for_splunk/cs_malicious_ip_list" target="_black">here</a>.</p>
+        </div>
+      </html>
+    </panel>
+  </row>
 </form>
