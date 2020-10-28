@@ -77,29 +77,6 @@
   </row>
   <row>
     <panel>
-      <title>Ransomware</title>
-      <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Ransomware")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="alert_count">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <title>Credential Compromise</title>
       <table>
         <search base="basesearch">
@@ -123,10 +100,10 @@
   </row>
   <row>
     <panel>
-      <title>Scanning</title>
+      <title>Ransomware</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Scanning")`</query>
+          <query>| `cs_filter_savedsearches("Ransomware")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
@@ -194,6 +171,31 @@
   </row>
   <row>
     <panel>
+      <title>Sophos</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Sophos")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="wrap">true</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>PaloAlto Firewall</title>
       <table>
         <search base="basesearch">
@@ -204,6 +206,29 @@
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">false</option>
         <option name="wrap">true</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Scanning</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Scanning")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <format type="color" field="disabled">
           <colorPalette type="map">{"1":#F7BC38}</colorPalette>
         </format>

@@ -6,6 +6,7 @@
     <view name="cs_o365_reports" />
     <view name="cs_paloalto_firewall_reports" />
     <view name="cs_malicious_ip_list" />
+    <view name="cs_sophos_reports" />
   </collection>
   <collection label="All Alerts/Reports">
     <view name="cs_all_alerts" />

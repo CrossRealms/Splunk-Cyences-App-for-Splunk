@@ -1,0 +1,154 @@
+<form>
+  <label>Sophos Reports</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="tkn_host">
+      <label>Sophos Endpoint Host</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>index=sophos | dedup host | table host</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+      <prefix>host="</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="multiselect" token="tkn_dhost">
+      <label>Hosts</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <prefix>dhost IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <fieldForLabel>dhost</fieldForLabel>
+      <fieldForValue>dhost</fieldForValue>
+      <search>
+        <query>index=sophos | dedup dhost | table dhost</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+    </input>
+    <input type="multiselect" token="tkn_user">
+      <label>Users</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <prefix>user IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <fieldForLabel>user</fieldForLabel>
+      <fieldForValue>user</fieldForValue>
+      <search>
+        <query>index=sophos | dedup user | table user</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Update Errors</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::UpdateFailure::*" NOT type IN ("Event::Endpoint::UpdateFailure::UPDATED_SUCCESSFULLY", "Event::Endpoint::UpdateFailure::RESTART_NEEDED", "Event::Endpoint::UpdateFailure::RESTARTING") $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_update_errors_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Endpoint Out of Date</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::OutOfDate" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_endpoint_outofdate_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Core Restore Failed</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::CoreRestoreFailed" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_core_restore_failed_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Certificate/License Expiration Messages</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Smc::Renew*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_expiration_messages_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Exploit Prevented</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::HmpaExploitPrevented" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_exploit_prevented`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Malware Detected</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_malware_detected`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Data Collection - Sophos Central SIEM Integration Add-on (https://splunkbase.splunk.com/app/4647/)</p>
+        <p> Items might have false positives based on user/admin activities.</p>
+      </html>
+    </panel>
+  </row>
+</form>
