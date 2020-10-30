@@ -1,0 +1,13 @@
+.success_msg {
+    color: green;
+}
+
+.error_msg {
+    color: red;
+}
+
+button {
+    background-color: #4d964d;
+    color: white;
+    margin-left: 10px;
+}

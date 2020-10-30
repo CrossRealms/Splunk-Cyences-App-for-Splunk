@@ -1,0 +1,100 @@
+<dashboard script="cs_configuration.js" stylesheet="cs_configuration.css">
+  <label>Configuration</label>
+  <row>
+    <panel>
+      <title>Macro Definitions Update</title>
+      <html></html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <div>
+          <p>Update these macro definination based on the data source (index) in your environment.</p>
+        </div>
+        <div id="data_macros">
+          Sophos Data : <input type="text" name="macro_data_sophos" id="macro_data_sophos"/>
+          <button id="macro_data_sophos_button">Update</button>
+          <br/>
+          <p id="macro_data_sophos_msg"/>
+          <br/>
+          O365 Data : <input type="text" name="macro_data_o365" id="macro_data_o365"/>
+          <button id="macro_data_o365_button">Update</button>
+          <br/>
+          <p id="macro_data_o365_msg"/>
+          <br/>
+          WinEventLog Security Data : <input type="text" name="macro_data_wineventlog_security" id="macro_data_wineventlog_security"/>
+          <button id="macro_data_wineventlog_security_button">Update</button>
+          <br/>
+          <p id="macro_data_wineventlog_security_msg"/>
+          <br/>
+          WinEventLog System Data : <input type="text" name="macro_data_wineventlog_system" id="macro_data_wineventlog_system"/>
+          <button id="macro_data_wineventlog_system_button">Update</button>
+          <br/>
+          <p id="macro_data_wineventlog_system_msg"/>
+          <br/>
+          Sysmon Data : <input type="text" name="macro_data_sysmon" id="macro_data_sysmon"/>
+          <button id="macro_data_sysmon_button">Update</button>
+          <br/>
+          <p id="macro_data_sysmon_msg"/>
+          <br/>
+          PaloAlto Data : <input type="text" name="macro_data_palo" id="macro_data_palo"/>
+          <button id="macro_data_palo_button">Update</button>
+          <br/>
+          <p id="macro_data_palo_msg"/>
+          <br/>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div>
+          <p>Update these macro definition to summariesonly=true if you have enabled accelerated data-model for better search performance.</p>
+        </div>
+        <div id="datamodel_macros">
+          Endpoint Data-Model : <input type="text" name="macro_datamodel_endpoint" id="macro_datamodel_endpoint"/>
+          <button id="macro_datamodel_endpoint_button">Update</button>
+          <br/>
+          <p id="macro_datamodel_endpoint_msg"/>
+          <br/>
+          Network Traffic Data-Model : <input type="text" name="macro_datamodel_network_traffic" id="macro_datamodel_network_traffic"/>
+          <button id="macro_datamodel_network_traffic_button">Update</button>
+          <br/>
+          <p id="macro_datamodel_network_traffic_msg"/>
+          <br/>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <div>
+          <p>These macros are being used in the different searches and dashboards. Update macros based on your environment and requirement.</p>
+        </div>
+        <div id="datamodel_macros">
+          cs_ad_password_change_outside_working_hour_definition : <input type="text" name="macro_cs_ad_password_change_outside_working_hour_definition" id="macro_cs_ad_password_change_outside_working_hour_definition"/>
+          <button id="macro_cs_ad_password_change_outside_working_hour_definition_button">Update</button>
+          <br/>
+          <p id="macro_cs_ad_password_change_outside_working_hour_definition_msg"/>
+          <br/>
+          cs_o365_country : <input type="text" name="macro_cs_o365_country" id="macro_cs_o365_country"/>
+          <button id="macro_cs_o365_country_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_country_msg"/>
+          <br/>
+          cs_palo_search_blocked_ip_lookup_name : <input type="text" name="macro_cs_palo_search_blocked_ip_lookup_name" id="macro_cs_palo_search_blocked_ip_lookup_name"/>
+          <button id="macro_cs_palo_search_blocked_ip_lookup_name_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_search_blocked_ip_lookup_name_msg"/>
+          <br/>
+          cs_palo_malicious_ip_list_filter_old_results : <input type="text" name="macro_cs_palo_malicious_ip_list_filter_old_results" id="macro_cs_palo_malicious_ip_list_filter_old_results"/>
+          <button id="macro_cs_palo_malicious_ip_list_filter_old_results_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_malicious_ip_list_filter_old_results_msg"/>
+          <br/>
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

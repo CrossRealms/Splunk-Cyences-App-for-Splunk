@@ -8,7 +8,8 @@
     <view name="cs_malicious_ip_list" />
     <view name="cs_sophos_reports" />
   </collection>
-  <collection label="All Alerts/Reports">
+  <collection label="Settings">
+    <view name="cs_configuration" />
     <view name="cs_all_alerts" />
     <a href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
   </collection>
