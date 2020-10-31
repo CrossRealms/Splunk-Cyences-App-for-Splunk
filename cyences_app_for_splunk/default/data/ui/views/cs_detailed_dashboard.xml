@@ -36,7 +36,7 @@
 | stats first(*) as * by savedsearch_name
 | eval alert_count=if(isnull(alert_count), 0, alert_count)
 | table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, total_execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
-| table disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, description, total_execution_count, last_execution, avg_runtime, cron_schedule</query>
+| table savedsearch_name, disabled, is_scheduled, description, alert_count, last_alert_fired_time, last_result_count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
