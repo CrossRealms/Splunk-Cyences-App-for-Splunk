@@ -12,7 +12,7 @@
         <div>
           <p>Update these macro definination based on the data source (index) in your environment.</p>
         </div>
-        <div id="data_macros">
+        <div>
           Sophos Data : <input type="text" name="macro_data_sophos" id="macro_data_sophos"/>
           <button id="macro_data_sophos_button">Update</button>
           <br/>
@@ -51,7 +51,7 @@
         <div>
           <p>Update these macro definition to summariesonly=true if you have enabled accelerated data-model for better search performance.</p>
         </div>
-        <div id="datamodel_macros">
+        <div>
           Endpoint Data-Model : <input type="text" name="macro_datamodel_endpoint" id="macro_datamodel_endpoint"/>
           <button id="macro_datamodel_endpoint_button">Update</button>
           <br/>
@@ -72,7 +72,7 @@
         <div>
           <p>These macros are being used in the different searches and dashboards. Update macros based on your environment and requirement.</p>
         </div>
-        <div id="datamodel_macros">
+        <div>
           cs_ad_password_change_outside_working_hour_definition : <input type="text" name="macro_cs_ad_password_change_outside_working_hour_definition" id="macro_cs_ad_password_change_outside_working_hour_definition"/>
           <button id="macro_cs_ad_password_change_outside_working_hour_definition_button">Update</button>
           <br/>
@@ -92,6 +92,264 @@
           <button id="macro_cs_palo_malicious_ip_list_filter_old_results_button">Update</button>
           <br/>
           <p id="macro_cs_palo_malicious_ip_list_filter_old_results_msg"/>
+          <br/>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <div>
+          <p>These macros are being used to whitelist(filter) the results from various alert and dashboard search queries. Update these macros to filter the results to avoid false positive. </p>
+          <br/>
+          <p><b>Category: Windows &amp; AD</b></p>
+        </div>
+        <div>
+          cs_ad_user_modification_filter : <input type="text" name="macro_cs_ad_user_modification_filter" id="macro_cs_ad_user_modification_filter"/>
+          <button id="macro_cs_ad_user_modification_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_ad_user_modification_filter_msg"/>
+          <br/>
+          cs_ad_user_privilege_escalation_filter : <input type="text" name="macro_cs_ad_user_privilege_escalation_filter" id="macro_cs_ad_user_privilege_escalation_filter"/>
+          <button id="macro_cs_ad_user_privilege_escalation_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_ad_user_privilege_escalation_filter_msg"/>
+          <br/>
+          cs_ad_password_change_outside_working_hour_filter : <input type="text" name="macro_cs_ad_password_change_outside_working_hour_filter" id="macro_cs_ad_password_change_outside_working_hour_filter"/>
+          <button id="macro_cs_ad_password_change_outside_working_hour_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_ad_password_change_outside_working_hour_filter_msg"/>
+          <br/>
+          cs_windows_host_missing_update_filter : <input type="text" name="macro_cs_windows_host_missing_update_filter" id="macro_cs_windows_host_missing_update_filter"/>
+          <button id="macro_cs_windows_host_missing_update_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_windows_host_missing_update_filter_msg"/>
+          <br/>
+          cs_windows_firewall_disabled_filter : <input type="text" name="macro_cs_windows_firewall_disabled_filter" id="macro_cs_windows_firewall_disabled_filter"/>
+          <button id="macro_cs_windows_firewall_disabled_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_windows_firewall_disabled_filter_msg"/>
+          <br/>
+          cs_windows_wmi_lateral_movement_filter : <input type="text" name="macro_cs_windows_wmi_lateral_movement_filter" id="macro_cs_windows_wmi_lateral_movement_filter"/>
+          <button id="macro_cs_windows_wmi_lateral_movement_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_windows_wmi_lateral_movement_filter_msg"/>
+          <br/>
+          cs_windows_event_log_cleared_filter : <input type="text" name="macro_cs_windows_event_log_cleared_filter" id="macro_cs_windows_event_log_cleared_filter"/>
+          <button id="macro_cs_windows_event_log_cleared_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_windows_event_log_cleared_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p><b>Category: Sophos</b></p>
+        </div>
+        <div>
+          cs_sophos_update_errors_filter : <input type="text" name="macro_cs_sophos_update_errors_filter" id="macro_cs_sophos_update_errors_filter"/>
+          <button id="macro_cs_sophos_update_errors_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_update_errors_filter_msg"/>
+          <br/>
+          cs_sophos_endpoint_not_protected_filter : <input type="text" name="macro_cs_sophos_endpoint_not_protected_filter" id="macro_cs_sophos_endpoint_not_protected_filter"/>
+          <button id="macro_cs_sophos_endpoint_not_protected_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_endpoint_not_protected_filter_msg"/>
+          <br/>
+          cs_sophos_endpoint_outofdate_filter : <input type="text" name="macro_cs_sophos_endpoint_outofdate_filter" id="macro_cs_sophos_endpoint_outofdate_filter"/>
+          <button id="macro_cs_sophos_endpoint_outofdate_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_endpoint_outofdate_filter_msg"/>
+          <br/>
+          cs_sophos_realtime_protection_disabled_filter : <input type="text" name="macro_cs_sophos_realtime_protection_disabled_filter" id="macro_cs_sophos_realtime_protection_disabled_filter"/>
+          <button id="macro_cs_sophos_realtime_protection_disabled_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_realtime_protection_disabled_filter_msg"/>
+          <br/>
+          cs_sophos_service_not_running_filter : <input type="text" name="macro_cs_sophos_service_not_running_filter" id="macro_cs_sophos_service_not_running_filter"/>
+          <button id="macro_cs_sophos_service_not_running_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_service_not_running_filter_msg"/>
+          <br/>
+          cs_sophos_failed_to_cleanup_threat_filter : <input type="text" name="macro_" id="macro_cs_sophos_failed_to_cleanup_threat_filter"/>
+          <button id="macro_cs_sophos_failed_to_cleanup_threat_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_failed_to_cleanup_threat_filter_msg"/>
+          <br/>
+          cs_sophos_core_restore_failed_filter : <input type="text" name="macro_cs_sophos_core_restore_failed_filter" id="macro_cs_sophos_core_restore_failed_filter"/>
+          <button id="macro_cs_sophos_core_restore_failed_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_core_restore_failed_filter_msg"/>
+          <br/>
+          cs_sophos_expiration_messages_filter : <input type="text" name="macro_cs_sophos_expiration_messages_filter" id="macro_cs_sophos_expiration_messages_filter"/>
+          <button id="macro_cs_sophos_expiration_messages_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_expiration_messages_filter_msg"/>
+          <br/>
+          cs_sophos_exploit_prevented : <input type="text" name="macro_cs_sophos_exploit_prevented" id="macro_cs_sophos_exploit_prevented"/>
+          <button id="macro_cs_sophos_exploit_prevented_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_exploit_prevented_msg"/>
+          <br/>
+          cs_sophos_malware_detected : <input type="text" name="macro_cs_sophos_malware_detected" id="macro_cs_sophos_malware_detected"/>
+          <button id="macro_cs_sophos_malware_detected_button">Update</button>
+          <br/>
+          <p id="macro_cs_sophos_malware_detected_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p><b>Category: Credential Compromise</b></p>
+        </div>
+        <div>
+          cs_attempted_credential_dump_from_registry_via_reg_exe_filter : <input type="text" name="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter" id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter"/>
+          <button id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_msg"/>
+          <br/>
+          cs_detect_credential_dumping_through_lsass_access_filter : <input type="text" name="macro_cs_detect_credential_dumping_through_lsass_access_filter" id="macro_cs_detect_credential_dumping_through_lsass_access_filter"/>
+          <button id="macro_cs_detect_credential_dumping_through_lsass_access_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_detect_credential_dumping_through_lsass_access_filter_msg"/>
+          <br/>
+          cs_credential_dumping_via_symlink_to_shadow_copy_filter : <input type="text" name="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter" id="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter"/>
+          <button id="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_msg"/>
+          <br/>
+          cs_credential_dumping_via_copy_command_from_shadow_copy_filter : <input type="text" name="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter" id="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter"/>
+          <button id="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div>
+          <p>These macros are being used to whitelist(filter) the results from various alert and dashboard search queries. Update these macros to filter the results to avoid false positive.</p>
+          <p><b>Category: Ransomware</b></p>
+        </div>
+        <div>
+          cs_spike_in_file_writes_filter : <input type="text" name="macro_cs_spike_in_file_writes_filter" id="macro_cs_spike_in_file_writes_filter"/>
+          <button id="macro_cs_spike_in_file_writes_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_spike_in_file_writes_filter_msg"/>
+          <br/>
+          cs_system_processes_run_from_unexpected_locations_filter : <input type="text" name="macro_cs_system_processes_run_from_unexpected_locations_filter" id="macro_cs_system_processes_run_from_unexpected_locations_filter"/>
+          <button id="macro_cs_system_processes_run_from_unexpected_locations_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_system_processes_run_from_unexpected_locations_filter_msg"/>
+          <br/>
+          cs_common_ransomware_extensions_filter : <input type="text" name="macro_cs_common_ransomware_extensions_filter" id="macro_cs_common_ransomware_extensions_filter"/>
+          <button id="macro_cs_common_ransomware_extensions_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_common_ransomware_extensions_filter_msg"/>
+          <br/>
+          cs_common_ransomware_notes_filter : <input type="text" name="macro_cs_common_ransomware_notes_filter" id="macro_cs_common_ransomware_notes_filter"/>
+          <button id="macro_cs_common_ransomware_notes_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_common_ransomware_notes_filter_msg"/>
+          <br/>
+          cs_usn_journal_deletion_filter : <input type="text" name="macro_cs_usn_journal_deletion_filter" id="macro_cs_usn_journal_deletion_filter"/>
+          <button id="macro_cs_usn_journal_deletion_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_usn_journal_deletion_filter_msg"/>
+          <br/>
+          cs_scheduled_tasks_used_in_badrabbit_ransomware_filter : <input type="text" name="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter" id="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter"/>
+          <button id="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p><b>Category: Office 365</b></p>
+        </div>
+        <div>
+          cs_o365_success_login_outside_country_filter : <input type="text" name="macro_cs_o365_success_login_outside_country_filter" id="macro_cs_o365_success_login_outside_country_filter"/>
+          <button id="macro_cs_o365_success_login_outside_country_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_success_login_outside_country_filter_msg"/>
+          <br/>
+          cs_o365_failed_login_outside_country_filter : <input type="text" name="macro_cs_o365_failed_login_outside_country_filter" id="macro_cs_o365_failed_login_outside_country_filter"/>
+          <button id="macro_cs_o365_failed_login_outside_country_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_failed_login_outside_country_filter_msg"/>
+          <br/>
+          cs_o365_login_by_unknown_userid_filter : <input type="text" name="macro_cs_o365_login_by_unknown_userid_filter" id="macro_cs_o365_login_by_unknown_userid_filter"/>
+          <button id="macro_cs_o365_login_by_unknown_userid_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_login_by_unknown_userid_filter_msg"/>
+          <br/>
+          cs_o365_dlp_exchange_filter : <input type="text" name="macro_cs_o365_dlp_exchange_filter" id="macro_cs_o365_dlp_exchange_filter"/>
+          <button id="macro_cs_o365_dlp_exchange_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_dlp_exchange_filter_msg"/>
+          <br/>
+          cs_o365_dlp_sharepoint_filter : <input type="text" name="macro_cs_o365_dlp_sharepoint_filter" id="macro_cs_o365_dlp_sharepoint_filter"/>
+          <button id="macro_cs_o365_dlp_sharepoint_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_o365_dlp_sharepoint_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p><b>Category: Networking</b></p>
+        </div>
+        <div>
+          cs_scanning_basic_scanning_filter : <input type="text" name="macro_cs_scanning_basic_scanning_filter" id="macro_cs_scanning_basic_scanning_filter"/>
+          <button id="macro_cs_scanning_basic_scanning_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_scanning_basic_scanning_filter_msg"/>
+          <br/>
+          cs_tor_traffic_filter : <input type="text" name="macro_cs_tor_traffic_filter" id="macro_cs_tor_traffic_filter"/>
+          <button id="macro_cs_tor_traffic_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_tor_traffic_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p><b>Category: PaloAlto Firewall</b></p>
+        </div>
+        <div>
+          cs_palo_dns_sinkhole_filter : <input type="text" name="macro_cs_palo_dns_sinkhole_filter" id="macro_cs_palo_dns_sinkhole_filter"/>
+          <button id="macro_cs_palo_dns_sinkhole_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_dns_sinkhole_filter_msg"/>
+          <br/>
+          cs_palo_ddos_prevented_filter : <input type="text" name="macro_cs_palo_ddos_prevented_filter" id="macro_cs_palo_ddos_prevented_filter"/>
+          <button id="macro_cs_palo_ddos_prevented_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_ddos_prevented_filter_msg"/>
+          <br/>
+          cs_palo_firewall_login_failure_filter : <input type="text" name="macro_cs_palo_firewall_login_failure_filter" id="macro_cs_palo_firewall_login_failure_filter"/>
+          <button id="macro_cs_palo_firewall_login_failure_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_firewall_login_failure_filter_msg"/>
+          <br/>
+          cs_palo_blocked_ip_inbound_filter : <input type="text" name="macro_cs_palo_blocked_ip_inbound_filter" id="macro_cs_palo_blocked_ip_inbound_filter"/>
+          <button id="macro_cs_palo_blocked_ip_inbound_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_blocked_ip_inbound_filter_msg"/>
+          <br/>
+          cs_palo_blocked_ip_outbound_filter : <input type="text" name="macro_cs_palo_blocked_ip_outbound_filter" id="macro_cs_palo_blocked_ip_outbound_filter"/>
+          <button id="macro_cs_palo_blocked_ip_outbound_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_blocked_ip_outbound_filter_msg"/>
+          <br/>
+          cs_palo_malicious_ip_list_filter : <input type="text" name="macro_cs_palo_malicious_ip_list_filter" id="macro_cs_palo_malicious_ip_list_filter"/>
+          <button id="macro_cs_palo_malicious_ip_list_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_palo_malicious_ip_list_filter_msg"/>
           <br/>
         </div>
       </html>
