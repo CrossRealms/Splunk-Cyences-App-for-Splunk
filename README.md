@@ -29,7 +29,7 @@ To develop the large collaborative App while keeping in mind the quality of the 
    - Reference - https://dev.splunk.com/enterprise/docs/releaseapps/appinspect/
 
 2. Dependencies
-   - This App is dependant on Security Essentials App from Splunk as of now for some macros. But the idea is to remove all the dependencies.
+   - This App is dependant on Security Essentials App from Splunk as of now for some lookups. And other Add-ons are required for field extractions like Sysmon, Windows, O365, etc.
 
 3. Reports and Alerts
    - One should not add an alert which might have a lot of false positives. It should rather go as an Report for particular category of reports.
@@ -51,17 +51,19 @@ To develop the large collaborative App while keeping in mind the quality of the 
      - What threat the search is trying to identify.
      - How to collect the data. (Data Collection)
      - False Positive, if any.
-   - Make sure the description is properly readable on the `Detailed` dashboard.
+   - Make sure the description is properly readable on the `All Alerts` dashboard.
    - Put all the savedsearches in the proper order (category vise) in the savedsearches.conf file.
 
 6. macros.conf
    - All the macro definition goes here.
    - All the macro should start with `cs` in the prefix to avoid any naming conflict with other Apps.
    - Add macros in the macros.conf file category vise.
+   - Any new macro has to be added to the `Configuration` dashboard for the ease of configuration.
 
 7. Dashboards
    - The `Overview` dashboard shows only the enabled alerts. For more information see the dashboard itself.
-   - The `Detailed` dashboard is very similar to what we have in the `Overview` dashboard, but this may be for the development purpose or Splunk Admins and Security Admins as it shows all the information like how to collect the data, cron schedule and other.
+   - The `All Alerts` dashboard is very similar to what we have in the `Overview` dashboard, but this may be for the development purpose or Splunk Admins and Security Admins as it shows all the information like how to collect the data, cron schedule and other.
+   - The `Details` dashboard is drilldown dashboard for the Overview dashboard. It shows the detailed information about the selected alert.
    - Any new type of Report addition should also be added to the navigation.
    - All the dashboard name should prefix with `cs` to avoid any naming conflict with other Apps.
 

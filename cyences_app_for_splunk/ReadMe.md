@@ -74,6 +74,9 @@ OR
 * For updating the macro, copy paste the macro stanza in the `$SPLUNK_HOME/etc/apps/cyences_app_for_splunk/local/macros.conf`. (Create the file in the local directory if not present already.)
 
 
+Note - For the complete information about the configuration and usage refer to App's documentation.
+
+
 
 DATA COLLECTION
 -------------

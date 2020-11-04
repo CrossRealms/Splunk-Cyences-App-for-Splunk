@@ -3,11 +3,12 @@
   <row>
     <panel>
       <title>Macro Definitions Update</title>
-      <html></html>
+      <html/>
     </panel>
   </row>
   <row>
     <panel>
+      <title>Data Source Macros</title>
       <html>
         <div>
           <p>Update these macro definination based on the data source (index) in your environment.</p>
@@ -47,6 +48,7 @@
       </html>
     </panel>
     <panel>
+      <title>Data-Model Macros</title>
       <html>
         <div>
           <p>Update these macro definition to summariesonly=true if you have enabled accelerated data-model for better search performance.</p>
@@ -68,6 +70,7 @@
   </row>
   <row>
     <panel>
+      <title>Other Macros</title>
       <html>
         <div>
           <p>These macros are being used in the different searches and dashboards. Update macros based on your environment and requirement.</p>
@@ -99,11 +102,14 @@
   </row>
   <row>
     <panel>
+      <title>Filter Macros</title>
       <html>
         <div>
           <p>These macros are being used to whitelist(filter) the results from various alert and dashboard search queries. Update these macros to filter the results to avoid false positive. </p>
           <br/>
-          <p><b>Category: Windows &amp; AD</b></p>
+          <p>
+            <b>Category: Windows &amp; AD</b>
+          </p>
         </div>
         <div>
           cs_ad_user_modification_filter : <input type="text" name="macro_cs_ad_user_modification_filter" id="macro_cs_ad_user_modification_filter"/>
@@ -145,7 +151,9 @@
       </html>
       <html>
         <div>
-          <p><b>Category: Sophos</b></p>
+          <p>
+            <b>Category: Sophos</b>
+          </p>
         </div>
         <div>
           cs_sophos_update_errors_filter : <input type="text" name="macro_cs_sophos_update_errors_filter" id="macro_cs_sophos_update_errors_filter"/>
@@ -202,7 +210,9 @@
       </html>
       <html>
         <div>
-          <p><b>Category: Credential Compromise</b></p>
+          <p>
+            <b>Category: Credential Compromise</b>
+          </p>
         </div>
         <div>
           cs_attempted_credential_dump_from_registry_via_reg_exe_filter : <input type="text" name="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter" id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter"/>
@@ -229,10 +239,13 @@
       </html>
     </panel>
     <panel>
+      <title>Filter Macros</title>
       <html>
         <div>
           <p>These macros are being used to whitelist(filter) the results from various alert and dashboard search queries. Update these macros to filter the results to avoid false positive.</p>
-          <p><b>Category: Ransomware</b></p>
+          <p>
+            <b>Category: Ransomware</b>
+          </p>
         </div>
         <div>
           cs_spike_in_file_writes_filter : <input type="text" name="macro_cs_spike_in_file_writes_filter" id="macro_cs_spike_in_file_writes_filter"/>
@@ -269,7 +282,9 @@
       </html>
       <html>
         <div>
-          <p><b>Category: Office 365</b></p>
+          <p>
+            <b>Category: Office 365</b>
+          </p>
         </div>
         <div>
           cs_o365_success_login_outside_country_filter : <input type="text" name="macro_cs_o365_success_login_outside_country_filter" id="macro_cs_o365_success_login_outside_country_filter"/>
@@ -301,7 +316,9 @@
       </html>
       <html>
         <div>
-          <p><b>Category: Networking</b></p>
+          <p>
+            <b>Category: Networking</b>
+          </p>
         </div>
         <div>
           cs_scanning_basic_scanning_filter : <input type="text" name="macro_cs_scanning_basic_scanning_filter" id="macro_cs_scanning_basic_scanning_filter"/>
@@ -318,7 +335,9 @@
       </html>
       <html>
         <div>
-          <p><b>Category: PaloAlto Firewall</b></p>
+          <p>
+            <b>Category: PaloAlto Firewall</b>
+          </p>
         </div>
         <div>
           cs_palo_dns_sinkhole_filter : <input type="text" name="macro_cs_palo_dns_sinkhole_filter" id="macro_cs_palo_dns_sinkhole_filter"/>

@@ -127,6 +127,31 @@
   </row>
   <row>
     <panel>
+      <title>PaloAlto Firewall</title>
+      <table>
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("PaloAlto Firewall")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="alert_count">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <fields>["Name","alert_count"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel>
       <title>Windows &amp; AD</title>
       <table>
         <search base="basesearch">
@@ -181,58 +206,6 @@
       <table>
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Sophos")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="alert_count">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <fields>["Name","alert_count"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>PaloAlto Firewall</title>
-      <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("PaloAlto Firewall")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="alert_count">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <fields>["Name","alert_count"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
-      <title>Scanning</title>
-      <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Scanning")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>

@@ -9,13 +9,13 @@
       </default>
     </input>
     <input type="dropdown" token="tkn_host">
-      <label>Sophos Endpoint Host</label>
+      <label>Sophos Splunk Data Collection Host</label>
       <choice value="*">All</choice>
       <default>*</default>
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>index=sophos | dedup host | table host</query>
+        <query>`cs_sophos` | dedup host | table host</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -34,7 +34,7 @@
       <fieldForLabel>dhost</fieldForLabel>
       <fieldForValue>dhost</fieldForValue>
       <search>
-        <query>index=sophos | dedup dhost | table dhost</query>
+        <query>`cs_sophos` | dedup dhost | table dhost</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -51,7 +51,7 @@
       <fieldForLabel>user</fieldForLabel>
       <fieldForValue>user</fieldForValue>
       <search>
-        <query>index=sophos | dedup user | table user</query>
+        <query>`cs_sophos` | dedup user | table user</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
