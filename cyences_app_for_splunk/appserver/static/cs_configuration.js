@@ -132,4 +132,66 @@ require([
             updateMacroDefinition(`${macro.macro_name}`, $(`#${macro.input_id}`).val(), `#${macro.msg_id}`)
         });
     });
+
+    function getHoneyDBConfiguration(){
+        let service = mvc.createService();
+        service.get("/HoneyDBConfiguration", {}, function(error, response){
+            if(response && response.data.entry[0].content && response.data.entry[0].content['api_id'] && response.data.entry[0].content['api_id'] != ''){
+                response = response.data.entry[0].content;
+                $("#honeydb_api_id").val(response['api_id']);
+                $("#honeydb_api_key").val(response['api_key']);
+            }
+            else if(response && response.data.entry[0].content['error'] && response.data.entry[0].content['error'] != ''){
+                let msg_location = "#honeydb_msg";
+                $(msg_location).addClass('error_msg');
+                $(msg_location).removeClass('success_msg');
+                $(msg_location).text(`Unable to get the API ID and Key, may be there is no configuration. Please set the configuration and save.`);
+            }
+            else if(error && error['error']){
+                console.log(`Error while getting HoneyDB Configuration: ${error['error']}`);
+            }
+            else{
+                console.log("Unknown error while getting HoneyDB API key.");
+            }
+        });
+    }
+
+    getHoneyDBConfiguration();
+
+    function updateHoneyDBConfiguration(){
+        let api_id = $("#honeydb_api_id").val();
+        let api_key = $("#honeydb_api_key").val();
+        let service = mvc.createService();
+        let data = {
+            "api_id": api_id,
+            "api_key": api_key
+        };
+        data = JSON.stringify(data);
+        service.post("/HoneyDBConfiguration/honeydb", {"data": data}, function(error, response){
+            if(response && response.data.entry[0].content['success'] && response.data.entry[0].content['success'] != ''){
+                let msg_location = "#honeydb_msg";
+                $(msg_location).removeClass('error_msg');
+                $(msg_location).addClass('success_msg');
+                $(msg_location).text("API configuration saved successfully.");
+            }
+            else if(response && response.data.entry[0].content['error'] && response.data.entry[0].content['error'] != ''){
+                let msg_location = "#honeydb_msg";
+                $(msg_location).addClass('error_msg');
+                $(msg_location).removeClass('success_msg');
+                $(msg_location).text(`Unable to save the API configuration. ${response.data.entry[0].content['error']}`);
+            }
+            else if(error && error['error']){
+                console.log(`Error while getting HoneyDB Configuration: ${error['error']}`);
+            }
+            else{
+                console.log("Unknown error while getting HoneyDB API key.");
+            }
+        });
+    }
+
+    $(`#honeydb_button`).on("click", function(){
+        updateHoneyDBConfiguration();
+    });
+
+
 });

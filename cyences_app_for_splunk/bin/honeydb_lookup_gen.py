@@ -6,6 +6,7 @@ import requests
 
 from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration, Option, validators
 from splunk import rest
+import cs_utils
 
 
 
@@ -31,7 +32,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
         for i in data:
             if i['name'] == 'honeydb':
                 api_id = i['content']['api_id']
-                api_key = i['content']['api_key']
+                api_key = cs_utils.CredentialManager(sessionKey).get_credential(api_id)
                 break
         return api_id, api_key
 
