@@ -30,60 +30,9 @@ This app can be set up in two ways:
      * App do not require on the Indexer or on the forwarder.
 
 
-
-INSTALLATION
-------------
-Follow the below-listed steps to install an App from the bundle:
-
-* Download the App package.
-* From the UI navigate to `Apps > Manage Apps`.
-* In the top right corner select `Install app from file`.
-* Select `Choose File` and select the App package.
-* Select `Upload` and follow the prompts.
-
-
-DEPENDENCIES   
-------------
-This App requires certain dependencies to work.
-
-* [ES Content Update App](https://splunkbase.splunk.com/app/3449/) - Requires for some of the macro definitions.
-* [Splunk Add-on for Windows](https://splunkbase.splunk.com/app/742/) - Requires for field extraction.
-* [Sysmon Add-on for Splunk](https://splunkbase.splunk.com/app/1914/) - Requires for field extraction.
-* [Splunk Add-on for O365](https://splunkbase.splunk.com/app/4055/) - Requires for field extraction.
-* All the other Add-ons for data collection and field extraction.
-
-
-CONFIGURATION
--------------
-### Macro Definition Update ###
-You have to update the macro definition based on your need.
-Find and update all the macro definition:
-
-#### View/Update from UI
-* Splunk UI > Settings > Advanced Search > Search macros
-* Select `Cyences App for Splunk` from the `App` list.
-* Select `Any` in `Owner` list.
-* Select `Created in App` option.
-
-OR 
-
-#### View/Update from macros.conf (Backend)
-
-* SSH to the Search Head backend.
-* Navigate to `$SPLUNK_HOME/etc/apps/cyences_app_for_splunk/default/macros.conf`.
-* For updating the macro, copy paste the macro stanza in the `$SPLUNK_HOME/etc/apps/cyences_app_for_splunk/local/macros.conf`. (Create the file in the local directory if not present already.)
-
-
-Note - For the complete information about the configuration and usage refer to App's documentation.
-
-
-
-DATA COLLECTION
--------------
-The App itself does not collect any data. The App uses data from different Add-ons like `Splunk Add-on for Windows`, `Sysmon Add-on for Splunk`, etc for collecting data for various use-cases.
-
-#### How to find which data to collect for different use-cases
-Look for `Detailed` dashboard, which contains the list of alerts/saved-searches and description specifies the `Data Collection` section.
+INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
+------------------------------------------------------------
+Visit https://cyences.com/cyences-app-for-splunk/ for complete configuration guide.
 
 
 UNINSTALL APP
