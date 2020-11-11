@@ -2,6 +2,23 @@
   <label>Configuration</label>
   <row>
     <panel>
+      <title>HoneyDB Configuration</title>
+      <html>
+        <div>
+          <span style="display:inline-block; width:10px;"></span> API ID: <input type="text" id="honeydb_api_id" style="margin-bottom:5px;"/> <span style="display:inline-block; width:15px;"></span>
+          API Key: <input type="text" id="honeydb_api_key"/>
+          <br/>
+          <span style="display:inline-block; width:150px;"></span> <button id="honeydb_button">Save HoneyDB Configuration</button>
+          <br/>
+          <p id="honeydb_msg"/>
+          <br/>
+          * If there ***** value in the API Key, before hitting Update button re-enter the API Key.
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Macro Definitions Update</title>
       <html/>
     </panel>
