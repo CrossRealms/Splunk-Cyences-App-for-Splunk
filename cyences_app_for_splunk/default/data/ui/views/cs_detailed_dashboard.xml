@@ -57,6 +57,14 @@
 | table sid, scheduled_time, result_count, run_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
+          <done>
+            <condition match="'job.resultCount'&gt;0">
+              <set token="results_present">1</set>
+            </condition>
+            <condition>
+              <unset token="results_present"></unset>
+            </condition>
+          </done>
         </search>
         <option name="drilldown">row</option>
         <fields>["scheduled_time","result_count","run_time"]</fields>
@@ -75,14 +83,6 @@
           <query>| makeresults | eval "Saved Search"=$tkn_savedsearch|s$ | eval Run="Run" | table "Saved Search", Run</query>
           <earliest>0</earliest>
           <latest></latest>
-          <done>
-            <condition match="'job.resultCount'>0">
-              <set token="results_present">1</set>
-            </condition>
-            <condition>
-              <unset token="results_present"></unset>
-            </condition>
-          </done>
         </search>
         <option name="drilldown">row</option>
         <drilldown>
@@ -110,7 +110,7 @@
       </html>
     </panel>
   </row>
-  <row>
+  <row depends="$results_present$">
     <panel depends="$forensic_system_compromised$">
       <title>Compromised Systems</title>
       <table>
