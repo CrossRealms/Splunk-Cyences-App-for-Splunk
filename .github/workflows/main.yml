@@ -1,0 +1,41 @@
+# This is a basic workflow to generate build on latest master
+name: "pre-release"
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      # ...
+      - name: "Generate App Build"
+        run: |
+          echo "Started generating build."
+      
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+          path: repodir
+            
+      - name: "Generate Build"
+        run: |
+          cd repodir
+          ls
+          find cyences_app_for_splunk -type f -exec chmod 644 '{}' \;
+          find cyences_app_for_splunk -type d -exec chmod 755 '{}' \;
+          tar -czf cyences_app_for_splunk.tgz cyences_app_for_splunk
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          path: repodir/cyences_app_for_splunk.tgz
+
+      - name: "Build Completed"
+        run: |
+          echo "Build generated."
