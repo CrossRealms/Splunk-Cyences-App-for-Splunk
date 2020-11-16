@@ -1,14 +1,12 @@
 require([
     'jquery',
     'splunkjs/mvc',
-    'splunkjs/mvc/searchmanager',
-    "splunkjs/mvc/postprocessmanager",
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc, SearchManager, PostProcessManager) {
+], function ($, mvc) {
 
     'use strict';
-    var submittedTokens = mvc.Components.getInstance('submitted');
-    var defaultTokens = mvc.Components.getInstance('default');
+    let submittedTokens = mvc.Components.getInstance('submitted');
+    let defaultTokens = mvc.Components.getInstance('default');
 
     let all_alerts = {
         "Ransomware - Spike in File Writes": {
@@ -98,33 +96,27 @@ require([
 
     submittedTokens.on("change:tkn_savedsearch", function(){
         let savedsearch_name = submittedTokens.get("tkn_savedsearch");
+        console.log(`Updated savedsearch token ${savedsearch_name}`);
+
+        if(all_alerts[savedsearch_name] === undefined){
+            return;
+        }
 
         if(all_alerts[savedsearch_name].system_compromised_search){
-            submittedTokens.set("forensic_system_compromise", "1");
-            new PostProcessManager({
-                id: "system_compromised_search",
-                managerid: "all_results",
-                search: `${all_alerts[savedsearch_name].system_compromised_search} | sort - count`
-            });
+            submittedTokens.set("system_compromised_search", `${all_alerts[savedsearch_name].system_compromised_search} | sort - count`);
         }
         else{
-            submittedTokens.unset("forensic_system_compromise");
+            submittedTokens.unset("system_compromised_search");
             console.log("No forensic search present for finding compromised system.");
         }
 
         if(all_alerts[savedsearch_name].attacker_search){
-            submittedTokens.set("forensic_attacker", "1");
-            new PostProcessManager({
-                id: "attacker_search",
-                managerid: "all_results",
-                search: `${all_alerts[savedsearch_name].attacker_search} | sort - count`
-            });                
+            submittedTokens.set("attacker_search", `${all_alerts[savedsearch_name].attacker_search} | sort - count`);
         }
         else{
-            submittedTokens.unset("forensic_attacker");
+            submittedTokens.unset("attacker_search");
             console.log("No forensic search present for finding attacker.");
         }
-
 
     });
 

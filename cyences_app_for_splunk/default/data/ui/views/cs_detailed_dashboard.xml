@@ -57,14 +57,6 @@
 | table sid, scheduled_time, result_count, run_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
-          <done>
-            <condition match="'job.resultCount'&gt;0">
-              <set token="results_present">1</set>
-            </condition>
-            <condition>
-              <unset token="results_present"></unset>
-            </condition>
-          </done>
         </search>
         <option name="drilldown">row</option>
         <fields>["scheduled_time","result_count","run_time"]</fields>
@@ -101,6 +93,14 @@
       <table>
         <search base="loadjob" id="all_results">
           <query>| map search="| loadjob $$sid$$"</query>
+          <done>
+            <condition match="'job.resultCount'&gt;0">
+              <set token="results_present">1</set>
+            </condition>
+            <condition>
+              <unset token="results_present"></unset>
+            </condition>
+          </done>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -111,21 +111,21 @@
     </panel>
   </row>
   <row depends="$results_present$">
-    <panel depends="$forensic_system_compromised$">
+    <panel depends="$system_compromised_search$">
       <title>Compromised Systems</title>
       <table>
-        <search base="system_compromised_search">
-          <query>| stats count by sourcetype</query>
+        <search base="all_results">
+          <query>$system_compromised_search$</query>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
-    <panel depends="$forensic_attacker$">
+    <panel depends="$attacker_search$">
       <title>Attackers</title>
       <table>
-        <search base="attacker_search">
-          <query>| stats count by src_ip</query>
+        <search base="all_results">
+          <query>$attacker_search$</query>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
