@@ -1,4 +1,4 @@
-<form theme="light">
+<form theme="dark">
   <label>Overview</label>
   <search id="basesearch">
     <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local

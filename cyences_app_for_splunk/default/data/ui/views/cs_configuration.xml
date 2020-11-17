@@ -1,4 +1,4 @@
-<dashboard script="cs_configuration.js" stylesheet="cs_configuration.css">
+<dashboard script="cs_configuration.js" stylesheet="cs_configuration.css" theme="dark">
   <label>Configuration</label>
   <row>
     <panel>

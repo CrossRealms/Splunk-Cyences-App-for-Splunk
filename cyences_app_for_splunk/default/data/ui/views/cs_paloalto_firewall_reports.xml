@@ -1,4 +1,4 @@
-<form theme="light">
+<form theme="dark">
   <label>PaloAlto Firewall Reports</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
