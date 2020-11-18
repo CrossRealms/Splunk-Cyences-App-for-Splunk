@@ -20,6 +20,8 @@ require([
 
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_cs_ad_password_change_outside_working_hour_definition_msg'},
         { macro_name: 'cs_o365_country', input_id: 'macro_cs_o365_country', button_id: 'macro_cs_o365_country_button', msg_id: 'macro_cs_o365_country_msg'},
+        { macro_name: 'cs_network_home_location_lat', input_id: 'macro_cs_network_home_location_lat', button_id: 'macro_cs_network_home_location_lat_button', msg_id: 'macro_cs_network_home_location_lat_msg'},
+        { macro_name: 'cs_network_home_location_lon', input_id: 'macro_cs_network_home_location_lon', button_id: 'macro_cs_network_home_location_lon_button', msg_id: 'macro_cs_network_home_location_lon_msg'},
         { macro_name: 'cs_palo_search_blocked_ip_lookup_name', input_id: 'macro_cs_palo_search_blocked_ip_lookup_name', button_id: 'macro_cs_palo_search_blocked_ip_lookup_name_button', msg_id: 'macro_cs_palo_search_blocked_ip_lookup_name_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter_old_results', input_id: 'macro_cs_palo_malicious_ip_list_filter_old_results', button_id: 'macro_cs_palo_malicious_ip_list_filter_old_results_button', msg_id: 'macro_cs_palo_malicious_ip_list_filter_old_results_msg'},
 
@@ -42,6 +44,8 @@ require([
 
         { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_cs_scanning_basic_scanning_filter_msg'},
         { macro_name: 'cs_tor_traffic_filter', input_id: 'macro_cs_tor_traffic_filter', button_id: 'macro_cs_tor_traffic_filter_button', msg_id: 'macro_cs_tor_traffic_filter_msg'},
+        { macro_name: 'cs_network_traffic_map_filter', input_id: 'macro_cs_network_traffic_map_filter', button_id: 'macro_cs_network_traffic_map_filter_button', msg_id: 'macro_cs_network_traffic_map_filter_msg'},
+        { macro_name: 'cs_network_scanning_map_filter', input_id: 'macro_cs_network_scanning_map_filter', button_id: 'macro_cs_network_scanning_map_filter_button', msg_id: 'macro_cs_network_scanning_map_filter_msg'},
 
         { macro_name: 'cs_palo_dns_sinkhole_filter', input_id: 'macro_cs_palo_dns_sinkhole_filter', button_id: 'macro_cs_palo_dns_sinkhole_filter_button', msg_id: 'macro_cs_palo_dns_sinkhole_filter_msg'},
         { macro_name: 'cs_palo_ddos_prevented_filter', input_id: 'macro_cs_palo_ddos_prevented_filter', button_id: 'macro_cs_palo_ddos_prevented_filter_button', msg_id: 'macro_cs_palo_ddos_prevented_filter_msg'},

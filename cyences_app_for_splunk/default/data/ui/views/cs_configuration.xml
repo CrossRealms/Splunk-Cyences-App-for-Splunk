@@ -103,6 +103,16 @@
           <br/>
           <p id="macro_cs_o365_country_msg"/>
           <br/>
+          Home Location Latitude (For Network Traffic Map) : <input type="text" name="macro_cs_network_home_location_lat" id="macro_cs_network_home_location_lat"/>
+          <button id="macro_cs_network_home_location_lat_button">Update</button>
+          <br/>
+          <p id="macro_cs_network_home_location_lat_msg"/>
+          <br/>
+          Home Location Longitude (For Network Traffic Map) : <input type="text" name="macro_cs_network_home_location_lon" id="macro_cs_network_home_location_lon"/>
+          <button id="macro_cs_network_home_location_lon_button">Update</button>
+          <br/>
+          <p id="macro_cs_network_home_location_lon_msg"/>
+          <br/>
           cs_palo_search_blocked_ip_lookup_name : <input type="text" name="macro_cs_palo_search_blocked_ip_lookup_name" id="macro_cs_palo_search_blocked_ip_lookup_name"/>
           <button id="macro_cs_palo_search_blocked_ip_lookup_name_button">Update</button>
           <br/>
@@ -347,6 +357,16 @@
           <button id="macro_cs_tor_traffic_filter_button">Update</button>
           <br/>
           <p id="macro_cs_tor_traffic_filter_msg"/>
+          <br/>
+          cs_network_traffic_map_filter : <input type="text" name="macro_cs_network_traffic_map_filter" id="macro_cs_network_traffic_map_filter"/>
+          <button id="macro_cs_network_traffic_map_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_network_traffic_map_filter_msg"/>
+          <br/>
+          cs_network_scanning_map_filter : <input type="text" name="macro_cs_network_scanning_map_filter" id="macro_cs_network_scanning_map_filter"/>
+          <button id="macro_cs_network_scanning_map_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_network_scanning_map_filter_msg"/>
           <br/>
         </div>
       </html>
