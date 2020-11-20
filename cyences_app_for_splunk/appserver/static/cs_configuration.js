@@ -11,23 +11,29 @@ require([
     var defaultTokens = mvc.Components.getInstance('default');
 
     let all_macros = [
+        /* Data Macros */
         { macro_name: 'cs_sophos', input_id: 'macro_data_sophos', button_id: 'macro_data_sophos_button', msg_id: 'macro_data_sophos_msg'},
         { macro_name: 'cs_o365', input_id: 'macro_data_o365', button_id: 'macro_data_o365_button', msg_id: 'macro_data_o365_msg'},
         { macro_name: 'cs_wineventlog_security', input_id: 'macro_data_wineventlog_security', button_id: 'macro_data_wineventlog_security_button', msg_id: 'macro_data_wineventlog_security_msg'},
         { macro_name: 'cs_wineventlog_system', input_id: 'macro_data_wineventlog_system', button_id: 'macro_data_wineventlog_system_button', msg_id: 'macro_data_wineventlog_system_msg'},
         { macro_name: 'cs_sysmon', input_id: 'macro_data_sysmon', button_id: 'macro_data_sysmon_button', msg_id: 'macro_data_sysmon_msg'},
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_palo_msg'},
+        { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_vpn_msg'},
 
+        /* Other Macros */
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_cs_ad_password_change_outside_working_hour_definition_msg'},
-        { macro_name: 'cs_o365_country', input_id: 'macro_cs_o365_country', button_id: 'macro_cs_o365_country_button', msg_id: 'macro_cs_o365_country_msg'},
+        { macro_name: 'cs_home_country', input_id: 'macro_cs_home_country', button_id: 'macro_cs_home_country_button', msg_id: 'macro_cs_home_country_msg'},
         { macro_name: 'cs_network_home_location_lat', input_id: 'macro_cs_network_home_location_lat', button_id: 'macro_cs_network_home_location_lat_button', msg_id: 'macro_cs_network_home_location_lat_msg'},
         { macro_name: 'cs_network_home_location_lon', input_id: 'macro_cs_network_home_location_lon', button_id: 'macro_cs_network_home_location_lon_button', msg_id: 'macro_cs_network_home_location_lon_msg'},
         { macro_name: 'cs_palo_search_blocked_ip_lookup_name', input_id: 'macro_cs_palo_search_blocked_ip_lookup_name', button_id: 'macro_cs_palo_search_blocked_ip_lookup_name_button', msg_id: 'macro_cs_palo_search_blocked_ip_lookup_name_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter_old_results', input_id: 'macro_cs_palo_malicious_ip_list_filter_old_results', button_id: 'macro_cs_palo_malicious_ip_list_filter_old_results_button', msg_id: 'macro_cs_palo_malicious_ip_list_filter_old_results_msg'},
 
+        /* Data-model */
         { macro_name: 'cs_summariesonly_endpoint', input_id: 'macro_datamodel_endpoint', button_id: 'macro_datamodel_endpoint_button', msg_id: 'macro_datamodel_endpoint_msg'},
         { macro_name: 'cs_summariesonly_network_traffic', input_id: 'macro_datamodel_network_traffic', button_id: 'macro_datamodel_network_traffic_button', msg_id: 'macro_datamodel_network_traffic_msg'},
+        { macro_name: 'cs_summariesonly_authentication', input_id: 'macro_datamodel_authentication', button_id: 'macro_datamodel_authentication_button', msg_id: 'macro_datamodel_authentication_msg'},
 
+        /* Windows & AD */
         { macro_name: 'cs_ad_user_modification_filter', input_id: 'macro_cs_ad_user_modification_filter', button_id: 'macro_cs_ad_user_modification_filter_button', msg_id: 'macro_cs_ad_user_modification_filter_msg'},
         { macro_name: 'cs_ad_user_privilege_escalation_filter', input_id: 'macro_cs_ad_user_privilege_escalation_filter', button_id: 'macro_cs_ad_user_privilege_escalation_filter_button', msg_id: 'macro_cs_ad_user_privilege_escalation_filter_msg'},
         { macro_name: 'cs_ad_password_change_outside_working_hour_filter', input_id: 'macro_cs_ad_password_change_outside_working_hour_filter', button_id: 'macro_cs_ad_password_change_outside_working_hour_filter_button', msg_id: 'macro_cs_ad_password_change_outside_working_hour_filter_msg'},
@@ -36,17 +42,20 @@ require([
         { macro_name: 'cs_windows_wmi_lateral_movement_filter', input_id: 'macro_cs_windows_wmi_lateral_movement_filter', button_id: 'macro_cs_windows_wmi_lateral_movement_filter_button', msg_id: 'macro_cs_windows_wmi_lateral_movement_filter_msg'},
         { macro_name: 'cs_windows_event_log_cleared_filter', input_id: 'macro_cs_windows_event_log_cleared_filter', button_id: 'macro_cs_windows_event_log_cleared_filter_button', msg_id: 'macro_cs_windows_event_log_cleared_filter_msg'},
 
+        /* O365 */
         { macro_name: 'cs_o365_success_login_outside_country_filter', input_id: 'macro_cs_o365_success_login_outside_country_filter', button_id: 'macro_cs_o365_success_login_outside_country_filter_button', msg_id: 'macro_cs_o365_success_login_outside_country_filter_msg'},
         { macro_name: 'cs_o365_failed_login_outside_country_filter', input_id: 'macro_cs_o365_failed_login_outside_country_filter', button_id: 'macro_cs_o365_failed_login_outside_country_filter_button', msg_id: 'macro_cs_o365_failed_login_outside_country_filter_msg'},
         { macro_name: 'cs_o365_login_by_unknown_userid_filter', input_id: 'macro_cs_o365_login_by_unknown_userid_filter', button_id: 'macro_cs_o365_login_by_unknown_userid_filter_button', msg_id: 'macro_cs_o365_login_by_unknown_userid_filter_msg'},
         { macro_name: 'cs_o365_dlp_exchange_filter', input_id: 'macro_cs_o365_dlp_exchange_filter', button_id: 'macro_cs_o365_dlp_exchange_filter_button', msg_id: 'macro_cs_o365_dlp_exchange_filter_msg'},
         { macro_name: 'cs_o365_dlp_sharepoint_filter', input_id: 'macro_cs_o365_dlp_sharepoint_filter', button_id: 'macro_cs_o365_dlp_sharepoint_filter_button', msg_id: 'macro_cs_o365_dlp_sharepoint_filter_msg'},
 
+        /* Network */
         { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_cs_scanning_basic_scanning_filter_msg'},
         { macro_name: 'cs_tor_traffic_filter', input_id: 'macro_cs_tor_traffic_filter', button_id: 'macro_cs_tor_traffic_filter_button', msg_id: 'macro_cs_tor_traffic_filter_msg'},
         { macro_name: 'cs_network_traffic_map_filter', input_id: 'macro_cs_network_traffic_map_filter', button_id: 'macro_cs_network_traffic_map_filter_button', msg_id: 'macro_cs_network_traffic_map_filter_msg'},
         { macro_name: 'cs_network_scanning_map_filter', input_id: 'macro_cs_network_scanning_map_filter', button_id: 'macro_cs_network_scanning_map_filter_button', msg_id: 'macro_cs_network_scanning_map_filter_msg'},
 
+        /* PaloAlto */
         { macro_name: 'cs_palo_dns_sinkhole_filter', input_id: 'macro_cs_palo_dns_sinkhole_filter', button_id: 'macro_cs_palo_dns_sinkhole_filter_button', msg_id: 'macro_cs_palo_dns_sinkhole_filter_msg'},
         { macro_name: 'cs_palo_ddos_prevented_filter', input_id: 'macro_cs_palo_ddos_prevented_filter', button_id: 'macro_cs_palo_ddos_prevented_filter_button', msg_id: 'macro_cs_palo_ddos_prevented_filter_msg'},
         { macro_name: 'cs_palo_firewall_login_failure_filter', input_id: 'macro_cs_palo_firewall_login_failure_filter', button_id: 'macro_cs_palo_firewall_login_failure_filter_button', msg_id: 'macro_cs_palo_firewall_login_failure_filter_msg'},
@@ -54,6 +63,7 @@ require([
         { macro_name: 'cs_palo_blocked_ip_outbound_filter', input_id: 'macro_cs_palo_blocked_ip_outbound_filter', button_id: 'macro_cs_palo_blocked_ip_outbound_filter_button', msg_id: 'macro_cs_palo_blocked_ip_outbound_filter_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter', input_id: 'macro_cs_palo_malicious_ip_list_filter', button_id: 'macro_cs_palo_malicious_ip_list_filter_button', msg_id: 'macro_cs_palo_malicious_ip_list_filter_msg'},
 
+        /* Sophos */
         { macro_name: 'cs_sophos_update_errors_filter', input_id: 'macro_cs_sophos_update_errors_filter', button_id: 'macro_cs_sophos_update_errors_filter_button', msg_id: 'macro_cs_sophos_update_errors_filter_msg'},
         { macro_name: 'cs_sophos_endpoint_not_protected_filter', input_id: 'macro_cs_sophos_endpoint_not_protected_filter', button_id: 'macro_cs_sophos_endpoint_not_protected_filter_button', msg_id: 'macro_cs_sophos_endpoint_not_protected_filter_msg'},
         { macro_name: 'cs_sophos_endpoint_outofdate_filter', input_id: 'macro_cs_sophos_endpoint_outofdate_filter', button_id: 'macro_cs_sophos_endpoint_outofdate_filter_button', msg_id: 'macro_cs_sophos_endpoint_outofdate_filter_msg'},
@@ -65,6 +75,7 @@ require([
         { macro_name: 'cs_sophos_exploit_prevented', input_id: 'macro_cs_sophos_exploit_prevented', button_id: 'macro_cs_sophos_exploit_prevented_button', msg_id: 'macro_cs_sophos_exploit_prevented_msg'},
         { macro_name: 'cs_sophos_malware_detected', input_id: 'macro_cs_sophos_malware_detected', button_id: 'macro_cs_sophos_malware_detected_button', msg_id: 'macro_cs_sophos_malware_detected_msg'},
 
+        /* Ransomware */
         { macro_name: 'cs_spike_in_file_writes_filter', input_id: 'macro_cs_spike_in_file_writes_filter', button_id: 'macro_cs_spike_in_file_writes_filter_button', msg_id: 'macro_cs_spike_in_file_writes_filter_msg'},
         { macro_name: 'cs_system_processes_run_from_unexpected_locations_filter', input_id: 'macro_cs_system_processes_run_from_unexpected_locations_filter', button_id: 'macro_cs_system_processes_run_from_unexpected_locations_filter_button', msg_id: 'macro_cs_system_processes_run_from_unexpected_locations_filter_msg'},
         { macro_name: 'cs_common_ransomware_extensions_filter', input_id: 'macro_cs_common_ransomware_extensions_filter', button_id: 'macro_cs_common_ransomware_extensions_filter_button', msg_id: 'macro_cs_common_ransomware_extensions_filter_msg'},
@@ -72,11 +83,14 @@ require([
         { macro_name: 'cs_usn_journal_deletion_filter', input_id: 'macro_cs_usn_journal_deletion_filter', button_id: 'macro_cs_usn_journal_deletion_filter_button', msg_id: 'macro_cs_usn_journal_deletion_filter_msg'},
         { macro_name: 'cs_scheduled_tasks_used_in_badrabbit_ransomware_filter', input_id: 'macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter', button_id: 'macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_button', msg_id: 'macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_msg'},
         
+        /* Credential Compromise */
         { macro_name: 'cs_attempted_credential_dump_from_registry_via_reg_exe_filter', input_id: 'macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter', button_id: 'macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_button', msg_id: 'macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_msg'},
         { macro_name: 'cs_detect_credential_dumping_through_lsass_access_filter', input_id: 'macro_cs_detect_credential_dumping_through_lsass_access_filter', button_id: 'macro_cs_detect_credential_dumping_through_lsass_access_filter_button', msg_id: 'macro_cs_detect_credential_dumping_through_lsass_access_filter_msg'},
         { macro_name: 'cs_credential_dumping_via_symlink_to_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_button', msg_id: 'macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_msg'},
-        { macro_name: 'cs_credential_dumping_via_copy_command_from_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button', msg_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_msg'}
-        
+        { macro_name: 'cs_credential_dumping_via_copy_command_from_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button', msg_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_msg'},
+
+        /* VPN */
+        { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_cs_vpn_dashboard_filter_msg'}        
     ];
    
     // Defining search and search manager

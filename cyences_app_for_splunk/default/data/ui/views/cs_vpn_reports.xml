@@ -1,0 +1,167 @@
+<form theme="dark">
+  <label>VPN Reports</label>
+  <init>
+    <set token="tkn_filter_home_country"></set>
+  </init>
+  <search id="bs1">
+    <query>
+      <![CDATA[
+        | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s
+        | rename Authentication.* as *
+        | iplocation src_ip
+        $tkn_filter_home_country$
+        | eval City = if(isnull(City) OR City="", "*Unknown", City) 
+        | search $Country$ $City$
+        | `cs_vpn_dashboard_filter`
+      ]]>
+    </query>
+    <earliest>$time.earliest$</earliest>
+    <latest>$time.latest$</latest>
+  </search>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="radio" token="tkn_home_country">
+      <label>Filter Home Country</label>
+      <fieldForLabel>home_country_label</fieldForLabel>
+      <fieldForValue>home_country</fieldForValue>
+      <search>
+        <query>| makeresults | eval home_country=`cs_home_country` | eval home_country_label="Exclude ".home_country</query>
+        <earliest>0</earliest>
+        <latest></latest>
+      </search>
+      <change>
+        <condition match="$value$==&quot;*&quot;">
+          <set token="tkn_filter_home_country"></set>
+        </condition>
+        <condition>
+          <set token="tkn_filter_home_country">| search Country!=$value|s$</set>
+        </condition>
+      </change>
+      <choice value="*">Not Exclude</choice>
+      <default>*</default>
+    </input>
+    <input type="dropdown" token="Country" searchWhenChanged="true">
+      <label>Country</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <prefix>Country="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+      <fieldForLabel>Country</fieldForLabel>
+      <fieldForValue>Country</fieldForValue>
+      <search base="bs1">
+        <query>| stats count by Country</query>
+      </search>
+    </input>
+    <input type="dropdown" token="City" searchWhenChanged="true">
+      <label>City</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>City</fieldForLabel>
+      <fieldForValue>City</fieldForValue>
+      <search base="bs1">
+        <query>| stats count by City</query>
+      </search>
+      <prefix>City="</prefix>
+      <suffix>"</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <map>
+        <title>Connected Workforce by Location</title>
+        <search base="bs1">
+          <query>| geostats count by action</query>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="mapping.tileLayer.maxZoom">15</option>
+        <option name="mapping.type">marker</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Logins by Success/Failure</title>
+        <search base="bs1">
+          <query>| stats count by action</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.fieldColors">{"success": 0x53a051, "failure": 0xdc4e41}</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Successful vs Failed Logins</title>
+        <search base="bs1">
+          <query>| timechart dc(user) as "Unique Users" count(eval(action="success")) as Success count(eval(action="failure")) as Failure</query>
+        </search>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"Unique Users"</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Logins by Country</title>
+        <search base="bs1">
+          <query>| stats count by Country</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Unique Users by Country</title>
+        <search base="bs1">
+          <query>| timechart dc(user) as "Unique Users" by Country</query>
+        </search>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Login Details</title>
+        <search base="bs1">
+          <query>| fields _time user action src_ip City Country
+| rename user as User, action as Status, src_ip as "SourceIP"
+| sort - _time</query>
+        </search>
+        <option name="count">5</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=%60rw_vpn_indexes%60%20TERM($row.User$)%20user=$row.User$%20TERM($row.SourceIP$)%20src_ip=$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>

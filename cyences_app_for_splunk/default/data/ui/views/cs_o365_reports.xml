@@ -10,7 +10,7 @@
     </input>
   </fieldset>
   <search>
-    <query>| makeresults | eval country=`cs_o365_country`</query>
+    <query>| makeresults | eval country=`cs_home_country`</query>
     <earliest>0</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
@@ -23,7 +23,7 @@
       <title>O365/Azure - Success logins outside $tkn_country$</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_o365_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -33,7 +33,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Successful logins outside country. You can change your contry with cs_o365_country macro.</p>
+        <p>Description: Successful logins outside country. You can change your home contry with cs_home_country macro.</p>
         <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
       </html>
     </panel>
@@ -43,7 +43,7 @@
       <title>O365/Azure - Failed logins outside $tkn_country$</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_o365_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -53,7 +53,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Failed logins outside country. You can change your contry with cs_o365_country macro.</p>
+        <p>Description: Failed logins outside country. You can change your home contry with cs_home_country macro.</p>
         <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
       </html>
     </panel>

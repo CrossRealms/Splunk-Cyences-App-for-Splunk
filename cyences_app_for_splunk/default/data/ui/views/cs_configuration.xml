@@ -61,6 +61,11 @@
           <br/>
           <p id="macro_data_palo_msg"/>
           <br/>
+          VPN Data (indexes) : <input type="text" name="macro_data_vpn" id="macro_data_vpn"/>
+          <button id="macro_data_vpn_button">Update</button>
+          <br/>
+          <p id="macro_data_vpn_msg"/>
+          <br/>
         </div>
       </html>
     </panel>
@@ -81,6 +86,11 @@
           <br/>
           <p id="macro_datamodel_network_traffic_msg"/>
           <br/>
+          Authentication Data-Model : <input type="text" name="macro_datamodel_authentication" id="macro_datamodel_authentication"/>
+          <button id="macro_datamodel_authentication_button">Update</button>
+          <br/>
+          <p id="macro_datamodel_authentication_msg"/>
+          <br/>
         </div>
       </html>
     </panel>
@@ -98,10 +108,10 @@
           <br/>
           <p id="macro_cs_ad_password_change_outside_working_hour_definition_msg"/>
           <br/>
-          cs_o365_country : <input type="text" name="macro_cs_o365_country" id="macro_cs_o365_country"/>
-          <button id="macro_cs_o365_country_button">Update</button>
+          cs_home_country (enclosed in double quotes) : <input type="text" name="macro_cs_home_country" id="macro_cs_home_country"/>
+          <button id="macro_cs_home_country_button">Update</button>
           <br/>
-          <p id="macro_cs_o365_country_msg"/>
+          <p id="macro_cs_home_country_msg"/>
           <br/>
           Home Location Latitude (For Network Traffic Map) : <input type="text" name="macro_cs_network_home_location_lat" id="macro_cs_network_home_location_lat"/>
           <button id="macro_cs_network_home_location_lat_button">Update</button>
@@ -406,6 +416,20 @@
           <button id="macro_cs_palo_malicious_ip_list_filter_button">Update</button>
           <br/>
           <p id="macro_cs_palo_malicious_ip_list_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>Category: VPN</b>
+          </p>
+        </div>
+        <div>
+          cs_vpn_dashboard_filter : <input type="text" name="macro_cs_vpn_dashboard_filter" id="macro_cs_vpn_dashboard_filter"/>
+          <button id="macro_cs_vpn_dashboard_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_vpn_dashboard_filter_msg"/>
           <br/>
         </div>
       </html>
