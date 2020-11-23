@@ -1,0 +1,114 @@
+<form theme="dark">
+  <label>Authentication</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="tkn_app">
+      <label>App</label>
+      <choice value="*">All</choice>
+      <fieldForLabel>app</fieldForLabel>
+      <fieldForValue>app</fieldForValue>
+      <search>
+        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Authentication where `cs_authentication_indexes` `cs_authentication_app_filter` by Authentication.app | rename "Authentication.app" as app</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>All Authentication</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.action
+| timechart span=1h count, dc(Authentication.user) by Authentication.action
+| eval "Unique Users"='dc(Authentication.user): failure'+'dc(Authentication.user): success'
+| fields - "dc(Authentication.user): failure", "dc(Authentication.user): success"
+| rename "count: failure" as "Failure", "count: success" as "Success"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"Unique Users"</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
+      </chart>
+      <html>
+        <b>Description:</b> Any unusual behaviors on the high number of failure attempts or abnormal behaviour in number of unique users.
+      </html>
+    </panel>
+    <panel>
+      <title>Authentication Failure Reasons Over Time</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Authentication where `cs_authentication_indexes` nodename=Authentication.Failed_Authentication Authentication.action=failure Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.signature
+| timechart span=1h count by Authentication.signature limit=0</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <html>
+        <b>Description:</b> Is there anything abnormal on the Authentication Failure Reasons? Any new spikes for specific failures should be investigated.
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Application Authentication Success Rate Below 100%</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Authentication where `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action
+| chart count by Authentication.app Authentication.action
+| addtotals
+| eval "Success%" = round(success / Total * 100,2)
+| fields - Total
+| rename failure as "Failure", success as "Success"
+| where 'Success%' &lt; 100
+| sort + "Success%"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="number" field="Success%">
+          <option name="unit">%</option>
+        </format>
+        <format type="color" field="Success%">
+          <colorPalette type="list">[#DC4E41,#F1813F,#F8BE34,#53A051,#53A051]</colorPalette>
+          <scale type="threshold">50,90,95,100</scale>
+        </format>
+      </table>
+      <html>
+        <b>Description:</b> Any low authentication success rate should be investigated and to determine if this is a single user issue or a greater impact.
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <h3>Dashboard Description</h3>
+        <p>This dashboard includes all the Authentication attempts that are mapped with Authentication CIM data model.</p>
+        <p>Update "Authentication Data (indexes)" macro (`cs_authentication_indexes`) definition from "Settings &gt; Configuration" page to filter any data or include only specific data.</p>
+        <p>You can also update `cs_authentication_app_filter` macro definition from "Settings &gt; Configuration" page to filter any authentication data with the <b>app</b> field from the data.</p>
+      </html>
+    </panel>
+  </row>
+</form>

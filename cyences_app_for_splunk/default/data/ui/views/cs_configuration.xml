@@ -66,6 +66,11 @@
           <br/>
           <p id="macro_data_vpn_msg"/>
           <br/>
+          Authentication Data (indexes) : <input type="text" name="macro_data_authentication" id="macro_data_authentication"/>
+          <button id="macro_data_authentication_button">Update</button>
+          <br/>
+          <p id="macro_data_authentication_msg"/>
+          <br/>
         </div>
       </html>
     </panel>
@@ -430,6 +435,20 @@
           <button id="macro_cs_vpn_dashboard_filter_button">Update</button>
           <br/>
           <p id="macro_cs_vpn_dashboard_filter_msg"/>
+          <br/>
+        </div>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>Category: Authentication</b>
+          </p>
+        </div>
+        <div>
+          cs_authentication_app_filter : <input type="text" name="macro_cs_authentication_app_filter" id="macro_cs_authentication_app_filter"/>
+          <button id="macro_cs_authentication_app_filter_button">Update</button>
+          <br/>
+          <p id="macro_cs_authentication_app_filter_msg"/>
           <br/>
         </div>
       </html>

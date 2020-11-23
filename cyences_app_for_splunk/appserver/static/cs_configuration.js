@@ -19,6 +19,7 @@ require([
         { macro_name: 'cs_sysmon', input_id: 'macro_data_sysmon', button_id: 'macro_data_sysmon_button', msg_id: 'macro_data_sysmon_msg'},
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_palo_msg'},
         { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_vpn_msg'},
+        { macro_name: 'cs_authentication_indexes', input_id: 'macro_data_authentication', button_id: 'macro_data_authentication_button', msg_id: 'macro_data_authentication_msg'},
 
         /* Other Macros */
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_cs_ad_password_change_outside_working_hour_definition_msg'},
@@ -90,7 +91,10 @@ require([
         { macro_name: 'cs_credential_dumping_via_copy_command_from_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button', msg_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_msg'},
 
         /* VPN */
-        { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_cs_vpn_dashboard_filter_msg'}        
+        { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_cs_vpn_dashboard_filter_msg'},
+
+        /* Authentication */
+        { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_cs_authentication_app_filter_msg'}
     ];
    
     // Defining search and search manager
