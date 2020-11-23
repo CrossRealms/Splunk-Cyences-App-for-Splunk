@@ -74,8 +74,8 @@
   </fieldset>
   <row>
     <panel>
+      <title>Connected Workforce by Location</title>
       <map>
-        <title>Connected Workforce by Location</title>
         <search base="bs1">
           <query>| geostats count by action</query>
         </search>
@@ -87,8 +87,8 @@
   </row>
   <row>
     <panel>
+      <title>Logins by Success/Failure</title>
       <chart>
-        <title>Logins by Success/Failure</title>
         <search base="bs1">
           <query>| stats count by action</query>
         </search>
@@ -99,29 +99,29 @@
       </chart>
     </panel>
     <panel>
+      <title>Successful vs Failed Logins</title>
       <chart>
-        <title>Successful vs Failed Logins</title>
         <search base="bs1">
           <query>| timechart dc(user) as "Unique Users" count(eval(action="success")) as Success count(eval(action="failure")) as Failure</query>
         </search>
-        <option name="charting.legend.mode">standard</option>
-        <option name="charting.legend.placement">top</option>
-        <option name="charting.lineWidth">2</option>
         <option name="charting.axisY2.enabled">1</option>
         <option name="charting.chart">column</option>
         <option name="charting.chart.overlayFields">"Unique Users"</option>
         <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.drilldown">none</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="refresh.display">progressbar</option>
         <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
   </row>
   <row>
     <panel>
+      <title>Logins by Country</title>
       <chart>
-        <title>Logins by Country</title>
         <search base="bs1">
           <query>| stats count by Country</query>
         </search>
@@ -131,25 +131,25 @@
       </chart>
     </panel>
     <panel>
+      <title>Unique Users by Country</title>
       <chart>
-        <title>Unique Users by Country</title>
         <search base="bs1">
           <query>| timechart dc(user) as "Unique Users" by Country</query>
         </search>
-        <option name="charting.legend.mode">standard</option>
-        <option name="charting.legend.placement">top</option>
-        <option name="charting.lineWidth">2</option>
         <option name="charting.chart">column</option>
         <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.drilldown">none</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="charting.lineWidth">2</option>
         <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
   </row>
   <row>
     <panel>
+      <title>Login Details</title>
       <table>
-        <title>Login Details</title>
         <search base="bs1">
           <query>| fields _time user action src_ip City Country
 | rename user as User, action as Status, src_ip as "SourceIP"
@@ -162,6 +162,17 @@
           <link target="_blank">search?q=%60rw_vpn_indexes%60%20TERM($row.User$)%20user=$row.User$%20TERM($row.SourceIP$)%20src_ip=$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
         </drilldown>
       </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <div>
+          <h3>Dashboard Description</h3>
+          <p>The dashboard uses data mapped with Authentication data-model. So make sure your VPN data is mapped with Authentication data-model. (If you are using Octa (PaloAlto) VPN then installing RWI Add-on will solve this.)</p>
+          <p>Also, update "VPN Data (indexes)" macro (`cs_vpn_indexes`) definition from "Settings > Configuration" page to consider proper data to be displayed.</p>
+        </div>
+      </html>
     </panel>
   </row>
 </form>
