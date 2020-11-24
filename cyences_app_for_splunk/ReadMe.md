@@ -46,8 +46,23 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
-Version 1.0.0
-* Created App Dashboards, Alerts and Reports.
+Version 1.0.0 (Nov 2020)
+* Created App Overview dashboard.
+* Added Details/Forensic dashboard for investigating security issues.
+* Added multiple security alerts with below categories.
+  * Categories: Ransomware, Windows & AD, Office 365, Endpoint Compromise, Network Compromise, Credential Compromise, Sophos and PaloAlto Firewall.
+* Added below reports:
+  * Windows & AD
+  * O365
+  * Network Reports
+  * PaloAlto
+  * Malicious IP List
+  * Sophos
+  * VPN
+  * Authentication
+* Added App configuration dashboard.
+* Added HoneyDB based blocked IP list and used that list to identify bad traffic.
+
 
 
 LOOKUPS
