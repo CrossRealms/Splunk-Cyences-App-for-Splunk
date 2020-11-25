@@ -123,7 +123,7 @@
   </row>
   <row>
     <panel>
-      <title>Windows &amp; AD</title>
+      <title>Active Directory &amp; Windows</title>
       <table>
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Windows|AD")`</query>
@@ -196,10 +196,10 @@
   </row>
   <row>
     <panel>
-      <title>PaloAlto Firewall</title>
+      <title>Palo Alto Firewall</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("PaloAlto Firewall")`</query>
+          <query>| `cs_filter_savedsearches("Palo Alto Firewall")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>

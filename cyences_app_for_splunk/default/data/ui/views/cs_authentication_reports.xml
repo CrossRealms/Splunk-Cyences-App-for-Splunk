@@ -23,7 +23,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>All Authentication</title>
+      <title>All Authentications</title>
       <chart>
         <search>
           <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.action
@@ -45,7 +45,7 @@
         <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
       </chart>
       <html>
-        <b>Description:</b> Any unusual behaviors on the high number of failure attempts or abnormal behaviour in number of unique users.
+        <p><b>Description:</b> Displays unusual behavior for users with a large number of failure attempts and abnormal behavior from the number of unique users.</p>
       </html>
     </panel>
     <panel>
@@ -63,7 +63,7 @@
         <option name="refresh.display">progressbar</option>
       </chart>
       <html>
-        <b>Description:</b> Is there anything abnormal on the Authentication Failure Reasons? Any new spikes for specific failures should be investigated.
+        <p><b>Description:</b> Displays any abnormalities that may have occurred or new spikes for a specific kind of failure that should be further investigated.</p>
       </html>
     </panel>
   </row>
@@ -97,17 +97,17 @@
         </format>
       </table>
       <html>
-        <b>Description:</b> Any low authentication success rate should be investigated and to determine if this is a single user issue or a greater impact.
+        <p><b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
       <html>
-        <h3>Dashboard Description</h3>
-        <p>This dashboard includes all the Authentication attempts that are mapped with Authentication CIM data model.</p>
-        <p>Update "Authentication Data (indexes)" macro (`cs_authentication_indexes`) definition from "Settings &gt; Configuration" page to filter any data or include only specific data.</p>
-        <p>You can also update `cs_authentication_app_filter` macro definition from "Settings &gt; Configuration" page to filter any authentication data with the <b>app</b> field from the data.</p>
+        <p>Authentication Reports</p>
+        <p>This dashboard includes all authentication attempts that are mapped with the Authentication CIM data model.</p>
+        <p>To filter through data or to only include specific kinds of data, update the "Authentication Data (indexes)" macro (cs_authentication_indexes) definition (Settings &gt; Configuration).</p>
+        <p>You can also update `cs_authentication_app_filter` macro definition from "Settings &gt; Configuration" page to filter any authentication data by app name.</p>
       </html>
     </panel>
   </row>

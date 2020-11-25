@@ -1,5 +1,5 @@
 <form theme="dark">
-  <label>Windows/AD Reports</label>
+  <label>Active Directory and Windows</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -23,8 +23,7 @@
         <option name="drilldown">none</option>
       </table>
       <html>
-        <p>Description: User added/removed/disabled/enabled events.</p>
-        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+        <p><b>Description:</b> User has added/removed/enabled/disabled the following events.</p>
       </html>
     </panel>
   </row>
@@ -41,14 +40,13 @@
         <option name="drilldown">none</option>
       </table>
       <html>
-        <p>Description: Member added/removed to/from a group events.</p>
-        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+        <p><b>Description:</b> User has added/removed to/from a group events.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>AD - Password change outside working hour</title>
+      <title>AD - Password Change Outside of Working Hours</title>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
@@ -62,8 +60,15 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Outside working hour is Saturday, Sunday and any day before 6 AM and after 7 PM. You can change the outside working hour definition with cs_ad_password_change_outside_working_hour_definition macro.</p>
-        <p>Data Collection: WinEventLog:Security events (Splunk Add-on for Windows)</p>
+        <p><b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Active Directory and Windows Reports</p>
+        <p><b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
       </html>
     </panel>
   </row>

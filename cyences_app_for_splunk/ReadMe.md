@@ -50,13 +50,13 @@ Version 1.0.0 (Nov 2020)
 * Created App Overview dashboard.
 * Added Details/Forensic dashboard for investigating security issues.
 * Added multiple security alerts with below categories.
-  * Categories: Ransomware, Windows & AD, Office 365, Endpoint Compromise, Network Compromise, Credential Compromise, Sophos and PaloAlto Firewall.
+  * Categories: Ransomware, Active Directory & Windows, Office 365, Endpoint Compromise, Network Compromise, Credential Compromise, Sophos and Palo Alto Firewall.
 * Added below reports:
-  * Windows & AD
+  * Active Directory & Windows
   * O365
   * Network Reports
-  * PaloAlto
-  * Malicious IP List
+  * Palo Alto
+  * Globally Detected Malicious IPs
   * Sophos
   * VPN
   * Authentication

@@ -52,7 +52,7 @@ require([
             system_compromised_search: "| stats count by sourcetype",
             attacker_search: "| stats count by src_ip"
         },
-        "PaloAlto Firewall - Network Compromise - PaloAlto DNS Sinkhole": {
+        "Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole": {
             system_compromised_search: "| stats sum(count) as count by dvc_name, rule, app, http_category",
             attacker_search: "| stats sum(count) as count by src_ip"
         },

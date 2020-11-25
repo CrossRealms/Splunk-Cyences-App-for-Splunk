@@ -1,3 +1,22 @@
+.dashboard-panel.with-title {
+    border: 2px solid #cccccc;
+    border-radius: 0.8em;
+    background: #37444e !important;
+}
+
+.dashboard-element.chart {
+    border: 2px solid #cccccc;
+    border-radius: 0.8em;
+    font-size: 15px;
+    background: #37444e !important;
+}
+
+.dashboard-panel {
+    border: 2px solid #cccccc;
+    border-radius: 0.8em;
+    font-size: 15px;
+    background: #37444e !important;
+}
 
 .dashboard-row {
     margin-top: 15px;

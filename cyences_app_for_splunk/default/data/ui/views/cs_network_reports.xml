@@ -29,8 +29,7 @@
       </map>
       <html>
         <div>
-          <p>Shows network (port) scanning attempt (scanned for more than 100 different ports).</p>
-          <p>Data Collection: Any Network Traffic data, like logs from PaloAlto and other firewalls, that mapped with Network_Traffic CIM data-model.</p>
+          <p><b>Description:</b> Displays port scanning attempts onto your network, which scan over 100 ports or more.</p>
         </div>
       </html>
     </panel>
@@ -40,7 +39,7 @@
       <title>Top Network Traffic</title>
       <input type="radio" token="tkn_filter_outbound_traffic">
         <label></label>
-        <choice value="| search `cs_filter_private_ips`">Filter Out-bound traffic</choice>
+        <choice value="| search `cs_filter_private_ips`">Filter Outbound Traffic</choice>
         <choice value="">All Traffic</choice>
         <default></default>
       </input>
@@ -74,10 +73,17 @@ $tkn_filter_outbound_traffic$
       </viz>
       <html>
         <div>
-          <p>Shows top20 normal traffic (in green color) from different source to destination. And it also shows top20 traffic from blocked IPs (in red color).</p>
-          <p>It requires HoneyDB configuration to identify blocked/bad traffic from the Network.</p>
-          <p>Data Collection: Any Network Traffic data, like logs from PaloAlto and other firewalls, that mapped with Network_Traffic CIM data-model.</p>
+          <p><b>Description:</b> Displays a traffic visual for the top twenty networks with their respective source and destination pathways.</p>
         </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Network Reports</p>
+        <p>The above dashboards use a third-party app called <a href="https://splunkbase.splunk.com/app/3511/" target="_blank">Missile App</a> to display the visuals for the Top Network Traffic dashboard panel.</p>
+        <p><b>Data Collection:</b> All types of network traffic data are mapped with the Network_Traffic CIM data model.</p>
       </html>
     </panel>
   </row>

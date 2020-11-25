@@ -1,5 +1,5 @@
 <form theme="dark">
-  <label>PaloAlto Firewall Reports</label>
+  <label>Palo Alto Firewall</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -11,10 +11,10 @@
   </fieldset>
   <row>
     <panel>
-      <title>DDoS Attack Prevented by PaloAlto Firewall</title>
+      <title>DDoS Attack Prevented by Palo Alto Firewall</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented"
+          <query>| savedsearch "Palo Alto Firewall - Network Compromise - DDoS Attack Prevented"
 | eval last_seen=strftime(last_seen, "%F %T")
 | fields - dc_src_port</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -27,14 +27,14 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Description: PaloAlto Firewall prevented DDoS attack events. It searches for log_subtype=packet. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - DDoS Attack Prevented", enable the report to use this panel.)</p>
-        <p>Data Collection - Palo Alto Networks firewalls threat data. (Palo Alto Networks Add-on for Splunk)</p>
+        <p><b>Description:</b> The events listed are DDoS attacks prevented by Palo Alto firewalls. The query searches for log_subtype=packet. An accelerated report named "Palo Alto Firewall – Network Compromise – DDoS Attack Prevented" has to be enabled in order for this dashboard panel to function.</p>
+        <p><b>Data Collection:</b> Threat data is received from Palo Alto Networks firewalls via the Palo Alto Networks Add-on for Splunk.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>PaloAlto Firewall Login Failures</title>
+      <title>Palo Alto Firewall Login Failures</title>
       <table>
         <search>
           <query>`cs_palo` sourcetype="pan:system" signature="auth-fail" object IN ("Local", "Local_Users") | rex "failed authentication for user \'(?&lt;user&gt;.*)\'\." | rex " From: (?&lt;src&gt;\d+\.\d+\.\d+\.\d+)" | stats count values(dvc) as dvc, values(dvc_name) as dvc_name, values(src) as src by user | sort - count | `cs_palo_firewall_login_failure_filter`</query>
@@ -46,8 +46,8 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Description: PaloAlto Firewall Logins on Local and Local_Users profile.</p>
-        <p>Data Collection: Palo Alto pan:system sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+        <p><b>Description:</b> Palo Alto firewall login failures by local and Local_Users profiles.</p>
+        <p><b>Data Collection:</b> : The pan:system sourcetype for Palo Alto is used to collect data via the Palo Alto Networks Add-on for Splunk.</p>
       </html>
     </panel>
   </row>
@@ -56,7 +56,7 @@
       <title>Inbound Traffic from Blocked IPs</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"
+          <query>| savedsearch "Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"
 | eval last_seen=strftime(last_seen, "%F %T")
 | fields - dc_dvc_name, dc_src_port, packets_in, packets_out, dc_dest_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -70,15 +70,15 @@
         </drilldown>
       </table>
       <html>
-        <p>Description: Traffic coming from blocked IPs. The ip_blocked_list lookup (`cs_palo_search_blocked_ip_lookup_name`) is being used to identify the blocked IPs. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - Inbound Traffic from Blocked IPs", enable the report to use this panel.)</p>
-        <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+        <p><b>Description:</b> Inbound traffic coming from blocked IP addresses. The ip_blocked_list lookup (cs_palo_search_blocked_ip_lookup_name) is used to identify the blocked IPs. An accelerated report named "Palo Alto Firewall – Network Compromise – Inbound Traffic from Blocked IPs" has to be enabled in order for this dashboard panel to function.</p>
+        <p><b>Data Collection:</b> The pan:traffic sourcetype for Palo Alto is used to collect data via the Palo Alto Networks Add-on for Splunk.</p>
       </html>
     </panel>
     <panel>
       <title>Outbound Traffic to Blocked IPs</title>
       <table>
         <search>
-          <query>| savedsearch "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"
+          <query>| savedsearch "Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"
 | eval last_seen=strftime(last_seen, "%F %T")
 | fields - dc_dvc_name, dc_dest_port, packets_in, packets_out, dc_src_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -92,8 +92,16 @@
         </drilldown>
       </table>
       <html>
-        <p>Description: Traffic going to blocked IPs. The ip_blocked_list lookup (`cs_palo_search_blocked_ip_lookup_name`) is being used to identify the blocked IPs. (Uses Accelerated Report "PaloAlto Firewall - Network Compromise - Outbound Traffic to Blocked IPs", enable the report to use this panel.)</p>
-        <p>Data Collection: Palo Alto pan:traffic sourcetype's data. (Palo Alto Networks Add-on for Splunk)</p>
+        <p><b>Description:</b> Outbound traffic going to blocked IP addresses. The ip_blocked_list lookup (‘cs_palo_search_blocked_ip_lookup_name’) is used to identify the blocked IPs. An accelerated report named "Palo Alto Firewall – Network Compromise – Outbound Traffic to Blocked IPs" has to be enabled in order for this dashboard panel to function.</p>
+        <p><b>Data Collection:</b> The pan:traffic sourcetype for Palo Alto is used to collect data via the Palo Alto Networks Add-on for Splunk.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Palo Alto Firewall Reports</p>
+        <p><b>Data Collection:</b> The pan:system, pan:threat, and pan:traffic sourcetypes are necessary to collect firewall data via the <a href="https://splunkbase.splunk.com/app/2757/" target="_blank">Palo Alto Networks Add-on for Splunk</a>.</p>
       </html>
     </panel>
   </row>

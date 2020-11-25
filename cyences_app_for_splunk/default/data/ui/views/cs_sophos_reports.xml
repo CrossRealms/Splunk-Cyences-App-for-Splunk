@@ -1,5 +1,5 @@
 <form theme="dark">
-  <label>Sophos Reports</label>
+  <label>Sophos</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -146,8 +146,8 @@
   <row>
     <panel>
       <html>
-        <p>Data Collection - Sophos Central SIEM Integration Add-on (https://splunkbase.splunk.com/app/4647/)</p>
-        <p> Items might have false positives based on user/admin activities.</p>
+        <p>Sophos Reports</p>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/4647/" target="_blank">Sophos Central SIEM Integration Add-on</a> for collecting Sophos data.</p>
       </html>
     </panel>
   </row>

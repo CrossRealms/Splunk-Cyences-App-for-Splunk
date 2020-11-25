@@ -65,7 +65,7 @@
         </drilldown>
       </table>
       <html>
-          <p>Click on any row to see all the results that were generated. Anything before last 24 hours, result will not be searchable.</p>
+        <p>Click on any of the triggered alert results to view additional details for the specified event. Results that are less than a day old are not searchable.</p>
       </html>
     </panel>
     <panel>
@@ -83,7 +83,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-          <p>Click on the result row to run the search now. On newly opened search windows you can see the search query and results, you can also change the time-range.</p>
+        <p>Click on the Saved Searches to run a search query for the desired search and to view the results. A time range picker will be provided for further evaluation.</p>
       </html>
     </panel>
   </row>

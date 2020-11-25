@@ -1,5 +1,5 @@
 <form theme="dark">
-  <label>VPN Reports</label>
+  <label>VPN</label>
   <init>
     <set token="tkn_filter_home_country"></set>
   </init>
@@ -43,7 +43,7 @@
           <set token="tkn_filter_home_country">| search Country!=$value|s$</set>
         </condition>
       </change>
-      <choice value="*">Not Exclude</choice>
+      <choice value="*">Do Not Exclude</choice>
       <default>*</default>
     </input>
     <input type="dropdown" token="Country" searchWhenChanged="true">
@@ -167,11 +167,10 @@
   <row>
     <panel>
       <html>
-        <div>
-          <h3>Dashboard Description</h3>
-          <p>The dashboard uses data mapped with Authentication data-model. So make sure your VPN data is mapped with Authentication data-model. (If you are using Octa (PaloAlto) VPN then installing RWI Add-on will solve this.)</p>
-          <p>Also, update "VPN Data (indexes)" macro (`cs_vpn_indexes`) definition from "Settings > Configuration" page to consider proper data to be displayed.</p>
-        </div>
+        <p>VPN Reports</p>
+        <p><b>Data Collection:</b> You can use Palo Alto Add-on if you are using Global Protect VPN. For any other VPN choose appropriate Splunk integration to collect the data.</p>
+        <p>The data must be mapped with the Authentication data model from the Common Information Model. The Global Protect (Palo Alto) VPN can be paired with the Remote Work Insights Add-on to circumvent this. For all other VPN options, please choose the appropriate Splunk integration method to collect this data.</p>
+        <p>The data displayed can be changed by updating the definition for the "VPN Data (indexes)" macro (Settings &gt; Configuration): cs_vpn_indexes.</p>
       </html>
     </panel>
   </row>

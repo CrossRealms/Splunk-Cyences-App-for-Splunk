@@ -1,14 +1,5 @@
 <form theme="dark">
-  <label>O365 Reports</label>
-  <fieldset submitButton="false">
-    <input type="time" token="timeRange">
-      <label>Time Range</label>
-      <default>
-        <earliest>-24h@h</earliest>
-        <latest>now</latest>
-      </default>
-    </input>
-  </fieldset>
+  <label>Office 365</label>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
     <earliest>0</earliest>
@@ -18,9 +9,18 @@
       <set token="tkn_country">$result.country$</set>
     </done>
   </search>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
-      <title>O365/Azure - Success logins outside $tkn_country$</title>
+      <title>O365/Azure - Success Logins Outside $tkn_country$</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
@@ -33,14 +33,13 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Successful logins outside country. You can change your home contry with cs_home_country macro.</p>
-        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>O365/Azure - Failed logins outside $tkn_country$</title>
+      <title>O365/Azure - Failed Logins Outside of $tkn_country$</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
@@ -53,14 +52,13 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Failed logins outside country. You can change your home contry with cs_home_country macro.</p>
-        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>O365/Azure - Login by Unknown UserId</title>
+      <title>O365/Azure - Login from Unknown UserId</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown | iplocation ClientIP | eval time=strftime(_time, "%F %T") | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
@@ -72,8 +70,16 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Description: Successful logins with Unknown user ID.</p>
-        <p>Data Collection: O365 management activity data (Splunk Add-on for O365)</p>
+        <p>
+          <b>Description:</b> Successful logins by an unknown user ID.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Office 365 Reports</p>
+        <p><b>Data Collection:</b> O365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for O365</a>.</p>
       </html>
     </panel>
   </row>
