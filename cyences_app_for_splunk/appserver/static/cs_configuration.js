@@ -151,7 +151,9 @@ require([
 
     $.each(all_macros, function(index, macro){
         $(`#${macro.button_id}`).on("click", function(){
-            updateMacroDefinition(`${macro.macro_name}`, $(`#${macro.input_id}`).val(), `#${macro.msg_id}`)
+            let value = $(`#${macro.input_id}`).val();
+            value = value.replace(/"/g, '\\\"');
+            updateMacroDefinition(`${macro.macro_name}`, value, `#${macro.msg_id}`);
         });
     });
 
