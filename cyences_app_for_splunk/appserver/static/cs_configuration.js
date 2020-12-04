@@ -94,7 +94,11 @@ require([
         { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_vpn_msg'},
 
         /* Authentication */
-        { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_authentication_msg'}
+        { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_authentication_msg'},
+
+        /* Splunk Admin */
+        { macro_name: 'cs_splunk_admin_missing_indexes_filter', input_id: 'macro_cs_splunk_admin_missing_indexes_filter', button_id: 'macro_cs_splunk_admin_missing_indexes_filter_button', msg_id: 'macro_splunk_admin_msg'},
+        { macro_name: 'cs_splunk_admin_missing_forwarders_filter', input_id: 'macro_cs_splunk_admin_missing_forwarders_filter', button_id: 'macro_cs_splunk_admin_missing_forwarders_filter_button', msg_id: 'macro_splunk_admin_msg'}
     ];
    
     // Defining search and search manager

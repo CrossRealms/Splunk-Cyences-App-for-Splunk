@@ -432,6 +432,28 @@
           </tr>
         </table>
       </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: VPN</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_vpn_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_vpn_dashboard_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_vpn_dashboard_filter" id="macro_cs_vpn_dashboard_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_vpn_dashboard_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
     </panel>
     <panel>
       <html>
@@ -612,20 +634,29 @@
         <div>
           <p>
             <b>
-              <center>Category: VPN</center>
+              <center>Category: Splunk Admin</center>
               <br/>
             </b>
           </p>
         </div>
-        <p id="macro_vpn_msg"/>
+        <p id="macro_splunk_admin_msg"/>
         <table style="width:80%">
           <tr>
-            <th style="text-align:left">cs_vpn_dashboard_filter</th>
+            <th style="text-align:left">cs_splunk_admin_missing_indexes_filter</th>
             <th style="text-align:left">
-              <input type="text" name="macro_cs_vpn_dashboard_filter" id="macro_cs_vpn_dashboard_filter"/>
+              <input type="text" name="macro_cs_splunk_admin_missing_indexes_filter" id="macro_cs_splunk_admin_missing_indexes_filter"/>
             </th>
             <th style="text-align:left">
-              <button id="macro_cs_vpn_dashboard_filter_button">Update</button>
+              <button id="macro_cs_splunk_admin_missing_indexes_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_splunk_admin_missing_forwarders_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_splunk_admin_missing_forwarders_filter" id="macro_cs_splunk_admin_missing_forwarders_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_splunk_admin_missing_forwarders_filter_button">Update</button>
             </th>
           </tr>
         </table>

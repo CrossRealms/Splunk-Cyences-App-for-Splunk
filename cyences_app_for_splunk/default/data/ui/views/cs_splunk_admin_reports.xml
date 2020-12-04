@@ -1,0 +1,110 @@
+<form theme="dark">
+  <label>Splunk Admin</label>
+  <search id="indexes_search">
+    <query>| inputlookup cs_indexes.csv
+| eval last_event=strftime(last_event, "%F %T")
+| table index, last_event, hosts, sourcetypes, status</query>
+    <earliest>0</earliest>
+    <latest></latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="forwarders_search">
+    <query>| inputlookup cs_forwarders.csv
+| eval last_connected=strftime(last_connected, "%F %T")
+| table hostname, forwarder_type, version, last_connected, os, arch, status</query>
+    <earliest>0</earliest>
+    <latest></latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <title>Indexes</title>
+      <input type="text" token="tkn_index">
+        <label>Index</label>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_indexes_status">
+        <label>Status</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>status</fieldForLabel>
+        <fieldForValue>status</fieldForValue>
+        <search base="indexes_search">
+          <query>dedup status | fields status</query>
+        </search>
+      </input>
+      <table>
+        <search base="indexes_search">
+          <query>search index=$tkn_index|s$ status=$tkn_indexes_status|s$</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Forwarders</title>
+      <input type="text" token="tkn_forwarder">
+        <label>Forwarder</label>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_forwarders_status">
+        <label>Status</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>status</fieldForLabel>
+        <fieldForValue>status</fieldForValue>
+        <search base="forwarders_search">
+          <query>dedup status | fields status</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_forwarders_version">
+        <label>Splunk Version</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>version</fieldForLabel>
+        <fieldForValue>version</fieldForValue>
+        <search base="forwarders_search">
+          <query>dedup version | fields version</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_forwarders_os">
+        <label>OS</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>os</fieldForLabel>
+        <fieldForValue>os</fieldForValue>
+        <search base="forwarders_search">
+          <query>dedup os | fields os</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_forwarders_arch">
+        <label>CPU Architecture</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>arch</fieldForLabel>
+        <fieldForValue>arch</fieldForValue>
+        <search base="forwarders_search">
+          <query>dedup arch | fields arch</query>
+        </search>
+      </input>
+      <table>
+        <search base="forwarders_search">
+          <query>search hostname=$tkn_forwarder|s$ status=$tkn_forwarders_status|s$ version=$tkn_forwarders_version|s$ os=$tkn_forwarders_os|s$ arch=$tkn_forwarders_arch$</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Splunk Admin Reports</p>
+        <p>Shows information which is important for security and overall health of the Splunk environment.</p>
+      </html>
+    </panel>
+  </row>
+</form>
