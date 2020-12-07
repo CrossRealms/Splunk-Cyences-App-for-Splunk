@@ -91,6 +91,13 @@ require([
         },
         "Sophos - Endpoint Protection - Failed to clean up threat": {
             system_compromised_search: "| stats sum(count) as count by dhost"
+        },
+        
+        "Splunk Admin - Missing Forwarder": {
+            system_compromised_search: "| stats count, values(forwarder_type) as forwarder_type, values(version) as version, values(arch) as arch, values(os) as os by hostname"
+        },
+        "Splunk Admin - Missing Data in the Index": {
+            system_compromised_search: "| stats count by index"
         }
     };
 
