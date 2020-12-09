@@ -38,8 +38,11 @@
         <search base="indexes_search">
           <query>search index=$tkn_index|s$ status=$tkn_indexes_status|s$</query>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index=$click.value|s$%20%7C%20timechart%20span=1h%20count&amp;earliest=-24h@h&amp;latest=now&amp;display.page.search.tab=visualizations&amp;display.general.type=visualizations&amp;display.visualizations.type=charting&amp;display.page.search.mode=fast</link>
+        </drilldown>
       </table>
     </panel>
   </row>
@@ -104,6 +107,7 @@
       <html>
         <p>Splunk Admin Reports</p>
         <p>Shows information which is important for security and overall health of the Splunk environment.</p>
+        <p>"Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" has to be enabled in order to populate this dashboard.</p>
       </html>
     </panel>
   </row>
