@@ -80,16 +80,16 @@ require([
             system_compromised_search: "| stats sum(count) as count by dest",
             attacker_search: "| stats sum(count) as count, values(process) as process by process_name"
         },
-        "Sophos - Endpoint Protection - Endpoint Not Protected": {
+        "Sophos - Endpoint Not Protected by Sophos": {
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
-        "Sophos - Endpoint Protection - Sophos RealTime Protection Disabled": {
+        "Sophos - Sophos RealTime Protection Disabled": {
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
-        "Sophos - Endpoint Protection - Sophos Service is not Running": {
+        "Sophos - Sophos Service is not Running": {
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
-        "Sophos - Endpoint Protection - Failed to clean up threat": {
+        "Sophos - Failed to clean up threat by Sophos": {
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
         

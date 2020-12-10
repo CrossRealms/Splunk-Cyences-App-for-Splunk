@@ -46,6 +46,15 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
+Version 1.1.0 (release date here)
+* (release notes will be here)
+
+
+Update Guide from version 1.0.0 to 1.1.0
+* Sophos savedsearches/alerts have been renamed.
+  * If the alert has been enabled before, it has to be enabled again.
+
+
 Version 1.0.0 (Nov 2020)
 * Created App Overview dashboard.
 * Added Details/Forensic dashboard for investigating security issues.
