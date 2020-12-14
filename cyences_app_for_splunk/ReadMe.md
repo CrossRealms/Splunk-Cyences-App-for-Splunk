@@ -53,6 +53,9 @@ Version 1.1.0 (release date here)
 Update Guide from version 1.0.0 to 1.1.0
 * Sophos savedsearches/alerts have been renamed.
   * If the alert has been enabled before, it has to be enabled again.
+* Sophos alerts have been moved under Antivirus panel.
+* Sophos reports have been moved under Antivirus in the navigation.
+* Details dashboard renamed to Forensic.
 
 
 Version 1.0.0 (Nov 2020)

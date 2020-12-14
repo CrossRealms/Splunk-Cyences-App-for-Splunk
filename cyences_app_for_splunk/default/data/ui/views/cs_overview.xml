@@ -45,7 +45,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -70,7 +70,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -95,7 +95,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -120,7 +120,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -147,7 +147,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
@@ -172,7 +172,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -197,7 +197,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -222,7 +222,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -249,7 +249,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -294,7 +294,7 @@
         </format>
         <fields>["Name","Alert Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_detailed_dashboard?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
         </drilldown>
       </table>
     </panel>

@@ -1,6 +1,6 @@
 <nav search_view="search">
   <view name="cs_overview" default="true" />
-  <view name="cs_detailed_dashboard" />
+  <view name="cs_forensic" />
   <collection label="Reports">
     <view name="cs_windows_ad_reports" />
     <view name="cs_o365_reports" />

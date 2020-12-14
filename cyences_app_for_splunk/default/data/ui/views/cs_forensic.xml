@@ -1,5 +1,5 @@
 <form theme="dark" script="cs_forensic.js">
-  <label>Details</label>
+  <label>Forensic</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -21,7 +21,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>Details</title>
+      <title>Alert Details</title>
       <table>
         <search>
           <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$

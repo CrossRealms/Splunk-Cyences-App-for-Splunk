@@ -63,7 +63,7 @@ To develop the large collaborative App while keeping in mind the quality of the 
 7. Dashboards
    - The `Overview` dashboard shows only the enabled alerts. For more information see the dashboard itself.
    - The `All Alerts` dashboard is very similar to what we have in the `Overview` dashboard, but this may be for the development purpose or Splunk Admins and Security Admins as it shows all the information like how to collect the data, cron schedule and other.
-   - The `Details` dashboard is drilldown dashboard for the Overview dashboard. It shows the detailed information about the selected alert.
+   - The `Forensic` dashboard is drilldown dashboard for the Overview dashboard. It shows the detailed information about the selected alert.
    - Any new type of Report addition should also be added to the navigation.
    - All the dashboard name should prefix with `cs` to avoid any naming conflict with other Apps.
 
