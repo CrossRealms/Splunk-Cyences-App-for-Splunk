@@ -1,0 +1,193 @@
+<form theme="dark">
+  <label>Windows Defender</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="multiselect" token="tkn_host">
+      <label>Hosts</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <prefix>host IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>`cs_windows_defender` | dedup host | table host</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Windows Defender Health Report</title>
+      <table>
+        <search>
+          <query>`cs_windows_defender` EventCode=1151 $tkn_host$ | dedup host 
+| table _time, host, RTP_state, Platform_version, Engine_version, AVSignature_version, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time
+| rename AVSignature_version as "Signature Version", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Update Errors</title>
+      <table>
+        <title>EventCodes=(2001, 2003, 2006)</title>
+        <search>
+          <query>`cs_windows_defender` EventCode IN (2001, 2003, 2006) $tkn_host$ | stats count, latest(_time) as _time, values(Error_Code) as Error_Code, values(Error_Description) as Error_Description, values(Update_Source) as Update_Source, values(Update_State) as Update_State, values(Update_Type) as Update_Type, values(Current_Engine_Version) as Current_Engine_Version, values(Previous_Engine_Version) as Previous_Engine_Version, values(Previous_Signature_Version) as Previous_Signature_Version, values(Product_Version) as Product_Version, values(Signature_Type) as Signature_Type by host, EventCode
+| eval EventCodeDescription=case(EventCode=2001, "The security intelligence update failed.", EventCode=2003, "The antimalware engine update failed.", EventCode=2006, "The platform update failed.") 
+| table _time, host, EventCode, EventCodeDescription, Error_Code, Error_Description, Update_Source, Update_State, Update_Type, Current_Engine_Version, Previous_Engine_Version, Previous_Signature_Version, Product_Version, Signature_Type, count
+| `cs_windows_defender_update_errors_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Antivirus Expired</title>
+      <table>
+        <title>EventCode=5101</title>
+        <search>
+          <query>`cs_windows_defender` EventCode=5101 $tkn_host$ | stats count, latest(_time) as _time, values(Error_Code) as Error_Code, values(Error_Description) as Error_Description, values(Expiration_Reason) as Expiration_Reason, values(Expiration_Date) as Expiration_Date by host
+| table _time, host, Error_Code, Error_Description, Expiration_Reason, Expiration_Date, count
+| `cs_windows_defender_antivirus_expired_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Antimalware/Antimalware Engine Dropped Support for Operating System</title>
+      <table>
+        <title>EventCodes=(2041, 2042)</title>
+        <search>
+          <query>`cs_windows_defender` EventCode IN (2041, 2042) $tkn_host$ | stats count, latest(_time) as _time by host
+| eval EventCodeDescription=if(EventCode=2041, "Antimalware dropped support for OS.", "Antimalware Engine dropped support for OS.")
+| table _time, host, EventCode, EventCodeDescription, count
+| `cs_windows_defender_antivirus_dropped_support_for_os_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Antimalware will Expire Soon</title>
+      <table>
+        <title>EventCode=5100</title>
+        <search>
+          <query>`cs_windows_defender` EventCode=5100 $tkn_host$ | stats count, latest(_time) as _time by host
+| table _time, host, count
+| `cs_windows_defender_antivirus_will_expired_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Antimalware will Drop Support for Operating System Soon</title>
+      <table>
+        <title>EventCode=2040</title>
+        <search>
+          <query>`cs_windows_defender` EventCode=2040 $tkn_host$ | stats count, latest(_time) as _time by host
+| table _time, host, count
+| `cs_windows_defender_antivirus_will_dropped_support_for_os_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Antivirus Scan Failed</title>
+      <table>
+        <title>EventCode=1005</title>
+        <search>
+          <query>`cs_windows_defender` EventCode=1005 $tkn_host$ 
+| table _time, host, Scan_Id, Scan_Type, Scan_Parameters, Error_Code, Error_Description
+| `cs_windows_defender_antivirus_scan_failed_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Unable to download and configure offline scan</title>
+      <table>
+        <title>EventCode=2031</title>
+        <search>
+          <query>`cs_windows_defender` EventCode=2031 $tkn_host$ 
+| table _time, host, Error_Code, Error_Description
+| `cs_windows_defender_unable_to_download_offline_scan_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Malware Detected</title>
+      <table>
+        <title>EventCodes=(1006, 1015, 1116)</title>
+        <search>
+          <query>`cs_windows_defender` EventCode IN (1006, 1015, 1116) $tkn_host$
+| eval EventCodeDescription=case(EventCode=1006, "Antimalware engine found malware", EventCode=1015, "Antimalware platform found malware", EventCode=1116, "Antimalware platform detected suspicious behaviour")
+| rename Name as Threat_Name, Id as Threat_Id
+| table _time, host, EventCode, EventCodeDescription, Threat_Name, Threat_Id, Severity, Category, Path, Detection_Origin, Detection_Type, Detection_Source, Status, Process_Name
+| `cs_windows_defender_malware_detected_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <p>Windows Defender Reports</p>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/3734/" target="_blank">Windows Defender Add-on</a> ([WinEventLog://Microsoft-Windows-Windows Defender/Operational] stanza) for collecting Windows defender data.</p>
+      </html>
+    </panel>
+  </row>
+</form>

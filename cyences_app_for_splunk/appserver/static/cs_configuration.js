@@ -13,6 +13,7 @@ require([
     let all_macros = [
         /* Data Macros */
         { macro_name: 'cs_sophos', input_id: 'macro_data_sophos', button_id: 'macro_data_sophos_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_windows_defender', input_id: 'macro_data_windows_defender', button_id: 'macro_data_windows_defender_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_o365', input_id: 'macro_data_o365', button_id: 'macro_data_o365_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_security', input_id: 'macro_data_wineventlog_security', button_id: 'macro_data_wineventlog_security_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_system', input_id: 'macro_data_wineventlog_system', button_id: 'macro_data_wineventlog_system_button', msg_id: 'macro_data_msg'},
@@ -75,6 +76,18 @@ require([
         { macro_name: 'cs_sophos_expiration_messages_filter', input_id: 'macro_cs_sophos_expiration_messages_filter', button_id: 'macro_cs_sophos_expiration_messages_filter_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_exploit_prevented', input_id: 'macro_cs_sophos_exploit_prevented', button_id: 'macro_cs_sophos_exploit_prevented_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_malware_detected', input_id: 'macro_cs_sophos_malware_detected', button_id: 'macro_cs_sophos_malware_detected_button', msg_id: 'macro_sophos_msg'},
+
+        /* Windows Defender */
+        { macro_name: 'cs_windows_defender_endpoint_not_protected', input_id: 'macro_cs_windows_defender_endpoint_not_protected', button_id: 'macro_cs_windows_defender_endpoint_not_protected_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_realtime_protection_disabled_filter', input_id: 'macro_cs_windows_defender_realtime_protection_disabled_filter', button_id: 'macro_cs_windows_defender_realtime_protection_disabled_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_update_errors_filter', input_id: 'macro_cs_windows_defender_update_errors_filter', button_id: 'macro_cs_windows_defender_update_errors_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_antivirus_expired_filter', input_id: 'macro_cs_windows_defender_antivirus_expired_filter', button_id: 'macro_cs_windows_defender_antivirus_expired_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_antivirus_dropped_support_for_os_filter', input_id: 'macro_cs_windows_defender_antivirus_dropped_support_for_os_filter', button_id: 'macro_cs_windows_defender_antivirus_dropped_support_for_os_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_antivirus_will_expired_filter', input_id: 'macro_cs_windows_defender_antivirus_will_expired_filter', button_id: 'macro_cs_windows_defender_antivirus_will_expired_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_antivirus_will_dropped_support_for_os_filter', input_id: 'macro_cs_windows_defender_antivirus_will_dropped_support_for_os_filter', button_id: 'macro_cs_windows_defender_antivirus_will_dropped_support_for_os_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_antivirus_scan_failed_filter', input_id: 'macro_cs_windows_defender_antivirus_scan_failed_filter', button_id: 'macro_cs_windows_defender_antivirus_scan_failed_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_unable_to_download_offline_scan_filter', input_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter', button_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter_button', msg_id: 'macro_windows_defender_msg'},
+        { macro_name: 'cs_windows_defender_malware_detected_filter', input_id: 'macro_cs_windows_defender_malware_detected_filter', button_id: 'macro_cs_windows_defender_malware_detected_filter_button', msg_id: 'macro_windows_defender_msg'},
 
         /* Ransomware */
         { macro_name: 'cs_spike_in_file_writes_filter', input_id: 'macro_cs_spike_in_file_writes_filter', button_id: 'macro_cs_spike_in_file_writes_filter_button', msg_id: 'macro_ransomware_msg'},

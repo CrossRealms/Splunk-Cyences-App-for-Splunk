@@ -202,10 +202,10 @@
       </table>
     </panel>
     <panel>
-      <title>Sophos</title>
+      <title>Antivirus</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Sophos")`</query>
+          <query>| `cs_filter_savedsearches("Sophos|Windows Defender")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>

@@ -48,6 +48,14 @@
               <button id="macro_data_sophos_button">Update</button> </th>
           </tr>
           <tr>
+            <th style="text-align:left">Windows Defender Data</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_data_windows_defender" id="macro_data_windows_defender"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_windows_defender_button">Update</button> </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Office 365 Data</th>
             <th style="text-align:left">
               <input type="text" name="macro_data_o365" id="macro_data_o365"/>
@@ -782,6 +790,109 @@
           </tr>
         </table>
     </html>
+    <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: Windows Defender</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_windows_defender_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_windows_defender_endpoint_not_protected</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_endpoint_not_protected" id="macro_cs_windows_defender_endpoint_not_protected"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_endpoint_not_protected_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_realtime_protection_disabled_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_realtime_protection_disabled_filter" id="macro_cs_windows_defender_realtime_protection_disabled_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_realtime_protection_disabled_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_update_errors_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_update_errors_filter" id="macro_cs_windows_defender_update_errors_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_update_errors_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_antivirus_expired_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_antivirus_expired_filter" id="macro_cs_windows_defender_antivirus_expired_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_antivirus_expired_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_antivirus_dropped_support_for_os_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_antivirus_dropped_support_for_os_filter" id="macro_cs_windows_defender_antivirus_dropped_support_for_os_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_antivirus_dropped_support_for_os_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_antivirus_will_expired_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_antivirus_will_expired_filter" id="macro_cs_windows_defender_antivirus_will_expired_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_antivirus_will_expired_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_antivirus_will_dropped_support_for_os_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_antivirus_will_dropped_support_for_os_filter" id="macro_cs_windows_defender_antivirus_will_dropped_support_for_os_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_antivirus_will_dropped_support_for_os_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_antivirus_scan_failed_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_antivirus_scan_failed_filter" id="macro_cs_windows_defender_antivirus_scan_failed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_antivirus_scan_failed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_unable_to_download_offline_scan_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_unable_to_download_offline_scan_filter" id="macro_cs_windows_defender_unable_to_download_offline_scan_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_unable_to_download_offline_scan_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_windows_defender_malware_detected_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_windows_defender_malware_detected_filter" id="macro_cs_windows_defender_malware_detected_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_windows_defender_malware_detected_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
     </panel>
   </row>
 </dashboard>

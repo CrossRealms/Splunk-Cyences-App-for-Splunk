@@ -80,6 +80,7 @@ require([
             system_compromised_search: "| stats sum(count) as count by dest",
             attacker_search: "| stats sum(count) as count, values(process) as process by process_name"
         },
+
         "Sophos - Endpoint Not Protected by Sophos": {
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
@@ -91,6 +92,13 @@ require([
         },
         "Sophos - Failed to clean up threat by Sophos": {
             system_compromised_search: "| stats sum(count) as count by dhost"
+        },
+
+        "Windows Defender - Endpoint Not Protected by Windows Defender":{
+            system_compromised_search: "| stats count by host"
+        },
+        "Windows Defender - Windows Defender RealTime Protection Disabled or Failed":{
+            system_compromised_search: "| stats count by host"
         },
         
         "Splunk Admin - Missing Forwarder": {
