@@ -38,7 +38,7 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-          <p>Results are from the Splunk search job cache. (Results which are expired will not be present, execute search query to find them.)</p>
+          <p>Results are from the Splunk search job cache. Results which are expired will not be present, execute search query to find them. Default expiration for all the alerts to 7 days.</p>
       </html>
     </panel>
   </row>
