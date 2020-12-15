@@ -97,7 +97,7 @@
         </search>
         <option name="drilldown">row</option>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/search?s=/servicesNS/nobody/cyences_app_for_splunk/saved/searches/$tkn_savedsearch$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/search?s=/servicesNS/nobody/cyences_app_for_splunk/saved/searches/$tkn_savedsearch$&amp;earliest=-24h%40h&amp;latest=now</link>
         </drilldown>
         <option name="refresh.display">progressbar</option>
       </table>
