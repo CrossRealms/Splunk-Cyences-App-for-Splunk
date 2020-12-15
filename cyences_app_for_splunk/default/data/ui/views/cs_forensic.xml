@@ -21,27 +21,46 @@
   </fieldset>
   <row>
     <panel>
-      <title>Alert Details</title>
+      <title>All Results from Triggered Alerts</title>
       <table>
-        <search>
-          <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
-| where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
-| stats count as total_execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
-| append [| search index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
-| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
-| stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name | eval total_execution_count=alert_count, last_execution=last_alert_fired_time]
-| stats avg(avg_runtime) as avg_runtime, sum(total_execution_count) as total_execution_count, max(last_execution) as last_execution, first(*) as * by savedsearch_name
-| eval avg_runtime=round(avg_runtime, 2), last_alert_fired_time=strftime(last_alert_fired_time, "%F %T"), last_execution=strftime(last_execution, "%F %T")
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title=$tkn_savedsearch|s$ | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
-| stats first(*) as * by savedsearch_name
-| eval alert_count=if(isnull(alert_count), 0, alert_count)
-| table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, total_execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
-| table savedsearch_name, disabled, is_scheduled, description, alert_count, last_alert_fired_time, last_result_count</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
+        <search base="loadjob" id="all_results">
+          <query>| map search="| loadjob $$sid$$"</query>
+          <done>
+            <condition match="'job.resultCount'&gt;0">
+              <set token="results_present">1</set>
+            </condition>
+            <condition>
+              <unset token="results_present"></unset>
+            </condition>
+          </done>
         </search>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+          <p>Results are from the Splunk search job cache. (Results which are expired will not be present, execute search query to find them.)</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel depends="$results_present$-$system_compromised_search$">
+      <title>Compromised Systems</title>
+      <table>
+        <search base="all_results">
+          <query>$system_compromised_search$</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+    <panel depends="$results_present$-$attacker_search$">
+      <title>Attackers</title>
+      <table>
+        <search base="all_results">
+          <query>$attacker_search$</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
       </table>
     </panel>
   </row>
@@ -87,45 +106,26 @@
       </html>
     </panel>
   </row>
-  <row depends="$results_present$">
+  <row>
     <panel>
-      <title>All Results from Triggered Alerts</title>
+      <title>Alert Details</title>
       <table>
-        <search base="loadjob" id="all_results">
-          <query>| map search="| loadjob $$sid$$"</query>
-          <done>
-            <condition match="'job.resultCount'&gt;0">
-              <set token="results_present">1</set>
-            </condition>
-            <condition>
-              <unset token="results_present"></unset>
-            </condition>
-          </done>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-      <html>
-          <p>Results are from the Splunk search job cache. (Results which are expired will not be present, execute search query to find them.)</p>
-      </html>
-    </panel>
-  </row>
-  <row depends="$results_present$">
-    <panel depends="$system_compromised_search$">
-      <title>Compromised Systems</title>
-      <table>
-        <search base="all_results">
-          <query>$system_compromised_search$</query>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
-    <panel depends="$attacker_search$">
-      <title>Attackers</title>
-      <table>
-        <search base="all_results">
-          <query>$attacker_search$</query>
+        <search>
+          <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
+| where NOT (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
+| stats count as total_execution_count, latest(scheduled_time) as last_execution, avg(run_time) as avg_runtime by savedsearch_name
+| append [| search index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name=$tkn_savedsearch|s$
+| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
+| stats count as alert_count, latest(scheduled_time) as last_alert_fired_time, latest(result_count) as last_result_count, avg(run_time) as avg_runtime by savedsearch_name | eval total_execution_count=alert_count, last_execution=last_alert_fired_time]
+| stats avg(avg_runtime) as avg_runtime, sum(total_execution_count) as total_execution_count, max(last_execution) as last_execution, first(*) as * by savedsearch_name
+| eval avg_runtime=round(avg_runtime, 2), last_alert_fired_time=strftime(last_alert_fired_time, "%F %T"), last_execution=strftime(last_execution, "%F %T")
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title=$tkn_savedsearch|s$ | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | rename title as savedsearch_name, "alert.severity" as severity, "dispatch.earliest_time" as earliest_time, "dispatch.latest_time" as latest_time, "eai:acl.app" as app | fields savedsearch_name, encodedtitle, disabled, severity, cron_schedule, description, earliest_time, latest_time, app, is_scheduled, next_scheduled_time, triggered_alert_count]
+| stats first(*) as * by savedsearch_name
+| eval alert_count=if(isnull(alert_count), 0, alert_count)
+| table savedsearch_name, description, app, disabled, is_scheduled, alert_count, last_alert_fired_time, last_result_count, total_execution_count, last_execution, avg_runtime, cron_schedule, earliest_time, latest_time, next_scheduled_time, severity
+| table savedsearch_name, disabled, is_scheduled, description, alert_count, last_alert_fired_time, last_result_count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
