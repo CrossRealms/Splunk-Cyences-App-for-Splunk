@@ -55,12 +55,12 @@ Update Guide from version 1.0.0 to 1.1.0
   * If the alert has been enabled before, it has to be enabled again.
 * Sophos alerts have been moved under Antivirus panel.
 * Sophos reports have been moved under Antivirus in the navigation.
-* Details dashboard renamed to Forensic.
+* Details dashboard renamed to Forensics.
 
 
 Version 1.0.0 (Nov 2020)
 * Created App Overview dashboard.
-* Added Details/Forensic dashboard for investigating security issues.
+* Added Details/Forensics dashboard for investigating security issues.
 * Added multiple security alerts with below categories.
   * Categories: Ransomware, Active Directory & Windows, Office 365, Endpoint Compromise, Network Compromise, Credential Compromise, Sophos and Palo Alto Firewall.
 * Added below reports:

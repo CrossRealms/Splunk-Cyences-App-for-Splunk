@@ -1,5 +1,5 @@
 <form theme="dark" script="cs_forensic.js">
-  <label>Forensic</label>
+  <label>Forensics</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
