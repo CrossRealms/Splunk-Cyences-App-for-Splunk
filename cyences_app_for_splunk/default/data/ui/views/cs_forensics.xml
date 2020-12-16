@@ -21,29 +21,20 @@
   </fieldset>
   <row>
     <panel>
-      <title>All Results from Triggered Alerts</title>
+      <title>Problems</title>
       <table>
-        <search base="loadjob" id="all_results">
-          <query>| map search="| loadjob $$sid$$"</query>
-          <done>
-            <condition match="'job.resultCount'&gt;0">
-              <set token="results_present">1</set>
-            </condition>
-            <condition>
-              <unset token="results_present"></unset>
-            </condition>
-          </done>
+        <search id="all_results">
+          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | fields - category</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
       </table>
-      <html>
-          <p>Results are from the Splunk search job cache. Results which are expired will not be present, execute search query to find them. Default expiration for all the alerts to 7 days.</p>
-      </html>
     </panel>
   </row>
   <row>
-    <panel depends="$results_present$-$system_compromised_search$">
+    <panel depends="$system_compromised_search$">
       <title>Compromised Systems</title>
       <table>
         <search base="all_results">
@@ -53,7 +44,7 @@
         <option name="rowNumbers">true</option>
       </table>
     </panel>
-    <panel depends="$results_present$-$attacker_search$">
+    <panel depends="$attacker_search$">
       <title>Attackers</title>
       <table>
         <search base="all_results">
@@ -65,28 +56,6 @@
     </panel>
   </row>
   <row>
-    <panel>
-      <title>Triggered Alerts</title>
-      <table>
-        <search id="loadjob">
-          <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" savedsearch_name=$tkn_savedsearch|s$
-| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
-| sort - scheduled_time
-| eval scheduled_time=strftime(scheduled_time, "%F %T")
-| table sid, scheduled_time, result_count, run_time</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="drilldown">row</option>
-        <fields>["scheduled_time","result_count","run_time"]</fields>
-        <drilldown>
-          <link target="_blank">search?q=%7C%20loadjob%20$row.sid$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
-        </drilldown>
-      </table>
-      <html>
-        <p>Click on any of the triggered alert results to view additional details for the specified event. Results that are less than a day old are not searchable.</p>
-      </html>
-    </panel>
     <panel>
       <title>Run Search Query</title>
       <table>
