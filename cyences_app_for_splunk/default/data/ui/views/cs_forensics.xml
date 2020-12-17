@@ -57,26 +57,6 @@
   </row>
   <row>
     <panel>
-      <title>Run Search Query</title>
-      <table>
-        <search>
-          <query>| makeresults | eval "Saved Search"=$tkn_savedsearch|s$ | eval Run="Run" | table "Saved Search", Run</query>
-          <earliest>0</earliest>
-          <latest></latest>
-        </search>
-        <option name="drilldown">row</option>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/search?s=/servicesNS/nobody/cyences_app_for_splunk/saved/searches/$tkn_savedsearch$&amp;earliest=-24h%40h&amp;latest=now</link>
-        </drilldown>
-        <option name="refresh.display">progressbar</option>
-      </table>
-      <html>
-        <p>Click on the Saved Searches to run a search query for the desired search and to view the results. A time range picker will be provided for further evaluation.</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <title>Alert Details</title>
       <table>
         <search>
@@ -94,7 +74,14 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
+        <option name="drilldown">row</option>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/search?s=/servicesNS/nobody/cyences_app_for_splunk/saved/searches/$tkn_savedsearch$&amp;earliest=-24h%40h&amp;latest=now</link>
+        </drilldown>
       </table>
+      <html>
+        <p>Click to run a search query of the saved search. A time range picker will be provided for further evaluation.</p>
+      </html>
     </panel>
   </row>
 </form>
