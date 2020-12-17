@@ -13,7 +13,7 @@
       <fieldForLabel>title</fieldForLabel>
       <fieldForValue>title</fieldForValue>
       <search>
-        <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | eval encodedtitle=title | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | fields title</query>
+        <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
