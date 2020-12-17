@@ -24,11 +24,12 @@
       <title>Problems</title>
       <table>
         <search id="all_results">
-          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | fields - category</query>
+          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, search_now, info_search_time, date_*, eventtype, host, index, linecount, source, sourcetype, splunk_server, splunk_server_group, tag, "tag::eventtype", "tag::sourcetype", timeendpos, timestartpos | table _time, * | rename orig_* as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
       </table>
     </panel>
