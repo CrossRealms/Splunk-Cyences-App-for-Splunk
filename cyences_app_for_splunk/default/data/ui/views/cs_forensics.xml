@@ -37,21 +37,21 @@
   <row>
     <panel depends="$system_compromised_search$">
       <title>Compromised Systems</title>
-      <table>
+      <table id="table_system_compromised">
         <search base="all_results">
           <query>$system_compromised_search$</query>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
       </table>
     </panel>
     <panel depends="$attacker_search$">
       <title>Attackers</title>
-      <table>
+      <table id="table_attacker">
         <search base="all_results">
           <query>$attacker_search$</query>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
       </table>
     </panel>

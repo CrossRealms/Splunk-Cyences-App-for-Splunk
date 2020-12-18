@@ -50,7 +50,9 @@ require([
         },
         "Network Compromise - Basic Scanning": {
             system_compromised_search: "| stats count by sourcetype",
-            attacker_search: "| stats count by src_ip"
+            system_compromised_drilldown: 'index=* sourcetype=$row.sourcetype$',
+            attacker_search: "| stats count by src_ip",
+            attacker_drilldown: 'index=* ( (tag=network tag=communicate) OR sourcetype=pan*traffic OR sourcetype=opsec OR sourcetype=cisco:asa) src_ip=$row.src_ip$',
         },
         "Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole": {
             system_compromised_search: "| stats sum(count) as count by dvc_name, rule, app, http_category",
@@ -94,13 +96,13 @@ require([
             system_compromised_search: "| stats sum(count) as count by dhost"
         },
 
-        "Windows Defender - Endpoint Not Protected by Windows Defender":{
+        "Windows Defender - Endpoint Not Protected by Windows Defender": {
             system_compromised_search: "| stats count by host"
         },
-        "Windows Defender - Windows Defender RealTime Protection Disabled or Failed":{
+        "Windows Defender - Windows Defender RealTime Protection Disabled or Failed": {
             system_compromised_search: "| stats count by host"
         },
-        
+
         "Splunk Admin - Missing Forwarder": {
             system_compromised_search: "| stats count, values(forwarder_type) as forwarder_type, values(version) as version, values(arch) as arch, values(os) as os by hostname"
         },
@@ -109,30 +111,76 @@ require([
         }
     };
 
-    submittedTokens.on("change:tkn_savedsearch", function(){
-        let savedsearch_name = submittedTokens.get("tkn_savedsearch");
+
+    let savedsearch_name;
+    let system_compromised_drilldown;
+    let attacker_drilldown;
+
+    submittedTokens.on("change:tkn_savedsearch", function () {
+        savedsearch_name = submittedTokens.get("tkn_savedsearch");
         console.log(`Updated savedsearch token ${savedsearch_name}`);
 
-        if(all_alerts[savedsearch_name] === undefined){
+        if (all_alerts[savedsearch_name] === undefined) {
             return;
         }
 
-        if(all_alerts[savedsearch_name].system_compromised_search){
+        if (all_alerts[savedsearch_name].system_compromised_search) {
             submittedTokens.set("system_compromised_search", `${all_alerts[savedsearch_name].system_compromised_search} | sort - count`);
+            submittedTokens.set("system_compromised_drilldown", all_alerts[savedsearch_name].system_compromised_drilldown);
+            system_compromised_drilldown = all_alerts[savedsearch_name].system_compromised_drilldown;
         }
-        else{
+        else {
             submittedTokens.unset("system_compromised_search");
             console.log("No forensic search present for finding compromised system.");
         }
 
-        if(all_alerts[savedsearch_name].attacker_search){
+        if (all_alerts[savedsearch_name].attacker_search) {
             submittedTokens.set("attacker_search", `${all_alerts[savedsearch_name].attacker_search} | sort - count`);
+            submittedTokens.set("attacker_drilldown", all_alerts[savedsearch_name].attacker_drilldown);
+            attacker_drilldown = all_alerts[savedsearch_name].attacker_drilldown;
         }
-        else{
+        else {
             submittedTokens.unset("attacker_search");
             console.log("No forensic search present for finding attacker.");
         }
+    });
 
+
+    function getTableHeaders(tableId) {
+        let columnHeaders = $('#' + tableId + ' table th');
+        columnHeaders = $.makeArray(columnHeaders).map(function (value) { return value.innerText; }); // if required add trimming
+        return columnHeaders;
+    }
+
+    function tableDrilldown(e, tableId, search_id){
+        e.preventDefault(); // Prevents the default splunk drilldown behaviour
+
+        let $cell = $(e.originalEvent.target).closest("td");
+        let selectedValues = $.makeArray($cell.parent("tr").children("td")).map(function (value) { return value.innerText; }); // get full row values, do trimming if requires
+        let columnHeaders = getTableHeaders(tableId);
+        let drilldown_search = eval(search_id);
+
+        for (let rowno in columnHeaders) {
+            let field = columnHeaders[rowno];
+            let value = selectedValues[rowno];
+            drilldown_search = drilldown_search.replace(`$row.${field}$`, `"${value}"`);
+        }
+
+        window.open(`/app/cyences_app_for_splunk/search?q=${drilldown_search}&earliest=${submittedTokens.get("timeRange.earliest")}&latest=${submittedTokens.get("timeRange.latest")}`);
+    }
+
+    let compromiseSystemTableDrilldown = function (e) {
+        tableDrilldown(e, "table_system_compromised", "system_compromised_drilldown");
+    }
+    let attackerTableDrilldown = function (e) {
+        tableDrilldown(e, "table_attacker", "attacker_drilldown");
+    }
+
+    mvc.Components.get("table_system_compromised").getVisualization(function (tableView) {
+        tableView.on('click:cell', compromiseSystemTableDrilldown);
+    });
+    mvc.Components.get("table_attacker").getVisualization(function (tableView) {
+        tableView.on('click:cell', attackerTableDrilldown);
     });
 
 });
