@@ -1,15 +1,14 @@
 <form theme="dark">
   <label>Overview</label>
   <search id="basesearch">
-    <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local
-| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
-| stats count as alert_count by savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | replace " " with "%20", "," with "%2C", "'" with "%27" in encodedtitle | fields title, disabled, is_scheduled | rename title as savedsearch_name]
+    <query>`cs_cyences_index` | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name]
 | stats first(*) as * by savedsearch_name
-| eval "Alert Count"=if(isnull(alert_count), 0, alert_count)
+| eval Problems=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
 | `cs_daily_alerts`
-| table savedsearch_name, "Alert Count" </query>
+| table savedsearch_name, Problems
+| sort - Problems</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>
@@ -39,13 +38,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -64,13 +63,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -89,13 +88,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -114,13 +113,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -141,13 +140,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
@@ -166,13 +165,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -191,13 +190,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -216,13 +215,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -243,13 +242,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
         </drilldown>
       </table>
     </panel>
@@ -266,16 +265,16 @@
       </input>
       <table>
         <search>
-          <query>index=_internal sourcetype="scheduler" status="success" app="cyences_app_for_splunk" splunk_server=local savedsearch_name IN ("Windows - Hosts Missing Update")
-| where (alert_action!="" OR (result_count&gt;0 AND suppressed=0))
-| stats count as alert_count by savedsearch_name 
+          <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts`
+| stats count as problems by category, alert_name | rename alert_name as savedsearch_name
 | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | rename title as savedsearch_name | fields savedsearch_name, disabled, is_scheduled]
 | stats first(*) as * by savedsearch_name
 | search savedsearch_name IN `cs_monthly_alerts`
-| eval "Alert Count"=if(isnull(alert_count), 0, alert_count)
+| eval Problems=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1
-| table savedsearch_name, "Alert Count"
-| eval Name=savedsearch_name</query>
+| table savedsearch_name, Problems
+| rename savedsearch_name as Name
+| sort - Problems</query>
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
@@ -288,13 +287,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Alert Count">
+        <format type="color" field="Problems">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Alert Count"]</fields>
+        <fields>["Name","Problems"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensic?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.Name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
         </drilldown>
       </table>
     </panel>
