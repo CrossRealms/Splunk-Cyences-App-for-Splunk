@@ -35,6 +35,20 @@
     </panel>
   </row>
   <row>
+    <panel depends="$contributing_events_search$">
+      <title>All Contributing Events</title>
+      <event>
+        <search>
+          <query>$contributing_events_search$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+    </panel>
+  </row>
+  <row>
     <panel depends="$system_compromised_search$">
       <title>Compromised Systems</title>
       <table id="table_system_compromised">
