@@ -21,7 +21,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>Problems</title>
+      <title>Notable Events</title>
       <table>
         <search id="all_results">
           <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, search_now, info_search_time, date_*, eventtype, host, index, linecount, source, sourcetype, splunk_server, splunk_server_group, tag, "tag::eventtype", "tag::sourcetype", timeendpos, timestartpos | table _time, * | rename orig_* as *</query>
@@ -60,7 +60,7 @@
       </table>
     </panel>
     <panel depends="$attacker_search$">
-      <title>Attackers</title>
+      <title>Signature</title>
       <table id="table_attacker">
         <search base="all_results">
           <query>$attacker_search$</query>

@@ -216,7 +216,7 @@ require([
             console.log("No forensic search present for finding compromised system.");
         }
 
-        // Attackers
+        // Attackers / Signature
         if (all_alerts[savedsearch_name].attacker_search) {
             submittedTokens.set("attacker_search", `${all_alerts[savedsearch_name].attacker_search} | sort - count`);
             submittedTokens.set("attacker_drilldown", all_alerts[savedsearch_name].attacker_drilldown);
