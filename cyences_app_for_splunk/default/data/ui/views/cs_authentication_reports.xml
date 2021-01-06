@@ -23,6 +23,28 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Authentication Reports</p>
+        <p>This dashboard includes all authentication attempts that are mapped with the Authentication CIM data model.</p>
+        <p>To filter through data or to only include specific kinds of data, update the "Authentication Data (indexes)" macro (cs_authentication_indexes) definition (Settings &gt; Configuration).</p>
+        <p>You can also update `cs_authentication_app_filter` macro definition from "Settings &gt; Configuration" page to filter any authentication data by app name.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_authentication_indexes` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_authentication_indexes`" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>All Authentications</title>
       <chart>
         <search>
@@ -98,16 +120,6 @@
       </table>
       <html>
         <p><b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-        <p>Authentication Reports</p>
-        <p>This dashboard includes all authentication attempts that are mapped with the Authentication CIM data model.</p>
-        <p>To filter through data or to only include specific kinds of data, update the "Authentication Data (indexes)" macro (cs_authentication_indexes) definition (Settings &gt; Configuration).</p>
-        <p>You can also update `cs_authentication_app_filter` macro definition from "Settings &gt; Configuration" page to filter any authentication data by app name.</p>
       </html>
     </panel>
   </row>

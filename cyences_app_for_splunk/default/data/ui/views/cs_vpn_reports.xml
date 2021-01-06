@@ -74,6 +74,28 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>VPN Reports</p>
+        <p><b>Data Collection:</b> You can use Palo Alto Add-on if you are using Global Protect VPN. For any other VPN choose appropriate Splunk integration to collect the data.</p>
+        <p>The data must be mapped with the Authentication data model from the Common Information Model. The Global Protect (Palo Alto) VPN can be paired with the Remote Work Insights Add-on to circumvent this. For all other VPN options, please choose the appropriate Splunk integration method to collect this data.</p>
+        <p>The data displayed can be changed by updating the definition for the "VPN Data (indexes)" macro (Settings &gt; Configuration): cs_vpn_indexes.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_vpn_indexes` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_vpn_indexes`" | table label, data</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Connected Workforce by Location</title>
       <map>
         <search base="bs1">
@@ -162,16 +184,6 @@
           <link target="_blank">search?q=%60rw_vpn_indexes%60%20TERM($row.User$)%20user=$row.User$%20TERM($row.SourceIP$)%20src_ip=$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
         </drilldown>
       </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-        <p>VPN Reports</p>
-        <p><b>Data Collection:</b> You can use Palo Alto Add-on if you are using Global Protect VPN. For any other VPN choose appropriate Splunk integration to collect the data.</p>
-        <p>The data must be mapped with the Authentication data model from the Common Information Model. The Global Protect (Palo Alto) VPN can be paired with the Remote Work Insights Add-on to circumvent this. For all other VPN options, please choose the appropriate Splunk integration method to collect this data.</p>
-        <p>The data displayed can be changed by updating the definition for the "VPN Data (indexes)" macro (Settings &gt; Configuration): cs_vpn_indexes.</p>
-      </html>
     </panel>
   </row>
 </form>

@@ -11,6 +11,26 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Active Directory and Windows Reports</p>
+        <p><b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_wineventlog_security`" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>AD - User Modification</title>
       <table>
         <search>
@@ -61,14 +81,6 @@
       </table>
       <html>
         <p><b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-        <p>Active Directory and Windows Reports</p>
-        <p><b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
       </html>
     </panel>
   </row>

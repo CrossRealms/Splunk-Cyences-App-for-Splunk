@@ -28,6 +28,26 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Windows Defender Reports</p>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/3734/" target="_blank">Windows Defender Add-on</a> ([WinEventLog://Microsoft-Windows-Windows Defender/Operational] stanza) for collecting Windows defender data.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_windows_defender` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_windows_defender`" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Windows Defender Health Report</title>
       <table>
         <search>
@@ -180,14 +200,6 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-        <p>Windows Defender Reports</p>
-        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/3734/" target="_blank">Windows Defender Add-on</a> ([WinEventLog://Microsoft-Windows-Windows Defender/Operational] stanza) for collecting Windows defender data.</p>
-      </html>
     </panel>
   </row>
 </form>

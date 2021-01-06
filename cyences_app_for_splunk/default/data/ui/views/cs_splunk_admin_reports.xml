@@ -19,6 +19,27 @@
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
+      <html>
+        <p>Splunk Admin Reports</p>
+        <p>Shows information which is important for security and overall health of the Splunk environment.</p>
+        <p>Alerts "Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" has to be enabled in order to populate this dashboard.</p>
+      </html>
+      <table>
+        <search>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Forwarder") | fields title, disabled | eval data=if(disabled=1, "Alert is disabled", "Alert is enabled") | rename title as label | table label, data</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Alert is enabled": #03991a, "Alert is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Indexes</title>
       <input type="text" token="tkn_index">
         <label>Index</label>

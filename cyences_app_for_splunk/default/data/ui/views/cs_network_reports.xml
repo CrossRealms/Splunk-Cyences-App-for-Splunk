@@ -11,6 +11,27 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Network Reports</p>
+        <p>This dashboard use a third-party app called <a href="https://splunkbase.splunk.com/app/3511/" target="_blank">Missile App</a> to display the visuals for the Top Network Traffic dashboard panel.</p>
+        <p><b>Data Collection:</b> All types of network traffic data are mapped with the Network_Traffic CIM data model.</p>
+      </html>
+      <table>
+        <search>
+          <query>index=* tag=network tag=communicate | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="index=* tag=network tag=communicate" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Port Scanning Attempts</title>
       <map>
         <search>

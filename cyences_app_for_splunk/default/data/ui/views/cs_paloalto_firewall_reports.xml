@@ -11,6 +11,29 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Palo Alto Firewall Reports</p>
+        <p><b>Data Collection:</b> The pan:system, pan:threat, and pan:traffic sourcetypes are necessary to collect firewall data via the <a href="https://splunkbase.splunk.com/app/2757/" target="_blank">Palo Alto Networks Add-on for Splunk</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype="pan:threat" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_palo` sourcetype=\"pan:threat\""
+| append [| search `cs_palo` sourcetype="pan:traffic" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_palo` sourcetype=\"pan:traffic\""]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Palo Alto Firewall - Network Compromise - DDoS Attack Prevented", "Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs", "Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled")]
+ | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>DDoS Attack Prevented by Palo Alto Firewall</title>
       <table>
         <search>

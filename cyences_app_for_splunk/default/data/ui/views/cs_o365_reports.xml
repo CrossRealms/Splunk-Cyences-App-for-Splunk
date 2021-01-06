@@ -20,6 +20,26 @@
   </fieldset>
   <row>
     <panel>
+      <html>
+        <p>Office 365 Reports</p>
+        <p><b>Data Collection:</b> O365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for O365</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>O365/Azure - Success Logins Outside $tkn_country$</title>
       <table>
         <search>
@@ -72,14 +92,6 @@
       <html>
         <p>
           <b>Description:</b> Successful logins by an unknown user ID.</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <html>
-        <p>Office 365 Reports</p>
-        <p><b>Data Collection:</b> O365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for O365</a>.</p>
       </html>
     </panel>
   </row>
