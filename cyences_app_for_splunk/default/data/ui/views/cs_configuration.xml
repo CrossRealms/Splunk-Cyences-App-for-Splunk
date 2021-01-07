@@ -56,6 +56,14 @@
               <button id="macro_data_windows_defender_button">Update</button> </th>
           </tr>
           <tr>
+            <th style="text-align:left">CrowdStrike EventStream Data</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_data_crowdstrike_eventstream" id="macro_data_crowdstrike_eventstream"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_crowdstrike_eventstream_button">Update</button> </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Office 365 Data</th>
             <th style="text-align:left">
               <input type="text" name="macro_data_o365" id="macro_data_o365"/>
@@ -665,6 +673,46 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_splunk_admin_missing_forwarders_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: CrowdStrike</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_crowdstrike_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_crowdstrike_malware_detected_alert_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_crowdstrike_malware_detected_alert_filter" id="macro_cs_crowdstrike_malware_detected_alert_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_crowdstrike_malware_detected_alert_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_crowdstrike_malware_detected_report_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_crowdstrike_malware_detected_report_filter" id="macro_cs_crowdstrike_malware_detected_report_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_crowdstrike_malware_detected_report_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_crowdstrike_malware_prevented_filter</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_crowdstrike_malware_prevented_filter" id="macro_cs_crowdstrike_malware_prevented_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_crowdstrike_malware_prevented_filter_button">Update</button>
             </th>
           </tr>
         </table>

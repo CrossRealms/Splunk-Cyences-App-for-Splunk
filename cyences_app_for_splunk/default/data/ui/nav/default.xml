@@ -10,6 +10,7 @@
     <collection label="Antivirus">
       <view name="cs_sophos_reports" />
       <view name="cs_windows_defender_reports" />
+      <view name="cs_crowdstrike_reports" />
     </collection>
     <view name="cs_vpn_reports" />
     <view name="cs_authentication_reports" />

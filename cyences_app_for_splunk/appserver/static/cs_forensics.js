@@ -173,6 +173,14 @@ require([
             system_compromised_drilldown: '`cs_windows_defender` host=$row.host$'
         },
 
+        "CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike": {
+            contributing_events: '`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent action="allowed"',
+            system_compromised_search: "| stats count by ComputerName",
+            system_compromised_drilldown: '`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent "event.ComputerName"=$row.ComputerName$',
+            attacker_search: "| stats count by UserName",
+            attacker_drilldown: '`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent "event.UserName"=$row.UserName$'
+        },
+
         "Splunk Admin - Missing Data in the Index": {
             system_compromised_search: "| stats count by index",
             system_compromised_drilldown: 'index=$row.index$ | timechart count by host'
