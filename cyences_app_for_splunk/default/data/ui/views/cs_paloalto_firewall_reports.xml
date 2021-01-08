@@ -120,12 +120,4 @@
       </html>
     </panel>
   </row>
-  <row>
-    <panel>
-      <html>
-        <p>Palo Alto Firewall Reports</p>
-        <p><b>Data Collection:</b> The pan:system, pan:threat, and pan:traffic sourcetypes are necessary to collect firewall data via the <a href="https://splunkbase.splunk.com/app/2757/" target="_blank">Palo Alto Networks Add-on for Splunk</a>.</p>
-      </html>
-    </panel>
-  </row>
 </form>
