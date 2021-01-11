@@ -53,6 +53,7 @@
         <search>
           <query>`cs_windows_defender` EventCode=1151 $tkn_host$ | dedup host 
 | table _time, host, RTP_state, Platform_version, Engine_version, AVSignature_version, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time
+| eval Last_full_scan_start_time=if(Last_full_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_start_time), Last_full_scan_end_time=if(Last_full_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_end_time),  Last_quick_scan_start_time=if(Last_quick_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_start_time), Last_quick_scan_end_time=if(Last_quick_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_end_time)
 | rename AVSignature_version as "Signature Version", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
