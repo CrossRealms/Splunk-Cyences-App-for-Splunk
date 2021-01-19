@@ -44,6 +44,7 @@ require([
         { macro_name: 'cs_windows_firewall_disabled_filter', input_id: 'macro_cs_windows_firewall_disabled_filter', button_id: 'macro_cs_windows_firewall_disabled_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_windows_wmi_lateral_movement_filter', input_id: 'macro_cs_windows_wmi_lateral_movement_filter', button_id: 'macro_cs_windows_wmi_lateral_movement_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_windows_event_log_cleared_filter', input_id: 'macro_cs_windows_event_log_cleared_filter', button_id: 'macro_cs_windows_event_log_cleared_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_windows_process_tampering_filter', input_id: 'macro_cs_windows_process_tampering_filter', button_id: 'macro_cs_windows_process_tampering_filter_button', msg_id: 'macro_windows_msg'},
 
         /* O365 */
         { macro_name: 'cs_o365_success_login_outside_country_filter', input_id: 'macro_cs_o365_success_login_outside_country_filter', button_id: 'macro_cs_o365_success_login_outside_country_filter_button', msg_id: 'macro_o365_msg'},
@@ -131,7 +132,7 @@ require([
 
 
     // Processing results search manager.
-    var searchManagerResults = searchManager.data("results");
+    var searchManagerResults = searchManager.data("results", {count: 0});
     searchManagerResults.on('data', function () {
         if (searchManagerResults.data()) {
             // set all the macro values in the input text field

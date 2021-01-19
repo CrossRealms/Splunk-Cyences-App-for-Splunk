@@ -80,6 +80,13 @@ require([
             system_compromised_search: "| stats count, values(ProfileChanged) as ProfileChanged by host",
             system_compromised_drilldown: '`cs_wineventlog_security` EventCode=4950 host=$row.host$'
         },
+        "Windows - Windows Process Tampering Detected": {
+            contributing_events: '`cs_sysmon` EventCode=25',
+            system_compromised_search: "| stats count by Computer",
+            system_compromised_drilldown: '`cs_sysmon` EventCode=25 Computer=$row.Computer$',
+            attacker_search: "| stats count, values(CommandLine) as CommandLine by ProcessId",
+            attacker_drilldown: '`cs_sysmon` EventCode=25 ProcessId=$row.ProcessId$'
+        },
 
         "Network Compromise - Basic Scanning": {
             contributing_events: 'index=* ( (tag=network tag=communicate) OR sourcetype=pan*traffic OR sourcetype=opsec OR sourcetype=cisco:asa)',
@@ -116,7 +123,7 @@ require([
             system_compromised_search: "| stats sum(count) as count by Computer",
             system_compromised_drilldown: '`cs_sysmon` EventCode=10 TargetImage=*lsass.exe Computer=$row.Computer$',
             attacker_search: "| stats sum(count) as count by SourceImage",
-            attacker_drilldown: '`cs_sysmon` EventCode=10 TargetImage=*lsass.exe Computer=$row.SourceImage$'
+            attacker_drilldown: '`cs_sysmon` EventCode=10 TargetImage=*lsass.exe SourceImage=$row.SourceImage$'
         },
         "Credential Compromise - Windows - Credential Dumping via Symlink to Shadow Copy": {
             contributing_events: 'index=* tag=process tag=report process_name="cmd.exe" process=*mklink* process=*HarddiskVolumeShadowCopy*',
