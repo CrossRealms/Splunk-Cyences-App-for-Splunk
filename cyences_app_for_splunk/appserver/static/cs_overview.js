@@ -1,0 +1,31 @@
+require([
+    'jquery',
+    'splunkjs/mvc/simplexml/ready!'
+], function ($) {
+
+    'use strict';
+    let baseURL = window.location.href.split('cs_overview')[0];
+
+    // List of report links
+    let report_links = [
+        { id: 'ad_reports_link', url: baseURL.concat('cs_windows_ad_reports')},
+        { id: 'o365_reports_link', url: baseURL.concat('cs_o365_reports')},
+        { id: 'network_reports_link', url: baseURL.concat('cs_network_reports')},
+        { id: 'paf_reports_link', url: baseURL.concat('cs_paloalto_firewall_reports')},
+        { id: 'malicious_reports_link', url: baseURL.concat('cs_malicious_ip_list')},
+        { id: 'sophos_reports_link', url: baseURL.concat('cs_sophos_reports')},
+        { id: 'vpn_reports_link', url: baseURL.concat('cs_vpn_reports')},
+        { id: 'auth_reports_link', url: baseURL.concat('cs_authentication_reports')},
+        { id: 'windowsdef_reports_link', url: baseURL.concat('cs_windows_defender_reports')},
+        { id: 'crowdstrike_reports_link', url: baseURL.concat('cs_crowdstrike_reports')},
+        { id: 'admin_reports_link', url: baseURL.concat('cs_splunk_admin_reports')},
+    ];
+
+    // Iterate through the link and add the onClick method
+    $.each(report_links, function(index, report){
+        $(`#${report.id}`).on("click", function(){
+            window.open(report.url, "_blank");
+        });
+    });
+
+});

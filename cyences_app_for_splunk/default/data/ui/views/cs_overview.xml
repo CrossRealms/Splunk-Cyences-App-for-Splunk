@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" stylesheet="cs_overview.css" script="cs_overview.js">
   <label>Overview</label>
   <search id="basesearch">
     <query>`cs_cyences_index` | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
@@ -22,6 +22,24 @@
       </default>
     </input>
   </fieldset>
+  <row>
+    <panel>
+      <title>Reports</title>
+      <html>
+        <div class="box" id="ad_reports_link">AD and Windows</div>
+        <div class="box" id="o365_reports_link">Office 365</div>
+        <div class="box" id="network_reports_link">Network</div>
+        <div class="box" id="paf_reports_link">PaloAlto Firewall</div>
+        <div class="box" id="malicious_reports_link">Malicious IP List</div>
+        <div class="box" id="sophos_reports_link">Sophos</div>
+        <div class="box" id="windowsdef_reports_link">Windows Defender</div>
+        <div class="box" id="crowdstrike_reports_link">CrowdStrike</div>
+        <div class="box" id="vpn_reports_link">VPN</div>
+        <div class="box" id="auth_reports_link">Authentication</div>
+        <div class="box" id="admin_reports_link">Splunk Admin</div>
+      </html>
+    </panel>
+  </row>
   <row>
     <panel>
       <title>Network Compromise</title>
