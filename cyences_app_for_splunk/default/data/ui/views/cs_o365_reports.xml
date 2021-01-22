@@ -22,7 +22,7 @@
     <panel>
       <html>
         <p>Office 365 Reports</p>
-        <p><b>Data Collection:</b> O365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for O365</a>.</p>
+        <p><b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.</p>
       </html>
       <table>
         <search>
@@ -40,7 +40,7 @@
   </row>
   <row>
     <panel>
-      <title>O365/Azure - Success Logins Outside $tkn_country$</title>
+      <title>Office 365/Azure - Success Logins Outside $tkn_country$</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
@@ -59,7 +59,7 @@
   </row>
   <row>
     <panel>
-      <title>O365/Azure - Failed Logins Outside of $tkn_country$</title>
+      <title>Office 365/Azure - Failed Logins Outside of $tkn_country$</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
@@ -78,7 +78,7 @@
   </row>
   <row>
     <panel>
-      <title>O365/Azure - Login from Unknown UserId</title>
+      <title>Office 365/Azure - Login from Unknown UserId</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown | iplocation ClientIP | eval time=strftime(_time, "%F %T") | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>

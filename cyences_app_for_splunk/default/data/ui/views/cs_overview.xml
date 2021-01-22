@@ -194,7 +194,7 @@
       </table>
     </panel>
     <panel>
-      <title>O365</title>
+      <title>Office 365</title>
       <table>
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("O365")`</query>
