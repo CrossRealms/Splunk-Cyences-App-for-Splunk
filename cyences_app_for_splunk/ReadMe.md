@@ -76,7 +76,7 @@ Update Guide from version 1.0.0 to 1.1.0
   * If the alert has been enabled before, it has to be enabled again.
 * Alerts notable events now stored in the index under stash sourcetype.
   * So, user has to create index named cyences.
-
+  * Have to copy paste props.conf from default directory to local directory and update the sourcetype name from cyences_stash to stash in the local props.conf file. ([cyences_stash] => [stash])
 
 
 Version 1.0.0 (Nov 2020)
