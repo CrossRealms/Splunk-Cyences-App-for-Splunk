@@ -46,16 +46,37 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
-Version 1.1.0 (release date here)
-* (release notes will be here)
+Version 1.1.0 (Jan 2021)
+* Improved Overview page.
+  * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
+  * Direct navigation to reports added on top of the Overview page.
+* Improved Forensics page.
+  * Renamed Details dashboard to Forensics dashboard.
+  * Added 4 panels to Forensics dashboard: All Notable Events, _raw data panel (Contributing Events), Compromised System, Signature (Attacker)
+  * Added drilldown for Compromised System and Signature panels.
+  * Combined open alert query in search in the Alert Details panel.
+  * Minor issue with panel visibility fixed.
+  * Alerts execution and and notable events now being stored in the events (index).
+    * So, there is virtually no limit to how long user will be able to see the notable events.
+* Improved Configuration page UI.
+  * Fixed the issue with the macro update in the Configuration page.
+* Added Splunk Admin category.
+  * Added two alerts and reports: Missing Index Data & Missing Forwarders
+* Sophos alerts renamed.
+* Added Antivirus category.
+  * Sophos alerts and reports moved under Antivirus category.
+  * Added alerts and reports for CrowdStrike.
+  * Added alerts and reports for Windows Defender.
+* Added panel on top of all the dashboards/reports to show whether the data required for the dashboard is present or not and also if any report/alerts needs to be enabled to make dashboard work is enabled or not.
+* New alert (Windows Process Tampering Detected) for Windows added based on new release of Sysmon version 13.0.
 
 
 Update Guide from version 1.0.0 to 1.1.0
 * Sophos savedsearches/alerts have been renamed.
   * If the alert has been enabled before, it has to be enabled again.
-* Sophos alerts have been moved under Antivirus panel.
-* Sophos reports have been moved under Antivirus in the navigation.
-* Details dashboard renamed to Forensics.
+* Alerts notable events now stored in the index under stash sourcetype.
+  * So, user has to create index named cyences.
+
 
 
 Version 1.0.0 (Nov 2020)
