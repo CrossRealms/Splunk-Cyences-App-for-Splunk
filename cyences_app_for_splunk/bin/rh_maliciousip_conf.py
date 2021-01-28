@@ -19,10 +19,9 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
         Sets the input arguments
         :return:
         """
-        if self.requestedAction == admin.ACTION_LIST:
-            # Set up the valid parameters
-            for arg in ['data','api_url', 'auth_token']:
-                self.supportedArgs.addOptArg(arg)
+        # Set up the valid parameters
+        for arg in ['data','api_url', 'auth_token']:
+            self.supportedArgs.addOptArg(arg)
 
 
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-
-from __future__ import absolute_import, division, print_function, unicode_literals
+import sys
 import json
 import requests
 
@@ -40,37 +39,42 @@ class MaliciousIPUploaderCommand(EventingCommand):
             self.logger.info("MaliciousIP Collector Configuration not found in the cs_configurations.conf file.")
 
         for record in records:
-            for idx, device_id in enumerate(str(record['dvc']).split(" ")):
-                api_payload.append(
-                    {
-                        'ip': record['ip'],
-                        'ip_location': record['ip_location'],
-                        'device_name': str(record['dvc_name']).split(" ")[idx],
-                        'device': device_id,
-                        'no_of_ports_used': int(record['no_of_ports_used']),
-                        'no_of_victims': int(record['no_of_victims']),
-                        'customer_id': api_config['cust_id'],
-                        'category': record['ip_category'],
-                    }
-                )
+            api_payload.append(
+                {
+                    'ip': record['ip'],
+                    'ip_location': ','.join(record['ip_location']) if type(record['ip_location']) == list else str(record['ip_location']),
+                    'device_name': ','.join(record['dvc_name']) if type(record['dvc_name']) == list else str(record['dvc_name']),
+                    'device': ','.join(record['dvc']) if type(record['dvc']) == list else str(record['dvc']),
+                    'no_of_ports_used': int(record['no_of_ports_used']),
+                    'no_of_victims': int(record['no_of_victims']),
+                    'customer_id': api_config['cust_id'],
+                    'category': record['ip_category'],
+                }
+            )
         endpoint_url = f"{api_config['api_url']}/api/v1/ip"
         payload = {'data': api_payload}
         auth_header = {
             "Authorization": f"Bearer {api_config['auth_token']}"
         }
+        resp = None
         try:
-            resp = requests.post(endpoint_url, data=payload, headers=auth_header)
+            resp = requests.post(endpoint_url, json=payload, headers=auth_header)
             resp.raise_for_status()
             yield {'success': True, 'message': "Successfully Uploaded Ips to API."}
             self.logger.info(f"Response received {resp.json()}")
         except Exception as e:
-            yield {
-                'success': False,
-                'message': f"Failed to upload Ips to API, Reason {repr(e)}"
-            }
+            if resp:
+                yield {
+                    'success': False,
+                    'error_message': f"Failed to upload Ips to API, Reason {repr(e)}",
+                    'response_body': resp.json()
+                }
+            else:
+                yield {
+                    'success': False,
+                    'error_message': f"Failed to upload Ips to API, Reason {repr(e)}",
+                    'response': "None"
+                }
         
-
-
-
 
 dispatch(MaliciousIPUploaderCommand, sys.argv, sys.stdin, sys.stdout, __name__)

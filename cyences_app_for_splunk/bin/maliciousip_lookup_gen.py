@@ -10,7 +10,7 @@ import cs_utils
 
 
 
-HEADERS = ['description','ip','ip_location','last_seen', 'no_of_ports_used', 'no_of_victims']
+HEADERS = ['description','ip','ip_location','last_seen']
 LOOKUP_NAME = 'cs_malicious_ip_list.csv'
 CONF_FILE = 'cs_configurations'
 
@@ -39,7 +39,7 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
         auth_header = {
             "Authorization": f"Bearer {api_config['auth_token']}"
         }
-        response = requests.get(api_config['api_url'], headers=auth_header)
+        response = requests.get("{}{}".format(api_config['api_url'], '/api/v1/ip'), headers=auth_header)
         return response.json()['data']
 
 
@@ -50,9 +50,7 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
                 '{}'.format(i['description']),
                 '{}'.format(i['ip']),
                 '{}'.format(i['ip_location']),
-                '{}'.format(i['last_seen']),
-                '{}'.format(i['no_of_ports_used']),
-                '{}'.format(i['no_of_victims']),
+                '{}'.format(i['last_seen'])
             ]
             for i in data
         ]
