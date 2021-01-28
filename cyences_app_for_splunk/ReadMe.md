@@ -46,7 +46,7 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
-Version 1.1.0 (Jan 2021)
+Version 1.1.0 (Jeb 2021)
 * Improved Overview page.
   * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
   * Direct navigation to reports added on top of the Overview page.
@@ -69,6 +69,7 @@ Version 1.1.0 (Jan 2021)
   * Added alerts and reports for Windows Defender.
 * Added panel on top of all the dashboards/reports to show whether the data required for the dashboard is present or not and also if any report/alerts needs to be enabled to make dashboard work is enabled or not.
 * New alert (Windows Process Tampering Detected) for Windows added based on new release of Sysmon version 13.0.
+* Malicious IP List is now updated to upload the data to Cyences Malicious IP server and retrieve back the latest results from the server and update the lookup.
 
 
 Update Guide from version 1.0.0 to 1.1.0
@@ -77,6 +78,8 @@ Update Guide from version 1.0.0 to 1.1.0
 * Alerts notable events now stored in the index under stash sourcetype.
   * So, user has to create index named cyences.
   * Have to copy paste props.conf from default directory to local directory and update the sourcetype name from cyences_stash to stash in the local props.conf file. ([cyences_stash] => [stash])
+* Configuration for Malicious IP Collector.
+  * Go to `Settings > Configuration > Malicious-IP Collector` Configuration to do so.
 
 
 Version 1.0.0 (Nov 2020)
