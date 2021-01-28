@@ -94,5 +94,6 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
                     yield i
         else:
             self.logger.info("No options were selected.")
- 
+
+
 dispatch(UpdateMaliciousIPLookup, sys.argv, sys.stdin, sys.stdout, __name__)

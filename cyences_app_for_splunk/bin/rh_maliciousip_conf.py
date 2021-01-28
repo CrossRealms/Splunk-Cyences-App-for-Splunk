@@ -24,7 +24,6 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
             self.supportedArgs.addOptArg(arg)
 
 
-
     def handleList(self, conf_info):
         # Get MaliciousIP Collector Configuration
         try:

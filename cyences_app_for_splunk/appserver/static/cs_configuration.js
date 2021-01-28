@@ -206,6 +206,7 @@ require([
 
     getHoneyDBConfiguration();
 
+
     function getMaliciousIPCollectorConfiguration(){
         let service = mvc.createService();
         service.get("/MaliciousIPConfiguration", {}, function(error, response){
@@ -230,6 +231,7 @@ require([
     }
 
     getMaliciousIPCollectorConfiguration();
+
 
     function updateHoneyDBConfiguration(){
         let api_id = $("#honeydb_api_id").val();
@@ -262,11 +264,11 @@ require([
         });
     }
 
-
     $(`#honeydb_button`).on("click", function(){
         updateHoneyDBConfiguration();
     });
 
+    
     function updateMaliciousIPConfiguration(){
         let api_url = $("#malicious_ip_api_url").val();
         let auth_token = $("#malicious_ip_auth_token").val();

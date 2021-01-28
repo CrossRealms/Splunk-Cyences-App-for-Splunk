@@ -30,8 +30,8 @@ class MaliciousIPUploaderCommand(EventingCommand):
                 break
         return {'api_url': api_url, 'auth_token': auth_token, 'cust_id': cust_id}
     
-    def transform(self, records):
 
+    def transform(self, records):
         api_payload = []
         api_config = self.get_api_info()
 
