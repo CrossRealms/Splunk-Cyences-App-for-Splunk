@@ -10,7 +10,7 @@ The Cyences App for Splunk is an Splunk App to provide complete security to the 
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.0.0
+* Version - 1.1.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,7 +46,7 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
-Version 1.1.0 (Jeb 2021)
+Version 1.1.0 (Feb 2021)
 * Improved Overview page.
   * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
   * Direct navigation to reports added on top of the Overview page.
@@ -56,7 +56,7 @@ Version 1.1.0 (Jeb 2021)
   * Added drilldown for Compromised System and Signature panels.
   * Combined open alert query in search in the Alert Details panel.
   * Minor issue with panel visibility fixed.
-  * Alerts execution and and notable events now being stored in the events (index).
+  * Alerts execution and notable events now being stored in the events (index).
     * So, there is virtually no limit to how long user will be able to see the notable events.
 * Improved Configuration page UI.
   * Fixed the issue with the macro update in the Configuration page.
@@ -67,12 +67,12 @@ Version 1.1.0 (Jeb 2021)
   * Sophos alerts and reports moved under Antivirus category.
   * Added alerts and reports for CrowdStrike.
   * Added alerts and reports for Windows Defender.
-* Added panel on top of all the dashboards/reports to show whether the data required for the dashboard is present or not and also if any report/alerts needs to be enabled to make dashboard work is enabled or not.
+* Added panel on top of all the dashboards/reports to show whether the data required for the dashboard is present or not and also if any report/alerts need to be enabled to make dashboard work is enabled or not.
 * New alert (Windows Process Tampering Detected) for Windows added based on new release of Sysmon version 13.0.
 * Malicious IP List is now updated to upload the data to Cyences Malicious IP server and retrieve back the latest results from the server and update the lookup.
 
 
-Update Guide from version 1.0.0 to 1.1.0
+Upgrade Guide from version 1.0.0 to 1.1.0
 * Sophos savedsearches/alerts have been renamed.
   * If the alert has been enabled before, it has to be enabled again.
 * Alerts notable events now stored in the index under stash sourcetype.
