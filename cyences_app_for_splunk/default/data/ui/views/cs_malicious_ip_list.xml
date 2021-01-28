@@ -4,8 +4,7 @@
     <query>| inputlookup cs_malicious_ip_list.csv
 | addinfo | where (info_min_time="-Infinity" OR last_seen&gt;=info_min_time) AND (info_max_time="+Infinity" OR last_seen&lt;=info_max_time)
 | eval last_seen=strftime(last_seen, "%F %T") 
-| sort - no_of_victims
-| table ip, last_seen, no_of_victims, ip_location, description</query>
+| table ip, last_seen, ip_location, description</query>
     <earliest>$tkn_last_seen.earliest$</earliest>
     <latest>$tkn_last_seen.latest$</latest>
   </search>
@@ -57,12 +56,12 @@
       <map>
         <search base="search_list">
           <query>| eval description=case(description="Incoming traffic into multiple firewalls from this blocked IP", "Incoming Traffic from Blocked IP", description="Outgoing traffic through multiple firewalls to this blocked IP", "Outgoing Traffic to Blocked IP", description="Involved in DDoS Attack", "DDoS", 1==1, "Other")
-| iplocation ip | geostats globallimit=0 sum(no_of_victims) by description</query>
+| iplocation ip | geostats globallimit=0 count by description</query>
         </search>
         <option name="drilldown">all</option>
         <option name="mapping.type">marker</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20inputlookup%20cs_malicious_ip_list.csv%0A%7C%20addinfo%20%7C%20where%20(info_min_time=%22-Infinity%22%20OR%20last_seen%3E=info_min_time)%20AND%20(info_max_time=%22+Infinity%22%20OR%20last_seen%3C=info_max_time)%0A%7C%20eval%20last_seen=strftime(last_seen,%20%22%25F%20%25T%22)%20%0A%7C%20sort%20-%20no_of_victims%0A%7C%20table%20ip,%20last_seen,%20no_of_victims,%20ip_location,%20description%20%7C%20%20eval%20description=case(description=%22Incoming%20traffic%20into%20multiple%20firewalls%20from%20this%20blocked%20IP%22,%20%22Incoming%20Traffic%20from%20Blocked%20IP%22,%20description=%22Outgoing%20traffic%20through%20multiple%20firewalls%20to%20this%20blocked%20IP%22,%20%22Outgoing%20Traffic%20to%20Blocked%20IP%22,%20description=%22Involved%20in%20DDoS%20Attack%22,%20%22DDoS%22,%201==1,%20%22Other%22)%0A%7C%20iplocation%20ip%0A%7C%20search%20lat%3E=$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E=$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$tkn_last_seen.earliest$&amp;latest=$tkn_last_seen.latest$</link>
+          <link target="_blank">search?q=%7C%20inputlookup%20cs_malicious_ip_list.csv%0A%7C%20addinfo%20%7C%20where%20(info_min_time%3D%22-Infinity%22%20OR%20last_seen%3E%3Dinfo_min_time)%20AND%20(info_max_time%3D%22%2BInfinity%22%20OR%20last_seen%3C%3Dinfo_max_time)%0A%7C%20eval%20last_seen%3Dstrftime(last_seen%2C%20%22%25F%20%25T%22)%20%0A%7C%20table%20ip%2C%20last_seen%2C%20ip_location%2C%20description%20%7C%20%20eval%20description%3Dcase(description%3D%22Incoming%20traffic%20into%20multiple%20firewalls%20from%20this%20blocked%20IP%22%2C%20%22Incoming%20Traffic%20from%20Blocked%20IP%22%2C%20description%3D%22Outgoing%20traffic%20through%20multiple%20firewalls%20to%20this%20blocked%20IP%22%2C%20%22Outgoing%20Traffic%20to%20Blocked%20IP%22%2C%20description%3D%22Involved%20in%20DDoS%20Attack%22%2C%20%22DDoS%22%2C%201%3D%3D1%2C%20%22Other%22)%0A%7C%20iplocation%20ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$tkn_last_seen.earliest$&amp;latest=$tkn_last_seen.latest$</link>
         </drilldown>
       </map>
     </panel>

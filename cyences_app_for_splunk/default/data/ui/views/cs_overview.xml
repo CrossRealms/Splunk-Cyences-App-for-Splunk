@@ -323,8 +323,7 @@
         <search>
           <query>| inputlookup cs_malicious_ip_list.csv
 | eval last_seen=strftime(last_seen, "%F %T") 
-| sort - no_of_victims
-| table ip, last_seen, no_of_victims, ip_location, description</query>
+| table ip, last_seen, ip_location, description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
