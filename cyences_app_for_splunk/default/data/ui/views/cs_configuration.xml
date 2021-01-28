@@ -26,6 +26,30 @@
   </row>
   <row>
     <panel>
+      <title>Malicious-IP Collector Configuration</title>
+      <html>
+        <p id="malicious_ip_msg"/>
+        <table style="width:60%">
+          <tr>
+            <th style="text-align:left">API URL</th>
+            <th style="text-align:left">
+              <input type="text" id="malicious_ip_api_url" style="margin-bottom:5px;"/>
+            </th>
+            <th style="text-align:left">Auth Token</th>
+            <th style="text-align:left">
+              <input type="password" id="malicious_ip_auth_token"/>
+            </th>
+            <th style="text-align:left">
+              <button id="malicious_button">Save Malicious-IP Collector Configuration</button>
+            </th>
+          </tr>
+        </table>
+        <div>*Re-enter the Auth Token before clicking Update.</div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Macro Definitions Update</title>
       <html/>
     </panel>
