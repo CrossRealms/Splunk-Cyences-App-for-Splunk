@@ -7,3 +7,4 @@ api_key = <string> Honey DB API Key
 # MaliciousIP Collector Configuration, 
 api_url = <string> URL where the API is hosted to collect the data
 auth_token = <string> API auth token
+cust_id = <string> UUID generated automatically while Configuration

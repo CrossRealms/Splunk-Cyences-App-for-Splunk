@@ -276,7 +276,7 @@ require([
             "auth_token": auth_token
         };
         data = JSON.stringify(data);
-        service.post("/MaliciousIPConfiguration/maliciousIP", {"data": data}, function(error, response){
+        service.post("/MaliciousIPConfiguration/maliciousip", {"data": data}, function(error, response){
             if(response && response.data.entry[0].content['success'] && response.data.entry[0].content['success'] != ''){
                 let msg_location = "#malicious_ip_msg";
                 $(msg_location).removeClass('error_msg');

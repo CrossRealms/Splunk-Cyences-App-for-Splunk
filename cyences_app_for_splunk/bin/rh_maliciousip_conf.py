@@ -2,6 +2,7 @@ import json
 import splunk.admin as admin
 from splunk import rest
 import cs_utils
+import uuid
 
 CONF_FILE = 'cs_configurations'
 MALICIOUS_IP_STANZA = 'maliciousip'
@@ -18,10 +19,11 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
         Sets the input arguments
         :return:
         """
+        if self.requestedAction == admin.ACTION_LIST:
+            # Set up the valid parameters
+            for arg in ['data','api_url', 'auth_token']:
+                self.supportedArgs.addOptArg(arg)
 
-        # Set up the valid parameters
-        for arg in ['data']:
-            self.supportedArgs.addOptArg(arg)
 
 
     def handleList(self, conf_info):
@@ -33,7 +35,7 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
             auth_token = '******'
             for i in data:
                 if i['name'] == 'maliciousip':
-                    api_id = i['content']['api_url']
+                    api_url = i['content']['api_url']
                     break
             conf_info['action']['api_url'] = api_url
             conf_info['action']['auth_token'] = auth_token
@@ -54,7 +56,14 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
         try:
             # Store API ID
             rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, MALICIOUS_IP_STANZA), postargs={'api_url': api_url}, method='POST', sessionKey=self.getSessionKey())
-
+            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
+            data = json.loads(serverContent)['entry']
+            cust_id = ''
+            for i in data:
+                if i['name'] == 'maliciousip':
+                    cust_id = i['content'].get('cust_id','')
+                    if cust_id == '':
+                        rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, MALICIOUS_IP_STANZA), postargs={'cust_id': uuid.uuid4().hex}, method='POST', sessionKey=self.getSessionKey())
             # Store API Key
             cs_utils.CredentialManager(self.getSessionKey()).store_credential(api_url, auth_token)
 
