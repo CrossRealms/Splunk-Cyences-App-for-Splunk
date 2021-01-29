@@ -19,6 +19,8 @@
         SYSMON EVENT ID 11 : FILE CREATED [FileCreate]
 	    <RuleGroup name="" groupRelation="or">
 		    <FileCreate onmatch="exclude">
+  - Added rule for EventCode 25 (Process Tampering)
+        SYSMON EVENT ID 25 : Process Tamering
 
 
 
@@ -1074,6 +1076,12 @@
 			and certain tasked could not be performed or a bug exists in the Sysmon service. You can report any bugs on the
 			Sysinternals forum or over Twitter (@markrussinovich)."-->
 		<!--Cannot be filtered.-->
+
+	<!--SYSMON EVENT ID 25 : Process Tamering-->
+    <RuleGroup name="" groupRelation="or">
+      <ProcessTampering onmatch="exclude">
+      </ProcessTampering>
+    </RuleGroup>
 
 	</EventFiltering>
 </Sysmon>

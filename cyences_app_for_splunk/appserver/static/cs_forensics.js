@@ -84,7 +84,7 @@ require([
             contributing_events: '`cs_sysmon` EventCode=25',
             system_compromised_search: "| stats count by Computer",
             system_compromised_drilldown: '`cs_sysmon` EventCode=25 Computer=$row.Computer$',
-            attacker_search: "| stats count, values(CommandLine) as CommandLine by ProcessId",
+            attacker_search: "| stats count, values(ProcessId) as Processes by Image",
             attacker_drilldown: '`cs_sysmon` EventCode=25 ProcessId=$row.ProcessId$'
         },
 
