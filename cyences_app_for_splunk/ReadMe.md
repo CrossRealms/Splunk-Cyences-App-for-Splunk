@@ -46,7 +46,7 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
-Version 1.1.0 (Feb 2021)
+Version 1.1.0 (Jan 2021)
 * Improved Overview page.
   * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
   * Direct navigation to reports added on top of the Overview page.
