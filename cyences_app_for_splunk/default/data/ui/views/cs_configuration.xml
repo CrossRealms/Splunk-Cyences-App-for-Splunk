@@ -16,7 +16,7 @@
               <input type="password" id="honeydb_api_key"/>
             </th>
             <th style="text-align:left">
-              <button id="honeydb_button">Save HoneyDB Configuration</button>
+              <button id="honeydb_button">Save</button>
             </th>
           </tr>
         </table>
@@ -40,7 +40,7 @@
               <input type="password" id="malicious_ip_auth_token"/>
             </th>
             <th style="text-align:left">
-              <button id="malicious_button">Save Malicious-IP Collector Configuration</button>
+              <button id="malicious_button">Save</button>
             </th>
           </tr>
         </table>

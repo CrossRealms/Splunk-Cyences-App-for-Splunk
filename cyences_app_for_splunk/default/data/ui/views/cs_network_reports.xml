@@ -50,7 +50,7 @@
       </map>
       <html>
         <div>
-          <p><b>Description:</b> Displays port scanning attempts onto your network, which scan over 100 ports or more.</p>
+          <p><b>Description:</b> Scans over 100 ports and displays port scanning attempts on your network.</p>
         </div>
       </html>
     </panel>

@@ -40,7 +40,7 @@
   </row>
   <row>
     <panel>
-      <title>Office 365/Azure - Success Logins Outside $tkn_country$</title>
+      <title>Office 365/Azure - Successful Logins Outside $tkn_country$</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_home_country` | eval time=strftime(_time, "%F %T") | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>

@@ -67,7 +67,7 @@
     <panel>
       <title>Update Errors</title>
       <table>
-        <title>EventCodes=(2001, 2003, 2006)</title>
+        <title>EventCodes=2001, 2003, 2006</title>
         <search>
           <query>`cs_windows_defender` EventCode IN (2001, 2003, 2006) $tkn_host$ | stats count, latest(_time) as _time, values(Error_Code) as Error_Code, values(Error_Description) as Error_Description, values(Update_Source) as Update_Source, values(Update_State) as Update_State, values(Update_Type) as Update_Type, values(Current_Engine_Version) as Current_Engine_Version, values(Previous_Engine_Version) as Previous_Engine_Version, values(Previous_Signature_Version) as Previous_Signature_Version, values(Product_Version) as Product_Version, values(Signature_Type) as Signature_Type by host, EventCode
 | eval EventCodeDescription=case(EventCode=2001, "The security intelligence update failed.", EventCode=2003, "The antimalware engine update failed.", EventCode=2006, "The platform update failed.") 
@@ -100,7 +100,7 @@
     <panel>
       <title>Antimalware/Antimalware Engine Dropped Support for Operating System</title>
       <table>
-        <title>EventCodes=(2041, 2042)</title>
+        <title>EventCodes=2041, 2042</title>
         <search>
           <query>`cs_windows_defender` EventCode IN (2041, 2042) $tkn_host$ | stats count, latest(_time) as _time by host
 | eval EventCodeDescription=if(EventCode=2041, "Antimalware dropped support for OS.", "Antimalware Engine dropped support for OS.")
@@ -165,7 +165,7 @@
       </table>
     </panel>
     <panel>
-      <title>Unable to download and configure offline scan</title>
+      <title>Unable to Download and Configure Offline Scan</title>
       <table>
         <title>EventCode=2031</title>
         <search>
@@ -186,7 +186,7 @@
     <panel>
       <title>Malware Detected</title>
       <table>
-        <title>EventCodes=(1006, 1015, 1116)</title>
+        <title>EventCodes=1006, 1015, 1116</title>
         <search>
           <query>`cs_windows_defender` EventCode IN (1006, 1015, 1116) $tkn_host$
 | eval EventCodeDescription=case(EventCode=1006, "Antimalware engine found malware", EventCode=1015, "Antimalware platform found malware", EventCode=1116, "Antimalware platform detected suspicious behaviour")

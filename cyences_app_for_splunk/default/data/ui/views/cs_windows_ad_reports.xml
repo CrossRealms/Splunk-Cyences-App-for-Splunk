@@ -49,7 +49,7 @@
   </row>
   <row>
     <panel>
-      <title>AD - User Previlege Escalation</title>
+      <title>AD - User Privilege Escalation</title>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode IN (4728, 4729) | rename name as change_action | table host, change_action, Group_Name, member_id | `cs_ad_user_privilege_escalation_filter`</query>
