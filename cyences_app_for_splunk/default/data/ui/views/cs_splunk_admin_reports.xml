@@ -20,9 +20,11 @@
   <row>
     <panel>
       <html>
-        <p>Splunk Admin Reports</p>
         <p>Shows information which is important for security and overall health of the Splunk environment.</p>
         <p>Alerts "Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" has to be enabled in order to populate this dashboard.</p>
+        <p>Both alerts update the information every hour.</p>
+        <p>Data on the Overview page might not match with the data in this dashboard if you have filtered any forwarders or indexes with macros cs_splunk_admin_missing_forwarders_filter or cs_splunk_admin_missing_indexes_filter. This dashboard shows all the indexes and forwarders.</p>
+        <p>To remove any forwarder or index from the list visit "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section from the <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">documentation</a>.</p>
       </html>
       <table>
         <search>

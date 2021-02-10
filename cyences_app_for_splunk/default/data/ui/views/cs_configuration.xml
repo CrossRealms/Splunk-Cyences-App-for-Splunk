@@ -834,7 +834,7 @@
             </th>
           </tr>
           <tr>
-            <th style="text-align:left">on_ransomware_extensions_filter</th>
+            <th style="text-align:left">cs_common_ransomware_extensions_filter</th>
             <th style="text-align:left">
               <input type="text" name="macro_cs_common_ransomware_extensions_filter" id="macro_cs_common_ransomware_extensions_filter"/>
             </th>

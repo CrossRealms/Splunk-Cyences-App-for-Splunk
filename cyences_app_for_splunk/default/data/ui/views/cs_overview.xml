@@ -248,8 +248,10 @@
     <panel>
       <title>Splunk Admin</title>
       <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Splunk Admin")`</query>
+        <search>
+          <query>| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
+| append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_filter` | stats count | eval Name="Missing Indexes" ]
+| rename count as Count</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -260,13 +262,13 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
+        <format type="color" field="Count">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Notable Events"]</fields>
+        <fields>["Name","Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_splunk_admin_reports</link>
         </drilldown>
       </table>
     </panel>
