@@ -15,6 +15,7 @@
     <view name="cs_vpn_reports" />
     <view name="cs_authentication_reports" />
     <view name="cs_splunk_admin_reports" />
+    <view name="cs_lansweeper" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />

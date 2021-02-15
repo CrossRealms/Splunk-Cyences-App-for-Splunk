@@ -22,6 +22,8 @@ require([
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_authentication_indexes', input_id: 'macro_data_authentication', button_id: 'macro_data_authentication_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_lansweeper', input_id: 'macro_data_lansweeper', button_id: 'macro_data_lansweeper_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_qualys', input_id: 'macro_data_qualys', button_id: 'macro_data_qualys_button', msg_id: 'macro_data_msg'},
 
         /* Other Macros */
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_other_msg'},
@@ -30,6 +32,12 @@ require([
         { macro_name: 'cs_network_home_location_lon', input_id: 'macro_cs_network_home_location_lon', button_id: 'macro_cs_network_home_location_lon_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_palo_search_blocked_ip_lookup_name', input_id: 'macro_cs_palo_search_blocked_ip_lookup_name', button_id: 'macro_cs_palo_search_blocked_ip_lookup_name_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter_old_results', input_id: 'macro_cs_palo_malicious_ip_list_filter_old_results', button_id: 'macro_cs_palo_malicious_ip_list_filter_old_results_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_lansweeper_timerange', input_id: 'macro_cs_lansweeper_timerange', button_id: 'macro_cs_lansweeper_timerange_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_wineventlog_security_timerange', input_id: 'macro_cs_wineventlog_security_timerange', button_id: 'macro_cs_wineventlog_security_timerange_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_wineventlog_system_timerange', input_id: 'macro_cs_wineventlog_system_timerange', button_id: 'macro_cs_wineventlog_system_timerange_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_sysmon_timerange', input_id: 'macro_cs_sysmon_timerange', button_id: 'macro_cs_sysmon_timerange_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_qualys_timerange', input_id: 'macro_cs_qualys_timerange', button_id: 'macro_cs_qualys_timerange_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_qualys_linux_os', input_id: 'macro_cs_qualys_linux_os', button_id: 'macro_cs_qualys_linux_os_button', msg_id: 'macro_other_msg'},
 
         /* Data-model */
         { macro_name: 'cs_summariesonly_endpoint', input_id: 'macro_datamodel_endpoint', button_id: 'macro_datamodel_endpoint_button', msg_id: 'macro_datamodel_msg'},

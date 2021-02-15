@@ -150,6 +150,24 @@
               <button id="macro_data_authentication_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">Lansweeper Data</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_data_lansweeper" id="macro_data_lansweeper"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_lansweeper_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">Qualys Data</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_data_qualys" id="macro_data_qualys"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_qualys_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>
@@ -253,6 +271,60 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_palo_malicious_ip_list_filter_old_results_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_lansweeper_timerange</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_lansweeper_timerange" id="macro_cs_lansweeper_timerange"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_lansweeper_timerange_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_wineventlog_security_timerange</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_wineventlog_security_timerange" id="macro_cs_wineventlog_security_timerange"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_wineventlog_security_timerange_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_wineventlog_system_timerange</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_wineventlog_system_timerange" id="macro_cs_wineventlog_system_timerange"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_wineventlog_system_timerange">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_sysmon_timerange</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_sysmon_timerange" id="macro_cs_sysmon_timerange"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_sysmon_timerange_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_qualys_timerange</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_qualys_timerange" id="macro_cs_qualys_timerange"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_qualys_timerange_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_qualys_linux_os</th>
+            <th style="text-align:left">
+              <input type="text" name="macro_cs_qualys_linux_os" id="macro_cs_qualys_linux_os"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_qualys_linux_os_button">Update</button>
             </th>
           </tr>
         </table>

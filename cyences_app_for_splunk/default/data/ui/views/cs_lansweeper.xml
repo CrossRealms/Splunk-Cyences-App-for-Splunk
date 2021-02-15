@@ -1,0 +1,399 @@
+<form theme="dark">
+  <init>
+    <set token="tkn_host">()</set>
+    <set token="tkn_ip">()</set>
+    <set token="tkn_user">()</set>
+    <set token="tkn_asset_state">()</set>
+  </init>
+  <label>Lansweeper</label>
+  <search id="search_windows_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Windows" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+| join type="left" Name [| search `cs_wineventlog_security` `cs_wineventlog_security_timerange` | dedup host | table host | rename host as Name | eval WinEventLog_Security="Present"]
+| join type="left" Name [| search `cs_wineventlog_system` cs_wineventlog_system_timerange | dedup host | table host | rename host as Name | eval WinEventLog_System="Present"]
+| join type="left" Name [| search `cs_sysmon` cs_sysmon_timerange | dedup host | table host | rename host as Name | eval Sysmon="Present"]
+| join type=left IPAddress [| search `cs_qualys_hostsummary` OS="Windows *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
+| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys value="Absent"
+| table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys
+| sort Name </query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_vmware_server_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange`  ("asset.assetTypeName"="VMware vCenter server" OR "asset.assetTypeName"="ESXi server") | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
+| join type=left IPAddress [| search `cs_qualys_hostsummary` OS="VMware *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
+| fillnull Qualys value="Absent"
+| table Site, Name, Type, Version, State, IPAddress, MacAddress, Qualys
+| sort Name</query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_vmware_guest_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="VMware Guest" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
+| join type="left" Name [| search `cs_wineventlog_security` `cs_wineventlog_security_timerange` | dedup host | table host | rename host as Name | eval WinEventLog_Security="Present"]
+| join type="left" Name [| search `cs_wineventlog_system` cs_wineventlog_system_timerange | dedup host | table host | rename host as Name | eval WinEventLog_System="Present"]
+| join type="left" Name [| search `cs_sysmon` cs_sysmon_timerange | dedup host | table host | rename host as Name | eval Sysmon="Present"]
+| join type=left IPAddress [| search `cs_qualys_hostsummary` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
+| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys value="Absent"
+| table Site, Name, Type, State, IPAddress, MacAddress, OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys
+| sort Name</query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_linux_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Linux" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+| join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
+| fillnull Qualys value="Absent"
+| table Site, Name, State, IPAddress, MacAddress, OS, User, Qualys
+| sort Name</query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_location_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Location" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+| table Site, Name, State
+| sort Name </query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_monitor_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Monitor" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+| table Site, Name, State
+| sort Name </query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_other_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT ("asset.assetTypeName"="VMware vCenter server" OR "asset.assetTypeName"="ESXi server" OR "asset.assetTypeName"="VMware Guest" OR "asset.assetTypeName"="Windows" OR "asset.assetTypeName"="Linux" OR "asset.assetTypeName"="Location" OR "asset.assetTypeName"="Monitor") | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
+| table Site, Name, Type, State, IPAddress, MacAddress
+| sort Name</query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>This dashboard shows information about all the assets in the environment and also show whether that asset is sending required security logs to Splunk or not. You can use this dashboard for security auditing. Data Availability will be color coded: Red (data not available) and Green (data available).</p>
+        <p>Timerange for searches: Lansweeper - last 4 hours, WinEventLogs(Security &amp; System) - last 4 hours, Sysmon - last 4 hours, Qualys - last 24 hours</p>
+        <p>Some searches could be slow due to amount of data it is trying to search.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="text" token="tkn_host_tmp">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_host_tmp'=&quot;*&quot;">
+            <set token="tkn_host">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_host">(Name="*$tkn_host_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_ip_tmp">
+        <label>IP Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_ip_tmp'=&quot;*&quot;">
+            <set token="tkn_ip">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_ip">(IPAddress="*$tkn_ip_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_user_tmp">
+        <label>User</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_user_tmp'=&quot;*&quot;">
+            <set token="tkn_user">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_user">(User="*$tkn_user_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="dropdown" token="tkn_asset_state_tml">
+        <label>Asset State</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Active</choice>
+        <choice value="Absent">Non-Active</choice>
+        <default>*</default>
+        <change>
+          <condition match="'tkn_asset_state_tmp'=&quot;*&quot;">
+            <set token="tkn_asset_state">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_asset_state">(State="*$tkn_asset_state_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Devices</title>
+      <input type="dropdown" token="tkn_win_security_logs">
+        <label>Security Logs</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_win_system_logs">
+        <label>System Logs</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_sysmon_logs">
+        <label>Sysmon Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_qualys_logs_windows">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_windows_assets">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_win_security_logs|s$ WinEventLog_System=$tkn_win_system_logs|s$ Sysmon=$tkn_sysmon_logs|s$ Qualys=$tkn_qualys_logs_windows|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="WinEventLog_Security">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="WinEventLog_System">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Sysmon">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>VMware Guests - Windows</title>
+            <input type="dropdown" token="tkn_vmware_win_security_logs">
+        <label>Security Logs</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_vmware_win_system_logs">
+        <label>System Logs</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_vmware_sysmon_logs">
+        <label>Sysmon Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_vmware_qualys_logs_windows">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_vmware_guest_assets">
+          <query>search OS="*Windows*" $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_vmware_win_security_logs|s$ WinEventLog_System=$tkn_vmware_win_system_logs|s$ Sysmon=$tkn_vmware_sysmon_logs|s$ Qualys=$tkn_vmware_qualys_logs_windows|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="WinEventLog_Security">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="WinEventLog_System">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Sysmon">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Linux Devices</title>
+      <input type="dropdown" token="tkn_qualys_logs_linux">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_linux_assets">
+          <query>search OS IN `cs_qualys_linux_os`| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_linux|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>VMware Guests - Linux</title>
+      <input type="dropdown" token="tkn_vmware_qualys_logs_linux">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_vmware_guest_assets">
+          <query>search OS IN `cs_qualys_linux_os` $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_vmware_qualys_logs_linux|s$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>VMware Guests - Other</title>
+      <table>
+        <search base="search_vmware_guest_assets">
+          <query>search NOT OS="*Windows*" NOT OS IN `cs_qualys_linux_os` | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+      <html>
+        <p>Note - OS for VMware Guests are determined based on Qualys data as we don't have Opertaring System information from the Lansweeper data. Keep in mind the same note for "VMware Guests - Windows" and "VMware Guests - Linux" panels.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>VMware vCenter server and ESXi server</title>
+      <input type="dropdown" token="tkn_qualys_logs_vmware_server">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_vmware_server_assets">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_vmware_server|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Location</title>
+      <table>
+        <search base="search_location_assets">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel>
+      <title>Monitor</title>
+      <table>
+        <search base="search_monitor_assets">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Other Devices</title>
+      <table>
+        <search base="search_other_assets">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>

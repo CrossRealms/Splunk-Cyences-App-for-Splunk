@@ -26,10 +26,12 @@ To develop the large collaborative App while keeping in mind the quality of the 
 
 1. Splunk App Inspect.
    - It should not fail the Splunk App Inspect.
+   - This Repo has configured to auto execute App-Inspect check with GitHub Actions.
    - Reference - https://dev.splunk.com/enterprise/docs/releaseapps/appinspect/
 
 2. Dependencies
    - This App is dependant on Security Essentials App from Splunk as of now for some lookups. And other Add-ons are required for field extractions like Sysmon, Windows, O365, etc.
+   - Refer to the <a href="https://cyences.com/cyences-app-for-splunk/">documentation</a> for full details.
 
 3. Reports and Alerts
    - One should not add an alert which might have a lot of false positives. It should rather go as an Report for particular category of reports.
@@ -53,6 +55,9 @@ To develop the large collaborative App while keeping in mind the quality of the 
      - False Positive, if any.
    - Make sure the description is properly readable on the `All Alerts` dashboard.
    - Put all the savedsearches in the proper order (category vise) in the savedsearches.conf file.
+   - Take reference from other searches in the savedsearches.conf.
+   - Make sure to add relevant queries and configuration in cs_forensics.js.
+   - If require, update `Overview` and `All Alerts` dashboard.
 
 6. macros.conf
    - All the macro definition goes here.
