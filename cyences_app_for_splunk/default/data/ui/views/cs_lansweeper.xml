@@ -81,7 +81,8 @@
     <panel>
       <html>
         <p>This dashboard shows information about all the assets in the environment and also show whether that asset is sending required security logs to Splunk or not. You can use this dashboard for security auditing. Data Availability will be color coded: Red (data not available) and Green (data available).</p>
-        <p>Timerange for searches: Lansweeper - last 4 hours, WinEventLogs(Security &amp; System) - last 4 hours, Sysmon - last 4 hours, Qualys - last 24 hours</p>
+        <p><b>Data Collection:</b> The lansweeper asset data are necessary, collect the data via the <a href="https://splunkbase.splunk.com/app/5418/" target="_blank">Lansweeper Add-on for Splunk</a>.</p>
+        <p>Timerange for searches: Lansweeper - last 4 hours, WinEventLogs(Security &amp; System) - last 4 hours, Sysmon - last 4 hours, Qualys - last 7 days</p>
         <p>Some searches could be slow due to amount of data it is trying to search.</p>
       </html>
     </panel>

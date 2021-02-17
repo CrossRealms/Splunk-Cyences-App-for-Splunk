@@ -16,6 +16,7 @@
     <view name="cs_authentication_reports" />
     <view name="cs_splunk_admin_reports" />
     <view name="cs_lansweeper" />
+    <view name="cs_qualys" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
