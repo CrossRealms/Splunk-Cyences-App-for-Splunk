@@ -16,15 +16,27 @@
     <latest></latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="base_search">
+    <query>| rest splunk_server=* /services/server/status/partitions-space 
+  | eval free = if(isnotnull(available), available, free) 
+  | eval usage = round((capacity - free) / 1024, 2) 
+  | eval capacity = round(capacity / 1024, 2) 
+  | eval compare_usage = usage." / ".capacity 
+  | eval pct_usage = round(usage / capacity * 100, 2) 
+  | stats first(fs_type) as fs_type first(compare_usage) as compare_usage first(pct_usage) as pct_usage, by mount_point splunk_server 
+  | sort - pct_usage 
+  | table splunk_server mount_point,compare_usage,pct_usage 
+    </query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
       <html>
+        <p>Splunk Admin Reports</p>
         <p>Shows information which is important for security and overall health of the Splunk environment.</p>
         <p>Alerts "Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" has to be enabled in order to populate this dashboard.</p>
-        <p>Both alerts update the information every hour.</p>
-        <p>Data on the Overview page might not match with the data in this dashboard if you have filtered any forwarders or indexes with macros cs_splunk_admin_missing_forwarders_filter or cs_splunk_admin_missing_indexes_filter. This dashboard shows all the indexes and forwarders.</p>
-        <p>To remove any forwarder or index from the list visit "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section from the <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">documentation</a>.</p>
       </html>
       <table>
         <search>
@@ -122,6 +134,41 @@
         </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Disk Statistics</title>
+      <input type="dropdown" token="host">
+        <label>Host</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>Host</fieldForLabel>
+        <fieldForValue>Host</fieldForValue>
+        <search base="base_search">
+          <query>| fields splunk_server | rename splunk_server as Host | dedup Host</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="disk_usage" searchWhenChanged="true">
+        <label>Disk Usage</label>
+        <choice value="&gt;0">All</choice>
+        <choice value="&gt;80">&gt; 80</choice>
+        <choice value="&gt;60">&gt;60</choice>
+        <default>&gt;0</default>
+        <initialValue>&gt;0</initialValue>
+      </input>
+      <table>
+        <search base="base_search">
+          <query>| search splunk_server=$host$ AND pct_usage$disk_usage$| rename mount_point as "Mount Point", compare_usage as "Disk Usage (GB)", capacity as "Capacity (GB)", pct_usage as "Disk Usage (%)", splunk_server as Host | search Host=$host$</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Disk Usage (%)">
+          <colorPalette type="list">[#3C444D,#F8BE34,#DC4E41]</colorPalette>
+          <scale type="threshold">60,80</scale>
+        </format>
       </table>
     </panel>
   </row>
