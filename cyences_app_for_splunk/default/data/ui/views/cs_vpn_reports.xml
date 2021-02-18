@@ -3,20 +3,26 @@
   <init>
     <set token="tkn_filter_home_country"></set>
   </init>
-  <search id="bs1">
+  <search id="bs0">
+    <query>
+      | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s
+      | rename Authentication.* as *
+    </query>
+    <earliest>$time.earliest$</earliest>
+    <latest>$time.latest$</latest>
+  </search>
+  <search id="bs1" base="bs0">
     <query>
       <![CDATA[
-        | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s
-        | rename Authentication.* as *
+        | search $User$
         | iplocation src_ip
         $tkn_filter_home_country$
-        | eval City = if(isnull(City) OR City="", "*Unknown", City) 
+        | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
+        | eval City = if(isnull(City) OR City="", "Unknown", City) 
         | search $Country$ $City$
         | `cs_vpn_dashboard_filter`
       ]]>
     </query>
-    <earliest>$time.earliest$</earliest>
-    <latest>$time.latest$</latest>
   </search>
   <fieldset submitButton="false" autoRun="true">
     <input type="time" token="time" searchWhenChanged="true">
@@ -55,7 +61,7 @@
       <initialValue>*</initialValue>
       <fieldForLabel>Country</fieldForLabel>
       <fieldForValue>Country</fieldForValue>
-      <search base="bs1">
+      <search base="bs0">
         <query>| stats count by Country</query>
       </search>
     </input>
@@ -65,10 +71,22 @@
       <default>*</default>
       <fieldForLabel>City</fieldForLabel>
       <fieldForValue>City</fieldForValue>
-      <search base="bs1">
+      <search base="bs0">
         <query>| stats count by City</query>
       </search>
       <prefix>City="</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="dropdown" token="User" searchWhenChanged="true">
+      <label>User</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>user</fieldForLabel>
+      <fieldForValue>user</fieldForValue>
+      <search base="bs0">
+        <query>| stats count by user</query>
+      </search>
+      <prefix>user="</prefix>
       <suffix>"</suffix>
     </input>
   </fieldset>
