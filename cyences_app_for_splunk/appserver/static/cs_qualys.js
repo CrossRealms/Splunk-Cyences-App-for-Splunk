@@ -16,7 +16,10 @@ function(TableView, SearchManager, mvc, _){
             this._chartView = new TableView({
                 managerid: 'details-search-manager',
                 'rowNumbers': true,
-                'drilldown': 'none'
+                'drilldown': 'none',
+                'count': 100    /* TODO - Currently, there is bug in the expandable table view where if once you switch in the page in the main table, 
+                                          the expanded table will not allow to switch page.
+                                          So, we are putting 100 as max count for now to accommodate most of the cases. */
             });
         },
         canRender: function(rowData) {

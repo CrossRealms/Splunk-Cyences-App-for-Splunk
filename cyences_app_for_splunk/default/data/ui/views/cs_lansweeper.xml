@@ -292,7 +292,7 @@
       </input>
       <table>
         <search base="search_vmware_guest_assets">
-          <query>search OS IN `cs_qualys_linux_os` $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_vmware_qualys_logs_linux|s$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys</query>
+          <query>search OS IN `cs_qualys_linux_os` $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_vmware_qualys_logs_linux|s$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
