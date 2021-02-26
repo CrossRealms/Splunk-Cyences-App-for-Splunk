@@ -61,14 +61,14 @@
         <fieldForLabel>AVSignature_version</fieldForLabel>
         <fieldForValue>AVSignature_version</fieldForValue>
         <search>
-          <query>`cs_windows_defender` EventCode=1151 | dedup AVSignature_version | table AVSignature_version</query>
+          <query>`cs_windows_defender` EventCode=1151 | dedup host | dedup AVSignature_version | table AVSignature_version</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
       </input>
       <table>
         <search>
-          <query>`cs_windows_defender` EventCode=1151 $tkn_host$ $tkn_signature_version$ | dedup host 
+          <query>`cs_windows_defender` EventCode=1151 | dedup host | search $tkn_host$ $tkn_signature_version$ 
 | table _time, host, RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time
 | eval Last_full_scan_start_time=if(Last_full_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_start_time), Last_full_scan_end_time=if(Last_full_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_end_time),  Last_quick_scan_start_time=if(Last_quick_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_start_time), Last_quick_scan_end_time=if(Last_quick_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_end_time)
 | rename AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
