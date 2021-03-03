@@ -16,9 +16,7 @@
       <view name="cs_splunk_admin_reports" />
     </collection>
   </collection>
-  <collection label="Escalation">
-    <view name="cs_forensics" />
-  </collection>
+  <view name="cs_forensics" />
   <collection label="Intelligence">
     <view name="cs_malicious_ip_list" />
     <view name="cs_master_translator_table" />
