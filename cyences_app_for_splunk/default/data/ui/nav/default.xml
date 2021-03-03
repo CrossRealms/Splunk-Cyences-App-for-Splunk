@@ -21,6 +21,7 @@
   </collection>
   <collection label="Intelligence">
     <view name="cs_malicious_ip_list" />
+    <view name="cs_master_translator_table" />
     <view name="cs_lansweeper" />
     <view name="cs_qualys" />
   </collection>

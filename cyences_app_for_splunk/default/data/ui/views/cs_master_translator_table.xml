@@ -1,0 +1,210 @@
+<form theme="dark">
+  <init>
+    <set token="tkn_host">()</set>
+    <set token="tkn_ip">()</set>
+    <set token="tkn_user">()</set>
+    <set token="tkn_mac">()</set>
+  </init>
+  <label>Master Translator Table</label>
+  <search id="base_master_table">
+    <query>| inputlookup master_translator_table
+| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(QUALYS_OS, lansweeper_os)
+| eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
+| eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
+| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
+| eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
+| eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
+| eval sophos_status=if(isnull(sophos_last_event), "-", sophos_status)
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
+| table host, ip, os, mac_address, user, lansweeper_status, qualys_status, ACTIVE, TOTAL_VULNS, defender_status, sophos_status, crowdstrike_status</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+  </search>
+  <row>
+    <panel>
+      <html>
+        <p>Master Translator Table generator report needs to be enabled.</p>
+      </html>
+      <table>
+        <search>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title="Master Translator Table Gen" | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Master Translator Table</title>
+      <input type="text" token="tkn_host_tmp">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_host_tmp'=&quot;&quot;">
+            <set token="tkn_host">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_host">(host="*$tkn_host_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_ip_tmp">
+        <label>IP Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_ip_tmp'=&quot;&quot;">
+            <set token="tkn_ip">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_ip">(ip="*$tkn_ip_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_user_tmp">
+        <label>User</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_user_tmp'=&quot;&quot;">
+            <set token="tkn_user">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_user">(user="*$tkn_user_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_mac_tmp">
+        <label>Mac Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_mac_tmp'=&quot;&quot;">
+            <set token="tkn_user">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_mac">(mac_address="*$tkn_mac_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search base="base_master_table">
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="lansweeper_status">
+          <colorPalette type="map">{"-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="qualys_status">
+          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="ACTIVE">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <format type="color" field="defender_status">
+          <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="sophos_status">
+          <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #a3030b, "Service not Running": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="crowdstrike_status">
+          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+        </format>
+        <drilldown>
+          <set token="tkn_drilldown_host">$row.host$</set>
+          <set token="tkn_drilldown_ip">$row.ip$</set>
+          <eval token="tkn_drilldown_user">if(isnull($row.user$), "-", $row.user$)</eval>
+        </drilldown>
+      </table>
+      <html>
+        <p>"-"(hyphen) means data not present in that category for that host.</p>
+        <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$tkn_drilldown_ip$">
+    <panel>
+      <title>Inbound and Outbound Traffic to/from IP ($tkn_drilldown_ip$)</title>
+      <input type="time" token="tkn_timeRange_network_traffic">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <map>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` count as inbound from datamodel=Network_Traffic where All_Traffic.dest_ip=$tkn_drilldown_ip|s$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)`
+| iplocation src_ip
+| append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip=$tkn_drilldown_ip|s$ by All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)`
+| iplocation dest_ip]
+| geostats sum(inbound) as inbound_traffic, sum(outbound) as outbound_traffic</query>
+          <earliest>$tkn_timeRange_network_traffic.earliest$</earliest>
+          <latest>$tkn_timeRange_network_traffic.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+      </map>
+      <html>
+        <p>Only Traffic from/to outside network will be shown in the Map.</p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$tkn_drilldown_user$-$tkn_drilldown_ip$">
+    <panel>
+      <title>VPN Logins for User($tkn_drilldown_user$) or from IP($tkn_drilldown_ip$)</title>
+      <input type="time" token="tkn_timeRange_vpn">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest="vpn_auth" AND (Authentication.user=$tkn_drilldown_user|s$ OR Authentication.src=$tkn_drilldown_ip|s$) AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
+        | iplocation src_ip
+        | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
+        | eval City = if(isnull(City) OR City="", "Unknown", City) | fields _time user action src_ip City Country
+        | rename user as User, action as Status, src_ip as "SourceIP"
+        | sort - _time</query>
+          <earliest>$tkn_timeRange_vpn.earliest$</earliest>
+          <latest>$tkn_timeRange_vpn.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$tkn_drilldown_user$-$tkn_drilldown_ip$">
+    <panel>
+      <title>Authentication activities for User($tkn_drilldown_user$) or from IP($tkn_drilldown_ip$)</title>
+      <input type="time" token="tkn_timeRange_authentication">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Authentication where `cs_authentication_indexes` (Authentication.user=$tkn_drilldown_user|s$ OR Authentication.src=$tkn_drilldown_ip|s$) Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <earliest>$tkn_timeRange_authentication.earliest$</earliest>
+          <latest>$tkn_timeRange_authentication.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
