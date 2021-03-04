@@ -1,0 +1,90 @@
+<form theme="dark" script="cs_tenable.js">
+  <init>
+    <set token="tkn_ip">()</set>
+    <set token="tkn_host">()</set>
+  </init>
+  <label>Tenable</label>
+  <search id="base_search_tenable">
+    <query>| inputlookup cs_tenable_vuln
+    | stats count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by ip, host, vul_severity 
+    | stats sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info, sum(eval(if(vul_severity="low", count, 0))) as low, sum(eval(if(vul_severity="medium", count, 0))) as medium, sum(eval(if(vul_severity="high", count, 0))) as high, sum(eval(if(vul_severity="critical", count, 0))) as critical, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active, sum(eval(if(vul_severity="low", active, 0))) as low_active, sum(eval(if(vul_severity="medium", active, 0))) as medium_active, sum(eval(if(vul_severity="high", active, 0))) as high_active, sum(eval(if(vul_severity="critical", active, 0))) as critical_active, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed by ip, host 
+    | append [| inputlookup cs_tenable_assets]
+    | stats values(*) as * by ip, host
+    | table ip, host, tenable_all_ips, tenable_mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active, high_active, fixed_vuln, medium_active, low_active, info_active, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_* 
+    | eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active)</query>
+    <earliest>0</earliest>
+    <latest></latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> The tenable data are necessary to collect the vulnerability scan results and host summaries via the <a href="https://splunkbase.splunk.com/app/4060/" target="_blank">Tenable Add-On for Splunk</a>.</p>
+        <p>Data check in below table is from last 7 days. Data in the main table of the dashboard is being loaded from the KV store lookup.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_tenable` | stats count, latest(_time) as "Last Event" | eval data_report=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_tenable`" | eval "Last Event"=if(count=0, " - ", strftime('Last Event', "%F %T"))
+            | table label, "Last Event", data_report
+            | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Tenable Assets Lookup Gen", "Tenable Vuln Lookup Gen") | table title, disabled | rename title as label | eval data_report=if(disabled=1, "Report is disabled", "Report is enabled"), "Last Event"="N/A"]
+            | table label, "Last Event", data_report</query>
+          <earliest>-7d@h</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data_report">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="text" token="tkn_ip_tmp">
+        <label>IP Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_ip_tmp'=&quot;&quot;">
+            <set token="tkn_ip">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_ip">(ip="*$tkn_ip_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_host_tmp">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_host_tmp'=&quot;&quot;">
+            <set token="tkn_ip">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_host">(host="*$tkn_host_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <table id="tenable_table">
+        <search base="base_search_tenable">
+          <query>search $tkn_ip$ $tkn_host$| sort - active_vuln</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="critical_active">
+          <colorPalette type="list">[#a30000]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <format type="color" field="high_active">
+          <colorPalette type="list">[#e87000]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+      <html>
+        <p>Expand the row to see all vulnerabilities on the hosts.</p>
+      </html>
+    </panel>
+  </row>
+</form>

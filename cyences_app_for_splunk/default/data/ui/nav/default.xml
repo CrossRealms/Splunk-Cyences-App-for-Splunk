@@ -22,6 +22,7 @@
     <view name="cs_master_translator_table" />
     <view name="cs_lansweeper" />
     <view name="cs_qualys" />
+    <view name="cs_tenable" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
