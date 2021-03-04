@@ -8,15 +8,16 @@
   <label>Master Translator Table</label>
   <search id="base_master_table">
     <query>| inputlookup cs_master_translator_table
-| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(QUALYS_OS, lansweeper_os)
+| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
 | eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
 | eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
 | eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
+| eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
 | eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
 | eval sophos_status=if(isnull(sophos_last_event), "-", sophos_status)
 | eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
-| table host, ip, os, mac_address, user, lansweeper_status, qualys_status, ACTIVE, TOTAL_VULNS, defender_status, sophos_status, crowdstrike_status</query>
+| table host, ip, os, mac_address, user, lansweeper_status, qualys_status, ACTIVE, TOTAL_VULNS, tenable_status, active_vuln, total_vuln, defender_status, sophos_status, crowdstrike_status</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -106,6 +107,13 @@
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
+        <format type="color" field="tenable_status">
+          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="active_vuln">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
         <format type="color" field="defender_status">
           <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
         </format>
@@ -124,6 +132,7 @@
       <html>
         <p>"-"(hyphen) means data not present in that category for that host.</p>
         <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
+        <p>Tenable Status: Red if there is any critical active severity vulnerability, Orange if there is any high active severity vulnerability, Yellow if there is any medium active severity vulnerability, Green if there is no critical, high or medium active vulnerabilities present.</p>
       </html>
     </panel>
   </row>
