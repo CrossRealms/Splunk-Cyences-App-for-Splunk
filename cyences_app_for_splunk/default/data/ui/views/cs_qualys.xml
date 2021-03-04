@@ -30,7 +30,7 @@
         <label>IP Address</label>
         <default></default>
         <change>
-          <condition match="'tkn_ip_tmp'=&quot;*&quot;">
+          <condition match="'tkn_ip_tmp'=&quot;&quot;">
             <set token="tkn_ip">()</set>
           </condition>
           <condition>

@@ -93,7 +93,7 @@
         <label>Host</label>
         <default></default>
         <change>
-          <condition match="'tkn_host_tmp'=&quot;*&quot;">
+          <condition match="'tkn_host_tmp'=&quot;&quot;">
             <set token="tkn_host">()</set>
           </condition>
           <condition>
@@ -105,7 +105,7 @@
         <label>IP Address</label>
         <default></default>
         <change>
-          <condition match="'tkn_ip_tmp'=&quot;*&quot;">
+          <condition match="'tkn_ip_tmp'=&quot;&quot;">
             <set token="tkn_ip">()</set>
           </condition>
           <condition>
@@ -117,7 +117,7 @@
         <label>User</label>
         <default></default>
         <change>
-          <condition match="'tkn_user_tmp'=&quot;*&quot;">
+          <condition match="'tkn_user_tmp'=&quot;&quot;">
             <set token="tkn_user">()</set>
           </condition>
           <condition>
