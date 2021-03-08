@@ -10,7 +10,7 @@ The Cyences App for Splunk is an Splunk App to provide complete security to the 
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.1.0
+* Version - 1.2.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,32 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
+Version 1.2.0 (March 2021)
+* Added Lansweeper dashboard.
+* Added Qualys dashboard.
+* Added Tenable dashboard.
+* Added Master Translator dashboard.
+* Navigation changes based on new design useful for security engineers.
+* Improvement on VPN dashboard:
+  * Added support for new version of Palo Alto (which changed the global protect data format)
+  * Added user filter.
+* Splunk Admin Reports improvements:
+  * Splunk Admin alerts on overview page now shows current missing indexes and current missing forwarders instead of historical notable events.
+  * It also drilldowns from Overview page to Splunk Admin Reports dashboard.
+  * Improved searches for missing indexes alert query.
+* Improvements on Windows Defender Report:
+  * Fixed issue with Signature field for Windows Defender data from Windows 10 devices.
+  * Added filter for Signature version on Windows Defender Health Report panel.
+* Minor issues fixed.
+  * Corrected query for Sysmon EventID 25 (process tampering).
+  * Minor UI improvements.
+  * Fixed configuration page macro name for cs_common_ransomware_extensions_filter.
+
+
+Upgrade Guide from version 1.1.0 to 1.2.0
+* Visit the "Upgrade Guide from version 1.1.0 to 1.2.0" section from the documentation.
+
+
 Version 1.1.0 (Jan 2021)
 * Improved Overview page.
   * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
