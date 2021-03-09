@@ -50,7 +50,7 @@ Version 1.2.0 (March 2021)
 * Added Lansweeper dashboard.
 * Added Qualys dashboard.
 * Added Tenable dashboard.
-* Added Master Translator dashboard.
+* Added Device Master Table dashboard.
 * Navigation changes based on new design useful for security engineers.
 * Improvement on VPN dashboard:
   * Added support for new version of Palo Alto (which changed the global protect data format)

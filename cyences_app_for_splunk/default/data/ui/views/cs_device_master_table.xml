@@ -5,9 +5,9 @@
     <set token="tkn_user">()</set>
     <set token="tkn_mac">()</set>
   </init>
-  <label>Master Translator Table</label>
+  <label>Device Master Table</label>
   <search id="base_master_table">
-    <query>| inputlookup cs_master_translator_table
+    <query>| inputlookup cs_device_master_table
 | eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
 | eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
@@ -24,11 +24,11 @@
   <row>
     <panel>
       <html>
-        <p>Master Translator Table generator report needs to be enabled.</p>
+        <p>Device Master Table generator report needs to be enabled.</p>
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title="Master Translator Table Gen" | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title="Device Master Table Gen" | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -42,7 +42,7 @@
   </row>
   <row>
     <panel>
-      <title>Master Translator Table</title>
+      <title>Device Master Table</title>
       <input type="text" token="tkn_host_tmp">
         <label>Host</label>
         <default></default>
