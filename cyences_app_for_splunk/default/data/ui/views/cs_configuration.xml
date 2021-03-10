@@ -20,7 +20,7 @@
             </th>
           </tr>
         </table>
-        <div>*Re-enter the API key before clicking Update.</div>
+        <div>*Re-enter the API key before clicking Save.</div>
       </html>
     </panel>
   </row>
@@ -44,7 +44,7 @@
             </th>
           </tr>
         </table>
-        <div>*Re-enter the Auth Token before clicking Update.</div>
+        <div>*Re-enter the Auth Token before clicking Save.</div>
       </html>
     </panel>
   </row>
