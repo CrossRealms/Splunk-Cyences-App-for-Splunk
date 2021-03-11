@@ -60,7 +60,6 @@
   <row>
     <panel>
       <html>
-        <p>Sophos Reports</p>
         <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/4647/" target="_blank">Sophos Central SIEM Integration Add-on</a> for collecting Sophos data.</p>
       </html>
       <table>
@@ -74,6 +73,78 @@
         <format type="color" field="data">
           <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
         </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Endpoint Service Not Running</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
+| eval ServiceDisabled = if(type="Event::Endpoint::ServiceNotRunning", _time, 0), ServiceEnabled = if(type="Event::Endpoint::ServiceRestored", _time, 0)
+| where ServiceDisabled&gt;ServiceEnabled
+| eval "Service Disabled Since"=strftime(ServiceDisabled, "%F %T")
+| table host, dhost, src_ip, user, "Service Disabled Since"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Real-Time Protection Disabled</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::Sav*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
+| eval RTPDisabled = if(type="Event::Endpoint::SavDisabled", _time, 0), RTPEnabled = if(type="Event::Endpoint::SavEnabled", _time, 0)
+| where RTPDisabled&gt;RTPEnabled
+| eval "RTP Disabled Since"=strftime(RTPDisabled, "%F %T")
+| table host, dhost, src_ip, user, "RTP Disabled Since"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Endpoints in Isolation</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::Isolation::*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
+| eval EndpointIsolated = if(type="Event::Endpoint::Isolation::Isolated", _time, 0), EndpointUnIsolated = if(type="Event::Endpoint::Isolation::UnIsolated", _time, 0)
+| where EndpointIsolated&gt;EndpointUnIsolated
+| eval "In Isolation Since"=strftime(EndpointIsolated, "%F %T")
+| table host, dhost, src_ip, user, "In Isolation Since"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Endpoints Suspended from Central Management</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
+| eval EndpointManagementResumed = if(type="Event::Endpoint::Management::Resumed", _time, 0), EndpointManagementSuspended = if(type="Event::Endpoint::Management::Suspended", _time, 0)
+| where EndpointManagementSuspended&gt;EndpointManagementResumed
+| eval "Suspended from Management Since"=strftime(EndpointManagementSuspended, "%F %T")
+| table host, dhost, src_ip, user, "Suspended from Management Since"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
@@ -110,7 +181,7 @@
       <title>Core Restore Failed</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::CoreRestoreFailed" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_core_restore_failed_filter`</query>
+          <query>`cs_sophos` type="Event::Endpoint::Core*RestoreFailed" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_core_restore_failed_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -155,6 +226,51 @@
       <table>
         <search>
           <query>`cs_sophos` type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count | `cs_sophos_malware_detected`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Application Blocked</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::Application::Blocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Web Control Violation</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::WebControlViolation" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_sophos%60%20type%3D%22Event%3A%3AEndpoint%3A%3AWebControlViolation%22%20host%3D$row.host|s$%20dhost%3D$row.dhost|s$%20%7C%20stats%20count%20by%20name%2C%20severity%20%7C%20sort%20-%20count&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Web Filtering Blocked</title>
+      <table>
+        <search>
+          <query>`cs_sophos` type="Event::Endpoint::WebFilteringBlocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | eval latest_event=strftime(latest_event, "%F %T") | sort -count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
