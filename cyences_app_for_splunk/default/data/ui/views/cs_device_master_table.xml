@@ -17,18 +17,30 @@
 | eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
 | eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
 | eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status)
-| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
-| table host, ip, os, mac_address, user, lansweeper_status, qualys_status, ACTIVE, TOTAL_VULNS, tenable_status, active_vuln, total_vuln, defender_status, sophos_status, crowdstrike_status</query>
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")</query>
     <earliest>0</earliest>
     <latest>now</latest>
+  </search>
+  <search base="base_master_table">
+    <query>| stats sum(lansweeper_last_event) as lansweeper, sum(qualys_last_event) as qualys, sum(tenable_last_event) as tenable, sum(sophos_last_event) as sophos, sum(defender_last_event) as defender, sum(crowdstrike_last_event) as crowdstrike
+| eval lansweeper=if(lansweeper&gt;0, ", lansweeper_status", ""), qualys=if(qualys&gt;0, ", qualys_status, ACTIVE, TOTAL_VULNS", ""), tenable=if(tenable&gt;0, ", tenable_status, active_vuln, total_vuln", ""), sophos=if(sophos&gt;0, ", sophos_status", ""), defender=if(defender&gt;0, ", defender_status", ""), crowdstrike=if(crowdstrike&gt;0, ", crowdstrike_status", "")</query>
+    <done>
+      <set token="tkn_tablefields_lansweeper">$result.lansweeper$</set>
+      <set token="tkn_tablefields_qualys">$result.qualys$</set>
+      <set token="tkn_tablefields_tenable">$result.tenable$</set>
+      <set token="tkn_tablefields_sophos">$result.sophos$</set>
+      <set token="tkn_tablefields_defender">$result.defender$</set>
+      <set token="tkn_tablefields_crowdstrike">$result.crowdstrike$</set>
+    </done>
   </search>
   <search id="base_summary">
     <query>| inputlookup cs_device_master_table
 | stats count as Total, sum(eval(if(lansweeper_last_event&gt;0, 1, 0))) as Lansweeper, sum(eval(if(qualys_last_event&gt;0, 1, 0))) as Qualys, sum(eval(if(tenable_last_event&gt;0, 1, 0))) as Tenable, sum(eval(if(defender_last_event&gt;0, 1, 0))) as Defender, sum(eval(if(sophos_last_event&gt;0, 1, 0))) as Sophos, sum(eval(if(crowdstrike_last_event&gt;0, 1, 0))) as Crowdstrike, sum(eval(if(lansweeper_last_event&gt;0 AND qualys_last_event&gt;0, 1, 0))) as lansweeper_qualys, sum(eval(if(lansweeper_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as lansweeper_tenable, sum(eval(if(lansweeper_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as lansweeper_defender, sum(eval(if(lansweeper_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as lansweeper_sophos, sum(eval(if(lansweeper_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as lansweeper_crowdstrike, sum(eval(if(qualys_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as qualys_tenable, sum(eval(if(qualys_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as qualys_sophos, sum(eval(if(qualys_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as qualys_defender, sum(eval(if(qualys_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as qualys_crowdstrike, sum(eval(if(tenable_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as tenable_sophos, sum(eval(if(tenable_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as tenable_defender, sum(eval(if(tenable_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as tenable_crowdstrike, sum(eval(if(sophos_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as sophos_defender, sum(eval(if(sophos_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as sophos_crowdstrike, sum(eval(if(defender_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as defender_crowdstrike, sum(eval(if(((lansweeper_last_event&gt;0) AND (tenable_last_event&gt;0 OR qualys_last_event&gt;0) AND (sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0)), 1, 0))) as All, sum(eval(if((tenable_last_event&gt;0 OR qualys_last_event&gt;0), 1, 0))) as Vulnerability_Scanner, sum(eval(if((sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0), 1, 0))) as Antivirus
-| eval Not_Lansweeper=Total-Lansweeper, Not_Qualys=Total-Qualys, Not_Tenable=Total-Tenable, Not_Sophos=Total-Sophos, Not_Defender=Total-Defender, Not_Crowdstrike=Total-Crowdstrike, Not_Antivirus=Total-Antivirus, Not_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
+| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_Crowdstrike=Total-Crowdstrike, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
+  <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
       <html>
@@ -61,9 +73,9 @@
         </drilldown>
       </single>
       <html>
-        <p><b>Description</b>: Total Devices detected.</p>
-        <p>---------------------------------------------------------</p>
-        <p>Note - Drilldown on above bar charts to see those specific devices in the master table. Click on this Total count to reset the filter.</p>
+        <p><b>Description</b>: The total amount of devices detected.</p>
+        <p>--------------------------------------------------------------------</p>
+        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Master Device Table. Click on the Total Devices number above to reset the filter.</p>
       </html>
     </panel>
     <panel>
@@ -80,7 +92,7 @@
           <condition match="$click.name2$ == &quot;Lansweeper&quot;">
             <set token="tkn_sp_filter">lansweeper_last_event=*</set>
           </condition>
-        <condition match="$click.name2$ == &quot;Qualys&quot;">
+          <condition match="$click.name2$ == &quot;Qualys&quot;">
             <set token="tkn_sp_filter">qualys_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Tenable&quot;">
@@ -135,27 +147,27 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: No. of devices connected with given connectivity. Lansweeper -> Device present in Lansweeper. Vulnerability Scanner -> Device has any of the vulnerability scanner (Qualys or Tenable). Antivirus -> Device has any of the antivirus (Sophos, Defender, CrowdStrike). All -> Lansweeper, Vulnerability Scanner and Antivirus present.</p>
+        <p><b>Description</b>: No. of devices connected with given connectivity. Lansweeper -&gt; Device present in Lansweeper. Vulnerability Scanner -&gt; Device has any of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has any of the antivirus (Sophos, Defender, CrowdStrike). All -&gt; Lansweeper, Vulnerability Scanner and Antivirus present.</p>
       </html>
     </panel>
     <panel>
       <chart>
         <title>Devices Security Missing</title>
         <search base="base_summary">
-          <query>| table Total, Not_Lansweeper, Not_Vulnerability_Scanner, Not_Antivirus</query>
+          <query>| table Total, No_Lansweeper, No_Vulnerability_Scanner, No_Antivirus</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
         <option name="charting.drilldown">all</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <condition match="$click.name2$ == &quot;Not_Lansweeper&quot;">
+          <condition match="$click.name2$ == &quot;No_Lansweeper&quot;">
             <set token="tkn_sp_filter">NOT lansweeper_last_event=*</set>
           </condition>
-          <condition match="$click.name2$ == &quot;Not_Vulnerability_Scanner&quot;">
+          <condition match="$click.name2$ == &quot;No_Vulnerability_Scanner&quot;">
             <set token="tkn_sp_filter">NOT (tenable_last_event=* OR qualys_last_event=*)</set>
           </condition>
-          <condition match="$click.name2$ == &quot;Not_Antivirus&quot;">
+          <condition match="$click.name2$ == &quot;No_Antivirus&quot;">
             <set token="tkn_sp_filter">NOT (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=*)</set>
           </condition>
           <condition>
@@ -164,7 +176,7 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: No. of devices not connected with given connectivity. Lansweeper -> Device not present in Lansweeper. Vulnerability Scanner -> Device has none of the vulnerability scanner (Qualys or Tenable). Antivirus -> Device has none of the antivirus (Sophos, Defender, CrowdStrike).</p>
+        <p><b>Description</b>: No. of devices not connected with given connectivity. Lansweeper -&gt; Device not present in Lansweeper. Vulnerability Scanner -&gt; Device has none of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has none of the antivirus (Sophos, Defender, CrowdStrike).</p>
       </html>
     </panel>
   </row>
@@ -221,9 +233,10 @@
       </input>
       <table>
         <search base="base_master_table">
-          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
         <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="lansweeper_status">
           <colorPalette type="map">{"-": #363030}</colorPalette>
@@ -259,6 +272,7 @@
       </table>
       <html>
         <p>"-"(hyphen) means data not present in that category for that host.</p>
+        <p>Table will automatically hide columns for which no device has data.</p>
         <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
         <p>Tenable Status: Red if there is any critical active severity vulnerability, Orange if there is any high active severity vulnerability, Yellow if there is any medium active severity vulnerability, Green if there is no critical, high or medium active vulnerabilities present.</p>
       </html>
