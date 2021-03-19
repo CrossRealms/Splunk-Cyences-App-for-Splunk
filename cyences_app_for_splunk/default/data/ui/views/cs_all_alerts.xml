@@ -54,10 +54,10 @@
   </row>
   <row>
     <panel>
-      <title>Endpoint Compromise</title>
+      <title>Authentication</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Endpoint Compromise")`</query>
+          <query>| `cs_filter_savedsearches("Authentication")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>

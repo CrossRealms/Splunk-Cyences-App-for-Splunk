@@ -544,28 +544,6 @@
         <div>
           <p>
             <b>
-              <center>Category: Authentication</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_authentication_msg"/>
-        <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_authentication_app_filter</th>
-            <th style="text-align:left">
-              <input type="text" name="macro_cs_authentication_app_filter" id="macro_cs_authentication_app_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_authentication_app_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-      </html>
-      <html>
-        <div>
-          <p>
-            <b>
               <center>Category: VPN</center>
               <br/>
             </b>
@@ -883,6 +861,82 @@
             </th>
           </tr>
         </table>
+        </html>
+        <html>
+          <div>
+            <p>
+              <b>
+                <center>Category: Authentication</center>
+                <br/>
+              </b>
+            </p>
+          </div>
+          <p id="macro_authentication_msg"/>
+          <table style="width:80%">
+            <tr>
+              <th style="text-align:left">cs_authentication_app_filter</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_app_filter" id="macro_cs_authentication_app_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_app_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_bruteforce_attempt_limit</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_bruteforce_attempt_limit" id="macro_cs_authentication_bruteforce_attempt_limit"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_bruteforce_attempt_limit_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_bruteforce_attempt_for_user_filter</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_bruteforce_attempt_for_user_filter" id="macro_cs_authentication_bruteforce_attempt_for_user_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_bruteforce_attempt_for_user_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_bruteforce_attempt_from_source_filter</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_bruteforce_attempt_from_source_filter" id="macro_cs_authentication_bruteforce_attempt_from_source_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_bruteforce_attempt_from_source_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_limit</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_excessive_vpn_login_failure_limit" id="macro_cs_authentication_excessive_vpn_login_failure_limit"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_excessive_vpn_login_failure_limit_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_for_user_filter</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_excessive_vpn_login_failure_for_user_filter" id="macro_cs_authentication_excessive_vpn_login_failure_for_user_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_excessive_vpn_login_failure_for_user_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_from_source_filter</th>
+              <th style="text-align:left">
+                <input type="text" name="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter" id="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button">Update</button>
+              </th>
+            </tr>
+          </table>
         </html>
         <html>
         <div>

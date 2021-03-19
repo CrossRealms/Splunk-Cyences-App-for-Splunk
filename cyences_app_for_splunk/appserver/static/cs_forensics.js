@@ -195,7 +195,36 @@ require([
         "Splunk Admin - Missing Forwarder": {
             system_compromised_search: "| stats count, values(forwarder_type) as forwarder_type, values(version) as version, values(arch) as arch, values(os) as os by hostname",
             system_compromised_drilldown: 'index=_internal host=$row.hostname$ | timechart count'
-        }
+        },
+
+        "Authentication - Bruteforce Attempt for a User": {
+            contributing_events: 'index=* `cs_authentication_indexes` tag=authentication action="failure"',
+            system_compromised_search: "| stats sum(count) as count by app",
+            system_compromised_drilldown: 'index=* `cs_authentication_indexes` tag=authentication action="failure" app=$row.app$',
+            attacker_search: "| stats sum(count) as count by user",
+            attacker_drilldown: 'index=* `cs_authentication_indexes` tag=authentication action="failure" user=$row.user$'
+        },
+        "Authentication - Bruteforce Attempt from a Source": {
+            contributing_events: 'index=* `cs_authentication_indexes` tag=authentication action="failure"',
+            system_compromised_search: "| stats sum(count) as count by app",
+            system_compromised_drilldown: 'index=* `cs_authentication_indexes` tag=authentication action="failure" app=$row.app$',
+            attacker_search: "| stats sum(count) as count by src",
+            attacker_drilldown: 'index=* `cs_authentication_indexes` tag=authentication action="failure" src=$row.src$'
+        },
+        "Authentication - Excessive Failed VPN Logins for a User": {
+            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth"',
+            system_compromised_search: "| stats sum(count) as count by app",
+            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" app=$row.app$',
+            attacker_search: "| stats sum(count) as count by user",
+            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" user=$row.user$'
+        },
+        "Authentication - Excessive Failed VPN Logins from a Source": {
+            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth"',
+            system_compromised_search: "| stats sum(count) as count by app",
+            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" app=$row.app$',
+            attacker_search: "| stats sum(count) as count by src",
+            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" src=$row.src$'
+        },
     };
 
 
