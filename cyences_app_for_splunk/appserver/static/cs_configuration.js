@@ -70,6 +70,9 @@ require([
 
         /* Palo Alto */
         { macro_name: 'cs_palo_dns_sinkhole_filter', input_id: 'macro_cs_palo_dns_sinkhole_filter', button_id: 'macro_cs_palo_dns_sinkhole_filter_button', msg_id: 'macro_palo_msg'},
+        { macro_name: 'cs_palo_high_threats_alert_filter', input_id: 'macro_cs_palo_high_threats_alert_filter', button_id: 'macro_cs_palo_high_threats_alert_filter_button', msg_id: 'macro_palo_msg'},
+        { macro_name: 'cs_palo_high_system_alerts_filter', input_id: 'macro_cs_palo_high_system_alerts_filter', button_id: 'macro_cs_palo_high_system_alerts_filter_button', msg_id: 'macro_palo_msg'},
+        { macro_name: 'cs_palo_wildfire_filter', input_id: 'macro_cs_palo_wildfire_filter', button_id: 'macro_cs_palo_wildfire_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_ddos_prevented_filter', input_id: 'macro_cs_palo_ddos_prevented_filter', button_id: 'macro_cs_palo_ddos_prevented_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_firewall_login_failure_filter', input_id: 'macro_cs_palo_firewall_login_failure_filter', button_id: 'macro_cs_palo_firewall_login_failure_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_blocked_ip_inbound_filter', input_id: 'macro_cs_palo_blocked_ip_inbound_filter', button_id: 'macro_cs_palo_blocked_ip_inbound_filter_button', msg_id: 'macro_palo_msg'},

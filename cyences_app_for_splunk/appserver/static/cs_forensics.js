@@ -95,12 +95,32 @@ require([
             attacker_search: "| stats count by src_ip",
             attacker_drilldown: 'index=* ( (tag=network tag=communicate) OR sourcetype=pan*traffic OR sourcetype=opsec OR sourcetype=cisco:asa) src_ip=$row.src_ip$',
         },
+        
         "Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole": {
             contributing_events: '`cs_palo` sourcetype="pan:traffic" dest_ip="72.5.65.111"',
             system_compromised_search: "| stats sum(count) as count by dvc_name, rule, app, http_category",
             system_compromised_drilldown: '`cs_palo` sourcetype="pan:traffic" dest_ip="72.5.65.111" dvc_name=$row.dvc_name$',
             attacker_search: "| stats sum(count) as count by src_ip",
             attacker_drilldown: '`cs_palo` sourcetype="pan:traffic" src_ip=$row.src_ip$'
+        },
+        "Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert": {
+            contributing_events: '`cs_palo` sourcetype="pan:traffic" severity IN ("high" "critical")',
+            system_compromised_search: "| stats sum(count) as count by dvc, dvc_name",
+            system_compromised_drilldown: '`cs_palo` sourcetype="pan:traffic" severity IN ("high" "critical") dvc=$row.dvc$ dvc_name=$row.dvc_name$',
+            attacker_search: "| stats sum(count) as count, values(src_location) as src_location by src",
+            attacker_drilldown: '`cs_palo` sourcetype="pan:traffic" src=$row.src$'
+        },
+        "Palo Alto Firewall - Network Compromise - Palo Alto High System Alerts": {
+            contributing_events: '`cs_palo` sourcetype="pan:system" severity IN ("high" "critical")',
+            system_compromised_search: "| stats sum(count) as count by dvc, dvc_name",
+            system_compromised_drilldown: '`cs_palo` sourcetype="pan:system" severity IN ("high" "critical") dvc=$row.dvc$ dvc_name=$row.dvc_name$'
+        },
+        "Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert": {
+            contributing_events: '`cs_palo` sourcetype="pan:traffic"  log_subtype="wildfire"',
+            system_compromised_search: "| stats sum(count) as count by dvc, dvc_name",
+            system_compromised_drilldown: '`cs_palo` sourcetype="pan:traffic"  log_subtype="wildfire" dvc=$row.dvc$ dvc_name=$row.dvc_name$',
+            attacker_search: "| stats sum(count) as count, values(src_location) as src_location by src",
+            attacker_drilldown: '`cs_palo` sourcetype="pan:traffic" log_subtype="wildfire" src=$row.src$'
         },
 
         "O365 - DLP event in Exchange": {
