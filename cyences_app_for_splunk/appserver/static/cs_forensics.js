@@ -29,7 +29,7 @@ require([
             attacker_drilldown: 'index=* tag=network tag=communicate app=tor src_ip=$row.src_ip$'
         },
         "Ransomware - Common Ransomware File Extensions": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `ransomware_extensions`',
+            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `cs_ransomware_extensions`',
             system_compromised_search: "| stats sum(count) as count by dest",
             system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem dest=$row.dest$',
             attacker_search: "| stats sum(count) as count by file_name",
