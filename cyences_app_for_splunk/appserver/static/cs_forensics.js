@@ -15,9 +15,9 @@ require([
             system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem action=created dest=$row.dest$'
         },
         "Ransomware - Endpoint Compromise - Fake Windows Processes": {
-            contributing_events: 'index=* tag=process tag=report  process_path!="C:\\\Windows\\\System32*" process_path!="C:\\\Windows\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
+            contributing_events: 'index=* tag=process tag=report  process_path!="C:\\\\Windows\\\\System32*" process_path!="C:\\\\Windows\\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$  process_path!="C:\\\Windows\\\System32*" process_path!="C:\\\Windows\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
+            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$  process_path!="C:\\\\Windows\\\\System32*" process_path!="C:\\\\Windows\\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             attacker_search: "| stats sum(count) as count by process_name, parent_process_name",
             attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$ parent_process_name=$row.parent_process_name$'
         },
