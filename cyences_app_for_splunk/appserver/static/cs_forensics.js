@@ -15,9 +15,9 @@ require([
             system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem action=created dest=$row.dest$'
         },
         "Ransomware - Endpoint Compromise - Fake Windows Processes": {
-            contributing_events: 'index=* tag=process tag=report process_path!="C:\\Windows\\System32*" process_path!="C:\\Windows\\SysWOW64*"',
+            contributing_events: 'index=* tag=process tag=report  process_path!="C:\\\Windows\\\System32*" process_path!="C:\\\Windows\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$ process_path!="C:\\Windows\\System32*" process_path!="C:\\Windows\\SysWOW64*"',
+            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$  process_path!="C:\\\Windows\\\System32*" process_path!="C:\\\Windows\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             attacker_search: "| stats sum(count) as count by process_name, parent_process_name",
             attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$ parent_process_name=$row.parent_process_name$'
         },
@@ -29,7 +29,7 @@ require([
             attacker_drilldown: 'index=* tag=network tag=communicate app=tor src_ip=$row.src_ip$'
         },
         "Ransomware - Common Ransomware File Extensions": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\.[^\.]+)$" | `ransomware_extensions`',
+            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `ransomware_extensions`',
             system_compromised_search: "| stats sum(count) as count by dest",
             system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem dest=$row.dest$',
             attacker_search: "| stats sum(count) as count by file_name",
@@ -43,7 +43,7 @@ require([
             attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$'
         },
         "Ransomware - Common Ransomware Notes": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\.[^\.]+)$" | `ransomware_notes`',
+            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `ransomware_notes`',
             system_compromised_search: "| stats sum(count) as count by dest",
             system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem dest=$row.dest$',
             attacker_search: "| stats sum(count) as count by file_name",
@@ -153,14 +153,14 @@ require([
             attacker_drilldown: 'index=* tag=process tag=report process="cmd.exe" process=$row.process$'
         },
         "Credential Compromise - Windows - Credential Dumping via Copy Command from Shadow Copy": {
-            contributing_events: 'index=* tag=process tag=report process_name=cmd.exe (process=*\\system32\\config\\sam* OR process=*\\system32\\config\\security* OR process=*\\system32\\config\\system* OR process=*\\windows\\ntds\\ntds.dit*)',
+            contributing_events: 'index=* tag=process tag=report process_name=cmd.exe (process=*\\\\system32\\\\config\\\\sam* OR process=*\\\\system32\\\\config\\\\security* OR process=*\\\\system32\\\\config\\\\system* OR process=*\\\\windows\\\\ntds\\\\ntds.dit*)',
             system_compromised_search: "| stats sum(count) as count by dest",
             system_compromised_drilldown: 'index=* tag=process tag=report process_name="cmd.exe" dest=$row.dest$',
             attacker_search: "| stats sum(count) as count by process, process_name, parent_process",
             attacker_drilldown: 'index=* tag=process tag=report process="cmd.exe" process=$row.process$'
         },
         "Credential Compromise - Windows - Credential Dump From Registry via Reg exe": {
-            contributing_events: 'index=* tag=process tag=report (process_name=reg.exe OR process_name=cmd.exe) process=*save* (process=*HKEY_LOCAL_MACHINE\\Security* OR process=*HKEY_LOCAL_MACHINE\\SAM* OR process=*HKEY_LOCAL_MACHINE\\System* OR process=*HKLM\\Security* OR process=*HKLM\\System* OR process=*HKLM\\SAM*)',
+            contributing_events: 'index=* tag=process tag=report (process_name=reg.exe OR process_name=cmd.exe) process=*save* (process=*HKEY_LOCAL_MACHINE\\\\Security* OR process=*HKEY_LOCAL_MACHINE\\\\SAM* OR process=*HKEY_LOCAL_MACHINE\\\\System* OR process=*HKLM\\\\Security* OR process=*HKLM\\\\System* OR process=*HKLM\\\\SAM*)',
             system_compromised_search: "| stats sum(count) as count by dest",
             system_compromised_drilldown: 'index=* tag=process tag=report process IN ("cmd.exe", "reg.exe") dest=$row.dest$',
             attacker_search: "| stats sum(count) as count by process, process_name, parent_process",
