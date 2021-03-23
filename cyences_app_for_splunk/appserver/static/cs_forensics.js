@@ -57,11 +57,11 @@ require([
             attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$'
         },
         "Ransomware - Windows - Windows Event Log Cleared": {
-            contributing_events: '((`cs_wineventlog_security` (EventID=1102 OR EventID=1100)) OR (`cs_wineventlog_system` EventID=104))',
+            contributing_events: '((`cs_wineventlog_security` (EventCode=1102 OR EventCode=1100)) OR (`cs_wineventlog_system` EventCode=104))',
             system_compromised_search: "| stats sum(count) as count by dest, LogName",
-            system_compromised_drilldown: '((`cs_wineventlog_security` (EventID=1102 OR EventID=1100)) OR (`cs_wineventlog_system` EventID=104)) dest=$row.dest$',
-            attacker_search: "| stats sum(count) as count by User",
-            attacker_drilldown: '((`cs_wineventlog_security`) OR (`cs_wineventlog_system`)) User=$row.User$'
+            system_compromised_drilldown: '((`cs_wineventlog_security` (EventCode=1102 OR EventCode=1100)) OR (`cs_wineventlog_system` EventCode=104)) dest=$row.dest$',
+            attacker_search: "| stats sum(count) as count by user",
+            attacker_drilldown: '((`cs_wineventlog_security`) OR (`cs_wineventlog_system`)) user=$row.user$'
         },
         "Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement": {
             contributing_events: '`cs_sysmon` EventCode=1 Image=*wmic* CommandLine="*/node*" CommandLine="*process call create*"',
