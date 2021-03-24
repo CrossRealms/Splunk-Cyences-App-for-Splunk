@@ -194,7 +194,9 @@ require([
     $.each(all_macros, function(index, macro){
         $(`#${macro.button_id}`).on("click", function(){
             let value = $(`#${macro.input_id}`).val();
-            value = value.replace(/"/g, '\\\"');
+            value = value.replace(/\\/g, '\\\\');   // \(back slash) from user input need to replace with double back slash, and double back slash as 4 back slashes
+            value = value.replace(/"/g, '\\\"');   // Prepend "(double quotes) with back slash
+            // Need to escape above two for search that we need to run in order to update the macro definition.
             updateMacroDefinition(`${macro.macro_name}`, value, `#${macro.msg_id}`);
         });
     });
