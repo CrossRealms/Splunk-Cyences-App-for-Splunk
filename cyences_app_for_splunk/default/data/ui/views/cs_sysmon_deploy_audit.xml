@@ -1,0 +1,71 @@
+<form theme="dark">
+  <init>
+    <set token="tkn_host">host="*"</set>
+  </init>
+  <label>Sysmon Deploy Audit</label>
+  <search id="base_search">
+    <query>`cs_sysmon_deploy_audit_data` "*No updates found*" | dedup host | table host | eval ta_sysmon_deploy_status="Updated"
+| append [| search `cs_sysmon` | dedup host | table host | eval data="Present"]
+| stats first(*) as * by host
+| fillnull data value="Absent"
+| fillnull ta_sysmon_deploy_status value="-"
+| sort ta_sysmon_deploy_status, data
+| table host, ta_sysmon_deploy_status, data</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <input type="text" token="tkn_host_temp">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <set token="tkn_host">host="*$tkn_host_temp$*"</set>
+        </change>
+      </input>
+      <table>
+        <search base="base_search">
+          <query>| search $tkn_host$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="ta_sysmon_deploy_status">
+          <colorPalette type="map">{"Updated":#00700b, "-":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <set token="tkn_drilldown_host">$row.host$</set>
+        </drilldown>
+      </table>
+      <html>
+        <p>Search tries to check last 24 hours of data to find the status of Sysmon deployment.</p>
+        <p>Click on any host to get Sysmon deloyment status events for troubleshooting.</p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$tkn_drilldown_host$">
+    <panel>
+      <title>TA Sysmon Deploy and Maintain Events for $tkn_drilldown_host$</title>
+      <table>
+        <search>
+          <query>`cs_sysmon_deploy_audit_data` host=$tkn_drilldown_host|s$ | rex field=_raw "\w+\s\d+\/\d+\/\d+-\s?\d+:\d+:\d+\.\d+\s(?&lt;status&gt;.+)" | eval status=trim(status) | dedup status | where status="No updates found"
+| append [search `cs_sysmon_deploy_audit_data` host=$tkn_drilldown_host|s$ | rex field=_raw "\w+\s\d+\/\d+\/\d+-\s?\d+:\d+:\d+\.\d+\s(?&lt;status&gt;.+)" | eval status=trim(status) | where status!="No updates found"]
+| table _time, status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
