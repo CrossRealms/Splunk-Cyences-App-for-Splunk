@@ -7,59 +7,59 @@
   </init>
   <label>Lansweeper</label>
   <search id="search_windows_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Windows" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
-| join type="left" Name [| search `cs_wineventlog_security` `cs_wineventlog_security_timerange` | dedup host | table host | rename host as Name | eval WinEventLog_Security="Present"]
-| join type="left" Name [| search `cs_wineventlog_system` cs_wineventlog_system_timerange | dedup host | table host | rename host as Name | eval WinEventLog_System="Present"]
-| join type="left" Name [| search `cs_sysmon` cs_sysmon_timerange | dedup host | table host | rename host as Name | eval Sysmon="Present"]
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User
+| join type="left" Name [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as Name | eval WinEventLog_Security="Present"]
+| join type="left" Name [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as Name | eval WinEventLog_System="Present"]
+| join type="left" Name [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as Name | eval Sysmon="Present"]
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS="Windows *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip] | dedup ip | rename ip as IPAddress | eval Tenable="Present"]
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
-| table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
+| table Site, Name,Description,State,  IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, Domain,User, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
 | sort Name </query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_server_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange`  ("asset.assetTypeName"="VMware vCenter server" OR "asset.assetTypeName"="ESXi server") | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange`  (AssetTypename="VMware vCenter server" OR AssetTypename="ESXi server") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress,Mac as MacAddress, OScode as OSVersion, version as Version,Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS="VMware *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip] | dedup ip | rename ip as IPAddress | eval Tenable="Present"]
 | fillnull Qualys, Tenable value="Absent"
-| table Site, Name, Type, Version, State, IPAddress, MacAddress, Qualys, Tenable
+| table Site, Name,Description,State,  IPAddress, MacAddress,IPLocation,FQDN ,Type,OS, OSVersion,Version, Qualys, Tenable
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_guest_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="VMware Guest" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
-| join type="left" Name [| search `cs_wineventlog_security` `cs_wineventlog_security_timerange` | dedup host | table host | rename host as Name | eval WinEventLog_Security="Present"]
-| join type="left" Name [| search `cs_wineventlog_system` cs_wineventlog_system_timerange | dedup host | table host | rename host as Name | eval WinEventLog_System="Present"]
-| join type="left" Name [| search `cs_sysmon` cs_sysmon_timerange | dedup host | table host | rename host as Name | eval Sysmon="Present"]
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="VMware Guest" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
+| join type="left" Name [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as Name | eval WinEventLog_Security="Present"]
+| join type="left" Name [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as Name | eval WinEventLog_System="Present"]
+| join type="left" Name [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as Name | eval Sysmon="Present"]
 | join type=left IPAddress [| search `cs_qualys_hostsummary` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip, tenable_os] | stats values(*) as * by ip | rename ip as IPAddress | eval Tenable="Present"]
 | eval OS=coalesce(OS, tenable_os)
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
-| table Site, Name, Type, State, IPAddress, MacAddress, OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
+| table Site, Name,Description,State,  IPAddress, MacAddress,IPLocation,FQDN , Type,OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_linux_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Linux" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Linux" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip, tenable_os] | stats values(*) as * by ip | rename ip as IPAddress | eval Tenable="Present"]
 | eval OS=coalesce(OS, tenable_os)
 | fillnull Qualys, Tenable value="Absent"
-| table Site, Name, State, IPAddress, MacAddress, OS, User, Qualys, Tenable
+| table Site, Name,Description,State, IPAddress, MacAddress,IPLocation,FQDN ,OS, Qualys, Tenable
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_location_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Location" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Location" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
 | table Site, Name, State
 | sort Name </query>
     <earliest>-4h@m</earliest>
@@ -67,7 +67,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_monitor_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` "asset.assetTypeName"="Monitor" | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.userName" as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Monitor" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
 | table Site, Name, State
 | sort Name </query>
     <earliest>-4h@m</earliest>
@@ -75,8 +75,8 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_other_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT ("asset.assetTypeName"="VMware vCenter server" OR "asset.assetTypeName"="ESXi server" OR "asset.assetTypeName"="VMware Guest" OR "asset.assetTypeName"="Windows" OR "asset.assetTypeName"="Linux" OR "asset.assetTypeName"="Location" OR "asset.assetTypeName"="Monitor") | dedup id | rename site_name as Site, "asset.assetName" as Name, "asset.assetTypeName" as Type, "assetCustom.stateName" as State, "asset.userDomain" as Domain, "asset.assetGroups{}.groupName" as GroupName, "asset.ipAddress" as IPAddress, "asset.mac" as MacAddress, "asset.osCodeId" as OSVersion, "asset.version" as Version, "asset.userName" as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User
-| table Site, Name, Type, State, IPAddress, MacAddress
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT (AssetTypename="VMware vCenter server" OR AssetTypename="ESXi server" OR AssetTypename="VMware Guest" OR AssetTypename="Windows" OR AssetTypename="Linux" OR AssetTypename="Location" OR AssetTypename="Monitor") | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
+| table Site, Name,Description,State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,Type,OS, OSVersion, User
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
@@ -87,7 +87,8 @@
     <panel>
       <html>
         <p>This dashboard shows information about all the assets in the environment and also show whether that asset is sending required security logs to Splunk or not. You can use this dashboard for security auditing. Data Availability will be color coded: Red (data not available) and Green (data available).</p>
-        <p><b>Data Collection:</b> The lansweeper asset data are necessary, collect the data via the <a href="https://splunkbase.splunk.com/app/5418/" target="_blank">Lansweeper Add-on for Splunk</a>.</p>
+        <p>
+          <b>Data Collection:</b> The lansweeper asset data are necessary, collect the data via the <a href="https://splunkbase.splunk.com/app/5418/" target="_blank">Lansweeper Add-on for Splunk</a>.</p>
         <p>Timerange for searches: Lansweeper - last 4 hours, WinEventLogs(Security &amp; System) - last 4 hours, Sysmon - last 4 hours, Qualys - last 7 days, Tenable - Not specific time-range (Data from lookups)</p>
         <p>Some searches could be slow due to amount of data it is trying to search.</p>
       </html>
@@ -209,7 +210,7 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -217,7 +218,7 @@
   <row>
     <panel>
       <title>VMware Guests - Windows</title>
-            <input type="dropdown" token="tkn_vmware_win_security_logs">
+      <input type="dropdown" token="tkn_vmware_win_security_logs">
         <label>Security Logs</label>
         <choice value="*">All</choice>
         <choice value="Present">Present</choice>
@@ -275,7 +276,7 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -311,7 +312,7 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -341,13 +342,13 @@
         <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="Qualys">
-          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
-          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -363,7 +364,7 @@
         <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
       <html>
@@ -390,19 +391,20 @@
       </input>
       <table>
         <search base="search_vmware_server_assets">
-          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_vmware_server|s$ Tenable=$tkn_tenable_logs_vmware_server|s$</query>
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_vmware_server|s$ Tenable=$tkn_tenable_logs_vmware_server|s$ | fields - OS, OSVersion</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="Qualys">
-          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
-          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -418,7 +420,7 @@
         <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -432,7 +434,7 @@
         <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
@@ -442,13 +444,14 @@
       <title>Other Devices</title>
       <table>
         <search base="search_other_assets">
-          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$</query>
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ | fields - User, Description, Domain</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <drilldown>
-          <link target="_blank">search?q=index%3Dlansweeper%20%22asset.assetName%22%3D$row.Name|s$%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%20%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
         </drilldown>
       </table>
     </panel>
