@@ -68,4 +68,25 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Sysmon is Installed but Splunk Unable to Read Symon Logs</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | eval last_error=strftime(last_error, "%F %T")
+| append [search `cs_sysmon_deploy_audit_data` "*No updates found*" earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
+| stats last(*) as * by host
+| search event_message=* ta_sysmon_deploy_status=*
+| table host, last_error, event_message</query>
+          <earliest>-4h@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Searching for errors in last 4 hours. Sysmon is deployed but Splunk is unable to read Logs for some reason. Try restarting Splunk UF on the host. Try checking EventViewer on the host whether Sysmon logs are present under Application Logs > Microsoft > Windows > Sysmon.</p>
+      </html>
+    </panel>
+  </row>
 </form>
