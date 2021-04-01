@@ -67,6 +67,9 @@
           <link target="_blank">search?q=index=$click.value|s$%20%7C%20timechart%20span=1h%20count&amp;earliest=-24h@h&amp;latest=now&amp;display.page.search.tab=visualizations&amp;display.general.type=visualizations&amp;display.visualizations.type=charting&amp;display.page.search.mode=fast</link>
         </drilldown>
       </table>
+      <html>
+        <p>Information updated hourly basis.</p>
+      </html>
     </panel>
   </row>
   <row>
@@ -123,6 +126,9 @@
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
       </table>
+      <html>
+        <p>Information updated hourly basis.</p>
+      </html>
     </panel>
   </row>
 </form>
