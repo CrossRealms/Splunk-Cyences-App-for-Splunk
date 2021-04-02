@@ -9,7 +9,7 @@
   <label>Device Master Table</label>
   <search id="base_master_table">
     <query>| inputlookup cs_device_master_table | search $tkn_sp_filter$
-| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
+| eval lansweeper_os =if(isnull(lansweeper_OS),AssetType." ".OSVersion." ".AssetVersion,lansweeper_OS) | eval os=coalesce(tenable_os,lansweeper_os,QUALYS_OS )
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
 | eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
 | eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
