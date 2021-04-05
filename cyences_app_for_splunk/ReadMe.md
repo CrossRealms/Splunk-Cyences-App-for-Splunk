@@ -10,7 +10,7 @@ The Cyences App for Splunk is an Splunk App to provide complete security to the 
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.2.0
+* Version - 1.3.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,13 @@ To uninstall app, user can follow below steps:
 
 RELEASE NOTES
 -------------
+Version 1.3.0 (April 2021)
+* Added support for Lansweeper On-prem
+
+Upgrade Guide from version 1.2.0 to 1.3.0
+* Visit the "Upgrade Guide from version 1.2.0 to 1.3.0" section from the documentation.
+* TODO: ADD NOTE: Must upgrade "Lansweeper Add-on for Splunk" to 1.2.0 for Lansweeper On-prem support.
+
 Version 1.2.0 (March 2021)
 * Added Lansweeper dashboard.
 * Added Qualys dashboard.
@@ -151,6 +158,7 @@ CONTRIBUTORS
 * Usama Houlila
 * Preston Carter
 * Ahad Ghani
+* Bhavik Bhalodia
 
 
 SUPPORT
