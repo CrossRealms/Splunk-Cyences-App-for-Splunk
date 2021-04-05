@@ -50,8 +50,7 @@ Version 1.3.0 (April 2021)
 * Added support for Lansweeper On-prem
 
 Upgrade Guide from version 1.2.0 to 1.3.0
-* Visit the "Upgrade Guide from version 1.2.0 to 1.3.0" section from the documentation.
-* TODO: ADD NOTE: Must upgrade "Lansweeper Add-on for Splunk" to 1.2.0 for Lansweeper On-prem support.
+* Must upgrade "Lansweeper Add-on for Splunk" to 1.1.0 before upgrading Cyences app to 1.3.0.
 
 Version 1.2.0 (March 2021)
 * Added Lansweeper dashboard.
