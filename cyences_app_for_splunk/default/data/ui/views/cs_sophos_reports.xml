@@ -15,7 +15,7 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>| tstats count where `cs_sophos` by host</query>
+        <query>`cs_sophos` | dedup host | table host</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>

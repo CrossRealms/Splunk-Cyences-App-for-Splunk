@@ -20,7 +20,7 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>| tstats count where `cs_windows_defender` by host | table host</query>
+        <query>`cs_windows_defender` | dedup host | table host</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
