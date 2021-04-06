@@ -6,7 +6,7 @@ https://splunkbase.splunk.com/app/5351/
 
 OVERVIEW
 --------
-The Cyences App for Splunk is a Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contain useful security alerts/reports and dashboards.
+The Cyences App for Splunk is a Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contains useful security alerts/reports and dashboards.
 
 
 * Author - CrossRealms International Inc.
@@ -48,12 +48,12 @@ RELEASE NOTES
 -------------
 Version 1.3.0 (April 2021)
 * Added support for Lansweeper On-prem. (Support with only Lansweeper Add-on version 1.1.0.)
-* Added dashboard for Sysmon Deployment Auditing under Settings section.
+* Added dashboard for Sysmon Deployment Audit under Settings section in the App navigation.
 * Added new alerts for Authentication category: Bruteforce attempt, Excessive Failed VPN Logins
 * Added new Alerts for Palo Alto: High Threats, High System Alerts, WildFire Alert
 * Added summary charts for Device Master Table dashboard.
 * Added more reports in Sophos Antivirus dashboard.
-* Enhancement:
+* Enhancements:
   * Moved Splunk Admin dashboard under Settings on the App navigation.
   * Search improvements on Lansweeper and some other dashboards.
   * Improved search for Forwarder Missing Alert.
@@ -68,7 +68,7 @@ Version 1.3.0 (April 2021)
 
 
 Upgrade Guide from version 1.2.0 to 1.3.0
-* Must upgrade "Lansweeper Add-on for Splunk" to 1.1.0 before upgrading Cyences app to 1.3.0.
+* Cyences version 1.3.0 only supports Lansweeper Add-on version 1.1.0. Please upgrade the Lansweeper Add-on before upgrading the Cyences App to 1.3.0.
 
 
 Version 1.2.0 (March 2021)

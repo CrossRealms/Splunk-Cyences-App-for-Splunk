@@ -12,17 +12,17 @@ To provide the feedback open issue in this repo.
 To contribute to the project, please raise PR against this repo.
 
 #### About this project
-This project is to build an Splunk App that allows user to visualize the security of the whole corporate environment at the central place. 
+This project is to build a Splunk App that allows user to visualize the security of the whole corporate environment at the central place. 
 
 #### How this App is different from Enterprise Security?
 - For enterprise security user has to configure the Enterprise Security's correlation searches and understand how Enterprise Security works. 
-- But for this App, the goal is to provide out of the box end-to-end security solutions. So, that user don't have to configure much. Also, this App works on the alerts so that user can get slack or email notification while keeping the minimal false positives.
+- But for this App, the goal is to provide out of the box end-to-end security solutions. So, user don't have to configure much. Also, this App works on the alerts so that user can get slack or email notification while keeping the minimal false positives.
 
 #### Owner of the Repo
 Development has started under the observation of `CrossRealms International`. But the goal is to make it collaborative development.
 
 ### Development Guidelines
-To develop the large collaborative App while keeping in mind the quality of the product here are some of the guidelines around the development of the App.
+To develop the large collaborative App while keeping in mind the quality of the product here are some guidelines around the development of the App.
 
 1. Splunk App Inspect.
    - It should not fail the Splunk App Inspect.
@@ -30,11 +30,11 @@ To develop the large collaborative App while keeping in mind the quality of the 
    - Reference - https://dev.splunk.com/enterprise/docs/releaseapps/appinspect/
 
 2. Dependencies
-   - This App is dependant on Security Essentials App from Splunk as of now for some lookups. And other Add-ons are required for field extractions like Sysmon, Windows, O365, etc.
+   - This App is dependent on Security Essentials App from Splunk as of now for some lookups. And other Add-ons are required for field extractions like Sysmon, Windows, O365, etc.
    - Refer to the <a href="https://cyences.com/cyences-app-for-splunk/">documentation</a> for full details.
 
 3. Reports and Alerts
-   - One should not add an alert which might have a lot of false positives. It should rather go as an Report for particular category of reports.
+   - One should not add an alert which might have a lot of false positives. It should rather go as a Report for particular category of reports.
    - Only add security related Alerts and Reports are allowed with this App.
 
 4. Standard with Searches
@@ -76,6 +76,6 @@ To develop the large collaborative App while keeping in mind the quality of the 
    - Improvements in any part of the App is most welcome. :)
 
 9. Goal
-   - Goal is to make the Security App providing security around all the areas.
-   - Also to add everything from MITRE ATT&CT framework eventually.
+   - The goal is to make the Security App providing security around all the areas.
+   - To add everything from MITRE ATT&CT framework eventually.
 
