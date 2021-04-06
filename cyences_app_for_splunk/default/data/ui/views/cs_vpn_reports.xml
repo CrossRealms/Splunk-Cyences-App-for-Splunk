@@ -61,7 +61,7 @@
       <initialValue>*</initialValue>
       <fieldForLabel>Country</fieldForLabel>
       <fieldForValue>Country</fieldForValue>
-      <search base="bs0">
+      <search base="bs1">
         <query>| stats count by Country</query>
       </search>
     </input>
@@ -71,7 +71,7 @@
       <default>*</default>
       <fieldForLabel>City</fieldForLabel>
       <fieldForValue>City</fieldForValue>
-      <search base="bs0">
+      <search base="bs1">
         <query>| stats count by City</query>
       </search>
       <prefix>City="</prefix>

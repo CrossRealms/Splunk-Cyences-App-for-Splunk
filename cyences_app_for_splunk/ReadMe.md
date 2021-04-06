@@ -60,6 +60,7 @@ Version 1.3.0 (April 2021)
 * Issues Fixed:
   * Fixed the issue with user field extraction for Sophos central data.
   * Fixed the issue field extraction from WinEventLog data for Windows Firewall Disabled Alert and WinEventLog Cleared Alert.
+  * Fixed the issue with dashboard filters on the VPN dashboard.
   * Macro definition update for Ransomware Extension to avoid field value conflicts in Common Ransomware extension search.
   * Fixed the issue with the Configuration page for the macro update where the macro value contains backslash.
   * Fixed search queries for forensics of Fake Windows Processes, Credential Compromise related search queries, and Palo Alto related search queries.
