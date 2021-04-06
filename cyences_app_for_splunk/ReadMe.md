@@ -6,7 +6,7 @@ https://splunkbase.splunk.com/app/5351/
 
 OVERVIEW
 --------
-The Cyences App for Splunk is an Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contains useful security alerts/reports and dashboards.
+The Cyences App for Splunk is a Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contain useful security alerts/reports and dashboards.
 
 
 * Author - CrossRealms International Inc.
@@ -27,17 +27,17 @@ This app can be set up in two ways:
      * Install the `Cyences App for Splunk`.
   2. Distributed Mode: 
      * Install the `Cyences App for Splunk` on the search head.
-     * App do not require on the Indexer or on the forwarder.
+     * App does not require on the Indexer or the forwarder.
 
 
 INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
 ------------------------------------------------------------
-Visit https://cyences.com/cyences-app-for-splunk/ for complete configuration guide.
+Visit https://cyences.com/cyences-app-for-splunk/ for the complete configuration guide.
 
 
 UNINSTALL APP
 -------------
-To uninstall app, user can follow below steps:
+To uninstall the app, the users can follow the below steps:
 * SSH to the Splunk instance
 * Go to folder apps($SPLUNK_HOME/etc/apps).
 * Remove the `cyences_app_for_splunk` folder from apps directory
@@ -47,23 +47,41 @@ To uninstall app, user can follow below steps:
 RELEASE NOTES
 -------------
 Version 1.3.0 (April 2021)
-* Added support for Lansweeper On-prem
+* Added support for Lansweeper On-prem. (Support with only Lansweeper Add-on version 1.1.0.)
+* Added dashboard for Sysmon Deployment Auditing under Settings section.
+* Added new alerts for Authentication category: Bruteforce attempt, Excessive Failed VPN Logins
+* Added new Alerts for Palo Alto: High Threats, High System Alerts, WildFire Alert
+* Added summary charts for Device Master Table dashboard.
+* Added more reports in Sophos Antivirus dashboard.
+* Enhancement:
+  * Moved Splunk Admin dashboard under Settings on the App navigation.
+  * Search improvements on Lansweeper and some other dashboards.
+  * Improved search for Forwarder Missing Alert.
+* Issues Fixed:
+  * Fixed the issue with user field extraction for Sophos central data.
+  * Fixed the issue field extraction from WinEventLog data for Windows Firewall Disabled Alert and WinEventLog Cleared Alert.
+  * Macro definition update for Ransomware Extension to avoid field value conflicts in Common Ransomware extension search.
+  * Fixed the issue with the Configuration page for the macro update where the macro value contains backslash.
+  * Fixed search queries for forensics of Fake Windows Processes, Credential Compromise related search queries, and Palo Alto related search queries.
+  * Fixed the issue with timerange not being followed while drilldown for Overview page to Forensics page.
+
 
 Upgrade Guide from version 1.2.0 to 1.3.0
 * Must upgrade "Lansweeper Add-on for Splunk" to 1.1.0 before upgrading Cyences app to 1.3.0.
+
 
 Version 1.2.0 (March 2021)
 * Added Lansweeper dashboard.
 * Added Qualys dashboard.
 * Added Tenable dashboard.
 * Added Device Master Table dashboard.
-* Navigation changes based on new design useful for security engineers.
+* Navigation changes based on the new design, useful for security engineers.
 * Improvement on VPN dashboard:
-  * Added support for new version of Palo Alto (which changed the global protect data format)
+  * Added support for the new version of Palo Alto (which changed the global protect data format)
   * Added user filter.
 * Splunk Admin Reports improvements:
-  * Splunk Admin alerts on overview page now shows current missing indexes and current missing forwarders instead of historical notable events.
-  * It also drilldowns from Overview page to Splunk Admin Reports dashboard.
+  * Splunk Admin alerts on the Overview page now show current missing indexes and current missing forwarders instead of historical-notable events.
+  * It also drilldowns from the Overview page to the Splunk Admin Reports dashboard.
   * Improved searches for missing indexes alert query.
 * Improvements on Windows Defender Report:
   * Fixed issue with Signature field for Windows Defender data from Windows 10 devices.
@@ -80,7 +98,7 @@ Upgrade Guide from version 1.1.0 to 1.2.0
 
 Version 1.1.0 (Jan 2021)
 * Improved Overview page.
-  * Now Overview page shows number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
+  * Now Overview page shows the number of Notable Events instead of number of alerts triggered which feels more useful to Security engineer.
   * Direct navigation to reports added on top of the Overview page.
 * Improved Forensics page.
   * Renamed Details dashboard to Forensics dashboard.
