@@ -57,6 +57,9 @@ To develop the large collaborative App while keeping in mind the quality of the 
    - Put all the savedsearches in the proper order (category vise) in the savedsearches.conf file.
    - Take reference from other searches in the savedsearches.conf.
    - Make sure to add relevant queries and configuration in cs_forensics.js.
+   - Make sure searches do not generate any fields that name contains special characters and spaces. Like, "Email Size", instead use EmailSize or Email_Size.
+      - As foreach command on the Forensics dashboard does not support field name with special character.
+      - Using the same approach across the App for field naming convention would be preferable.
    - If require, update `Overview` and `All Alerts` dashboard.
 
 6. macros.conf
