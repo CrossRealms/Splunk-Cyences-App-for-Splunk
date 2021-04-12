@@ -1,4 +1,4 @@
 Version 1.4.0
 
----- CY-181-Adding-Filter-for-Malicious-IPs-Dashboard ----
+---- CY-181-Adding-Filter-for-Global-Malicious-IPs-Dashboard ----
 > Adding & Updating Filter for "Globally Detected Malicious IPs" Panel on "Globally Detected Malicious IPs" Dashboard
