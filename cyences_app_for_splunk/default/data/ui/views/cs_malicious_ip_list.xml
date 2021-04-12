@@ -31,7 +31,8 @@
           </ul>
         </p>
         <p>The Malicious IP List contains IP addresses discovered in the last seven days by default. The time range can be changed by updating the following macro definition (Settings &gt; Configuration): cs_palo_malicious_ip_list_filter_old_results.</p>
-        <p><b>Data Collection:</b> The pan:traffic sourcetype for Palo Alto is being used to collect data via the Palo Alto Networks Add-on for Splunk.</p>
+        <p>
+          <b>Data Collection:</b> The pan:traffic sourcetype for Palo Alto is being used to collect data via the Palo Alto Networks Add-on for Splunk.</p>
       </html>
       <table>
         <search>
@@ -69,22 +70,40 @@
   <row>
     <panel>
       <title>Globally Detected Malicious IPs</title>
-      <input type="dropdown" token="tkn_ip">
+      <input type="text" token="tkn_ip">
         <label>Search for Bad IP Addresses</label>
-        <choice value="*">All</choice>
-        <fieldForLabel>ip</fieldForLabel>
-        <fieldForValue>ip</fieldForValue>
-        <search base="search_list">
-          <query>| fields ip</query>
-        </search>
         <default>*</default>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_location">
+        <label>Search By Location</label>
+        <search base="search_list">
+          <query> | search ip=$tkn_ip|s$ description=$tkn_description|s$  |stats count by ip_location</query>
+        </search>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>ip_location</fieldForLabel>
+        <fieldForValue>ip_location</fieldForValue>
+      </input>
+      <input type="dropdown" token="tkn_description">
+        <label>Search By Description</label>
+        <search base="search_list">
+          <query> | search ip=$tkn_ip|s$ ip_location=$tkn_location|s$ |stats count by description</query>
+        </search>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>description</fieldForLabel>
+        <fieldForValue>description</fieldForValue>
       </input>
       <table>
         <search base="search_list">
-          <query>| search ip=$tkn_ip|s$</query>
+          <query>| search ip=$tkn_ip|s$ ip_location=$tkn_location|s$ description=$tkn_description|s$</query>
         </search>
         <option name="count">20</option>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
       </table>
     </panel>
