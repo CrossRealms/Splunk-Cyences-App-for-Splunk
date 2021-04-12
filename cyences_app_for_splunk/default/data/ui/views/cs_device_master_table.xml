@@ -9,7 +9,7 @@
   <label>Device Master Table</label>
   <search id="base_master_table">
     <query>| inputlookup cs_device_master_table | search $tkn_sp_filter$
-| eval lansweeper_os =if(isnull(lansweeper_OS),AssetType." ".OSVersion." ".AssetVersion,lansweeper_OS) | eval os=coalesce(tenable_os,lansweeper_os,QUALYS_OS )
+| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
 | eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
 | eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
@@ -63,7 +63,7 @@
   <row>
     <panel>
       <single>
-        <title>Total Devices</title>
+        <title>Total Number of Devices</title>
         <search base="base_summary">
           <query>| table Total</query>
         </search>
@@ -74,13 +74,13 @@
       </single>
       <html>
         <p><b>Description</b>: The total amount of devices detected.</p>
-        <p>--------------------------------------------------------------------</p>
-        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Master Device Table. Click on the Total Devices number above to reset the filter.</p>
+        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
+        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Master Table. Click on the number above to reset the filter.</p>
       </html>
     </panel>
     <panel>
       <chart>
-        <title>Devices Connected To</title>
+        <title>Number of Devices That Are Connected To A Specific Security Component</title>
         <search base="base_summary">
           <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, Crowdstrike</query>
         </search>
@@ -113,14 +113,14 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: No. of devices connected with given connectivity.</p>
+        <p><b>Description</b>: The total amount of devices that are connected to a particular security component.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
       <chart>
-        <title>Devices Security Present</title>
+        <title>Number of Devices That Contain A Specific Security Component</title>
         <search base="base_summary">
           <query>| table Total, All, Lansweeper, Vulnerability_Scanner, Antivirus</query>
         </search>
@@ -152,7 +152,7 @@
     </panel>
     <panel>
       <chart>
-        <title>Devices Security Missing</title>
+        <title>Number of Devices That Lack A Specific Security Component</title>
         <search base="base_summary">
           <query>| table Total, No_Lansweeper, No_Vulnerability_Scanner, No_Antivirus</query>
         </search>
@@ -265,9 +265,7 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
-          <set token="tkn_drilldown_host">$row.host$</set>
-          <set token="tkn_drilldown_ip">$row.ip$</set>
-          <eval token="tkn_drilldown_user">if(isnull($row.user$), "-", $row.user$)</eval>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.user$</link>
         </drilldown>
       </table>
       <html>
@@ -276,86 +274,6 @@
         <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
         <p>Tenable Status: Red if there is any critical active severity vulnerability, Orange if there is any high active severity vulnerability, Yellow if there is any medium active severity vulnerability, Green if there is no critical, high or medium active vulnerabilities present.</p>
       </html>
-    </panel>
-  </row>
-  <row depends="$tkn_drilldown_ip$">
-    <panel>
-      <title>Inbound and Outbound Traffic to/from IP ($tkn_drilldown_ip$)</title>
-      <input type="time" token="tkn_timeRange_network_traffic">
-        <label></label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <map>
-        <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count as inbound from datamodel=Network_Traffic where All_Traffic.dest_ip=$tkn_drilldown_ip|s$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)`
-| iplocation src_ip
-| append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip=$tkn_drilldown_ip|s$ by All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)`
-| iplocation dest_ip]
-| geostats sum(inbound) as inbound_traffic, sum(outbound) as outbound_traffic</query>
-          <earliest>$tkn_timeRange_network_traffic.earliest$</earliest>
-          <latest>$tkn_timeRange_network_traffic.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="mapping.type">marker</option>
-        <option name="refresh.display">progressbar</option>
-      </map>
-      <html>
-        <p>Only Traffic from/to outside network will be shown in the Map.</p>
-      </html>
-    </panel>
-  </row>
-  <row depends="$tkn_drilldown_user$-$tkn_drilldown_ip$">
-    <panel>
-      <title>VPN Logins for User($tkn_drilldown_user$) or from IP($tkn_drilldown_ip$)</title>
-      <input type="time" token="tkn_timeRange_vpn">
-        <label></label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <table>
-        <search>
-          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest="vpn_auth" AND (Authentication.user=$tkn_drilldown_user|s$ OR Authentication.src=$tkn_drilldown_ip|s$) AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
-        | iplocation src_ip
-        | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
-        | eval City = if(isnull(City) OR City="", "Unknown", City) | fields _time user action src_ip City Country
-        | rename user as User, action as Status, src_ip as "SourceIP"
-        | sort - _time</query>
-          <earliest>$tkn_timeRange_vpn.earliest$</earliest>
-          <latest>$tkn_timeRange_vpn.latest$</latest>
-        </search>
-        <option name="count">5</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">true</option>
-        <option name="drilldown">none</option>
-      </table>
-    </panel>
-  </row>
-  <row depends="$tkn_drilldown_user$-$tkn_drilldown_ip$">
-    <panel>
-      <title>Authentication activities for User($tkn_drilldown_user$) or from IP($tkn_drilldown_ip$)</title>
-      <input type="time" token="tkn_timeRange_authentication">
-        <label></label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <table>
-        <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Authentication where `cs_authentication_indexes` (Authentication.user=$tkn_drilldown_user|s$ OR Authentication.src=$tkn_drilldown_ip|s$) Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
-          <earliest>$tkn_timeRange_authentication.earliest$</earliest>
-          <latest>$tkn_timeRange_authentication.latest$</latest>
-        </search>
-        <option name="count">5</option>
-        <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">true</option>
-        <option name="drilldown">none</option>
-      </table>
     </panel>
   </row>
 </form>

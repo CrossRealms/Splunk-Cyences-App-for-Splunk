@@ -80,7 +80,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
+        <p><b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.</p>
       </html>
     </panel>
   </row>
