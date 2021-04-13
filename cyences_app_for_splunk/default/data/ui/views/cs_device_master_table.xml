@@ -99,7 +99,7 @@
             <set token="tkn_sp_filter">tenable_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Sophos&quot;">
-            <set token="tkn_sp_filter">lansweeper_last_event=*</set>
+            <set token="tkn_sp_filter">sophos_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Defender&quot;">
             <set token="tkn_sp_filter">defender_last_event=*</set>
