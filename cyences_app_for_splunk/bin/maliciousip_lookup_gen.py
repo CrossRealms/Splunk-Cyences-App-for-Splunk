@@ -39,7 +39,7 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
         auth_header = {
             "Authorization": "Bearer {}".format(api_config['auth_token'])
         }
-        response = requests.get("{}{}".format(api_config['api_url'], '/api/v1/ip'), headers=auth_header)
+        response = requests.get("{}{}".format(api_config['api_url'].rstrip('/'), '/api/v1/ip'), headers=auth_header)
         return response.json()['data']
 
 

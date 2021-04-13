@@ -51,7 +51,7 @@ class MaliciousIPUploaderCommand(EventingCommand):
                     'category': record['ip_category'],
                 }
             )
-        endpoint_url = "{}/api/v1/ip".format(api_config['api_url'])
+        endpoint_url = "{}/api/v1/ip".format(api_config['api_url'].rstrip('/'))
         payload = {'data': api_payload}
         auth_header = {
             "Authorization": "Bearer {}".format(api_config['auth_token'])
