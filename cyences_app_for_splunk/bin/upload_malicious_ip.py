@@ -51,28 +51,28 @@ class MaliciousIPUploaderCommand(EventingCommand):
                     'category': record['ip_category'],
                 }
             )
-        endpoint_url = f"{api_config['api_url']}/api/v1/ip"
+        endpoint_url = "{}/api/v1/ip".format(api_config['api_url'])
         payload = {'data': api_payload}
         auth_header = {
-            "Authorization": f"Bearer {api_config['auth_token']}"
+            "Authorization": "Bearer {}".format(api_config['auth_token'])
         }
         resp = None
         try:
             resp = requests.post(endpoint_url, json=payload, headers=auth_header)
             resp.raise_for_status()
             yield {'success': True, 'message': "Successfully Uploaded Ips to API."}
-            self.logger.info(f"Response received {resp.json()}")
+            self.logger.info("Response received {}".format(resp.json()))
         except Exception as e:
             if resp:
                 yield {
                     'success': False,
-                    'error_message': f"Failed to upload Ips to API, Reason {repr(e)}",
+                    'error_message': "Failed to upload Ips to API, Reason {}".format(repr(e)),
                     'response_body': resp.json()
                 }
             else:
                 yield {
                     'success': False,
-                    'error_message': f"Failed to upload Ips to API, Reason {repr(e)}",
+                    'error_message': "Failed to upload Ips to API, Reason {}".format(repr(e)),
                     'response': "None"
                 }
         
