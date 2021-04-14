@@ -115,6 +115,24 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">Active Directory Logs</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_ad_activedirectory"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_ad_activedirectory_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">MSAD Health Logs</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_msad_healthlogs"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_msad_healthlogs_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Sysmon Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_sysmon"/>

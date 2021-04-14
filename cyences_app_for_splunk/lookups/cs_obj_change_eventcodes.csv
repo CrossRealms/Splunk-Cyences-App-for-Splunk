@@ -1,0 +1,86 @@
+EventCode,change_action,change_category,obj_type,signature
+566,modified,Group Policy,groupPolicyContainer,Object Operation (W3 Active Directory)
+4720,created,User,user,A user account was created
+4722,modified,User,user,A user account was enabled
+4722,enabled,Computer,computer,A Computer account was enabled
+4723,modified,User,user,An attempt was made to change an account password
+4724,modified,User,user,An attempt was made to reset an account password
+4725,disabled,User,user,A user account was disabled
+4726,deleted,User,user,A user account was deleted
+4727,created,Group,group,A security-enabled global group was created
+4728,added,Group Membership,group,A member was added to a security-enabled global group
+4729,removed,Group Membership,group,A member was removed from a security-enabled global group
+4730,deleted,Group,group,A security-enabled global group was deleted
+4731,created,Group,group,A security-enabled local group was created
+4732,added,Group Membership,group,A member was added to a security-enabled local group
+4733,removed,Group Membership,group,A member was removed from a security-enabled local group
+4734,deleted,Group,group,A security-enabled local group was deleted
+4735,modified,Group,group,A security-enabled local group was changed
+4737,modified,Group,group,A security-enabled global group was changed
+4738,modified,User,user,A user account was changed
+4741,created,Computer,computer,A computer account was created
+4742,modified,Computer,computer,A computer account was changed
+4743,deleted,Computer,computer,A computer account was deleted
+4744,created,Group,group,A security-disabled local group was created
+4745,modified,Group,group,A security-disabled local group was changed
+4746,added,Group Membership,group,A member was added to a security-disabled local group
+4747,removed,Group Membership,group,A member was removed from a security-disabled local group
+4748,deleted,Group,group,A security-disabled local group was deleted
+4749,created,Group,group,A security-disabled global group was created
+4750,modified,Group,group,A security-disabled global group was changed
+4751,added,Group Membership,group,A member was added to a security-disabled global group
+4752,removed,Group Membership,group,A member was removed from a security-disabled global group
+4753,deleted,Group,group,A security-disabled global group was deleted
+4754,created,Group,group,A security-enabled universal group was created
+4755,modified,Group,group,A security-enabled universal group was changed
+4756,added,Group Membership,group,A member was added to a security-enabled universal group
+4757,removed,Group Membership,group,A member was removed from a security-enabled universal group
+4758,deleted,Group,group,A security-enabled universal group was deleted
+4759,created,Group,group,A security-disabled universal group was created
+4760,modified,Group,group,A security-disabled universal group was changed
+4761,added,Group Membership,group,A member was added to a security-disabled universal group
+4762,removed,Group Membership,group,A member was removed from a security-disabled universal group
+4763,deleted,Group,group,A security-disabled universal group was deleted
+4764,modified,Group,group,A groups type was changed
+4765,modified,User,user,Success: SID History was added to an account.
+4766,modified,User,user,Failed: An attempt to add SID History to an account failed.
+4767,modified,User,user,A user account was unlocked
+4780,modified,User,user,The ACL was set on accounts which are members of administrators groups.
+4781,modified,User,user,The name of an account was changed
+4783,created,Group,group,A basic application group was created.
+4784,modified,Group,group,A basic application group was changed.
+4785,added,Group Membership,group,A member was added to a basic application group.
+4786,removed,Group Membership,group,A member was removed from a basic application group.
+4787,added,Group Membership,group,A non-member was added to a basic application group.
+4788,removed,Group Membership,group,A non-member was removed from a basic application group.
+4789,deleted,Group,group,A basic application group was deleted.
+4790,created,Group,group,An LDAP query group was created.
+4791,modified,Group,group,An LDAP query group was changed.
+4792,deleted,Group,group,An LDAP query group was deleted.
+4794,modified,User,user,An attempt was made to set the Directory Services Restore Mode administrator password.
+4798,modified,User,user,A user's local group membership was enumerated.
+4799,modified,Group,group,A security-enabled local group membership was enumerated.
+4912,modified,User,user,Per User Audit Policy was changed
+5136,modified,Computer,computer,A directory service Computer object was modified
+5136,modified,Group,group,A directory service Group object was modified
+5136,modified,Group Policy,groupPolicyContainer,A directory service Group Policy object was modified
+5136,modified,User,user,A directory service User object was modified
+5136,modified,OU,organizationalUnit,A directory service Organizational Unit object was modified
+5137,created,Computer,computer,A directory service Computer object was created
+5137,created,Group,group,A directory service Group object was created
+5137,created,Group Policy,groupPolicyContainer,A directory service Group Policy object was created
+5137,created,User,user,A directory service User object was created
+5137,created,OU,organizationalUnit,A directory service Organizational Unit object was created
+5138,undeleted,Computer,computer,A directory service Computer object was undeleted
+5138,undeleted,Group,group,A directory service Group object was undeleted
+5138,undeleted,User,user,A directory service User object was undeleted
+5138,undeleted,OU,organizationalUnit,A directory service OU object was undeleted
+5139,moved,Computer,computer,A directory service Computer object was moved
+5139,moved,Group,group,A directory service Group object was moved
+5139,moved,User,user,A directory service User object was moved
+5139,moved,OU,organizationalUnit,A directory service OU object was moved
+5141,deleted,Computer,computer,A directory service Computer object was deleted
+5141,deleted,Group,group,A directory service Group object was deleted
+5141,deleted,Group Policy,groupPolicyContainer,A directory service Group Policy object was deleted
+5141,deleted,User,user,A directory service User object was deleted
+5141,deleted,OU,organizationalUnit,A directory service Organizational Unit object was deleted
