@@ -8,3 +8,4 @@ Version 1.4.0
     "AD - Group Changed",
     "AD - Group Policy Changed",
     "AD - User Changed"
+    "AD - User Locked Out"
