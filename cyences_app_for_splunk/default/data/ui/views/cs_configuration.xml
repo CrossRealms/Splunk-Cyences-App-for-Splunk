@@ -400,6 +400,42 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">cs_ad_group_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_group_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_group_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_group_policy_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_group_policy_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_group_policy_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_user_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_user_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_user_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_user_locked_out_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_user_locked_out_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_user_locked_out_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">cs_ad_password_change_outside_working_hour_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_ad_password_change_outside_working_hour_filter"/>

@@ -13,7 +13,8 @@
     <panel>
       <html>
         <p>Active Directory and Windows Reports</p>
-        <p><b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
+        <p>
+          <b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
       </html>
       <table>
         <search>
@@ -43,7 +44,8 @@
         <option name="drilldown">none</option>
       </table>
       <html>
-        <p><b>Description:</b> User has added/removed/enabled/disabled the following events.</p>
+        <p>
+          <b>Description:</b> User has added/removed/enabled/disabled the following events.</p>
       </html>
     </panel>
   </row>
@@ -60,7 +62,8 @@
         <option name="drilldown">none</option>
       </table>
       <html>
-        <p><b>Description:</b> User has added/removed to/from a group events.</p>
+        <p>
+          <b>Description:</b> User has added/removed to/from a group events.</p>
       </html>
     </panel>
   </row>
@@ -80,8 +83,94 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.</p>
+        <p>
+          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
       </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Group Changed</title>
+      <table>
+        <search>
+          <query>`ms_obj_changes_base_cat("Group")` 
+| `ms_obj_group_change_out` 
+| fields - member_obj_lkp 
+| rename adminuser as "Administrator",msad_action as "Action",group_obj_nm as "Group Name",MSADGroupType as "Group Type",MSADGroupClass AS "Group Class",signature as "Changes" | `cs_ad_group_changed_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Group Policy Changed</title>
+      <table>
+        <search>
+          <query>`ms_obj_changes_base_cat("Group Policy")`
+| fields _time, session_id, src_nt_domain, src_user,Object_Name_Guid,displayName,dir_svcs_action,AttributeLDAPDisplayName,AttributeValue,MSADChangedAttributes,Correlation_ID,signature,msad_action,Old_DN,New_DN
+| fillnull value="" Correlation_ID,msad_action
+| eval adminuser=if(isnull(src_nt_domain),src_user,src_nt_domain."\\".src_user) 
+| eval Object_Lookup_Name="{".lower(Object_Name_Guid)."}" 
+| join type=left Object_Lookup_Name [| inputlookup cs_ad_obj_gpo | fields cn, displayName | rename cn AS Object_Lookup_Name | table Object_Lookup_Name, displayName]
+| eval displayName=if(isnull(displayName),"Warning: ".Object_Lookup_Name." GPO CN not found in the AD_Obj_GPO Lookup. If GPO is new wait 15 minutes and run report again, or check that ms_ad_obj_sched_sync_gpo scheduled search is running as scheduled.",displayName) 
+| `ms_obj_msad-changed-attributes`
+| stats max(_time) AS last_time, min(_time) AS start_time,list(MSADChanges) AS MSADChanges,values(Correlation_ID) AS Correlation_IDs by session_id,Object_Lookup_Name,displayName,adminuser,signature,msad_action
+| eval MSADChanges=mvjoin(MSADChanges, "########")
+| eval MSADChanges=case(isnull(signature) AND isnull(MSADChanges),"Unknown Changes",isnull(signature),MSADChanges,isnotnull(MSADChanges),"Signature: ".signature."########".MSADChanges)
+| eval Session_Time="Session ID (".session_id.")|Start: ".strftime(start_time,"%m/%d/%y %I:%M:%S %P")."|End: ".strftime(last_time,"%m/%d/%y %I:%M:%S %P")
+| table displayName,adminuser,Session_Time,msad_action,Correlation_IDs,MSADChanges
+| makemv delim="########" MSADChanges
+| makemv delim="|" Session_Time
+| rename adminuser as "Administrator",msad_action as "Action",displayName as "GPO Name",MSADChanges as "Changes" | `cs_ad_group_policy_changed_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - User Changed</title>
+      <table>
+        <search>
+          <query>`ms_obj_changes_base_cat("User")`
+| `ms_obj_user_change_out`
+| rename adminuser as "Administrator",msad_action as "Action",dest_user_subject as "Target User ID",MSADChanges as "Changes" | `cs_ad_user_changed_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - User Account Locked Out</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` (EventCode=4740) 
+| eval Account_Name=mvfilter(NOT match(Account_Name, "\$")) 
+| fields ComputerName Account_Domain Account_Name Caller_Computer_Name | fields - _raw
+| rename ComputerName as "Domain_Controller", Account_Domain as User_Domain ,Account_Name as "User_Name", Caller_Computer_Name as "Source_Computer_Name"
+| fillnull value="-" Source_Computer_Name 
+| table _time  User_Name,User_Domain,Source_Computer_Name * | `cs_ad_user_locked_out_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
     </panel>
   </row>
 </form>
