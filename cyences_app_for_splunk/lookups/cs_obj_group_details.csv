@@ -1,0 +1,9 @@
+groupType,sAMAccountType,groupType_Name,MSADGroupType,MSADGroupClass
+"2",268435457,"Global distribution group",Global,Distribution
+"4",268435457,"Domain local distribution group","Domain Local",Distribution
+"8",268435457,"Universal distribution group","Universal",Distribution
+"-2147483646",268435456,"Global security group",Global,Security
+"-2147483644",536870912,"Domain local security group","Domain Local",Security
+"-2147483640",268435456,"Universal security group","Universal",Security
+"2147483653",536870912,"Built-In Domain Group","Built-In Local","Security"
+"-2147483643",536870912,"Built-In Domain Group","Built-In Local","Security"

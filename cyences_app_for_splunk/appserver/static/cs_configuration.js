@@ -18,6 +18,8 @@ require([
         { macro_name: 'cs_o365', input_id: 'macro_data_o365', button_id: 'macro_data_o365_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_security', input_id: 'macro_data_wineventlog_security', button_id: 'macro_data_wineventlog_security_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_system', input_id: 'macro_data_wineventlog_system', button_id: 'macro_data_wineventlog_system_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_ad_active_directory', input_id: 'macro_data_ad_active_directory', button_id: 'macro_data_ad_active_directory_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_ad_health_logs', input_id: 'macro_data_ad_health_logs', button_id: 'macro_data_ad_health_logs_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_sysmon', input_id: 'macro_data_sysmon', button_id: 'macro_data_sysmon_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_msg'},
@@ -47,6 +49,10 @@ require([
 
         /* Windows & AD */
         { macro_name: 'cs_ad_user_modification_filter', input_id: 'macro_cs_ad_user_modification_filter', button_id: 'macro_cs_ad_user_modification_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_ad_group_policy_changed_filter', input_id: 'macro_cs_ad_group_policy_changed_filter', button_id: 'macro_cs_ad_group_policy_changed_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_ad_user_changed_filter', input_id: 'macro_cs_ad_user_changed_filter', button_id: 'macro_cs_ad_user_changed_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_ad_user_locked_out_filter', input_id: 'macro_cs_ad_user_locked_out_filter', button_id: 'macro_cs_ad_user_locked_out_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_user_privilege_escalation_filter', input_id: 'macro_cs_ad_user_privilege_escalation_filter', button_id: 'macro_cs_ad_user_privilege_escalation_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_password_change_outside_working_hour_filter', input_id: 'macro_cs_ad_password_change_outside_working_hour_filter', button_id: 'macro_cs_ad_password_change_outside_working_hour_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_windows_host_missing_update_filter', input_id: 'macro_cs_windows_host_missing_update_filter', button_id: 'macro_cs_windows_host_missing_update_filter_button', msg_id: 'macro_windows_msg'},

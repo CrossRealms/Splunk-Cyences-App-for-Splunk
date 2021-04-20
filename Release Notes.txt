@@ -2,3 +2,15 @@ Version 1.4.0
 
 ---- CY-181-Adding-Filter-for-Global-Malicious-IPs-Dashboard ----
 > Adding & Updating Filter for "Globally Detected Malicious IPs" Panel on "Globally Detected Malicious IPs" Dashboard
+
+---- CY-202-Adding-AD-Alerts ----
+> Adding Below AD Alerts
+    "AD - Group Changed",
+    "AD - Group Policy Changed",
+    "AD - User Changed"
+    "AD - User Locked Out"
+
+Documentation Changes Required
+- Data collection for MSAD Health Check logs and ActiveDirectory logs
+- Security logs only in plain text format (for 4 alerts of AD Changes)
+

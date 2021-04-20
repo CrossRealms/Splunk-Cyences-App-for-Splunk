@@ -245,6 +245,15 @@ require([
             attacker_search: "| stats sum(count) as count by src",
             attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" src=$row.src$'
         },
+        "AD - Group Changed": {
+            contributing_events: '`cs_wineventlog_security` [| inputlookup cs_ad_audit_change_event_codes WHERE change_category="Group" | stats values(EventCode) AS EventCode,values(obj_type) AS obj_type | format] src_user_type="user" NOT((EventCode=4723 OR EventCode=4738) AND src_user!=user)'
+        },
+        "AD - Group Policy Changed": {
+            contributing_events: '`cs_wineventlog_security` [| inputlookup cs_ad_audit_change_event_codes WHERE change_category="Group Policy" | stats values(EventCode) AS EventCode,values(obj_type) AS obj_type | format] src_user_type="user" NOT((EventCode=4723 OR EventCode=4738) AND src_user!=user)'
+        },
+        "AD - User Changed": {
+            contributing_events: '`cs_wineventlog_security` [| inputlookup cs_ad_audit_change_event_codes WHERE change_category="User" | stats values(EventCode) AS EventCode,values(obj_type) AS obj_type | format] src_user_type="user" NOT((EventCode=4723 OR EventCode=4738) AND src_user!=user)'
+        },
     };
 
 

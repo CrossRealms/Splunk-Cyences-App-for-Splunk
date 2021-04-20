@@ -115,6 +115,24 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">Active Directory Logs</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_ad_active_directory"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_ad_active_directory_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">MSAD Health Logs</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_ad_health_logs"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_ad_health_logs_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Sysmon Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_sysmon"/>
@@ -379,6 +397,42 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_ad_user_privilege_escalation_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_group_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_group_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_group_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_group_policy_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_group_policy_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_group_policy_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_user_changed_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_user_changed_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_user_changed_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_user_locked_out_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_user_locked_out_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_user_locked_out_filter_button">Update</button>
             </th>
           </tr>
           <tr>
