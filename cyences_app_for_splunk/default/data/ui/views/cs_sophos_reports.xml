@@ -81,10 +81,10 @@
       <title>Endpoint Service Not Running</title>
       <table>
         <search>
-          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
-| eval ServiceDisabled = if(type="Event::Endpoint::ServiceNotRunning", _time, 0), ServiceEnabled = if(type="Event::Endpoint::ServiceRestored", _time, 0)
-| where ServiceDisabled&gt;ServiceEnabled
-| eval "Service Disabled Since"=strftime(ServiceDisabled, "%F %T")
+          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$ 
+| stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user latest(type) as type by host, dhost 
+| where type=="Event::Endpoint::ServiceNotRunning"
+| eval "Service Disabled Since"=strftime(_time, "%F %T") 
 | table host, dhost, src_ip, user, "Service Disabled Since"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -99,10 +99,9 @@
       <title>Real-Time Protection Disabled</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Sav*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
-| eval RTPDisabled = if(type="Event::Endpoint::SavDisabled", _time, 0), RTPEnabled = if(type="Event::Endpoint::SavEnabled", _time, 0)
-| where RTPDisabled&gt;RTPEnabled
-| eval "RTP Disabled Since"=strftime(RTPDisabled, "%F %T")
+          <query>`cs_sophos` type="Event::Endpoint::Sav*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user latest(type) as type by host, dhost
+| where type=="Event::Endpoint::SavDisabled"
+| eval "RTP Disabled Since"=strftime(_time, "%F %T")
 | table host, dhost, src_ip, user, "RTP Disabled Since"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
