@@ -14,3 +14,6 @@ Documentation Changes Required
 - Data collection for MSAD Health Check logs and ActiveDirectory logs
 - Security logs only in plain text format (for 4 alerts of AD Changes)
 
+
+---- CY-206-Enhancement-Antivirus Panel------
+> Adding realtime status of Antivirus on hosts
