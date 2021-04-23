@@ -426,17 +426,6 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
-      <table>
-        <title>Other Windows Defender Events (TODO - Need to recheck this query)</title>
-        <search>
-          <query>`cs_windows_defender` EventCode!="1151" host=$tkn_filter_host_only$ | fields _time, EventCode, EventCodeDescription, host, Platform_version, Current_Engine_Version, Current_Signature_Version, Current_security_intelligence_Version, Domain, Error_Code, Error_Description, Old_Value, New_Value, Feature_Name, Action_Type, Persistence_Path, Policy_Rule_Id, Policy_Version, Process, Scan_ID, Scan_Parameter, Scan_Type, Source, Source_Path, Target, Update_State, Update_Type, User 
-| stats latest(_time) as _time, latest(EventCodeDescription) as EventCodeDescription, values(*) as * by host, EventCode</query>
-          <earliest>$tkn_timeRange_av_windefender.earliest$</earliest>
-          <latest>$tkn_timeRange_av_windefender.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
     </panel>
   </row>
 </form>
