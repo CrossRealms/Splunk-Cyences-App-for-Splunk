@@ -148,6 +148,27 @@
       </table>
     </panel>
   </row>
+  <row depends="$tkn_show_hide_qualys$">
+    <panel>
+      <title>Network Traffic from Vulnerable Ports (Detected from Qualys)</title>
+      <input type="time" token="tkn_timeRange_qualys">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <viz type="missile_map.missile_map">
+        <search>
+          <query>| tstats count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP=$tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | rename All_Traffic.* as * | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 , animate="true" | eval pulse_at_start = if(src_ip==$tkn_filter_ip_only$,"true","false") | eval pulse_at_end = if(dest_ip==$tkn_filter_ip_only$,"true","false") | eval color= "#dc4e41" | iplocation src_ip | rename lat as start_lat, lon as start_lon | iplocation dest_ip | rename lat as end_lat, lon as end_lon | `cs_network_filter_internal_traffic`</query>
+          <earliest>$tkn_timeRange_qualys.earliest$</earliest>
+          <latest>$tkn_timeRange_qualys.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </viz>
+    </panel>
+  </row>
   <row depends="$tkn_show_hide_tenable$">
     <panel>
       <title>Tenable Summary $tkn_filter_ip_host_label$</title>
@@ -193,6 +214,27 @@
           <colorPalette type="map">{"open":#c90000, "reopened":#c90000}</colorPalette>
         </format>
       </table>
+    </panel>
+  </row>
+  <row depends="$tkn_show_hide_tenable$">
+    <panel>
+      <title>Network Traffic from Vulnerable Ports (Detected from Tenable)</title>
+      <input type="time" token="tkn_timeRange_tenable">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <viz type="missile_map.missile_map">
+        <search>
+          <query>| tstats count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$ AND (vul_state="open" OR vul_state="reopened")) | stats count by ip vul_port | search vul_port!=0 | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")" | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | rename All_Traffic.* as * | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 , animate="true" | appendpipe [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$) | fields ip | stats values(ip) as ip] | eventstats values(ip) as ip | eval pulse_at_start = if(isnotnull(mvfind(src_ip, ip)),"true","false") | eval pulse_at_end = if(isnotnull(mvfind(dest_ip, ip)),"true","false")| eval color= "#dc4e41" | iplocation src_ip | rename lat as start_lat, lon as start_lon | iplocation dest_ip | rename lat as end_lat, lon as end_lon | `cs_network_filter_internal_traffic`</query>
+          <earliest>$tkn_timeRange_tenable.earliest$</earliest>
+          <latest>$tkn_timeRange_tenable.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </viz>
     </panel>
   </row>
   <row>
