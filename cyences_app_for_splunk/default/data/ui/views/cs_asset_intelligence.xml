@@ -148,6 +148,27 @@
       </table>
     </panel>
   </row>
+  <row depends="$tkn_show_hide_qualys$">
+    <panel>
+      <title>Network Traffic to/from Vulnerable Ports (Detected from Qualys)</title>
+      <input type="time" token="tkn_timeRange_qualys">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <viz type="missile_map.missile_map">
+        <search>
+          <query>| tstats count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP=$tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port  | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map` | eval pulse_at_start = if(src_ip==$tkn_filter_ip_only$,"true","false") | eval pulse_at_end = if(dest_ip==$tkn_filter_ip_only$,"true","false") | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
+          <earliest>$tkn_timeRange_qualys.earliest$</earliest>
+          <latest>$tkn_timeRange_qualys.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </viz>
+    </panel>
+  </row>
   <row depends="$tkn_show_hide_tenable$">
     <panel>
       <title>Tenable Summary $tkn_filter_ip_host_label$</title>
@@ -193,6 +214,27 @@
           <colorPalette type="map">{"open":#c90000, "reopened":#c90000}</colorPalette>
         </format>
       </table>
+    </panel>
+  </row>
+  <row depends="$tkn_show_hide_tenable$">
+    <panel>
+      <title>Network Traffic to/from Vulnerable Ports (Detected from Tenable)</title>
+      <input type="time" token="tkn_timeRange_tenable">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <viz type="missile_map.missile_map">
+        <search>
+          <query>| tstats count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$ AND (vul_state="open" OR vul_state="reopened") AND vul_port!=0) | stats count by ip vul_port  | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")" | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1| `cs_network_animate_traffic_map` | appendpipe [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$) | fields ip | stats values(ip) as ip] | eventstats values(ip) as ip | eval pulse_at_start = if(isnotnull(mvfind(src_ip, ip)),"true","false") | eval pulse_at_end = if(isnotnull(mvfind(dest_ip, ip)),"true","false")| eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | `cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon </query>
+          <earliest>$tkn_timeRange_tenable.earliest$</earliest>
+          <latest>$tkn_timeRange_tenable.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </viz>
     </panel>
   </row>
   <row>
@@ -338,10 +380,9 @@
       <table>
         <title>Endpoint Service Not Running</title>
         <search>
-          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, type
-| eval ServiceDisabled = if(type="Event::Endpoint::ServiceNotRunning", _time, 0), ServiceEnabled = if(type="Event::Endpoint::ServiceRestored", _time, 0)
-| where ServiceDisabled&gt;ServiceEnabled
-| eval "Service Disabled Since"=strftime(ServiceDisabled, "%F %T")
+          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+| where type=="Event::Endpoint::ServiceNotRunning"
+| eval "Service Disabled Since"=strftime(_time, "%F %T")
 | table host, src_ip, user, "Service Disabled Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -352,10 +393,9 @@
       <table>
         <title>Real-Time Protection Disabled</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Sav*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, type
-| eval RTPDisabled = if(type="Event::Endpoint::SavDisabled", _time, 0), RTPEnabled = if(type="Event::Endpoint::SavEnabled", _time, 0)
-| where RTPDisabled&gt;RTPEnabled
-| eval "RTP Disabled Since"=strftime(RTPDisabled, "%F %T")
+          <query>`cs_sophos` type="Event::Endpoint::Sav*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+| where type=="Event::Endpoint::SavDisabled"
+| eval "RTP Disabled Since"=strftime(_time, "%F %T")
 | table host, src_ip, user, "RTP Disabled Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -366,10 +406,9 @@
       <table>
         <title>Endpoints in Isolation</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Isolation::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, type
-| eval EndpointIsolated = if(type="Event::Endpoint::Isolation::Isolated", _time, 0), EndpointUnIsolated = if(type="Event::Endpoint::Isolation::UnIsolated", _time, 0)
-| where EndpointIsolated&gt;EndpointUnIsolated
-| eval "In Isolation Since"=strftime(EndpointIsolated, "%F %T")
+          <query>`cs_sophos` type="Event::Endpoint::Isolation::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) by host
+| where type=="Event::Endpoint::Isolation::Isolated"
+| eval "In Isolation Since"=strftime(_time, "%F %T")
 | table host, src_ip, user, "In Isolation Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -380,10 +419,9 @@
       <table>
         <title>Endpoints Suspended from Central Management</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Management::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, type
-| eval EndpointManagementResumed = if(type="Event::Endpoint::Management::Resumed", _time, 0), EndpointManagementSuspended = if(type="Event::Endpoint::Management::Suspended", _time, 0)
-| where EndpointManagementSuspended&gt;EndpointManagementResumed
-| eval "Suspended from Management Since"=strftime(EndpointManagementSuspended, "%F %T")
+          <query>`cs_sophos` type="Event::Endpoint::Management::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+| where type=="Event::Endpoint::Management::Suspended"
+| eval "Suspended from Management Since"=strftime(_time, "%F %T")
 | table host, src_ip, user, "Suspended from Management Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -417,6 +455,8 @@
         <title>Windows Defender Health Check Event</title>
         <search>
           <query>`cs_windows_defender` EventCode=1151 host=$tkn_filter_host_only$ | dedup host
+| rex field=_raw "&lt;Data Name='RTP\s+state'&gt;(?&lt;RTP_state_cs&gt;[^\&lt;]*)" 
+| eval RTP_state=coalesce(RTP_state_cs,RTP_state) 
 | table _time, host, RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time
 | eval Last_full_scan_start_time=if(Last_full_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_start_time), Last_full_scan_end_time=if(Last_full_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_end_time),  Last_quick_scan_start_time=if(Last_quick_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_start_time), Last_quick_scan_end_time=if(Last_quick_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_end_time)
 | rename AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
