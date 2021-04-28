@@ -2,7 +2,7 @@
   <label>Splunk Admin</label>
   <search id="indexes_search">
     <query>| inputlookup cs_indexes.csv
-| eval last_event=strftime(last_event, "%F %T")
+| `cs_human_readable_time_format(last_event)`
 | table index, last_event, hosts, sourcetypes, status</query>
     <earliest>0</earliest>
     <latest></latest>
@@ -10,7 +10,7 @@
   </search>
   <search id="forwarders_search">
     <query>| inputlookup cs_forwarders.csv
-| eval last_connected=strftime(last_connected, "%F %T")
+| `cs_human_readable_time_format(last_connected)`
 | table hostname, forwarder_type, version, last_connected, os, arch, status</query>
     <earliest>0</earliest>
     <latest></latest>

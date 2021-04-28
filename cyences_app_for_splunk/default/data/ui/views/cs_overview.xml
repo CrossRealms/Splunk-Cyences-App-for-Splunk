@@ -365,7 +365,7 @@
       <table>
         <search>
           <query>| inputlookup cs_malicious_ip_list.csv
-| eval last_seen=strftime(last_seen, "%F %T") 
+| `cs_human_readable_time_format(last_seen)` 
 | table ip, last_seen, ip_location, description</query>
           <earliest>0</earliest>
           <latest></latest>

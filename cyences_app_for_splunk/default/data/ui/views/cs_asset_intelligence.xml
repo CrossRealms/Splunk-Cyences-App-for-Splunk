@@ -382,7 +382,7 @@
         <search>
           <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
 | where type=="Event::Endpoint::ServiceNotRunning"
-| eval "Service Disabled Since"=strftime(_time, "%F %T")
+| `cs_human_readable_time_format(_time, "Service Disabled Since")`
 | table host, src_ip, user, "Service Disabled Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -395,7 +395,7 @@
         <search>
           <query>`cs_sophos` type="Event::Endpoint::Sav*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
 | where type=="Event::Endpoint::SavDisabled"
-| eval "RTP Disabled Since"=strftime(_time, "%F %T")
+| `cs_human_readable_time_format(_time, "RTP Disabled Since")`
 | table host, src_ip, user, "RTP Disabled Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -408,7 +408,7 @@
         <search>
           <query>`cs_sophos` type="Event::Endpoint::Isolation::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) by host
 | where type=="Event::Endpoint::Isolation::Isolated"
-| eval "In Isolation Since"=strftime(_time, "%F %T")
+| `cs_human_readable_time_format(_time, "In Isolation Since")`
 | table host, src_ip, user, "In Isolation Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
@@ -421,7 +421,7 @@
         <search>
           <query>`cs_sophos` type="Event::Endpoint::Management::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
 | where type=="Event::Endpoint::Management::Suspended"
-| eval "Suspended from Management Since"=strftime(_time, "%F %T")
+| `cs_human_readable_time_format(_time, "Suspended from Management Since")`
 | table host, src_ip, user, "Suspended from Management Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>

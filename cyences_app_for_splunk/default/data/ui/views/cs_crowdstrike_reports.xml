@@ -53,7 +53,7 @@
         <search>
           <query>`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent action="allowed" $tkn_host$
 | table event.ComputerName, event.LocalIP, event.UserName, event.DetectDescription, event.DetectName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime 
-| rename event.* as * | eval ProcessStartTime=strftime(ProcessStartTime, "%F %T"), ProcessEndTime=strftime(ProcessEndTime, "%F %T") 
+| rename event.* as * | `cs_human_readable_time_format(ProcessStartTime)` | `cs_human_readable_time_format(ProcessEndTime)` 
 | `cs_crowdstrike_malware_detected_report_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -70,7 +70,7 @@
         <search>
           <query>`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent action="blocked" $tkn_host$
 | table event.ComputerName, event.LocalIP, event.UserName, event.DetectDescription, event.DetectName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime 
-| rename event.* as * | eval ProcessStartTime=strftime(ProcessStartTime, "%F %T"), ProcessEndTime=strftime(ProcessEndTime, "%F %T") 
+| rename event.* as * | `cs_human_readable_time_format(ProcessStartTime)` | `cs_human_readable_time_format(ProcessEndTime)` 
 | `cs_crowdstrike_malware_prevented_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>

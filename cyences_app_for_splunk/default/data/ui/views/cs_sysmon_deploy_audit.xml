@@ -73,7 +73,7 @@
       <title>Sysmon is Installed but Splunk Unable to Read Symon Logs</title>
       <table>
         <search>
-          <query>index=_internal sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | eval last_error=strftime(last_error, "%F %T")
+          <query>index=_internal sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | `cs_human_readable_time_format(last_error)`
 | append [search `cs_sysmon_deploy_audit_data` "*No updates found*" earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
 | stats last(*) as * by host
 | search event_message=* ta_sysmon_deploy_status=*

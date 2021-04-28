@@ -38,7 +38,7 @@
       <table>
         <search>
           <query>| savedsearch "Palo Alto Firewall - Network Compromise - DDoS Attack Prevented"
-| eval last_seen=strftime(last_seen, "%F %T")
+| `cs_human_readable_time_format(last_seen)`
 | fields - dc_src_port</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -80,7 +80,7 @@
       <table>
         <search>
           <query>| savedsearch "Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs"
-| eval last_seen=strftime(last_seen, "%F %T")
+| `cs_human_readable_time_format(last_seen)`
 | fields - dc_dvc_name, dc_src_port, packets_in, packets_out, dc_dest_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -102,7 +102,7 @@
       <table>
         <search>
           <query>| savedsearch "Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs"
-| eval last_seen=strftime(last_seen, "%F %T")
+| `cs_human_readable_time_format(last_seen)`
 | fields - dc_dvc_name, dc_dest_port, packets_in, packets_out, dc_src_location, app, http_category, firewall_rule, blocked</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>

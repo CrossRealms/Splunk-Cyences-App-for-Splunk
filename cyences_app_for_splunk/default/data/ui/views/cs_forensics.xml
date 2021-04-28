@@ -27,7 +27,7 @@
           <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ 
           | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
           | rename * AS X_*_NEW | foreach X_*_NEW [ eval &lt;&lt;MATCHSTR&gt;&gt;=&lt;&lt;FIELD&gt;&gt; ] | fields - X_*_NEW 
-          | rename orig_* as * | table _time, *</query>
+          | rename orig_* as * | `cs_human_readable_time_format(_time, alert_time)` | table alert_time, event_tim*, *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
