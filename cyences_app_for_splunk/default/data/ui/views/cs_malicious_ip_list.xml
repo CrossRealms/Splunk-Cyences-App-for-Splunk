@@ -3,7 +3,7 @@
   <search id="search_list">
     <query>| inputlookup cs_malicious_ip_list.csv
 | addinfo | where (info_min_time="-Infinity" OR last_seen&gt;=info_min_time) AND (info_max_time="+Infinity" OR last_seen&lt;=info_max_time)
-| eval last_seen=strftime(last_seen, "%F %T") 
+| `cs_human_readable_time_format(last_seen)` 
 | table ip, last_seen, ip_location, description  | fillnull value="-" description,ip_location</query>
     <earliest>$tkn_last_seen.earliest$</earliest>
     <latest>$tkn_last_seen.latest$</latest>
