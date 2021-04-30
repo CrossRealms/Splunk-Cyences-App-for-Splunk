@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.3.0
+* Version - 1.4.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,23 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.4.0 (May 2021)
+* Asset Intelligence dashboard added. (See documentation section `Asset Intelligence Dashboard` for details.)
+* Added Active Directory related alerts and reports: Group Changes, Group Policy Changes, User Changes, User Locked Out Events (See `Windows WinEventLog` and `Windows Active Directory Logs` section in the documentation for data collection.)
+* Added more reports and alerts for Office 365.* Alert updated to support time-based filtering. (See `Filter Macros` in the documentation for more details.)
+* Enhancements:
+  * Improved Antivirus visibility on the `Overview` dashboard. Now Overview page shows disabled/stopped endpoint service and real-time protection.
+  * Updated drilldown on the `Device Master Table`.
+  * Improved filters on `Globally Detected Malicious IPs` dashboard.
+* Issues Fixed:
+  * The `Device Master Table` dashboard's Sophos drilldown issue fixed.
+  * Malicious Ip lookup gen and upload malicious IP commands fixed for interpolation issue in python.
+
+
+Upgrade Guide from Version 1.3.0 to 1.4.0
+* N/A (See Release notes for version 1.4.0)
+
+
 Version 1.3.0 (April 2021)
 * Added support for Lansweeper On-prem. (Support with only Lansweeper Add-on version 1.1.0.)
 * Added dashboard for Sysmon Deployment Audit under Settings section in the App navigation.
