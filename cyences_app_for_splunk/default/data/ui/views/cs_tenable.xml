@@ -1,4 +1,4 @@
-<form theme="dark" script="cs_tenable.js">
+<form theme="dark" script="cs_tenable.js,cs_dmt_tenable.js">
   <init>
     <set token="tkn_ip">()</set>
     <set token="tkn_host">()</set>
