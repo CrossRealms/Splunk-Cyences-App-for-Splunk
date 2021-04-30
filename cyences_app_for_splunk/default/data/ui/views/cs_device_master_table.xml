@@ -73,7 +73,8 @@
         </drilldown>
       </single>
       <html>
-        <p><b>Description</b>: The total amount of devices detected.</p>
+        <p>
+          <b>Description</b>: The total amount of devices detected.</p>
         <p>---------------------------------------------------------------------------------------------------------------------------------</p>
         <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Master Table. Click on the number above to reset the filter.</p>
       </html>
@@ -113,7 +114,8 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: The total amount of devices that are connected to a particular security component.</p>
+        <p>
+          <b>Description</b>: The total amount of devices that are connected to a particular security component.</p>
       </html>
     </panel>
   </row>
@@ -147,7 +149,8 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: No. of devices connected with given connectivity. Lansweeper -&gt; Device present in Lansweeper. Vulnerability Scanner -&gt; Device has any of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has any of the antivirus (Sophos, Defender, CrowdStrike). All -&gt; Lansweeper, Vulnerability Scanner and Antivirus present.</p>
+        <p>
+          <b>Description</b>: No. of devices connected with given connectivity. Lansweeper -&gt; Device present in Lansweeper. Vulnerability Scanner -&gt; Device has any of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has any of the antivirus (Sophos, Defender, CrowdStrike). All -&gt; Lansweeper, Vulnerability Scanner and Antivirus present.</p>
       </html>
     </panel>
     <panel>
@@ -176,7 +179,8 @@
         </drilldown>
       </chart>
       <html>
-        <p><b>Description</b>: No. of devices not connected with given connectivity. Lansweeper -&gt; Device not present in Lansweeper. Vulnerability Scanner -&gt; Device has none of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has none of the antivirus (Sophos, Defender, CrowdStrike).</p>
+        <p>
+          <b>Description</b>: No. of devices not connected with given connectivity. Lansweeper -&gt; Device not present in Lansweeper. Vulnerability Scanner -&gt; Device has none of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has none of the antivirus (Sophos, Defender, CrowdStrike).</p>
       </html>
     </panel>
   </row>
@@ -233,8 +237,9 @@
       </input>
       <table>
         <search base="base_master_table">
-          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
+        <fields>host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
@@ -265,7 +270,39 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.user$</link>
+          <condition match="'click.name2'==&quot;lansweeper_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_lansweeper?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.lansweeper_user$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;qualys_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;ACTIVE&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;TOTAL_VULNS&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;tenable_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;active_vuln&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;total_vuln&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;sophos_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.tkn_user=$row.sophos_user$&amp;form.tkn_dhost=$row.host$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;defender_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.tkn_host=$row.host$</link>
+          </condition>
+          <condition match="'click.name2'==&quot;crowdstrike_status&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_crowdstrike_reports?form.tkn_host=$row.host$</link>
+          </condition>
+          <condition>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.user$</link>
+          </condition>
         </drilldown>
       </table>
       <html>
