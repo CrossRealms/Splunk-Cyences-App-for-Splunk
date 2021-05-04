@@ -17,16 +17,31 @@
         <latest>now</latest>
       </default>
     </input>
+    <input type="dropdown" token="tkn_host">
+      <label>O365 Data Collection Host</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>| tstats count where `cs_o365` by host</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+      <prefix>host="</prefix>
+      <suffix>"</suffix>
+    </input>
   </fieldset>
   <row>
     <panel>
       <html>
         <p>Office 365 Reports</p>
-        <p><b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.</p>
+        <p>
+          <b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.</p>
       </html>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" | table label, data</query>
+          <query>`cs_o365` sourcetype="o365:management:activity"  $tkn_host$| head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -40,10 +55,52 @@
   </row>
   <row>
     <panel>
+      <title>Office 365: Service Status</title>
+      <!-- Service Status Reference - https://docs.microsoft.com/en-us/dotnet/api/microsoft.exchange.servicestatus.tenantcommunications.data.servicestatus?view=o365-service-communications -->
+      <table id="my_table_with_default_sort">
+        <search>
+          <query>`cs_o365` sourcetype="o365:service:status" $tkn_host$ source="*CurrentStatus"
+| stats latest(Status) as Status latest(_time) as _time by WorkloadDisplayName host 
+| rename _time as "LastUpdatedTime" 
+| convert ctime(LastUpdatedTime) as LastUpdatedTime 
+| table LastUpdatedTime host Work* Status 
+| sort host Status 
+| eval Status_temp=Status
+| eval Status=case(Status_temp=="ServiceInterruption",0,Status_temp=="ServiceDegradation",1,Status_temp=="RestoringService",2,Status_temp=="ExtendedRecovery",3,Status_temp=="Investigating",4,Status_temp=="ServiceRestored",5,Status_temp=="FalsePositive",6,Status_temp=="PostIncidentReviewPublished",7,Status_temp=="InformationUnavailable",8,Status_temp=="ServiceOperational",99) 
+| fieldformat  Status=Status_temp</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <fields>LastUpdatedTime,host,WorkloadDisplayName, Status</fields>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="Status">
+          <colorPalette type="map">{"ServiceOperational":#499547,"ServiceDegradation":#DC4E41,"RestoringService":#F8BE34,"FalsePositive":#006D9C,"Investigating":#F1813F,"ServiceRestored":#4FA484,"InformationAvailable":#E86DD3,"PIRPublished":#E86DD3}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>O365 :  Activity Over World (Unique Users)</title>
+      <map>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity"  $tkn_host$| iplocation ClientIP | geostats latfield=lat longfield=lon dc(UserId)  by Workload</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Office 365/Azure - Successful Logins Outside $tkn_country$</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* | iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* $tkn_host$| iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -53,7 +110,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -62,7 +120,7 @@
       <title>Office 365/Azure - Failed Logins Outside of $tkn_country$</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed | iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$| iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -72,7 +130,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -81,7 +140,7 @@
       <title>Office 365/Azure - Login from Unknown UserId</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown | iplocation ClientIP | `cs_human_readable_time_format(_time, time)` | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn UserId=Unknown $tkn_host$| iplocation ClientIP | `cs_human_readable_time_format(_time, time)` | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -93,6 +152,44 @@
         <p>
           <b>Description:</b> Successful logins by an unknown user ID.</p>
       </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>External Users Added to Teams</title>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=MicrosoftTeams Operation=MemberAdded Members{}.UPN=*\#ext\#* $tkn_host$
+| rename Members{}.UPN AS memberUpn 
+| eval memberUpn =lower(memberUpn) 
+| rex field=memberUpn "(?&lt;email&gt;.*)\#ext\#" 
+| rex mode=sed field=email "s/_(?!.*_)/@/g" 
+| rex field=email "@(?&lt;target_domain&gt;.*)" 
+| stats count by memberUpn 
+| table memberUpn | rename memberUpn as "External Users"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>O365 : Security &amp; Compliance Center: Alert Details</title>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype=o365:management:activity  Workload=SecurityComplianceCenter Operation=AlertTriggered $tkn_host$
+| dedup AlertId
+| rex field=Data "\"(?&lt;email&gt;[\w\d\.\-]+\@[\w\d\.]+)\""
+| stats count by _time, Severity, Status, email, Name, Comments, Category, AlertType, Data | fields - count
+| sort -_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
     </panel>
   </row>
 </form>

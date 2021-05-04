@@ -67,6 +67,8 @@ require([
         { macro_name: 'cs_o365_login_by_unknown_userid_filter', input_id: 'macro_cs_o365_login_by_unknown_userid_filter', button_id: 'macro_cs_o365_login_by_unknown_userid_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_dlp_exchange_filter', input_id: 'macro_cs_o365_dlp_exchange_filter', button_id: 'macro_cs_o365_dlp_exchange_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_dlp_sharepoint_filter', input_id: 'macro_cs_o365_dlp_sharepoint_filter', button_id: 'macro_cs_o365_dlp_sharepoint_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_external_users_filter', input_id: 'macro_cs_o365_external_users_filter', button_id: 'macro_cs_o365_external_users_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_service_not_operational_filter', input_id: 'macro_cs_o365_service_not_operational_filter', button_id: 'macro_cs_o365_service_not_operational_filter_button', msg_id: 'macro_o365_msg'},
 
         /* Network */
         { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_network_msg'},
