@@ -1,12 +1,14 @@
-# This is a basic workflow to generate build on latest master
+# This is a basic workflow to generate build
 name: "pre-release"
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for every branch
 on:
   push:
     branches:
-      - "master"
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
 
 jobs:
   pre-release:
@@ -19,9 +21,14 @@ jobs:
         run: |
           echo "Started generating build."
       
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ steps.extract_branch.outputs.branch }}
           path: repodir
             
       - name: "Generate Build"
