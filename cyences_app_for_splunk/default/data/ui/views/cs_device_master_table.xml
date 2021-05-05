@@ -13,11 +13,23 @@
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
 | eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
 | eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
+| eval tmp_lansweeper_status = lansweeper_status, lansweeper_status=case(tmp_lansweeper_status=="Non-active",1,tmp_lansweeper_status=="Active",0) 
+| fieldformat lansweeper_status=tmp_lansweeper_status 
 | eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
+| eval tmp_qualys_status = qualys_status, qualys_status=case(tmp_qualys_status == "Red", 3,tmp_qualys_status=="Orange",2, tmp_qualys_status=="Yellow",1, tmp_qualys_status=="Green",0) 
+| fieldformat qualys_status=tmp_qualys_status 
 | eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
+| eval tmp_tenable_status = tenable_status, tenable_status=case(tmp_tenable_status == "Red", 3,tmp_tenable_status=="Orange",2, tmp_tenable_status=="Yellow",1, tmp_tenable_status=="Green",0) 
+| fieldformat tenable_status=tmp_tenable_status 
 | eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
+| eval tmp_defender_status = defender_status, defender_status=case(tmp_defender_status == "Enabled", 0,tmp_defender_status=="Disabled",1,true(),tmp_defender_status) 
+| fieldformat defender_status=tmp_defender_status 
 | eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status)
-| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")</query>
+| eval tmp_sophos_status = sophos_status, sophos_status=case(tmp_sophos_status == "RTP Enabled", 0,tmp_sophos_status=="RTP Disabled",1,tmp_sophos_status=="Service not Running",2) 
+| fieldformat sophos_status=tmp_sophos_status 
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
+| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike_status=case(tmp_crowdstrike_status == "Present", 0)
+| fieldformat crowdstrike_status=tmp_crowdstrike_status</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -237,7 +249,7 @@
       </input>
       <table>
         <search base="base_master_table">
-          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_*| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
         <fields>host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="drilldown">cell</option>
