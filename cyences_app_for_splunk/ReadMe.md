@@ -49,7 +49,8 @@ RELEASE NOTES
 Version 1.4.0 (May 2021)
 * Asset Intelligence dashboard added. (See documentation section `Asset Intelligence Dashboard` for details.)
 * Added Active Directory related alerts and reports: Group Changes, Group Policy Changes, User Changes, User Locked Out Events (See `Windows WinEventLog` and `Windows Active Directory Logs` section in the documentation for data collection.)
-* Added more reports and alerts for Office 365.* Alert updated to support time-based filtering. (See `Filter Macros` in the documentation for more details.)
+* Added more reports and alerts for Office 365: Service Status & Service not Operational Alert, Activity Over World, External Users Added to Teams
+* Alert updated to support time-based filtering. (See `Filter Macros` in the documentation for more details.)
 * Enhancements:
   * Improved Antivirus visibility on the `Overview` dashboard. Now Overview page shows disabled/stopped endpoint service and real-time protection.
   * Updated drilldown on the `Device Master Table`.
