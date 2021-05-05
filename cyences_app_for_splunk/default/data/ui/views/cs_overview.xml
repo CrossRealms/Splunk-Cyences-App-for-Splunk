@@ -208,7 +208,7 @@
     | stats latest(Status) as Status latest(_time) as _time by WorkloadDisplayName host 
     | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
     | stats count as Count
-    | eval Name="O365 Service is not Operational"]</query>
+    | eval Name="Currently not Operations O365 Services"]</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -225,7 +225,7 @@
         </format>
         <fields>["Name","Count"]</fields>
         <drilldown>
-          <condition match="'row.Name'==&quot;O365 Service is not Operational&quot;">
+          <condition match="'row.Name'==&quot;Currently not Operations O365 Services&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition>
