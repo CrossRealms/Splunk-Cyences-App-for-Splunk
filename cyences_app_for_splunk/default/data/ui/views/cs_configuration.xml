@@ -674,6 +674,24 @@
               <button id="macro_cs_o365_dlp_sharepoint_filter_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_external_users_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_external_users_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_external_users_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_service_not_operational_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_service_not_operational_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_service_not_operational_filter_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
       <html>

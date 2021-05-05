@@ -201,7 +201,14 @@
       <title>Office 365</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("O365")`</query>
+          <query>| `cs_filter_savedsearches("O365")` 
+| rename "Notable Events" as Count 
+| append 
+    [| search `cs_o365` sourcetype="o365:service:status" source="*current*"  earliest=$timeRange.earliest$ latest=$timeRange.latest$
+    | stats latest(Status) as Status latest(_time) as _time by WorkloadDisplayName host 
+    | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
+    | stats count as Count
+    | eval Name="Currently not Operational O365 Services"]</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -212,13 +219,18 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
+        <format type="color" field="Count">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Notable Events"]</fields>
+        <fields>["Name","Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <condition match="'row.Name'==&quot;Currently not Operational O365 Services&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          </condition>
+          <condition>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          </condition>
         </drilldown>
       </table>
     </panel>
