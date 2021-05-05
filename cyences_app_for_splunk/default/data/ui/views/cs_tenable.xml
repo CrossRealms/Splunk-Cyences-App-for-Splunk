@@ -19,8 +19,8 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> The tenable data are necessary to collect the vulnerability scan results and host summaries via the <a href="https://splunkbase.splunk.com/app/4060/" target="_blank">Tenable Add-On for Splunk</a>.</p>
-        <p>Data check in below table is from last 7 days. Data in the main table of the dashboard is being loaded from the KV store lookup.</p>
+        <p><b>Data Collection:</b> Tenable data is necessary to collect the vulnerability scan results and host summaries. This data can be acquired via the <a href="https://splunkbase.splunk.com/app/4060/" target="_blank">Tenable Add-On for Splunk</a>.</p>
+        <p>The data check for the table below is for the last seven days. The data for this table is loaded from the KV store lookup.</p>
       </html>
       <table>
         <search>
@@ -83,7 +83,7 @@
         </format>
       </table>
       <html>
-        <p>Expand the row to see all vulnerabilities on the hosts.</p>
+        <p>Expand each row to view all vulnerabilities related to a specific host.</p>
       </html>
     </panel>
   </row>

@@ -86,11 +86,15 @@
   <row>
     <panel>
       <html>
-        <p>This dashboard shows information about all the assets in the environment and also show whether that asset is sending required security logs to Splunk or not. You can use this dashboard for security auditing. Data Availability will be color coded: Red (data not available) and Green (data available).</p>
+        <p>This dashboard displays information about every asset that's present in the environment and helps determine if the assets are sending the required security logs to Splunk or not. This dashboard can be used for security auditing.</p>
         <p>
-          <b>Data Collection:</b> The lansweeper asset data are necessary, collect the data via the <a href="https://splunkbase.splunk.com/app/5418/" target="_blank">Lansweeper Add-on for Splunk</a>.</p>
-        <p>Timerange for searches: Lansweeper - last 4 hours, WinEventLogs(Security &amp; System) - last 4 hours, Sysmon - last 4 hours, Qualys - last 7 days, Tenable - Not specific time-range (Data from lookups)</p>
-        <p>Some searches could be slow due to amount of data it is trying to search.</p>
+          <b>Data Collection:</b> Lansweeper asset data is collected via the <a href="https://splunkbase.splunk.com/app/5418/" target="_blank">Lansweeper Add-on for Splunk</a>.</p>
+        <p>The time range for the following searches is as follows:</p>
+        <ul>
+          <li>Last four hours - Lansweeper, Sysmon, and WinEventLog (security and system)</li>
+          <li>Last seven days - Qualys</li>
+          <li>Tenable does not have a specified time range, since the data is pulled from lookups.</li>
+        </ul>
       </html>
     </panel>
   </row>
@@ -368,7 +372,7 @@
         </drilldown>
       </table>
       <html>
-        <p>Note - OS for VMware Guests are determined based on Qualys or Tenable data as we don't have Opertaring System information from the Lansweeper data. Keep in mind the same note for "VMware Guests - Windows" and "VMware Guests - Linux" panels.</p>
+        <p>Note - Operating systems for VMWare Guests are determined by Qualys or Tenable data, since in some cases Lansweeper do not identify OS information. This also applies for the "VMWare Guests – Windows" and "VMWare Guests – Linux" dashboard panels.</p>
       </html>
     </panel>
   </row>

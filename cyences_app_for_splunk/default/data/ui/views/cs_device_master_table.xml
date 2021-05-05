@@ -47,8 +47,8 @@
   </search>
   <search id="base_summary">
     <query>| inputlookup cs_device_master_table
-| stats count as Total, sum(eval(if(lansweeper_last_event&gt;0, 1, 0))) as Lansweeper, sum(eval(if(qualys_last_event&gt;0, 1, 0))) as Qualys, sum(eval(if(tenable_last_event&gt;0, 1, 0))) as Tenable, sum(eval(if(defender_last_event&gt;0, 1, 0))) as Defender, sum(eval(if(sophos_last_event&gt;0, 1, 0))) as Sophos, sum(eval(if(crowdstrike_last_event&gt;0, 1, 0))) as Crowdstrike, sum(eval(if(lansweeper_last_event&gt;0 AND qualys_last_event&gt;0, 1, 0))) as lansweeper_qualys, sum(eval(if(lansweeper_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as lansweeper_tenable, sum(eval(if(lansweeper_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as lansweeper_defender, sum(eval(if(lansweeper_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as lansweeper_sophos, sum(eval(if(lansweeper_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as lansweeper_crowdstrike, sum(eval(if(qualys_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as qualys_tenable, sum(eval(if(qualys_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as qualys_sophos, sum(eval(if(qualys_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as qualys_defender, sum(eval(if(qualys_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as qualys_crowdstrike, sum(eval(if(tenable_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as tenable_sophos, sum(eval(if(tenable_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as tenable_defender, sum(eval(if(tenable_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as tenable_crowdstrike, sum(eval(if(sophos_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as sophos_defender, sum(eval(if(sophos_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as sophos_crowdstrike, sum(eval(if(defender_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as defender_crowdstrike, sum(eval(if(((lansweeper_last_event&gt;0) AND (tenable_last_event&gt;0 OR qualys_last_event&gt;0) AND (sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0)), 1, 0))) as All, sum(eval(if((tenable_last_event&gt;0 OR qualys_last_event&gt;0), 1, 0))) as Vulnerability_Scanner, sum(eval(if((sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0), 1, 0))) as Antivirus
-| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_Crowdstrike=Total-Crowdstrike, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
+| stats count as Total, sum(eval(if(lansweeper_last_event&gt;0, 1, 0))) as Lansweeper, sum(eval(if(qualys_last_event&gt;0, 1, 0))) as Qualys, sum(eval(if(tenable_last_event&gt;0, 1, 0))) as Tenable, sum(eval(if(defender_last_event&gt;0, 1, 0))) as Defender, sum(eval(if(sophos_last_event&gt;0, 1, 0))) as Sophos, sum(eval(if(crowdstrike_last_event&gt;0, 1, 0))) as CrowdStrike, sum(eval(if(lansweeper_last_event&gt;0 AND qualys_last_event&gt;0, 1, 0))) as lansweeper_qualys, sum(eval(if(lansweeper_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as lansweeper_tenable, sum(eval(if(lansweeper_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as lansweeper_defender, sum(eval(if(lansweeper_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as lansweeper_sophos, sum(eval(if(lansweeper_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as lansweeper_crowdstrike, sum(eval(if(qualys_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as qualys_tenable, sum(eval(if(qualys_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as qualys_sophos, sum(eval(if(qualys_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as qualys_defender, sum(eval(if(qualys_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as qualys_crowdstrike, sum(eval(if(tenable_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as tenable_sophos, sum(eval(if(tenable_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as tenable_defender, sum(eval(if(tenable_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as tenable_crowdstrike, sum(eval(if(sophos_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as sophos_defender, sum(eval(if(sophos_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as sophos_crowdstrike, sum(eval(if(defender_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as defender_crowdstrike, sum(eval(if(((lansweeper_last_event&gt;0) AND (tenable_last_event&gt;0 OR qualys_last_event&gt;0) AND (sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0)), 1, 0))) as All, sum(eval(if((tenable_last_event&gt;0 OR qualys_last_event&gt;0), 1, 0))) as Vulnerability_Scanner, sum(eval(if((sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0), 1, 0))) as Antivirus
+| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -95,7 +95,7 @@
       <chart>
         <title>Number of Devices That Are Connected To A Specific Security Component</title>
         <search base="base_summary">
-          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, Crowdstrike</query>
+          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, CrowdStrike</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
@@ -117,7 +117,7 @@
           <condition match="$click.name2$ == &quot;Defender&quot;">
             <set token="tkn_sp_filter">defender_last_event=*</set>
           </condition>
-          <condition match="$click.name2$ == &quot;Crowdstrike&quot;">
+          <condition match="$click.name2$ == &quot;CrowdStrike&quot;">
             <set token="tkn_sp_filter">crowdstrike_last_event=*</set>
           </condition>
           <condition>
@@ -162,7 +162,7 @@
       </chart>
       <html>
         <p>
-          <b>Description</b>: No. of devices connected with given connectivity. Lansweeper -&gt; Device present in Lansweeper. Vulnerability Scanner -&gt; Device has any of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has any of the antivirus (Sophos, Defender, CrowdStrike). All -&gt; Lansweeper, Vulnerability Scanner and Antivirus present.</p>
+          <b>Description</b>: Each bar represents the total number of devices that are connected to a particular security component. The Lansweeper bar displays the number of devices that have Lansweeper. The Vulnerability Scanner bar displays the number of devices that have either Qualys or Tenable. The Antivirus bar displays the number of devices that have CrowdStrike, Defender, or Sophos.</p>
       </html>
     </panel>
     <panel>
@@ -192,7 +192,7 @@
       </chart>
       <html>
         <p>
-          <b>Description</b>: No. of devices not connected with given connectivity. Lansweeper -&gt; Device not present in Lansweeper. Vulnerability Scanner -&gt; Device has none of the vulnerability scanner (Qualys or Tenable). Antivirus -&gt; Device has none of the antivirus (Sophos, Defender, CrowdStrike).</p>
+          <b>Description</b>: Each bar represents the total number of devices that lack a particular security component. The Lansweeper bar displays the number of devices where Lansweeper is absent. The Vulnerability Scanner displays the number of devices where Qualys or Tenable are absent. The Antivirus bar displays the number of devices that lack the following antivirus software: CrowdStrike, Defender, and Sophos.</p>
       </html>
     </panel>
   </row>
@@ -318,10 +318,22 @@
         </drilldown>
       </table>
       <html>
-        <p>"-"(hyphen) means data not present in that category for that host.</p>
-        <p>Table will automatically hide columns for which no device has data.</p>
-        <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
-        <p>Tenable Status: Red if there is any critical active severity vulnerability, Orange if there is any high active severity vulnerability, Yellow if there is any medium active severity vulnerability, Green if there is no critical, high or medium active vulnerabilities present.</p>
+        <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
+        <p>The Device Master Table will automatically hide columns for devices that lack a certain type of data.</p>
+        <p>Qualys Status</p>
+        <ul>
+          <li>Red = Urgent severity (level 5)</li>
+          <li>Orange = Critical severity (level 4)</li>
+          <li>Yellow = Serious severity (level 3)</li>
+          <li>Green = No active vulnerabilities</li>
+        </ul>
+        <p>Tenable Status</p>
+        <ul>
+          <li>Red = Urgent severity</li>
+          <li>Orange = High severity</li>
+          <li>Yellow = Medium severity</li>
+          <li>Green = No active vulnerabilities</li>
+        </ul>
       </html>
     </panel>
   </row>

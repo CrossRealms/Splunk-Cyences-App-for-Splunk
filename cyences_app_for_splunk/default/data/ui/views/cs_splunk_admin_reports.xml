@@ -20,11 +20,11 @@
   <row>
     <panel>
       <html>
-        <p>Shows information which is important for security and overall health of the Splunk environment.</p>
-        <p>Alerts "Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" has to be enabled in order to populate this dashboard.</p>
-        <p>Both alerts update the information every hour.</p>
-        <p>Data on the Overview page might not match with the data in this dashboard if you have filtered any forwarders or indexes with macros cs_splunk_admin_missing_forwarders_filter or cs_splunk_admin_missing_indexes_filter. This dashboard shows all the indexes and forwarders.</p>
-        <p>To remove any forwarder or index from the list visit "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section from the <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">documentation</a>.</p>
+        <p>Displays information which is important for security, as well as the overall health of the Splunk environment.</p>
+        <p>Both the "Splunk Admin - Missing Data in the Index" and "Splunk Admin – Missing Forwarder" alerts have to be enabled beforehand in order to populate this dashboard.</p>
+        <p>Both alerts are updated every hour.</p>
+        <p>Data from the Overview page might not match with the data in the Splunk Admin dashboard if any filtering has taken place on forwarders or indexers with either the cs_splunk_admin_missing_forwarders or cs_splunk_admin_missing_indexes_filter macros. This dashboard displays all forwarders and indexes found in your Splunk environment.</p>
+        <p>To remove a forwarder or index from this list, visit the "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section found <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">here</a>.</p>
       </html>
       <table>
         <search>
@@ -68,7 +68,7 @@
         </drilldown>
       </table>
       <html>
-        <p>Information updated hourly basis.</p>
+        <p>The information is updated on an hourly basis.</p>
       </html>
     </panel>
   </row>
@@ -127,7 +127,7 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Information updated hourly basis.</p>
+        <p>The information is updated on an hourly basis.</p>
       </html>
     </panel>
   </row>

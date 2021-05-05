@@ -39,8 +39,8 @@
         <default>OR</default>
       </input>
       <html>
-        <p>Use * (wildcard) if you are not sure of complete usename. Like, *pcarter*, will match with usernames like 'pcarter', 'CRAD\pcarter', 'pcarter_admin', etc.</p>
-        <p>Try not to use wildcard in IP address or Hostname to see acurate and complete information in the dashboard.</p>
+        <p>A wildcard (*) can be used if you're uncertain about the spelling for a particular user. For example, *asmith*, will match with the following user names: asmith, desktop\asmith, asmith_admin, etc.</p>
+        <p>Try to avoid using wildcards for both the IP Address and Host Name fields, as it may return less accurate and incomplete information in the dashboard.</p>
       </html>
     </panel>
   </row>
@@ -88,10 +88,8 @@
         </drilldown>
       </table>
       <html>
-        <p>"-"(hyphen) means data not present in that category for that host.</p>
-        <p>Table will automatically hide columns for which no device has data.</p>
-        <p>Qualys Status: Red if there is any severity 5 (Urgent) active vulnerability, Orange if there is any severity 4 (Critical) active vulnerability, Yellow if there is any severity 3 (Serious) active vulnerability, Green if there is no Urgent, Critical or Serious active vulnerabilities present.</p>
-        <p>Tenable Status: Red if there is any critical active severity vulnerability, Orange if there is any high active severity vulnerability, Yellow if there is any medium active severity vulnerability, Green if there is no critical, high or medium active vulnerabilities present.</p>
+        <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
+        <p>The Device Master Table will automatically hide columns for devices that lack a certain type of data.</p>
       </html>
     </panel>
   </row>

@@ -6,8 +6,8 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> The qualys data are necessary to collect the vulnerability scan results and host summaries via the <a href="https://splunkbase.splunk.com/app/2964/" target="_blank">Qualys Technology Add-on (TA) for Splunk</a>.</p>
-        <p>Currently, the App searches for the last 7 days of Qualys data.</p>
+        <p><b>Data Collection:</b> Qualys data is necessary to collect vulnerability scan results and host summaries. This data can be acquired via the <a href="https://splunkbase.splunk.com/app/2964/" target="_blank">Qualys Technology Add-on (TA) for Splunk</a>.</p>
+        <p>Currently, the Cyences app searches through the last seven days of Qualys related data.</p>
       </html>
       <table>
         <search>
@@ -63,7 +63,7 @@
         </format>
       </table>
       <html>
-        <p>Expand the row to see all vulnerabilities on the hosts.</p>
+        <p>Expand each row to view all vulnerabilities related to a specific host.</p>
       </html>
     </panel>
   </row>

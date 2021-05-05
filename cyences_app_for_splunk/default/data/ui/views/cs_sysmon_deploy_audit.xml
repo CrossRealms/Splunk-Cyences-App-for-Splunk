@@ -48,8 +48,8 @@
         </drilldown>
       </table>
       <html>
-        <p>Search tries to check last 24 hours of data to find the status of Sysmon deployment.</p>
-        <p>Click on any host to get Sysmon deloyment status events for troubleshooting.</p>
+        <p>This search checks the last twenty-four hours of data to find the Sysmon deployment status.</p>
+        <p>Click on any host to view Sysmon deployment status related events for further troubleshooting.</p>
       </html>
     </panel>
   </row>
@@ -85,7 +85,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>Searching for errors in last 4 hours. Sysmon is deployed but Splunk is unable to read Logs for some reason. Try restarting Splunk UF on the host. Try checking EventViewer on the host whether Sysmon logs are present under Application Logs > Microsoft > Windows > Sysmon.</p>
+        <p>This search checks for errors in the last four hours. Sysmon is deployed, but Splunk is unable to read the Sysmon logs for some reason. Try restarting Splunk UF on the host to resolve the problem. Also, check EventViewer on the host to see if the Sysmon logs are present under Application Logs > Microsoft > Windows > Sysmon.</p>
       </html>
     </panel>
   </row>
