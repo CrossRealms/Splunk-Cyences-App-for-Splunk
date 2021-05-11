@@ -6,7 +6,7 @@ require([
     if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_master_table") < 0) {
         // Do not load the context menu on the Asset Intelligence dashboard and Device Master Table.
 
-        let MAX_TEXT_SELECTION = 35;
+        let MAX_TEXT_SELECTION = 45;
 
         let dashboard_body = 'div.dashboard-body';
         let contextMenu = '#assetIntelligenceCtxMenu';
@@ -21,7 +21,7 @@ require([
             }
             $(contextMenu).append(link);
             $(contextMenu).css('left', (mouseX - 10)+"px");
-            $(contextMenu).css('top', (mouseY - 10)+"px");
+            $(contextMenu).css('top', (mouseY + 20)+"px");
             $(contextMenu).show();
         }
         function hideContextMenu(){
