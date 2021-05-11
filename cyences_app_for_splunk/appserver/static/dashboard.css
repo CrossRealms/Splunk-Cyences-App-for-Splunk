@@ -26,3 +26,21 @@
     font-weight: bold;
     margin-bottom: 4px;
 }
+
+/* Asset Intelligence Drilldown Link */
+#assetIntelligenceCtxMenu{
+    display:none;
+    z-index:100;
+
+    position:absolute;
+    display:block;
+    left:0px;
+    top:0px;
+    height:20px;
+    padding:5px;
+    margin:0;
+    border:1px solid;
+    background-color:#171D21;
+    font-weight:normal;
+    white-space:nowrap;
+}
