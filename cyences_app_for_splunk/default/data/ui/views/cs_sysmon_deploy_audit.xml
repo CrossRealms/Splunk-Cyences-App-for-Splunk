@@ -4,7 +4,7 @@
   </init>
   <label>Sysmon Deploy Audit</label>
   <search id="base_search">
-    <query>`cs_sysmon_deploy_audit_data` "*No updates found*" | dedup host | table host | eval ta_sysmon_deploy_status="Updated"
+    <query>`cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") | dedup host | table host | eval ta_sysmon_deploy_status="Updated"
 | append [| tstats count where `cs_sysmon` by host| table host | eval data="Present"]
 | stats first(*) as * by host
 | fillnull data value="Absent"
@@ -74,7 +74,7 @@
       <table>
         <search>
           <query>index=_internal sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | `cs_human_readable_time_format(last_error)`
-| append [search `cs_sysmon_deploy_audit_data` "*No updates found*" earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
+| append [search `cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
 | stats last(*) as * by host
 | search event_message=* ta_sysmon_deploy_status=*
 | table host, last_error, event_message</query>
