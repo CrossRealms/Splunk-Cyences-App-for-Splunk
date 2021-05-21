@@ -70,22 +70,49 @@
   </row>
   <row>
     <panel>
-      <title>Sysmon is Installed but Splunk Unable to Read Symon Logs</title>
+      <title>Sysmon Data Collection Releated Errors</title>
+      <input type="time" token="tkn_error_logs_timerange">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="text" token="tkn_host_temp_error_messages">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <set token="tkn_host_error_message">host="*$tkn_host_temp$*"</set>
+        </change>
+      </input>
       <table>
+        <title>Sysmon is Installed but Splunk Unable to Read Symon Logs</title>
         <search>
-          <query>index=_internal sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | `cs_human_readable_time_format(last_error)`
+          <query>index=_internal $tkn_host_error_message$ sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | `cs_human_readable_time_format(last_error)`
 | append [search `cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
 | stats last(*) as * by host
 | search event_message=* ta_sysmon_deploy_status=*
 | table host, last_error, event_message</query>
-          <earliest>-4h@m</earliest>
-          <latest>now</latest>
+          <earliest>$tkn_error_logs_timerange.earliest$</earliest>
+          <latest>$tkn_error_logs_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <title>Error in Sysmon Deploy App in Batch File Execution</title>
+        <search>
+          <query>index=_internal $tkn_host_error_message$ sourcetype="splunkd" source="*splunkd*" sysmon ERROR "TA-Sysmon-deploy" 
+| rex "ExecProcessor\]\s-\s(?&lt;mymessage&gt;.*)" | eval event_message=coalesce(mymessage, event_message) 
+| table host, _time, event_message | sort 0 host, _time</query>
+          <earliest>$tkn_error_logs_timerange.earliest$</earliest>
+          <latest>$tkn_error_logs_timerange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>This search checks for errors in the last four hours. Sysmon is deployed, but Splunk is unable to read the Sysmon logs for some reason. Try restarting Splunk UF on the host to resolve the problem. Also, check EventViewer on the host to see if the Sysmon logs are present under Application Logs > Microsoft > Windows > Sysmon.</p>
+        <p>App is deployed, but Splunk is unable to read the Sysmon logs for some reason. Try restarting Splunk UF on the host to resolve the problem. Also, check EventViewer on the host to see if the Sysmon logs are present under Application Logs &gt; Microsoft &gt; Windows &gt; Sysmon.</p>
       </html>
     </panel>
   </row>
