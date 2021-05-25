@@ -303,7 +303,7 @@
       <table>
         <search>
           <query>| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
-| append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_filter` | stats count | eval Name="Missing Indexes" ]
+| append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_internal_filter` | `cs_splunk_admin_missing_indexes_filter`| stats count | eval Name="Missing Indexes" ]
 | rename count as Count</query>
         </search>
         <option name="count">10</option>
