@@ -131,4 +131,50 @@
       </html>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Remove Decommissioned Forwarder</title>
+      <input type="dropdown" token="tkn_remove_forwarder_dropdown">
+        <label>Forwarder</label>
+        <search>
+          <query>| inputlookup cs_forwarders.csv | search status="Missing" | fields hostname</query>
+        </search>
+        <change>
+          <condition match="'tkn_remove_forwarder_dropdown'='tkn_remove_forwarder_text'">
+            <set token="tkn_remove_forwarder">$tkn_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_remove_forwarder"></unset>
+          </condition>
+        </change>
+        <fieldForLabel>hostname</fieldForLabel>
+        <fieldForValue>hostname</fieldForValue>
+      </input>
+      <input type="text" token="tkn_remove_forwarder_text">
+        <label>Re-type Forwarder Name for Confirmation</label>
+        <change>
+          <condition match="'tkn_remove_forwarder_dropdown'='tkn_remove_forwarder_text'">
+            <set token="tkn_remove_forwarder">$tkn_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_remove_forwarder"></unset>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| inputlookup cs_forwarders.csv | search NOT hostname=$tkn_remove_forwarder|s$ | outputlookup cs_forwarders.csv | where hostname="DO-NOT-RETURN-ANYRESULTS"
+| append [| stats count | rename count as result | eval result="Forwarder ".$tkn_remove_forwarder|s$." has been removed from the list."]</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Query will remove the forwarder from the list and you will not see the forwarder in the dashboard or alert.</p>
+      </html>
+    </panel>
+  </row>
 </form>
