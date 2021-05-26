@@ -1,6 +1,7 @@
 <form theme="dark">
   <init>
     <set token="tkn_host">host="*"</set>
+    <set token="tkn_host_error_message">host="*"</set>
   </init>
   <label>Sysmon Deploy Audit</label>
   <search id="base_search">
@@ -82,14 +83,14 @@
         <label>Host</label>
         <default></default>
         <change>
-          <set token="tkn_host_error_message">host="*$tkn_host_temp$*"</set>
+          <set token="tkn_host_error_message">host="*$tkn_host_temp_error_messages$*"</set>
         </change>
       </input>
       <table>
         <title>Sysmon is Installed but Splunk Unable to Read Symon Logs</title>
         <search>
           <query>index=_internal $tkn_host_error_message$ sourcetype="splunkd" CASE(ERROR) "Microsoft-Windows-Sysmon/Operational" | dedup host, event_message | table host, _time, event_message | rename _time as last_error | `cs_human_readable_time_format(last_error)`
-| append [search `cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") earliest=-24h@h latest=now | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
+| append [search `cs_sysmon_deploy_audit_data` $tkn_host_error_message$ ("No updates found" OR "Install complete!") | dedup host | table host | eval ta_sysmon_deploy_status="Sysmon Installed"]
 | stats last(*) as * by host
 | search event_message=* ta_sysmon_deploy_status=*
 | table host, last_error, event_message</query>
