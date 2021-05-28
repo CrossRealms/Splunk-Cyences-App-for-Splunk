@@ -123,4 +123,33 @@
       </html>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>User Authentication Activities</title>
+      <input type="text" token="tkn_user_tmp">
+        <label>User</label>
+        <change>
+          <set token="tkn_user">*$tkn_user_tmp$*</set>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` count as count from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
+| `drop_dm_object_name(Authentication)`
+| eval over_field=user."|".app
+| chart sum(count) as count over over_field by action
+| rex field=over_field "(?&lt;user&gt;[^\|]*)\|(?&lt;app&gt;.*)" | fields - over_field
+| table user, app, success, failure
+| sort -failure, -success</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p><b>Note:</b> Enter the username in the User filter to populate the panel.</p>
+      </html>
+    </panel>
+  </row>
 </form>
