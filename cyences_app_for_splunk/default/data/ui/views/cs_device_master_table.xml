@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" stylesheet="cs_device_master_table.css">
   <init>
     <set token="tkn_host">()</set>
     <set token="tkn_ip">()</set>
@@ -9,40 +9,43 @@
   <label>Device Master Table</label>
   <search id="base_master_table">
     <query>| inputlookup cs_device_master_table | search $tkn_sp_filter$
-| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
-| eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address)
-| eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
-| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
-| eval tmp_lansweeper_status = lansweeper_status, lansweeper_status=case(tmp_lansweeper_status=="Non-active",1,tmp_lansweeper_status=="Active",0) 
-| fieldformat lansweeper_status=tmp_lansweeper_status 
-| eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
-| eval tmp_qualys_status = qualys_status, qualys_status=case(tmp_qualys_status == "Red", 3,tmp_qualys_status=="Orange",2, tmp_qualys_status=="Yellow",1, tmp_qualys_status=="Green",0) 
-| fieldformat qualys_status=tmp_qualys_status 
-| eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
-| eval tmp_tenable_status = tenable_status, tenable_status=case(tmp_tenable_status == "Red", 3,tmp_tenable_status=="Orange",2, tmp_tenable_status=="Yellow",1, tmp_tenable_status=="Green",0) 
-| fieldformat tenable_status=tmp_tenable_status 
-| eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
-| eval tmp_defender_status = defender_status, defender_status=case(tmp_defender_status == "Enabled", 0,tmp_defender_status=="Disabled",1,true(),tmp_defender_status) 
-| fieldformat defender_status=tmp_defender_status 
-| eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status)
-| eval tmp_sophos_status = sophos_status, sophos_status=case(tmp_sophos_status == "RTP Enabled", 0,tmp_sophos_status=="RTP Disabled",1,tmp_sophos_status=="Service not Running",2) 
-| fieldformat sophos_status=tmp_sophos_status 
-| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
-| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike_status=case(tmp_crowdstrike_status == "Present", 0)
-| fieldformat crowdstrike_status=tmp_crowdstrike_status</query>
+| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion 
+| eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os) 
+| eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address) 
+| eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user) 
+| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState) 
+| eval tmp_lansweeper_status = lansweeper_status, lansweeper=case(tmp_lansweeper_status=="Non-active",1,tmp_lansweeper_status=="Active",0) 
+| fieldformat lansweeper=tmp_lansweeper_status 
+| eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green") 
+| eval tmp_qualys_status = qualys_status, qualys=case(tmp_qualys_status == "Red", 3,tmp_qualys_status=="Orange",2, tmp_qualys_status=="Yellow",1, tmp_qualys_status=="Green",0) 
+| fieldformat qualys=tmp_qualys_status 
+| eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green") 
+| eval tmp_tenable_status = tenable_status, tenable=case(tmp_tenable_status == "Red", 3,tmp_tenable_status=="Orange",2, tmp_tenable_status=="Yellow",1, tmp_tenable_status=="Green",0) 
+| fieldformat tenable=tmp_tenable_status 
+| eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state) 
+| eval tmp_defender_status = defender_status, defender=case(tmp_defender_status == "Enabled", 0,tmp_defender_status=="Disabled",1,true(),tmp_defender_status) 
+| fieldformat defender=tmp_defender_status 
+| eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status) 
+| eval tmp_sophos_status = sophos_status, sophos=case(tmp_sophos_status == "RTP Enabled", 0,tmp_sophos_status=="RTP Disabled",1,tmp_sophos_status=="Service not Running",2) 
+| fieldformat sophos=tmp_sophos_status 
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present") 
+| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike=case(tmp_crowdstrike_status == "Present", 0) 
+| fieldformat crowdstrike=tmp_crowdstrike_status 
+| fields - crowdstrike_status,sophos_status,defender_status,tenable_status ,qualys_status ,lansweeper_status 
+| rename ACTIVE as active, TOTAL_VULNS as total_vul, active_vuln as active_vuln, total_vuln as total_vuln</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
   <search base="base_master_table">
-    <query>| stats sum(lansweeper_last_event) as lansweeper, sum(qualys_last_event) as qualys, sum(tenable_last_event) as tenable, sum(sophos_last_event) as sophos, sum(defender_last_event) as defender, sum(crowdstrike_last_event) as crowdstrike
-| eval lansweeper=if(lansweeper&gt;0, ", lansweeper_status", ""), qualys=if(qualys&gt;0, ", qualys_status, ACTIVE, TOTAL_VULNS", ""), tenable=if(tenable&gt;0, ", tenable_status, active_vuln, total_vuln", ""), sophos=if(sophos&gt;0, ", sophos_status", ""), defender=if(defender&gt;0, ", defender_status", ""), crowdstrike=if(crowdstrike&gt;0, ", crowdstrike_status", "")</query>
+    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike
+| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys, active, total_vul", ""), field_tenable=if(field_tenable&gt;0, ", tenable, active_vuln, total_vuln", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", "")</query>
     <done>
-      <set token="tkn_tablefields_lansweeper">$result.lansweeper$</set>
-      <set token="tkn_tablefields_qualys">$result.qualys$</set>
-      <set token="tkn_tablefields_tenable">$result.tenable$</set>
-      <set token="tkn_tablefields_sophos">$result.sophos$</set>
-      <set token="tkn_tablefields_defender">$result.defender$</set>
-      <set token="tkn_tablefields_crowdstrike">$result.crowdstrike$</set>
+      <set token="tkn_tablefields_lansweeper">$result.field_lansweeper$</set>
+      <set token="tkn_tablefields_qualys">$result.field_qualys$</set>
+      <set token="tkn_tablefields_tenable">$result.field_tenable$</set>
+      <set token="tkn_tablefields_sophos">$result.field_sophos$</set>
+      <set token="tkn_tablefields_defender">$result.field_defender$</set>
+      <set token="tkn_tablefields_crowdstrike">$result.field_crowdstrike$</set>
     </done>
   </search>
   <search id="base_summary">
@@ -247,7 +250,7 @@
           </condition>
         </change>
       </input>
-      <table>
+      <table id="device_master_table">
         <search base="base_master_table">
           <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_*| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
@@ -255,46 +258,46 @@
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <format type="color" field="lansweeper_status">
+        <format type="color" field="lansweeper">
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
-        <format type="color" field="qualys_status">
+        <format type="color" field="qualys">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="ACTIVE">
+        <format type="color" field="active">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <format type="color" field="tenable_status">
+        <format type="color" field="tenable">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="active_vuln">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <format type="color" field="defender_status">
+        <format type="color" field="defender">
           <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="sophos_status">
+        <format type="color" field="sophos">
           <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #a3030b, "Service not Running": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="crowdstrike_status">
+        <format type="color" field="crowdstrike">
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
-          <condition match="'click.name2'==&quot;lansweeper_status&quot;">
+          <condition match="'click.name2'==&quot;lansweeper&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_lansweeper?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.lansweeper_user$</link>
           </condition>
-          <condition match="'click.name2'==&quot;qualys_status&quot;">
+          <condition match="'click.name2'==&quot;qualys&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
           </condition>
-          <condition match="'click.name2'==&quot;ACTIVE&quot;">
+          <condition match="'click.name2'==&quot;active&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
           </condition>
-          <condition match="'click.name2'==&quot;TOTAL_VULNS&quot;">
+          <condition match="'click.name2'==&quot;total_vul&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
           </condition>
-          <condition match="'click.name2'==&quot;tenable_status&quot;">
+          <condition match="'click.name2'==&quot;tenable&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
           </condition>
           <condition match="'click.name2'==&quot;active_vuln&quot;">
@@ -303,13 +306,13 @@
           <condition match="'click.name2'==&quot;total_vuln&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
           </condition>
-          <condition match="'click.name2'==&quot;sophos_status&quot;">
+          <condition match="'click.name2'==&quot;sophos&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.tkn_user=$row.sophos_user$&amp;form.tkn_dhost=$row.host$</link>
           </condition>
-          <condition match="'click.name2'==&quot;defender_status&quot;">
+          <condition match="'click.name2'==&quot;defender&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.tkn_host=$row.host$</link>
           </condition>
-          <condition match="'click.name2'==&quot;crowdstrike_status&quot;">
+          <condition match="'click.name2'==&quot;crowdstrike&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_crowdstrike_reports?form.tkn_host=$row.host$</link>
           </condition>
           <condition>
@@ -337,4 +340,5 @@
       </html>
     </panel>
   </row>
+
 </form>
