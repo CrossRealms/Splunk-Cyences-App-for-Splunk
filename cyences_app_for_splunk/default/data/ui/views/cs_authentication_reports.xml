@@ -107,8 +107,7 @@
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">5</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <format type="number" field="Success%">
           <option name="unit">%</option>
@@ -117,6 +116,9 @@
           <colorPalette type="list">[#DC4E41,#F1813F,#F8BE34,#53A051,#53A051]</colorPalette>
           <scale type="threshold">50,90,95,100</scale>
         </format>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20from%20datamodel%3AAuthentication%20%7C%20search%20action%20IN%20(%22success%22%2C%20%22failure%22)%20app%3D$click.value|s$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
       </table>
       <html>
         <p><b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
@@ -140,12 +142,15 @@
 | chart sum(count) as count over over_field by action
 | rex field=over_field "(?&lt;user&gt;[^\|]*)\|(?&lt;app&gt;.*)" | fields - over_field
 | table user, app, success, failure
+| fillnull success, failure value=0
 | sort -failure, -success</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="drilldown">row</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20from%20datamodel%3AAuthentication%20%7C%20search%20action%20IN%20(%22success%22%2C%20%22failure%22)%20app%3D$row.app|s$%20user%3D$row.user|s$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
       </table>
       <html>
         <p><b>Note:</b> Enter the username in the User filter to populate the panel.</p>
