@@ -213,5 +213,23 @@ class DeviceInventoryGenCommand(EventingCommand):
 
 dispatch(DeviceInventoryGenCommand, sys.argv, sys.stdin, sys.stdout, __name__)
 
-# TODO - manually provide way to remove hostname, mac_address for any item in the list
-
+# TODO - test above command's logic (if its merging right devices together and its merging devices that it should be)
+# TODO - remove unnecessary logs and change logging location from logger_manager
+# TODO - change device master to device inventory through-out the App
+# TODO - change csv lookups to kvstore for all lookups
+# TODO - write savedsearches for all (execution one after other)
+# TODO - update tenable vulnerabilities lookup
+# TODO - write savedsearched for generating inventory lookup (that should execute at last)
+# TODO - Provide a way to manually merge two uuids/devices from UI
+# TODO - Provide a way to manually remove uuids
+# TODO - manually provide way to remove hostname, mac_address for any item in the list to be consider
+#        (mac address collision (ignoring some mac address) - https://www.google.com/amp/s/www.howtogeek.com/228286/how-is-the-uniqueness-of-mac-addresses-enforced/amp/)
+# TODO - write backfilling (-7d) searches for all
+# TODO - write cleanup searches for all (more than 30d remove device)
+# TODO - change device master table with new lookup
+# TODO - change asset intelligence dashboard to be displayed in the per uuid 
+#        (search based on ip/host but display rest of the page based on specific device (for all it's ips and hostnames, etc) selected from the first device inventory table)
+# TODO - Update all savedsearches to add more information (ex. add different statuses from sophos data)
+# TODO - update rest of the App based on new lookups
+# TODO - what to do for conflicting mac_address
+# TODO - update qualys and tenable -> remote fixed and info vulnerabilities
