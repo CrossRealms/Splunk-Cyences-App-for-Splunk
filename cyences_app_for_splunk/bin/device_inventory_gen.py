@@ -7,11 +7,12 @@ import uuid
 import time
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
-from splunklib.searchcommands.validators import Boolean
+from splunklib.searchcommands import validators
 
 
+import logging
 import logger_manager
-logger = logger_manager.setup_logging('device_inventory_command')
+logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
 
 
 def get_lookup_path(lookup_name):
@@ -34,6 +35,10 @@ class DeviceInventoryGenCommand(EventingCommand):
     '''
     Reference for KVstore - https://dev.splunk.com/enterprise/docs/developapps/manageknowledge/kvstore/usetherestapitomanagekv/
     '''
+
+    ipmatchstarttime = Option(name="ipmatchstarttime", require=False, validate=validators.Float(), default=time.time())
+    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=validators.Float(), default=3600.0)
+    # NOTE - Above shows at what timerange command should match IPs to combine devices
     
     def read_csv_lookup(self, lookup_file, csv_file_headers):
         logger.info("Reading lookup file: {}".format(lookup_file))
@@ -63,43 +68,44 @@ class DeviceInventoryGenCommand(EventingCommand):
 
     
     def get_pointer_in_data(self, field, value, time=None):
-        logger.info("Finding field:{}, value:{}".format(field, value))
+        logger.debug("Finding field:{}, value:{}".format(field, value))
         field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[field]
         if field in ['hostname', 'mac_address']:
             for i in self.device_inventory:
                 lookup_values = i[field_index].split(',')
                 if value in lookup_values:
-                    logger.info("Found lookup entry:{}".format(i))
+                    logger.debug("Found lookup entry:{}".format(i))
                     return i
         elif field == 'ip':
             for i in self.device_inventory:
                 lookup_values = i[field_index].split(',')
                 if value in lookup_values:
+                    logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
                     if self.check_timestamp(time):
-                        logger.info("Found lookup entry:{}".format(i))
+                        logger.debug("Found lookup entry for ip and matches the timestamp condition.:{}".format(i))
                         return i
         else:
             for i in self.device_inventory:
                 if value==i[field_index]:
-                    logger.info("Found lookup entry:{}".format(i))
+                    logger.debug("Found lookup entry:{}".format(i))
                     return i
-        logger.info("Lookup entry not found.")
+        logger.debug("Lookup entry not found.")
 
 
     def append_value_in_multivalued_csv_field(self, current, new_values):
-        logger.info("Handling multi-valued field: current:{}, new_values:{}".format(current, new_values))
         new_val = current.split(',')
         new_val.extend(new_values)
         new_val = ','.join(set(new_val))
-        logger.info("Handling multi-valued field: updated: {}".format(new_val))
         return new_val
     
 
     def update_lookup_row(self, record, data_pointer, ips, hostnames, mac_addresses, product_uuid=None):
         if product_uuid:
             field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[product_uuid]
+            if data_pointer[field_index]:
+                # TODO - if data_pointer[field_index] is already present that means there is conflicting mac_address, etc
+                logger.warning("data_pointer[{}]={} is already present, while adding record:{} into exiting lookup entry:{}".format(product_uuid, data_pointer[field_index], record, data_pointer))
             data_pointer[field_index] = record[product_uuid]
-            # TODO - if data_pointer[field_index] is already present that means there is conflicting mac_address, etc
 
         data_pointer[LOOKUP_KEY_HOSTNAME] = self.append_value_in_multivalued_csv_field(data_pointer[LOOKUP_KEY_HOSTNAME], hostnames)
         data_pointer[LOOKUP_KEY_MAC_ADDRESS] = self.append_value_in_multivalued_csv_field(data_pointer[LOOKUP_KEY_MAC_ADDRESS], mac_addresses)
@@ -113,63 +119,73 @@ class DeviceInventoryGenCommand(EventingCommand):
 
 
     def handle_record(self, record, product_uuid):
-        # TODO - always generate hostname, mac_address fields from search queries (generate empty string instead to avoid errors)
-        logger.info("handle_record: product_uuid: {}, record: {}".format(product_uuid, record))
+        logger.debug("handle_record: product_uuid: {}, record: {}".format(product_uuid, record))
 
-        ips = list(set(record['ip'].split(",")))
-        if len(ips)==1 and ips[0] == '':
+        ips = None
+        try:
+            ips = list(set(record['ip'].split(",")))
+            if not ips or (len(ips)==1 and ips[0]) == '':
+                ips = []
+        except:
             ips = []
 
-        hostnames = list(set(record['hostname'].split(",")))
-        if len(hostnames)==1 and hostnames[0] == '':
+        hostnames = None
+        try:
+            hostnames = list(set(record['hostname'].split(",")))
+            if not hostnames or (len(hostnames)==1 and hostnames[0]) == '':
+                hostnames = []
+        except:
             hostnames = []
 
-        mac_addresses = list(set(record['mac_address'].split(",")))
-        if len(mac_addresses)==1 and mac_addresses[0] == '':
+        mac_addresses = None
+        try:
+            mac_addresses = list(set(record['mac_address'].split(",")))
+            if not mac_addresses or (len(mac_addresses)==1 and mac_addresses[0]) == '':
+                mac_addresses = []
+        except:
             mac_addresses = []
 
         data_pointer = self.get_pointer_in_data(field=product_uuid, value=record[product_uuid])
         if data_pointer:
-            logger.info("product_uuid found in the lookup")
+            logger.debug("product_uuid found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses)
             return
 
-        logger.info("product_uuid not found in the lookup")
+        logger.debug("product_uuid not found in the lookup")
         for host in hostnames:
             data_pointer = self.get_pointer_in_data(field='hostname', value=host)
             break
         if data_pointer:
-            logger.info("hostname found in the lookup")
+            logger.debug("hostname found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.info("hostname not found in the lookup")
+        logger.debug("hostname not found in the lookup")
         for mac in mac_addresses:
             data_pointer = self.get_pointer_in_data(field='mac_address', value=mac)
             break
         if data_pointer:
-            logger.info("mac_address found in the lookup")
+            logger.debug("mac_address found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.info("mac_address not found in the lookup")
+        logger.debug("mac_address not found in the lookup")
         for ip in ips:
             data_pointer = self.get_pointer_in_data(field='ip', value=ip, time=record['time'])
             break
         if data_pointer:
-            logger.info("ip found in the lookup")
+            logger.debug("ip found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.info("ip not found in the lookup (in last 30 minutes timespan")
+        logger.debug("ip not found in the lookup (in last 30 minutes timespan")
         return record
 
 
     def transform(self, records):
         self.device_inventory = None
-        self.current_time = time.time()
-        self.current_time_delta = self.current_time - 60*60
-        # TODO - Need to delta based on timerange of savedsearch execution (here last 60 minutes)
+        self.current_time = self.ipmatchstarttime
+        self.current_time_delta = self.current_time - self.ipmatchtimediff
 
         for record in records:
             if not self.device_inventory:
@@ -189,7 +205,7 @@ class DeviceInventoryGenCommand(EventingCommand):
             elif 'windows_defender_host' in record and record['windows_defender_host']:
                 ret = self.handle_record(record, product_uuid='windows_defender_host')
 
-            logger.info("ret: {}".format(ret))
+            logger.debug("ret: {}".format(ret))
 
             if ret:
                 # ret is dict, convert to list in proper order and prepend with new uuid
@@ -199,12 +215,12 @@ class DeviceInventoryGenCommand(EventingCommand):
                     if not exist:
                         new_device = [new_uuid, ret['time'], ret['ip'], ret['hostname'], ret['mac_address'], 
                                     ret['tenable_uuid'], ret['qualys_id'], ret['lansweeper_id'], ret['sophos_uuid'], ret['crowdstrike_userid'], ret['windows_defender_host']]
+                        logger.info("New device being added to list: {}".format(new_device))
                         self.device_inventory.append(new_device)
                         break
                 yield ret
             
-            logger.info("")
-            logger.info("")
+            logger.debug("")
             
         # Write lookup at the end
         if self.device_inventory:
@@ -213,11 +229,16 @@ class DeviceInventoryGenCommand(EventingCommand):
 
 dispatch(DeviceInventoryGenCommand, sys.argv, sys.stdin, sys.stdout, __name__)
 
+
+# TODO - give proper name to time_ip_lookup and other lookups
+# TODO - update qualys query to add fqdns, sophos add more fields so that we can use lookup for anything later, etc.
+# TODO - update all searches to use prefix for fields to avoid conflict while merging
+# TODO - write savedsearches for all (execution one after other)
 # TODO - test above command's logic (if its merging right devices together and its merging devices that it should be)
 # TODO - remove unnecessary logs and change logging location from logger_manager
+# TODO - write device inventory query by joining all tables with device inventory table
 # TODO - change device master to device inventory through-out the App
-# TODO - change csv lookups to kvstore for all lookups
-# TODO - write savedsearches for all (execution one after other)
+# TODO - change csv lookups to kvstore for all lookups, use key as it's unique uuid per devices
 # TODO - update tenable vulnerabilities lookup
 # TODO - write savedsearched for generating inventory lookup (that should execute at last)
 # TODO - Provide a way to manually merge two uuids/devices from UI
