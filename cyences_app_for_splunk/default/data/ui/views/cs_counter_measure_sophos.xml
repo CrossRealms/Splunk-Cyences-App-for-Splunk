@@ -1,0 +1,40 @@
+<form theme="dark" script="cs_counter_measure_sophos.js" stylesheet="cs_counter_measure_sophos.css">
+  <label>Counter Measure - Sophos</label>
+  <fieldset submitButton="false">
+    <input type="text" token="tkn_ip">
+      <label>IP</label>
+      <default></default>
+    </input>
+    <input type="text" token="tkn_hostname">
+      <label>Hostname</label>
+      <default></default>
+    </input>
+    <input type="text" token="tkn_uuid">
+      <label>Instance UUID</label>
+      <default></default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table id="counter_measure_sophos">
+        <search>
+          <query>| sophosinstancedetails hostname=$tkn_hostname|s$ ip=$tkn_ip|s$ uuid=$tkn_uuid|s$ 
+| spath input=tenant output=tenant_id path=id 
+| eval checkbox=id."$$$$$$$$".tenant_id 
+| table checkbox id,type,tenant_id,hostname,ipv4*,macAddresses</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+          <input type="button" class="btn btn-primary pull-left" id="submit_btn" value="Isolate Selected Instance/s"/>
+      </html>
+    </panel>
+  </row>
+</form>
