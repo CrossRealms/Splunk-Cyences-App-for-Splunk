@@ -97,10 +97,29 @@
   </row>
   <row>
     <panel>
-      <title>Office 365/Azure - Successful Logins Outside $tkn_country$</title>
+      <title>Office 365/Azure - Successful Logins</title>
+      <input type="text" token="tkn__user" searchWhenChanged="true">
+        <label>User</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="tkn_drop__country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* $tkn_host$| iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* $tkn_host$| iplocation ClientIP | search $tkn_drop__country$ user=$tkn__user|s$ | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_success_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -117,10 +136,36 @@
   </row>
   <row>
     <panel>
-      <title>Office 365/Azure - Failed Logins Outside of $tkn_country$</title>
+      <title>Office 365/Azure - Failed Logins</title>
+      <input type="text" token="tkn_user" searchWhenChanged="true">
+        <label>User</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="tkn_drop_country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$| iplocation ClientIP | search Country!=`cs_home_country` | `cs_human_readable_time_format(_time, time)` | stats count, values(time) as time, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - time | `cs_o365_failed_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$ 
+| iplocation ClientIP 
+| search $tkn_drop_country$  user=$tkn_user|s$
+| `cs_human_readable_time_format(_time, time)` 
+| eval ExtendedProperties=mvzip('ExtendedProperties{}.Name','ExtendedProperties{}.Value'," : ") 
+| stats count, values(time) as time, values(ExtendedProperties) as ExtendedProperties, values(Country) as Country, values(Region) as Region, values(City) as City by host, user, ClientIP
+| fields - time 
+| `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
