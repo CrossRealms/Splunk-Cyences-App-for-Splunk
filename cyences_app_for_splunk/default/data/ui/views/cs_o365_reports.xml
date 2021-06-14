@@ -107,15 +107,14 @@
       </input>
       <input type="dropdown" token="tkn_drop__country" searchWhenChanged="true">
         <label>Country</label>
-        <default>Country!="United States"</default>
-        <initialValue>Country!="United States"</initialValue>
+        <selectFirstChoice>true</selectFirstChoice>
         <fieldForLabel>label</fieldForLabel>
         <fieldForValue>value</fieldForValue>
         <search>
           <query>| makeresults count=3 
   | streamstats count 
-  | eval label = case(count==1,"All",count==2,"From $tkn_country$",count==3,"Outside of $tkn_country$") 
-  | eval value = case(count==1,"*",count==2,"Country=\"$tkn_country$\"",count==3,"Country!=\"$tkn_country$\"")</query>
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
         </search>
       </input>
       <table>
@@ -147,15 +146,14 @@
       </input>
       <input type="dropdown" token="tkn_drop_country" searchWhenChanged="true">
         <label>Country</label>
-        <default>Country!="United States"</default>
-        <initialValue>Country!="United States"</initialValue>
+        <selectFirstChoice>true</selectFirstChoice>
         <fieldForLabel>label</fieldForLabel>
         <fieldForValue>value</fieldForValue>
         <search>
           <query>| makeresults count=3 
   | streamstats count 
-  | eval label = case(count==1,"All",count==2,"From $tkn_country$",count==3,"Outside of $tkn_country$") 
-  | eval value = case(count==1,"*",count==2,"Country=\"$tkn_country$\"",count==3,"Country!=\"$tkn_country$\"")</query>
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
         </search>
       </input>
       <table>
