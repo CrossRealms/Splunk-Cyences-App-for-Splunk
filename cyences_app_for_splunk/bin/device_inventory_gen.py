@@ -230,12 +230,14 @@ class DeviceInventoryGenCommand(EventingCommand):
 dispatch(DeviceInventoryGenCommand, sys.argv, sys.stdin, sys.stdout, __name__)
 
 
-# TODO - give proper name to time_ip_lookup and other lookups
-# TODO - update qualys query to add fqdns, sophos add more fields so that we can use lookup for anything later, etc.
-# TODO - update all searches to use prefix for fields to avoid conflict while merging
-# TODO - write savedsearches for all (execution one after other)
+# DONE - for time_ip_lookup (from all searches with now()) there should be a field called indextime which should be used to get last 69 minutes added data in the lookup from where condition to avoid any issues of missing data.
+# DONE - give proper name to time_ip_lookup and other lookups
+# DONE - update qualys query to add fqdns, sophos add more fields so that we can use lookup for anything later, etc.
+# TODO ? - update all searches to use prefix for fields to avoid conflict while merging
+# DONE - write savedsearches for all (execution one after other)
 # TODO - test above command's logic (if its merging right devices together and its merging devices that it should be)
-# TODO - remove unnecessary logs and change logging location from logger_manager
+# DONE - remove unnecessary logs and change logging location from logger_manager
+# TODO - update debug to info mode for logger
 # TODO - write device inventory query by joining all tables with device inventory table
 # TODO - change device master to device inventory through-out the App
 # TODO - change csv lookups to kvstore for all lookups, use key as it's unique uuid per devices
