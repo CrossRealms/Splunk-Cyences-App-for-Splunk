@@ -7,7 +7,7 @@ import uuid
 import time
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
-from splunklib.searchcommands import validators
+from splunklib.searchcommands.validators import Validator
 
 
 import logging
@@ -29,6 +29,51 @@ LOOKUP_KEY_HOSTNAME = 3
 LOOKUP_KEY_MAC_ADDRESS = 4
 
 
+import six
+from json.encoder import encode_basestring_ascii as json_encode_string
+
+class Float(Validator):
+    """ Validates float option values.
+
+    """
+    def __init__(self, minimum=None, maximum=None):
+        if minimum is not None and maximum is not None:
+            def check_range(value):
+                if not (minimum <= value <= maximum):
+                    raise ValueError('Expected float in the range [{0},{1}], not {2}'.format(minimum, maximum, value))
+                return
+        elif minimum is not None:
+            def check_range(value):
+                if value < minimum:
+                    raise ValueError('Expected float in the range [{0},+∞], not {1}'.format(minimum, value))
+                return
+        elif maximum is not None:
+            def check_range(value):
+                if value > maximum:
+                    raise ValueError('Expected float in the range [-∞,{0}], not {1}'.format(maximum, value))
+                return
+        else:
+            def check_range(value):
+                return
+
+        self.check_range = check_range
+        return
+
+    def __call__(self, value):
+        if value is None:
+            return None
+        try:
+            value = float(value)
+        except ValueError:
+            raise ValueError('Expected float value, not {}'.format(json_encode_string(value)))
+
+        self.check_range(value)
+        return value
+
+    def format(self, value):
+        return None if value is None else six.text_type(float(value))
+
+
 @Configuration()
 class DeviceInventoryGenCommand(EventingCommand):
 
@@ -36,8 +81,8 @@ class DeviceInventoryGenCommand(EventingCommand):
     Reference for KVstore - https://dev.splunk.com/enterprise/docs/developapps/manageknowledge/kvstore/usetherestapitomanagekv/
     '''
 
-    ipmatchstarttime = Option(name="ipmatchstarttime", require=False, validate=validators.Float(), default=time.time())
-    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=validators.Float(), default=3600.0)
+    ipmatchstarttime = Option(name="ipmatchstarttime", require=False, validate=Float(), default=time.time())
+    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=Float(), default=3600.0)
     # NOTE - Above shows at what timerange command should match IPs to combine devices
     
     def read_csv_lookup(self, lookup_file, csv_file_headers):
@@ -195,7 +240,7 @@ class DeviceInventoryGenCommand(EventingCommand):
             if 'tenable_uuid' in record and record['tenable_uuid']:
                 ret = self.handle_record(record, product_uuid='tenable_uuid')
             elif 'qualys_id' in record and record['qualys_id']:
-                ret = self.handle_record(record, product_uuid='tenable_uuid')
+                ret = self.handle_record(record, product_uuid='qualys_id')
             elif 'lansweeper_id' in record and record['lansweeper_id']:
                 ret = self.handle_record(record, product_uuid='lansweeper_id')
             elif 'sophos_uuid' in record and record['sophos_uuid']:
