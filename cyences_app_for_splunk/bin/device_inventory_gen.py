@@ -223,7 +223,7 @@ class DeviceInventoryGenCommand(EventingCommand):
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.debug("ip not found in the lookup (in last 30 minutes timespan")
+        logger.debug("ip not found in the lookup (in last 30 minutes timespan)")
         return record
 
 
@@ -258,6 +258,19 @@ class DeviceInventoryGenCommand(EventingCommand):
                     new_uuid = str(uuid.uuid4())
                     exist = self.get_pointer_in_data('uuid', new_uuid)
                     if not exist:
+                        if 'lansweeper_id' not in ret:
+                            ret['lansweeper_id'] = ''
+                        if 'tenable_uuid' not in ret:
+                            ret['tenable_uuid'] = ''
+                        if 'qualys_id' not in ret:
+                            ret['qualys_id'] = ''
+                        if 'sophos_uuid' not in ret:
+                            ret['sophos_uuid'] = ''
+                        if 'windows_defender_host' not in ret:
+                            ret['windows_defender_host'] = ''
+                        if 'crowdstrike_userid' not in ret:
+                            ret['crowdstrike_userid'] = ''
+
                         new_device = [new_uuid, ret['time'], ret['ip'], ret['hostname'], ret['mac_address'], 
                                     ret['tenable_uuid'], ret['qualys_id'], ret['lansweeper_id'], ret['sophos_uuid'], ret['crowdstrike_userid'], ret['windows_defender_host']]
                         logger.info("New device being added to list: {}".format(new_device))
@@ -301,3 +314,30 @@ dispatch(DeviceInventoryGenCommand, sys.argv, sys.stdin, sys.stdout, __name__)
 # TODO - update rest of the App based on new lookups
 # TODO - what to do for conflicting mac_address
 # TODO - update qualys and tenable -> remote fixed and info vulnerabilities
+
+# TODO - Sophos depends on counter-measure configuration and commands for collecting inventory.
+# TODO - Update above csv lookup writing to kvstore for cs_device_inventory_lookup.csv
+
+# TODO - Logic validation Notes
+# - product_uuid match scenario found - seems to be working
+# - hostname search is working when product_uuid not found
+#
+# - mac address conflict scenario found:
+#       | inputlookup cs_device_inventory_lookup.csv | search hostname="*CR-LANSWEEPER*" | table uuid, ip, hostname, mac_address, *
+#       b35e767b-34ce-4859-a8a9-6166e992ada5	10.33.1.202	                cr-lansweeper.crossrealms.local,cr-lansweeper	00:50:56:88:3a:a3	 	                                                                        2	126356656	-	 	                                 1623697740.185	     -
+#       f472a01e-74d9-4631-8990-2a7a4aef1144	10.10.10.6,169.254.150.167	CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02	    00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf   	-	-	 	    c64b1e2d-4807-442e-ba5b-b97cf432a113	 1623350390.283000	 -
+#
+# - another conflict found:
+#       handle_record: product_uuid: sophos_uuid, record: OrderedDict([('hostname', 'mleadc02'), ('indextime', '1623759108'), ('lansweeper_id', ''), ('time', '1623473357.840000'), ('ip', '10.10.10.6,169.254.150.167'), ('mac_address', '00:0c:29:ee:91:7e,02:00:4c:4f:4f:50'), ('sophos_uuid', 'c64b1e2d-4807-442e-ba5b-b97cf432a113'), ('qualys_id', '')])
+#       Finding field:sophos_uuid, value:c64b1e2d-4807-442e-ba5b-b97cf432a113
+#       Lookup entry not found.
+#       product_uuid not found in the lookup
+#       Finding field:hostname, value:mleadc02
+#       Found lookup entry:['f472a01e-74d9-4631-8990-2a7a4aef1144', '1623350390.283000', '169.254.122.185,10.10.10.5', 'CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02', '00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf', '', '', '', '90674878-eade-480a-9d17-29a37da4327c', '', '']
+#       hostname found in the lookup
+#       data_pointer[sophos_uuid]=90674878-eade-480a-9d17-29a37da4327c is already present, while adding record:OrderedDict([('hostname', 'mleadc02'), ('indextime', '1623759108'), ('lansweeper_id', ''), ('time', '1623473357.840000'), ('ip', '10.10.10.6,169.254.150.167'), ('mac_address', '00:0c:29:ee:91:7e,02:00:4c:4f:4f:50'), ('sophos_uuid', 'c64b1e2d-4807-442e-ba5b-b97cf432a113'), ('qualys_id', '')]) into exiting lookup entry:['f472a01e-74d9-4631-8990-2a7a4aef1144', '1623350390.283000', '169.254.122.185,10.10.10.5', 'CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02', '00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf', '', '', '', '90674878-eade-480a-9d17-29a37da4327c', '', '']
+
+
+# TODO - Auto remove mac_addresses and hostnames that is causing conflict.
+#      - Or find some better solution for these conflicts as it seems conflict are more often.
+
