@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.4.0
+* Version - 1.5.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,29 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.4.0 (June 2021)
+* Improved Authentication dashboard.
+  * Added user authentication list with user filter capability.
+  * Added drilldowns to important panels to view detailed data.
+  * Fixed the Authentication CIM mapping for Office365/Azure success logins data.
+* Improved Office 365 dashboard.
+  * Added Success and Login Failures with user filter and extended information in failure login panel like UserAgent, Location, etc.
+* Palo Alto Firewall – Added panel to show list of firewalls with VPN (Global Protect) data availability for auditing.
+* Enhancements:
+  * Added text selection drilldown to Asset Intelligence dashboard for better navigation through-out App in search for Host, IP Addresses and Usernames. (You can invoke the drilldown from anywhere in the App just by selecting IP Address or Hostname or Username.)
+  * Improved Splunk Admin dashboard for missing forwarders. Now dashboard provides a way to remove decommissioned UF directly from the dashboard.
+  * Filter some commonly known false positive for multiple alerts to reduce the false positive alerts.
+  * Added current status of Windows Defender status.
+* Issues Fixed:
+  * Fixed the logic for Global Protect VPN login incorrect success and failure count.
+  * Fixed the Sysmon Deploy Audit dashboard to show correct data and added more error logs for better auditing.
+  * Fixed Device Master Table column width problem when sorting the data. 
+
+
+Upgrade Guide from Version 1.4.0 to 1.5.0
+* N/A (See Release notes for version 1.5.0)
+
+
 Version 1.4.0 (May 2021)
 * Asset Intelligence dashboard added. (See documentation section `Asset Intelligence Dashboard` for details.)
 * Added Active Directory related alerts and reports: Group Changes, Group Policy Changes, User Changes, User Locked Out Events (See `Windows WinEventLog` and `Windows Active Directory Logs` section in the documentation for data collection.)
