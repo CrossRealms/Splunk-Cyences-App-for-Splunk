@@ -102,7 +102,6 @@
 | eval "Success%" = round(success / Total * 100,2)
 | fields - Total
 | rename failure as "Failure", success as "Success"
-| where 'Success%' &lt; 100
 | sort + "Success%"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -157,7 +156,12 @@
         </search>
         <option name="drilldown">row</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$row.app|s$%20Authentication.user%3D$row.user|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <condition match="$row.app$ == &quot;AzureActiveDirectory&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.tkn_user=$row.user$&amp;form.tkn__user=$row.user$</link>
+          </condition>
+          <condition>
+            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$row.app|s$%20Authentication.user%3D$row.user|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          </condition>
         </drilldown>
       </table>
       <html>
