@@ -3,7 +3,7 @@ require([
     'splunkjs/mvc/simplexml/ready!'
 ], function ($) {
 
-    if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_master_table") < 0) {
+    if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_inventory_table") < 0) {
         // Do not load the context menu on the Asset Intelligence dashboard and Device Master Table.
 
         let MAX_TEXT_SELECTION = 45;

@@ -1,6 +1,6 @@
 <form theme="dark" script="cs_asset_intelligence.js">
   <label>Asset Intelligence</label>
-  <search id="base_device_master_table">
+  <search id="base_device_inventory_table">
     <query>| inputlookup cs_device_master_table
 | eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
 | eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address, tenable_mac_address)
@@ -14,7 +14,7 @@
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
-  <search base="base_device_master_table" id="show_hide_search">
+  <search base="base_device_inventory_table" id="show_hide_search">
     <query>| stats sum(lansweeper_last_event) as lansweeper, sum(qualys_last_event) as qualys, sum(tenable_last_event) as tenable, sum(sophos_last_event) as sophos, sum(defender_last_event) as defender, sum(crowdstrike_last_event) as crowdstrike</query>
   </search>
   <fieldset submitButton="false"></fieldset>
@@ -48,7 +48,7 @@
     <panel>
       <title>Device Master Table $tkn_filter_main_label$</title>
       <table>
-        <search base="base_device_master_table">
+        <search base="base_device_inventory_table">
           <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ | search $tkn_filter_main$</query>
         </search>
         <option name="count">5</option>
