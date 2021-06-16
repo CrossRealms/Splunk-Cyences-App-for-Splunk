@@ -12,7 +12,7 @@ from splunklib.searchcommands.validators import Validator
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
+logger = logger_manager.setup_logging('cyences_device_inventory_command', logging.DEBUG)
 
 
 def get_lookup_path(lookup_name):
