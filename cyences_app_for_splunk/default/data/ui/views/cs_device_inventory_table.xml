@@ -6,39 +6,53 @@
     <set token="tkn_mac">()</set>
     <set token="tkn_sp_filter">()</set>
   </init>
-  <label>Device Master Table</label>
+  <label>Device Inventory</label>
   <search id="base_inventory_table">
-    <query>| inputlookup cs_device_master_table | search $tkn_sp_filter$
-| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion 
-| eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os) 
-| eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address) 
-| eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user) 
-| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState) 
+    <query>| inputlookup cs_device_inventory_lookup.csv
+| join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join tenable_uuid type=left [| inputlookup cs_tenable_vuln
+| stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
+| stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
+| append [| inputlookup cs_tenable_inventory] | stats values(*) as *, max(time) as time by tenable_uuid
+| rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
+| fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join qualys_id type=left [| inputlookup cs_qualys_inventory.csv | rename time as qualys_last_event | fields - ip, hostname, mac_address, tenable_uuid, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join sophos_uuid type=left [| inputlookup cs_sophos_inventory | rename time as sophos_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, crowdstrike_userid, windows_defender_host]
+| join windows_defender_host type=left [| inputlookup cs_windows_defender_inventory | rename time as defender_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid]
+| join crowdstrike_userid type=left [| inputlookup cs_crowdstrike_inventory | rename time as crowdstrike_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, windows_defender_host]
+| rename time as _time
+| eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
+| eval user=mvdedup(mvappend(lansweeper_user, sophos_user, crowdstrike_userid))
+| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, lansweeper_state)
 | eval tmp_lansweeper_status = lansweeper_status, lansweeper=case(tmp_lansweeper_status=="Non-active",1,tmp_lansweeper_status=="Active",0) 
 | fieldformat lansweeper=tmp_lansweeper_status 
-| eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green") 
+| eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
 | eval tmp_qualys_status = qualys_status, qualys=case(tmp_qualys_status == "Red", 3,tmp_qualys_status=="Orange",2, tmp_qualys_status=="Yellow",1, tmp_qualys_status=="Green",0) 
 | fieldformat qualys=tmp_qualys_status 
-| eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green") 
+| eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
 | eval tmp_tenable_status = tenable_status, tenable=case(tmp_tenable_status == "Red", 3,tmp_tenable_status=="Orange",2, tmp_tenable_status=="Yellow",1, tmp_tenable_status=="Green",0) 
 | fieldformat tenable=tmp_tenable_status 
-| eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state) 
+| eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
 | eval tmp_defender_status = defender_status, defender=case(tmp_defender_status == "Enabled", 0,tmp_defender_status=="Disabled",1,true(),tmp_defender_status) 
 | fieldformat defender=tmp_defender_status 
-| eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status) 
+| eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status)
 | eval tmp_sophos_status = sophos_status, sophos=case(tmp_sophos_status == "RTP Enabled", 0,tmp_sophos_status=="RTP Disabled",1,tmp_sophos_status=="Service not Running",2) 
 | fieldformat sophos=tmp_sophos_status 
-| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present") 
-| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike=case(tmp_crowdstrike_status == "Present", 0) 
-| fieldformat crowdstrike=tmp_crowdstrike_status 
-| fields - crowdstrike_status,sophos_status,defender_status,tenable_status ,qualys_status ,lansweeper_status 
-| rename ACTIVE as active, TOTAL_VULNS as total_vul, active_vuln as active_vuln, total_vuln as total_vuln</query>
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
+| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike=case(tmp_crowdstrike_status == "Present", 0)
+| fieldformat crowdstrike=tmp_crowdstrike_status
+| makemv ip delim=","
+| makemv hostname delim=","
+| makemv mac_address delim=","
+| eval active_vul=coalesce(active_vuln, ACTIVE), total_vul=coalesce(total_vuln, TOTAL_VULNS)
+| table _time, uuid, ip, hostname, mac_address, user, os, lansweeper, qualys, tenable, active_vul, total_vul, sophos, defender, crowdstrike, tmp_*, *_last_event
+| fields - crowdstrike_status, sophos_status, defender_status, tenable_status, qualys_status, lansweeper_status</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
   <search base="base_inventory_table">
     <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike
-| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys, active, total_vul", ""), field_tenable=if(field_tenable&gt;0, ", tenable, active_vuln, total_vuln", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", "")</query>
+| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", "")</query>
     <done>
       <set token="tkn_tablefields_lansweeper">$result.field_lansweeper$</set>
       <set token="tkn_tablefields_qualys">$result.field_qualys$</set>
@@ -49,8 +63,8 @@
     </done>
   </search>
   <search id="base_summary">
-    <query>| inputlookup cs_device_master_table
-| stats count as Total, sum(eval(if(lansweeper_last_event&gt;0, 1, 0))) as Lansweeper, sum(eval(if(qualys_last_event&gt;0, 1, 0))) as Qualys, sum(eval(if(tenable_last_event&gt;0, 1, 0))) as Tenable, sum(eval(if(defender_last_event&gt;0, 1, 0))) as Defender, sum(eval(if(sophos_last_event&gt;0, 1, 0))) as Sophos, sum(eval(if(crowdstrike_last_event&gt;0, 1, 0))) as CrowdStrike, sum(eval(if(lansweeper_last_event&gt;0 AND qualys_last_event&gt;0, 1, 0))) as lansweeper_qualys, sum(eval(if(lansweeper_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as lansweeper_tenable, sum(eval(if(lansweeper_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as lansweeper_defender, sum(eval(if(lansweeper_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as lansweeper_sophos, sum(eval(if(lansweeper_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as lansweeper_crowdstrike, sum(eval(if(qualys_last_event&gt;0 AND tenable_last_event&gt;0, 1, 0))) as qualys_tenable, sum(eval(if(qualys_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as qualys_sophos, sum(eval(if(qualys_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as qualys_defender, sum(eval(if(qualys_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as qualys_crowdstrike, sum(eval(if(tenable_last_event&gt;0 AND sophos_last_event&gt;0, 1, 0))) as tenable_sophos, sum(eval(if(tenable_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as tenable_defender, sum(eval(if(tenable_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as tenable_crowdstrike, sum(eval(if(sophos_last_event&gt;0 AND defender_last_event&gt;0, 1, 0))) as sophos_defender, sum(eval(if(sophos_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as sophos_crowdstrike, sum(eval(if(defender_last_event&gt;0 AND crowdstrike_last_event&gt;0, 1, 0))) as defender_crowdstrike, sum(eval(if(((lansweeper_last_event&gt;0) AND (tenable_last_event&gt;0 OR qualys_last_event&gt;0) AND (sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0)), 1, 0))) as All, sum(eval(if((tenable_last_event&gt;0 OR qualys_last_event&gt;0), 1, 0))) as Vulnerability_Scanner, sum(eval(if((sophos_last_event&gt;0 OR defender_last_event&gt;0 OR crowdstrike_last_event&gt;0), 1, 0))) as Antivirus
+    <query>| inputlookup cs_device_inventory_lookup.csv
+| stats count as Total, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="", 1, 0))) as Lansweeper, sum(eval(if(isnotnull(qualys_id) and qualys_id!="", 1, 0))) as Qualys, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as Tenable, sum(eval(if(isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as Defender, sum(eval(if((isnotnull(sophos_uuid) and sophos_uuid!=""), 1, 0))) as Sophos, sum(eval(if(isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as CrowdStrike, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(qualys_id) and qualys_id!="", 1, 0))) as lansweeper_qualys, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as lansweeper_tenable, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as lansweeper_defender, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as lansweeper_sophos, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as lansweeper_crowdstrike, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as qualys_tenable, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as qualys_sophos, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as qualys_defender, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as qualys_crowdstrike, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as tenable_sophos, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as tenable_defender, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as tenable_crowdstrike, sum(eval(if(isnotnull(sophos_uuid) and sophos_uuid!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as sophos_defender, sum(eval(if(isnotnull(sophos_uuid) and sophos_uuid!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as sophos_crowdstrike, sum(eval(if(isnotnull(windows_defender_host) and windows_defender_host!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as defender_crowdstrike, sum(eval(if(((isnotnull(lansweeper_id) and lansweeper_id!="") AND ((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")) AND ((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!=""))), 1, 0))) as All, sum(eval(if(((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!="")), 1, 0))) as Antivirus
 | eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
     <earliest>0</earliest>
     <latest>now</latest>
@@ -59,11 +73,11 @@
   <row>
     <panel>
       <html>
-        <p>Device Master Table generator report needs to be enabled.</p>
+        <p>Device Inventory generator report needs to be enabled.</p>
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title="Device Master Table Gen" | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory Gen", "Device Inventory Temp Lookup CleanUp", "Device Inventory Lookup CleanUp") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -73,6 +87,9 @@
           <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
         </format>
       </table>
+      <html>
+        <p>If you are looking at the Device Inventory for the first time and you don't see all the available devices in the table below then you can manually execute <a target="_blank" href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=*&amp;search=Device%20Inventory%20Backfill">Device Inventory Backfill</a> report to fill all the lookups. (By default it runs over last 30 days of time to collect the device inventory.)</p>
+      </html>
     </panel>
   </row>
   <row>
@@ -201,7 +218,7 @@
   </row>
   <row>
     <panel>
-      <title>Device Master Table</title>
+      <title>Device Inventory Table</title>
       <input type="text" token="tkn_host_tmp">
         <label>Host</label>
         <default></default>
@@ -210,7 +227,7 @@
             <set token="tkn_host">()</set>
           </condition>
           <condition>
-            <set token="tkn_host">(host="*$tkn_host_tmp$*")</set>
+            <set token="tkn_host">(hostname="*$tkn_host_tmp$*")</set>
           </condition>
         </change>
       </input>
@@ -252,10 +269,10 @@
       </input>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_*| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_* | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
-        <fields>host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
-        <option name="drilldown">cell</option>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
+        <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="lansweeper">
@@ -285,39 +302,7 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
-          <condition match="'click.name2'==&quot;lansweeper&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_lansweeper?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.lansweeper_user$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;qualys&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;active&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;total_vul&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_qualys?form.tkn_ip_tmp=$row.ip$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;tenable&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;active_vuln&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;total_vuln&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_tenable?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;sophos&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.tkn_user=$row.sophos_user$&amp;form.tkn_dhost=$row.host$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;defender&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.tkn_host=$row.host$</link>
-          </condition>
-          <condition match="'click.name2'==&quot;crowdstrike&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_crowdstrike_reports?form.tkn_host=$row.host$</link>
-          </condition>
-          <condition>
-            <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.host$&amp;form.tkn_user_tmp=$row.user$</link>
-          </condition>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_device_uuid=$row.uuid$&amp;form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.hostname$&amp;form.tkn_user_tmp=$row.user$</link>
         </drilldown>
       </table>
       <html>
@@ -340,5 +325,4 @@
       </html>
     </panel>
   </row>
-
 </form>

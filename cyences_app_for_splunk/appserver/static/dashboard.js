@@ -4,7 +4,7 @@ require([
 ], function ($) {
 
     if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_inventory_table") < 0) {
-        // Do not load the context menu on the Asset Intelligence dashboard and Device Master Table.
+        // Do not load the context menu on the Asset Intelligence dashboard and Device Inventory Table.
 
         let MAX_TEXT_SELECTION = 45;
 

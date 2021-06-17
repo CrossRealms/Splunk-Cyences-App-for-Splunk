@@ -37,7 +37,7 @@
         <div class="box" id="auth_reports_link">Authentication</div>
         <div class="box" id="admin_reports_link">Splunk Admin</div>
         <div class="box" id="malicious_reports_link">Malicious IP List</div>
-        <div class="box" id="device_inventory_table_link">Device Master Table</div>
+        <div class="box" id="device_inventory_table_link">Device Inventory</div>
         <div class="box" id="lansweeper_link">Lansweeper</div>
         <div class="box" id="qualys_link">Qualys</div>
         <div class="box" id="tenable_link">Tenable</div>
