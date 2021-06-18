@@ -163,7 +163,7 @@
 | search $tkn_drop_country$  user=$tkn_user|s$
 | `cs_human_readable_time_format(_time, time)` 
 | eval ExtendedProperties=mvzip('ExtendedProperties{}.Name','ExtendedProperties{}.Value'," : ") 
-| stats count, latest(time) as Last_Failed_Login, values(ExtendedProperties) as ExtendedProperties, values(Country) as Country, values(Region) as Region, values(City) as City by host, user, ClientIP 
+| stats count, latest(time) as Last_Failed_Login, values(ExtendedProperties) as ExtendedProperties, values(Country) as Country, values(Region) as Region, values(City) as City by host, user, LogonError, ClientIP 
 | fields - host
 | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
