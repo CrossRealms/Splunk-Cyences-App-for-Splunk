@@ -41,11 +41,12 @@
 | eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
 | eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike=case(tmp_crowdstrike_status == "Present", 0)
 | fieldformat crowdstrike=tmp_crowdstrike_status
+| eval ip_drilldown=ip, hostname_drilldown=hostname, user_drilldown=mvjoin(user, ",")
 | makemv ip delim=","
 | makemv hostname delim=","
 | makemv mac_address delim=","
 | eval active_vul=coalesce(active_vuln, ACTIVE), total_vul=coalesce(total_vuln, TOTAL_VULNS)
-| table _time, uuid, ip, hostname, mac_address, user, os, lansweeper, qualys, tenable, active_vul, total_vul, sophos, defender, crowdstrike, tmp_*, *_last_event
+| table _time, uuid, ip, hostname, mac_address, user, os, lansweeper, qualys, tenable, active_vul, total_vul, sophos, defender, crowdstrike, tmp_*, *_last_event, ip_drilldown, hostname_drilldown, user_drilldown
 | fields - crowdstrike_status, sophos_status, defender_status, tenable_status, qualys_status, lansweeper_status</query>
     <earliest>0</earliest>
     <latest>now</latest>
@@ -108,7 +109,7 @@
         <p>
           <b>Description</b>: The total amount of devices detected.</p>
         <p>---------------------------------------------------------------------------------------------------------------------------------</p>
-        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Master Table. Click on the number above to reset the filter.</p>
+        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
       </html>
     </panel>
     <panel>
@@ -269,7 +270,7 @@
       </input>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_* | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
         <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="drilldown">row</option>
@@ -281,14 +282,10 @@
         <format type="color" field="qualys">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="active">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <format type="color" field="tenable">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="active_vuln">
+        <format type="color" field="active_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
@@ -302,12 +299,12 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_device_uuid=$row.uuid$&amp;form.tkn_ip_tmp=$row.ip$&amp;form.tkn_host_tmp=$row.hostname$&amp;form.tkn_user_tmp=$row.user$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>
         </drilldown>
       </table>
       <html>
         <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
-        <p>The Device Master Table will automatically hide columns for devices that lack a certain type of data.</p>
+        <p>The Device Inventory will automatically hide columns for devices that lack a certain type of data.</p>
         <p>Qualys Status</p>
         <ul>
           <li>Red = Urgent severity (level 5)</li>

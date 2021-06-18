@@ -1,3 +1,86 @@
+
+Device Master Table Change
+===============
+* Device Master Table -> drilldown Changed -> now it always leads to Asset Intelligence dashboard.
+
+
+TODOs & Notes
+==================
+# DONE - for time_ip_lookup (from all searches with now()) there should be a field called indextime which should be used to get last 69 minutes added data in the lookup from where condition to avoid any issues of missing data.
+# DONE - give proper name to time_ip_lookup and other lookups
+# DONE - update qualys query to add fqdns, sophos add more fields so that we can use lookup for anything later, etc.
+# TODO ? - update all searches to use prefix for fields to avoid conflict while merging
+# DONE - write savedsearches for all (execution one after other)
+# TODO - test above command's logic (if its merging right devices together and its merging devices that it should be)
+# DONE - remove unnecessary logs and change logging location from logger_manager
+# TODO - update debug to info mode for logger
+# TODO - write device inventory query by joining all tables with device inventory table
+# TODO - change device master to device inventory through-out the App
+# TODO - change csv lookups to kvstore for all lookups, use key as it's unique uuid per devices
+# TODO - update tenable vulnerabilities lookup
+# TODO - write savedsearched for generating inventory lookup (that should execute at last)
+# TODO - Provide a way to manually merge two uuids/devices from UI
+# TODO - Provide a way to manually remove uuids
+# TODO - manually provide way to remove hostname, mac_address for any item in the list to be consider
+#        (mac address collision (ignoring some mac address) - https://www.google.com/amp/s/www.howtogeek.com/228286/how-is-the-uniqueness-of-mac-addresses-enforced/amp/)
+# TODO - write backfilling (-7d) searches for all
+# TODO - write cleanup searches for all (more than 30d remove device)
+# TODO - change device master table with new lookup
+# TODO - change asset intelligence dashboard to be displayed in the per uuid 
+#        (search based on ip/host but display rest of the page based on specific device (for all it's ips and hostnames, etc) selected from the first device inventory table)
+# TODO - Update all savedsearches to add more information (ex. add different statuses from sophos data)
+# TODO - update rest of the App based on new lookups
+# TODO - what to do for conflicting mac_address
+# TODO - update qualys and tenable -> remote fixed and info vulnerabilities
+
+# TODO - Sophos depends on counter-measure configuration and commands for collecting inventory.
+# TODO - Update above csv lookup writing to kvstore for cs_device_inventory_lookup.csv
+
+# TODO - Logic validation Notes
+# - product_uuid match scenario found - seems to be working
+# - hostname search is working when product_uuid not found
+#
+# - mac address conflict scenario found:
+#       | inputlookup cs_device_inventory_lookup.csv | search hostname="*CR-LANSWEEPER*" | table uuid, ip, hostname, mac_address, *
+#       b35e767b-34ce-4859-a8a9-6166e992ada5	10.33.1.202	                cr-lansweeper.crossrealms.local,cr-lansweeper	00:50:56:88:3a:a3	 	                                                                        2	126356656	-	 	                                 1623697740.185	     -
+#       f472a01e-74d9-4631-8990-2a7a4aef1144	10.10.10.6,169.254.150.167	CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02	    00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf   	-	-	 	    c64b1e2d-4807-442e-ba5b-b97cf432a113	 1623350390.283000	 -
+#
+# - another conflict found:
+#       handle_record: product_uuid: sophos_uuid, record: OrderedDict([('hostname', 'mleadc02'), ('indextime', '1623759108'), ('lansweeper_id', ''), ('time', '1623473357.840000'), ('ip', '10.10.10.6,169.254.150.167'), ('mac_address', '00:0c:29:ee:91:7e,02:00:4c:4f:4f:50'), ('sophos_uuid', 'c64b1e2d-4807-442e-ba5b-b97cf432a113'), ('qualys_id', '')])
+#       Finding field:sophos_uuid, value:c64b1e2d-4807-442e-ba5b-b97cf432a113
+#       Lookup entry not found.
+#       product_uuid not found in the lookup
+#       Finding field:hostname, value:mleadc02
+#       Found lookup entry:['f472a01e-74d9-4631-8990-2a7a4aef1144', '1623350390.283000', '169.254.122.185,10.10.10.5', 'CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02', '00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf', '', '', '', '90674878-eade-480a-9d17-29a37da4327c', '', '']
+#       hostname found in the lookup
+#       data_pointer[sophos_uuid]=90674878-eade-480a-9d17-29a37da4327c is already present, while adding record:OrderedDict([('hostname', 'mleadc02'), ('indextime', '1623759108'), ('lansweeper_id', ''), ('time', '1623473357.840000'), ('ip', '10.10.10.6,169.254.150.167'), ('mac_address', '00:0c:29:ee:91:7e,02:00:4c:4f:4f:50'), ('sophos_uuid', 'c64b1e2d-4807-442e-ba5b-b97cf432a113'), ('qualys_id', '')]) into exiting lookup entry:['f472a01e-74d9-4631-8990-2a7a4aef1144', '1623350390.283000', '169.254.122.185,10.10.10.5', 'CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02', '00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf', '', '', '', '90674878-eade-480a-9d17-29a37da4327c', '', '']
+
+# TODO - Auto remove mac_addresses and hostnames that is causing conflict.
+#      - Or find some better solution for these conflicts as it seems conflict are more often.
+
+# TODO - Device master table showing wrong count for sophos
+#      - I think that's due to mac_address conflict
+
+
+
+TODO - Add mac_address filter on Asset Intelligence dashboard
+    - Update device master drilldown
+
+TODO - update csv device inventory lookup to kvstore lookup (grep)
+
+TODO - grep master and update through out the App
+
+TODO - Change default value for animate to "false" for cs_network_animate_pulse_traffic_map and cs_network_animate_traffic_map
+
+TODO - Asset Intelligence Dashboard
+    - Make drilldown from device master table appropriate
+    - Handle multi-values properly
+    - Add tables/lookups for everything -> change the ones that uses direct search from the asset intelligence dashboard
+
+TODO - Use macro for common searches through-out all the dashboards
+
+
+
 Version 1.4.0
 
 ---- CY-181-Adding-Filter-for-Global-Malicious-IPs-Dashboard ----

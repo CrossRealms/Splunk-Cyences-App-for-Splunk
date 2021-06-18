@@ -1,21 +1,50 @@
 <form theme="dark" script="cs_asset_intelligence.js">
   <label>Asset Intelligence</label>
-  <search id="base_device_inventory_table">
-    <query>| inputlookup cs_device_master_table
-| eval lansweeper_os =AssetType." ".OSVersion." ".AssetVersion | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
-| eval mac_address=mvappend(lansweeper_mac_address, crowdstrike_mac_address, tenable_mac_address)
-| eval user=mvappend(lansweeper_user, sophos_user, crowdstrike_user)
-| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, AssetState)
+  <search id="base_inventory_table">
+    <query>| inputlookup cs_device_inventory_lookup.csv
+| join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join tenable_uuid type=left [| inputlookup cs_tenable_vuln
+| stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
+| stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
+| append [| inputlookup cs_tenable_inventory] | stats values(*) as *, max(time) as time by tenable_uuid
+| rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
+| fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join qualys_id type=left [| inputlookup cs_qualys_inventory.csv | rename time as qualys_last_event | fields - ip, hostname, mac_address, tenable_uuid, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
+| join sophos_uuid type=left [| inputlookup cs_sophos_inventory | rename time as sophos_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, crowdstrike_userid, windows_defender_host]
+| join windows_defender_host type=left [| inputlookup cs_windows_defender_inventory | rename time as defender_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid]
+| join crowdstrike_userid type=left [| inputlookup cs_crowdstrike_inventory | rename time as crowdstrike_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, windows_defender_host]
+| rename time as _time
+| eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) | eval os=coalesce(tenable_os, QUALYS_OS, lansweeper_os)
+| eval user=mvdedup(mvappend(lansweeper_user, sophos_user, crowdstrike_userid))
+| eval lansweeper_status=case(isnull(lansweeper_last_event), "-", 1==1, lansweeper_state)
+| eval tmp_lansweeper_status = lansweeper_status, lansweeper=case(tmp_lansweeper_status=="Non-active",1,tmp_lansweeper_status=="Active",0) 
+| fieldformat lansweeper=tmp_lansweeper_status 
 | eval qualys_status=case(isnull(qualys_last_event), "-", ACTIVE_SEVERITY_5&gt;0, "Red", ACTIVE_SEVERITY_4&gt;0, "Orange", ACTIVE_SEVERITY_3&gt;0, "Yellow", 1==1, "Green")
+| eval tmp_qualys_status = qualys_status, qualys=case(tmp_qualys_status == "Red", 3,tmp_qualys_status=="Orange",2, tmp_qualys_status=="Yellow",1, tmp_qualys_status=="Green",0) 
+| fieldformat qualys=tmp_qualys_status 
 | eval tenable_status=case(isnull(tenable_last_event), "-", critical_active_vuln&gt;0, "Red", high_active_vuln&gt;0, "Orange", medium_active_vuln&gt;0, "Yellow", 1==1, "Green")
+| eval tmp_tenable_status = tenable_status, tenable=case(tmp_tenable_status == "Red", 3,tmp_tenable_status=="Orange",2, tmp_tenable_status=="Yellow",1, tmp_tenable_status=="Green",0) 
+| fieldformat tenable=tmp_tenable_status 
 | eval defender_status=case(isnull(defender_last_event), "-", 1==1, RTP_state)
+| eval tmp_defender_status = defender_status, defender=case(tmp_defender_status == "Enabled", 0,tmp_defender_status=="Disabled",1,true(),tmp_defender_status) 
+| fieldformat defender=tmp_defender_status 
 | eval sophos_status=case(isnull(sophos_last_event), "-", isnull(sophos_status), "RTP Enabled", 1==1, sophos_status)
-| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")</query>
+| eval tmp_sophos_status = sophos_status, sophos=case(tmp_sophos_status == "RTP Enabled", 0,tmp_sophos_status=="RTP Disabled",1,tmp_sophos_status=="Service not Running",2) 
+| fieldformat sophos=tmp_sophos_status 
+| eval crowdstrike_status=if(isnull(crowdstrike_last_event), "-", "Present")
+| eval tmp_crowdstrike_status = crowdstrike_status, crowdstrike=case(tmp_crowdstrike_status == "Present", 0)
+| fieldformat crowdstrike=tmp_crowdstrike_status
+| makemv ip delim=","
+| makemv hostname delim=","
+| makemv mac_address delim=","
+| eval active_vul=coalesce(active_vuln, ACTIVE), total_vul=coalesce(total_vuln, TOTAL_VULNS)
+| table _time, uuid, ip, hostname, mac_address, user, os, lansweeper, qualys, tenable, active_vul, total_vul, sophos, defender, crowdstrike, tmp_*, *_last_event
+| fields - crowdstrike_status, sophos_status, defender_status, tenable_status, qualys_status, lansweeper_status</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
-  <search base="base_device_inventory_table" id="show_hide_search">
-    <query>| stats sum(lansweeper_last_event) as lansweeper, sum(qualys_last_event) as qualys, sum(tenable_last_event) as tenable, sum(sophos_last_event) as sophos, sum(defender_last_event) as defender, sum(crowdstrike_last_event) as crowdstrike</query>
+  <search base="base_inventory_table" id="show_hide_search">
+    <query>| stats first(lansweeper_last_event) as field_lansweeper, first(qualys_last_event) as field_qualys, first(tenable_last_event) as field_tenable, first(sophos_last_event) as field_sophos, first(defender_last_event) as field_defender, first(crowdstrike_last_event) as field_crowdstrike</query>
   </search>
   <fieldset submitButton="false"></fieldset>
   <row>
@@ -40,45 +69,57 @@
       </input>
       <html>
         <p>A wildcard (*) can be used if you're uncertain about the spelling for a particular user. For example, *asmith*, will match with the following user names: asmith, desktop\asmith, asmith_admin, etc.</p>
+        <p>You can add comma separated values for all like, 10.0.0.1,10.0.0.2</p>
         <p>Try to avoid using wildcards for both the IP Address and Host Name fields, as it may return less accurate and incomplete information in the dashboard.</p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$for_dev_only$">
+    <panel>
+      <html>
+        <br/>Device Master Table -&gt; $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
+        <br/>Qualys -&gt; $tkn_show_hide_qualys$ - $tkn_filter_ip_only$ - $tkn_filter_ip_only_label$
+        <br/>Tenable -&gt; $tkn_show_hide_tenable$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
+        <br/>VPN, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
+        <br/>CrowdStrike -&gt; $tkn_show_hide_crowdstrike$ - $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>Sophos -&gt; $tkn_show_hide_sophos$ - $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>Windows Defender -&gt; $tkn_show_hide_defender$ - $tkn_filter_host_only$ - $tkn_filter_host_only_label$
       </html>
     </panel>
   </row>
   <row depends="$tkn_filter_main$">
     <panel>
-      <title>Device Master Table $tkn_filter_main_label$</title>
+      <title>Device Inventory $tkn_filter_main_label$</title>
       <table>
-        <search base="base_device_inventory_table">
-          <query>table host, ip, os, mac_address, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ | search $tkn_filter_main$</query>
+        <search base="base_inventory_table">
+          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
         </search>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="count">5</option>
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <format type="color" field="lansweeper_status">
+        <format type="color" field="lansweeper">
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
-        <format type="color" field="qualys_status">
+        <format type="color" field="qualys">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="ACTIVE">
+        <format type="color" field="tenable">
+          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="active_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <format type="color" field="tenable_status">
-          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
-        </format>
-        <format type="color" field="active_vuln">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <format type="color" field="defender_status">
+        <format type="color" field="defender">
           <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="sophos_status">
+        <format type="color" field="sophos">
           <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #a3030b, "Service not Running": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="crowdstrike_status">
+        <format type="color" field="crowdstrike">
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <drilldown>
@@ -89,7 +130,7 @@
       </table>
       <html>
         <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
-        <p>The Device Master Table will automatically hide columns for devices that lack a certain type of data.</p>
+        <p>The Device Inventory will automatically hide columns for devices that lack a certain type of data.</p>
       </html>
     </panel>
   </row>
@@ -114,7 +155,7 @@
       <title>Qualys Host Summary $tkn_filter_ip_only_label$</title>
       <event>
         <search>
-          <query>`cs_qualys_hostsummary` IP=$tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID</query>
+          <query>`cs_qualys_hostsummary` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -126,7 +167,7 @@
       <title>Qualys Vulnerabilities</title>
       <table>
         <search>
-          <query>`cs_qualys_vuln` IP=$tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID, QID
+          <query>`cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID, QID
 | eval status_id=if(STATUS="NEW" OR STATUS="ACTIVE" OR STATUS="RE-OPENED", 1, 0)
 | sort - status_id, - SEVERITY, HOST_ID | rename vuln_category as CATEGORY, vendor_severity as SEVERITY
 | table HOST_ID, QID, SEVERITY, signature, CATEGORY, STATUS, TYPE, PUBLISHED_DATETIME, PATCHABLE, TIMES_FOUND, VULN_TYPE, PROTOCOL, PORT, PCI_FLAG, LAST_FOUND_DATETIME, cve</query>
@@ -158,7 +199,7 @@
       </input>
       <viz type="missile_map.missile_map">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP=$tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port  | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map` | eval pulse_at_start = if(src_ip==$tkn_filter_ip_only$,"true","false") | eval pulse_at_end = if(dest_ip==$tkn_filter_ip_only$,"true","false") | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
+          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port  | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map` | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
           <earliest>$tkn_timeRange_qualys.earliest$</earliest>
           <latest>$tkn_timeRange_qualys.latest$</latest>
         </search>
@@ -172,17 +213,17 @@
       <title>Tenable Summary $tkn_filter_ip_host_label$</title>
       <table>
         <search>
-          <query>| inputlookup cs_tenable_vuln | search $tkn_filter_ip_host$
-    | stats count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by ip, host, vul_severity 
-    | stats sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info, sum(eval(if(vul_severity="low", count, 0))) as low, sum(eval(if(vul_severity="medium", count, 0))) as medium, sum(eval(if(vul_severity="high", count, 0))) as high, sum(eval(if(vul_severity="critical", count, 0))) as critical, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active, sum(eval(if(vul_severity="low", active, 0))) as low_active, sum(eval(if(vul_severity="medium", active, 0))) as medium_active, sum(eval(if(vul_severity="high", active, 0))) as high_active, sum(eval(if(vul_severity="critical", active, 0))) as critical_active, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed by ip, host 
-    | append [| inputlookup cs_tenable_assets | search $tkn_filter_ip_host$]
-    | stats values(*) as * by ip, host
-    | fields - created_at, first_*, has_plugin_results
-    | table ip, host, tenable_all_ips, tenable_mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active, high_active, fixed_vuln, medium_active, low_active, info_active, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_*, *
-    | eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active) | search () ()| sort - active_vuln
-| eval asset_name=host." - ".ip
-| fields - host, ip
-| transpose header_field=asset_name include_empty=false column_name="Fields"</query>
+          <query>| inputlookup cs_tenable_vuln
+| stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
+| stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
+| append [| inputlookup cs_tenable_inventory | rename hostname as host] | stats values(*) as *, max(time) as time by tenable_uuid
+| makemv ip delim="," | makemv host delim=","
+| search $tkn_filter_ip_host$
+| rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
+| fields - tenable_last_event, created_at, first_*, has_plugin_results
+| table ip, host, mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active, high_active, fixed_vuln, medium_active, low_active, info_active, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_*, *
+| eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active) | sort - active_vuln
+| transpose header_field=tenable_uuid include_empty=false column_name="Fields"</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -194,10 +235,12 @@
       <title>Tenable Vulnerabilities</title>
       <table>
         <search>
-          <query>| inputlookup cs_tenable_vuln | search $tkn_filter_ip_host$
+          <query>| inputlookup cs_tenable_vuln 
+| append [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="," | makemv hostname delim="," | rename hostname as host ] | stats values(*) as * by tenable_uuid
+| search $tkn_filter_ip_host$
 | eval vul_state_id = if(vul_state="open" OR vul_state="reopened", 1, 0)
-| sort -vul_state_id, -vul_severity_id, +ip
-| table ip, host, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
+| sort -vul_state_id, -vul_severity_id, +tenable_uuid
+| table tenable_uuid, ip, host, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -226,7 +269,13 @@
       </input>
       <viz type="missile_map.missile_map">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$ AND (vul_state="open" OR vul_state="reopened") AND vul_port!=0) | stats count by ip vul_port  | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")" | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1| `cs_network_animate_traffic_map` | appendpipe [| inputlookup cs_tenable_vuln | search ($tkn_filter_ip_host$) | fields ip | stats values(ip) as ip] | eventstats values(ip) as ip | eval pulse_at_start = if(isnotnull(mvfind(src_ip, ip)),"true","false") | eval pulse_at_end = if(isnotnull(mvfind(dest_ip, ip)),"true","false")| eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | `cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon </query>
+          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search (vul_state="open" OR vul_state="reopened") AND vul_port!=0 | fields tenable_uuid, vul_port
+           | append [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="," | makemv hostname delim="," | rename hostname as host ] | stats values(*) as * by tenable_uuid | search $tkn_filter_ip_host$ | search vul_port=*
+           | stats count by ip vul_port | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")"
+           | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] 
+           by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` 
+           | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map`
+           | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | `cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
           <earliest>$tkn_timeRange_tenable.earliest$</earliest>
           <latest>$tkn_timeRange_tenable.latest$</latest>
         </search>
@@ -272,8 +321,8 @@
       </input>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count as inbound from datamodel=Network_Traffic where All_Traffic.dest_ip=$tkn_filter_ip_only$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)` | iplocation src_ip
-| append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip=$tkn_filter_ip_only$ by All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` | iplocation dest_ip]
+          <query>| tstats `cs_summariesonly_network_traffic` count as inbound from datamodel=Network_Traffic where All_Traffic.dest_ip IN $tkn_filter_ip_only$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)` | iplocation src_ip
+| append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip IN $tkn_filter_ip_only$ by All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` | iplocation dest_ip]
 | eval ip=coalesce(src_ip, dest_ip)
 | `cs_network_generate_location_for_internal_network(ip)`
 | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked 
@@ -452,7 +501,7 @@
       <table>
         <title>Windows Defender Health Check Event</title>
         <search>
-          <query>`cs_windows_defender` EventCode=1151 host=$tkn_filter_host_only$ | dedup host
+          <query>`cs_windows_defender` EventCode=1151 host IN $tkn_filter_host_only$ | dedup host
 | rex field=_raw "&lt;Data Name='RTP\s+state'&gt;(?&lt;RTP_state_cs&gt;[^\&lt;]*)" 
 | eval RTP_state=coalesce(RTP_state_cs,RTP_state) 
 | table _time, host, RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time

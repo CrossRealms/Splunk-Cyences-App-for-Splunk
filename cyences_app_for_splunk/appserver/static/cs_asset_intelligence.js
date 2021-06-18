@@ -11,10 +11,10 @@ function(mvc){
         submittedTokens.set(name, value);
         defaultTokens.set(name + '_label', value);
         if(name == 'tkn_filter_ip_only'){
-            defaultTokens.set(name + '_label', `(ip=${value})`);
+            defaultTokens.set(name + '_label', `(ip IN ${value})`);
         }
         if(name == 'tkn_filter_host_only'){
-            defaultTokens.set(name + '_label', `(host=${value})`);
+            defaultTokens.set(name + '_label', `(host IN ${value})`);
         }
     }
 
@@ -50,7 +50,7 @@ function(mvc){
             let crowdstrike = results[5];
 
             if(lansweeper > 0){
-                setToken("tkn_tablefields_lansweeper", ", lansweeper_status");
+                setToken("tkn_tablefields_lansweeper", ", lansweeper");
                 setToken("tkn_show_hide_lansweeper", "true");
             }
             else{
@@ -59,7 +59,7 @@ function(mvc){
             }
 
             if(qualys > 0){
-                setToken("tkn_tablefields_qualys", ", qualys_status, ACTIVE, TOTAL_VULNS");
+                setToken("tkn_tablefields_qualys", ", qualys");
                 setToken("tkn_show_hide_qualys", "true");
             }
             else{
@@ -68,7 +68,7 @@ function(mvc){
             }
 
             if(tenable > 0){
-                setToken("tkn_tablefields_tenable", ", tenable_status, active_vuln, total_vuln");
+                setToken("tkn_tablefields_tenable", ", tenable");
                 setToken("tkn_show_hide_tenable", "true");
             }
             else{
@@ -77,7 +77,7 @@ function(mvc){
             }
 
             if(sophos > 0){
-                setToken("tkn_tablefields_sophos", ", sophos_status");
+                setToken("tkn_tablefields_sophos", ", sophos");
                 setToken("tkn_show_hide_sophos", "true");
             }
             else{
@@ -86,7 +86,7 @@ function(mvc){
             }
 
             if(defender > 0){
-                setToken("tkn_tablefields_defender", ", defender_status");
+                setToken("tkn_tablefields_defender", ", defender");
                 setToken("tkn_show_hide_defender", "true");
             }
             else{
@@ -95,7 +95,7 @@ function(mvc){
             }
 
             if(crowdstrike > 0){
-                setToken("tkn_tablefields_crowdstrike", ", crowdstrike_status");
+                setToken("tkn_tablefields_crowdstrike", ", crowdstrike");
                 setToken("tkn_show_hide_crowdstrike", "true");
             }
             else{
@@ -108,6 +108,36 @@ function(mvc){
 
     function isEmptyValue(val){
         return (val === "" || val === "-");
+    }
+
+    function getMultiValues(val){
+        return val.split(',').map(x => x.trim()).filter(x => x!=="");
+    }
+    function getInListFormattedValues(valList){
+        let valueonly = "(";
+        for(let i=0; i<valList.length; i++){
+            if(i===0){
+                valueonly += `"${valList[i]}"`;
+            }
+            else{
+                valueonly += `, "${valList[i]}"`;
+            }
+        }
+        valueonly += ")";
+        return valueonly;
+    }
+    function getORFormattedValues(valList){
+        let valueonly = "(";
+        for(let i=0; i<valList.length; i++){
+            if(i===0){
+                valueonly += `"${valList[i]}"`;
+            }
+            else{
+                valueonly += ` OR "${valList[i]}"`;
+            }
+        }
+        valueonly += ")";
+        return valueonly;
     }
 
     function filterChanged(){
@@ -130,58 +160,61 @@ function(mvc){
         let filter_ip_host = '(';
 
         if(! isEmptyValue(submittedTokens.get('tkn_ip_tmp'))){
-            let ip_valueonly = `"${submittedTokens.get('tkn_ip_tmp')}"`;
+            let ips = getMultiValues(submittedTokens.get('tkn_ip_tmp'));
+            let ip_valueonly = getInListFormattedValues(ips);
             setToken('tkn_filter_ip_only', ip_valueonly);
 
-            filter_main += `ip=${ip_valueonly}`;
-            filter_values_only += `${ip_valueonly}`;
-            filter_authentication += `Authentication.src=${ip_valueonly}`;
-            filter_ip_host += `ip=${ip_valueonly}`;
+            filter_main += `ip IN ${ip_valueonly}`;
+            filter_values_only += getORFormattedValues(ips);
+            filter_authentication += `Authentication.src IN ${ip_valueonly}`;
+            filter_ip_host += `ip IN ${ip_valueonly}`;
         }
         else{
             unsetToken('tkn_filter_ip_only');
         }
 
         if(! isEmptyValue(submittedTokens.get('tkn_host_tmp'))){
-            let host_valueonly = `"${submittedTokens.get('tkn_host_tmp')}"`;
+            let hosts = getMultiValues(submittedTokens.get('tkn_host_tmp'));
+            let host_valueonly = getInListFormattedValues(hosts);
             setToken('tkn_filter_host_only', host_valueonly);
 
             if(filter_main !== '('){
                 filter_main += ` ${filterCondition} `;
             }
-            filter_main += `host=${host_valueonly}`;
+            filter_main += `host IN ${host_valueonly}`;
 
             if(filter_values_only !== '('){
                 filter_values_only += ` ${filterCondition} `;
             }
-            filter_values_only += `${host_valueonly}`;
+            filter_values_only += getORFormattedValues(hosts);
 
             if(filter_ip_host !== '('){
                 filter_ip_host += ` ${filterCondition} `;
             }
-            filter_ip_host += `host=${host_valueonly}`;            
+            filter_ip_host += `host IN ${host_valueonly}`;            
         }
         else{
             unsetToken('tkn_filter_host_only');
         }
 
         if(! isEmptyValue(submittedTokens.get('tkn_user_tmp'))){
-            user_valueonly = `"${submittedTokens.get('tkn_user_tmp')}"`;
+            let users = getMultiValues(submittedTokens.get('tkn_user_tmp'));
+            let user_valueonly = getInListFormattedValues(users);
 
             if(filter_main !== '('){
                 filter_main += ` ${filterCondition} `;
             }
-            filter_main += `user=${user_valueonly}`;
+            filter_main += `user IN ${user_valueonly}`;
 
             if(filter_values_only !== '('){
                 filter_values_only += ` ${filterCondition} `;
             }
-            filter_values_only += `${user_valueonly}`;
+            filter_values_only += getORFormattedValues(users);
 
             if(filter_authentication !== '('){
                 filter_authentication += ` ${filterCondition} `;
             }
-            filter_authentication += `Authentication.user=${user_valueonly}`;
+            filter_authentication += `Authentication.user IN ${user_valueonly}`;
         }
 
         filter_main += ')';
