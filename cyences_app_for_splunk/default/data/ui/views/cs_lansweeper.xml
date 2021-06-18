@@ -7,10 +7,10 @@
   </init>
   <label>Lansweeper</label>
   <search id="search_windows_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User
-| join type="left" Name [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as Name | eval WinEventLog_Security="Present"]
-| join type="left" Name [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as Name | eval WinEventLog_System="Present"]
-| join type="left" Name [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as Name | eval Sysmon="Present"]
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User | eval name_lower=lower(Name)
+| join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
+| join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
+| join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS="Windows *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip] | dedup ip | rename ip as IPAddress | eval Tenable="Present"]
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
@@ -32,10 +32,10 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_guest_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="VMware Guest" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
-| join type="left" Name [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as Name | eval WinEventLog_Security="Present"]
-| join type="left" Name [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as Name | eval WinEventLog_System="Present"]
-| join type="left" Name [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as Name | eval Sysmon="Present"]
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="VMware Guest" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+| join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
+| join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
+| join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| search `cs_qualys_hostsummary` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_vuln | dedup ip | table ip | append [| inputlookup cs_tenable_assets | dedup ip | table ip, tenable_os] | stats values(*) as * by ip | rename ip as IPAddress | eval Tenable="Present"]
 | eval OS=coalesce(OS, tenable_os)
