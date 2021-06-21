@@ -46,7 +46,7 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
-Version 1.4.0 (June 2021)
+Version 1.5.0 (June 2021)
 * Improved Authentication dashboard.
   * Added user authentication list with user filter capability.
   * Added drilldowns to important panels to view detailed data.
