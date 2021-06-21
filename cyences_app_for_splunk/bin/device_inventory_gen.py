@@ -118,17 +118,19 @@ class DeviceInventoryGenCommand(EventingCommand):
         if field in ['hostname', 'mac_address']:
             for i in self.device_inventory:
                 lookup_values = i[field_index].split(',')
-                if value in lookup_values:
-                    logger.debug("Found lookup entry:{}".format(i))
-                    return i
+                for val in value:
+                    if val in lookup_values:
+                        logger.debug("Found lookup entry:{}".format(i))
+                        return i
         elif field == 'ip':
             for i in self.device_inventory:
                 lookup_values = i[field_index].split(',')
-                if value in lookup_values:
-                    logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
-                    if self.check_timestamp(time):
-                        logger.debug("Found lookup entry for ip and matches the timestamp condition.:{}".format(i))
-                        return i
+                for val in value:
+                    if val in lookup_values:
+                        logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
+                        if self.check_timestamp(time):
+                            logger.debug("Found lookup entry for ip and matches the timestamp condition.:{}".format(i))
+                            return i
         else:
             for i in self.device_inventory:
                 if value==i[field_index]:
@@ -197,27 +199,21 @@ class DeviceInventoryGenCommand(EventingCommand):
             return
 
         logger.debug("product_uuid not found in the lookup")
-        for host in hostnames:
-            data_pointer = self.get_pointer_in_data(field='hostname', value=host)
-            break
+        data_pointer = self.get_pointer_in_data(field='hostname', value=hostnames)
         if data_pointer:
             logger.debug("hostname found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
         logger.debug("hostname not found in the lookup")
-        for mac in mac_addresses:
-            data_pointer = self.get_pointer_in_data(field='mac_address', value=mac)
-            break
+        data_pointer = self.get_pointer_in_data(field='mac_address', value=mac_addresses)
         if data_pointer:
             logger.debug("mac_address found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
         logger.debug("mac_address not found in the lookup")
-        for ip in ips:
-            data_pointer = self.get_pointer_in_data(field='ip', value=ip, time=record['time'])
-            break
+        data_pointer = self.get_pointer_in_data(field='ip', value=ips, time=record['time'])
         if data_pointer:
             logger.debug("ip found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
