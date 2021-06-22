@@ -1,7 +1,7 @@
 <form theme="dark" script="cs_asset_intelligence.js">
   <label>Asset Intelligence</label>
   <search id="base_inventory_table">
-    <query>| inputlookup cs_device_inventory_lookup.csv
+    <query>| inputlookup cs_device_inventory
 | join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
 | join tenable_uuid type=left [| inputlookup cs_tenable_vuln
 | stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 

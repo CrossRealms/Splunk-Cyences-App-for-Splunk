@@ -137,6 +137,26 @@ class DeviceInventoryGenCommand(EventingCommand):
                     logger.debug("Found lookup entry:{}".format(i))
                     return i
         logger.debug("Lookup entry not found.")
+    
+
+    def get_pointer_to_match_mac_and_ip(self, mac_addresses, ips, time=None):
+        logger.debug("Finding mac:{}, ip:{}".format(mac_addresses, ips))
+        for i in self.device_inventory:
+            lookup_values_mac = i[LOOKUP_KEY_MAC_ADDRESS].split(',')
+            for mac in mac_addresses:
+                if mac in lookup_values_mac:
+                    lookup_values_ip = i[LOOKUP_KEY_IP].split(',')
+                    for ip in ips:
+                        if ip in lookup_values_ip:
+                            logger.debug("Found lookup entry for matching mac and ip.:{}".format(i))
+                            return i
+                            # Note - We need to keep time for each specific IP separately so that we can match IPs while backfilling also.
+                            # OR if both mac and ip are matching then probably we don't need to look at time parameter as well.
+                            # logger.debug("Found lookup entry for matching mac and ip, checking timestamp.:{}".format(i))
+                            # if self.check_timestamp(time):
+                            #     logger.debug("Found lookup entry for mac and ip that matches the timestamp condition.:{}".format(i))
+                            #     return i
+        logger.debug("Lookup entry not found for matching mac or ip.")
 
 
     def append_value_in_multivalued_csv_field(self, current, new_values):
@@ -163,6 +183,8 @@ class DeviceInventoryGenCommand(EventingCommand):
         else:
             # update ips
             data_pointer[LOOKUP_KEY_IP] = ','.join(set(ips))
+        
+        data_pointer[LOOKUP_KEY_TIME] = record['time']   # last update time
 
 
     def handle_record(self, record, product_uuid):
@@ -201,25 +223,18 @@ class DeviceInventoryGenCommand(EventingCommand):
         logger.debug("product_uuid not found in the lookup")
         data_pointer = self.get_pointer_in_data(field='hostname', value=hostnames)
         if data_pointer:
-            logger.debug("hostname found in the lookup")
+            logger.debug("Hostname found in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.debug("hostname not found in the lookup")
-        data_pointer = self.get_pointer_in_data(field='mac_address', value=mac_addresses)
+        logger.debug("Hostname not found in the lookup")
+        data_pointer = self.get_pointer_to_match_mac_and_ip(mac_addresses, ips, time=record['time'])
         if data_pointer:
-            logger.debug("mac_address found in the lookup")
+            logger.debug("IP and Mac-Address both matches in the lookup")
             self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
             return
 
-        logger.debug("mac_address not found in the lookup")
-        data_pointer = self.get_pointer_in_data(field='ip', value=ips, time=record['time'])
-        if data_pointer:
-            logger.debug("ip found in the lookup")
-            self.update_lookup_row(record, data_pointer, ips, hostnames, mac_addresses, product_uuid)
-            return
-
-        logger.debug("ip not found in the lookup (in last 30 minutes timespan)")
+        logger.debug("No first look matching entry found in the lookup")
         return record
 
 
@@ -246,7 +261,7 @@ class DeviceInventoryGenCommand(EventingCommand):
             elif 'windows_defender_host' in record and record['windows_defender_host']:
                 ret = self.handle_record(record, product_uuid='windows_defender_host')
 
-            logger.debug("ret: {}".format(ret))
+            logger.debug("Ret: {}".format(ret))
 
             if ret:
                 # ret is dict, convert to list in proper order and prepend with new uuid
@@ -273,9 +288,7 @@ class DeviceInventoryGenCommand(EventingCommand):
                         self.device_inventory.append(new_device)
                         break
                 yield ret
-            
-            logger.debug("")
-            
+
         # Write lookup at the end
         if self.device_inventory:
             self.update_csv_lookup(DEVICE_INVENTORY_LOOKUP, self.device_inventory)
