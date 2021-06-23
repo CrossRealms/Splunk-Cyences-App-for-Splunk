@@ -4,8 +4,7 @@ import sys
 import requests
 
 
-from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
-from splunklib.searchcommands.validators import Code
+from splunklib.searchcommands import dispatch, StreamingCommand, Configuration
 import cs_utils
 
 import logging
@@ -14,10 +13,10 @@ logger = logger_manager.setup_logging('upload_malicious_ip', logging.DEBUG)
 
 
 
-@Configuration()
-class MaliciousIPUploaderCommand(EventingCommand):
+@Configuration(distributed=False)
+class MaliciousIPUploaderCommand(StreamingCommand):
     
-    def transform(self, records):
+    def stream(self, records):
         try:
             api_payload = []
             api_config = cs_utils.get_cyences_api_key(self.search_results_info.auth_token, logger)
