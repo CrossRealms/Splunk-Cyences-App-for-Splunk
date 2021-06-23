@@ -1,4 +1,4 @@
-<form theme="dark" stylesheet="cs_device_inventory_table.css">
+<form theme="dark" stylesheet="cs_device_inventory_table.css" script="cs_device_inventory_table.js">
   <init>
     <set token="tkn_host">()</set>
     <set token="tkn_ip">()</set>
@@ -319,6 +319,56 @@
           <li>Yellow = Medium severity</li>
           <li>Green = No active vulnerabilities</li>
         </ul>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Possible Merge UUIDs (Devices) in Device Inventory</title>
+      <table id="device_inventory_management_table">
+        <title>ADMIN</title>
+        <search>
+          <query>| inputlookup cs_device_inventory
+| eval ip_values=split(ip, ","), mac_values=split(mac_address, ",")
+| multireport [
+| stats values(*) as * by mac_values
+| where isnotnull(mac_values) AND mac_values!="" AND mac_values!=" " 
+| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
+| eval no_lansweeper=mvcount(lansweeper_id), no_qualys=mvcount(qualys_id), no_tenable=mvcount(tenable_uuid), no_sophos=mvcount(sophos_uuid), no_defender=mvcount(windows_defender_host), no_crowdstrike=mvcount(crowdstrike_userid) | fillnull value=0 no_lansweeper no_qualys no_tenable no_sophos no_defender no_crowdstrike
+| where no_uuids&gt;no_lansweeper and no_uuids&gt;no_qualys and no_uuids&gt;no_tenable and no_uuids&gt;no_sophos and no_uuids&gt;no_defender and no_uuids&gt;no_crowdstrike
+| eval Type="Mac Address Matches" | table Type, mac_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+[
+| stats values(*) as * by ip_values
+| where isnotnull(ip_values) AND ip_values!="" AND ip_values!=" " 
+| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
+| eval no_lansweeper=mvcount(lansweeper_id), no_qualys=mvcount(qualys_id), no_tenable=mvcount(tenable_uuid), no_sophos=mvcount(sophos_uuid), no_defender=mvcount(windows_defender_host), no_crowdstrike=mvcount(crowdstrike_userid) | fillnull value=0 no_lansweeper no_qualys no_tenable no_sophos no_defender no_crowdstrike
+| where no_uuids&gt;no_lansweeper and no_uuids&gt;no_qualys and no_uuids&gt;no_tenable and no_uuids&gt;no_sophos and no_uuids&gt;no_defender and no_uuids&gt;no_crowdstrike
+| eval Type="IP Matches" | table Type, ip_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+| table Type, ip_values, mac_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <div id="myModal" class="modal fade" role="dialog" data-backdrop="static" style="display:none;">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close modelclosebutton">Close</button>
+                <h4 class="modal-title">Device Inventory Management</h4>
+              </div>
+              <div class="modal-body">
+                <p id="myModelMessage">Wait a second...</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default modelconfirmbutton" id="modelConfirmButton">Ok</button>
+                <button type="button" class="btn btn-default modelclosebutton">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </html>
     </panel>
   </row>
