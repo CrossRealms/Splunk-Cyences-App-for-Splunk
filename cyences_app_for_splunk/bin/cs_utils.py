@@ -4,6 +4,9 @@ import splunk.entity as entity
 from splunk import rest
 
 APP_NAME = 'cyences_app_for_splunk'
+CYENCES_NETWORK_CALL_TIMEOUT = 5   # max timeout for all network calls are 5 seconds
+CYENCES_CONF_FILE = 'cs_configurations'
+
 
 class CredentialManager(object):
     '''
@@ -66,3 +69,19 @@ class CredentialManager(object):
             }
             rest.simpleRequest("/servicesNS/nobody/{}/storage/passwords/?output_mode=json".format(APP_NAME),
                                     self.session_key, postargs=postargs, method='POST', raiseAllErrors=True)
+
+def get_cyences_api_key(session_key, logger):
+    logger.debug("Getting Cyences API Key.")
+    _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CYENCES_CONF_FILE), sessionKey=session_key)
+    data = json.loads(serverContent)['entry']
+    api_url = None
+    auth_token = None
+    cust_id = None
+    for i in data:
+        if i['name'] == 'maliciousip':
+            api_url = i['content']['api_url']
+            cust_id = i['content']['cust_id']
+            auth_token = CredentialManager(session_key).get_credential(api_url)
+            break
+    logger.debug("Got API key.")
+    return {'api_url': api_url, 'auth_token': auth_token, 'cust_id': cust_id}
