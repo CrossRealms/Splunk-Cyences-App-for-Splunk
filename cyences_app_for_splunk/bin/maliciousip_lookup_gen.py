@@ -84,7 +84,8 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
                     for i in data:
                         yield i
             else:
-                logger.info("No options were selected.")
+                logger.warning("No option were selected. Select between: update_lookup and generate_events")
+                yield {"warning_message": "No option were selected. Select between: update_lookup and generate_events"}
         except Exception as e:
             logger.exception("Error in maliciousip_lookup_gen command: {}".format(e))
             raise e
