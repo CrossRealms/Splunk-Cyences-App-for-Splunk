@@ -54,21 +54,6 @@ function($, TableView, SearchManager, mvc, _){
         $('#myModal').hide()
     }
 
-    $("button.modelclosebutton").click(function(){
-        hideModel();
-        selectedUUIDs = undefined;
-    });
-
-    $("#modelConfirmButton").click(function(){
-        setModelMessage("Merging the devices...");
-        disableModelCloseButton();
-        disableModelConfirmButton();
-        // TODO - Run search query to merge the devices in the lookup (use selectedUUIDs)
-        // TODO - Re-run all searches on the dashboard
-        // TODO - change the model message to success message and enable the model close button
-        setTimeout(enableModelCloseButton, 60000);   // remove this line
-    });
-
 
     function defineAndExecuteSearch(searchQuery, executeOnSearchDone){
         // Defining search and search manager
@@ -88,6 +73,37 @@ function($, TableView, SearchManager, mvc, _){
         });
         // handle search error here
     }
+
+
+    $("button.modelclosebutton").click(function(){
+        hideModel();
+        selectedUUIDs = undefined;
+    });
+
+    $("#modelConfirmButton").click(function(){
+        setModelMessage("Merging the devices...");
+        disableModelCloseButton();
+        disableModelConfirmButton();
+
+        let firstUUID = selectedUUIDs[0];
+        let allSelectedUUIDs = generateInFormattedSearchString(selectedUUIDs);
+        let restOfUUIDs = generateInFormattedSearchString(selectedUUIDs.slice(1));
+
+        defineAndExecuteSearch(
+            `| inputlookup cs_device_inventory where uuid="${firstUUID}"
+            | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | fields - uuid]
+            | makemv ip delim="," | makemv hostname delim="," | makemv mac_address delim=","
+            | stats first(*) as *, max(time) as time, values(ip) as ip, values(hostname) as hostname, values(mac_address) as mac_address
+            | eval ip=mvjoin(mvdedup(ip), ","), hostname=mvjoin(mvdedup(hostname), ","), mac_address=mvjoin(mvdedup(mac_address), ",")
+            | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
+            | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"`,
+            function (resultRows){
+                // This will return no search results
+                enableModelCloseButton();
+                setModelMessage(`Devices successfully merged to device UUID:${firstUUID} - Changes reflect on the dashboard when you refresh the page.`);
+                // TODO - Re-run all searches on the dashboard (future)
+            });
+    });
 
 
     function utilCheckDifferentDevices(product, previous, current){
