@@ -4,7 +4,7 @@ import splunk.entity as entity
 from splunk import rest
 
 APP_NAME = 'cyences_app_for_splunk'
-CYENCES_NETWORK_CALL_TIMEOUT = 5   # max timeout for all network calls are 5 seconds
+CYENCES_NETWORK_CALL_TIMEOUT = 20   # max timeout for all network calls are 20 seconds
 CYENCES_CONF_FILE = 'cs_configurations'
 
 
