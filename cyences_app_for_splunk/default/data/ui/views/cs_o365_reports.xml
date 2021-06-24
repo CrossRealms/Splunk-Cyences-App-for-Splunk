@@ -156,9 +156,26 @@
   | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
         </search>
       </input>
+      <input type="multiselect" token="tkn_logon_error">
+        <label>Logon Error</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <prefix>LogonError IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+        <fieldForLabel>LogonError</fieldForLabel>
+        <fieldForValue>LogonError</fieldForValue>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$ | dedup LogonError | table LogonError</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$ 
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed $tkn_host$ $tkn_logon_error$
 | iplocation ClientIP 
 | search $tkn_drop_country$  user=$tkn_user|s$
 | `cs_human_readable_time_format(_time, time)` 
