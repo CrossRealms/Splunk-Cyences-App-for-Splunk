@@ -192,7 +192,8 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         ips = None
         try:
-            ips = list(set(record['ip'].split(",")))
+            ips = record['ip'].split(",")
+            ips = set([x.strip() for x in ips if len(x.strip())>1])
             if not ips or (len(ips)==1 and ips[0]) == '':
                 ips = []
         except:
@@ -200,7 +201,8 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         hostnames = None
         try:
-            hostnames = list(set(record['hostname'].split(",")))
+            hostnames = record['hostname'].split(",")
+            hostnames = set([x.strip() for x in hostnames if len(x.strip())>1])
             if not hostnames or (len(hostnames)==1 and hostnames[0]) == '':
                 hostnames = []
         except:
@@ -208,7 +210,8 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         mac_addresses = None
         try:
-            mac_addresses = list(set(record['mac_address'].split(",")))
+            mac_addresses = record['mac_address'].split(",")
+            mac_addresses = set([x.strip() for x in mac_addresses if len(x.strip())>1])
             if not mac_addresses or (len(mac_addresses)==1 and mac_addresses[0]) == '':
                 mac_addresses = []
         except:

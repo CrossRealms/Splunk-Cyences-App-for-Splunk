@@ -11,32 +11,32 @@ TODOs & Notes
 # DONE - update qualys query to add fqdns, sophos add more fields so that we can use lookup for anything later, etc.
 # TODO ? - update all searches to use prefix for fields to avoid conflict while merging
 # DONE - write savedsearches for all (execution one after other)
-# TODO - test above command's logic (if its merging right devices together and its merging devices that it should be)
+# DONE - test above command's logic (if its merging right devices together and its merging devices that it should be)
 # DONE - remove unnecessary logs and change logging location from logger_manager
 # TODO - update debug to info mode for logger
-# TODO - write device inventory query by joining all tables with device inventory table
-# TODO - change device master to device inventory through-out the App
-# TODO - change csv lookups to kvstore for all lookups, use key as it's unique uuid per devices
-# TODO - update tenable vulnerabilities lookup
-# TODO - write savedsearched for generating inventory lookup (that should execute at last)
-# TODO - Provide a way to manually merge two uuids/devices from UI
+# DONE - write device inventory query by joining all tables with device inventory table
+# DONE - change device master to device inventory through-out the App
+# DONE - change csv lookups to kvstore for all lookups, use key as it's unique uuid per devices
+# DONE - update tenable vulnerabilities lookup
+# DONE - write savedsearched for generating inventory lookup (that should execute at last)
+# DONE - Provide a way to manually merge two uuids/devices from UI
 # TODO - Provide a way to manually remove uuids
 # TODO - manually provide way to remove hostname, mac_address for any item in the list to be consider
 #        (mac address collision (ignoring some mac address) - https://www.google.com/amp/s/www.howtogeek.com/228286/how-is-the-uniqueness-of-mac-addresses-enforced/amp/)
-# TODO - write backfilling (-7d) searches for all
-# TODO - write cleanup searches for all (more than 30d remove device)
-# TODO - change device master table with new lookup
-# TODO - change asset intelligence dashboard to be displayed in the per uuid 
+# DONE - write backfilling (-7d) searches for all
+# DONE - write cleanup searches for all (more than 60d remove device)
+# DONE - change device master table with new lookup
+# DONE (not doing it) - change asset intelligence dashboard to be displayed in the per uuid 
 #        (search based on ip/host but display rest of the page based on specific device (for all it's ips and hostnames, etc) selected from the first device inventory table)
 # TODO - Update all savedsearches to add more information (ex. add different statuses from sophos data)
 # TODO - update rest of the App based on new lookups
-# TODO - what to do for conflicting mac_address
+# DONE - what to do for conflicting mac_address
 # TODO - update qualys and tenable -> remote fixed and info vulnerabilities
 
 # TODO - Sophos depends on counter-measure configuration and commands for collecting inventory.
 # TODO - Update above csv lookup writing to kvstore for cs_device_inventory_lookup.csv
 
-# TODO - Logic validation Notes
+# DONE - Logic validation Notes
 # - product_uuid match scenario found - seems to be working
 # - hostname search is working when product_uuid not found
 #
@@ -55,31 +55,31 @@ TODOs & Notes
 #       hostname found in the lookup
 #       data_pointer[sophos_uuid]=90674878-eade-480a-9d17-29a37da4327c is already present, while adding record:OrderedDict([('hostname', 'mleadc02'), ('indextime', '1623759108'), ('lansweeper_id', ''), ('time', '1623473357.840000'), ('ip', '10.10.10.6,169.254.150.167'), ('mac_address', '00:0c:29:ee:91:7e,02:00:4c:4f:4f:50'), ('sophos_uuid', 'c64b1e2d-4807-442e-ba5b-b97cf432a113'), ('qualys_id', '')]) into exiting lookup entry:['f472a01e-74d9-4631-8990-2a7a4aef1144', '1623350390.283000', '169.254.122.185,10.10.10.5', 'CR-LANSWEEPER,mleadc01,MLEA-FS01,mleadc02', '00:0c:29:ee:91:7e,00:0c:29:63:00:43,00:50:56:88:3a:a3,02:00:4c:4f:4f:50,00:0c:29:3d:da:cf', '', '', '', '90674878-eade-480a-9d17-29a37da4327c', '', '']
 
-# TODO - Auto remove mac_addresses and hostnames that is causing conflict.
-#      - Or find some better solution for these conflicts as it seems conflict are more often.
+# DONE (not needed for current logic) - Auto remove mac_addresses and hostnames that is causing conflict.
+#      - DONE - Or find some better solution for these conflicts as it seems conflict are more often.
 
-# TODO - Device master table showing wrong count for sophos
+# DONE - Device master table showing wrong count for sophos
 #      - I think that's due to mac_address conflict
 
 
 
-TODO - Add mac_address filter on Asset Intelligence dashboard
-    - Update device master drilldown
+DONE (not doing it now) - Add mac_address filter on Asset Intelligence dashboard
+DONE - Update device master drilldown
 
 TODO - update csv device inventory lookup to kvstore lookup (grep)
 
-TODO - grep master and update through out the App
+DONE - grep master and update through out the App
 
 TODO - Change default value for animate to "false" for cs_network_animate_pulse_traffic_map and cs_network_animate_traffic_map
 
-TODO - Asset Intelligence Dashboard
-    - Make drilldown from device master table appropriate
-    - Handle multi-values properly
-    - Add tables/lookups for everything -> change the ones that uses direct search from the asset intelligence dashboard
+Asset Intelligence Dashboard
+DONE - Make drilldown from device master table appropriate
+DONE - Handle multi-values properly
+TODO - Add tables/lookups for everything -> change the ones that uses direct search from the asset intelligence dashboard
 
-TODO - Use macro for common searches through-out all the dashboards
+DONE - Use macro for common searches through-out all the dashboards
 
-TODO - There are still mac_address and ip value that starts with ,(comma) - example -> ,10.33.50.10 and ,00:50:56:88:5f:4f,00:50:56:88:57:ae
+DONE - There are still mac_address and ip value that starts with ,(comma) - example -> ,10.33.50.10 and ,00:50:56:88:5f:4f,00:50:56:88:57:ae
 
 TODO - For Future - Smart merge
     - If IP matches and time last updated is quite near Or similar way for Mac Address -> Then we can smartly merge it.
@@ -88,18 +88,19 @@ Note (Why can't we merge these automatically):
 - IP or Mac matches but we for sure know they are different device -> https://10.33.1.40:8000/en-US/app/cyences_app_for_splunk/search?q=%7C%20inputlookup%20cs_device_inventory%0A%7C%20eval%20ip_values%3Dsplit(ip%2C%20%22%2C%22)%2C%20mac_values%3Dsplit(mac_address%2C%20%22%2C%22)%0A%7C%20multireport%20%5B%0A%7C%20stats%20values(*)%20as%20*%20by%20mac_values%0A%7C%20eval%20no_uuids%3Dmvcount(uuid)%20%7C%20where%20no_uuids%3E1%20%0A%7C%20eval%20no_lansweeper%3Dmvcount(lansweeper_id)%2C%20no_qualys%3Dmvcount(qualys_id)%2C%20no_tenable%3Dmvcount(tenable_uuid)%2C%20no_sophos%3Dmvcount(sophos_uuid)%2C%20no_defender%3Dmvcount(windows_defender_host)%2C%20no_crowdstrike%3Dmvcount(crowdstrike_userid)%20%7C%20fillnull%20value%3D0%20no_lansweeper%20no_qualys%20no_tenable%20no_sophos%20no_defender%20no_crowdstrike%0A%7C%20where%20no_uuids%3C%3Dno_lansweeper%20or%20no_uuids%3C%3Dno_qualys%20or%20no_uuids%3C%3Dno_tenable%20or%20no_uuids%3C%3Dno_sophos%20or%20no_uuids%3C%3Dno_defender%20or%20no_uuids%3C%3Dno_crowdstrike%0A%7C%20eval%20Type%3D%22Mac%20Address%20Matches%22%20%7C%20table%20Type%2C%20mac_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid%5D%0A%5B%0A%7C%20stats%20values(*)%20as%20*%20by%20ip_values%0A%7C%20eval%20no_uuids%3Dmvcount(uuid)%20%7C%20where%20no_uuids%3E1%20%0A%7C%20eval%20no_lansweeper%3Dmvcount(lansweeper_id)%2C%20no_qualys%3Dmvcount(qualys_id)%2C%20no_tenable%3Dmvcount(tenable_uuid)%2C%20no_sophos%3Dmvcount(sophos_uuid)%2C%20no_defender%3Dmvcount(windows_defender_host)%2C%20no_crowdstrike%3Dmvcount(crowdstrike_userid)%20%7C%20fillnull%20value%3D0%20no_lansweeper%20no_qualys%20no_tenable%20no_sophos%20no_defender%20no_crowdstrike%0A%7C%20where%20no_uuids%3C%3Dno_lansweeper%20or%20no_uuids%3C%3Dno_qualys%20or%20no_uuids%3C%3Dno_tenable%20or%20no_uuids%3C%3Dno_sophos%20or%20no_uuids%3C%3Dno_defender%20or%20no_uuids%3C%3Dno_crowdstrike%0A%7C%20eval%20Type%3D%22IP%20Matches%22%20%7C%20table%20Type%2C%20ip_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid%5D%0A%7C%20table%20Type%2C%20ip_values%2C%20mac_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=-24h%40h&latest=now&display.general.type=statistics&display.statistics.sortColumn=ip_values&sid=1624284644.866
     - Another example -> https://10.33.1.40:8000/en-US/app/cyences_app_for_splunk/search?q=%7C%20inputlookup%20cs_device_inventory%20where%20uuid%20IN%20(%22e497d205-8043-4634-b4f3-12720e8e8224%22%2C%20%22ef137f4a-a74e-45e5-bfa2-ce27a55edacb%22%2C%20%22f8951be9-4621-4d39-b819-0b9f230c2dcf%22)%0A%7C%20join%20lansweeper_id%20type%3Dleft%20%5B%7C%20inputlookup%20cs_lansweeper_inventory%20%7C%20rename%20time%20as%20lansweeper_last_event%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20tenable_uuid%2C%20qualys_id%2C%20sophos_uuid%2C%20crowdstrike_userid%2C%20windows_defender_host%5D%0A%7C%20join%20tenable_uuid%20type%3Dleft%20%5B%7C%20inputlookup%20cs_tenable_inventory%20%7C%20rename%20time%20as%20tenable_last_event%2C%20created_at%20as%20tenable_created_at%2C%20first_seen%20as%20tenable_first_seen%2C%20last_seen%20as%20tenable_last_seen%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20qualys_id%2C%20lansweeper_id%2C%20sophos_uuid%2C%20crowdstrike_userid%2C%20windows_defender_host%5D%0A%7C%20join%20qualys_id%20type%3Dleft%20%5B%7C%20inputlookup%20cs_qualys_inventory.csv%20%7C%20rename%20time%20as%20qualys_last_event%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20tenable_uuid%2C%20lansweeper_id%2C%20sophos_uuid%2C%20crowdstrike_userid%2C%20windows_defender_host%5D%0A%7C%20join%20sophos_uuid%20type%3Dleft%20%5B%7C%20inputlookup%20cs_sophos_inventory%20%7C%20rename%20time%20as%20sophos_last_event%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20tenable_uuid%2C%20qualys_id%2C%20lansweeper_id%2C%20crowdstrike_userid%2C%20windows_defender_host%5D%0A%7C%20join%20windows_defender_host%20type%3Dleft%20%5B%7C%20inputlookup%20cs_windows_defender_inventory%20%7C%20rename%20time%20as%20defender_last_event%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20tenable_uuid%2C%20qualys_id%2C%20lansweeper_id%2C%20sophos_uuid%2C%20crowdstrike_userid%5D%0A%7C%20join%20crowdstrike_userid%20type%3Dleft%20%5B%7C%20inputlookup%20cs_crowdstrike_inventory%20%7C%20rename%20time%20as%20crowdstrike_last_event%20%7C%20fields%20-%20ip%2C%20hostname%2C%20mac_address%2C%20tenable_uuid%2C%20qualys_id%2C%20lansweeper_id%2C%20sophos_uuid%2C%20windows_defender_host%5D%0A%7C%20eval%20lansweeper_os%3Dcoalesce(lansweeper_os%2C%20AssetType.%22%20%22.OSVersion.%22%20%22.AssetVersion)%20%7C%20rename%20AssetType%20AS%20lansweeper_asset_type%2C%20Description%20as%20lansweeper_description%0A%7C%20rename%20NETWORK_ID%20as%20qualys_network_id%0A%7C%20rename%20time%20as%20_time%0A%7C%20makemv%20ip%20delim%3D%22%2C%22%0A%7C%20makemv%20hostname%20delim%3D%22%2C%22%0A%7C%20makemv%20mac_address%20delim%3D%22%2C%22%0A%7C%20eval%20active_vul%3Dcoalesce(active_vuln%2C%20ACTIVE)%2C%20total_vul%3Dcoalesce(total_vuln%2C%20TOTAL_VULNS)%0A%7C%20table%20_time%2C%20uuid%2C%20ip%2C%20hostname%2C%20mac_address%2C%20lansweeper_id%2C%20lansweeper_state%2C%20lansweeper_asset_type%2C%20lansweeper_os%2C%20lansweeper_user%2C%20lansweeper_description%2C%20qualys_id%2C%20QUALYS_OS%2C%20qualys_network_id%2C%20tenable_uuid%2C%20tenable_os%2C%20sophos_uuid%2C%20sophos_type%2C%20sophos_os%2C%20sophos_user%2C%20sophos_login_via%2C%20sophos_health%2C%20sophos_product_installed%2C%20crowdstrike_userid%2C%20windows_defender_host&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=-24h%40h&latest=now&display.general.type=statistics&display.page.search.tab=statistics&sid=1624286113.1055
 - IP Address matches but may or may not be same device -> https://10.33.1.40:8000/en-US/app/cyences_app_for_splunk/search?q=%7C%20inputlookup%20cs_device_inventory%0A%7C%20eval%20ip_values%3Dsplit(ip%2C%20%22%2C%22)%2C%20mac_values%3Dsplit(mac_address%2C%20%22%2C%22)%0A%7C%20multireport%20%5B%0A%7C%20stats%20values(*)%20as%20*%20by%20mac_values%0A%7C%20eval%20no_uuids%3Dmvcount(uuid)%20%7C%20where%20no_uuids%3E1%20%0A%7C%20eval%20no_lansweeper%3Dmvcount(lansweeper_id)%2C%20no_qualys%3Dmvcount(qualys_id)%2C%20no_tenable%3Dmvcount(tenable_uuid)%2C%20no_sophos%3Dmvcount(sophos_uuid)%2C%20no_defender%3Dmvcount(windows_defender_host)%2C%20no_crowdstrike%3Dmvcount(crowdstrike_userid)%20%7C%20fillnull%20value%3D0%20no_lansweeper%20no_qualys%20no_tenable%20no_sophos%20no_defender%20no_crowdstrike%0A%7C%20where%20no_uuids%3Eno_lansweeper%20and%20no_uuids%3Eno_qualys%20and%20no_uuids%3Eno_tenable%20and%20no_uuids%3Eno_sophos%20and%20no_uuids%3Eno_defender%20and%20no_uuids%3Eno_crowdstrike%0A%7C%20eval%20Type%3D%22Mac%20Address%20Matches%22%20%7C%20table%20Type%2C%20mac_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid%5D%0A%5B%0A%7C%20stats%20values(*)%20as%20*%20by%20ip_values%0A%7C%20eval%20no_uuids%3Dmvcount(uuid)%20%7C%20where%20no_uuids%3E1%20%0A%7C%20eval%20no_lansweeper%3Dmvcount(lansweeper_id)%2C%20no_qualys%3Dmvcount(qualys_id)%2C%20no_tenable%3Dmvcount(tenable_uuid)%2C%20no_sophos%3Dmvcount(sophos_uuid)%2C%20no_defender%3Dmvcount(windows_defender_host)%2C%20no_crowdstrike%3Dmvcount(crowdstrike_userid)%20%7C%20fillnull%20value%3D0%20no_lansweeper%20no_qualys%20no_tenable%20no_sophos%20no_defender%20no_crowdstrike%0A%7C%20where%20no_uuids%3Eno_lansweeper%20and%20no_uuids%3Eno_qualys%20and%20no_uuids%3Eno_tenable%20and%20no_uuids%3Eno_sophos%20and%20no_uuids%3Eno_defender%20and%20no_uuids%3Eno_crowdstrike%0A%7C%20eval%20Type%3D%22IP%20Matches%22%20%7C%20table%20Type%2C%20ip_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid%5D%0A%7C%20table%20Type%2C%20ip_values%2C%20mac_values%2C%20uuid%2C%20no_uuids%2C%20hostname%2C%20ip%2C%20mac_address%2C%20lansweeper_id%2C%20qualys_id%2C%20tenable_uuid%2C%20sophos_uuid%2C%20windows_defender_host%2C%20crowdstrike_userid&display.page.search.mode=verbose&dispatch.sample_ratio=1&workload_pool=&earliest=-24h%40h&latest=now&display.general.type=statistics&sid=1624284556.851
+(CR ES SH - Conflicting IP - 10.33.1.217)
 
 
 TODO - Add sophos_os to build final os in device inventory
 
 TODO - Tenable vulnerabilities we need to backfill in all time to get correct count - Need analysis
 
-TODO - Do not let user merge if it device has two lansweeper_id or product_uuid
+DONE - Do not let user merge if it device has two lansweeper_id or product_uuid
 
 DONE - Row expanded table has issue with column width (ex. look at device inventory management table)
 TODO - Adding visible border to expanded table would be better.
 
-TODO - Device Inventory Management - Add checkboxes to select uuids and add buttons for merge and never merge.
+DONE - Device Inventory Management - Add checkboxes to select uuids and add buttons for merge and never merge.
     - Show message for confirmation of merge and merge completion.
 
 
