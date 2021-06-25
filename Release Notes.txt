@@ -91,7 +91,7 @@ Note (Why can't we merge these automatically):
 (CR ES SH - Conflicting IP - 10.33.1.217)
 
 
-TODO - Add sophos_os to build final os in device inventory
+DONE - Add sophos_os to build final os in device inventory
 
 TODO - Tenable vulnerabilities we need to backfill in all time to get correct count - Need analysis
 
@@ -102,6 +102,23 @@ TODO - Adding visible border to expanded table would be better.
 
 DONE - Device Inventory Management - Add checkboxes to select uuids and add buttons for merge and never merge.
     - Show message for confirmation of merge and merge completion.
+
+
+TODO - Allow merging devices which lansweeper or tenable says different device (multi-value in product id field)
+
+
+TODO - issue with warning (hostname are combining which should not)
+    Example - uuid=82e71252-3b3a-4f2d-8729-3242231b42a2
+    index=_internal sourcetype="cyences:logs" "WARNING 140250925581952 - data_pointer[lansweeper_id]=830"
+    | inputlookup cs_lansweeper_inventory where lansweeper_id IN ("830", "842")
+    | inputlookup cs_device_inventory_temp where lansweeper_id IN ("830", "842")
+    
+
+
+
+
+
+
 
 
 
