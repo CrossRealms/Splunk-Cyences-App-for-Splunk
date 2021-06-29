@@ -218,7 +218,7 @@ function($, TableView, SearchManager, mvc, _){
                 // console.log("cellData", cellData);
                 if (Array.isArray(cellData.value)){
                     let innerHtml = ``;
-                    for(let i=0; i<=cellData.value.length; i++){
+                    for(let i=0; i<cellData.value.length; i++){
                         innerHtml += `<div class="multivalue-subcell" data-mv-index="${i}">${cellData.value[i]}</div>`;
                     }
                     $td.addClass("string").html(innerHtml);
