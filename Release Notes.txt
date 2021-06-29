@@ -114,6 +114,8 @@ TODO - issue with warning (hostname are combining which should not)
     | inputlookup cs_device_inventory_temp where lansweeper_id IN ("830", "842")
     
 
+TODO - [Device inventory dashboard] Need to fix the issue with sophos uuid being converting to checkbox on the row expansion
+
 
 
 

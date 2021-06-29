@@ -112,10 +112,21 @@ class DeviceInventoryGenCommand(EventingCommand):
 
     def update_kvstore_lookup(self, collection_name, updated_data):
         if updated_data:
-            jsonargs=json.dumps(updated_data)
-            _ = rest.simpleRequest(
+            # splunk.BadRequest: [HTTP 400] Bad Request; [{'type': 'ERROR', 'code': None, 'text': 'Request exceeds API limits - see limits.conf for details. (Too many documents for a single batch save, max_documents_per_batch_save=1000)'}]
+            if len(updated_data) < 1000:
+                jsonargs=json.dumps(updated_data)
+                _ = rest.simpleRequest(
+                    "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
                 "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
-                method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+                    "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
+                    method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+            else:
+                updated_data_full = [updated_data[i:i + 800] for i in range(0, len(updated_data), 800)]   # send max 800 in each chunk
+                for chunk in updated_data_full:
+                    jsonargs=json.dumps(chunk)
+                    _ = rest.simpleRequest(
+                        "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
+                        method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
             logger.info("Updated {} entries in the lookup.".format(len(updated_data)))
         else:
             logger.info("No entries to update in the KVStore lookup.")
@@ -154,7 +165,7 @@ class DeviceInventoryGenCommand(EventingCommand):
         csv_data = DEVICE_INVENTORY_LOOKUP_HEADERS
         for i in data:
             csv_data.append(
-                [i['uuid'], i['time'], i['ip'], i['hostname'], i['mac_address'], 
+                [i['uuid'], i['time'], '~~'.join(i['ip']), '~~'.join(i['hostname']), '~~'.join(i['mac_address']), 
                 i['tenable_uuid'], i['qualys_id'], i['lansweeper_id'], i['sophos_uuid'], i['crowdstrike_userid'], i['windows_defender_host']])
 
         backup_file = get_lookup_path('{}_{}.csv'.format(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX, datetime.today().strftime('%Y_%m_%d_%H_%M_%s')))
@@ -174,14 +185,14 @@ class DeviceInventoryGenCommand(EventingCommand):
         field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[field]
         if field in ['hostname', 'mac_address']:
             for i in self.device_inventory:
-                lookup_values = i[field_index].split(',')
+                lookup_values = i[field_index]
                 for val in value:
                     if val in lookup_values:
                         logger.debug("Found lookup entry:{}".format(i))
                         return i
         elif field == 'ip':
             for i in self.device_inventory:
-                lookup_values = i[field_index].split(',')
+                lookup_values = i[field_index]
                 for val in value:
                     if val in lookup_values:
                         logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
@@ -190,7 +201,7 @@ class DeviceInventoryGenCommand(EventingCommand):
                             return i
         else:
             for i in self.device_inventory:
-                if value==i[field_index]:
+                if (isinstance(i[field_index], list) and value in i[field_index]) or (value==i[field_index]):
                     logger.debug("Found lookup entry:{}".format(i))
                     return i
         logger.debug("Lookup entry not found.")
@@ -199,10 +210,10 @@ class DeviceInventoryGenCommand(EventingCommand):
     def get_pointer_to_match_mac_and_ip(self, mac_addresses, ips, time=None):
         logger.debug("Finding mac:{}, ip:{}".format(mac_addresses, ips))
         for i in self.device_inventory:
-            lookup_values_mac = i[LOOKUP_KEY_MAC_ADDRESS].split(',')
+            lookup_values_mac = i[LOOKUP_KEY_MAC_ADDRESS]
             for mac in mac_addresses:
                 if mac in lookup_values_mac:
-                    lookup_values_ip = i[LOOKUP_KEY_IP].split(',')
+                    lookup_values_ip = i[LOOKUP_KEY_IP]
                     for ip in ips:
                         if ip in lookup_values_ip:
                             logger.debug("Found lookup entry for matching mac and ip.:{}".format(i))
@@ -215,13 +226,10 @@ class DeviceInventoryGenCommand(EventingCommand):
                             #     return i
         logger.debug("Lookup entry not found for matching mac or ip.")
 
-
-    def append_value_in_multivalued_csv_field(self, current, new_values):
-        new_val = current.split(',')
-        new_val.extend(new_values)
-        new_val = ','.join(set(new_val))
-        return new_val
     
+    def combine_multivalued_field(self, current, new_values):
+        current.extend(new_values)
+        return list(set(current))
 
     def update_lookup_row(self, record, data_pointer, ips, hostnames, mac_addresses, product_uuid=None):
         # check if the entry is in already updated list
@@ -235,19 +243,28 @@ class DeviceInventoryGenCommand(EventingCommand):
         if product_uuid:
             field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[product_uuid]
             if data_pointer[field_index]:
-                # TODO - if data_pointer[field_index] is already present that means there is conflicting mac_address, etc
-                logger.warning("data_pointer[{}]={} is already present, while adding record:{} into exiting lookup entry:{}".format(product_uuid, data_pointer[field_index], record, data_pointer))
-            data_pointer[field_index] = record[product_uuid]
+                logger.info("data_pointer[{}]={} is already present, while adding record:{} into exiting lookup entry:{}, mering...".format(product_uuid, data_pointer[field_index], record, data_pointer))
+                # now we are merging these events
+                if isinstance(data_pointer[field_index], list):
+                    if record[product_uuid] not in data_pointer[field_index]:
+                        data_pointer[field_index] = data_pointer[field_index].append(record[product_uuid])
+                elif isinstance(data_pointer[field_index], str):
+                    if data_pointer[field_index] != record[product_uuid]:
+                        data_pointer[field_index] = [data_pointer[field_index], record[product_uuid]]
+                else:
+                    data_pointer[field_index] = record[product_uuid]
+            else:
+                data_pointer[field_index] = record[product_uuid]
 
-        data_pointer[LOOKUP_KEY_HOSTNAME] = self.append_value_in_multivalued_csv_field(data_pointer[LOOKUP_KEY_HOSTNAME], hostnames)
-        data_pointer[LOOKUP_KEY_MAC_ADDRESS] = self.append_value_in_multivalued_csv_field(data_pointer[LOOKUP_KEY_MAC_ADDRESS], mac_addresses)
+        data_pointer[LOOKUP_KEY_HOSTNAME] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_HOSTNAME], hostnames)
+        data_pointer[LOOKUP_KEY_MAC_ADDRESS] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_MAC_ADDRESS], mac_addresses)
 
         if self.check_timestamp(data_pointer[LOOKUP_KEY_TIME]):
             # append ips
-            data_pointer[LOOKUP_KEY_IP] = self.append_value_in_multivalued_csv_field(data_pointer[LOOKUP_KEY_IP], ips)
+            data_pointer[LOOKUP_KEY_IP] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_IP], ips)
         else:
             # update ips
-            data_pointer[LOOKUP_KEY_IP] = ','.join(set(ips))
+            data_pointer[LOOKUP_KEY_IP] = ips
         
         data_pointer[LOOKUP_KEY_TIME] = record['time']   # last update time
 
@@ -263,30 +280,33 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         ips = None
         try:
-            ips = record['ip'].split(",")
-            ips = set([x.strip() for x in ips if len(x.strip())>1])
+            ips = record['ip'].split("~~")
+            ips = list(set([x.strip() for x in ips if len(x.strip())>1]))
             if not ips or (len(ips)==1 and ips[0]) == '':
                 ips = []
         except:
             ips = []
+        record['ip'] = ips
 
         hostnames = None
         try:
-            hostnames = record['hostname'].split(",")
-            hostnames = set([x.strip() for x in hostnames if len(x.strip())>1])
+            hostnames = record['hostname'].split("~~")
+            hostnames = list(set([x.strip() for x in hostnames if len(x.strip())>1]))
             if not hostnames or (len(hostnames)==1 and hostnames[0]) == '':
                 hostnames = []
         except:
             hostnames = []
+        record['hostname'] = hostnames
 
         mac_addresses = None
         try:
-            mac_addresses = record['mac_address'].split(",")
-            mac_addresses = set([x.strip() for x in mac_addresses if len(x.strip())>1])
+            mac_addresses = record['mac_address'].split("~~")
+            mac_addresses = list(set([x.strip() for x in mac_addresses if len(x.strip())>1]))
             if not mac_addresses or (len(mac_addresses)==1 and mac_addresses[0]) == '':
                 mac_addresses = []
         except:
             mac_addresses = []
+        record['mac_address'] = mac_addresses
 
         data_pointer = self.get_pointer_in_data(field=product_uuid, value=record[product_uuid])
         if data_pointer:
@@ -309,82 +329,110 @@ class DeviceInventoryGenCommand(EventingCommand):
             return
 
         logger.debug("No first look matching entry found in the lookup")
+
+        try:
+            lansweeper_id = record['lansweeper_id'].strip()
+            record['lansweeper_id'] = [lansweeper_id] if lansweeper_id else []
+        except:
+            record['lansweeper_id'] = []
+
+        try:
+            tenable_uuid = record['tenable_uuid'].strip()
+            record['tenable_uuid'] = [tenable_uuid] if tenable_uuid else []
+        except:
+            record['tenable_uuid'] = []
+
+        try:
+            qualys_id = record['qualys_id'].strip()
+            record['qualys_id'] = [qualys_id] if qualys_id else []
+        except:
+            record['qualys_id'] = []
+
+        try:
+            sophos_uuid = record['sophos_uuid'].strip()
+            record['sophos_uuid'] = [sophos_uuid] if sophos_uuid else []
+        except:
+            record['sophos_uuid'] = []
+
+        try:
+            windows_defender_host = record['windows_defender_host'].strip()
+            record['windows_defender_host'] = [windows_defender_host] if windows_defender_host else []
+        except:
+            record['windows_defender_host'] = []
+
+        try:
+            crowdstrike_userid = record['crowdstrike_userid'].strip()
+            record['crowdstrike_userid'] = [crowdstrike_userid] if crowdstrike_userid else []
+        except:
+            record['crowdstrike_userid'] = []
+
         return record
 
 
     def transform(self, records):
-        self.device_inventory = None
-        self.updated_entries = []
-        self.current_time = self.ipmatchstarttime
-        self.current_time_delta = self.current_time - self.ipmatchtimediff
+        try:
+            self.device_inventory = None
+            self.updated_entries = []
+            self.current_time = self.ipmatchstarttime
+            self.current_time_delta = self.current_time - self.ipmatchtimediff
 
-        for record in records:
-            if not self.device_inventory:
-                # self.device_inventory = self.read_csv_lookup(DEVICE_INVENTORY_LOOKUP, DEVICE_INVENTORY_LOOKUP_HEADERS)   # for csv lookup
-                self.device_inventory = self.read_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION)
+            for record in records:
+                if not self.device_inventory:
+                    # self.device_inventory = self.read_csv_lookup(DEVICE_INVENTORY_LOOKUP, DEVICE_INVENTORY_LOOKUP_HEADERS)   # for csv lookup
+                    self.device_inventory = self.read_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION)
 
-            ret = None
-            if 'tenable_uuid' in record and record['tenable_uuid']:
-                ret = self.handle_record(record, product_uuid='tenable_uuid')
-            elif 'qualys_id' in record and record['qualys_id']:
-                ret = self.handle_record(record, product_uuid='qualys_id')
-            elif 'lansweeper_id' in record and record['lansweeper_id']:
-                ret = self.handle_record(record, product_uuid='lansweeper_id')
-            elif 'sophos_uuid' in record and record['sophos_uuid']:
-                ret = self.handle_record(record, product_uuid='sophos_uuid')
-            elif 'crowdstrike_userid' in record and record['crowdstrike_userid']:
-                ret = self.handle_record(record, product_uuid='crowdstrike_userid')
-            elif 'windows_defender_host' in record and record['windows_defender_host']:
-                ret = self.handle_record(record, product_uuid='windows_defender_host')
+                ret = None
+                if 'tenable_uuid' in record and record['tenable_uuid']:
+                    ret = self.handle_record(record, product_uuid='tenable_uuid')
+                elif 'qualys_id' in record and record['qualys_id']:
+                    ret = self.handle_record(record, product_uuid='qualys_id')
+                elif 'lansweeper_id' in record and record['lansweeper_id']:
+                    ret = self.handle_record(record, product_uuid='lansweeper_id')
+                elif 'sophos_uuid' in record and record['sophos_uuid']:
+                    ret = self.handle_record(record, product_uuid='sophos_uuid')
+                elif 'crowdstrike_userid' in record and record['crowdstrike_userid']:
+                    ret = self.handle_record(record, product_uuid='crowdstrike_userid')
+                elif 'windows_defender_host' in record and record['windows_defender_host']:
+                    ret = self.handle_record(record, product_uuid='windows_defender_host')
 
-            logger.debug("Ret: {}".format(ret))
+                logger.debug("Ret: {}".format(ret))
 
-            if ret:
-                # ret is dict, convert to list in proper order and prepend with new uuid
-                while True:
-                    new_uuid = str(uuid.uuid4())
-                    exist = self.get_pointer_in_data('uuid', new_uuid)
-                    if not exist:
-                        if 'lansweeper_id' not in ret:
-                            ret['lansweeper_id'] = ''
-                        if 'tenable_uuid' not in ret:
-                            ret['tenable_uuid'] = ''
-                        if 'qualys_id' not in ret:
-                            ret['qualys_id'] = ''
-                        if 'sophos_uuid' not in ret:
-                            ret['sophos_uuid'] = ''
-                        if 'windows_defender_host' not in ret:
-                            ret['windows_defender_host'] = ''
-                        if 'crowdstrike_userid' not in ret:
-                            ret['crowdstrike_userid'] = ''
+                if ret:
+                    # ret is dict, convert to list in proper order and prepend with new uuid
+                    while True:
+                        new_uuid = str(uuid.uuid4())
+                        exist = self.get_pointer_in_data('uuid', new_uuid)
+                        if not exist:
+                            # new_device = [new_uuid, ret['time'], ret['ip'], ret['hostname'], ret['mac_address'],   # For csv lookup
+                            #             ret['tenable_uuid'], ret['qualys_id'], ret['lansweeper_id'], ret['sophos_uuid'], ret['crowdstrike_userid'], ret['windows_defender_host']]
+                            new_device = {
+                                '_key': new_uuid,
+                                'uuid': new_uuid,
+                                'time': ret['time'],
+                                'ip': ret['ip'],
+                                'hostname': ret['hostname'],
+                                'mac_address': ret['mac_address'],
+                                'lansweeper_id': ret['lansweeper_id'],
+                                'qualys_id': ret['qualys_id'],
+                                'tenable_uuid': ret['tenable_uuid'],
+                                'sophos_uuid': ret['sophos_uuid'],
+                                'windows_defender_host': ret['windows_defender_host'],
+                                'crowdstrike_userid': ret['crowdstrike_userid']
+                            }
+                            logger.info("New device being added to list: {}".format(new_device))
+                            self.device_inventory.append(new_device)
+                            self.updated_entries.append(new_device)
+                            break
+                    yield ret
 
-                        # new_device = [new_uuid, ret['time'], ret['ip'], ret['hostname'], ret['mac_address'],   # For csv lookup
-                        #             ret['tenable_uuid'], ret['qualys_id'], ret['lansweeper_id'], ret['sophos_uuid'], ret['crowdstrike_userid'], ret['windows_defender_host']]
-                        new_device = {
-                            '_key': new_uuid,
-                            'uuid': new_uuid,
-                            'time': ret['time'],
-                            'ip': ret['ip'],
-                            'hostname': ret['hostname'],
-                            'mac_address': ret['mac_address'],
-                            'lansweeper_id': ret['lansweeper_id'],
-                            'qualys_id': ret['qualys_id'],
-                            'tenable_uuid': ret['tenable_uuid'],
-                            'sophos_uuid': ret['sophos_uuid'],
-                            'windows_defender_host': ret['windows_defender_host'],
-                            'crowdstrike_userid': ret['crowdstrike_userid']
-                        }
-                        logger.info("New device being added to list: {}".format(new_device))
-                        self.device_inventory.append(new_device)
-                        self.updated_entries.append(new_device)
-                        break
-                yield ret
-
-        # Write lookup at the end
-        if self.device_inventory:
-            # self.update_csv_lookup(DEVICE_INVENTORY_LOOKUP, self.device_inventory)   # For csv lookup
-            self.update_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION, self.updated_entries)
-            self.take_backup_of_lookup_only_updated_entries(self.updated_entries)
+            # Write lookup at the end
+            if self.device_inventory:
+                # self.update_csv_lookup(DEVICE_INVENTORY_LOOKUP, self.device_inventory)   # For csv lookup
+                self.update_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION, self.updated_entries)
+                self.take_backup_of_lookup_only_updated_entries(self.updated_entries)
+        except:
+            logger.exception("Exception in command deviceinventorygen.")
+            raise
 
 
 dispatch(DeviceInventoryGenCommand, sys.argv, sys.stdin, sys.stdout, __name__)

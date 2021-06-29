@@ -290,22 +290,20 @@
         <title>ADMIN</title>
         <search>
           <query>| inputlookup cs_device_inventory
-| eval ip_values=split(ip, ","), mac_values=split(mac_address, ",")
+| eval ip_all=ip, mac_address_all=mac_address
+| eval ip_all=mvjoin(ip, ","), mac_address_all=mvjoin(mac_address, ",")
 | multireport [
-| stats values(*) as * by mac_values
-| where isnotnull(mac_values) AND mac_values!="" AND mac_values!=" " 
+| stats values(*) as * by mac_address
+| where isnotnull(mac_address) AND mac_address!="" AND mac_address!=" " 
 | eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
-| eval no_lansweeper=mvcount(lansweeper_id), no_qualys=mvcount(qualys_id), no_tenable=mvcount(tenable_uuid), no_sophos=mvcount(sophos_uuid), no_defender=mvcount(windows_defender_host), no_crowdstrike=mvcount(crowdstrike_userid) | fillnull value=0 no_lansweeper no_qualys no_tenable no_sophos no_defender no_crowdstrike
-| where no_uuids&gt;no_lansweeper and no_uuids&gt;no_qualys and no_uuids&gt;no_tenable and no_uuids&gt;no_sophos and no_uuids&gt;no_defender and no_uuids&gt;no_crowdstrike
-| eval Type="Mac Address Matches" | table Type, mac_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+| eval Type="Mac Address Matches", ip="" | table Type, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
 [
-| stats values(*) as * by ip_values
-| where isnotnull(ip_values) AND ip_values!="" AND ip_values!=" " 
+| stats values(*) as * by ip
+| where isnotnull(ip) AND ip!="" AND ip!=" " 
 | eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
-| eval no_lansweeper=mvcount(lansweeper_id), no_qualys=mvcount(qualys_id), no_tenable=mvcount(tenable_uuid), no_sophos=mvcount(sophos_uuid), no_defender=mvcount(windows_defender_host), no_crowdstrike=mvcount(crowdstrike_userid) | fillnull value=0 no_lansweeper no_qualys no_tenable no_sophos no_defender no_crowdstrike
-| where no_uuids&gt;no_lansweeper and no_uuids&gt;no_qualys and no_uuids&gt;no_tenable and no_uuids&gt;no_sophos and no_uuids&gt;no_defender and no_uuids&gt;no_crowdstrike
-| eval Type="IP Matches" | table Type, ip_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
-| table Type, ip_values, mac_values, uuid, no_uuids, hostname, ip, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid</query>
+| eval Type="IP Matches", mac_address="" | table Type, ip, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+| table Type, ip, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid
+| sort - no_uuids</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>

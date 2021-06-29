@@ -92,9 +92,7 @@ function($, TableView, SearchManager, mvc, _){
         defineAndExecuteSearch(
             `| inputlookup cs_device_inventory where uuid="${firstUUID}"
             | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | fields - uuid]
-            | makemv ip delim="," | makemv hostname delim="," | makemv mac_address delim=","
-            | stats first(*) as *, max(time) as time, values(ip) as ip, values(hostname) as hostname, values(mac_address) as mac_address
-            | eval ip=mvjoin(mvdedup(ip), ","), hostname=mvjoin(mvdedup(hostname), ","), mac_address=mvjoin(mvdedup(mac_address), ",")
+            | stats max(time) as new_time, values(*) as * | rename new_time as time
             | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
             | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"`,
             function (resultRows){
@@ -105,7 +103,7 @@ function($, TableView, SearchManager, mvc, _){
             });
     });
 
-
+    /*
     function utilCheckDifferentDevices(product, previous, current){
         if (current !== null && current.trim() !== ""){
             if (previous === undefined){
@@ -119,6 +117,7 @@ function($, TableView, SearchManager, mvc, _){
         }
         return false;
     }
+    */
 
     function onMergeButtonClick(){
         // Start model and processing spinner to show progress
@@ -136,7 +135,8 @@ function($, TableView, SearchManager, mvc, _){
             return;
         }
         let search_uuids = generateInFormattedSearchString(selected_uuids);
-        // TODO - Run the search query to get details about all the selected uuids and make sure that no product ids collide
+        /*
+        // Note - Run the search query to get details about all the selected uuids and make sure that no product ids collide
         defineAndExecuteSearch(
             `| inputlookup cs_device_inventory where uuid IN ${search_uuids} | table time, uuid, ip, hostname, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid`,
             function (resultRows){
@@ -200,6 +200,10 @@ function($, TableView, SearchManager, mvc, _){
             });
         // if product ids collide then show the Message="Device <uuid1> and <uuid2> are two different devices as they have two different unique IDs from Tenable/Lansweeper/etc."
         // else merge them with the query and show success message.
+        */
+        setModelMessage(`Are you sure you wanna merge these devices? ${search_uuids}`);
+        enableModelConfirmButton(selected_uuids);
+        enableModelCloseButton();
     }
 
 
@@ -271,21 +275,20 @@ function($, TableView, SearchManager, mvc, _){
 
             //update the search with the HOST_ID that we are interested in
             this._searchManager.set({ search: `| inputlookup cs_device_inventory where uuid IN ${search_uuids}
+            | mvexpand lansweeper_id | mvexpand tenable_uuid | mvexpand qualys_id | mvexpand sophos_uuid | mvexpand windows_defender_host | mvexpand crowdstrike_userid
             | join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
             | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen | fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
             | join qualys_id type=left [| inputlookup cs_qualys_inventory.csv | rename time as qualys_last_event | fields - ip, hostname, mac_address, tenable_uuid, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
             | join sophos_uuid type=left [| inputlookup cs_sophos_inventory | rename time as sophos_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, crowdstrike_userid, windows_defender_host]
             | join windows_defender_host type=left [| inputlookup cs_windows_defender_inventory | rename time as defender_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid]
             | join crowdstrike_userid type=left [| inputlookup cs_crowdstrike_inventory | rename time as crowdstrike_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, windows_defender_host]
+            | stats values(*) as * by uuid
             | eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) | rename AssetType AS lansweeper_asset_type, Description as lansweeper_description
             | rename NETWORK_ID as qualys_network_id
             | eval _time=strftime(time, "%F %T")
-            | makemv ip delim=","
-            | makemv hostname delim=","
-            | makemv mac_address delim=","
             | eval Select=uuid
             | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid, windows_defender_host
-            | transpose header_field=uuid column_name=field`});
+            | transpose 0 header_field=uuid column_name=field`});
             // $container is the jquery object where we can put out content.
             // In this case we will render our chart and add it to the $container
             $container.append(`<div><button id="device_inventory_manager_merge_button" style="
