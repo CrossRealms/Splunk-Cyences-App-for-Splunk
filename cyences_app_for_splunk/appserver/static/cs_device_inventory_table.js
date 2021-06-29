@@ -225,9 +225,9 @@ function($, TableView, SearchManager, mvc, _){
                 }
                 else {
                     let cell_value = cellData.value.trim();
-                    let match = cell_value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/g);
-                    if (match !== null && match.length > 0){
-                        $td.addClass("string").html(`<input type="checkbox" class="device-selection" title="${cellData.value}" id="${cellData.value}" />`);
+                    let match = /^CHECKBOX_THIS_(?<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/g.exec(cell_value);
+                    if (match !== null && match.length >= 2){
+                        $td.addClass("string").html(`<input type="checkbox" class="device-selection" title="${match[1]}" id="${match[1]}" />`);
                         $td.click(function(e){
                             // console.log("clicked on cell.")
                             e.stopPropagation();   // To stop from Splunk from disabling clicking on checkbox
@@ -286,7 +286,7 @@ function($, TableView, SearchManager, mvc, _){
             | eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) | rename AssetType AS lansweeper_asset_type, Description as lansweeper_description
             | rename NETWORK_ID as qualys_network_id
             | eval _time=strftime(time, "%F %T")
-            | eval Select=uuid
+            | eval Select="CHECKBOX_THIS_".uuid
             | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid, windows_defender_host
             | transpose 0 header_field=uuid column_name=field`});
             // $container is the jquery object where we can put out content.
