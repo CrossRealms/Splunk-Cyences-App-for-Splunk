@@ -289,6 +289,7 @@
       <table id="device_inventory_management_table">
         <title>ADMIN</title>
         <search>
+          <!-- When second_bit_in_mac_binary (from first part of mac_address) is 1 that is locally administratored mac_address, we'll filter those mac_address from showing. -->
           <query>| inputlookup cs_device_inventory
 | eval ip_all=ip, mac_address_all=mac_address
 | eval ip_all=mvjoin(ip, ","), mac_address_all=mvjoin(mac_address, ",")
@@ -296,6 +297,12 @@
 | stats values(*) as * by mac_address
 | where isnotnull(mac_address) AND mac_address!="" AND mac_address!=" " 
 | eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
+| eval first_part_of_mac=tonumber(substr(mac_address, 0, 2))
+| eval power=mvrange(0,8) | mvexpand power | eval base2=pow(2, power) 
+| eval mydiv=floor(first_part_of_mac/base2) 
+| eval mybin=mydiv % 2 
+| stats list(mybin) as binary, values(*) as * by mac_address
+| eval second_bit_in_mac_binary=mvindex(binary,1) | where second_bit_in_mac_binary=0
 | eval Type="Mac Address Matches", ip="" | table Type, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
 [
 | stats values(*) as * by ip
