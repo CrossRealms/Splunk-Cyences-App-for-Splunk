@@ -59,7 +59,7 @@
         </search>
         <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="count">5</option>
-        <option name="drilldown">cell</option>
+        <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="lansweeper">
@@ -84,11 +84,6 @@
         <format type="color" field="crowdstrike">
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
-        <drilldown>
-          <set token="tkn_drilldown_host">$row.host$</set>
-          <set token="tkn_drilldown_ip">$row.ip$</set>
-          <eval token="tkn_drilldown_user">if(isnull($row.user$), "-", $row.user$)</eval>
-        </drilldown>
       </table>
       <html>
         <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>

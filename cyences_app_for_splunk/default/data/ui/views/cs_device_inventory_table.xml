@@ -231,7 +231,7 @@
       </input>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ lansweeper_user sophos_user crowdstrike_user tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
         <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="drilldown">row</option>
