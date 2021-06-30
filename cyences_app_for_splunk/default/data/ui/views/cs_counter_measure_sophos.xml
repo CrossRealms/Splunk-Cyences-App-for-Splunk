@@ -20,8 +20,7 @@
         <search>
           <query>| sophosinstancedetails hostname=$tkn_hostname|s$ ip=$tkn_ip|s$ uuid=$tkn_uuid|s$ 
 | spath input=tenant output=tenant_id path=id 
-| eval checkbox=id."$$$$$$$$".tenant_id 
-| table checkbox id,type,tenant_id,hostname,ipv4*,macAddresses</query>
+| table id,type,tenant_id,hostname,ipv4*,macAddresses</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
