@@ -89,12 +89,14 @@ function($, TableView, SearchManager, mvc, _){
         let allSelectedUUIDs = generateInFormattedSearchString(selectedUUIDs);
         let restOfUUIDs = generateInFormattedSearchString(selectedUUIDs.slice(1));
 
+        // Note - device_inventory_merge_logs.csv are just for logs
         defineAndExecuteSearch(
-            `| inputlookup cs_device_inventory where uuid="${firstUUID}"
-            | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | fields - uuid]
+            `| inputlookup cs_device_inventory where uuid="${firstUUID}" | eval indextime=now() | outputlookup append=T cs_device_inventory_merge_logs.csv | fields - indextime
+            | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | outputlookup append=T device_inventory_merge_logs.csv | fields - indextime, uuid]
             | stats max(time) as new_time, values(*) as * | rename new_time as time
             | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
-            | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"`,
+            | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"
+            | append [| stats count | eval count="dummy results"]`,
             function (resultRows){
                 // This will return no search results
                 enableModelCloseButton();
