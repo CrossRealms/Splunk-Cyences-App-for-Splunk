@@ -16,7 +16,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('cyences_device_inventory_command', logging.DEBUG)
+logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
 
 
 LOOKUP_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lookups')
@@ -25,7 +25,7 @@ def get_lookup_path(lookup_name):
     return os.path.join(LOOKUP_DIR, lookup_name)
 
 
-DEVICE_INVENTORY_LOOKUP = get_lookup_path('cs_device_inventory_lookup.csv')
+# DEVICE_INVENTORY_LOOKUP = get_lookup_path('cs_device_inventory_lookup.csv')
 DEVICE_INVENTORY_LOOKUP_COLLECTION = 'cs_device_inventory_collection'
 DEVICE_INVENTORY_LOOKUP_HEADERS = ['uuid', 'time', 'ip', 'hostname', 'mac_address', 'tenable_uuid', 'qualys_id', 'lansweeper_id', 'sophos_uuid', 'crowdstrike_userid', 'windows_defender_host']
 # DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX = {'uuid':0, 'time':1, 'ip':2, 'hostname':3, 'mac_address':4, 'tenable_uuid':5, 'qualys_id':6, 'lansweeper_id':7, 'sophos_uuid':8, 'crowdstrike_userid':9, 'windows_defender_host':10}
@@ -116,8 +116,6 @@ class DeviceInventoryGenCommand(EventingCommand):
             if len(updated_data) < 1000:
                 jsonargs=json.dumps(updated_data)
                 _ = rest.simpleRequest(
-                    "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
-                "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
                     "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
                     method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
             else:
@@ -368,9 +366,18 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         return record
 
+    
+    def check_session_key(self, records):
+        if not self.search_results_info or not self.search_results_info.auth_token:
+            logger.debug("Unable to find session key in the custom command. Logging records, if any.")
+            for r in records:
+                logger.debug(r)
+            raise Exception("unable to find session key.")
+
 
     def transform(self, records):
         try:
+            self.check_session_key(records)
             self.device_inventory = None
             self.updated_entries = []
             self.current_time = self.ipmatchstarttime
