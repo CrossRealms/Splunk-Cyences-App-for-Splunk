@@ -57,7 +57,7 @@
         <search base="base_inventory_table">
           <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
         </search>
-        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
+        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="count">5</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -96,7 +96,7 @@
       <title>Lansweeper $tkn_filter_main_label$</title>
       <table>
         <search>
-          <query>`cs_lansweeper` `cs_lansweeper_timerange` | rename IPAddress as ip, Name as host, Username as user | search $tkn_filter_main$ | eval id=coalesce(AssetID,id) | dedup id
+          <query>`cs_lansweeper` `cs_lansweeper_timerange` | rename IPAddress as ip, AssetName as host, Username as user | search $tkn_filter_main$ | eval id=coalesce(AssetID,id) | dedup id
 | rename AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Firstseen as FirstSeen, Lastseen as LastSeen, LastChanged as LastChanged 
 | table id, ip, host, user, MacAddress, State, Type, OS, OSVersion, OSRelease, OSname, SystemVersion, version, FQDN, GroupName, IPLocation, Domain, AssetDomain, Memory, Processor, Manufacturer, Model, Serialnumber, BuildNumber, LsAgentVersion, LastLsAgent, FirstSeen, LastSeen, LastChanged, Description</query>
           <earliest>0</earliest>
@@ -174,7 +174,7 @@
 | stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
 | stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
 | append [| inputlookup cs_tenable_inventory | rename hostname as host] | stats values(*) as *, max(time) as time by tenable_uuid
-| makemv ip delim="," | makemv host delim=","
+| makemv ip delim="~~" | makemv host delim="~~"
 | search $tkn_filter_ip_host$
 | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
 | fields - tenable_last_event, created_at, first_*, has_plugin_results
@@ -193,7 +193,7 @@
       <table>
         <search>
           <query>| inputlookup cs_tenable_vuln 
-| append [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="," | makemv hostname delim="," | rename hostname as host ] | stats values(*) as * by tenable_uuid
+| join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="~~" | makemv hostname delim="~~" | rename hostname as host ]
 | search $tkn_filter_ip_host$
 | eval vul_state_id = if(vul_state="open" OR vul_state="reopened", 1, 0)
 | sort -vul_state_id, -vul_severity_id, +tenable_uuid

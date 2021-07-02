@@ -181,14 +181,14 @@ class DeviceInventoryGenCommand(EventingCommand):
     def get_pointer_in_data(self, field, value, time=None):
         logger.debug("Finding field:{}, value:{}".format(field, value))
         field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[field]
-        if field in ['hostname', 'mac_address']:
+        if field in ['hostname', 'mac_address']:   # not being used for mac_address currently
             for i in self.device_inventory:
                 lookup_values = i[field_index]
                 for val in value:
                     if val in lookup_values:
                         logger.debug("Found lookup entry:{}".format(i))
                         return i
-        elif field == 'ip':
+        elif field == 'ip':   # not being used currently
             for i in self.device_inventory:
                 lookup_values = i[field_index]
                 for val in value:
