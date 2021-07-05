@@ -1,0 +1,98 @@
+<form theme="dark">
+  <init>
+    <set token="tkn_host">*</set>
+    <set token="tkn_user">*</set>
+  </init>
+  <label>Linux</label>
+  <search id="user_list_basesearch">
+    <query>`cs_linux_users_with_previledge`
+| table _time host UID USERNAME GID HOME_DIR 
+| stats earliest(_time) as _time latest(*) as * by host UID 
+| append [| search `cs_linux_sudousers`
+| stats latest(_raw) as raw by host 
+| rex field=raw "sudouser=(?&lt;USERNAME&gt;.*)" max_match=0 
+| fields - raw 
+| mvexpand USERNAME 
+| eval sudo_access="Yes"]
+| stats first(*) as * by host, USERNAME
+| fillnull sudo_access value="-"</query>
+    <earliest>-2h</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_host_tmp">
+      <label>Host</label>
+      <change>
+        <set token="tkn_host">*$tkn_host_tmp$*</set>
+      </change>
+    </input>
+    <input type="text" token="tkn_user_tmp">
+      <label>User</label>
+      <change>
+        <set token="tkn_user">*$tkn_user_tmp$*</set>
+      </change>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Linux/Unix Reports</p>
+        <p>This dashboard includes all linux/unix security related reports.</p>
+        <p>
+          <b>Data Collection:</b> It uses two Add-ons to collect different data. <a href="https://splunkbase.splunk.com/app/4232/" target="_blank">Linux Auditd Technology Add-On</a> and <a href="https://splunkbase.splunk.com/app/833/" target="_blank">Splunk Add-on for Linux and Unix (*nix)</a>
+        </p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_linux_users_with_previledge` | head 1 | stats count | eval label="`cs_linux` sourcetype=\"usersWithLoginPrivs\"" 
+          | append [| search `cs_linux_sudousers` | head 1 | stats count | eval label="`cs_linux` sourcetype=\"sudousers\""]
+          | eval data=if(count&gt;0, "Data Present", "Data Not Present") | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User List</title>
+      <table>
+        <search base="user_list_basesearch">
+          <query>| search host=$tkn_host|s$ USERNAME=$tkn_user|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Open Ports</title>
+      <table>
+        <search>
+          <query>`cs_linux_open_ports` host=$tkn_host|s$ | dedup host, Proto, Port | table host, Proto, Port</query>
+          <earliest>-10m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
