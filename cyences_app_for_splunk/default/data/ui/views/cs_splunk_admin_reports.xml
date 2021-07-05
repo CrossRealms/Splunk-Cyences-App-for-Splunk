@@ -46,6 +46,8 @@
       <input type="text" token="tkn_index">
         <label>Index</label>
         <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
       </input>
       <input type="dropdown" token="tkn_indexes_status">
         <label>Status</label>
@@ -78,6 +80,8 @@
       <input type="text" token="tkn_forwarder">
         <label>Forwarder</label>
         <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
       </input>
       <input type="dropdown" token="tkn_forwarders_status">
         <label>Status</label>
