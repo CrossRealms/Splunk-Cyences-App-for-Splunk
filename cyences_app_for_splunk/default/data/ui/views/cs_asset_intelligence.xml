@@ -193,11 +193,12 @@
       <table>
         <search>
           <query>| inputlookup cs_tenable_vuln 
-| join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="~~" | makemv hostname delim="~~" | rename hostname as host ]
+| join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | rename hostname as host ]
+ | makemv ip delim="~~" | makemv host delim="~~"
 | search $tkn_filter_ip_host$
 | eval vul_state_id = if(vul_state="open" OR vul_state="reopened", 1, 0)
 | sort -vul_state_id, -vul_severity_id, +tenable_uuid
-| table tenable_uuid, ip, host, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
+| table tenable_uuid, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -226,8 +227,8 @@
       </input>
       <viz type="missile_map.missile_map">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search (vul_state="open" OR vul_state="reopened") AND vul_port!=0 | fields tenable_uuid, vul_port
-           | append [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | makemv ip delim="," | makemv hostname delim="," | rename hostname as host ] | stats values(*) as * by tenable_uuid | search $tkn_filter_ip_host$ | search vul_port=*
+          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search (vul_state="open" OR vul_state="reopened") AND vul_port!=0 | fields tenable_uuid, vul_port
+           | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | rename hostname as host ] | makemv ip delim="~~" | makemv host delim="~~" | search $tkn_filter_ip_host$
            | stats count by ip vul_port | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")"
            | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] 
            by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` 

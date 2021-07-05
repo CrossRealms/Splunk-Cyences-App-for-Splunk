@@ -98,7 +98,7 @@ class DeviceInventoryGenCommand(EventingCommand):
     '''
 
     ipmatchstarttime = Option(name="ipmatchstarttime", require=False, validate=Float(), default=time.time())
-    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=Float(), default=3600.0)
+    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=Float(), default=604800.0)   # 7days (keep ips until 7 days) - If lookup entry has not been updated since 7 days then re-add the ips, or append ip
     # NOTE - Above shows at what timerange command should match IPs to combine devices
 
 
