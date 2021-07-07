@@ -5,7 +5,7 @@ import cs_utils
 import uuid
 
 CONF_FILE = 'cs_configurations'
-SOPHOS_STANZA = 'countermeasure_sophos'
+SOPHOS_STANZA = 'cs_sophos_endpoint'
 
 
 class SophosConfRestcall(admin.MConfigHandler):
@@ -32,7 +32,7 @@ class SophosConfRestcall(admin.MConfigHandler):
             client_id = ''
             client_secret = '******'
             for i in data:
-                if i['name'] == 'countermeasure_sophos':
+                if i['name'] == SOPHOS_STANZA:
                     client_id = i['content']['client_id']
                     break
             conf_info['action']['client_id'] = client_id
@@ -54,8 +54,7 @@ class SophosConfRestcall(admin.MConfigHandler):
         try:
             # Store Client ID
             rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, SOPHOS_STANZA), postargs={'client_id': client_id}, method='POST', sessionKey=self.getSessionKey())
-            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
-            data = json.loads(serverContent)['entry']
+
             # Store Client Secret
             cs_utils.CredentialManager(self.getSessionKey()).store_credential(client_id, client_secret)
 

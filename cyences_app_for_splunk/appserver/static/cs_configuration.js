@@ -332,63 +332,63 @@ require([
         updateMaliciousIPConfiguration();
     });
 
-    function getSophosConfiguration(){
+    function getSophosEndpointConfiguration(){
         let service = mvc.createService();
-        service.get("/SophosConfiguration", {}, function(error, response){
+        service.get("/SophosEndpointConfiguration", {}, function(error, response){
             if(response && response.data.entry[0].content && response.data.entry[0].content['client_id'] && response.data.entry[0].content['client_secret'] != ''){
                 response = response.data.entry[0].content;
-                $("#sophos_client_id").val(response['client_id']);
-                $("#sophos_client_secret").val(response['client_secret']);
+                $("#sophos_endpoint_client_id").val(response['client_id']);
+                $("#sophos_endpoint_client_secret").val(response['client_secret']);
             }
             else if(response && response.data.entry[0].content['error'] && response.data.entry[0].content['error'] != ''){
-                let msg_location = "#sophos_msg";
+                let msg_location = "#sophos_endpoint_msg";
                 $(msg_location).addClass('error_msg');
                 $(msg_location).removeClass('success_msg');
                 $(msg_location).text(`Unable to get the Client ID and Client Secret, may be there is no configuration. Please set the configuration and save.`);
             }
             else if(error && error['error']){
-                console.log(`Error while getting Sophos Configuration: ${error['error']}`);
+                console.log(`Error while getting Sophos Endpoint Configuration: ${error['error']}`);
             }
             else{
-                console.log("Unknown error while getting Sophos Client Secret.");
+                console.log("Unknown error while getting Sophos Endpoint Client Secret.");
             }
         });
     }
 
-    getSophosConfiguration();
+    getSophosEndpointConfiguration();
 
-    function updateSophosConfiguration(){
-        let client_id = $("#sophos_client_id").val();
-        let client_secret = $("#sophos_client_secret").val();
+    function updateSophosEndpointConfiguration(){
+        let client_id = $("#sophos_endpoint_client_id").val();
+        let client_secret = $("#sophos_endpoint_client_secret").val();
         let service = mvc.createService();
         let data = {
             "client_id": client_id,
             "client_secret": client_secret
         };
         data = JSON.stringify(data);
-        service.post("/SophosConfiguration/countermeasure_sophos", {"data": data}, function(error, response){
+        service.post("/SophosEndpointConfiguration/sophos", {"data": data}, function(error, response){
             if(response && response.data.entry[0].content['success'] && response.data.entry[0].content['success'] != ''){
-                let msg_location = "#sophos_msg";
+                let msg_location = "#sophos_endpoint_msg";
                 $(msg_location).removeClass('error_msg');
-                $(msg_location).addClass('success_msg');
-                $(msg_location).text("Sophos configuration saved successfully.");
+                $(msg_location).addClass('sophos_endpoint_msg');
+                $(msg_location).text("Sophos Endpoint configuration saved successfully.");
             }
             else if(response && response.data.entry[0].content['error'] && response.data.entry[0].content['error'] != ''){
-                let msg_location = "#sophos_msg";
+                let msg_location = "#sophos_endpoint_msg";
                 $(msg_location).addClass('error_msg');
                 $(msg_location).removeClass('success_msg');
                 $(msg_location).text(`Unable to save the Sophos configuration. ${response.data.entry[0].content['error']}`);
             }
             else if(error && error['error']){
-                console.log(`Error while getting Sophos Configuration: ${error['error']}`);
+                console.log(`Error while getting Sophos Endpoint Configuration: ${error['error']}`);
             }
             else{
-                console.log("Unknown error while getting Sophos Client Secret.");
+                console.log("Unknown error while getting Sophos Endpoint Client Secret.");
             }
         });
     }
 
-    $(`#sophos_button`).on("click", function(){
-        updateSophosConfiguration();
+    $(`#sophos_endpoint_button`).on("click", function(){
+        updateSophosEndpointConfiguration();
     });
 });

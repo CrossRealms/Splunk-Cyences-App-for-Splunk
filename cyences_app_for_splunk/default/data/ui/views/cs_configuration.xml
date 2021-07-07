@@ -50,21 +50,21 @@
   </row>
   <row>
     <panel>
-      <title>Sophos Configuration</title>
+      <title>Sophos Endpoint API Configuration</title>
       <html>
-        <p id="sophos_msg"/>
+        <p id="sophos_endpoint_msg"/>
         <table style="width:60%">
           <tr>
             <th style="text-align:left">Client ID</th>
             <th style="text-align:left">
-              <input type="text" id="sophos_client_id" style="margin-bottom:5px;"/>
+              <input type="text" id="sophos_endpoint_client_id" style="margin-bottom:5px;"/>
             </th>
             <th style="text-align:left">Client Secret</th>
             <th style="text-align:left">
-              <input type="password" id="sophos_client_secret"/>
+              <input type="password" id="sophos_endpoint_client_secret"/>
             </th>
             <th style="text-align:left">
-              <button id="sophos_button">Save</button>
+              <button id="sophos_endpoint_button">Save</button>
             </th>
           </tr>
         </table>

@@ -5,9 +5,6 @@ require([
   'splunkjs/mvc',
   'underscore',
   "splunkjs/mvc/utils",
-  'models/SplunkDBase',
-  'splunkjs/mvc/sharedmodels',
-  "splunkjs/mvc/tokenutils",
   "jquery",
   'splunkjs/mvc/simplexml/ready!'
 ], function(
@@ -111,7 +108,7 @@ require([
       }
   });
 
-  var tableElement = mvc.Components.getInstance("counter_measure_sophos");
+  var tableElement = mvc.Components.getInstance("sophos_instance_details");
   tableElement.getVisualization(function(tableView) {
       // Add custom cell renderer, the table will re-render automatically.
       // tableView.table.addCellRenderer(new HiddenCellRenderer());
