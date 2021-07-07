@@ -50,6 +50,30 @@
   </row>
   <row>
     <panel>
+      <title>Sophos Endpoint API Configuration</title>
+      <html>
+        <p id="sophos_endpoint_msg"/>
+        <table style="width:60%">
+          <tr>
+            <th style="text-align:left">Client ID</th>
+            <th style="text-align:left">
+              <input type="text" id="sophos_endpoint_client_id" style="margin-bottom:5px;"/>
+            </th>
+            <th style="text-align:left">Client Secret</th>
+            <th style="text-align:left">
+              <input type="password" id="sophos_endpoint_client_secret"/>
+            </th>
+            <th style="text-align:left">
+              <button id="sophos_endpoint_button">Save</button>
+            </th>
+          </tr>
+        </table>
+        <div>*Re-enter the Client Secret before clicking Save.</div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Macro Definitions Update</title>
       <html/>
     </panel>
