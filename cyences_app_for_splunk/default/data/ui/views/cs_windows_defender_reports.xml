@@ -30,7 +30,8 @@
     <panel>
       <html>
         <p>Windows Defender Reports</p>
-        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/3734/" target="_blank">Windows Defender Add-on</a> ([WinEventLog://Microsoft-Windows-Windows Defender/Operational] stanza) for collecting Windows defender data.</p>
+        <p>
+          <b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/3734/" target="_blank">Windows Defender Add-on</a> ([WinEventLog://Microsoft-Windows-Windows Defender/Operational] stanza) for collecting Windows defender data.</p>
       </html>
       <table>
         <search>
@@ -73,18 +74,19 @@
 | dedup host 
 | rex field=_raw "&lt;Data Name='RTP\s+state'&gt;(?&lt;RTP_state_cs&gt;[^\&lt;]*)" 
 | eval RTP_state=coalesce(RTP_state_cs,RTP_state) 
+| eval Current_Defender_Status="Running"
 | append 
     [| search `cs_wineventlog_system` $tkn_host$ SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *"
-    | stats latest(Message) as Message by host 
+    | stats latest(Message) as Message, latest(_time) as _time by host 
     | search Message=*stopped* 
     | eval Current_Defender_Status= "Stopped" 
-    | table host ,Current_Defender_Status] 
-| table _time, host, Current_Defender_Status,RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time 
-| eventstats values(Current_Defender_Status) as Current_Defender_Status by host 
-| where isnotnull(_time) 
-| eval Current_Defender_Status=if(isnull(Current_Defender_Status),"Running",Current_Defender_Status) 
+    | table _time, host, Current_Defender_Status] 
+| append [| search `cs_windows_defender` EventCode=1150 $tkn_host$ | dedup host | eval Current_Defender_Status="Running" | table _time, host, Current_Defender_Status]
+| fields _time, host, Current_Defender_Status, RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time
+| stats latest(Current_Defender_Status) as Current_Defender_Status1, latest(_time) as _time, values(*) as * by host 
+| table _time, host, Current_Defender_Status1, RTP_state, Platform_version, Engine_version, AVSignature_version, AV_signature_creation_time, BM_state, IOAV_state, OA_state, Last_full_scan_start_time, Last_full_scan_end_time, Last_quick_scan_start_time, Last_quick_scan_end_time 
 | eval Last_full_scan_start_time=if(Last_full_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_start_time), Last_full_scan_end_time=if(Last_full_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_full_scan_end_time),  Last_quick_scan_start_time=if(Last_quick_scan_start_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_start_time), Last_quick_scan_end_time=if(Last_quick_scan_end_time="1/1/1601 12:00:00 AM", "-", Last_quick_scan_end_time)
-| rename AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State" , Current_Defender_Status as "Current Defender Status"</query>
+| rename Current_Defender_Status1 as Current_Defender_Status, AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State" , Current_Defender_Status as "Current Defender Status"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

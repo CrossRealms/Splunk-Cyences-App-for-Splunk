@@ -46,6 +46,8 @@
       <input type="text" token="tkn_index">
         <label>Index</label>
         <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
       </input>
       <input type="dropdown" token="tkn_indexes_status">
         <label>Status</label>
@@ -68,7 +70,7 @@
         </drilldown>
       </table>
       <html>
-        <p>The information is updated on an hourly basis.</p>
+        <p>Information updated hourly basis.</p>
       </html>
     </panel>
   </row>
@@ -78,6 +80,8 @@
       <input type="text" token="tkn_forwarder">
         <label>Forwarder</label>
         <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
       </input>
       <input type="dropdown" token="tkn_forwarders_status">
         <label>Status</label>
@@ -127,7 +131,7 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>The information is updated on an hourly basis.</p>
+        <p>Information updated hourly basis.</p>
       </html>
     </panel>
   </row>
@@ -136,11 +140,11 @@
       <title>Remove Decommissioned Forwarder</title>
       <input type="dropdown" token="tkn_remove_forwarder_dropdown">
         <label>Forwarder</label>
-        <search>
-          <query>| inputlookup cs_forwarders.csv | search status="Missing" | fields hostname</query>
+        <search base="forwarders_search">
+          <query>fields hostname</query>
         </search>
         <change>
-          <condition match="'tkn_remove_forwarder_dropdown'='tkn_remove_forwarder_text'">
+          <condition match="'tkn_remove_forwarder_dropdown'=='tkn_remove_forwarder_text'">
             <set token="tkn_remove_forwarder">$tkn_remove_forwarder_dropdown$</set>
           </condition>
           <condition>

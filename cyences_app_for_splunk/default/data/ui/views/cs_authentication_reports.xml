@@ -67,7 +67,8 @@
         <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
       </chart>
       <html>
-        <p><b>Description:</b> Displays unusual behavior for users with a large number of failure attempts and abnormal behavior from the number of unique users.</p>
+        <p>
+          <b>Description:</b> Displays unusual behavior for users with a large number of failure attempts and abnormal behavior from the number of unique users.</p>
       </html>
     </panel>
     <panel>
@@ -85,30 +86,29 @@
         <option name="refresh.display">progressbar</option>
       </chart>
       <html>
-        <p><b>Description:</b> Displays any abnormalities that may have occurred or new spikes for a specific kind of failure that should be further investigated.</p>
+        <p>
+          <b>Description:</b> Displays any abnormalities that may have occurred or new spikes for a specific kind of failure that should be further investigated.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
-      <title>Application Authentication Success Rate Below 100%</title>
+      <title>Application Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Authentication where `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action
-| chart count by Authentication.app Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Authentication where `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+| chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
 | fields - Total
 | rename failure as "Failure", success as "Success"
-| where 'Success%' &lt; 100
 | sort + "Success%"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">5</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
+        <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <format type="number" field="Success%">
           <option name="unit">%</option>
@@ -117,9 +117,56 @@
           <colorPalette type="list">[#DC4E41,#F1813F,#F8BE34,#53A051,#53A051]</colorPalette>
           <scale type="threshold">50,90,95,100</scale>
         </format>
+        <drilldown>
+          <condition match="$row.app$ == &quot;AzureActiveDirectory&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports</link>
+          </condition>
+          <condition>
+            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$click.value|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          </condition>
+        </drilldown>
       </table>
       <html>
-        <p><b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
+        <p>
+          <b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User Authentication Activities</title>
+      <input type="text" token="tkn_user_tmp">
+        <label>User</label>
+        <change>
+          <set token="tkn_user">*$tkn_user_tmp$*</set>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` count as count from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
+| `drop_dm_object_name(Authentication)`
+| eval over_field=user."|".app
+| chart sum(count) as count over over_field by action
+| rex field=over_field "(?&lt;user&gt;[^\|]*)\|(?&lt;app&gt;.*)" | fields - over_field
+| table user, app, success, failure
+| fillnull success, failure value=0
+| sort -failure, -success</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">row</option>
+        <drilldown>
+          <condition match="$row.app$ == &quot;AzureActiveDirectory&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.tkn_user=$row.user$&amp;form.tkn__user=$row.user$</link>
+          </condition>
+          <condition>
+            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$row.app|s$%20Authentication.user%3D$row.user|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          </condition>
+        </drilldown>
+      </table>
+      <html>
+        <p>
+          <b>Note:</b> Enter the username in the User filter to populate the panel.</p>
       </html>
     </panel>
   </row>

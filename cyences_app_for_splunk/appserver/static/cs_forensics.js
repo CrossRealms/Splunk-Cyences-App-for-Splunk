@@ -10,51 +10,51 @@ require([
 
     let all_alerts = {
         "Ransomware - Spike in File Writes": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem action=created',
+            contributing_events: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.action=created | `drop_dm_object_name(Filesystem)`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem action=created dest=$row.dest$'
+            system_compromised_drilldown: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.action=created Filesystem.dest=$row.dest$ | `drop_dm_object_name(Filesystem)`'
         },
         "Ransomware - Endpoint Compromise - Fake Windows Processes": {
-            contributing_events: 'index=* tag=process tag=report  process_path!="C:\\\\Windows\\\\System32*" process_path!="C:\\\\Windows\\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_path!="C:\\\\Windows\\\\System32*" Processes.process_path!="C:\\\\Windows\\\\SysWOW64*" | `drop_dm_object_name(Processes)` | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$  process_path!="C:\\\\Windows\\\\System32*" process_path!="C:\\\\Windows\\\\SysWOW64*" | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.dest=$row.dest$ Processes.process_path!="C:\\\\Windows\\\\System32*" Processes.process_path!="C:\\\\Windows\\\\SysWOW64*" | `drop_dm_object_name(Processes)` | lookup update=true is_windows_system_file filename as process_name OUTPUT systemFile | search systemFile=true',
             attacker_search: "| stats sum(count) as count by process_name, parent_process_name",
-            attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$ parent_process_name=$row.parent_process_name$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=$row.process_name$ Processes.parent_process_name=$row.parent_process_name$ | `drop_dm_object_name(Processes)`'
         },
         "Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic": {
-            contributing_events: 'index=* tag=network tag=communicate app=tor',
+            contributing_events: '| datamodel Network_Traffic search strict_fields=false | search All_Traffic.app=tor | `drop_dm_object_name(All_Traffic)`',
             system_compromised_search: "| stats sum(count) as count by dest_ip, dest_port",
-            system_compromised_drilldown: 'index=* tag=network tag=communicate app=tor dest_ip=$row.dest_ip$',
+            system_compromised_drilldown: '| datamodel Network_Traffic search strict_fields=false | search All_Traffic.app=tor All_Traffic.dest_ip=$row.dest_ip$ | `drop_dm_object_name(All_Traffic)`',
             attacker_search: "| stats sum(count) as count by src_ip",
-            attacker_drilldown: 'index=* tag=network tag=communicate app=tor src_ip=$row.src_ip$'
+            attacker_drilldown: '| datamodel Network_Traffic search strict_fields=false | search All_Traffic.app=tor All_Traffic.src_ip=$row.src_ip$ | `drop_dm_object_name(All_Traffic)`'
         },
         "Ransomware - Common Ransomware File Extensions": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `cs_ransomware_extensions`',
+            contributing_events: '| datamodel Endpoint Filesystem search strict_fields=false | `drop_dm_object_name(Filesystem)` | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `cs_ransomware_extensions`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.dest=$row.dest$ | `drop_dm_object_name(Filesystem)`',
             attacker_search: "| stats sum(count) as count by file_name",
-            attacker_drilldown: 'index=* tag=endpoint tag=filesystem file_name=$row.file_name$'
+            attacker_drilldown: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.file_name=$row.file_name$ | `drop_dm_object_name(Filesystem)`'
         },
         "Ransomware - Scheduled tasks used in BadRabbit ransomware": {
-            contributing_events: 'index=* tag=process tag=report process_name=schtasks.exe (process="*create*" OR process="*delete*") (process=*rhaegal* OR process=*drogon* OR *viserion_*)',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=schtasks.exe (Processes.process="*create*" OR Processes.process="*delete*") (Processes.process=*rhaegal* OR Processes.process=*drogon* OR Processes.process=*viserion_*) | `drop_dm_object_name(Processes)`',
             system_compromised_search: "| stats sum(count) as count by dest, user",
-            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.dest=$row.dest$ | `drop_dm_object_name(Processes)`',
             attacker_search: "| stats sum(count) as count, values(process) as process by process_name, parent_process_name",
-            attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=$row.process_name$ | `drop_dm_object_name(Processes)`'
         },
         "Ransomware - Common Ransomware Notes": {
-            contributing_events: 'index=* tag=endpoint tag=filesystem | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `ransomware_notes`',
+            contributing_events: '| datamodel Endpoint Filesystem search strict_fields=false | `drop_dm_object_name(Filesystem)` | rex field=file_name "(?<file_extension>\\.[^\\.]+)$" | `ransomware_notes`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=endpoint tag=filesystem dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.dest=$row.dest$ | `drop_dm_object_name(Filesystem)`',
             attacker_search: "| stats sum(count) as count by file_name",
-            attacker_drilldown: 'index=* tag=endpoint tag=filesystem file_name=$row.file_name$'
+            attacker_drilldown: '| datamodel Endpoint Filesystem search strict_fields=false | search Filesystem.file_name=$row.file_name$ | `drop_dm_object_name(Filesystem)`'
         },
         "Ransomware - Endpoint Compromise - USN Journal Deletion on Windows": {
-            contributing_events: 'index=* tag=process tag=report process_name=fsutil.exe process="*deletejournal*" process="*usn*"',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=fsutil.exe Processes.process="*deletejournal*" Processes.process="*usn*" | `drop_dm_object_name(Processes)`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.dest=$row.dest$ | `drop_dm_object_name(Processes)`',
             attacker_search: "| stats sum(count) as count, values(process) as process by process_name, parent_process_name",
-            attacker_drilldown: 'index=* tag=process tag=report process_name=$row.process_name$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=$row.process_name$ | `drop_dm_object_name(Processes)`'
         },
         "Ransomware - Windows - Windows Event Log Cleared": {
             contributing_events: '((`cs_wineventlog_security` (EventCode=1102 OR EventCode=1100)) OR (`cs_wineventlog_system` EventCode=104))',
@@ -146,25 +146,25 @@ require([
             attacker_drilldown: '`cs_sysmon` EventCode=10 TargetImage=*lsass.exe SourceImage=$row.SourceImage$'
         },
         "Credential Compromise - Windows - Credential Dumping via Symlink to Shadow Copy": {
-            contributing_events: 'index=* tag=process tag=report process_name="cmd.exe" process=*mklink* process=*HarddiskVolumeShadowCopy*',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name="cmd.exe" Processes.process=*mklink* Processes.process=*HarddiskVolumeShadowCopy* | `drop_dm_object_name(Processes)`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report process_name="cmd.exe" dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name="cmd.exe" Processes.dest=$row.dest$ | `drop_dm_object_name(Processes)`',
             attacker_search: "| stats sum(count) as count by process, process_name, parent_process",
-            attacker_drilldown: 'index=* tag=process tag=report process="cmd.exe" process=$row.process$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process="cmd.exe" Processes.process=$row.process$ | `drop_dm_object_name(Processes)`'
         },
         "Credential Compromise - Windows - Credential Dumping via Copy Command from Shadow Copy": {
-            contributing_events: 'index=* tag=process tag=report process_name=cmd.exe (process=*\\\\system32\\\\config\\\\sam* OR process=*\\\\system32\\\\config\\\\security* OR process=*\\\\system32\\\\config\\\\system* OR process=*\\\\windows\\\\ntds\\\\ntds.dit*)',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name=cmd.exe (Processes.process=*\\\\system32\\\\config\\\\sam* OR Processes.process=*\\\\system32\\\\config\\\\security* OR Processes.process=*\\\\system32\\\\config\\\\system* OR Processes.process=*\\\\windows\\\\ntds\\\\ntds.dit*) | `drop_dm_object_name(Processes)`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report process_name="cmd.exe" dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process_name="cmd.exe" dest=$row.dest$ | `drop_dm_object_name(Processes)`',
             attacker_search: "| stats sum(count) as count by process, process_name, parent_process",
-            attacker_drilldown: 'index=* tag=process tag=report process="cmd.exe" process=$row.process$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process="cmd.exe" Processes.process=$row.process$ | `drop_dm_object_name(Processes)`'
         },
         "Credential Compromise - Windows - Credential Dump From Registry via Reg exe": {
-            contributing_events: 'index=* tag=process tag=report (process_name=reg.exe OR process_name=cmd.exe) process=*save* (process=*HKEY_LOCAL_MACHINE\\\\Security* OR process=*HKEY_LOCAL_MACHINE\\\\SAM* OR process=*HKEY_LOCAL_MACHINE\\\\System* OR process=*HKLM\\\\Security* OR process=*HKLM\\\\System* OR process=*HKLM\\\\SAM*)',
+            contributing_events: '| datamodel Endpoint Processes search strict_fields=false | search (Processes.process_name=reg.exe OR Processes.process_name=cmd.exe) Processes.process=*save* (Processes.process=*HKEY_LOCAL_MACHINE\\\\Security* OR Processes.process=*HKEY_LOCAL_MACHINE\\\\SAM* OR Processes.process=*HKEY_LOCAL_MACHINE\\\\System* OR Processes.process=*HKLM\\\\Security* OR Processes.process=*HKLM\\\\System* OR Processes.process=*HKLM\\\\SAM*) | `drop_dm_object_name(Processes)`',
             system_compromised_search: "| stats sum(count) as count by dest",
-            system_compromised_drilldown: 'index=* tag=process tag=report process IN ("cmd.exe", "reg.exe") dest=$row.dest$',
+            system_compromised_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process IN ("cmd.exe", "reg.exe") Processes.dest=$row.dest$ | `drop_dm_object_name(Processes)`',
             attacker_search: "| stats sum(count) as count by process, process_name, parent_process",
-            attacker_drilldown: 'index=* tag=process tag=report process IN ("cmd.exe", "reg.exe") process=$row.process$'
+            attacker_drilldown: '| datamodel Endpoint Processes search strict_fields=false | search Processes.process IN ("cmd.exe", "reg.exe") Processes.process=$row.process$ | `drop_dm_object_name(Processes)`'
         },
 
         "Sophos - Endpoint Not Protected by Sophos": {
