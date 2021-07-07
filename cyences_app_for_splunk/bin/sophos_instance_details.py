@@ -8,6 +8,10 @@ from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration,
 from splunk import rest
 import cs_utils
 
+import logging
+import logger_manager
+logger = logger_manager.setup_logging('sophos_details_command', logging.DEBUG)
+
 APP_NAME = 'cyences_app_for_splunk'
 CONF_FILE = 'cs_configurations'
 SOPHOS_AUTH_URL = 'https://id.sophos.com/api/v2/oauth2/token'
@@ -107,7 +111,7 @@ class SophosEndpointDetails(GeneratingCommand):
                         list_of_uuid.append(response_json)
                         return list_of_uuid
                     else:
-                        self.logger.error("Error while fetching UUID of instance")
+                        logger.error("Error while fetching UUID of instance")
 
             elif(hostname!="" and ip!="" and hostname!=" " and ip!=" "):
                 for tenant in SOPHOS_TENANT_DICT:
@@ -119,7 +123,7 @@ class SophosEndpointDetails(GeneratingCommand):
                         for instance in response_json.get("items"):
                             list_of_uuid.append(instance)
                     else:
-                        self.logger.error("Error while fetching UUID of instance")
+                        logger.error("Error while fetching UUID of instance")
 
             elif(ip!="" and ip!=" "):
                 for tenant in SOPHOS_TENANT_DICT:
@@ -130,7 +134,7 @@ class SophosEndpointDetails(GeneratingCommand):
                         for instance in response_json.get("items"):
                             list_of_uuid.append(instance)
                     else:
-                        self.logger.error("Error while fetching UUID of instance")
+                        logger.error("Error while fetching UUID of instance")
 
 
             elif(hostname!="" and hostname!=" "):
@@ -146,7 +150,7 @@ class SophosEndpointDetails(GeneratingCommand):
 
             return list_of_uuid
         except Exception as e:
-            self.logger.exception("Error while fetching Instance UUID : {}".format(e))
+            logger.exception("Error while fetching Instance UUID : {}".format(e))
 
 
 
@@ -166,40 +170,41 @@ class SophosEndpointDetails(GeneratingCommand):
 
             if not client_id or not client_secret:
                 raise Exception("Sophos Client ID or Client Secret or both not found in the cs_configurations.conf file.")
+
+            barier_token = self.get_barier_token(client_id,client_secret)
+            self.get_tenant_list(barier_token)
+
+            if(all_endpoints):
+                for i in SOPHOS_TENANT_DICT:
+
+                    current_page=1
+                    total_page = 1
+                    while(current_page<=total_page):
+                        requestHeaders = self.get_request_header(i,barier_token)
+                        if(current_page==1):
+                            requestUrl = SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?pageTotal=true"
+                        else:
+                            requestUrl =  SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?page="+str(current_page)
+                        request = requests.get(requestUrl, headers=requestHeaders)
+                        if(request.status_code!=200):
+                            raise Exception("Error while fetching all the endpoints")
+                        request_json = request.json()
+
+                        if(current_page==1):
+                            total_page = request_json.get("pages").get("total")
+
+                        for i in request_json.get("items"):
+                            yield i
+                        
+                        current_page = current_page + 1
+
             else:
-                barier_token = self.get_barier_token(client_id,client_secret)
-                self.get_tenant_list(barier_token)
-
-                if(all_endpoints):
-                    for i in SOPHOS_TENANT_DICT:
-
-                        current_page=1
-                        total_page = 1
-                        while(current_page<=total_page):
-                            requestHeaders = self.get_request_header(i,barier_token)
-                            if(current_page==1):
-                                requestUrl = SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?pageTotal=true"
-                            else:
-                                requestUrl =  SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?page="+str(current_page)
-                            request = requests.get(requestUrl, headers=requestHeaders)
-                            if(request.status_code!=200):
-                                raise Exception("Error while fetching all the endpoints")
-                            request_json = request.json()
-
-                            if(current_page==1):
-                                total_page = request_json.get("pages").get("total")
-
-                            for i in request_json.get("items"):
-                                yield i
-                            
-                            current_page = current_page + 1
-
-                else:
-                    instance_details = self.get_instance_uuid(barier_token,ip,hostname,uuid)
-                    for i in instance_details:
-                        yield i
+                instance_details = self.get_instance_uuid(barier_token,ip,hostname,uuid)
+                for i in instance_details:
+                    yield i
         except Exception as e:
-            self.logger.exception("Error Occured while fetching instance details. Error: {}".format(e))
+            logger.exception("Error Occured while fetching instance details. Error: {}".format(e))
+            self.write_warning("Error Occured while fetching instance details. Go to Inspect Job and check search logs")
 
         
  
