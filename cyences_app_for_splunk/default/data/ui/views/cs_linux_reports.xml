@@ -68,6 +68,23 @@
   </row>
   <row>
     <panel>
+      <title>Hosts Details</title>
+      <table>
+        <search>
+          <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
+| fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type 
+| stats latest(*) as * by host 
+| table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type, SystemUpTime</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>User List</title>
       <table>
         <search base="user_list_basesearch">
@@ -86,9 +103,65 @@
       <title>Open Ports</title>
       <table>
         <search>
-          <query>`cs_linux_open_ports` host=$tkn_host|s$ | dedup host, Proto, Port | table host, Proto, Port</query>
-          <earliest>-10m</earliest>
-          <latest>now</latest>
+          <query>`cs_linux_open_ports` host=$tkn_host|s$ | dedup host, Proto, Port | table host, _time , Proto, Port</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Interfaces on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_interfaces` host=$tkn_host|s$ | dedup host, Name | rename Name as Interface_Name | table host, _time ,Interface_Name, enabled, inetAddr, inet6Addr, mac</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Mount Points on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_df` host=$tkn_host|s$ | dedup host, Filesystem, MountedOn | table host,  _time, Filesystem, MountedOn, Type, Size, Used</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Listening Ports on Host</title>
+      <table>
+        <search>
+          <query>`cs_linux_unix_listening_ports` host=$tkn_host|s$ | dedup host, dest_port, transport | table host,_time, dest_port, transport, app, user, dest_ip, ip_version, fd</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>List of Services on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_unix_service` host=$tkn_host|s$ | dedup host, type, UNIT | table host, _time,type, UNIT, LOADED, ACTIVE, SUB, DESCRIPTION</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
