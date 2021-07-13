@@ -1,9 +1,5 @@
 <form theme="dark">
-  <init>
-    <set token="tkn_host">*</set>
-    <set token="tkn_user">*</set>
-  </init>
-  <label>Linux/Unix</label>
+  <label>Linux</label>
   <search id="user_list_basesearch">
     <query>`cs_linux_users_with_previledge`
 | table _time host UID USERNAME GID HOME_DIR 
@@ -21,24 +17,26 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <fieldset submitButton="false">
-    <input type="time" token="timeRange">
+    <input type="time" token="timeRange" searchWhenChanged="true">
       <label>Time Range</label>
       <default>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </default>
     </input>
-    <input type="text" token="tkn_host_tmp">
+    <input type="text" token="tkn_host" searchWhenChanged="true">
       <label>Host</label>
-      <change>
-        <set token="tkn_host">*$tkn_host_tmp$*</set>
-      </change>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
     </input>
-    <input type="text" token="tkn_user_tmp">
+    <input type="text" token="tkn_user" searchWhenChanged="true">
       <label>User</label>
-      <change>
-        <set token="tkn_user">*$tkn_user_tmp$*</set>
-      </change>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
     </input>
   </fieldset>
   <row>
