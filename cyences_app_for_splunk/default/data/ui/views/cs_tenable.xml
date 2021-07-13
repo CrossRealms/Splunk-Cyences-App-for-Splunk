@@ -6,12 +6,14 @@
   <label>Tenable</label>
   <search id="base_search_tenable">
     <query>| inputlookup cs_tenable_vuln
-    | stats count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by ip, host, vul_severity 
-    | stats sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info, sum(eval(if(vul_severity="low", count, 0))) as low, sum(eval(if(vul_severity="medium", count, 0))) as medium, sum(eval(if(vul_severity="high", count, 0))) as high, sum(eval(if(vul_severity="critical", count, 0))) as critical, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active, sum(eval(if(vul_severity="low", active, 0))) as low_active, sum(eval(if(vul_severity="medium", active, 0))) as medium_active, sum(eval(if(vul_severity="high", active, 0))) as high_active, sum(eval(if(vul_severity="critical", active, 0))) as critical_active, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed by ip, host 
-    | append [| inputlookup cs_tenable_assets]
-    | stats values(*) as * by ip, host
-    | table ip, host, tenable_all_ips, tenable_mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active, high_active, fixed_vuln, medium_active, low_active, info_active, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_* 
-    | eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active)</query>
+| stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
+| stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
+| append [| inputlookup cs_tenable_inventory | rename hostname as host] | stats values(*) as *, max(time) as time by tenable_uuid
+| makemv ip delim="~~" | makemv host delim="~~" | makemv mac_address delim="~~"
+| rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
+| fields - tenable_last_event, created_at, first_*, has_plugin_results
+| table tenable_uuid, ip, host, mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active_vuln, high_active_vuln, fixed_vuln, medium_active_vuln, low_active_vuln, info_active_vuln, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_*, *
+| eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active) | sort - active_vuln</query>
     <earliest>0</earliest>
     <latest></latest>
     <sampleRatio>1</sampleRatio>
@@ -26,7 +28,7 @@
         <search>
           <query>`cs_tenable` | stats count, latest(_time) as "Last Event" | eval data_report=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_tenable`" | eval "Last Event"=if(count=0, " - ", strftime('Last Event', "%F %T"))
             | table label, "Last Event", data_report
-            | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Tenable Assets Lookup Gen", "Tenable Vuln Lookup Gen") | table title, disabled | rename title as label | eval data_report=if(disabled=1, "Report is disabled", "Report is enabled"), "Last Event"="N/A"]
+            | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Tenable", "Device Inventory - Tenable Vuln") | table title, disabled | rename title as label | eval data_report=if(disabled=1, "Report is disabled", "Report is enabled"), "Last Event"="N/A"]
             | table label, "Last Event", data_report</query>
           <earliest>-7d@h</earliest>
           <latest></latest>

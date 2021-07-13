@@ -19,7 +19,7 @@ require([
         { id: 'auth_reports_link', url: baseURL.concat('cs_authentication_reports')},
         { id: 'admin_reports_link', url: baseURL.concat('cs_splunk_admin_reports')},
         { id: 'malicious_reports_link', url: baseURL.concat('cs_malicious_ip_list')},
-        { id: 'device_master_table_link', url: baseURL.concat('cs_device_master_table')},
+        { id: 'device_inventory_table_link', url: baseURL.concat('cs_device_inventory_table')},
         { id: 'lansweeper_link', url: baseURL.concat('cs_lansweeper')},
         { id: 'qualys_link', url: baseURL.concat('cs_qualys')},
         { id: 'tenable_link', url: baseURL.concat('cs_tenable')},

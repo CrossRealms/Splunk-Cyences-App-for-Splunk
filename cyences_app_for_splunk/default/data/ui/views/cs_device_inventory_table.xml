@@ -1,0 +1,371 @@
+<form theme="dark" stylesheet="cs_device_inventory_table.css" script="cs_device_inventory_table.js">
+  <init>
+    <set token="tkn_host">()</set>
+    <set token="tkn_ip">()</set>
+    <set token="tkn_user">()</set>
+    <set token="tkn_mac">()</set>
+    <set token="tkn_sp_filter">()</set>
+  </init>
+  <label>Device Inventory</label>
+  <search id="base_inventory_table">
+    <query>| `cs_device_inventory_data_format`</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+  </search>
+  <search base="base_inventory_table">
+    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike
+| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", "")</query>
+    <done>
+      <set token="tkn_tablefields_lansweeper">$result.field_lansweeper$</set>
+      <set token="tkn_tablefields_qualys">$result.field_qualys$</set>
+      <set token="tkn_tablefields_tenable">$result.field_tenable$</set>
+      <set token="tkn_tablefields_sophos">$result.field_sophos$</set>
+      <set token="tkn_tablefields_defender">$result.field_defender$</set>
+      <set token="tkn_tablefields_crowdstrike">$result.field_crowdstrike$</set>
+    </done>
+  </search>
+  <search id="base_summary">
+    <query>| inputlookup cs_device_inventory
+| stats count as Total, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="", 1, 0))) as Lansweeper, sum(eval(if(isnotnull(qualys_id) and qualys_id!="", 1, 0))) as Qualys, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as Tenable, sum(eval(if(isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as Defender, sum(eval(if((isnotnull(sophos_uuid) and sophos_uuid!=""), 1, 0))) as Sophos, sum(eval(if(isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as CrowdStrike, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(qualys_id) and qualys_id!="", 1, 0))) as lansweeper_qualys, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as lansweeper_tenable, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as lansweeper_defender, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as lansweeper_sophos, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as lansweeper_crowdstrike, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as qualys_tenable, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as qualys_sophos, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as qualys_defender, sum(eval(if(isnotnull(qualys_id) and qualys_id!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as qualys_crowdstrike, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(sophos_uuid) and sophos_uuid!="", 1, 0))) as tenable_sophos, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as tenable_defender, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as tenable_crowdstrike, sum(eval(if(isnotnull(sophos_uuid) and sophos_uuid!="" AND isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as sophos_defender, sum(eval(if(isnotnull(sophos_uuid) and sophos_uuid!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as sophos_crowdstrike, sum(eval(if(isnotnull(windows_defender_host) and windows_defender_host!="" AND isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as defender_crowdstrike, sum(eval(if(((isnotnull(lansweeper_id) and lansweeper_id!="") AND ((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")) AND ((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!=""))), 1, 0))) as All, sum(eval(if(((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!="")), 1, 0))) as Antivirus
+| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Device Inventory generator report needs to be enabled.</p>
+      </html>
+      <table>
+        <search>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory Gen", "Device Inventory Temp Lookup CleanUp", "Device Inventory Lookup CleanUp") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+      <html>
+        <p>If you are looking at the Device Inventory for the first time and you don't see all the available devices in the table below then you can manually execute <a target="_blank" href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=*&amp;search=Device%20Inventory%20Backfill">Device Inventory Backfill</a> report to fill all the lookups. (By default it runs over last 30 days of time to collect the device inventory.)</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Total Number of Devices</title>
+        <search base="base_summary">
+          <query>| table Total</query>
+        </search>
+        <option name="drilldown">all</option>
+        <drilldown>
+          <set token="tkn_sp_filter">()</set>
+        </drilldown>
+      </single>
+      <html>
+        <p>
+          <b>Description</b>: The total amount of devices detected.</p>
+        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
+        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
+      </html>
+    </panel>
+    <panel>
+      <chart>
+        <title>Number of Devices That Are Connected To A Specific Security Component</title>
+        <search base="base_summary">
+          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, CrowdStrike</query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="$click.name2$ == &quot;Lansweeper&quot;">
+            <set token="tkn_sp_filter">lansweeper_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Qualys&quot;">
+            <set token="tkn_sp_filter">qualys_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Tenable&quot;">
+            <set token="tkn_sp_filter">tenable_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Sophos&quot;">
+            <set token="tkn_sp_filter">sophos_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Defender&quot;">
+            <set token="tkn_sp_filter">defender_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;CrowdStrike&quot;">
+            <set token="tkn_sp_filter">crowdstrike_last_event=*</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
+        </drilldown>
+      </chart>
+      <html>
+        <p>
+          <b>Description</b>: The total amount of devices that are connected to a particular security component.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Number of Devices That Contain A Specific Security Component</title>
+        <search base="base_summary">
+          <query>| table Total, All, Lansweeper, Vulnerability_Scanner, Antivirus</query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="$click.name2$ == &quot;All&quot;">
+            <set token="tkn_sp_filter">((lansweeper_last_event=*) AND (tenable_last_event=* OR qualys_last_event=*) AND (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=*))</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Lansweeper&quot;">
+            <set token="tkn_sp_filter">lansweeper_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Vulnerability_Scanner&quot;">
+            <set token="tkn_sp_filter">(tenable_last_event=* OR qualys_last_event=*)</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;Antivirus&quot;">
+            <set token="tkn_sp_filter">(sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=*)</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
+        </drilldown>
+      </chart>
+      <html>
+        <p>
+          <b>Description</b>: Each bar represents the total number of devices that are connected to a particular security component. The Lansweeper bar displays the number of devices that have Lansweeper. The Vulnerability Scanner bar displays the number of devices that have either Qualys or Tenable. The Antivirus bar displays the number of devices that have CrowdStrike, Defender, or Sophos.</p>
+      </html>
+    </panel>
+    <panel>
+      <chart>
+        <title>Number of Devices That Lack A Specific Security Component</title>
+        <search base="base_summary">
+          <query>| table Total, No_Lansweeper, No_Vulnerability_Scanner, No_Antivirus</query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="$click.name2$ == &quot;No_Lansweeper&quot;">
+            <set token="tkn_sp_filter">NOT lansweeper_last_event=*</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;No_Vulnerability_Scanner&quot;">
+            <set token="tkn_sp_filter">NOT (tenable_last_event=* OR qualys_last_event=*)</set>
+          </condition>
+          <condition match="$click.name2$ == &quot;No_Antivirus&quot;">
+            <set token="tkn_sp_filter">NOT (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=*)</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
+        </drilldown>
+      </chart>
+      <html>
+        <p>
+          <b>Description</b>: Each bar represents the total number of devices that lack a particular security component. The Lansweeper bar displays the number of devices where Lansweeper is absent. The Vulnerability Scanner displays the number of devices where Qualys or Tenable are absent. The Antivirus bar displays the number of devices that lack the following antivirus software: CrowdStrike, Defender, and Sophos.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Device Inventory Table</title>
+      <input type="text" token="tkn_host_tmp">
+        <label>Host</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_host_tmp'=&quot;&quot;">
+            <set token="tkn_host">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_host">(hostname="*$tkn_host_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_ip_tmp">
+        <label>IP Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_ip_tmp'=&quot;&quot;">
+            <set token="tkn_ip">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_ip">(ip="*$tkn_ip_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_user_tmp">
+        <label>User</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_user_tmp'=&quot;&quot;">
+            <set token="tkn_user">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_user">(user="*$tkn_user_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <input type="text" token="tkn_mac_tmp">
+        <label>Mac Address</label>
+        <default></default>
+        <change>
+          <condition match="'tkn_mac_tmp'=&quot;&quot;">
+            <set token="tkn_user">()</set>
+          </condition>
+          <condition>
+            <set token="tkn_mac">(mac_address="*$tkn_mac_tmp$*")</set>
+          </condition>
+        </change>
+      </input>
+      <table id="device_inventory_table">
+        <search base="base_inventory_table">
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+        </search>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="lansweeper">
+          <colorPalette type="map">{"-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="qualys">
+          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="tenable">
+          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="active_vul">
+          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <format type="color" field="defender">
+          <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="sophos">
+          <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #a3030b, "Service not Running": #a3030b, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="crowdstrike">
+          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>
+        </drilldown>
+      </table>
+      <html>
+        <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
+        <p>The Device Inventory will automatically hide columns for devices that lack a certain type of data.</p>
+        <p>Qualys Status</p>
+        <ul>
+          <li>Red = Urgent severity (level 5)</li>
+          <li>Orange = Critical severity (level 4)</li>
+          <li>Yellow = Serious severity (level 3)</li>
+          <li>Green = No active vulnerabilities</li>
+        </ul>
+        <p>Tenable Status</p>
+        <ul>
+          <li>Red = Urgent severity</li>
+          <li>Orange = High severity</li>
+          <li>Yellow = Medium severity</li>
+          <li>Green = No active vulnerabilities</li>
+        </ul>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Possible Merge UUIDs (Devices) in Device Inventory</title>
+      <table id="device_inventory_management_table">
+        <title>ADMIN</title>
+        <search>
+          <!-- When second_bit_in_mac_binary (from first part of mac_address) is 1 that is locally administratored mac_address, we'll filter those mac_address from showing. -->
+          <query>| inputlookup cs_device_inventory
+| eval ip_all=ip, mac_address_all=mac_address
+| eval ip_all=mvjoin(ip, ","), mac_address_all=mvjoin(mac_address, ",")
+| multireport [
+| stats values(*) as * by mac_address
+| where isnotnull(mac_address) AND mac_address!="" AND mac_address!=" " 
+| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
+| eval first_part_of_mac=tonumber(substr(mac_address, 0, 2))
+| eval power=mvrange(0,8) | mvexpand power | eval base2=pow(2, power) 
+| eval mydiv=floor(first_part_of_mac/base2) 
+| eval mybin=mydiv % 2 
+| stats list(mybin) as binary, values(*) as * by mac_address
+| eval second_bit_in_mac_binary=mvindex(binary,1) | where second_bit_in_mac_binary=0
+| eval Type="Mac Address Matches", ip="" | table Type, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+[
+| stats values(*) as * by ip
+| where isnotnull(ip) AND ip!="" AND ip!=" " 
+| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
+| eval Type="IP Matches", mac_address="" | table Type, ip, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid]
+| table Type, ip, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid
+| sort - no_uuids</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <div id="myModal" class="modal fade" role="dialog" data-backdrop="static" style="display:none;">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close modelclosebutton">Close</button>
+                <h4 class="modal-title">Device Inventory Management</h4>
+              </div>
+              <div class="modal-body">
+                <p id="myModelMessage">Wait a second...</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default modelconfirmbutton" id="modelConfirmButton">Ok</button>
+                <button type="button" class="btn btn-default modelclosebutton">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Product Device ID Conflicts Auto Merged</title>
+      <input type="time" token="tkn_timerange_conflicted_merged">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <table>
+        <title>ADMIN</title>
+        <search>
+          <query>index=_internal sourcetype="cyences:logs" CASE(INFO) "is already present, while adding record"
+| rex "\'uuid\':\s'(?&lt;uuid&gt;[^\']+)\'" | rex " - data_pointer\[(?&lt;product&gt;[^\]]+)\]=(?&lt;product_id_1&gt;.*)\sis already present" 
+| rex "\(\'lansweeper_id\', \'(?&lt;product_id_2_lansweeper&gt;[^\']+)\'\)" | rex "\(\'tenable_uuid\', \'(?&lt;product_id_2_tenable&gt;[^\']+)\'\)" | rex "\(\'qualys_id\', \'(?&lt;product_id_2_qualys&gt;[^\']+)\'\)" | rex "\(\'sophos_uuid\', \'(?&lt;product_id_2_sophos&gt;[^\']+)\'\)" | rex "\(\'windows_defender_host\', \'(?&lt;product_id_2_windows_defender&gt;[^\']+)\'\)" | rex "\(\'crowdstrike_userid\', \'(?&lt;product_id_2_crowdstrike&gt;[^\']+)\'\)"
+| eval product_id_2=case(product=="lansweeper_id", product_id_2_lansweeper, product=="tenable_uuid", product_id_2_tenable, product=="qualys_id", product_id_2_qualys, product=="sophos_uuid", product_id_2_sophos, product=="windows_defender_host", product_id_2_windows_defender, product=="crowstrike_userid", product_id_2_crowdsrike)
+| rex "\(\'hostname\', \[(?&lt;hostname1&gt;[^\]]+)\]\)" | rex "\(\'ip\', \[(?&lt;ip1&gt;[^\]]+)\]\)" | rex "\(\'mac_address\', \[(?&lt;mac_address1&gt;[^\]]+)\]\)"
+| rex "\'hostname\': \[(?&lt;hostname2&gt;[^\]]+)\]" | rex "\'ip\': \[(?&lt;ip2&gt;[^\]]+)\]" | rex "\'mac_address\': \[(?&lt;mac_address2&gt;[^\]]+)\]"
+| rex "entry:{(?&lt;lookup_entry&gt;[^}]+)}"
+| table uuid, product, product_id_1, product_id_2, hostname1, hostname2, ip1, ip2, mac_address1, mac_address2, lookup_entry</query>
+          <earliest>$tkn_timerange_conflicted_merged.earliest$</earliest>
+          <latest>$tkn_timerange_conflicted_merged.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

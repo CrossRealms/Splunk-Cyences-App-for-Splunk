@@ -18,7 +18,7 @@
   <view name="cs_forensics" />
   <collection label="Intelligence">
     <view name="cs_malicious_ip_list" />
-    <view name="cs_device_master_table" />
+    <view name="cs_device_inventory_table" />
     <view name="cs_asset_intelligence" />
     <view name="cs_lansweeper" />
     <view name="cs_qualys" />
