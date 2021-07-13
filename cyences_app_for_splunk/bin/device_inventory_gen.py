@@ -18,6 +18,8 @@ import logging
 import logger_manager
 logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
 
+IS_DEBUGGING_MODE = False
+
 
 LOOKUP_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lookups')
 
@@ -160,17 +162,18 @@ class DeviceInventoryGenCommand(EventingCommand):
                 # os.remove(f)
 
     def take_backup_of_lookup_only_updated_entries(self, data):
-        csv_data = DEVICE_INVENTORY_LOOKUP_HEADERS
-        for i in data:
-            csv_data.append(
-                [i['uuid'], i['time'], '~~'.join(i['ip']), '~~'.join(i['hostname']), '~~'.join(i['mac_address']), 
-                i['tenable_uuid'], i['qualys_id'], i['lansweeper_id'], i['sophos_uuid'], i['crowdstrike_userid'], i['windows_defender_host']])
+        if IS_DEBUGGING_MODE:
+            csv_data = DEVICE_INVENTORY_LOOKUP_HEADERS
+            for i in data:
+                csv_data.append(
+                    [i['uuid'], i['time'], '~~'.join(i['ip']), '~~'.join(i['hostname']), '~~'.join(i['mac_address']), 
+                    i['tenable_uuid'], i['qualys_id'], i['lansweeper_id'], i['sophos_uuid'], i['crowdstrike_userid'], i['windows_defender_host']])
 
-        backup_file = get_lookup_path('{}_{}.csv'.format(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX, datetime.today().strftime('%Y_%m_%d_%H_%M_%s')))
-        self.update_csv_lookup(backup_file, csv_data)
+            backup_file = get_lookup_path('{}_{}.csv'.format(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX, datetime.today().strftime('%Y_%m_%d_%H_%M_%s')))
+            self.update_csv_lookup(backup_file, csv_data)
 
-        self.remove_old_backups()
-    
+            self.remove_old_backups()
+
 
     def check_timestamp(self, event_time):
         if float(event_time) >= self.current_time_delta and float(event_time) <= self.current_time:

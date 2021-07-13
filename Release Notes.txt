@@ -28,12 +28,12 @@ TODOs & Notes
 # DONE - change device master table with new lookup
 # DONE (not doing it) - change asset intelligence dashboard to be displayed in the per uuid 
 #        (search based on ip/host but display rest of the page based on specific device (for all it's ips and hostnames, etc) selected from the first device inventory table)
-# TODO - Update all savedsearches to add more information (ex. add different statuses from sophos data)
+# DONE - Update all savedsearches to add more information (ex. add different statuses from sophos data)
 # TODO - update rest of the App based on new lookups
 # DONE - what to do for conflicting mac_address
 # TODO - update qualys and tenable -> remote fixed and info vulnerabilities
 
-# TODO - Sophos depends on counter-measure configuration and commands for collecting inventory.
+# DONE - Sophos depends on counter-measure configuration and commands for collecting inventory.
 # DONE - Update above csv lookup writing to kvstore for cs_device_inventory_lookup.csv
 
 # DONE - Logic validation Notes
