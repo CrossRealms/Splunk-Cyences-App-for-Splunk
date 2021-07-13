@@ -3,7 +3,7 @@
     <set token="tkn_host">*</set>
     <set token="tkn_user">*</set>
   </init>
-  <label>Linux</label>
+  <label>Linux/Unix</label>
   <search id="user_list_basesearch">
     <query>`cs_linux_users_with_previledge`
 | table _time host UID USERNAME GID HOME_DIR 
@@ -72,9 +72,11 @@
       <table>
         <search>
           <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
-| fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type 
-| stats latest(*) as * by host 
-| table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type, SystemUpTime</query>
+| fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
+| eval cpu_freq=cpu_freq+" "+cpu_freq_unit 
+| fields - cpu_freq_unit
+| stats latest(*) as * by host | eval SystemUpTime=toString(SystemUpTime,"duration")
+| table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
