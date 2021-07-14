@@ -53,7 +53,6 @@ Version 1.6.0 (July 2021)
 * New Device Inventory:
   * It uses better metadata information for endpoints from Sophos-central API. 
   * It merges devices automatically based on information like hostname, mac-address, IP-address to show accurate count of devices.
-  * As you can see above two screenshots now Cyences App intelligently merge entries which are for same device. 
   * New device inventory assigns unique uuid to each device. 
   * Device Master Table name changed to Device Inventory. 
 * Added Linux Reports dashboard.
