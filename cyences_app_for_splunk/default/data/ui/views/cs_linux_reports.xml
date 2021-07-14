@@ -1,0 +1,179 @@
+<form theme="dark">
+  <label>Linux/Unix</label>
+  <search id="user_list_basesearch">
+    <query>`cs_linux_users_with_previledge`
+| table _time host UID USERNAME GID HOME_DIR 
+| stats earliest(_time) as _time latest(*) as * by host UID 
+| append [| search `cs_linux_sudousers`
+| stats latest(_raw) as raw by host 
+| rex field=raw "sudouser=(?&lt;USERNAME&gt;.*)" max_match=0 
+| fields - raw 
+| mvexpand USERNAME 
+| eval sudo_access="Yes"]
+| stats first(*) as * by host, USERNAME
+| fillnull sudo_access value="-"</query>
+    <earliest>-2h</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_host" searchWhenChanged="true">
+      <label>Host</label>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_user" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Linux/Unix Reports</p>
+        <p>This dashboard includes all linux/unix security related reports.</p>
+        <p>
+          <b>Data Collection:</b> It uses two Add-ons to collect different data. <a href="https://splunkbase.splunk.com/app/4232/" target="_blank">Linux Auditd Technology Add-On</a> and <a href="https://splunkbase.splunk.com/app/833/" target="_blank">Splunk Add-on for Linux and Unix (*nix)</a>
+        </p>
+      </html>
+      <table>
+        <search>
+          <query>| tstats count where `cs_linux_users_with_previledge` | eval label="`cs_linux` sourcetype=\"usersWithLoginPrivs\"" 
+| append [| tstats count where `cs_linux_sudousers`  | eval label="`cs_linux` sourcetype=\"sudousers\""]
+| append [| tstats count where `cs_linux_unix_version`  | eval label="`cs_linux` sourcetype=\"Unix:Version\""]
+| append [| tstats count where `cs_linux_unix_uptime`  | eval label="`cs_linux` sourcetype=\"Unix:Uptime\""]
+| append [| tstats count where `cs_linux_hardware`  | eval label="`cs_linux` sourcetype=\"hardware\""]
+| append [| tstats count where `cs_linux_open_ports`  | eval label="`cs_linux` sourcetype=\"openPorts\""]
+| append [| tstats count where `cs_linux_interfaces`  | eval label="`cs_linux` sourcetype=\"interfaces\""]
+| append [| tstats count where `cs_linux_df`  | eval label="`cs_linux` sourcetype=\"df\""]
+| append [| tstats count where `cs_linux_unix_listening_ports`  | eval label="`cs_linux` sourcetype=\"Unix:ListeningPorts\""]
+| append [| tstats count where `cs_linux_unix_service`  | eval label="`cs_linux` sourcetype=\"Unix:Service\""]
+| eval data=if(count&gt;0, "Data Present", "Data Not Present") | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Hosts Details</title>
+      <table>
+        <search>
+          <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
+| fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
+| eval cpu_freq=cpu_freq+" "+cpu_freq_unit 
+| fields - cpu_freq_unit
+| stats latest(*) as * by host | eval SystemUpTime=toString(SystemUpTime,"duration")
+| table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User List</title>
+      <table>
+        <search base="user_list_basesearch">
+          <query>| search host=$tkn_host|s$ USERNAME=$tkn_user|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Open Ports</title>
+      <table>
+        <search>
+          <query>`cs_linux_open_ports` host=$tkn_host|s$ | dedup host, Proto, Port | table host, _time , Proto, Port</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Interfaces on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_interfaces` host=$tkn_host|s$ | dedup host, Name | rename Name as Interface_Name | table host, _time ,Interface_Name, enabled, inetAddr, inet6Addr, mac</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Mount Points on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_df` host=$tkn_host|s$ | dedup host, Filesystem, MountedOn | table host,  _time, Filesystem, MountedOn, Type, Size, Used</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Listening Ports on Host</title>
+      <table>
+        <search>
+          <query>`cs_linux_unix_listening_ports` host=$tkn_host|s$ | dedup host, dest_port, transport | table host,_time, dest_port, transport, app, user, dest_ip, ip_version, fd</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>List of Services on Hosts</title>
+      <table>
+        <search>
+          <query>`cs_linux_unix_service` host=$tkn_host|s$ | dedup host, type, UNIT | table host, _time,type, UNIT, LOADED, ACTIVE, SUB, DESCRIPTION</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

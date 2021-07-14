@@ -219,6 +219,15 @@
               <button id="macro_data_tenable_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">Linux Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_linux"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_linux_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>

@@ -23,9 +23,9 @@ jobs:
     
     steps:
       # ...
-      - name: "Generate App Build"
+      - name: "Generate App and Add-on Build"
         run: |
-          echo "Started generating build."
+          echo "Started generating builds."
       
       - name: Extract branch name
         shell: bash
@@ -37,10 +37,9 @@ jobs:
           ref: ${{ steps.extract_branch.outputs.branch }}
           path: repodir
             
-      - name: "Generate Build"
+      - name: "Generate App Build"
         run: |
           cd repodir
-          ls
           find cyences_app_for_splunk -type f -exec chmod 644 '{}' \;
           find cyences_app_for_splunk -type d -exec chmod 755 '{}' \;
           tar -czf cyences_app_for_splunk.tgz cyences_app_for_splunk
@@ -51,6 +50,20 @@ jobs:
           name: "build"
           path: |
             repodir/cyences_app_for_splunk.tgz
+      
+      - name: "Generate Add-on Build"
+        run: |
+          cd repodir
+          find TA-cyences -type f -exec chmod 644 '{}' \;
+          find TA-cyences -type d -exec chmod 755 '{}' \;
+          tar -czf TA-cyences.tgz TA-cyences
+          cd ..
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "build"
+          path: |
+            repodir/TA-cyences.tgz
       
       - name: "Python Installation"
         uses: actions/setup-python@v2
@@ -69,11 +82,13 @@ jobs:
       - name: "Running App-Inspect"
         run: |
           mkdir test_results || true
-          splunk-appinspect inspect --mode test --data-format junitxml --output-file test_results/appinspect-mode-test.xml repodir/cyences_app_for_splunk.tgz
+          splunk-appinspect inspect --mode test --data-format junitxml --output-file test_results/app-appinspect-mode-test.xml repodir/cyences_app_for_splunk.tgz
+          splunk-appinspect inspect --mode test --data-format junitxml --output-file test_results/ta-appinspect-mode-test.xml repodir/TA-cyences.tgz
       
       - name: "Running Cloud-Inspect"
         run: |
-          splunk-appinspect inspect --mode precert --included-tags cloud --data-format junitxml --output-file test_results/appinspect-mode-cloud.xml repodir/cyences_app_for_splunk.tgz
+          splunk-appinspect inspect --mode precert --included-tags cloud --data-format junitxml --output-file test_results/app-appinspect-mode-cloud.xml repodir/cyences_app_for_splunk.tgz
+          splunk-appinspect inspect --mode precert --included-tags cloud --data-format junitxml --output-file test_results/ta-appinspect-mode-cloud.xml repodir/TA-cyences.tgz
       
       - uses: actions/upload-artifact@v2
         with:
@@ -84,5 +99,7 @@ jobs:
 
       - name: "Inspect and Cloud Vetting Check"
         run: |
-          if grep failures=\"[1-9] test_results/appinspect-mode-test.xml; then exit 1; else exit 0; fi
-          if grep failures=\"[1-9] test_results/appinspect-mode-cloud.xml; then exit 1; else exit 0; fi
+          if grep failures=\"[1-9] test_results/app-appinspect-mode-test.xml; then exit 1; else exit 0; fi
+          if grep failures=\"[1-9] test_results/app-appinspect-mode-cloud.xml; then exit 1; else exit 0; fi
+          if grep failures=\"[1-9] test_results/ta-appinspect-mode-test.xml; then exit 1; else exit 0; fi
+          if grep failures=\"[1-9] test_results/ta-appinspect-mode-cloud.xml; then exit 1; else exit 0; fi

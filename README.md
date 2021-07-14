@@ -3,6 +3,7 @@ Cyences App for Splunk built by CrossRealms International
 
 ### Documentation
 Please read App's documentation [here](cyences_app_for_splunk/ReadMe.md).
+Please read Add-on's documentation [here](TA-cyences/ReadMe.md).
 
 ### Feedback
 To provide the feedback open issue in this repo.
