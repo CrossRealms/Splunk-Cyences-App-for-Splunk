@@ -47,51 +47,6 @@ DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX = 'backup_device_inventory'
 
 
 
-import six
-from json.encoder import encode_basestring_ascii as json_encode_string
-
-class Float(Validator):
-    """ Validates float option values.
-
-    """
-    def __init__(self, minimum=None, maximum=None):
-        if minimum is not None and maximum is not None:
-            def check_range(value):
-                if not (minimum <= value <= maximum):
-                    raise ValueError('Expected float in the range [{0},{1}], not {2}'.format(minimum, maximum, value))
-                return
-        elif minimum is not None:
-            def check_range(value):
-                if value < minimum:
-                    raise ValueError('Expected float in the range [{0},+∞], not {1}'.format(minimum, value))
-                return
-        elif maximum is not None:
-            def check_range(value):
-                if value > maximum:
-                    raise ValueError('Expected float in the range [-∞,{0}], not {1}'.format(maximum, value))
-                return
-        else:
-            def check_range(value):
-                return
-
-        self.check_range = check_range
-        return
-
-    def __call__(self, value):
-        if value is None:
-            return None
-        try:
-            value = float(value)
-        except ValueError:
-            raise ValueError('Expected float value, not {}'.format(json_encode_string(value)))
-
-        self.check_range(value)
-        return value
-
-    def format(self, value):
-        return None if value is None else six.text_type(float(value))
-
-
 @Configuration()
 class DeviceInventoryGenCommand(EventingCommand):
 
@@ -99,8 +54,8 @@ class DeviceInventoryGenCommand(EventingCommand):
     Reference for KVstore - https://dev.splunk.com/enterprise/docs/developapps/manageknowledge/kvstore/usetherestapitomanagekv/
     '''
 
-    ipmatchstarttime = Option(name="ipmatchstarttime", require=False, validate=Float(), default=time.time())
-    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, validate=Float(), default=604800.0)   # 7days (keep ips until 7 days) - If lookup entry has not been updated since 7 days then re-add the ips, or append ip
+    ipmatchstarttime = Option(name="ipmatchstarttime", require=False, default=time.time())
+    ipmatchtimediff = Option(name="ipmatchmaxtime", require=False, default=604800.0)   # 7days (keep ips until 7 days) - If lookup entry has not been updated since 7 days then re-add the ips, or append ip
     # NOTE - Above shows at what timerange command should match IPs to combine devices
 
 
