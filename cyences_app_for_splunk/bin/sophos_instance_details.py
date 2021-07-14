@@ -194,17 +194,17 @@ class SophosEndpointDetails(GeneratingCommand):
                             total_page = request_json.get("pages").get("total")
 
                         for i in request_json.get("items"):
-                            yield i
+                            yield {"_raw": i}
                         
                         current_page = current_page + 1
 
             else:
                 instance_details = self.get_instance_uuid(barier_token,ip,hostname,uuid)
                 for i in instance_details:
-                    yield i
+                    yield {"_raw": i}
         except Exception as e:
-            logger.exception("Error Occured while fetching instance details. Error: {}".format(e))
-            self.write_warning("Error Occured while fetching instance details. Go to Inspect Job and check search logs")
+            logger.exception("Error Occurred while fetching instance details. Error: {}".format(e))
+            self.write_warning("Error Occurred while fetching instance details. Go to Inspect Job and check search logs")
 
         
  

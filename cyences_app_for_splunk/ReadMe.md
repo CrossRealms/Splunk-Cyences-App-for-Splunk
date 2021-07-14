@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.5.0
+* Version - 1.6.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,44 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.6.0 (July 2021)
+* Added Sophos Endpoint metadata collection (through Sophos central API) command.
+  * Added configuration part in Cyences configuration page’s to configure Sophos-central API.
+  * See Data Onboarding > Sophos Central Metadata through API section for more information.
+* New Device Inventory:
+  * It uses better metadata information for endpoints from Sophos-central API. 
+  * It merges devices automatically based on information like hostname, mac-address, IP-address to show accurate count of devices.
+  * New device inventory assigns unique uuid to each device. 
+  * Device Master Table name changed to Device Inventory. 
+* Added Linux Reports dashboard.
+* Enhancements in Asset Intelligence Dashboard:
+  * Asset Intelligence dashboard updated with new device inventory lookup. 
+  * Asset Intelligence dashboard now support command separated values in the filter. 
+    * This allows you to search machines with multiple IP addresses. Or if user wants to search multiple users at the same time. Etc. 
+  * Tenable lookups are enhanced and better connected with device inventory lookup. 
+* Enhancements: 
+  * Reduce false positives from Ransomware Alerts (Spike in the file writes and ransomware file extension).
+  * Added loggers in custom command for better debugging. 
+  * Enhancement in Splunk Admin dashboard 
+    * Search improvement in the dashboard 
+    * Fixed searches of alerts (Missing Forwarders & Missing indexes) 
+    * By-default use wildcard (*) in all text filters. 
+  * Office 365 Dashboard: Added LogonError filter in the failed login panel. 
+  * Enhancement on forensics page drilldown searches. 
+    * Changed from index=* to use the datamodel command. 
+* Issues Fixed: 
+  * Fixed the issue with custom commands: when there is network error search runs indefinitely. 
+  * Fixed the issue with long horizontal scrolling on row expansion in Tenable and Qualys dashboard. 
+  * Fixed correlation issue of hosts on Lansweeper dashboard. 
+
+
+Upgrade Guide from Version 1.5.0 to 1.6.0 
+* Cyences App now utilize Sophos Central API to collect metadata information about Sophos endpoints. And it is being used in new Device Inventory instead regular sophos central events. 
+* Device Master Table renamed to Device Inventory through-out the App. 
+  * Follow Data Onboarding > Sophos Central Metadata through API section in this document to configure the API. 
+  * Please follow App Installation and Configuration > Device Inventory section for new device inventory configuration.
+
+
 Version 1.5.0 (June 2021)
 * Improved Authentication dashboard.
   * Added user authentication list with user filter capability.
