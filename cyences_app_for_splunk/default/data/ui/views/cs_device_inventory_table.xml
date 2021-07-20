@@ -231,9 +231,9 @@
       </input>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
-        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
@@ -246,7 +246,7 @@
         <format type="color" field="tenable">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="active_vul">
+        <format type="color" field="high_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
@@ -280,6 +280,7 @@
           <li>Yellow = Medium severity</li>
           <li>Green = No active vulnerabilities</li>
         </ul>
+        <p>high_vul: Severity 5 and severity 4 active vulnerabilities count.</p>
       </html>
     </panel>
   </row>

@@ -55,9 +55,9 @@
       <title>Device Inventory $tkn_filter_main_label$</title>
       <table>
         <search base="base_inventory_table">
-          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
+          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
         </search>
-        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, total_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
+        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$</fields>
         <option name="count">5</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -71,7 +71,7 @@
         <format type="color" field="tenable">
           <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
-        <format type="color" field="active_vul">
+        <format type="color" field="high_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
