@@ -34,7 +34,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_guest_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="VMware Guest" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename IN ("VMware Guest", "Hyper-V guest") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
 | join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
@@ -62,6 +62,45 @@
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="search_mac_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Apple Mac" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+| join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
+| join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
+| eval OS=coalesce(OS, tenable_os)
+| fillnull Qualys, Tenable value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN ,OS, User, Qualys, Tenable
+| sort Name</query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_network_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Network device" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
+  | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
+| join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
+| eval OS=coalesce(OS, tenable_os)
+| fillnull Qualys, Tenable value="Absent"
+| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Qualys, Tenable
+| sort Name </query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
+  <search id="search_webserver_assets">
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Webserver" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
+  | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
+| join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
+| eval OS=coalesce(OS, tenable_os)
+| fillnull Qualys, Tenable value="Absent"
+| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Model, Qualys, Tenable
+| sort Name </query>
+    <earliest>-4h@m</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+  </search>
   <search id="search_location_assets">
     <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Location" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
 | table Site, Name, State
@@ -79,7 +118,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_other_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT (AssetTypename="VMware vCenter server" OR AssetTypename="ESXi server" OR AssetTypename="VMware Guest" OR AssetTypename="Windows" OR AssetTypename="Linux" OR AssetTypename="Location" OR AssetTypename="Monitor") | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT AssetTypename IN ("Hyper-V guest", "VMware vCenter server", "ESXi server", "VMware Guest", "Windows", "Linux", "Apple Mac", "Network device", "Webserver", "Location", "Monitor") | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
 | table Site, Name,Description,State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,Type,OS, OSVersion, User
 | sort Name</query>
     <earliest>-4h@m</earliest>
@@ -225,7 +264,7 @@
   </row>
   <row>
     <panel>
-      <title>VMware Guests - Windows</title>
+      <title>VMware/Hyper-V Guests - Windows</title>
       <input type="dropdown" token="tkn_vmware_win_security_logs">
         <label>Security Logs</label>
         <choice value="*">All</choice>
@@ -327,7 +366,7 @@
   </row>
   <row>
     <panel>
-      <title>VMware Guests - Linux</title>
+      <title>VMware/Hyper-V Guests - Linux</title>
       <input type="dropdown" token="tkn_vmware_qualys_logs_linux">
         <label>Qualys Data</label>
         <choice value="*">All</choice>
@@ -363,7 +402,7 @@
   </row>
   <row>
     <panel>
-      <title>VMware Guests - Other</title>
+      <title>VMware/Hyper-V Guests - Other</title>
       <table>
         <search base="search_vmware_guest_assets">
           <query>search NOT OS="*Windows*" NOT OS IN `cs_qualys_linux_os` | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable</query>
@@ -410,6 +449,114 @@
         </format>
         <format type="color" field="Tenable">
           <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Apple Mac Devices</title>
+      <input type="dropdown" token="tkn_qualys_logs_mac">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_tenable_logs_mac">
+        <label>Tenable Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_mac_assets">
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_linux|s$ Tenable=$tkn_tenable_logs_mac|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Network Devices</title>
+      <input type="dropdown" token="tkn_qualys_logs_network">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_tenable_logs_network">
+        <label>Tenable Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_network_assets">
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_network|s$ Tenable=$tkn_tenable_logs_network|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Web Servers</title>
+      <input type="dropdown" token="tkn_qualys_logs_webserver">
+        <label>Qualys Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="tkn_tenable_logs_webserver">
+        <label>Tenable Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="search_webserver_assets">
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_webserver|s$ Tenable=$tkn_tenable_logs_webserver|s$</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="Qualys">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
           <link target="_blank">search?q=index%3Dlansweeper%20AssetName%3D$row.Name|s$%20%7C%20eval%20id%3Dcoalesce(AssetID%2Cid)%7C%20dedup%20id&amp;earliest=-4h@m&amp;latest=now</link>
