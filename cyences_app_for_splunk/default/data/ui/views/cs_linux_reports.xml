@@ -16,6 +16,19 @@
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="base_search_host_details">
+    <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
+  | fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
+  | eval cpu_freq=cpu_freq+" "+cpu_freq_unit 
+  | fields - cpu_freq_unit
+  | stats latest(*) as * by host | eval SystemUpTime=toString(SystemUpTime,"duration")
+  | table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
+  <search base="base_search_host_details" id="base_search_host_details_stats">
+    <query>| fields - host | stats values(*) as *</query>
+  </search>
   <fieldset submitButton="false">
     <input type="time" token="timeRange" searchWhenChanged="true">
       <label>Time Range</label>
@@ -26,13 +39,6 @@
     </input>
     <input type="text" token="tkn_host" searchWhenChanged="true">
       <label>Host</label>
-      <default>*</default>
-      <prefix>*</prefix>
-      <suffix>*</suffix>
-      <initialValue>*</initialValue>
-    </input>
-    <input type="text" token="tkn_user" searchWhenChanged="true">
-      <label>User</label>
       <default>*</default>
       <prefix>*</prefix>
       <suffix>*</suffix>
@@ -50,7 +56,10 @@
       </html>
       <table>
         <search>
-          <query>| tstats count where `cs_linux_users_with_previledge` | eval label="`cs_linux` sourcetype=\"usersWithLoginPrivs\"" 
+          <query>| tstats count where `cs_linux` | eval label="`cs_linux`"
+| append [| tstats count where `cs_linux_users_with_previledge` | eval label="`cs_linux` sourcetype=\"usersWithLoginPrivs\"" ]
+| append [| search index=* `cs_linux_failed_login` | head 1 | stats count  | eval label="`cs_linux` (sourcetype=linux_secure eventtype=*failed_login*) OR (source=/var/log/audit.log user=* process=sshd action=failure)"]
+| append [| search index=* `cs_linux_success_login` | head 1 | stats count | eval label="`cs_linux` (source=/var/log/secure app=sshd vendor_action=Accepted) OR (source=/var/log/audit.log user=* process=sshd action=success)"]
 | append [| tstats count where `cs_linux_sudousers`  | eval label="`cs_linux` sourcetype=\"sudousers\""]
 | append [| tstats count where `cs_linux_unix_version`  | eval label="`cs_linux` sourcetype=\"Unix:Version\""]
 | append [| tstats count where `cs_linux_unix_uptime`  | eval label="`cs_linux` sourcetype=\"Unix:Uptime\""]
@@ -75,16 +84,93 @@
   <row>
     <panel>
       <title>Hosts Details</title>
+      <input type="multiselect" token="tkn_host_details_machine_architecture_name" searchWhenChanged="true">
+        <label>machine_architecture_name</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>machine_architecture_name</fieldForLabel>
+        <fieldForValue>machine_architecture_name</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields machine_architecture_name | mvexpand machine_architecture_name</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_os_release" searchWhenChanged="true">
+        <label>os_release</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>os_release</fieldForLabel>
+        <fieldForValue>os_release</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields os_release | mvexpand os_release</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_os_name" searchWhenChanged="true">
+        <label>os_name</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>os_name</fieldForLabel>
+        <fieldForValue>os_name</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields os_name | mvexpand os_name</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_os_version" searchWhenChanged="true">
+        <label>os_version</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>os_version</fieldForLabel>
+        <fieldForValue>os_version</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields os_version | mvexpand os_version</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_cpu_cores" searchWhenChanged="true">
+        <label>cpu_cores</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>cpu_cores</fieldForLabel>
+        <fieldForValue>cpu_cores</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields cpu_cores | mvexpand cpu_cores</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_cpu_freq" searchWhenChanged="true">
+        <label>cpu_freq</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>cpu_freq</fieldForLabel>
+        <fieldForValue>cpu_freq</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields cpu_freq | mvexpand cpu_freq</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_cpu_type" searchWhenChanged="true">
+        <label>cpu_type</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>cpu_type</fieldForLabel>
+        <fieldForValue>cpu_type</fieldForValue>
+        <search base="base_search_host_details_stats">
+          <query>| fields cpu_type | mvexpand cpu_type</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
       <table>
-        <search>
-          <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
-| fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
-| eval cpu_freq=cpu_freq+" "+cpu_freq_unit 
-| fields - cpu_freq_unit
-| stats latest(*) as * by host | eval SystemUpTime=toString(SystemUpTime,"duration")
-| table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
+        <search base="base_search_host_details">
+          <query>| search machine_architecture_name IN ($tkn_host_details_machine_architecture_name$) os_release IN ($tkn_host_details_os_release$) os_name IN ($tkn_host_details_os_name$) os_version IN ($tkn_host_details_os_version$) cpu_cores IN ($tkn_host_details_cpu_cores$) cpu_freq IN ($tkn_host_details_cpu_freq$) cpu_type IN ($tkn_host_details_cpu_type$)</query>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -94,9 +180,22 @@
   <row>
     <panel>
       <title>User List</title>
+      <input type="text" token="tkn_user_list_USERNAME">
+        <label>USERNAME</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="tkn_user_list_sudo_access">
+        <label>sudo_access</label>
+        <choice value="*">All</choice>
+        <choice value="(sudo_access=&quot;Yes&quot;)">Yes</choice>
+        <choice value="NOT (sudo_access=&quot;Yes&quot;)">No</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
       <table>
         <search base="user_list_basesearch">
-          <query>| search host=$tkn_host|s$ USERNAME=$tkn_user|s$</query>
+          <query>| search host=$tkn_host|s$ USERNAME IN ($tkn_user_list_USERNAME$) $tkn_user_list_sudo_access$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
@@ -108,10 +207,96 @@
   </row>
   <row>
     <panel>
-      <title>Open Ports</title>
+      <title>Success Login by Host, Users</title>
+      <input type="text" token="tkn_success_login_USERNAME">
+        <label>USERNAME</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
       <table>
         <search>
-          <query>`cs_linux_open_ports` host=$tkn_host|s$ | dedup host, Proto, Port | table host, _time , Proto, Port</query>
+          <query>`cs_linux_success_login` host=$tkn_host|s$ user IN ($tkn_success_login_USERNAME$)
+| table _time, host, src_ip, user 
+| stats count, values(src_ip) as src_ips by host, user 
+| sort - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Failed Login by Host, Users</title>
+      <input type="text" token="tkn_failed_login_USERNAME">
+        <label>USERNAME</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>`cs_linux_failed_login` host=$tkn_host|s$ user IN ($tkn_failed_login_USERNAME$)
+| rename src as src_ip 
+| table _time, host, user, src_ip, app
+| stats count, values(src_ip) as src_ips by host, user app
+| sort - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Password Change(unix/linux)</title>
+      <input type="text" token="tkn_password_change_USERNAME">
+        <label>USERNAME</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <event>
+        <search>
+          <query>`cs_linux` "password changed for" host=$tkn_host|s$ user IN ($tkn_password_change_USERNAME$)</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="list.drilldown">none</option>
+        <option name="list.wrap">1</option>
+        <option name="maxLines">5</option>
+        <option name="raw.drilldown">full</option>
+        <option name="rowNumbers">0</option>
+        <option name="table.drilldown">all</option>
+        <option name="table.sortDirection">asc</option>
+        <option name="table.wrap">1</option>
+        <option name="type">list</option>
+      </event>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Open Ports</title>
+      <input type="dropdown" token="tkn_open_ports_proto">
+        <label>Proto</label>
+        <choice value="*">All</choice>
+        <choice value="(Proto=&quot;udp&quot;)">udp</choice>
+        <choice value="(Proto=&quot;tcp&quot;)">tcp</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="tkn_open_ports_port">
+        <label>Port</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>`cs_linux_open_ports` host=$tkn_host|s$ | search  $tkn_open_ports_proto$ Port IN ($tkn_open_ports_port$) | dedup host, Proto, Port | table host, _time , Proto, Port</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -151,9 +336,41 @@
   <row>
     <panel>
       <title>Listening Ports on Host</title>
+      <input type="dropdown" token="tkn_listening_transport">
+        <label>transport</label>
+        <choice value="*">All</choice>
+        <choice value="(transport=&quot;udp&quot;)">udp</choice>
+        <choice value="(transport=&quot;tcp&quot;)">tcp</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_listening_app" searchWhenChanged="true">
+        <label>app</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>app</fieldForLabel>
+        <fieldForValue>app</fieldForValue>
+        <search base="base_search_listening_port">
+          <query>| fields app | stats count by app</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_listening_user" searchWhenChanged="true">
+        <label>user</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>user</fieldForLabel>
+        <fieldForValue>user</fieldForValue>
+        <search base="base_search_listening_port">
+          <query>| fields user | stats count by user</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
       <table>
-        <search>
-          <query>`cs_linux_unix_listening_ports` host=$tkn_host|s$ | dedup host, dest_port, transport | table host,_time, dest_port, transport, app, user, dest_ip, ip_version, fd</query>
+        <search id="base_search_listening_port">
+          <query>`cs_linux_unix_listening_ports` host=$tkn_host|s$ app IN ($tkn_listening_app$) user IN ($tkn_listening_user$) $tkn_listening_transport$| dedup host, dest_port, transport | table host,_time, dest_port, transport, app, user, dest_ip, ip_version, fd</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -165,9 +382,45 @@
   <row>
     <panel>
       <title>List of Services on Hosts</title>
+      <input type="multiselect" token="tkn_services_LOADED" searchWhenChanged="true">
+        <label>LOADED</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>LOADED</fieldForLabel>
+        <fieldForValue>LOADED</fieldForValue>
+        <search base="base_search_services">
+          <query>| fields LOADED | stats count by LOADED</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_ACTIVE" searchWhenChanged="true">
+        <label>ACTIVE</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>ACTIVE</fieldForLabel>
+        <fieldForValue>ACTIVE</fieldForValue>
+        <search base="base_search_services">
+          <query>| fields ACTIVE | stats count by ACTIVE</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host_details_SUB" searchWhenChanged="true">
+        <label>SUB</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>SUB</fieldForLabel>
+        <fieldForValue>SUB</fieldForValue>
+        <search base="base_search_services">
+          <query>| fields SUB | stats count by SUB</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
       <table>
-        <search>
-          <query>`cs_linux_unix_service` host=$tkn_host|s$ | dedup host, type, UNIT | table host, _time,type, UNIT, LOADED, ACTIVE, SUB, DESCRIPTION</query>
+        <search id="base_search_services">
+          <query>`cs_linux_unix_service` host=$tkn_host|s$ LOADED IN ($tkn_services_LOADED$) ACTIVE IN ($tkn_host_details_ACTIVE$) SUB IN ($tkn_host_details_SUB$)| dedup host, type, UNIT | table host, _time,type, UNIT, LOADED, ACTIVE, SUB, DESCRIPTION</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
