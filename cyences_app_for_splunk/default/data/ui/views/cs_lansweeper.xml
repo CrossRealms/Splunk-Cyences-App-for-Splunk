@@ -475,7 +475,7 @@
       </input>
       <table>
         <search base="search_mac_assets">
-          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_linux|s$ Tenable=$tkn_tenable_logs_mac|s$</query>
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_mac|s$ Tenable=$tkn_tenable_logs_mac|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
