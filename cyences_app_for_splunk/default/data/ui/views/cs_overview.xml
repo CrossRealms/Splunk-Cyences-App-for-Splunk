@@ -149,10 +149,10 @@
   </row>
   <row>
     <panel>
-      <title>Palo Alto Firewall</title>
+      <title>Linux\Unix</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Palo Alto Firewall")`</query>
+          <query>| `cs_filter_savedsearches("Linux")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
