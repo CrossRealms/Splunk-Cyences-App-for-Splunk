@@ -149,7 +149,7 @@
   </row>
   <row>
     <panel>
-      <title>Linux\Unix</title>
+      <title>Linux/Unix</title>
       <table>
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Linux")`</query>
