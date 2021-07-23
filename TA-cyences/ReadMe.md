@@ -14,19 +14,16 @@ The Cyences Add-on for Splunk is a Splunk Add-on/App to provide some custom inpu
 * Build - 1
 * Creates Index - False
 * Compatible with:
-   * Splunk Enterprise version: 8.2, 8.1, 8.0
+   * Splunk Enterprise version: 8.2, 8.1, 8.0, 7.3, 7.2
    * OS: Platform Independent
 
 
 
 TOPOLOGY AND SETTING UP SPLUNK ENVIRONMENT
 ------------------------------------------
-This app can be set up in two ways: 
-  1. Standalone Mode: 
-     * Install the `Cyences Add-on for Splunk`.
-  2. Distributed Mode: 
-     * Install the `Cyences Add-on for Splunk` on the search head.
-     * App does not require on the Indexer or the forwarder.
+* Install this Add-on on every Linux/Unix server from which user would like to collect local account and privileges data.
+* Add-on can be installed on both full Splunk server and Splunk universal forwarder.
+* Splunk should be running as root user.
 
 
 INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
