@@ -1,17 +1,7 @@
 <form theme="dark">
   <label>Linux/Unix</label>
   <search id="user_list_basesearch">
-    <query>`cs_linux_users_with_previledge`
-| table _time host UID USERNAME GID HOME_DIR 
-| stats earliest(_time) as _time latest(*) as * by host UID 
-| append [| search `cs_linux_sudousers`
-| stats latest(_raw) as raw by host 
-| rex field=raw "sudouser=(?&lt;USERNAME&gt;.*)" max_match=0 
-| fields - raw 
-| mvexpand USERNAME 
-| eval sudo_access="Yes"]
-| stats first(*) as * by host, USERNAME
-| fillnull sudo_access value="-"</query>
+    <query>|inputlookup cs_linux_user_list.csv | convert ctime(sudo_last_modified) as sudo_last_modified | convert ctime(user_last_modified) as user_last_modified</query>
     <earliest>-2h</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
@@ -51,7 +41,7 @@
         <p>Linux/Unix Reports</p>
         <p>This dashboard includes all linux/unix security related reports.</p>
         <p>
-          <b>Data Collection:</b> It uses two Add-ons to collect different data. <a href="https://splunkbase.splunk.com/app/4232/" target="_blank">Linux Auditd Technology Add-On</a> and <a href="https://splunkbase.splunk.com/app/833/" target="_blank">Splunk Add-on for Linux and Unix (*nix)</a>
+          <b>Data Collection:</b> It uses two Add-ons to collect different data. <a href="https://splunkbase.splunk.com/app/5659/" target="_blank">Cyences Add-on for Splunk</a> and <a href="https://splunkbase.splunk.com/app/833/" target="_blank">Splunk Add-on for Linux and Unix (*nix)</a>
         </p>
       </html>
       <table>
