@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.6.0
+* Version - 1.6.1
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,12 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.6.1 (July 2021)
+* Bug Fixes
+
+Upgrade Guide from Version 1.6.0 to 1.6.1
+* N/A (See Release notes for version 1.6.0)
+
 Version 1.6.0 (July 2021)
 * Added Sophos Endpoint metadata collection (through Sophos central API) command.
   * Added configuration part in Cyences configuration page’s to configure Sophos-central API.
