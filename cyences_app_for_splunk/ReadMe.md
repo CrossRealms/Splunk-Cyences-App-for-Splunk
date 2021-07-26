@@ -47,10 +47,8 @@ To uninstall the app, the users can follow the below steps:
 RELEASE NOTES
 -------------
 Version 1.6.1 (July 2021)
-* Bug Fixes
+ * Bug Fix: Link of Linux Dashboard was not working on Overview Dashboard.
 
-Upgrade Guide from Version 1.6.0 to 1.6.1
-* N/A (See Release notes for version 1.6.0)
 
 Version 1.6.0 (July 2021)
 * Added Sophos Endpoint metadata collection (through Sophos central API) command.
