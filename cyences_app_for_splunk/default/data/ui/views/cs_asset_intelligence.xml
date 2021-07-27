@@ -31,7 +31,7 @@
       </input>
       <html>
         <p>A wildcard (*) can be used if you're uncertain about the spelling for a particular user. For example, *asmith*, will match with the following user names: asmith, desktop\asmith, asmith_admin, etc.</p>
-        <p>You can add comma separated values for all like, 10.0.0.1,10.0.0.2</p>
+        <p>You can add comma separated values for all like, 10.0.0.1,10.0.0.2 OR you can also specify IP subnet mask, like 10.1.1.0/24</p>
         <p>Try to avoid using wildcards for both the IP Address and Host Name fields, as it may return less accurate and incomplete information in the dashboard.</p>
       </html>
     </panel>
