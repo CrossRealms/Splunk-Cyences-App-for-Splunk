@@ -201,7 +201,7 @@
             <set token="tkn_ip">()</set>
           </condition>
           <condition>
-            <set token="tkn_ip">(ip="*$tkn_ip_tmp$*")</set>
+            <set token="tkn_ip">(ip="$tkn_ip_tmp$")</set>
           </condition>
         </change>
       </input>
@@ -229,6 +229,10 @@
           </condition>
         </change>
       </input>
+      <html>
+        <p>You can use IP subnet mask search for IP, like 10.1.1.0/24 or you can also use a wildcard (*) can be used to search IP Address range like: 10.1.1.*</p>
+        <p>A wildcard (*) is added by default at the front and end of Host, User and Mac Address filters.</p>
+      </html>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
           <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
