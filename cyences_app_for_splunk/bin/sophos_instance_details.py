@@ -175,16 +175,16 @@ class SophosEndpointDetails(GeneratingCommand):
             self.get_tenant_list(barier_token)
 
             if(all_endpoints):
-                for i in SOPHOS_TENANT_DICT:
+                for tenant in SOPHOS_TENANT_DICT:
 
                     current_page=1
                     total_page = 1
                     while(current_page<=total_page):
-                        requestHeaders = self.get_request_header(i,barier_token)
+                        requestHeaders = self.get_request_header(tenant,barier_token)
                         if(current_page==1):
-                            requestUrl = SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?pageTotal=true"
+                            requestUrl = SOPHOS_TENANT_DICT.get(tenant)+"/endpoint/v1/endpoints?pageTotal=true"
                         else:
-                            requestUrl =  SOPHOS_TENANT_DICT.get(i)+"/endpoint/v1/endpoints?page="+str(current_page)
+                            requestUrl =  SOPHOS_TENANT_DICT.get(tenant)+"/endpoint/v1/endpoints?page="+str(current_page)
                         request = requests.get(requestUrl, headers=requestHeaders)
                         if(request.status_code!=200):
                             raise Exception("Error while fetching all the endpoints")
@@ -193,15 +193,15 @@ class SophosEndpointDetails(GeneratingCommand):
                         if(current_page==1):
                             total_page = request_json.get("pages").get("total")
 
-                        for i in request_json.get("items"):
-                            yield {"_raw": i}
-                        
+                        for item in request_json.get("items"):
+                            yield {"_raw": item}
+
                         current_page = current_page + 1
 
             else:
                 instance_details = self.get_instance_uuid(barier_token,ip,hostname,uuid)
-                for i in instance_details:
-                    yield {"_raw": i}
+                for instance in instance_details:
+                    yield {"_raw": instance}
         except Exception as e:
             logger.exception("Error Occurred while fetching instance details. Error: {}".format(e))
             self.write_warning("Error Occurred while fetching instance details. Go to Inspect Job and check search logs")
