@@ -56,6 +56,7 @@ jobs:
           cd repodir
           find TA-cyences -type f -exec chmod 644 '{}' \;
           find TA-cyences -type d -exec chmod 755 '{}' \;
+          find TA-cyences -type f -name *.sh -exec chmod +x '{}' \;
           tar -czf TA-cyences.tgz TA-cyences
           cd ..
           
