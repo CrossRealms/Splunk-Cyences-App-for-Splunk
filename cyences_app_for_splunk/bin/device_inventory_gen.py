@@ -157,19 +157,28 @@ class DeviceInventoryGenCommand(EventingCommand):
                             return i
         else:
             for i in self.device_inventory:
-                if (isinstance(i[field_index], list) and value in i[field_index]) or (value==i[field_index]):
-                    logger.debug("Found lookup entry:{}".format(i))
-                    return i
+                try:
+                    if (isinstance(i[field_index], list) and value in i[field_index]) or (value==i[field_index]):
+                        logger.debug("Found lookup entry:{}".format(i))
+                        return i
+                except KeyError:
+                    pass   # in the case of field not exist in the lookup, exclude that entry as that is for sure not matching entry
         logger.debug("Lookup entry not found.")
     
 
     def get_pointer_to_match_mac_and_ip(self, mac_addresses, ips, time=None):
         logger.debug("Finding mac:{}, ip:{}".format(mac_addresses, ips))
         for i in self.device_inventory:
-            lookup_values_mac = i[LOOKUP_KEY_MAC_ADDRESS]
+            try:
+                lookup_values_mac = i[LOOKUP_KEY_MAC_ADDRESS]
+            except KeyError:
+                continue
             for mac in mac_addresses:
                 if mac in lookup_values_mac:
-                    lookup_values_ip = i[LOOKUP_KEY_IP]
+                    try:
+                        lookup_values_ip = i[LOOKUP_KEY_IP]
+                    except KeyError:
+                        continue
                     for ip in ips:
                         if ip in lookup_values_ip:
                             logger.debug("Found lookup entry for matching mac and ip.:{}".format(i))
@@ -184,7 +193,11 @@ class DeviceInventoryGenCommand(EventingCommand):
 
     
     def combine_multivalued_field(self, current, new_values):
-        current.extend(new_values)
+        try:
+            current.extend(new_values)
+        except AttributeError:
+            current = [current]
+            current.extend(new_values)
         return list(set(current))
 
     def update_lookup_row(self, record, data_pointer, ips, hostnames, mac_addresses, product_uuid=None):
@@ -198,7 +211,7 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         if product_uuid:
             field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[product_uuid]
-            if data_pointer[field_index]:
+            if field_index in data_pointer and data_pointer[field_index]:
                 logger.info("data_pointer[{}]={} is already present, while adding record:{} into exiting lookup entry:{}, mering...".format(product_uuid, data_pointer[field_index], record, data_pointer))
                 # now we are merging these events
                 if isinstance(data_pointer[field_index], list):
@@ -212,8 +225,15 @@ class DeviceInventoryGenCommand(EventingCommand):
             else:
                 data_pointer[field_index] = record[product_uuid]
 
-        data_pointer[LOOKUP_KEY_HOSTNAME] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_HOSTNAME], hostnames)
-        data_pointer[LOOKUP_KEY_MAC_ADDRESS] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_MAC_ADDRESS], mac_addresses)
+        try:
+            data_pointer[LOOKUP_KEY_HOSTNAME] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_HOSTNAME], hostnames)
+        except KeyError:
+            data_pointer[LOOKUP_KEY_HOSTNAME] = hostnames
+        
+        try:
+            data_pointer[LOOKUP_KEY_MAC_ADDRESS] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_MAC_ADDRESS], mac_addresses)
+        except KeyError:
+            data_pointer[LOOKUP_KEY_MAC_ADDRESS] = mac_addresses
 
         if self.check_timestamp(data_pointer[LOOKUP_KEY_TIME]):
             # append ips
