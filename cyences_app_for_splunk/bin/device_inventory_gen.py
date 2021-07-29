@@ -141,20 +141,26 @@ class DeviceInventoryGenCommand(EventingCommand):
         field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[field]
         if field in ['hostname', 'mac_address']:   # not being used for mac_address currently
             for i in self.device_inventory:
-                lookup_values = i[field_index]
-                for val in value:
-                    if val in lookup_values:
-                        logger.debug("Found lookup entry:{}".format(i))
-                        return i
+                try:
+                    lookup_values = i[field_index]
+                    for val in value:
+                        if val in lookup_values:
+                            logger.debug("Found lookup entry:{}".format(i))
+                            return i
+                except KeyError:
+                    continue   # If lookup entry do not have hostname of mac_address then continue with other entries
         elif field == 'ip':   # not being used currently
             for i in self.device_inventory:
-                lookup_values = i[field_index]
-                for val in value:
-                    if val in lookup_values:
-                        logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
-                        if self.check_timestamp(time):
-                            logger.debug("Found lookup entry for ip and matches the timestamp condition.:{}".format(i))
-                            return i
+                try:
+                    lookup_values = i[field_index]
+                    for val in value:
+                        if val in lookup_values:
+                            logger.debug("Found lookup entry for ip, checking timestamp.:{}".format(i))
+                            if self.check_timestamp(time):
+                                logger.debug("Found lookup entry for ip and matches the timestamp condition.:{}".format(i))
+                                return i
+                except KeyError:
+                    continue   # If lookup entry do not have ip address then continue with other entries
         else:
             for i in self.device_inventory:
                 try:
@@ -162,7 +168,7 @@ class DeviceInventoryGenCommand(EventingCommand):
                         logger.debug("Found lookup entry:{}".format(i))
                         return i
                 except KeyError:
-                    pass   # in the case of field not exist in the lookup, exclude that entry as that is for sure not matching entry
+                    continue   # in the case of field not exist in the lookup, exclude that entry as that is for sure not matching entry
         logger.debug("Lookup entry not found.")
     
 
