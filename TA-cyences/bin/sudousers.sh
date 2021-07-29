@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 groups=$(cat /etc/sudoers | grep "ALL=(ALL" | awk '{print $1}'  | grep % | grep -v '#')
 for i in $groups
 do
