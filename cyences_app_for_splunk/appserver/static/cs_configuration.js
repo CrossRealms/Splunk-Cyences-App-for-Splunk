@@ -51,6 +51,7 @@ require([
         /* Windows & AD */
         { macro_name: 'cs_ad_user_modification_filter', input_id: 'macro_cs_ad_user_modification_filter', button_id: 'macro_cs_ad_user_modification_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},
+        { macro_name: 'cs_ad_group_membership_changed_filter', input_id: 'macro_cs_ad_group_membership_changed_filter', button_id: 'macro_cs_ad_group_membership_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_group_policy_changed_filter', input_id: 'macro_cs_ad_group_policy_changed_filter', button_id: 'macro_cs_ad_group_policy_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_user_changed_filter', input_id: 'macro_cs_ad_user_changed_filter', button_id: 'macro_cs_ad_user_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_user_locked_out_filter', input_id: 'macro_cs_ad_user_locked_out_filter', button_id: 'macro_cs_ad_user_locked_out_filter_button', msg_id: 'macro_windows_msg'},
