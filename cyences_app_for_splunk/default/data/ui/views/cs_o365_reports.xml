@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" stylesheet="cs_o365_reports.css">
   <label>Office 365</label>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
@@ -18,15 +18,15 @@
       </default>
     </input>
     <input type="dropdown" token="tkn_host">
-      <label>O365 Data Collection Host</label>
+      <label>Data Collection Host</label>
       <choice value="*">All</choice>
       <default>*</default>
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>| tstats count where `cs_o365` by host</query>
-        <earliest>$timeRange.earliest$</earliest>
-        <latest>$timeRange.latest$</latest>
+        <query>| tstats count where ((`cs_o365`) OR (`cs_azure_securityscore`)) by host</query>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
       </search>
       <prefix>host="</prefix>
       <suffix>"</suffix>
@@ -35,13 +35,20 @@
   <row>
     <panel>
       <html>
-        <p>Office 365 Reports</p>
+        <p>Office 365 - Azure</p>
         <p>
-          <b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.</p>
+          ##TODO Change SplunkBase Link for Graph Security<br/>
+          <b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.<br/>
+          Microsoft Azure Security Score data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Microsoft Graph Security Score Add-on for Splunk</a>.</p>
       </html>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity"  $tkn_host$| head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" | table label, data</query>
+          <query>| tstats count where `cs_o365` sourcetype="o365:management:activity" $tkn_host$ 
+| eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" 
+| append 
+    [| tstats count where `cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ 
+    | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_azure_securityscore` sourcetype=\"graphsecurity:score\"" ] 
+| table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -50,6 +57,60 @@
         <format type="color" field="data">
           <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
         </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Azure - Current Security Score(In Percentage)</title>
+      <single>
+        <search>
+          <query>`cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ | eval percentage = (currentScore/maxScore)*100 | timechart max(percentage) as percentage | streamstats last(percentage) as percentage</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="unit">%</option>
+        <option name="drilldown">all</option>
+        <drilldown>
+          <set token="tkn_panel_basis_security_score_visible">"True"</set>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <title>Azure - Current Security Score</title>
+      <single>
+        <search>
+          <query>`cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ | head 1 | eval score = currentScore."/".maxScore | fields score</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="drilldown">all</option>
+        <drilldown>
+          <set token="tkn_panel_basis_security_score_visible">"True"</set>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row depends="$tkn_panel_basis_security_score_visible$">
+    <panel>
+      <title>Parameter used to calculate Security Score</title>
+      <table id="tbl_security_score">
+        <search>
+          <query>`cs_azure_securityscore` sourcetype="graphsecurity:score" | where $tkn_panel_basis_security_score_visible$=="True"
+| head 1
+| spath output=controlScores path=controlScores{}  | fields controlScores
+| mvexpand controlScores
+| spath input=controlScores | table controlCategory controlName controlState State scoreInPercentage count total lastSynced IsEnforced IsEnforced IsApplicable on implementationStatus description | sort  scoreInPercentage, + controlCategory</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
       </table>
     </panel>
   </row>
