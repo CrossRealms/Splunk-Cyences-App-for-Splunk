@@ -1,0 +1,116 @@
+#tbl_security_score table{
+    table-layout: fixed;
+    width : 150%;
+}
+
+#tbl_security_score th:nth-child(1) {
+    width:  2%!important;
+}
+
+#tbl_security_score td:nth-child(2) {
+    width:  6%!important;
+}
+
+#tbl_security_score td:nth-child(3) {
+    width:  12%!important;
+}
+
+#tbl_security_score td:nth-child(4) {
+    width:  5%!important;
+}
+
+#tbl_security_score td:nth-child(5) {
+    width:  3%!important;
+}
+
+#tbl_security_score td:nth-child(6) {
+    width:  7%!important;
+}
+
+#tbl_security_score td:nth-child(7) {
+    width:  3%!important;
+}
+
+#tbl_security_score td:nth-child(8) {
+    width:  3%!important;
+}
+
+#tbl_security_score td:nth-child(9) {
+    width:  5%!important;
+}
+
+#tbl_security_score td:nth-child(10) {
+    width:  4%!important;
+}
+
+#tbl_security_score td:nth-child(11) {
+    width:  5%!important;
+}
+
+#tbl_security_score td:nth-child(12) {
+    width:  3%!important;
+}
+
+#tbl_security_score td:nth-child(13) {
+    width:  8%!important;
+}
+
+#tbl_security_score td:nth-child(14) {
+    width:  27%!important;
+}
+
+#tbl_security_score th:nth-child(1) {
+    width:  2%!important;
+}
+
+#tbl_security_score th:nth-child(2) {
+    width:  6%!important;
+}
+
+#tbl_security_score th:nth-child(3) {
+    width:  12%!important;
+}
+
+#tbl_security_score th:nth-child(4) {
+    width:  5%!important;
+}
+
+#tbl_security_score th:nth-child(5) {
+    width:  3%!important;
+}
+
+#tbl_security_score th:nth-child(6) {
+    width:  7%!important;
+}
+
+#tbl_security_score th:nth-child(7) {
+    width:  3%!important;
+}
+
+#tbl_security_score th:nth-child(8) {
+    width:  3%!important;
+}
+
+#tbl_security_score th:nth-child(9) {
+    width:  5%!important;
+}
+
+#tbl_security_score th:nth-child(10) {
+    width:  4%!important;
+}
+
+#tbl_security_score th:nth-child(11) {
+    width:  5%!important;
+}
+
+#tbl_security_score th:nth-child(12) {
+    width:  3%!important;
+}
+
+#tbl_security_score th:nth-child(13) {
+    width:  8%!important;
+}
+
+#tbl_security_score th:nth-child(14) {
+    width:  27%!important;
+}
