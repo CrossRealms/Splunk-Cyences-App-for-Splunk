@@ -70,7 +70,6 @@
           <latest>now</latest>
         </search>
         <option name="numberPrecision">0.0</option>
-        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
         <option name="showTrendIndicator">1</option>
         <option name="unit">%</option>
         <option name="drilldown">all</option>
@@ -78,6 +77,9 @@
           <set token="tkn_panel_basis_security_score_visible">"True"</set>
         </drilldown>
       </single>
+      <html>
+        <p>DrillDown is present on the panel which will give detailed information of Security Score.</p>
+      </html>
     </panel>
     <panel>
       <title>Azure - Current Security Score</title>
@@ -94,6 +96,9 @@
           <set token="tkn_panel_basis_security_score_visible">"True"</set>
         </drilldown>
       </single>
+      <html>
+        <p>DrillDown is present on the panel which will give detailed information of Security Score.</p>
+      </html>      
     </panel>
   </row>
   <row depends="$tkn_panel_basis_security_score_visible$">
