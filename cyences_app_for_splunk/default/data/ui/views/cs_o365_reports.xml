@@ -65,7 +65,7 @@
       <title>Azure - Current Security Score(In Percentage)</title>
       <single>
         <search>
-          <query>`cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ | eval percentage = (currentScore/maxScore)*100 | timechart max(percentage) as percentage | streamstats last(percentage) as percentage</query>
+          <query>`cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ | eval percentage = (currentScore/maxScore)*100 | timechart latest(percentage) as percentage | streamstats last(percentage) as percentage</query>
           <earliest>-7d@h</earliest>
           <latest>now</latest>
         </search>
