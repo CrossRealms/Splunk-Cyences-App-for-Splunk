@@ -121,6 +121,15 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">Azure Security Score Logs</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_azure_securityscore"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_azure_securityscore_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">WinEventLog Security Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_wineventlog_security"/>
