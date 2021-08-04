@@ -228,6 +228,15 @@
               <button id="macro_data_linux_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">Microsoft Defender ATP Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_o365_defender_atp"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_o365_defender_atp_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>
