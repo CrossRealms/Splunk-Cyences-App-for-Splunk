@@ -1,7 +1,18 @@
 
+# Ransomware Demo
 
-Steps to Create Executable file:
-----------------
+### Execution Requirements
+* Operating System: Windows
+
+
+### Dev Requirements
+* Operating System: Windows
+* Python 3
+* NSIS (To create executable file)
+* Python modules: py2exe, tkinter
+
+
+### Steps to Create Executable file:
 * Run `python setup.py py2exe`
 * Rename `dist` directory to `RansomwareDemo`.
 * Compress the `RansomwareDemo` to `RansomwareDemo.zip`.
