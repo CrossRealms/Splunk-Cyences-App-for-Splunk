@@ -32,64 +32,6 @@
   </row>
   <row>
     <panel>
-      <title>AD - User Modification</title>
-      <table>
-        <search>
-          <query>`cs_wineventlog_security` EventCode IN (4722, 4725, 4720, 4726) user!=*$$ | table _time, host, user, name, EventCode | rename subject as Action | `cs_ad_user_modification_filter`</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">none</option>
-      </table>
-      <html>
-        <p>
-          <b>Description:</b> User has added/removed/enabled/disabled the following events.</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>AD - User Privilege Escalation</title>
-      <table>
-        <search>
-          <query>`cs_wineventlog_security` EventCode IN (4728, 4729) | rename name as change_action | table host, change_action, Group_Name, member_id | `cs_ad_user_privilege_escalation_filter`</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">none</option>
-      </table>
-      <html>
-        <p>
-          <b>Description:</b> User has added/removed to/from a group events.</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>AD - Password Change Outside of Working Hours</title>
-      <table>
-        <search>
-          <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
-          | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
-          | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription | `cs_ad_password_change_outside_working_hour_filter`</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-      <html>
-        <p>
-          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
-      </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <title>AD - Group Changed</title>
       <table>
         <search>
@@ -151,6 +93,31 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p>
+          <b>Description:</b> User has added/removed/enabled/disabled the following events.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Password Change Outside of Working Hours</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
+          | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
+          | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription | `cs_ad_password_change_outside_working_hour_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>
+          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
+      </html>
     </panel>
   </row>
   <row>
