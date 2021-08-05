@@ -50,12 +50,10 @@ require([
         { macro_name: 'cs_summariesonly_authentication', input_id: 'macro_datamodel_authentication', button_id: 'macro_datamodel_authentication_button', msg_id: 'macro_datamodel_msg'},
 
         /* Windows & AD */
-        { macro_name: 'cs_ad_user_modification_filter', input_id: 'macro_cs_ad_user_modification_filter', button_id: 'macro_cs_ad_user_modification_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_group_policy_changed_filter', input_id: 'macro_cs_ad_group_policy_changed_filter', button_id: 'macro_cs_ad_group_policy_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_user_changed_filter', input_id: 'macro_cs_ad_user_changed_filter', button_id: 'macro_cs_ad_user_changed_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_user_locked_out_filter', input_id: 'macro_cs_ad_user_locked_out_filter', button_id: 'macro_cs_ad_user_locked_out_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_user_privilege_escalation_filter', input_id: 'macro_cs_ad_user_privilege_escalation_filter', button_id: 'macro_cs_ad_user_privilege_escalation_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_password_change_outside_working_hour_filter', input_id: 'macro_cs_ad_password_change_outside_working_hour_filter', button_id: 'macro_cs_ad_password_change_outside_working_hour_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_windows_host_missing_update_filter', input_id: 'macro_cs_windows_host_missing_update_filter', button_id: 'macro_cs_windows_host_missing_update_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_windows_firewall_disabled_filter', input_id: 'macro_cs_windows_firewall_disabled_filter', button_id: 'macro_cs_windows_firewall_disabled_filter_button', msg_id: 'macro_windows_msg'},
