@@ -415,24 +415,6 @@
         <p id="macro_windows_msg"/>
         <table style="width:70%">
           <tr>
-            <th style="text-align:left">cs_ad_user_modification_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_user_modification_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_user_modification_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_user_privilege_escalation_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_user_privilege_escalation_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_user_privilege_escalation_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
             <th style="text-align:left">cs_ad_group_changed_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_ad_group_changed_filter"/>
