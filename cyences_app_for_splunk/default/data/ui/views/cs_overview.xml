@@ -238,12 +238,21 @@
     <panel>
       <title>Antivirus</title>
       <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike")` 
-| eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name) 
+        <search>
+          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *") | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike")`]
+| stats first(*) as * by savedsearch_name
+| `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike")` 
+| eval "Notable Events"=if(isnull(problems), 0, problems)
+| search disabled=0 is_scheduled=1 
+| `cs_daily_alerts`
+| table savedsearch_name, "Notable Events"
+| sort - "Notable Events"
+| eval Name=case(savedsearch_name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",savedsearch_name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",savedsearch_name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",savedsearch_name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),savedsearch_name)
 | rename "Notable Events" as Count 
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
+    [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | fields _time host dhost type 
     | stats latest(type) as type by host, dhost 
     | where type=="Event::Endpoint::ServiceNotRunning" 
@@ -251,17 +260,30 @@
     | eval Name="Currently Disabled/Stopped Sophos Services"] 
 | append
     [| search `cs_sophos` type="Event::Endpoint::Sav*" host="*" dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
+    [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | fields host dhost type 
     | stats latest(type) as type by host, dhost 
     | where type=="Event::Endpoint::SavDisabled" 
-    | stats count as Count 
+    | stats count as Count
     | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"]
 | append
-    [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=*stopped*) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ | fields EventCode, host | stats latest(EventCode) as EventCode by host | stats count(eval(EventCode!=1150 AND EventCode!=1151)) as Count | eval Name="Currently Disabled/Stopped Windows Defender Services"]
+    [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=stopped) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
+      [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
+      | fields EventCode, host 
+      | stats latest(EventCode) as EventCode by host 
+      | stats count(eval(EventCode!=1150 AND EventCode!=1151)) as Count 
+      | eval Name="Currently Disabled/Stopped Windows Defender Services"]
 | append
-    [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ | fields RTP_state host| stats latest(RTP_state) as RTP_state by host | where RTP_state=="Disabled" | stats count as Count
+    [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
+    [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
+    | fields RTP_state host 
+    | stats latest(RTP_state) as RTP_state by host 
+    | where RTP_state=="Disabled" 
+    | stats count as Count 
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"]
 | sort - Count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
