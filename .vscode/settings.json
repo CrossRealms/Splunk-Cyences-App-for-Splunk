@@ -9,6 +9,7 @@
         "summariesonly",
         "sysmon",
         "tenable",
+        "nessus",
         "wineventlog"
     ]
 }
