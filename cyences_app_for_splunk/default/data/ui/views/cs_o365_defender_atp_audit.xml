@@ -34,6 +34,7 @@
         </format>
       </table>
       <html>
+        <p>Data Collection: Use <a target="_blank" href="https://splunkbase.splunk.com/app/5691">Defender ATP Status Check Add-on</a>.</p>
         <p>This search checks the last 4 hours to see Defender ATP configuration on Windows machines.</p>
       </html>
     </panel>
