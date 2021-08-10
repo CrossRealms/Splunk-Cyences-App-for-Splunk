@@ -1,0 +1,84 @@
+<form theme="dark">
+  <label>Microsoft 365 Defender ATP</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Defender ATP / Microsoft 365 Defender ATP - This dashboard shows Defender ATP alerts.</p>
+        <p>
+          <b>Data Collection:</b> It uses <a href="https://splunkbase.splunk.com/app/4959" target="_blank">Microsoft 365 Defender Add-on for Splunk</a> for Microsoft Defender ATP data collection.
+        </p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_o365_defender_atp_alerts` | head 1 | stats count | eval label="`cs_o365_defender_atp_alerts`"
+| eval data=if(count&gt;0, "Data Present", "Data Not Present") | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>All Alerts</title>
+      <input type="text" token="tkn_host" searchWhenChanged="true">
+        <label>Computer Name</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="defender_atp_table">
+        <search>
+          <query>`cs_o365_defender_atp_alerts` computerDnsName=$tkn_host|s$
+| stats count, latest(_time) as _time, last(firstEventTime) as firstEventTime, last(lastEventTime) as lastEventTime, last(lastUpdateTime) as lastUpdateTime, last(resolvedTime) as resolvedTime, last(severity) as severity, last(status) as status, last(threatFamilyName) as threatFamilyName, last(threatName) as threatName, last(title) as title, last(investigationState) as investigationState, last(detectionSource) as detectionSource, last(assignedTo) as assignedTo, last(category) as category, last(classification) as classification, last(description) as description, last(incidentId) as incidentId, last(investigationId) as investigationId by detectorId, id, machineId, computerDnsName
+| eval firstEventTime=strftime(strptime(firstEventTime, "%FT%T.%7QZ"), "%F %T"), lastEventTime=strftime(strptime(lastEventTime, "%FT%T.%7QZ"), "%F %T"), lastUpdateTime=strftime(strptime(lastUpdateTime, "%FT%T.%7QZ"), "%F %T"), resolvedTime=strftime(strptime(resolvedTime, "%FT%T.%7QZ"), "%F %T")
+| table computerDnsName, count, firstEventTime, lastUpdateTime, resolvedTime, incidentId, title, threatFamilyName, threatName, category, classification, severity, status, investigationId, invenstigationState, assignedTo, detectionSource, detectorId, id, machineId</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <set token="drilldown_computerDnsName">$row.computerDnsName$</set>
+          <set token="drilldown_detectorId">$row.detectorId$</set>
+          <set token="drilldown_id">$row.id$</set>
+          <set token="drilldown_machineId">$row.machineId$</set>
+        </drilldown>
+      </table>
+      <html>
+        <p>Drilldown to see evidence for the incidents.</p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$drilldown_machineId$">
+    <panel>
+      <event>
+        <title>Incident Evidence - $drilldown_computerDnsName$</title>
+        <search>
+          <query>`cs_o365_defender_atp_alerts` computerDnsName=$drilldown_computerDnsName|s$ detectorId=$drilldown_detectorId|s$ id=$drilldown_id|s$ machineId=$drilldown_machineId|s$ | head 1
+| spath path=evidence{} output=evidence | mvexpand evidence 
+| rename evidence as _raw</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+    </panel>
+  </row>
+</form>

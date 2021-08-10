@@ -15,6 +15,7 @@ require([
         { id: 'paf_reports_link', url: baseURL.concat('cs_paloalto_firewall_reports')},
         { id: 'sophos_reports_link', url: baseURL.concat('cs_sophos_reports')},
         { id: 'windowsdef_reports_link', url: baseURL.concat('cs_windows_defender_reports')},
+        { id: 'o365_defender_atp_link', url: baseURL.concat('cs_o365_defender_atp')},
         { id: 'crowdstrike_reports_link', url: baseURL.concat('cs_crowdstrike_reports')},
         { id: 'vpn_reports_link', url: baseURL.concat('cs_vpn_reports')},
         { id: 'auth_reports_link', url: baseURL.concat('cs_authentication_reports')},

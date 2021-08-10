@@ -1,0 +1,73 @@
+<form theme="dark">
+  <label>Microsoft 365 Defender ATP Audit</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <input type="text" token="tkn_host">
+        <label>Host</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>`cs_o365_defender_atp_audit` host=$tkn_host|s$ | dedup host 
+| rex "^The defender ATP (?&lt;status&gt;[\w\s]+) installed\. OnboardingState=(?&lt;OnboardingState&gt;.+), LastConnected=(?&lt;LastConnected&gt;.+)$" 
+| eval status= if(status="is" AND OnboardingState=1, "Installed", "Not Installed") | eval LastConnectedEpoch = strptime(LastConnected, "%m/%d/%Y %H:%M:%S %Z") | fillnull OnboardingState value="-" 
+| table host, status, OnboardingState, LastConnected, _time
+| sort - status, + OnboardingState</query>
+          <earliest>-4h@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Installed":#00700b, "Not Installed":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="OnboardingState">
+          <colorPalette type="map">{"1":#00700b, "0":#bd0d00, "-":#bd0d00}</colorPalette>
+        </format>
+      </table>
+      <html>
+        <p>Data Collection: Use <a target="_blank" href="https://splunkbase.splunk.com/app/5691">Defender ATP Status Check Add-on</a>.</p>
+        <p>This search checks the last 4 hours to see Defender ATP configuration on Windows machines.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>PowerShell Script Execution Error</title>
+      <input type="time" token="tkn_error_logs_timerange">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="text" token="tkn_host_error_messages">
+        <label>Host</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd "ERROR" "splunk-powershell.ps1" host=$tkn_host_error_message|s$ | dedup host | table host, _time</query>
+          <earliest>$tkn_error_logs_timerange.earliest$</earliest>
+          <latest>$tkn_error_logs_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The data collection works based on PowerShell script from Splunk. In some cases Windows machine do not allow PowerShell script execution in that case above panel show those errors.</p>
+      </html>
+    </panel>
+  </row>
+</form>
