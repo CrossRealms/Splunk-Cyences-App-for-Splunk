@@ -1,5 +1,5 @@
 <form >
-    <label>User Activity</label>
+    <label>AWS User Activity</label>
     <fieldset submitButton="false">
         <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
             <label>Account ID</label>
