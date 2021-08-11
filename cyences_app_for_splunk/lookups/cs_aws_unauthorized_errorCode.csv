@@ -1,0 +1,7 @@
+errorCode, Unauthorized
+UnauthorizedOperation, true
+Client.UnauthorizedOperation, true
+AccessDenied, true
+AuthFailure, true
+Client.AuthFailure, true
+OperationNotPermitted, true
