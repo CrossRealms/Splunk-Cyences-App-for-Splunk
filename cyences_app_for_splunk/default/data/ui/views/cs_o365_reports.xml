@@ -37,9 +37,8 @@
       <html>
         <p>Office 365 - Azure</p>
         <p>
-          ##TODO Change SplunkBase Link for Graph Security<br/>
           <b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.<br/>
-          Microsoft Azure Security Score data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Microsoft Graph Security Score Add-on for Splunk</a>.</p>
+          Microsoft Azure Security Score data from <a href="https://splunkbase.splunk.com/app/5693/" target="_blank">Microsoft Graph Security Score Add-on for Splunk</a>.</p>
       </html>
       <table>
         <search>
