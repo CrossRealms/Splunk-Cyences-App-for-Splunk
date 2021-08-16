@@ -30,6 +30,7 @@ require([
         { macro_name: 'cs_tenable', input_id: 'macro_data_tenable', button_id: 'macro_data_tenable_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_linux', input_id: 'macro_data_linux', button_id: 'macro_data_linux_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_o365_defender_atp', input_id: 'macro_data_o365_defender_atp', button_id: 'macro_data_o365_defender_atp_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_aws', input_id: 'macro_data_aws', button_id: 'macro_data_aws_button', msg_id: 'macro_data_msg'},
 
         /* Other Macros */
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_other_msg'},

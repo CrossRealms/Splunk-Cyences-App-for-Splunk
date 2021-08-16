@@ -11,6 +11,7 @@ require([
         { id: 'ad_reports_link', url: baseURL.concat('cs_windows_ad_reports')},
         { id: 'linux_reports_link', url: baseURL.concat('cs_linux_reports')},
         { id: 'o365_reports_link', url: baseURL.concat('cs_o365_reports')},
+        { id: 'aws_reports_link', url: baseURL.concat('cs_aws_user_activity')},
         { id: 'network_reports_link', url: baseURL.concat('cs_network_reports')},
         { id: 'paf_reports_link', url: baseURL.concat('cs_paloalto_firewall_reports')},
         { id: 'sophos_reports_link', url: baseURL.concat('cs_sophos_reports')},

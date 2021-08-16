@@ -1,5 +1,5 @@
 <form >
-    <label>AWS User Activity</label>
+    <label>AWS</label>
     <fieldset submitButton="false">
         <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
             <label>Account ID</label>
@@ -110,7 +110,7 @@
             <option name="drilldown">none</option>
             <option name="refresh.display">progressbar</option>
             <format type="color" field="data">
-            <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+            <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b,"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
             </format>
         </table>
         </panel>
