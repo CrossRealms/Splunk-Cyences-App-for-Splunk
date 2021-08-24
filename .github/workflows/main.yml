@@ -68,4 +68,4 @@ jobs:
       
       - uses: splunk/appinspect-cli-action@v1
         with:
-          app_path: 'repodir/TA-cyences'
+          app_path: 'repodir/TA-cyences.tgz'
