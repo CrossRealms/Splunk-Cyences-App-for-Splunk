@@ -1,0 +1,302 @@
+<form >
+    <label>AWS</label>
+    <fieldset submitButton="false">
+        <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
+            <label>Account ID</label>
+            <choice value="*">All</choice>
+            <fieldForValue>account_id</fieldForValue>
+            <fieldForLabel>title</fieldForLabel>
+            <search id="accountIdSearch">
+              <query>
+                <![CDATA[
+                 | inputlookup cs_all_aws_account_ids.csv | mvcombine delim=", " name | nomv name | eval title=account_id." (".name.")"
+                 ]]>
+              </query>
+            </search>
+            <prefix> (</prefix>
+            <suffix>) </suffix>
+            <valuePrefix>aws_account_id="</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter> OR </delimiter>
+            <default>*</default>
+            <initialValue>*</initialValue>
+        </input>
+        <input type="multiselect" token="region" id="ip2" searchWhenChanged="true">
+            <label>Regions</label>
+            <choice value="*">All</choice>
+            <search>
+                <query>
+                    <![CDATA[ |inputlookup cs_aws_regions.csv ]]>
+                </query>
+            </search>
+            <prefix> (</prefix>
+            <suffix>) </suffix>
+            <valuePrefix>region="</valuePrefix>
+            <valueSuffix>"</valueSuffix>
+            <delimiter> OR </delimiter>
+            <fieldForValue>region</fieldForValue>
+            <fieldForLabel>label</fieldForLabel>
+            <default>*</default>
+            <initialValue>*</initialValue>
+        </input>
+        <input type="dropdown" token="username" searchWhenChanged="true">
+            <label>Username</label>
+            <choice value="*">All</choice>
+            <default>*</default>
+            <fieldForValue>userName</fieldForValue>
+            <fieldForLabel>userName</fieldForLabel>
+            <search  base="baseCloudTrailSearch">
+                <query>
+                        | stats count by userName
+                </query>
+            </search>
+            <prefix>userName="</prefix>
+            <suffix>"</suffix>
+        </input>
+        <input type="text" token="eventname" searchWhenChanged="true">
+            <label>Event Name</label>
+            <prefix>eventName=</prefix>
+            <default></default>
+        </input>
+        <input type="dropdown" token="notable" searchWhenChanged="true">
+            <label>Notable</label>
+            <default>1</default>
+            <choice value="0">False</choice>
+            <choice value="1">True</choice>
+        </input>
+        <input type="time" searchWhenChanged="true">
+            <label>Time Range</label>
+            <default>Last 7 days</default>
+        </input>
+    </fieldset>
+
+    <search id="baseCloudTrailSearch_base">
+        <query>
+            `cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
+            | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
+            | stats count count(eval(errorCode!="success")) as errors count(Unauthorized) as Unauthorized by eventName region aws_account_id userName
+        </query>
+        <earliest>$earliest$</earliest>
+        <latest>$latest$</latest>
+    </search>
+
+    <search id="baseCloudTrailSearch" base="baseCloudTrailSearch_base">
+        <query>
+            | search $accountId$ $region$ $eventname$ $username$
+            | `cs_cloudtrail_service("*", $notable$)`
+        </query>
+    </search>
+    <search base="baseCloudTrailSearch" id="baseCloudTrailActivity">
+        <query>
+            stats sum(count) as count sum(errors) as errors
+            | eval errors=if(isnull(errors),0,errors)
+            | eval count=if(isnull(count),0,count)
+            | eval _total_name="events", _total_field=count
+        </query>
+    </search>
+    <row>
+        <panel>
+        <html>
+            <p>AWS Reports</p>
+            <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/1876/" target="_blank">Splunk Add-on for Amazon Web Services</a> for collecting AWS baseCloudTrail data.</p>
+            <p>This Dashboard is depends on "AWS - AWS Account Lookup Gen" Report. </p>
+        </html>
+        <table>
+            <search>
+            <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled")]</query>
+            <earliest>$earliest$</earliest>
+            <latest>$latest$</latest>
+            </search>
+            <option name="drilldown">none</option>
+            <option name="refresh.display">progressbar</option>
+            <format type="color" field="data">
+            <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b,"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+            </format>
+        </table>
+        </panel>
+    </row>
+    <row>
+        <single>
+            <title>Active Users</title>
+            <search base="baseCloudTrailSearch">
+                <query>
+                    stats count by userName aws_account_id
+                    | stats count
+                </query>
+            </search>
+            <drilldown>
+                <link target="_blank">
+                    <![CDATA[
+                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ | `cs_cloudtrail_service("*", $notable$)`
+                        | stats count count(eval(match(_raw, "errorCode"))) as errors count(Unauthorized) as Unauthorized by userName aws_account_id&earliest=$earliest$&latest=$latest$
+                    ]]>
+                </link>
+            </drilldown>
+            <option name="field">count</option>
+        </single>
+        <single id="tracking_err">
+            <title>Error Activities</title>
+            <search base="baseCloudTrailActivity">
+                <query>
+                    fields count
+                </query>
+            </search>
+            <option name="field">count</option>
+        </single>
+
+        <single id="tracking_err">
+            <title>Error Activities</title>
+            <search base="baseCloudTrailActivity">
+                <query>
+                    fields errors
+                </query>
+            </search>
+            <drilldown>
+                <link target="_blank">
+                    <![CDATA[
+                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)`&$earliest$&latest=$latest$
+                    ]]>
+                </link>
+            </drilldown>
+            <option name="field">errors</option>
+        </single>
+        <single id="tracking_auth">
+            <title>Unauthorized Activities</title>
+            <search base="baseCloudTrailSearch">
+                <query>
+                    stats sum(count) as count sum(Unauthorized) as Unauthorized
+                    | eval errors=if(isnull(errors),0,errors)
+                    | eval count=if(isnull(count),0,count)
+                    | eval _total_name="events", _total_field=count
+                </query>
+            </search>
+            <drilldown>
+                <link target="_blank">
+                    <![CDATA[
+                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)` | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized | search Unauthorized="*"&$earliest$&latest=$latest$
+                    ]]>
+                </link>
+            </drilldown>
+            <option name="field">Unauthorized</option>
+        </single>
+    </row>
+    <row>
+        <chart>
+            <title>User Activity by Event Name Over Time</title>
+            <search>
+                <query>
+                    `cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
+                    | eval day=strftime(_time, "%Y-%m-%d %z") 
+                    | stats count by eventName region aws_account_id day errorCode 
+                    | eval _time=strptime(day, "%Y-%m-%d %z") 
+                    | eval response=if(errorCode=="success","success", "error") 
+                    | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
+                    | eval response=if(Unauthorized=="true", "unauthorized", response) 
+                    | fields - day errorCode Unauthorized
+                    | search $accountId$ $region$ $eventname$
+                    | `cs_cloudtrail_service("*", $notable$)`
+                    | timechart sum(count) by eventName
+                </query>
+                <earliest>$earliest$</earliest>
+                <latest>$latest$</latest>
+            </search>
+            <option name="charting.chart">column</option>
+            <option name="charting.legend.placement">right</option>
+            <option name="charting.legend.masterLegend">null</option>
+            <option name="charting.chart.stackMode">stacked</option>
+            <option name="charting.axisTitleX.text">Time</option>
+            <option name="charting.axisTitleY.text">Events</option>
+        </chart>
+    </row>
+
+    <row>
+        <chart>
+            <title>User Activity by User Name Over Time</title>
+            <search>
+                <query>
+                    `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
+                    | `cs_cloudtrail_service("*", $notable$)`
+                    | timechart count by userName
+                </query>
+                <earliest>$earliest$</earliest>
+                <latest>$latest$</latest>
+            </search>
+            <option name="charting.chart">column</option>
+            <option name="charting.legend.placement">right</option>
+            <option name="charting.legend.masterLegend">null</option>
+            <option name="charting.chart.stackMode">stacked</option>
+            <option name="charting.axisTitleX.text">Time</option>
+            <option name="charting.axisTitleY.text">Events</option>
+        </chart>
+    </row>
+
+    <row>
+        <table>
+            <title>Most Recent User Activity Grouped by Event Name</title>
+            <search>
+                <query>
+                    `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
+                    | head 100
+                    | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized
+                    | rename "userIdentity.arn" as arn
+                    | eval userName = coalesce(userName,"root")
+                    | stats count count(Unauthorized) as Unauthorized by eventName _time eventID arn userName region aws_account_id
+                    | eval eventNumber=tonumber(substr(md5(eventName), -6), 16)
+                    | sort _time
+                    | delta eventNumber as d1
+                    | fillnull value=0 d1
+                    | eval time=_time
+                    | autoregress d1 as d2
+                    | fillnull value="special" d2
+                    | eval t=if(d1=0 AND d2!="special", 1, if(NOT d1=d2, 2, 0))
+                    | transam eventName endswith="t=2" keepevicted=1 mvlist=time
+                    | eval time = if(mvcount(time)==1, mvindex(time, 0), mvindex(time,0)."|".mvindex(time,-1))
+                    | makemv delim="|" time
+                    | rename eventcount as count
+                    | fields eventName time count arn user* Unauthorized function region aws_account_id
+                    | fields - _raw _time | eval time=strftime(time, "%F %T %z")
+                    | lookup cs_aws_all_eventName.csv eventName OUTPUT function
+                    | lookup cs_aws_regions.csv region OUTPUT label as region
+                    | rename eventName as "Event Name", time as Time, count as Count, arn as ARN, userName as Username, function as Function, region as Region, aws_account_id as "Account ID"
+                </query>
+            </search>
+            <option name="count">10</option>
+            <option name="wrap">true</option>
+            <option name="dataOverlayMode">none</option>
+            <option name="drilldown">row</option>
+            <option name="cell.eventName">Event Name</option>
+            <option name="cell.cellRange">true</option>
+            <drilldown>
+                <set token="time">$row.Time$</set>
+                <set token="form.time">$row.Time$</set>
+                <set token="eventName">$row.Event Name$</set>
+                <set token="form.eventName">$row.Event Name$</set>
+            </drilldown>
+        </table>
+    </row>
+    <!--Passing eventName and time field values to the drilldown. time can be multivalued hence the need for mvindex/mvcount to extract earliest and latest, +/- 1seconds-->
+    <row>
+        <event depends="$time$, $eventName$, $accountId$, $region$">
+            <title>Event Details</title>
+            <search>
+                <query>
+                    `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest]
+                </query>
+                <earliest>$earliest$</earliest>
+                <latest>$latest$</latest>
+            </search>
+            <fields>_raw</fields>
+            <option name="count">3</option>
+        </event>
+        <map depends="$time$, $accountId$, $region$">
+            <title>Geographic Source of Event(s)</title>
+            <search>
+                <query>
+                    `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest] | iplocation sourceIPAddress | geostats latfield=lat longfield=lon count
+                </query>
+            </search>
+            <option name="mapping.map.center">(42.879094,-97.381205)</option>
+            <option name="mapping.map.zoom">3</option>
+        </map>
+    </row>
+</form>

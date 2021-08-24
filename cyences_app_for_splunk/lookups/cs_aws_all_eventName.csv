@@ -1,0 +1,615 @@
+eventName,function,highlight,notable
+AddRoleToInstanceProfile,IAM,low,true
+AddUserToGroup,IAM,low,true
+ChangePassword,IAM,elevated,true
+CreateAccessKey,IAM,low,true
+CreateAccountAlias,IAM,low,true
+CreateGroup,IAM,low,true
+CreateInstanceProfile,IAM,low,true
+CreateLoginProfile,IAM,low,true
+CreateRole,IAM,low,true
+CreateSAMLProvider,IAM,low,true
+CreateUser,IAM,low,true
+CreateVirtualMFADevice,IAM,low,true
+DeactivateMFADevice,IAM,severe,true
+DeleteAccessKey,IAM,severe,true
+DeleteAccountAlias,IAM,severe,true
+DeleteAccountPasswordPolicy,IAM,severe,true
+DeleteGroup,IAM,severe,true
+DeleteGroupPolicy,IAM,severe,true
+DeleteInstanceProfile,IAM,severe,true
+DeleteLoginProfile,IAM,severe,true
+DeleteRole,IAM,severe,true
+DeleteRolePolicy,IAM,severe,true
+DeleteSAMLProvider,IAM,severe,true
+DeleteServerCertificate,IAM,severe,true
+DeleteSigningCertificate,IAM,severe,true
+DeleteUser,IAM,severe,true
+DeleteUserPolicy,IAM,severe,true
+DeleteVirtualMFADevice,IAM,severe,true
+EnableMFADevice,IAM,low,true
+GetAccountPasswordPolicy,IAM,elevated,false
+GetAccountSummary,IAM,elevated,false
+GetGroup,IAM,elevated,false
+GetGroupPolicy,IAM,elevated,false
+GetInstanceProfile,IAM,elevated,false
+GetLoginProfile,IAM,elevated,false
+GetRole,IAM,elevated,false
+GetRolePolicy,IAM,elevated,false
+GetSAMLProvider,IAM,elevated,false
+GetServerCertificate,IAM,elevated,false
+GetUser,IAM,elevated,false
+GetUserPolicy,IAM,elevated,false
+ListAccessKeys,IAM,elevated,false
+ListAccountAliases,IAM,elevated,false
+ListGroupPolicies,IAM,elevated,false
+ListGroups,IAM,elevated,false
+ListGroupsForUser,IAM,elevated,false
+ListInstanceProfiles,IAM,elevated,false
+ListInstanceProfilesForRole,IAM,elevated,false
+ListMFADevices,IAM,elevated,false
+ListRolePolicies,IAM,elevated,false
+ListRoles,IAM,elevated,false
+ListSAMLProviders,IAM,elevated,false
+ListServerCertificates,IAM,elevated,false
+ListSigningCertificates,IAM,elevated,false
+ListUserPolicies,IAM,elevated,false
+ListUsers,IAM,elevated,false
+ListVirtualMFADevices,IAM,elevated,false
+PutGroupPolicy,IAM,low,true
+PutRolePolicy,IAM,low,true
+PutUserPolicy,IAM,low,true
+RemoveRoleFromInstanceProfile,IAM,severe,true
+RemoveUserFromGroup,IAM,severe,true
+ResyncMFADevice,IAM,low,true
+UpdateAccessKey,IAM,elevated,true
+UpdateAccountPasswordPolicy,IAM,elevated,true
+UpdateAssumeRolePolicy,IAM,elevated,true
+UpdateGroup,IAM,elevated,true
+UpdateLoginProfile,IAM,elevated,true
+UpdateSAMLProvider,IAM,elevated,true
+UpdateServerCertificate,IAM,elevated,true
+UpdateSigningCertificate,IAM,elevated,true
+UpdateUser,IAM,elevated,true
+UploadServerCertificate,IAM,low,true
+UploadSigningCertificate,IAM,low,true
+DescribeAccountAttributes,"Account Attributes",elevated,false
+ConfirmProductInstance,DevPay,low,false
+CopyImage,AMIs,low,true
+CreateImage,AMIs,low,true
+DeregisterImage,AMIs,severe,true
+DescribeImageAttribute,AMIs,elevated,false
+DescribeImages,AMIs,elevated,false
+ModifyImageAttribute,AMIs,elevated,true
+RegisterImage,AMIs,low,true
+ResetImageAttribute,AMIs,severe,true
+BundleInstance,"Bundle Tasks",low,true
+CancelBundleTask,"Bundle Tasks",severe,true
+DescribeBundleTasks,"Bundle Tasks",elevated,false
+CreateCustomerGateway,VPC,low,true
+DeleteCustomerGateway,VPC,severe,true
+DescribeCustomerGateways,VPC,elevated,false
+AssociateDhcpOptions,VPC,low,true
+CreateDhcpOptions,VPC,low,true
+DeleteDhcpOptions,VPC,severe,true
+DescribeDhcpOptions,VPC,elevated,false
+AttachVolume,EBS,low,true
+CopySnapshot,EBS,low,true
+CreateSnapshot,EBS,low,true
+CreateVolume,EBS,low,true
+DeleteSnapshot,EBS,severe,true
+DeleteVolume,EBS,severe,true
+DescribeSnapshotAttribute,EBS,elevated,false
+DescribeSnapshots,EBS,elevated,false
+DescribeVolumeAttribute,EBS,elevated,false
+DescribeVolumes,EBS,elevated,false
+DescribeVolumeStatus,EBS,elevated,false
+DetachVolume,EBS,severe,true
+EnableVolumeIO,EBS,low,true
+ModifySnapshotAttribute,EBS,elevated,true
+ModifyVolumeAttribute,EBS,elevated,true
+ResetSnapshotAttribute,EBS,severe,true
+AllocateAddress,"Elastic IP Addresses",low,true
+AssociateAddress,"Elastic IP Addresses",low,true
+DescribeAddresses,"Elastic IP Addresses",elevated,false
+DisassociateAddress,"Elastic IP Addresses",severe,true
+ReleaseAddress,"Elastic IP Addresses",elevated,true
+AssignPrivateIpAddresses,VPC,low,true
+AttachNetworkInterface,VPC,low,true
+CreateNetworkInterface,VPC,low,true
+DeleteNetworkInterface,VPC,severe,true
+DescribeNetworkInterfaceAttribute,VPC,elevated,false
+DescribeNetworkInterfaces,VPC,elevated,false
+DetachNetworkInterface,VPC,severe,true
+ModifyNetworkInterfaceAttribute,VPC,elevated,true
+ResetNetworkInterfaceAttribute,VPC,severe,true
+UnassignPrivateIpAddresses,VPC,severe,true
+DescribeInstanceAttribute,Instances,elevated,false
+DescribeInstances,Instances,elevated,false
+DescribeInstanceStatus,Instances,elevated,false
+GetConsoleOutput,Instances,elevated,true
+GetPasswordData,Instances,elevated,true
+ModifyInstanceAttribute,Instances,elevated,true
+MonitorInstances,Instances,elevated,true
+RebootInstances,Instances,severe,true
+ReportInstanceStatus,Instances,elevated,true
+ResetInstanceAttribute,Instances,severe,true
+RunInstances,Instances,low,true
+StartInstances,Instances,low,true
+StopInstances,Instances,severe,true
+TerminateInstances,Instances,severe,true
+UnmonitorInstances,Instances,severe,true
+AttachInternetGateway,VPC,low,true
+CreateInternetGateway,VPC,low,true
+DeleteInternetGateway,VPC,severe,true
+DescribeInternetGateways,VPC,elevated,false
+DetachInternetGateway,VPC,severe,true
+CreateKeyPair,"Key Pairs",low,true
+DeleteKeyPair,"Key Pairs",severe,true
+DescribeKeyPairs,"Key Pairs",elevated,false
+ImportKeyPair,"Key Pairs",low,true
+CreateNetworkAcl,VPC,low,true
+CreateNetworkAclEntry,VPC,low,true
+DeleteNetworkAcl,VPC,severe,true
+DeleteNetworkAclEntry,VPC,severe,true
+DescribeNetworkAcls,VPC,elevated,false
+ReplaceNetworkAclAssociation,VPC,elevated,true
+ReplaceNetworkAclEntry,VPC,elevated,true
+CreatePlacementGroup,"Placement Groups",low,true
+DeletePlacementGroup,"Placement Groups",severe,true
+DescribePlacementGroups,"Placement Groups",elevated,false
+DescribeAvailabilityZones,Regions,elevated,false
+DescribeRegions,Regions,elevated,false
+CancelReservedInstancesListing,RI,severe,false
+CreateReservedInstancesListing,RI,low,false
+DescribeReservedInstances,RI,elevated,false
+DescribeReservedInstancesListings,RI,elevated,false
+DescribeReservedInstancesModifications,RI,elevated,false
+DescribeReservedInstancesOfferings,RI,elevated,false
+ModifyReservedInstances,RI,elevated,true
+PurchaseReservedInstancesOffering,RI,low,true
+AssociateRouteTable,VPC,low,true
+CreateRoute,VPC,low,true
+CreateRouteTable,VPC,low,true
+DeleteRoute,VPC,severe,true
+DeleteRouteTable,VPC,severe,true
+DescribeRouteTables,VPC,elevated,false
+DisableVgwRoutePropagation,VPC,severe,false
+DisassociateRouteTable,VPC,severe,true
+EnableVgwRoutePropagation,VPC,low,true
+ReplaceRoute,VPC,elevated,true
+ReplaceRouteTableAssociation,VPC,elevated,true
+AuthorizeSecurityGroupEgress,"Security Groups",low,true
+AuthorizeSecurityGroupIngress,"Security Groups",low,true
+CreateSecurityGroup,"Security Groups",low,true
+DeleteSecurityGroup,"Security Groups",severe,true
+DescribeSecurityGroups,"Security Groups",elevated,false
+RevokeSecurityGroupEgress,"Security Groups",severe,true
+RevokeSecurityGroupIngress,"Security Groups",severe,true
+CancelSpotInstanceRequests,"Spot Instances",severe,true
+CreateSpotDatafeedSubscription,"Spot Instances",low,true
+DeleteSpotDatafeedSubscription,"Spot Instances",severe,true
+DescribeSpotDatafeedSubscription,"Spot Instances",elevated,false
+DescribeSpotInstanceRequests,"Spot Instances",elevated,false
+DescribeSpotPriceHistory,"Spot Instances",elevated,false
+RequestSpotInstances,"Spot Instances",low,true
+CreateSubnet,VPC,low,true
+DeleteSubnet,VPC,severe,true
+DescribeSubnets,VPC,elevated,false
+CreateTags,Tags,low,true
+DeleteTags,Tags,severe,true
+DescribeTags,Tags,elevated,false
+CancelConversionTask,"VM Import",severe,true
+DescribeConversionTasks,"VM Import",elevated,false
+ImportInstance,"VM Import",low,true
+ImportVolume,"VM Import",low,true
+CancelExportTask,"VM Export",severe,true
+CreateInstanceExportTask,"VM Export",low,true
+DescribeExportTasks,"VM Export",elevated,false
+CreateVpc,VPC,low,true
+DeleteVpc,VPC,severe,true
+DescribeVpcAttribute,VPC,elevated,false
+DescribeVpcs,VPC,elevated,false
+ModifyVpcAttribute,VPC,elevated,true
+AcceptVpcPeeringConnection,VPC,low,true
+CreateVpcPeeringConnection,VPC,low,true
+DeleteVpcPeeringConnection,VPC,severe,true
+DescribeVpcPeeringConnections,VPC,elevated,false
+RejectVpcPeeringConnection,VPC,severe,true
+CreateVpnConnection,VPC,low,true
+CreateVpnConnectionRoute,VPC,low,true
+DeleteVpnConnection,VPC,severe,true
+DeleteVpnConnectionRoute,VPC,severe,true
+DescribeVpnConnections,VPC,elevated,false
+AttachVpnGateway,VPC,low,true
+CreateVpnGateway,VPC,low,true
+DeleteVpnGateway,VPC,severe,true
+DescribeVpnGateways,VPC,elevated,false
+DetachVpnGateway,VPC,severe,true
+AssumeRole,STS,low,true
+AssumeRoleWithSAML,STS,low,true
+AssumeRoleWithWebIdentity,STS,low,true
+DecodeAuthorizationMessage,STS,low,true
+GetFederationToken,STS,elevated,true
+GetSessionToken,STS,elevated,true
+PutMetricAlarm,CloudWatch,low,true
+DescribeAlarms,CloudWatch,elevated,false
+DescribeAlarmHistory,CloudWatch,elevated,false
+DescribeAlarmsForMetric,CloudWatch,elevated,false
+DisableAlarmActions,CloudWatch,severe,true
+EnableAlarmActions,CloudWatch,low,true
+SetAlarmState,CloudWatch,low,true
+DeleteAlarms,CloudWatch,severe,true
+DeprecateActivityType,SWF,severe,true
+DeprecateDomain,SWF,severe,true
+DeprecateWorkflowType,SWF,severe,true
+RegisterActivityType,SWF,low,true
+RegisterDomain,SWF,low,true
+RegisterWorkflowType,SWF,low,true
+AddPermission,SQS,low,true
+CreateQueue,SQS,low,true
+DeleteQueue,SQS,severe,true
+RemovePermission,SQS,severe,true
+SetQueueAttributes,SQS,low,true
+AllocateConnectionOnInterconnect,"Direct Connect",low,true
+AllocatePrivateVirtualInterface,"Direct Connect",low,true
+AllocatePublicVirtualInterface,"Direct Connect",low,true
+ConfirmConnection,"Direct Connect",low,true
+ConfirmPrivateVirtualInterface,"Direct Connect",low,true
+ConfirmPublicVirtualInterface,"Direct Connect",low,true
+CreateConnection,"Direct Connect",low,true
+CreateInterconnect,"Direct Connect",low,true
+CreatePrivateVirtualInterface,"Direct Connect",low,true
+CreatePublicVirtualInterface,"Direct Connect",low,true
+DeleteConnection,"Direct Connect",severe,true
+DeleteInterconnect,"Direct Connect",severe,true
+DeleteVirtualInterface,"Direct Connect",severe,true
+DescribeConnections,"Direct Connect",elevated,false
+DescribeConnectionsOnInterconnect,"Direct Connect",elevated,false
+DescribeInterconnects,"Direct Connect",elevated,false
+DescribeLocations,"Direct Connect",elevated,false
+DescribeVirtualGateways,"Direct Connect",elevated,false
+DescribeVirtualInterfaces,"Direct Connect",elevated,false
+ApplySecurityGroupsToLoadBalancer,ELB,low,true
+AttachLoadBalancerToSubnets,ELB,low,true
+ConfigureHealthCheck,ELB,low,true
+CreateAppCookieStickinessPolicy,ELB,low,true
+CreateLBCookieStickinessPolicy,ELB,low,true
+CreateLoadBalancer,ELB,low,true
+CreateLoadBalancerListeners,ELB,low,false
+CreateLoadBalancerPolicy,ELB,low,true
+DeleteLoadBalancer,ELB,severe,true
+DeleteLoadBalancerListeners,ELB,severe,false
+DeleteLoadBalancerPolicy,ELB,severe,true
+DeregisterInstancesFromLoadBalancer,ELB,severe,true
+DetachLoadBalancerFromSubnets,ELB,severe,true
+DisableAvailabilityZonesForLoadBalancer,ELB,severe,true
+EnableAvailabilityZonesForLoadBalancer,ELB,low,true
+ModifyLoadBalancerAttributes,ELB,elevated,true
+RegisterInstancesWithLoadBalancer,ELB,low,true
+SetLoadBalancerListenerSSLCertificate,ELB,low,false
+SetLoadBalancerPoliciesForBackendServer,ELB,low,true
+SetLoadBalancerPoliciesOfListener,ELB,low,false
+DescribeLoadBalancerPolicies,ELB,elevated,false
+DescribeLoadBalancerPolicyTypes,ELB,elevated,false
+DescribeLoadBalancers,ELB,elevated,false
+AttachInstances,"Auto Scaling",low,true
+CompleteLifecycleAction,"Auto Scaling",low,true
+CreateAutoScalingGroup,"Auto Scaling",low,true
+CreateLaunchConfiguration,"Auto Scaling",low,true
+CreateOrUpdateTags,"Auto Scaling",low,true
+DeleteAutoScalingGroup,"Auto Scaling",severe,true
+DeleteLaunchConfiguration,"Auto Scaling",severe,true
+DeleteLifecycleHook,"Auto Scaling",severe,true
+DeleteNotificationConfiguration,"Auto Scaling",severe,true
+DeletePolicy,"Auto Scaling",severe,true
+DeleteScheduledAction,"Auto Scaling",severe,true
+DeleteTags,"Auto Scaling",severe,true
+DescribeAccountLimits,"Auto Scaling",elevated,false
+DescribeAdjustmentTypes,"Auto Scaling",elevated,false
+DescribeAutoScalingGroups,"Auto Scaling",elevated,false
+DescribeAutoScalingInstances,"Auto Scaling",elevated,false
+DescribeAutoScalingNotificationTypes,"Auto Scaling",elevated,false
+DescribeLaunchConfigurations,"Auto Scaling",elevated,false
+DescribeLifecycleHookTypes,"Auto Scaling",elevated,false
+DescribeLifecycleHooks,"Auto Scaling",elevated,false
+DescribeMetricCollectionTypes,"Auto Scaling",elevated,false
+DescribeNotificationConfigurations,"Auto Scaling",elevated,false
+DescribePolicies,"Auto Scaling",elevated,false
+DescribeScalingActivities,"Auto Scaling",elevated,false
+DescribeScalingProcessTypes,"Auto Scaling",elevated,false
+DescribeScheduledActions,"Auto Scaling",elevated,false
+DescribeTags,"Auto Scaling",elevated,false
+DescribeTerminationPolicyTypes,"Auto Scaling",elevated,false
+DetachInstances,"Auto Scaling",severe,true
+DisableMetricsCollection,"Auto Scaling",severe,true
+EnableMetricsCollection,"Auto Scaling",low,true
+EnterStandby,"Auto Scaling",low,true
+ExecutePolicy,"Auto Scaling",low,true
+ExitStandby,"Auto Scaling",severe,true
+PutLifecycleHook,"Auto Scaling",low,true
+PutNotificationConfiguration,"Auto Scaling",low,true
+PutScalingPolicy,"Auto Scaling",low,true
+PutScheduledUpdateGroupAction,"Auto Scaling",low,true
+RecordLifecycleActionHeartbeat,"Auto Scaling",low,true
+ResumeProcesses,"Auto Scaling",low,true
+SetDesiredCapacity,"Auto Scaling",low,true
+SetInstanceHealth,"Auto Scaling",low,true
+SuspendProcesses,"Auto Scaling",severe,true
+TerminateInstanceInAutoScalingGroup,"Auto Scaling",severe,true
+UpdateAutoScalingGroup,"Auto Scaling",elevated,true
+AddSourceIdentifierToSubscription,RDS,low,true
+AddTagsToResource,RDS,low,true
+AuthorizeDBSecurityGroupIngress,RDS,low,true
+CopyDBSnapshot,RDS,low,true
+CreateDBInstance,RDS,low,true
+CreateDBInstanceReadReplica,RDS,low,true
+CreateDBParameterGroup,RDS,low,true
+CreateDBSecurityGroup,RDS,low,true
+CreateDBSnapshot,RDS,low,true
+CreateDBSubnetGroup,RDS,low,true
+CreateEventSubscription,RDS,low,true
+CreateOptionGroup,RDS,low,true
+DeleteDBInstance,RDS,severe,true
+DeleteDBParameterGroup,RDS,severe,true
+DeleteDBSecurityGroup,RDS,severe,true
+DeleteDBSnapshot,RDS,severe,true
+DeleteDBSubnetGroup,RDS,severe,true
+DeleteEventSubscription,RDS,severe,true
+DeleteOptionGroup,RDS,severe,true
+DescribeDBEngineVersions,RDS,elevated,false
+DescribeDBInstances,RDS,elevated,false
+DescribeDBLogFiles,RDS,elevated,false
+DescribeDBParameterGroups,RDS,elevated,false
+DescribeDBParameters,RDS,elevated,false
+DescribeDBSecurityGroups,RDS,elevated,false
+DescribeDBSnapshots,RDS,elevated,false
+DescribeDBSubnetGroups,RDS,elevated,false
+DescribeEngineDefaultParameters,RDS,elevated,false
+DescribeEventCategories,RDS,elevated,false
+DescribeEventSubscriptions,RDS,elevated,false
+DescribeEvents,RDS,elevated,false
+DescribeOptionGroupOptions,RDS,elevated,false
+DescribeOptionGroups,RDS,elevated,false
+DescribeOrderableDBInstanceOptions,RDS,elevated,false
+DescribeReservedDBInstances,RDS,elevated,false
+DescribeReservedDBInstancesOfferings,RDS,elevated,false
+DownloadDBLogFilePortion,RDS,elevated,true
+ListTagsForResource,RDS,elevated,false
+ModifyDBInstance,RDS,elevated,true
+ModifyDBParameterGroup,RDS,elevated,true
+ModifyDBSubnetGroup,RDS,elevated,true
+ModifyEventSubscription,RDS,elevated,true
+ModifyOptionGroup,RDS,elevated,true
+PromoteReadReplica,RDS,low,true
+PurchaseReservedDBInstancesOffering,RDS,low,true
+RebootDBInstance,RDS,severe,true
+RemoveSourceIdentifierFromSubscription,RDS,severe,true
+RemoveTagsFromResource,RDS,severe,true
+ResetDBParameterGroup,RDS,severe,true
+RestoreDBInstanceFromDBSnapshot,RDS,low,true
+RestoreDBInstanceToPointInTime,RDS,low,true
+RevokeDBSecurityGroupIngress,RDS,severe,true
+AuthorizeClusterSecurityGroupIngress,Redshift,low,true
+AuthorizeSnapshotAccess,Redshift,low,true
+CopyClusterSnapshot,Redshift,low,true
+CreateCluster,Redshift,low,true
+CreateClusterParameterGroup,Redshift,low,true
+CreateClusterSecurityGroup,Redshift,low,true
+CreateClusterSnapshot,Redshift,low,true
+CreateClusterSubnetGroup,Redshift,low,true
+CreateEventSubscription,Redshift,low,true
+CreateHsmClientCertificate,Redshift,low,true
+CreateHsmConfiguration,Redshift,low,true
+DeleteCluster,Redshift,severe,true
+DeleteClusterParameterGroup,Redshift,severe,true
+DeleteClusterSecurityGroup,Redshift,severe,true
+DeleteClusterSnapshot,Redshift,severe,true
+DeleteClusterSubnetGroup,Redshift,severe,true
+DeleteEventSubscription,Redshift,severe,true
+DeleteHsmClientCertificate,Redshift,severe,true
+DeleteHsmConfiguration,Redshift,severe,true
+DescribeClusterParameterGroups,Redshift,elevated,false
+DescribeClusterParameters,Redshift,elevated,false
+DescribeClusterSecurityGroups,Redshift,elevated,false
+DescribeClusterSnapshots,Redshift,elevated,false
+DescribeClusterSubnetGroups,Redshift,elevated,false
+DescribeClusterVersions,Redshift,elevated,false
+DescribeClusters,Redshift,elevated,false
+DescribeDefaultClusterParameters,Redshift,elevated,false
+DescribeEventCategories,Redshift,elevated,false
+DescribeEventSubscriptions,Redshift,elevated,false
+DescribeEvents,Redshift,elevated,false
+DescribeHsmClientCertificates,Redshift,elevated,false
+DescribeHsmConfigurations,Redshift,elevated,false
+DescribeLoggingStatus,Redshift,elevated,false
+DescribeOrderableClusterOptions,Redshift,elevated,false
+DescribeReservedNodeOfferings,Redshift,elevated,false
+DescribeReservedNodes,Redshift,elevated,false
+DescribeResize,Redshift,elevated,false
+DisableLogging,Redshift,severe,false
+DisableSnapshotCopy,Redshift,severe,true
+EnableLogging,Redshift,low,true
+EnableSnapshotCopy,Redshift,low,true
+ModifyCluster,Redshift,elevated,true
+ModifyClusterParameterGroup,Redshift,elevated,true
+ModifyClusterSubnetGroup,Redshift,elevated,true
+ModifyEventSubscription,Redshift,elevated,true
+ModifySnapshotCopyRetentionPeriod,Redshift,elevated,true
+PurchaseReservedNodeOffering,Redshift,low,true
+RebootCluster,Redshift,severe,true
+ResetClusterParameterGroup,Redshift,severe,true
+RestoreFromClusterSnapshot,Redshift,low,true
+RevokeClusterSecurityGroupIngress,Redshift,severe,true
+RevokeSnapshotAccess,Redshift,severe,true
+RotateEncryptionKey,Redshift,low,true
+CancelUpdateStack,CloudFormation,severe,true
+CreateStack,CloudFormation,low,true
+DeleteStack,CloudFormation,severe,true
+DescribeStackEvents,CloudFormation,elevated,false
+DescribeStackResource,CloudFormation,elevated,false
+DescribeStackResources,CloudFormation,elevated,false
+DescribeStacks,CloudFormation,elevated,false
+EstimateTemplateCost,CloudFormation,low,true
+GetStackPolicy,CloudFormation,elevated,true
+GetTemplate,CloudFormation,elevated,true
+ListStackResources,CloudFormation,elevated,false
+ListStacks,CloudFormation,elevated,false
+SetStackPolicy,CloudFormation,low,true
+UpdateStack,CloudFormation,elevated,true
+ValidateTemplate,CloudFormation,low,true
+CreateTrail,CloudTrail,low,true
+DeleteTrail,CloudTrail,severe,true
+DescribeTrails,CloudTrail,elevated,false
+GetTrailStatus,CloudTrail,elevated,true
+StartLogging,CloudTrail,low,true
+StopLogging,CloudTrail,severe,true
+UpdateTrail,CloudTrail,elevated,true
+CheckDNSAvailability,"Elastic Beanstalk",low,true
+CreateApplication,"Elastic Beanstalk",low,true
+CreateApplicationVersion,"Elastic Beanstalk",low,true
+CreateConfigurationTemplate,"Elastic Beanstalk",low,true
+CreateEnvironment,"Elastic Beanstalk",low,true
+CreateStorageLocation,"Elastic Beanstalk",low,true
+DeleteApplication,"Elastic Beanstalk",severe,true
+DeleteApplicationVersion,"Elastic Beanstalk",severe,true
+DeleteConfigurationTemplate,"Elastic Beanstalk",severe,true
+DeleteEnvironmentConfiguration,"Elastic Beanstalk",severe,true
+DescribeApplicationVersions,"Elastic Beanstalk",elevated,false
+DescribeApplications,"Elastic Beanstalk",elevated,false
+DescribeConfigurationOptions,"Elastic Beanstalk",elevated,false
+DescribeConfigurationSettings,"Elastic Beanstalk",elevated,false
+DescribeEnvironmentResources,"Elastic Beanstalk",elevated,false
+DescribeEnvironments,"Elastic Beanstalk",elevated,false
+DescribeEvents,"Elastic Beanstalk",elevated,false
+ListAvailableSolutionStacks,"Elastic Beanstalk",elevated,false
+RebuildEnvironment,"Elastic Beanstalk",low,true
+RequestEnvironmentInfo,"Elastic Beanstalk",low,true
+RestartAppServer,"Elastic Beanstalk",low,true
+RetrieveEnvironmentInfo,"Elastic Beanstalk",low,true
+SwapEnvironmentCNAMEs,"Elastic Beanstalk",low,true
+TerminateEnvironment,"Elastic Beanstalk",severe,true
+UpdateApplication,"Elastic Beanstalk",elevated,true
+UpdateApplicationVersion,"Elastic Beanstalk",elevated,true
+UpdateConfigurationTemplate,"Elastic Beanstalk",elevated,true
+UpdateEnvironment,"Elastic Beanstalk",elevated,true
+ValidateConfigurationSettings,"Elastic Beanstalk",low,true
+AssignVolume,OpsWorks,low,true
+AssociateElasticIp,OpsWorks,low,true
+AttachElasticLoadBalancer,OpsWorks,low,true
+CloneStack,OpsWorks,low,true
+CreateApp,OpsWorks,low,true
+CreateDeployment,OpsWorks,low,true
+CreateInstance,OpsWorks,low,true
+CreateLayer,OpsWorks,low,true
+CreateStack,OpsWorks,low,true
+CreateUserProfile,OpsWorks,low,true
+DeleteApp,OpsWorks,severe,true
+DeleteInstance,OpsWorks,severe,true
+DeleteLayer,OpsWorks,severe,true
+DeleteStack,OpsWorks,severe,true
+DeleteUserProfile,OpsWorks,severe,true
+DeregisterElasticIp,OpsWorks,severe,true
+DeregisterRdsDbInstance,OpsWorks,severe,true
+DeregisterVolume,OpsWorks,severe,true
+DescribeApps,OpsWorks,elevated,false
+DescribeCommands,OpsWorks,elevated,false
+DescribeDeployments,OpsWorks,elevated,false
+DescribeElasticIps,OpsWorks,elevated,false
+DescribeElasticLoadBalancers,OpsWorks,elevated,false
+DescribeInstances,OpsWorks,elevated,false
+DescribeLayers,OpsWorks,elevated,false
+DescribeLoadBasedAutoScaling,OpsWorks,elevated,false
+DescribeMyUserProfile,OpsWorks,elevated,false
+DescribePermissions,OpsWorks,elevated,false
+DescribeRaidArrays,OpsWorks,elevated,false
+DescribeRdsDbInstances,OpsWorks,elevated,false
+DescribeServiceErrors,OpsWorks,elevated,false
+DescribeStackSummary,OpsWorks,elevated,false
+DescribeStacks,OpsWorks,elevated,false
+DescribeTimeBasedAutoScaling,OpsWorks,elevated,false
+DescribeUserProfiles,OpsWorks,elevated,false
+DescribeVolumes,OpsWorks,elevated,false
+DetachElasticLoadBalancer,OpsWorks,severe,true
+DisassociateElasticIp,OpsWorks,severe,true
+GetHostnameSuggestion,OpsWorks,elevated,true
+RebootInstance,OpsWorks,severe,true
+RegisterElasticIp,OpsWorks,low,true
+RegisterRdsDbInstance,OpsWorks,low,true
+RegisterVolume,OpsWorks,low,true
+SetLoadBasedAutoScaling,OpsWorks,low,true
+SetPermission,OpsWorks,low,true
+SetTimeBasedAutoScaling,OpsWorks,low,true
+StartInstance,OpsWorks,low,true
+StartStack,OpsWorks,low,true
+StopInstance,OpsWorks,severe,true
+StopStack,OpsWorks,severe,true
+UnassignVolume,OpsWorks,severe,true
+UpdateApp,OpsWorks,elevated,true
+UpdateElasticIp,OpsWorks,elevated,true
+UpdateInstance,OpsWorks,elevated,true
+UpdateLayer,OpsWorks,elevated,true
+UpdateMyUserProfile,OpsWorks,elevated,true
+UpdateRdsDbInstance,OpsWorks,elevated,true
+UpdateStack,OpsWorks,elevated,true
+UpdateUserProfile,OpsWorks,elevated,true
+UpdateVolume,OpsWorks,elevated,true
+AddInstanceGroups,EMR,low,true
+AddJobFlowSteps,EMR,low,true
+AddTags,EMR,low,true
+DescribeCluster,EMR,elevated,false
+DescribeJobFlows,EMR,elevated,false
+DescribeStep,EMR,elevated,false
+ListBootstrapActions,EMR,elevated,true
+ListClusters,EMR,elevated,true
+ListInstanceGroups,EMR,elevated,true
+ListInstances,EMR,elevated,true
+ListSteps,EMR,elevated,true
+ModifyInstanceGroups,EMR,elevated,true
+RemoveTags,EMR,severe,true
+RunJobFlow,EMR,low,true
+SetTerminationProtection,EMR,low,true
+SetVisibleToAllUsers,EMR,low,true
+TerminateJobFlows,EMR,severe,true
+CreateStream,Kinesis,low,true
+DeleteStream,Kinesis,severe,true
+DescribeStream,Kinesis,elevated,false
+GetRecords,Kinesis,elevated,true
+GetShardIterator,Kinesis,elevated,true
+ListStreams,Kinesis,elevated,true
+MergeShards,Kinesis,low,true
+PutRecord,Kinesis,low,true
+SplitShard,Kinesis,low,true
+ConsoleLogin,User,elevated,true
+DeleteObject,"S3 Data Event",,
+DeleteMultipleObjects,"S3 Data Event",,
+GetObject,"S3 Data Event",,
+GetObjectAcl,"S3 Data Event",,
+GetObjectTorrent,"S3 Data Event",,
+HeadObject,"S3 Data Event",,
+OptionsObject,"S3 Data Event",,
+PostObject,"S3 Data Event",,
+PostObjectRestore,"S3 Data Event",,
+PutObject,"S3 Data Event",,
+PutObjectAcl,"S3 Data Event",,
+PutObjectCopy,"S3 Data Event",,
+ListParts,"S3 Data Event",,
+InitiateMultipartUpload,"S3 Data Event",,
+UploadPart,"S3 Data Event",,
+UploadPartCopy,"S3 Data Event",,
+CompleteMultipartUpload,"S3 Data Event",,
+AbortMultipartUpload,"S3 Data Event",,
+CreateLogStream,,,
+UpdateInstanceInformation,,,
+CheckMfa,,,
+DeliverConfigSnapshot,,,
+CreateBucket,,,
+PutBucketAcl,,,
+PutBucketLogging,,,
+LookupEvents,,,
+Subscribe,,,
+PutConfigRule,,,
+PutEvaluations,,,
+SwitchRole,,,
+PutSubscriptionFilter,,,
+RenewRole,,,
