@@ -1,4 +1,4 @@
-<form theme="dark" script="cs_dmt_lansweeper.js">
+<form theme="dark" script="cs_dmt_lansweeper.js" version="1.1">
   <init>
     <set token="tkn_host">()</set>
     <set token="tkn_ip">()</set>

@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" version="1.1">
   <label>Globally Detected Malicious IPs</label>
   <search id="search_list">
     <query>| inputlookup cs_malicious_ip_list.csv

@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" version="1.1">
   <label>VPN</label>
   <init>
     <set token="tkn_filter_home_country"></set>
