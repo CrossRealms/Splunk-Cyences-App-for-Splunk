@@ -1,0 +1,127 @@
+<form theme="dark">
+  <label>GSuite</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_user">
+      <label>User</label>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> User can collect Gsuite data with <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>.</p>
+        <p>Recommendation: Do not keep any of the GSuite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_gsuite_login_events` | head 1 | stats count
+| eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_gsuite` sourcetype=gapps:report:login" 
+| table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Login Types</title>
+      <chart>
+        <search>
+          <query>`cs_gsuite_login_events` | search user=$tkn_user|s$ | stats count by login_type | sort 0 - count | head 10</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Login Challenge</title>
+      <table>
+        <title>User was asked for extra login question due to suspicious login activity</title>
+        <search>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_challenge" | sort challenge_status | table _time, user, ipAddress, login_type, login_challenge_method, challenge_status</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Login Failures</title>
+      <table>
+        <search>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_failure" | stats latest(_time) as last_login_time, count, values(ipAddress) as ipAddress, values(login_type) as login_type, values(login_challenge_method) as login_challenge_method by user | eval last_login_time=strftime(last_login_time, "%F %T") | sort - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Success Logins</title>
+      <table>
+        <search>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_success" | stats latest(_time) as last_login_time, count, values(ipAddress) as ipAddress, values(login_type) as login_type, values(login_challenge_method) as login_challenge_method by user | eval last_login_time=strftime(last_login_time, "%F %T") | sort - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Password Update</title>
+      <table>
+        <search>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="password_edit" | stats latest(_time) as _time, count, values(ipAddress) as ipAddress by user | sort - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Other Login Related Events</title>
+      <table>
+        <search>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ NOT event_name IN ("login_challenge", "login_success", "login_failure", "logout", "login_verification", "password_edit") | table _time, user, ipAddress, event_name</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

@@ -255,6 +255,15 @@
               <button id="macro_data_aws_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">GSuite Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_gsuite"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_gsuite_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>
