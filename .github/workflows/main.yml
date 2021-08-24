@@ -20,7 +20,7 @@ jobs:
   pre-release:
     name: "Pre Release"
     runs-on: "ubuntu-latest"
-    continue-on-error: true
+
     steps:
       # ...
       - name: "Generate App and Add-on Build"
