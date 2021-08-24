@@ -69,19 +69,19 @@ jobs:
       - uses: splunk/appinspect-cli-action@v1
         with:
           app_path: 'repodir/cyences_app_for_splunk.tgz'
-          result_file: 'test_results/app-appinspect-mode-test.json'
+          result_file: 'repodir/app-appinspect-mode-test.json'
           
       - uses: splunk/appinspect-cli-action@v1
         if: always()
         with:
           app_path: 'repodir/TA-cyences.tgz'
-          result_file: 'test_results/ta-appinspect-mode-test.json'
+          result_file: 'repodir/ta-appinspect-mode-test.json'
           
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: "app_inspect_reports"
           path: |
-            test_results
-
-  
+            repodir/app-appinspect-mode-test.json
+            repodir/ta-appinspect-mode-test.json
+            
