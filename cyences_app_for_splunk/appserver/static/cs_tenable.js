@@ -37,7 +37,7 @@ function(TableView, SearchManager, mvc, _){
             }).value;
             //update the search with the HOST_ID that we are interested in
             this._searchManager.set({ search: `| inputlookup cs_tenable_vuln | search tenable_uuid="${tenable_uuid}" | sort -vul_severity_id, -vul_state
-            | table vul_id, vul_name, vul_severity, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, vul_description, vul_synopsis, _time, last_fixed, last_found, vul_cpe, vul_in_the_news`});
+            | table vul_id, vul_name, vul_severity, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_cve, vul_solution, vul_type, vul_version, vul_description, vul_synopsis, _time, last_fixed, last_found, vul_cpe, vul_in_the_news`});
             // $container is the jquery object where we can put out content.
             // In this case we will render our chart and add it to the $container
             $container.append(this._chartView.render().el);
