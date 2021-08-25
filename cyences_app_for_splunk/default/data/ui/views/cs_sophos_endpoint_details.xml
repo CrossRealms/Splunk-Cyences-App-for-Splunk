@@ -1,4 +1,4 @@
-<form theme="dark" script="cs_sophos_endpoint_details.js" stylesheet="cs_sophos_endpoint_details.css">
+<form theme="dark" script="cs_sophos_endpoint_details.js" stylesheet="cs_sophos_endpoint_details.css" version="1.1">
   <label>Sophos Endpoints Details</label>
   <fieldset submitButton="false">
     <input type="text" token="tkn_ip">
