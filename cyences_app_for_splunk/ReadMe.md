@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.6.1
+* Version - 1.7.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,60 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.7.0 (August 2021) 
+* Added AWS dashboard. 
+  * Find it under Control > Reports > AWS. 
+* Added GSuite dashboard. 
+  * Find it under Control > Reports > GSuite. 
+* Added a Microsoft Azure Security Score to the Office 365 dashboard. 
+  * Cyences App now shows Azure security score on the Office 365 dashboard directly representing how much secure your Azure configurations are. 
+  * Go to Data Onboarding > Microsoft Azure Security Score for more information on how to collect data for this new panel. 
+* Added a Microsoft 365 Defender ATP dashboard. (Antivirus > Microsoft 365 Defender ATP) 
+  * Cyences App shows alerts from Microsoft 365 Defender ATP alerts information in the dashboard. 
+  * Cyences App also has a dashboard Settings > Microsoft 365 Defender ATP Audit for checking configuration status of Defender ATP on Windows machines. 
+  * View the Data Onboarding > Microsoft 365 Defender ATP section to see how to collect data for Windows Defender ATP alerts and Windows Defender ATP configuration statuses from Windows machines. 
+* Support for Tenable:SC and Nessus on-prem. 
+  * You can see vulnerability data into Tenable dashboard and these data also reflects the Device Inventory. 
+  * We now support data collected from Tenable:SC with Tenable Add-on for Splunk (https://splunkbase.splunk.com/app/4060 - same that can be used to collect data from Tenable:IO or Tenable Cloud). 
+  * We now also supporting data collected by Nessus Data importer Add-on (https://splunkbase.splunk.com/app/2740). We do not recommend using this Add-on as the Add-on itself is archive. 
+  * Please see Data Onboarding > Tenable Data section in this document to see how to collect data from this Add-on. 
+* Added a new Active Directory related alert: AD - Group Membership Changed 
+  * You can also see the panel for Group Membership Changes in the Active Directory and Windows dashboard. 
+* Enhancements: 
+  * Device Inventory and Asset Intelligence dashboards: 
+    * Now we show high vulnerability count and active vulnerability count for Qualys and Tenable which is more important than total vulnerability count that includes already fixed vulnerabilities. 
+    * These dashboards now allow to search device with IP mask. For example: 10.1.1.0/24 
+  * Overview dashboard: 
+    * Hide antivirus alert names which is not present in the environment. 
+  * Lansweeper dashboard: 
+    * Added Hyper-V, Apple Mac, Web servers and Network Devices into the right category. 
+  * Linux/Unix: 
+    * Linux/Unix dashboard: Added important input filters to filter the data as required. 
+    * Added alert: Change in Sudo Access of Local Linux Account. 
+  * Active Directory Alerts: 
+    * Active Directory and Windows dashboard: Removed unnecessary duplicate panels. 
+    * Group Changed Alert & User Changed Alert: Added ComputerName (host) field in the alert. 
+  * Alerts Timestamp: 
+    * We have added time-zone information with all the timestamp in the Cyences alert to avoid confusion with time-zone of events and alerts. 
+* Issues Fixed: 
+  * Fixed minor python error on device inventory gen python custom command: Remove unused Float Validator and better error handling added. 
+  * Fixed the python issue with Sophos custom command: variable conflict resolved. 
+  * Fixed the issue: Forensic dashboard do not show information about AD – User Locked Out notable events. 
+
+Upgrade Guide from Version 1.6.0 to 1.7.0 
+* AWS Data Collection 
+  * View the Data Onboarding > AWS section to see how to collect AWS data required by Cyences App. 
+* GSuite Data Collection 
+  * View the Data Onboarding > GSuite section to see how to collect data for GSuite. 
+* Microsoft Security Score Collection 
+  * View the Data Onboarding > Microsoft Azure Security Score section to learn how to collect data for the Microsoft Azure/Office 365 Security Score panel. 
+* Microsoft 365 Defender ATP Data Collection 
+  * View the Data Onboarding > Microsoft 365 Defender ATP section to see how to collect data for Windows Defender ATP alerts and configuration statuses from Windows machines. 
+* Sysmon data action field conflict detected, please look at Troubleshooting > Sysmon data action field issue section in the document to make sure your environment does not have the same issue. 
+* Cyences Add-on's (https://splunkbase.splunk.com/app/5659/) new version has released 1.0.1 with fix to permission issue in linux sudo access data collection shell script. 
+  * Upgrade the Cyences Add-on on the Deployment server/Universal forwarder. 
+
+
 Version 1.6.1 (July 2021)
  * Bug Fix: Link of Linux Dashboard was not working on Overview Dashboard.
 
