@@ -103,7 +103,7 @@
         </html>
         <table>
             <search>
-            <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled")]</query>
+            <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled") | table label data]</query>
             <earliest>$earliest$</earliest>
             <latest>$latest$</latest>
             </search>
@@ -134,8 +134,8 @@
             </drilldown>
             <option name="field">count</option>
         </single>
-        <single id="tracking_err">
-            <title>Error Activities</title>
+        <single id="tracking_total">
+            <title>Total Activities</title>
             <search base="baseCloudTrailActivity">
                 <query>
                     fields count
