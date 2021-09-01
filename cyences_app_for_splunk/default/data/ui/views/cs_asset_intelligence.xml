@@ -198,7 +198,7 @@
 | search $tkn_filter_ip_host$
 | eval vul_state_id = if(vul_state="open" OR vul_state="reopened", 1, 0)
 | sort -vul_state_id, -vul_severity_id, +tenable_uuid
-| table tenable_uuid, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
+| table tenable_uuid, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_cve, vul_solution, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
