@@ -346,7 +346,7 @@
         </format>
         <fields>["Name","Count"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_splunk_admin_reports</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_splunk_admin_reports?form.tkn_indexes_status=Missing&amp;form.tkn_forwarders_status=Missing</link>
         </drilldown>
       </table>
     </panel>
