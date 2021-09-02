@@ -14,7 +14,8 @@
       <html>
         <p>Network Reports</p>
         <p>This dashboard use a third-party app called <a href="https://splunkbase.splunk.com/app/3511/" target="_blank">Missile App</a> to display the visuals for the Top Network Traffic dashboard panel.</p>
-        <p><b>Data Collection:</b> All types of network traffic data are mapped with the Network_Traffic CIM data model.</p>
+        <p>
+          <b>Data Collection:</b> All types of network traffic data are mapped with the Network_Traffic CIM data model.</p>
       </html>
       <table>
         <search>
@@ -44,13 +45,13 @@
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
-        <option name="drilldown">none</option>
+        <option name="drilldown">all</option>
         <option name="mapping.type">marker</option>
-        <option name="refresh.display">progressbar</option>
       </map>
       <html>
         <div>
-          <p><b>Description:</b> Scans over 100 ports and displays port scanning attempts on your network.</p>
+          <p>
+            <b>Description:</b> Scans over 100 ports and displays port scanning attempts on your network.</p>
         </div>
       </html>
     </panel>
@@ -58,13 +59,13 @@
   <row>
     <panel>
       <title>Top Network Traffic</title>
+      <!--This viz is using more CPU then expected.-->
       <input type="radio" token="tkn_filter_outbound_traffic">
         <label></label>
         <choice value="| search `cs_filter_private_ips`">Filter Outbound Traffic</choice>
         <choice value="">All Traffic</choice>
         <default></default>
       </input>
-      <!--This viz is using more CPU then expected.-->
       <viz type="missile_map.missile_map">
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
@@ -94,7 +95,8 @@ $tkn_filter_outbound_traffic$
       </viz>
       <html>
         <div>
-          <p><b>Description:</b> Displays a traffic visual for the top twenty networks with their respective source and destination pathways.</p>
+          <p>
+            <b>Description:</b> Displays a traffic visual for the top twenty networks with their respective source and destination pathways.</p>
         </div>
       </html>
     </panel>
