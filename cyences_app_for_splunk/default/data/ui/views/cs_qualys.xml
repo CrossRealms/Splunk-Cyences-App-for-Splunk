@@ -3,10 +3,46 @@
     <set token="tkn_ip">()</set>
   </init>
   <label>Qualys</label>
+  <search id="vulnerability_port_traffic_search">
+          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where
+    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=*
+    | stats count by IP PORT
+    | eval field = "(All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"
+    | appendpipe
+        [| stats count
+        | where count==0
+        | eval field="false()"
+        | fields field]
+    | fields field
+    | return 10000 $field ] by All_Traffic.src_ip  All_Traffic.dest_ip All_Traffic.dest_port
+| `drop_dm_object_name(All_Traffic)`
+| rename dest_ip as vul_ip, dest_port as vul_port, count as inbound_traffic
+| append [| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where
+    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=*
+    | stats count by IP PORT
+    | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\")"
+    | appendpipe
+        [| stats count
+        | where count==0
+        | eval field="false()"
+        | fields field]
+    | fields field
+    | return 10000 $field ] by All_Traffic.dest_ip  All_Traffic.src_ip All_Traffic.src_port
+| `drop_dm_object_name(All_Traffic)`
+| rename src_ip as vul_ip, src_port as vul_port, count as outbound_traffic]
+| iplocation src_ip
+| ` cs_network_generate_location_for_internal_network(src_ip)`
+| iplocation dest_ip
+| ` cs_network_generate_location_for_internal_network(dest_ip)`
+| table vul_ip, vul_port, src_ip, inbound_traffic, dest_ip, outbound_traffic, Country, Region, City</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> Qualys data is necessary to collect vulnerability scan results and host summaries. This data can be acquired via the <a href="https://splunkbase.splunk.com/app/2964/" target="_blank">Qualys Technology Add-on (TA) for Splunk</a>.</p>
+        <p>
+          <b>Data Collection:</b> Qualys data is necessary to collect vulnerability scan results and host summaries. This data can be acquired via the <a href="https://splunkbase.splunk.com/app/2964/" target="_blank">Qualys Technology Add-on (TA) for Splunk</a>.</p>
         <p>Currently, the Cyences app searches through the last seven days of Qualys related data.</p>
       </html>
       <table>
@@ -65,6 +101,27 @@
       <html>
         <p>Expand each row to view all vulnerabilities related to a specific host.</p>
       </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Traffic on Vulnerable Ports</title>
+      <input type="time" token="timeRange">
+        <label></label>
+        <default>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <table id="vulnerability_port_traffic_table">
+        <search base="vulnerability_port_traffic_search">
+          <query>| stats sum(inbound_traffic) as inbound_traffic, sum(outbound_traffic) as outbound_traffic by vul_ip, vul_port
+| sort - inbound_traffic, - outbound_traffic</query>
+        </search>
+        <option name="count">50</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
     </panel>
   </row>
 </form>

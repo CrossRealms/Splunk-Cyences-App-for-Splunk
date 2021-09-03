@@ -1,10 +1,11 @@
 require([
     'splunkjs/mvc/tableview',
     'splunkjs/mvc/searchmanager',
+    "splunkjs/mvc/postprocessmanager",
     'splunkjs/mvc',
     'underscore',
     'splunkjs/mvc/simplexml/ready!'], 
-function(TableView, SearchManager, mvc, _){
+function(TableView, SearchManager, PostProcessManager, mvc, _){
 
     var AllVulnRowExpansionRenderer = TableView.BaseRowExpansionRenderer.extend({
         initialize: function(args) {
@@ -50,5 +51,53 @@ function(TableView, SearchManager, mvc, _){
     tableElement.getVisualization(function(tableView) {
         // Add custom cell renderer, the table will re-render automatically.
         tableView.addRowExpansionRenderer(new AllVulnRowExpansionRenderer());
+    });
+
+    var VulTrafficExpansionRenderer = TableView.BaseRowExpansionRenderer.extend({
+        initialize: function(args) {
+            // initialize will run once, so we will set up a search and a chart to be reused.
+            this._searchManager = new PostProcessManager({
+                id: 'vul-traffic-search-manager',
+                managerid: "vulnerability_port_traffic_search",
+                preview: false
+            });
+            this._chartView = new TableView({
+                managerid: 'vul-traffic-search-manager',
+                'rowNumbers': true,
+                'drilldown': 'none',
+                'wrap': true,
+                'count': 100    /* TODO - Currently, there is bug in the expandable table view where if once you switch in the page in the main table, 
+                                          the expanded table will not allow to switch page.
+                                          So, we are putting 100 as max count for now to accommodate most of the cases. */
+            });
+        },
+        canRender: function(rowData) {
+            // Since more than one row expansion renderer can be registered we let each decide if they can handle that
+            // data
+            // Here we will always handle it.
+            return true;
+        },
+        render: function($container, rowData) {
+            // rowData contains information about the row that is expanded.  We can see the cells, fields, and values
+            // We will find the HOST_ID cell to use its value
+            var vul_ip = _(rowData.cells).find(function (cell) {
+               return cell.field === 'vul_ip';
+            }).value;
+            var vul_port = _(rowData.cells).find(function (cell) {
+                return cell.field === 'vul_port';
+             }).value;
+            //update the search with the HOST_ID that we are interested in
+            this._searchManager.set({ search: `| search vul_ip="${vul_ip}" vul_port="${vul_port}"
+            | sort Country, - inbound_traffic, - outbound_traffic
+            | table src_ip, inbound_traffic, dest_ip, outbound_traffic, Country, Region, City`});
+            // $container is the jquery object where we can put out content.
+            // In this case we will render our chart and add it to the $container
+            $container.append(this._chartView.render().el);
+        }
+    });
+    var tableElement2 = mvc.Components.getInstance("vulnerability_port_traffic_table");
+    tableElement2.getVisualization(function(tableView) {
+        // Add custom cell renderer, the table will re-render automatically.
+        tableView.addRowExpansionRenderer(new VulTrafficExpansionRenderer());
     });
 });
