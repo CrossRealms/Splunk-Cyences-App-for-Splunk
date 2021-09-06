@@ -3,18 +3,18 @@ EventCode,change_action,change_category,obj_type,signature,alert
 4720,created,User,user,A user account was created,userchanged
 4722,modified,User,user,A user account was enabled,userchanged
 4722,enabled,Computer,computer,A Computer account was enabled,
-4723,modified,User,user,An attempt was made to change an account password,
+4723,modified,User,user,An attempt was made to change an account password,userchanged
 4724,modified,User,user,An attempt was made to reset an account password,userchanged
 4725,disabled,User,user,A user account was disabled,userchanged
 4726,deleted,User,user,A user account was deleted,userchanged
 4727,created,Group,group,A security-enabled global group was created,groupchanged
 4728,added,Group Membership,group,A member was added to a security-enabled global group,groupmembershipchanged
 4729,removed,Group Membership,group,A member was removed from a security-enabled global group,groupmembershipchanged
-4730,deleted,Group,group,A security-enabled global group was deleted,
+4730,deleted,Group,group,A security-enabled global group was deleted,groupchanged
 4731,created,Group,group,A security-enabled local group was created,groupchanged
 4732,added,Group Membership,group,A member was added to a security-enabled local group,groupmembershipchanged
 4733,removed,Group Membership,group,A member was removed from a security-enabled local group,groupmembershipchanged
-4734,deleted,Group,group,A security-enabled local group was deleted,
+4734,deleted,Group,group,A security-enabled local group was deleted,groupchanged
 4735,modified,Group,group,A security-enabled local group was changed,groupchanged
 4737,modified,Group,group,A security-enabled global group was changed,groupchanged
 4738,modified,User,user,A user account was changed,
@@ -26,11 +26,11 @@ EventCode,change_action,change_category,obj_type,signature,alert
 4746,added,Group Membership,group,A member was added to a security-disabled local group,
 4747,removed,Group Membership,group,A member was removed from a security-disabled local group,
 4748,deleted,Group,group,A security-disabled local group was deleted,
-4749,created,Group,group,A security-disabled global group was created,
+4749,created,Group,group,A security-disabled global group was created,groupchanged
 4750,modified,Group,group,A security-disabled global group was changed,groupchanged
 4751,added,Group Membership,group,A member was added to a security-disabled global group,groupmembershipchanged
 4752,removed,Group Membership,group,A member was removed from a security-disabled global group,groupmembershipchanged
-4753,deleted,Group,group,A security-disabled global group was deleted,
+4753,deleted,Group,group,A security-disabled global group was deleted,groupchanged
 4754,created,Group,group,A security-enabled universal group was created,groupchanged
 4755,modified,Group,group,A security-enabled universal group was changed,groupchanged
 4756,added,Group Membership,group,A member was added to a security-enabled universal group,groupmembershipchanged
@@ -41,7 +41,7 @@ EventCode,change_action,change_category,obj_type,signature,alert
 4761,added,Group Membership,group,A member was added to a security-disabled universal group,groupmembershipchanged
 4762,removed,Group Membership,group,A member was removed from a security-disabled universal group,groupmembershipchanged
 4763,deleted,Group,group,A security-disabled universal group was deleted,groupchanged
-4764,modified,Group,group,A groups type was changed,
+4764,modified,Group,group,A groups type was changed,groupchanged
 4765,modified,User,user,Success: SID History was added to an account.,
 4766,modified,User,user,Failed: An attempt to add SID History to an account failed.,
 4767,modified,User,user,A user account was unlocked,userchanged
@@ -67,7 +67,7 @@ EventCode,change_action,change_category,obj_type,signature,alert
 5136,modified,User,user,A directory service User object was modified,userchanged
 5136,modified,OU,organizationalUnit,A directory service Organizational Unit object was modified,
 5137,created,Computer,computer,A directory service Computer object was created,
-5137,created,Group,group,A directory service Group object was created,
+5137,created,Group,group,A directory service Group object was created,groupchanged
 5137,created,Group Policy,groupPolicyContainer,A directory service Group Policy object was created,grouppolicychanged
 5137,created,User,user,A directory service User object was created,userchanged
 5137,created,OU,organizationalUnit,A directory service Organizational Unit object was created,
