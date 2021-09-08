@@ -4,8 +4,8 @@
   </init>
   <label>Qualys</label>
   <search id="vulnerability_port_traffic_search">
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where
-    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=*
+    <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where
+    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=* $tkn_vul_severity_filter_in_traffic$
     | stats count by IP PORT
     | eval field = "(All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"
     | appendpipe
@@ -18,7 +18,7 @@
 | `drop_dm_object_name(All_Traffic)`
 | rename dest_ip as vul_ip, dest_port as vul_port, count as inbound_traffic
 | append [| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where
-    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=*
+    [| search `cs_qualys_vuln` IP IN ("*") `cs_qualys_timerange` STATUS="ACTIVE" PORT=* $tkn_vul_severity_filter_in_traffic$
     | stats count by IP PORT
     | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\")"
     | appendpipe
@@ -35,9 +35,9 @@
 | iplocation dest_ip
 | ` cs_network_generate_location_for_internal_network(dest_ip)`
 | table vul_ip, vul_port, src_ip, inbound_traffic, dest_ip, outbound_traffic, Country, Region, City</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
+      <earliest>$timeRange.earliest$</earliest>
+      <latest>$timeRange.latest$</latest>
+    </search>
   <row>
     <panel>
       <html>
@@ -112,6 +112,20 @@
           <earliest>-7d@h</earliest>
           <latest>now</latest>
         </default>
+      </input>
+      <input type="multiselect" token="tkn_vul_severity_filter_in_traffic">
+        <label>Vulnerability Severity</label>
+        <choice value="critical">Critical</choice>
+        <choice value="high">High</choice>
+        <choice value="medium">Medium</choice>
+        <choice value="low">Low</choice>
+        <choice value="information">Information</choice>
+        <default>critical,high</default>
+        <prefix>severity IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
       </input>
       <table id="vulnerability_port_traffic_table">
         <search base="vulnerability_port_traffic_search">
