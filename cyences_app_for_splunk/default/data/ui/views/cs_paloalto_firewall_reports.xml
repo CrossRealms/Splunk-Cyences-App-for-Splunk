@@ -98,6 +98,93 @@
   </row>
   <row>
     <panel>
+      <title>System Alerts and Threats</title>
+      <input type="multiselect" token="tkn_threat_severity">
+        <label>Severity</label>
+        <choice value="critical">Critical</choice>
+        <choice value="high">High</choice>
+        <choice value="medium">Medium</choice>
+        <choice value="low">Low</choice>
+        <choice value="informational">Informational</choice>
+        <default>critical,high</default>
+        <prefix>severity IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> , </delimiter>
+      </input>
+      <input type="dropdown" token="tkn_threat_palo_device">
+        <label>Palo Device</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>dvc_n</fieldForLabel>
+        <fieldForValue>dvc</fieldForValue>
+        <search>
+          <query>`cs_palo` sourcetype IN ("pan:threat", "pan:system") | dedup dvc | eval dvc_n=dvc." (".dvc_name.")"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <default>*</default>
+      </input>
+      <input type="multiselect" token="tkn_threat_logsubtype">
+        <label>Log Subtype</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <prefix>log_subtype IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+        <fieldForLabel>log_subtype</fieldForLabel>
+        <fieldForValue>log_subtype</fieldForValue>
+        <search>
+          <query>`cs_palo` sourcetype IN ("pan:system", "pan:threat") | fields log_subtype | dedup log_subtype | table log_subtype</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+      </input>
+      <input type="text" token="tkn_threat_search">
+        <label>Text Search in Logs</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <table>
+        <title>Threat Events</title>
+        <search>
+          <query>`cs_palo` sourcetype="pan:threat" $tkn_threat_severity$ dvc=$tkn_threat_palo_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$
+| table dvc, dvc_name, _time, log_subtype, severity, threat_category, threat, action, app, user, src, src_port, src_location, src_zone, dest, dest_port, dest_translated_ip, dest_translated_port, url, serial_number, session_id</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+        </format>
+        <format type="color" field="action">
+          <colorPalette type="map">{"allowed":#F7BC38,"blocked":#A2CC3E,"deferred":#6A5C9E,"dropped":#65A637}</colorPalette>
+        </format>
+      </table>
+      <table>
+        <title>System Events</title>
+        <search>
+          <query>`cs_palo` sourcetype="pan:system" $tkn_threat_severity$ dvc=$tkn_threat_palo_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$
+| table dvc, dvc_name, _time, log_subtype, severity, signature, action, user, src, serial_number</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+        </format>
+        <format type="color" field="action">
+          <colorPalette type="map">{"failure":#F7BC38,"success":#A2CC3E}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Inbound Traffic from Blocked IPs</title>
       <table>
         <search>
