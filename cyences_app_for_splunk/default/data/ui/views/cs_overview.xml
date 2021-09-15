@@ -26,7 +26,8 @@
     <panel>
       <title>Reports</title>
       <html>
-        <div class="box" id="ad_reports_link">AD and Windows</div>
+        <div class="box" id="ad_reports_link">Active Directory</div>
+        <div class="box" id="windows_reports_link">Windows</div>
         <div class="box" id="linux_reports_link">Linux</div>
         <div class="box" id="o365_reports_link">Office 365</div>
         <div class="box" id="aws_reports_link">AWS</div>

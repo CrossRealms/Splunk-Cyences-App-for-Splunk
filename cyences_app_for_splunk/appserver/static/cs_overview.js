@@ -8,7 +8,8 @@ require([
 
     // List of report links
     let report_links = [
-        { id: 'ad_reports_link', url: baseURL.concat('cs_windows_ad_reports')},
+        { id: 'ad_reports_link', url: baseURL.concat('cs_ad_reports')},
+        { id: 'windows_reports_link', url: baseURL.concat('cs_windows_reports')},
         { id: 'linux_reports_link', url: baseURL.concat('cs_linux_reports')},
         { id: 'o365_reports_link', url: baseURL.concat('cs_o365_reports')},
         { id: 'aws_reports_link', url: baseURL.concat('cs_aws_user_activity')},
