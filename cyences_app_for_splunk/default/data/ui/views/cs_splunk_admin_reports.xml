@@ -42,6 +42,41 @@
   </row>
   <row>
     <panel>
+      <input type="time" token="tkn_timerange">
+        <label></label>
+        <default>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="dropdown" token="tkn_splitby">
+        <label>Split By</label>
+        <choice value="&quot;&quot;">No Split</choice>
+        <choice value="idx">Index</choice>
+        <choice value="st">Sourcetype</choice>
+        <choice value="h">Host</choice>
+        <default>""</default>
+        <initialValue>""</initialValue>
+      </input>
+      <chart>
+        <title>Historical Splunk License Usage</title>
+        <search>
+          <query>`cs_licensing_base_usage("")` | `cs_licensing_usage_all("$tkn_splitby$")`</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <html>
+        <p>Please update the License Master Host Name on Settings -> Configuration Page. </p>
+        <p>Ensure that License Master is forwarding _internal logs to indexers</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Indexes</title>
       <input type="text" token="tkn_index">
         <label>Index</label>

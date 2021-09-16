@@ -34,6 +34,7 @@ require([
         { macro_name: 'cs_gsuite', input_id: 'macro_data_gsuite', button_id: 'macro_data_gsuite_button', msg_id: 'macro_data_msg'},
 
         /* Other Macros */
+        { macro_name: 'cs_license_master', input_id: 'macro_cs_license_master_defination', button_id: 'macro_cs_license_master_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_home_country', input_id: 'macro_cs_home_country', button_id: 'macro_cs_home_country_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_network_home_location_lat', input_id: 'macro_cs_network_home_location_lat', button_id: 'macro_cs_network_home_location_lat_button', msg_id: 'macro_other_msg'},

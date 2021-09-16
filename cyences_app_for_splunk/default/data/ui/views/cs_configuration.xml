@@ -316,6 +316,15 @@
         <p id="macro_other_msg"/>
         <table style="width:55%">
           <tr>
+            <th style="text-align:left">cs_license_master (Provide Hostname of License Master)</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_license_master_defination"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_license_master_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">cs_ad_password_change_outside_working_hour_definition</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_ad_password_change_outside_working_hour_definition"/>
