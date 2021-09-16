@@ -1,13 +1,5 @@
 <form theme="dark" version="1.1">
   <label>Windows</label>
-  <search>
-    <done>
-      <set token="tkn_host_stats">$result.host_name$</set>
-    </done>
-    <query>| makeresults | eval host_name = if("*"=="$tkn_host$","","host")</query>
-    <earliest>-24h@h</earliest>
-    <latest>now</latest>
-  </search>
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
