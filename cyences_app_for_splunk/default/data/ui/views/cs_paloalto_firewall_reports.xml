@@ -146,6 +146,7 @@
         <label>Text Search in Logs</label>
         <prefix>*</prefix>
         <suffix>*</suffix>
+        <default>*</default>
       </input>
       <table>
         <title>Threat Events</title>
@@ -156,7 +157,6 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
         <format type="color" field="severity">
           <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
         </format>
