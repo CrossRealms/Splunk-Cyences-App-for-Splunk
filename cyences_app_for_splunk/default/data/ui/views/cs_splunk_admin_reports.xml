@@ -49,29 +49,43 @@
           <latest>now</latest>
         </default>
       </input>
+      <input type="dropdown" token="tkn_licensemaster">
+        <label>License Master</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+        <search>
+          <query>index=_internal source=*license_usage.log* TERM(type=Usage) host IN (*) | stats count by host</query>
+          <earliest>-2d@d</earliest>
+          <latest>now</latest>
+        </search>
+      </input>
       <input type="dropdown" token="tkn_splitby">
         <label>Split By</label>
-        <choice value="&quot;&quot;">No Split</choice>
+        <choice value="">No Split</choice>
         <choice value="idx">Index</choice>
         <choice value="st">Sourcetype</choice>
         <choice value="h">Host</choice>
-        <default>""</default>
-        <initialValue>""</initialValue>
+        <default></default>
       </input>
       <chart>
         <title>Historical Splunk License Usage</title>
         <search>
-          <query>`cs_licensing_base_usage("")` | `cs_licensing_usage_all("$tkn_splitby$")`</query>
+          <query>`cs_licensing_base_usage("$tkn_licensemaster$","")` | `cs_licensing_usage_all("$tkn_licensemaster$","$tkn_splitby$")`</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
         <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"stack size"</option>
+        <option name="charting.chart.stackMode">stacked</option>
         <option name="charting.drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </chart>
       <html>
-        <p>Please update the License Master Host Name on Settings -> Configuration Page. </p>
-        <p>Ensure that License Master is forwarding _internal logs to indexers</p>
+        <p>Note: Please update the License Master Host Name on Settings -&gt; Configuration Page. </p>
+        <p>And ensure that License Master is forwarding _internal logs to indexers</p>
       </html>
     </panel>
   </row>
