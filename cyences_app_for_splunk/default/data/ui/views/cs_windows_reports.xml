@@ -1,0 +1,121 @@
+<form theme="dark" version="1.1">
+  <label>Windows</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Windows Reports</p>
+        <p>
+          <b>Data Collection:</b> WinEventLog:Security events from <a href="https://splunkbase.splunk.com/app/742/" target="_blank">Splunk Add-on for Windows</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_wineventlog_security`" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="time" token="timeRange">
+        <label>Time Range</label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="text" token="tkn_host" searchWhenChanged="true">
+        <label>Host</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_user" searchWhenChanged="true">
+        <label>User</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+    </panel>
+  </row>
+  <row depends="$hidden_row$">
+    <panel>
+      <table>
+        <search>
+          <done>
+            <set token="tkn_host_stats">$result.host_name$</set>
+          </done>
+          <query>| makeresults | eval host_name = if("***"=="$tkn_host$","","host")</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Users and Privileges (EventCode=4672)</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4672 host=$tkn_host|s$ user=$tkn_user|s$
+| stats values(privilege_id) as privilege_id by $tkn_host_stats$ user 
+| mvexpand privilege_id 
+| lookup windows_privilege_lookup privilege_id OUTPUT privilege as privilege_new 
+| eval Privilege=if(isnotnull(privilege_new),privilege_id." (".privilege_new.")" ,privilege_id)
+| stats values(Privilege) as Privilege by $tkn_host_stats$  user | eval count=mvcount(Privilege) | sort - count | fields - count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Privileged Service Accessed (EventCode=4673)</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` TERM(EventCode=4673) host IN ($tkn_host$)
+| stats values(host) as hosts, values(privilege_id) as privileges, values(service) as services, count by user, process, status
+| eval status=status." (".count.")"
+| stats values(status) as status, values(hosts) as hosts, values(privileges) as privileges, values(services) as services, sum(count) as count by user, process | sort - count | fields - count
+| lookup windows_privilege_lookup privilege_id AS privileges OUTPUT privilege as privilege_new | eval privileges=if(isnotnull(privilege_new),privileges." (".privilege_new.")" ,privileges) | fields - privilege_new</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Operation Attempted on Privileged Object (EventCode=4674)</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` TERM(EventCode=4674) host IN ($tkn_host$) 
+| rex "(?s)Desired Access:\s?(?&lt;desired_accesses&gt;.+?)[\s\n\r]*Privileges:" | makemv tokenizer="[\s*]?([^\n]+)\n?" desired_accesses | eval desired_accesses = mvmap(desired_accesses, trim(desired_accesses)) | fillnull value="-" object_file_path 
+| stats values(host) as hosts, values(desired_accesses) as desired_accesses, values(privilege_id) as privileges, values(process) as processes, count by user, object_file_path, Object_Handle, Object_Server, status
+| eval status=status." (".count.")"
+| stats values(status) as status, values(hosts) as hosts, values(desired_accesses) as desired_accesses, values(privileges) as privileges, values(processes) as processes, sum(count) as count by user, object_file_path, Object_Handle, Object_Server | sort - count | fields - count
+| lookup windows_privilege_lookup privilege_id AS privileges OUTPUT privilege as privilege_new | eval privileges=if(isnotnull(privilege_new),privileges." (".privilege_new.")" ,privileges) | fields - privilege_new</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
