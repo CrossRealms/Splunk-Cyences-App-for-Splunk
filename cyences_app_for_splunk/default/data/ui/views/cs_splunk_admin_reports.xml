@@ -8,6 +8,13 @@
     <latest></latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="base_license_search">
+    <query>
+      `cs_licensing_base_usage("$tkn_licensemaster$","")` 
+    </query>
+    <earliest>$tkn_timerange.earliest$</earliest>
+    <latest>$tkn_timerange.latest$</latest>
+  </search>
   <search id="forwarders_search">
     <query>| inputlookup cs_forwarders.csv
 | `cs_human_readable_time_format(last_connected)`
@@ -72,10 +79,8 @@
       </input>
       <chart>
         <title>Historical Splunk License Usage</title>
-        <search>
-          <query>`cs_licensing_base_usage("$tkn_licensemaster$","")` | `cs_licensing_usage_all("$tkn_licensemaster$","$tkn_splitby$")`</query>
-          <earliest>$tkn_timerange.earliest$</earliest>
-          <latest>$tkn_timerange.latest$</latest>
+        <search base="base_license_search">
+          <query>| `cs_licensing_usage_all("$tkn_licensemaster$","$tkn_splitby$")`</query>
         </search>
         <option name="charting.chart">column</option>
         <option name="charting.chart.overlayFields">"stack size"</option>
