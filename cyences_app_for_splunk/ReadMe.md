@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.7.0
+* Version - 1.8.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,43 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.8.0 (September 2021) 
+* Tenable and Qualys – Correlation between Vulnerabilities and Network Telemetry 
+  * Added table that shows traffic on vulnerable ports for both Qualys and Tenable. User can see those details in the Tenable and Qualys dashboard. (New panels added at the last of the panel.) 
+* Fortigate VPN Support 
+  * Cyences App’s VPN dashboard now supports Fortigate VPN logs. 
+* New Windows Dashboard 
+  * The Windows dashboard is now separated from Active Directory.
+  * The Active Directory dashboard now has panels from the original dashboard.
+  * The new Windows dashboard has Accesses to privileged objects and services and User Privileges related information. 
+* Palo Alto Dashboard: 
+  * Added System Events panel and Palo Threats (Incidents) panel in the dashboard. 
+  * Added sourcetypes available for each Palo device on Palo Alto Firewall device list panel. 
+* Splunk Admin 
+  * Added panel Splunk Licensing report and added alert for Splunk licensing violation. 
+  * Added panel Splunk Environment Disk usage report and added alert for Splunk instance disk usage more than 85% or disk space less than 6 GB. 
+* Enhancements: 
+  * Ransomware – Spike in the File Writes Alert 
+    * Improved by adding file locations alongside file writes count so we can identify whether the alert is false positive or ransomware right from the email alert. 
+  * Tenable: Added CVE and solution field for tenable vulnerabilities. (Tenable dashboard and Asset Intelligence dashboard) 
+  * Overview dashboard 
+    * Improved drilldown for Splunk Admin panel that now auto set the filters on Splunk Admin dashboard. 
+  * Network Reports dashboard 
+    * Added drilldown for “Port Scanning Attempts” map. 
+  * AD Alerts 
+    * Improved search queries for Active Directory related alerts. 
+    * Added ComputerName field in the alert results. 
+* Issues Fixed: 
+  * AWS Dashboard 
+    * Fixed the issue with AWS dashboard panel loading. 
+
+Upgrade Guide from Version 1.7.0 to 1.8.0 
+* Fortigate VPN Data Collection 
+  * If you are using Fortinate Fortigate for VPN then follow the Data Onboarding > Fortigate VPN Logs section from the Guide to see how to collect the data and then you can utilize Cyences App’s VPN dashboard. 
+* New Splunk Admin Alerts 
+  * Enable new Splunk Admin alerts for Splunk licensing and Disk usage. 
+
+ 
 Version 1.7.0 (August 2021) 
 * Added AWS dashboard. 
   * Find it under Control > Reports > AWS. 
