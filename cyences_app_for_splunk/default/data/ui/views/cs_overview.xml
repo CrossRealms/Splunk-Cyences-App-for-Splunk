@@ -327,10 +327,13 @@
     <panel>
       <title>Splunk Admin</title>
       <table>
-        <search>
-          <query>| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Splunk Admin")` | search NOT savedsearch_name IN ("Splunk Admin - Missing Forwarder", "Splunk Admin - Missing Data in the Index")
+| rename "Notable Events" as Count
+| append
+[| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
 | append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_internal_filter` | `cs_splunk_admin_missing_indexes_filter`| stats count | eval Name="Missing Indexes" ]
-| rename count as Count</query>
+| rename count as Count]</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>

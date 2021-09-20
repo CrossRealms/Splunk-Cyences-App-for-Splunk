@@ -8,6 +8,20 @@
     <latest></latest>
     <sampleRatio>1</sampleRatio>
   </search>
+  <search id="base_license_search">
+    <query>
+      `cs_licensing_base_usage("$tkn_licensemaster$","")` 
+    </query>
+    <earliest>$tkn_timerange.earliest$</earliest>
+    <latest>$tkn_timerange.latest$</latest>
+  </search>
+  <search id="base_disk_search">
+    <query>
+      `cs_disk_usage("*")` 
+    </query>
+    <earliest>$tkn_timerange_disk.earliest$</earliest>
+    <latest>$tkn_timerange_disk.latest$</latest>
+  </search>
   <search id="forwarders_search">
     <query>| inputlookup cs_forwarders.csv
 | `cs_human_readable_time_format(last_connected)`
@@ -28,7 +42,12 @@
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Forwarder") | fields title, disabled | eval data=if(disabled=1, "Alert is disabled", "Alert is enabled") | rename title as label | table label, data</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
+| search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Forwarder","Splunk Admin - High Disk Usage Alert","Splunk Admin - Splunk License Violation") 
+| fields title, disabled 
+| eval data=if(disabled=1, "Alert is disabled", "Alert is enabled") 
+| rename title as label 
+| table label, data</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -38,6 +57,86 @@
           <colorPalette type="map">{"Alert is enabled": #03991a, "Alert is disabled": #a3030b}</colorPalette>
         </format>
       </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Splunk License Usage</title>
+      <input type="time" token="tkn_timerange">
+        <label></label>
+        <default>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="dropdown" token="tkn_licensemaster">
+        <label>License Master</label>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+        <search>
+          <query>index=_internal source=*license_usage.log* TERM(type=Usage) host IN (*) | stats count by host</query>
+          <earliest>-2d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <selectFirstChoice>true</selectFirstChoice>
+      </input>
+      <input type="dropdown" token="tkn_splitby">
+        <label>Split By</label>
+        <choice value="">No Split</choice>
+        <choice value="idx">Index</choice>
+        <choice value="st">Sourcetype</choice>
+        <choice value="h">Host</choice>
+        <default></default>
+      </input>
+      <chart>
+        <search base="base_license_search">
+          <query>| `cs_licensing_usage_all("$tkn_licensemaster$","$tkn_splitby$")`</query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"stack size"</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <html>
+        <p>Note: Ensure that License Master is forwarding _internal logs to indexers. </p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Instance Disk Usage</title>
+      <input type="time" token="tkn_timerange_disk">
+        <label></label>
+        <default>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="multiselect" token="tkn_disk_host">
+        <label>Host</label>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+        <search base="base_disk_search">
+          <query>| stats count by host</query>
+        </search>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>, </delimiter>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <chart>
+        <search base="base_disk_search">
+          <query>| search host IN ($tkn_disk_host$)   | timechart limit=0 latest(pct_disk_usage) as dedup_pct_disk_usage by serverp useother=false</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.overlayFields">"stack size"</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
     </panel>
   </row>
   <row>
