@@ -245,10 +245,10 @@
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
         <format type="color" field="qualys">
-          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
-          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
@@ -275,14 +275,16 @@
           <li>Red = Urgent severity (level 5)</li>
           <li>Orange = Critical severity (level 4)</li>
           <li>Yellow = Serious severity (level 3)</li>
-          <li>Green = No active vulnerabilities</li>
+          <li>Blue = Low severity (level 2)</li>
+          <li>Green = No active vulnerabilities (Info level is not considered)</li>
         </ul>
         <p>Tenable Status</p>
         <ul>
           <li>Red = Urgent severity</li>
           <li>Orange = High severity</li>
           <li>Yellow = Medium severity</li>
-          <li>Green = No active vulnerabilities</li>
+          <li>Blue = Low severity</li>
+          <li>Green = No active vulnerabilities (Info level is not considered)</li>
         </ul>
         <p>high_vul: Severity 5 and severity 4 active vulnerabilities count.</p>
       </html>
