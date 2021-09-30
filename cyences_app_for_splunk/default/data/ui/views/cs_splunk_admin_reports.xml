@@ -100,6 +100,7 @@
       </chart>
       <html>
         <p>Note: Ensure that License Master is forwarding _internal logs to indexers. </p>
+        <p>License details is in GB.</p>
       </html>
     </panel>
   </row>
@@ -137,6 +138,9 @@
         <option name="charting.drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </chart>
+      <html>
+        <p>Disk Details is in percentage(%).</p>
+      </html>
     </panel>
   </row>
   <row>
