@@ -79,6 +79,7 @@
           <query>`cs_qualys_hostsummary` `cs_qualys_timerange` | dedup HOST_ID 
 | search $tkn_ip$
 | fields HOST_ID, DNS, IP, NETWORK_ID, OS, TRACKING_METHOD, TOTAL_VULNS, ACTIVE*, NEW*, CONFIRMED*, POTENTIAL*, RE_OPENED*, FIXED*, INFO*, SEVERITY_*, LAST_*
+| eval ACTIVE=ACTIVE-ACTIVE_SEVERITY_1
 | table IP, OS, TOTAL_VULNS, ACTIVE, ACTIVE_SEVERITY_5, ACTIVE_SEVERITY_4, NEW, CONFIRMED, POTENTIAL, RE_OPENED, FIXED, INFO, LAST_*, HOST_ID, DNS, NETWORK_ID, TRACKING_METHOD
 | sort -ACTIVE</query>
           <earliest>0</earliest>
@@ -100,6 +101,7 @@
       </table>
       <html>
         <p>Expand each row to view all vulnerabilities related to a specific host.</p>
+        <p>ACTIVE: Active vulnerabilities exclude informational vulnerabilities.</p>
       </html>
     </panel>
   </row>

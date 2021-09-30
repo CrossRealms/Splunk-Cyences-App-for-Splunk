@@ -286,6 +286,7 @@
           <li>Blue = Low severity</li>
           <li>Green = No active vulnerabilities (Info level is not considered)</li>
         </ul>
+        <p>active_vul: Informational vulnerabilities are excluded from the active_vuln count.</p>
         <p>high_vul: Severity 5 and severity 4 active vulnerabilities count.</p>
       </html>
     </panel>
