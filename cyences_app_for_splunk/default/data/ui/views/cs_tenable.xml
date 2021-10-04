@@ -12,6 +12,7 @@
 | makemv ip delim="~~" | makemv host delim="~~" | makemv mac_address delim="~~"
 | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
 | fields - tenable_last_event, created_at, first_*, has_plugin_results
+| eval active_vuln=active_vuln-info_active_vuln
 | table tenable_uuid, ip, host, mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active_vuln, high_active_vuln, fixed_vuln, medium_active_vuln, low_active_vuln, info_active_vuln, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_*, *
 | eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active) | sort - active_vuln</query>
     <earliest>0</earliest>
@@ -125,17 +126,18 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <format type="color" field="critical_active">
+        <format type="color" field="critical_active_vuln">
           <colorPalette type="list">[#a30000]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <format type="color" field="high_active">
+        <format type="color" field="high_active_vuln">
           <colorPalette type="list">[#e87000]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
       </table>
       <html>
         <p>Expand each row to view all vulnerabilities related to a specific host.</p>
+        <p>active_vuln: Active vulnerabilities exclude informational vulnerabilities.</p>
       </html>
     </panel>
   </row>

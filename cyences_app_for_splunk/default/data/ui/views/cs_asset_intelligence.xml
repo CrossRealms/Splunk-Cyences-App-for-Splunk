@@ -66,10 +66,10 @@
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
         <format type="color" field="qualys">
-          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
-          <colorPalette type="map">{"Green": #03991a, "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
