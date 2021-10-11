@@ -6,7 +6,7 @@
   <label>Sysmon Deploy Audit</label>
   <search id="base_search">
     <query>`cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") | dedup host | table host | eval ta_sysmon_deploy_status="Updated"
-| append [| tstats count where `cs_sysmon` by host| table host | eval data="Present"]
+| append [| search `cs_sysmon` | fields host | stats count by host| table host | eval data="Present"]
 | stats first(*) as * by host
 | fillnull data value="Absent"
 | fillnull ta_sysmon_deploy_status value="-"
