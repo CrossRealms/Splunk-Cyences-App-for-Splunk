@@ -1,5 +1,11 @@
 #!/bin/bash
-groups=$(cat /etc/sudoers | grep "ALL=(ALL" | awk '{print $1}'  | grep % | grep -v '#')
+test=$(cat /etc/sudoers | grep "#includedir /etc/sudoers.d")
+if  [ -z "$test" ]; 
+then
+groups=$(cat /etc/sudoers | grep "ALL\s*=\s*(ALL" | awk '{print $1}'  | grep % | grep -v '#')
+else
+groups=$(cat /etc/sudoers /etc/sudoers.d/* | grep "ALL\s*=\s*(ALL" | awk '{print $1}'  | grep % | grep -v '#')
+fi
 for i in $groups
 do
 group_name=$(echo $i | cut -d "%" -f 2)
@@ -10,7 +16,12 @@ do
     echo sudouser=$i
 done
 done
-users=$(cat /etc/sudoers | grep "ALL=(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
+if  [ -z "$test" ]; 
+then
+users=$(cat /etc/sudoers | grep "ALL\s*=\s*(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
+else
+users=$(cat /etc/sudoers /etc/sudoers.d/* | grep "ALL\s*=\s*(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
+fi
 for i in $users
 do
 echo sudouser=$i
