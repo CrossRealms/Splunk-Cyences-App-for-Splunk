@@ -51,8 +51,9 @@
         <search>
           <done>
             <set token="tkn_host_stats">$result.host_name$</set>
+            <set token="tkn_host_stats_appedquery">$result.append_query$</set>
           </done>
-          <query>| makeresults | eval host_name = if("***"=="$tkn_host$","","host")</query>
+          <query>| makeresults | eval host_name = if("***"=="$tkn_host$","","host") | eval append_query=if("***"=="$tkn_host$","","join type=left host user [| search `cs_wineventlog_security` EventCode IN (4624,4648) user!=*$ | eval Workstation_Name=if(EventCode==\"4648\" AND Target_Server==\"localhost\",host,Workstation_Name) | where Workstation_Name!=\"-\" | stats count as no_of_logins by user Workstation_Name | rename Workstation_Name as host ] | fillnull value=0 no_of_logins")</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
@@ -66,12 +67,12 @@
       <title>Windows Users and Privileges (EventCode=4672)</title>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode=4672 host=$tkn_host|s$ user=$tkn_user|s$
+          <query>`cs_wineventlog_security` EventCode=4672 host=$tkn_host|s$ user=$tkn_user|s$ user!=*$
 | stats values(privilege_id) as privilege_id by $tkn_host_stats$ user 
 | mvexpand privilege_id 
 | lookup windows_privilege_lookup privilege_id OUTPUT privilege as privilege_new 
 | eval Privilege=if(isnotnull(privilege_new),privilege_id." (".privilege_new.")" ,privilege_id)
-| stats values(Privilege) as Privilege by $tkn_host_stats$  user | eval count=mvcount(Privilege) | sort - count | fields - count</query>
+| stats values(Privilege) as Privilege by $tkn_host_stats$  user | eval count=mvcount(Privilege) | sort - count | fields - count | $tkn_host_stats_appedquery$ </query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
