@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.8.0
+* Version - 1.9.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,43 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.9.0 (October 2021) 
+*	Sysmon Deployment/Data-Onboarding Guide Updated. Please find more information here in the Upgrade Guide.
+*	Meraki Firewall Log CIM Compatibility:
+  * Meraki logs added props to make network flow data compatibility with CIM data-model.
+* Enhancements:
+  * Tenable/Qualys vulnerability proper coloring scheme for Device Inventory and Asset Intelligence dashboard.
+  * Tenable/Qualys – Active vulnerability count now excludes Information vulnerability.
+  * Overview Dashboard:
+    * Hide unused products’ notable events. For O365 currently not running services and Antivirus current status related notable events.
+  * Tenable Dashboard - added panel for “All Traffic on All Vulnerable Hosts”.
+  * Linux Sudo Access
+    * Released Cyences Add-on version 1.0.2.
+    * Fixed the issues with inappropriately generated alerts of Sudo access changed alert (Linux - Change in Sudo Access of Local Linux Account).
+  * AD – User Changed Alert
+    * Added Message field in the alert result and dashboard panel to show what has changed.
+  * Windows Dashboard - Windows Users and Privileges (EventCode=4672)
+    * Added no. of logins by user along-side the user privileges.
+* Issues Fixed:
+  * Splunk Admin License Usage Panel:
+    * Now license usage is shown in GB.
+  * Sysmon Deploy Audit Dashboard:
+    * Fixed: shows no hosts with data present even though there is Sysmon data present.
+  * Forensics Dashboard:
+    * Fixed the issue with missing fields in the “Notable Events” panel.
+    * Also fixed the error shown at the top-right of the panel.
+
+
+Upgrade Guide from Version 1.8.0 to 1.9.0
+•	Sysmon Deployment/Data-Onboarding Guide Updated
+o	We have improved Sysmon deployment and configuration guide by creating a simple TA that has the latest Sysmon binary, latest Sysmon configuration file, all fixed issues with scripts and inputs with all the configuration required for Cyences App.
+o	Please remove TA-sysmon-deploy and TA-microsoft-sysmon add-ons installed on your forwarders and deployment server.
+o	And follow the new guide from Data Onboarding > Sysmon to configure the Sysmon deployment and the Sysmon data collection.
+•	Cyences Add-on Upgrade
+o	Upgrade Cyences Add-on to newly released Add-on version 1.0.2. (https://splunkbase.splunk.com/app/5659/)
+
+
+
 Version 1.8.0 (September 2021) 
 * Tenable and Qualys – Correlation between Vulnerabilities and Network Telemetry 
   * Added table that shows traffic on vulnerable ports for both Qualys and Tenable. User can see those details in the Tenable and Qualys dashboard. (New panels added at the last of the panel.) 
