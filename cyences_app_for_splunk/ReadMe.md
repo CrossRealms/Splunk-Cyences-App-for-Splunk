@@ -47,8 +47,8 @@ To uninstall the app, the users can follow the below steps:
 RELEASE NOTES
 -------------
 Version 1.9.0 (October 2021) 
-*	Sysmon Deployment/Data-Onboarding Guide Updated. Please find more information here in the Upgrade Guide.
-*	Meraki Firewall Log CIM Compatibility:
+* Sysmon Deployment/Data-Onboarding Guide Updated. Please find more information here in the Upgrade Guide.
+* Meraki Firewall Log CIM Compatibility:
   * Meraki logs added props to make network flow data compatibility with CIM data-model.
 * Enhancements:
   * Tenable/Qualys vulnerability proper coloring scheme for Device Inventory and Asset Intelligence dashboard.
@@ -74,12 +74,12 @@ Version 1.9.0 (October 2021)
 
 
 Upgrade Guide from Version 1.8.0 to 1.9.0
-•	Sysmon Deployment/Data-Onboarding Guide Updated
-o	We have improved Sysmon deployment and configuration guide by creating a simple TA that has the latest Sysmon binary, latest Sysmon configuration file, all fixed issues with scripts and inputs with all the configuration required for Cyences App.
-o	Please remove TA-sysmon-deploy and TA-microsoft-sysmon add-ons installed on your forwarders and deployment server.
-o	And follow the new guide from Data Onboarding > Sysmon to configure the Sysmon deployment and the Sysmon data collection.
-•	Cyences Add-on Upgrade
-o	Upgrade Cyences Add-on to newly released Add-on version 1.0.2. (https://splunkbase.splunk.com/app/5659/)
+* Sysmon Deployment/Data-Onboarding Guide Updated
+  * We have improved Sysmon deployment and configuration guide by creating a simple TA that has the latest Sysmon binary, latest Sysmon configuration file, all fixed issues with scripts and inputs with all the configuration required for Cyences App.
+  * Please remove TA-sysmon-deploy and TA-microsoft-sysmon add-ons installed on your forwarders and deployment server.
+  * And follow the new guide from Data Onboarding > Sysmon to configure the Sysmon deployment and the Sysmon data collection.
+* Cyences Add-on Upgrade
+  * Upgrade Cyences Add-on to newly released Add-on version 1.0.2. (https://splunkbase.splunk.com/app/5659/)
 
 
 
