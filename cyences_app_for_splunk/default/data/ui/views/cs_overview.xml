@@ -329,11 +329,11 @@
       <title>Splunk Admin</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Splunk Admin")` | search NOT savedsearch_name IN ("Splunk Admin - Missing Forwarder", "Splunk Admin - Missing Data in the Index")
+          <query>| `cs_filter_savedsearches("Splunk Admin")` | search NOT savedsearch_name IN ("Splunk Admin - Missing Forwarder", "Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Data in the Index (Daily)")
 | rename "Notable Events" as Count
-| append
-[| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
+| append [| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
 | append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_internal_filter` | `cs_splunk_admin_missing_indexes_filter`| stats count | eval Name="Missing Indexes" ]
+| append [| inputlookup cs_indexes.csv | where last_event &lt; (now() - 86400) | `cs_splunk_admin_missing_indexes_internal_filter` | `cs_splunk_admin_missing_indexes_daily_filter`| stats count | eval Name="Missing Indexes (Daily)" ]
 | rename count as Count]</query>
         </search>
         <option name="count">10</option>

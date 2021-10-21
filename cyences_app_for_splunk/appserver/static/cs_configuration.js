@@ -148,6 +148,7 @@ require([
 
         /* Splunk Admin */
         { macro_name: 'cs_splunk_admin_missing_indexes_filter', input_id: 'macro_cs_splunk_admin_missing_indexes_filter', button_id: 'macro_cs_splunk_admin_missing_indexes_filter_button', msg_id: 'macro_splunk_admin_msg'},
+        { macro_name: 'cs_splunk_admin_missing_indexes_daily_filter', input_id: 'macro_cs_splunk_admin_missing_indexes_daily_filter', button_id: 'macro_cs_splunk_admin_missing_indexes_daily_filter_button', msg_id: 'macro_splunk_admin_msg'},
         { macro_name: 'cs_splunk_admin_missing_forwarders_filter', input_id: 'macro_cs_splunk_admin_missing_forwarders_filter', button_id: 'macro_cs_splunk_admin_missing_forwarders_filter_button', msg_id: 'macro_splunk_admin_msg'}
     ];
    
