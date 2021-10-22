@@ -28,15 +28,15 @@
     <panel>
       <html>
         <p>Displays information which is important for security, as well as the overall health of the Splunk environment.</p>
-        <p>Both the "Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Data in the Index (Daily)" and "Splunk Admin – Missing Forwarder" alerts have to be enabled beforehand in order to populate this dashboard.</p>
+        <p>Both the "Splunk Admin - Missing Data in the Index" and "Splunk Admin – Missing Forwarder" alerts have to be enabled beforehand in order to populate this dashboard.</p>
         <p>Both alerts are updated every hour.</p>
-        <p>Data from the Overview page might not match with the data in the Splunk Admin dashboard if any filtering has taken place on forwarders or indexers with either the cs_splunk_admin_missing_forwarders or cs_splunk_admin_missing_indexes_filter and cs_splunk_admin_missing_indexes_daily_filter macros. This dashboard displays all forwarders and indexes found in your Splunk environment.</p>
+        <p>Data from the Overview page might not match with the data in the Splunk Admin dashboard if any filtering has taken place on forwarders or indexers with either the cs_splunk_admin_missing_forwarders or cs_splunk_admin_missing_indexes_filter macros. This dashboard displays all forwarders and indexes found in your Splunk environment.</p>
         <p>To remove a forwarder or index from this list, visit the "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section found <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">here</a>.</p>
       </html>
       <table>
         <search>
           <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
-| search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Data in the Index (Daily)", "Splunk Admin - Missing Forwarder","Splunk Admin - High Disk Usage Alert","Splunk Admin - Splunk License Violation") 
+| search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index","Splunk Admin - Missing Forwarder","Splunk Admin - High Disk Usage Alert","Splunk Admin - Splunk License Violation") 
 | fields title, disabled 
 | eval data=if(disabled=1, "Alert is disabled", "Alert is enabled") 
 | rename title as label 
@@ -169,6 +169,10 @@
       </table>
       <html>
         <p>Information updated hourly basis.</p>
+        <p>It mark index as missing if there is no data in last 1 hour. To change the the time duration for any index add an entry in the lookup file cs_missing_indexes_time_duration.csv ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_missing_indexes_time_duration.csv).</p>
+        <p>For example, lansweeper collects data every 4 hours (14400 seconds) so you can create csv file with below 2 lines. Note that the max_time_duration is in seconds.</p>
+        <p>index, max_time_duration</p>
+        <p>lansweeper, 14440</p>
       </html>
     </panel>
   </row>

@@ -212,10 +212,6 @@ require([
             system_compromised_search: "| stats count by index",
             system_compromised_drilldown: 'index=$row.index$ | timechart count by host'
         },
-        "Splunk Admin - Missing Data in the Index (Daily)": {
-            system_compromised_search: "| stats count by index",
-            system_compromised_drilldown: 'index=$row.index$ | timechart count by host'
-        },
         "Splunk Admin - Missing Forwarder": {
             system_compromised_search: "| stats count, values(forwarder_type) as forwarder_type, values(version) as version, values(arch) as arch, values(os) as os by hostname",
             system_compromised_drilldown: 'index=_internal host=$row.hostname$ | timechart count'

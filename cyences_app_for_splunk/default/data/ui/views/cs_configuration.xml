@@ -918,15 +918,6 @@
             </th>
           </tr>
           <tr>
-            <th style="text-align:left">cs_splunk_admin_missing_indexes_daily_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_splunk_admin_missing_indexes_daily_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_splunk_admin_missing_indexes_daily_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
             <th style="text-align:left">cs_splunk_admin_missing_forwarders_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_splunk_admin_missing_forwarders_filter"/>
