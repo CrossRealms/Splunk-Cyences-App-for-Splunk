@@ -1,5 +1,15 @@
 <form theme="dark" stylesheet="cs_o365_reports.css" version="1.1">
   <label>Office 365</label>
+  <init>
+    <set token="tkn_show_table_authorizationpolicy"></set>
+    <set token="tkn_show_table_policy"></set>
+    <set token="tkn_show_table_role"></set>
+    <set token="tkn_show_table_application"></set>
+    <set token="tkn_show_table_group"></set>
+    <set token="tkn_show_table_user"></set>
+    <set token="tkn_show_table_serviceprincipal"></set>
+    <set token="tkn_show_table_other"></set>
+  </init>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
     <earliest>0</earliest>
@@ -310,6 +320,471 @@
 | rex field=Data "\"(?&lt;email&gt;[\w\d\.\-]+\@[\w\d\.]+)\""
 | stats count by _time, Severity, Status, email, Name, Comments, Category, AlertType, Data | fields - count
 | sort -_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AuthorizationPolicy Change/Update</title>
+      <input type="multiselect" token="tkn_command_authorizationpolicy">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="AuthorizationPolicy"
+    | rename Action as command 
+    </query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_authorizationpolicy">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_authorizationpolicy">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_authorizationpolicy$==&quot;&quot;">
+            <unset token="tkn_show_table_authorizationpolicy"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_authorizationpolicy"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_authorizationpolicy$">
+        <search>
+          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_host$ $tkn_raw_events_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_authorizationpolicy$">
+        <search>
+          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_show_table_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ $tkn_host$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Policy Change/Update</title>
+      <input type="multiselect" token="tkn_command_policy">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="Policy"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_policy">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_policy">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_policy$==&quot;&quot;">
+            <unset token="tkn_show_table_policy"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_policy"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_policy$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_raw_events_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_policy$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_show_table_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$ 
+|`cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Role Change/Update</title>
+      <input type="multiselect" token="tkn_command_role">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="Role"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_role">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_role">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_role$==&quot;&quot;">
+            <unset token="tkn_show_table_role"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_role"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_role$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_raw_events_role$ $tkn_text_search_role$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_role$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_show_table_role$ $tkn_text_search_role$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Group Change/Update</title>
+      <input type="multiselect" token="tkn_command_group">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="Group"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_group">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_group">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_group$==&quot;&quot;">
+            <unset token="tkn_show_table_group"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_group"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_group$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_group$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User Change/Update</title>
+      <input type="multiselect" token="tkn_command_user">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="User"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_user">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_user">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_user$==&quot;&quot;">
+            <unset token="tkn_show_table_user"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_user"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_user$">
+        <search>
+          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_raw_events_user$ $tkn_text_search_user$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_user$">
+        <search>
+          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_show_table_user$ $tkn_text_search_user$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ServicePrincipal Change/Update</title>
+      <input type="multiselect" token="tkn_command_serviceprincipal">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="ServicePrincipal"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_serviceprincipal">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_serviceprincipal">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_serviceprincipal$==&quot;&quot;">
+            <unset token="tkn_show_table_serviceprincipal"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_serviceprincipal"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_serviceprincipal$">
+        <search>
+          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_raw_events_serviceprincipal$ $tkn_text_search_serviceprincipal$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_serviceprincipal$">
+        <search>
+          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_show_table_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Application Change/Update</title>
+      <input type="multiselect" token="tkn_command_application">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="Application"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_application">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_application">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_application$==&quot;&quot;">
+            <unset token="tkn_show_table_application"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_application"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_application$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_raw_events_application$ $tkn_text_search_application$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_application$">
+        <search>
+          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_show_table_application$ $tkn_text_search_application$ 
+| `cs_o365_managementactivity_change_out`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Other Change/Update</title>
+      <input type="multiselect" token="tkn_command_other">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category!="Application" Category!="AuthorizationPolicy" Category!="Policy" Category!="Role" Category!="Group" Category!="User" Category!="ServicePrincipal"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_other">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_other">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_other$==&quot;&quot;">
+            <unset token="tkn_show_table_other"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_other"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_other$">
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group" command="Update User*") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_other$">
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group" command="Update User*") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
+| `cs_o365_managementactivity_change_out`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

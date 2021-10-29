@@ -73,6 +73,13 @@ require([
         { macro_name: 'cs_o365_dlp_sharepoint_filter', input_id: 'macro_cs_o365_dlp_sharepoint_filter', button_id: 'macro_cs_o365_dlp_sharepoint_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_external_users_filter', input_id: 'macro_cs_o365_external_users_filter', button_id: 'macro_cs_o365_external_users_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_service_not_operational_filter', input_id: 'macro_cs_o365_service_not_operational_filter', button_id: 'macro_cs_o365_service_not_operational_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_authorizationpolicy_change_filter', input_id: 'macro_cs_o365_authorizationpolicy_change_filter', button_id: 'macro_cs_o365_authorizationpolicy_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_policy_change_filter', input_id: 'macro_cs_o365_policy_change_filter', button_id: 'macro_cs_o365_policy_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_role_change_filter', input_id: 'macro_cs_o365_role_change_filter', button_id: 'macro_cs_o365_role_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_group_change_filter', input_id: 'macro_cs_o365_group_change_filter', button_id: 'macro_cs_o365_group_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_user_change_filter', input_id: 'macro_cs_o365_user_change_filter', button_id: 'macro_cs_o365_user_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_serviceprincipal_change_filter', input_id: 'macro_cs_o365_serviceprincipal_change_filter', button_id: 'macro_cs_o365_serviceprincipal_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_application_change_filter', input_id: 'macro_cs_o365_application_change_filter', button_id: 'macro_cs_o365_application_change_filter_button', msg_id: 'macro_o365_msg'},
 
         /* Network */
         { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_network_msg'},
