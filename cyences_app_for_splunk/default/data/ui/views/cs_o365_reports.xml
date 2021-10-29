@@ -107,7 +107,7 @@
       </single>
       <html>
         <p>DrillDown is present on the panel which will give detailed information of Security Score.</p>
-      </html>      
+      </html>
     </panel>
   </row>
   <row depends="$tkn_panel_basis_security_score_visible$">
@@ -330,7 +330,7 @@
   </row>
   <row>
     <panel>
-      <title>AuthorizationPolicy Change/Update</title>
+      <title>Azure Active Directory - AuthorizationPolicy Change/Update</title>
       <input type="multiselect" token="tkn_command_authorizationpolicy">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -368,7 +368,10 @@
       </input>
       <event depends="$tkn_raw_events_authorizationpolicy$">
         <search>
-          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_host$ $tkn_raw_events_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$</query>
+          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_host$ $tkn_raw_events_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ 
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_authorizationpolicy_change_internal_filter` 
+| `cs_o365_authorizationpolicy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -378,7 +381,10 @@
       <table depends="$tkn_show_table_authorizationpolicy$">
         <search>
           <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_show_table_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ $tkn_host$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_authorizationpolicy_change_internal_filter` 
+| `cs_o365_authorizationpolicy_change_filter` 
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -389,7 +395,7 @@
   </row>
   <row>
     <panel>
-      <title>Policy Change/Update</title>
+      <title>Azure Active Directory - Policy Change/Update</title>
       <input type="multiselect" token="tkn_command_policy">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -426,7 +432,10 @@
       </input>
       <event depends="$tkn_raw_events_policy$">
         <search>
-          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_raw_events_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$</query>
+          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_raw_events_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_policy_change_internal_filter` 
+| `cs_o365_policy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -436,7 +445,9 @@
       <table depends="$tkn_show_table_policy$">
         <search>
           <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_show_table_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$ 
-|`cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_policy_change_internal_filter` 
+| `cs_o365_policy_change_filter`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -447,7 +458,7 @@
   </row>
   <row>
     <panel>
-      <title>Role Change/Update</title>
+      <title>Azure Active Directory - Role Change/Update</title>
       <input type="multiselect" token="tkn_command_role">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -484,7 +495,10 @@
       </input>
       <event depends="$tkn_raw_events_role$">
         <search>
-          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_raw_events_role$ $tkn_text_search_role$</query>
+          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_raw_events_role$ $tkn_text_search_role$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_role_change_internal_filter` 
+| `cs_o365_role_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -494,7 +508,9 @@
       <table depends="$tkn_show_table_role$">
         <search>
           <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_show_table_role$ $tkn_text_search_role$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_role_change_internal_filter` 
+| `cs_o365_role_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -505,7 +521,7 @@
   </row>
   <row>
     <panel>
-      <title>Group Change/Update</title>
+      <title>Azure Active Directory - Group Change/Update</title>
       <input type="multiselect" token="tkn_command_group">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -542,7 +558,10 @@
       </input>
       <event depends="$tkn_raw_events_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$</query>
+          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_group_change_internal_filter` 
+| `cs_o365_group_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -552,7 +571,9 @@
       <table depends="$tkn_show_table_group$">
         <search>
           <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_group_change_internal_filter` 
+| `cs_o365_group_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -563,7 +584,7 @@
   </row>
   <row>
     <panel>
-      <title>User Change/Update</title>
+      <title>Azure Active Directory - User Change/Update</title>
       <input type="multiselect" token="tkn_command_user">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -600,7 +621,10 @@
       </input>
       <event depends="$tkn_raw_events_user$">
         <search>
-          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_raw_events_user$ $tkn_text_search_user$</query>
+          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_raw_events_user$ $tkn_text_search_user$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_user_change_internal_filter` 
+| `cs_o365_user_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -610,7 +634,9 @@
       <table depends="$tkn_show_table_user$">
         <search>
           <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_show_table_user$ $tkn_text_search_user$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_user_change_internal_filter` 
+| `cs_o365_user_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -621,7 +647,7 @@
   </row>
   <row>
     <panel>
-      <title>ServicePrincipal Change/Update</title>
+      <title>Azure Active Directory - ServicePrincipal Change/Update</title>
       <input type="multiselect" token="tkn_command_serviceprincipal">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -658,7 +684,10 @@
       </input>
       <event depends="$tkn_raw_events_serviceprincipal$">
         <search>
-          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_raw_events_serviceprincipal$ $tkn_text_search_serviceprincipal$</query>
+          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_raw_events_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_serviceprincipal_change_internal_filter` 
+| `cs_o365_serviceprincipal_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -668,7 +697,9 @@
       <table depends="$tkn_show_table_serviceprincipal$">
         <search>
           <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_show_table_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_serviceprincipal_change_internal_filter` 
+| `cs_o365_serviceprincipal_change_filter`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -679,7 +710,7 @@
   </row>
   <row>
     <panel>
-      <title>Application Change/Update</title>
+      <title>Azure Active Directory - Application Change/Update</title>
       <input type="multiselect" token="tkn_command_application">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -716,7 +747,10 @@
       </input>
       <event depends="$tkn_raw_events_application$">
         <search>
-          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_raw_events_application$ $tkn_text_search_application$</query>
+          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_raw_events_application$ $tkn_text_search_application$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_application_change_internal_filter` 
+| `cs_o365_application_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -726,7 +760,9 @@
       <table depends="$tkn_show_table_application$">
         <search>
           <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_show_table_application$ $tkn_text_search_application$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_application_change_internal_filter` 
+| `cs_o365_application_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -737,7 +773,7 @@
   </row>
   <row>
     <panel>
-      <title>Other Change/Update</title>
+      <title>Azure Active Directory - Other Change/Update</title>
       <input type="multiselect" token="tkn_command_other">
         <label>Command</label>
         <choice value="*">All</choice>
@@ -784,7 +820,7 @@
       <table depends="$tkn_show_table_other$">
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group" command="Update User*") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
-| `cs_o365_managementactivity_change_out`</query>
+| `cs_o365_managementactivity_change_out`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
