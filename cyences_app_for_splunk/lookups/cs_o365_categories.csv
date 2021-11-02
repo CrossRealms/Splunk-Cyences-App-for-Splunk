@@ -1,0 +1,94 @@
+Action,Category
+"Add OAuth2PermissionGrant.",ServicePrincipal
+"Add a deletion-marked app role assignment grant to group as part of link removal.",""
+"Add a deletion-marked app role assignment grant to user as part of link removal.",User
+"Add app role assignment grant to user.",User
+"Add app role assignment to group.",Group
+"Add app role assignment to service principal.",ServicePrincipal
+"Add application.",Application
+"Add contact.",Contact
+"Add delegated permission grant.",ServicePrincipal
+"Add device.",Device
+"Add group.",Group
+"Add member to group.",Group
+"Add member to role.",Role
+"Add owner to application.",Application
+"Add owner to group.",Group
+"Add owner to policy.",Policy
+"Add owner to service principal.",ServicePrincipal
+"Add partner to company.",Company
+"Add policy to service principal.",ServicePrincipal
+"Add policy.",Policy
+"Add registered owner to device.",Device
+"Add registered users to device.",Device
+"Add role from template.",Role
+"Add scoped member to role.",Role
+"Add service principal credentials.",ServicePrincipal
+"Add service principal.",ServicePrincipal
+"Add unverified domain.",Domain
+"Add user.",User
+"Change user license.",User
+"Change user password.",User
+"Consent to application.",ServicePrincipal
+"Create application password for user.",User
+"Create company",""
+"Create company settings",Company
+"Delete application password for user.",User
+"Delete application.",Application
+"Delete device.",Device
+"Delete group.",Group
+"Delete policy.",Policy
+"Delete user.",User
+"Device no longer compliant.",Device
+"Device no longer managed.",Device
+"Disable Strong Authentication.",User
+"Disable account.",User
+"Enable Strong Authentication.",User
+"Enable account.",User
+"Finish applying group based license to users.",Group
+"Hard Delete application.",Application
+"Hard Delete group.",Group
+"Hard Delete user.",User
+"Remove app role assignment from group.",Group
+"Remove app role assignment from user.",User
+"Remove delegated permission grant.",ServicePrincipal
+"Remove member from group.",Group
+"Remove member from role.",Role
+"Remove owner from application.",Application
+"Remove owner from group.",Group
+"Remove owner from policy.",Policy
+"Remove owner from service principal.",ServicePrincipal
+"Remove policy credentials.",Policy
+"Remove scoped member from role.",Role
+"Remove service principal credentials.",ServicePrincipal
+"Remove service principal.",ServicePrincipal
+"Remove unverified domain.",Domain
+"Remove users strong authentication phone app detail.",User
+"Reset user password.",User
+"Restore Group.",Group
+"Restore user.",User
+"Revoke consent.",ServicePrincipal
+"Set Company Information.",Company
+"Set DirSync feature.",Company
+"Set directory feature on tenant.",Company
+"Set group license.",Group
+"Set user manager.",User
+"Start applying group based license to users.",Group
+"Update StsRefreshTokenValidFrom Timestamp.",User
+"Update application – Certificates and secrets management ",Application
+"Update application.",Application
+"Update authorization policy.",AuthorizationPolicy
+"Update company",Company
+"Update company settings",Company
+"Update contact.",Contact
+"Update device.",Device
+"Update domain.",Domain
+"Update external secrets",ServicePrincipal
+"Update external secrets",User
+"Update group.",Group
+"Update policy.",Policy
+"Update role.",Role
+"Update service principal.",ServicePrincipal
+"Update user.",User
+"User consent disabled.",Role
+"Verify domain.",Domain
