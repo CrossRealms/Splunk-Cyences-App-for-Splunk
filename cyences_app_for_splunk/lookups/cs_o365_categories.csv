@@ -84,7 +84,7 @@ Action,Category
 "Update device.",Device
 "Update domain.",Domain
 "Update external secrets",ServicePrincipal
-"Update external secrets",User,1
+"Update external secrets",User
 "Update group.",Group
 "Update policy.",Policy
 "Update role.",Role
