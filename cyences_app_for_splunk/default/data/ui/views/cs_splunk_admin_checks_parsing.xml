@@ -1,0 +1,307 @@
+<form theme="dark">
+  <label>Splunk Admin - Checks - Parsing and Timestamp</label>
+  <fieldset submitButton="false">
+    <input type="time" token="splunk_issues_timerange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Data parsing error</title>
+      <table>
+        <search>
+          <query>index=_internal (TERM(WARN) TERM(CsvLineBreaker)) OR (TERM("ERROR") (TERM("JsonLineBreaker") OR TERM("LineBreakingProcessor") OR TERM("AggregatorMiningProcessor")) NOT "WARN  AggregatorMiningProcessor") sourcetype=splunkd (source=*splunkd.log)
+| rex "(?s)^(\S+\s+){3}(?P&lt;error&gt;.*)"
+| stats count, earliest(_time) as earliest_time, latest(_time) AS latest_time, values(host) as hosts latest(_raw) as sample_raw by error 
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>LineBreakingProcessor ERROR's are usually related to misconfiguration/errors in the LINE_BREAKER= setup in props.conf and are therefore an issue. This version of the Aggregator error often relates to date time config files.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Parsing - Very large multiline events (using SHOULD_LINEMERGE=true)</title>
+      <table>
+        <search>
+          <query>| tstats max(linecount) AS maxLineCount, earliest(_time) as earliest_time, latest(_time) AS latest_time, values(host) as hosts, count AS occurrenceCount where index=*, linecount&gt;250 groupby sourcetype
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count
+| join [| rest /servicesNS/-/-/configs/conf-props
+| fields title SHOULD_LINEMERGE
+| search SHOULD_LINEMERGE = 1
+| dedup title | rename title AS sourcetype]
+| where maxLineCount &gt; 260 AND occurrenceCount&gt;30
+| eval hostList=if(mvcount(hosts)&gt;1,mvjoin(hosts," OR host="),hosts)
+| eval hostList="host=" . hostList
+| eval investigationQuery="index=* sourcetype=" . sourcetype . " " . hostList . " linecount&gt;250 earliest=" . firstSeen . " latest=" . mostRecent
+| sort - occurrenceCount, maxLineCount
+| table sourcetype, earliest_time, latest_time, maxLineCount, occurrenceCount, hosts</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>This search detects sourcetypes with greater than 250 lines which have SHOULD_LINEMERGE set to true, this might cause blocking in the indexer aggregation queue if there are a large number of events with hundreds of lines or very large events such as &gt;5000 lines of data. This alert is designed to give hints about where SHOULD_LINEMERGE=false / LINE_BREAKER=... might be more appropriate.</p>
+        <p>Note that the REST API will return every instance of sourcetype, it's not quite as accurate a btool so this can generate false alarms if there are multiple props.conf definitions of a sourcetype.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Parsing - Broken Events</title>
+      <table>
+        <search>
+          <query>index=_internal "AggregatorMiningProcessor - Breaking event because limit of" sourcetype=splunkd (source=*splunkd.log)
+| rex "Breaking event because limit of (?P&lt;curlimit&gt;\d+)" 
+| stats values(curlimit) as curlimit, count, earliest(_time) as earliest_time, latest(_time) AS latest_time, values(host) as hosts, latest(_raw) as sample_raw by data_sourcetype, data_host 
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count
+| eval longerThan=curlimit-1
+| eval invesLatest = if(mostRecent==firstSeen,mostRecent+1,mostRecent)
+| rename data_sourcetype AS sourcetype, data_host AS host
+| eval investigationQuery="index=* host=" . host . " sourcetype=\"" . sourcetype . "\" linecount&gt;" . longerThan . " earliest=" . firstSeen . " latest=" . invesLatest
+| fields - firstSeen, longerThan, invesLatest</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The event that came in was greater than the maximum number of lines that were configured, therefore it was broken into multiple events...</p>
+        <p>If running Splunk 7 or newer than refer to the monitoring console Indexing -&gt; Inputs -&gt; Data Quality</p>
+        <p>If no results are found prepend the earliest=/latest= with _index_ (eg _index_earliest=...) and expand the timeframe searched over, as the parsed timestamps from the data does not have to exactly match the time the warnings appeared...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Parsing - Truncated Logs</title>
+      <table>
+        <search>
+          <query>index=_internal "Truncating line because limit of" sourcetype=splunkd (source=*splunkd.log)
+| rex "Truncating line because limit of (?P&lt;curlimit&gt;\d+) bytes.*with a line length &gt;= (?P&lt;approxlinelength&gt;\S+)" 
+| rex field=data_host "(?P&lt;data_host&gt;[^\.]+)"
+| eval data_host=data_host . "*"
+| stats count, earliest(_time) as earliest_time, latest(_time) AS latest_time, values(host) as hosts, values(curlimit) as curlimit, avg(approxlinelength) AS avgApproxLineLength, max(approxlinelength) AS maxApproxLineLength, values(data_host) AS data_hosts,  latest(_raw) as sample_raw by data_sourcetype
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| rename data_sourcetype AS sourcetype
+| eval avgApproxLineLength = round(avgApproxLineLength)
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The line was truncated due to length, the TRUNCATE setting may need tweaking (or it may be just bad data coming in).</p>
+        <p>If running Splunk 7 or newer than refer to the Monitoring Console, Indexing -&gt; Inputs -&gt; Data Quality</p>
+        <p>If you are in a (very) performance sensitive environment you might want to remove the rex/eval lines for the data_host field and let the admin update the inves query manually.</p>
+        <p>Find examples where the truncation limit has been reached. The earliest/latest time is based on the warning messages in the Splunk logs, they may need customisation!</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Failures To Parse Timestamp Correctly</title>
+      <table>
+        <search>
+          <query>index=_internal source=*splunkd.log sourcetype=splunkd (("Defaulting to timestamp of previous event" "Failed to parse timestamp") OR "Breaking event because limit of " OR "outside of the acceptable time window")
+| bin _time span=1m 
+| eval host=data_host, source=data_source, sourcetype=data_sourcetype 
+| rex field=_raw "source::(?P&lt;source&gt;[^|]+)\\|host::(?P&lt;host&gt;[^|]+)\\|(?P&lt;sourcetype&gt;[^|]+)" 
+| eventstats count(eval(isnotnull(data_host))) AS hasBrokenEventOrTuncatedLine, count(eval(searchmatch("outside of the acceptable time window"))) AS outsideTimewindow by _time, host, source, sourcetype 
+| where (((hasBrokenEventOrTuncatedLine == 0) AND (true() XOR searchmatch("(acceptable of outside the time window)"))) AND isnull(data_host)) 
+| rex field=_raw "Defaulting to timestamp of previous event \\((?P&lt;previousTimeStamp&gt;[^)]+)" 
+| eval previousTimeStamp=strptime(previousTimeStamp,"%a %b %d %H:%M:%S %Y") 
+| stats count, min(_time) AS firstSeen, max(_time) AS mostRecent, first(previousTimeStamp) AS recentExample, sum(outsideTimewindow) AS outsideTimewindow by host, sourcetype, source 
+| where (count &gt; 0) 
+| stats sum(count) AS count, min(firstSeen) AS firstSeen, max(mostRecent) AS mostRecent, first(recentExample) AS recentExample, values(source) AS sourceList, sum(outsideTimewindow) AS outsideTimewindow by host, sourcetype
+| eval invesEnd=(recentExample + 1), invesDataSource=sourceList, invesDataSource=if((mvcount(invesDataSource) &gt; 1),mvjoin(invesDataSource,"\" OR source=\""),invesDataSource), invesDataSource=(("source=\"" + invesDataSource) + "\""), invesDataSource=replace(invesDataSource,"\\\\","\\\\\\\\"), investigationQuery=(((((((((("`comment(\"The investigation query may find zero data if the data was sent to the null queue by a transforms.conf as the time parsing occurs before the transforms occur. If this source/sourcetype has a null queue you may need to exclude it from this alert\")` `comment(\"Note that the host= can be inaccurate if host overrides are in use in transforms.conf, if this query finds no results remove host=...\")` index=* host=" . host) . " sourcetype=\"") . sourcetype) . "\" ") . invesDataSource) . " earliest=") . recentExample) . " latest=") . invesEnd) . " | eval indextime=strftime(_indextime, \"%+\")"), mostRecent=strftime(mostRecent,"%+"), firstSeen=strftime(firstSeen,"%+"), outsideAcceptableTimeWindow=if((outsideTimewindow != 0),"Timestamp parsing failed due to been outside the acceptable time window","No") 
+| fields - recentExample, invesEnd, invesDataSource, outsideTimewindow 
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>Excluding breaking issues</p>
+        <p>Timestamp parsing has failed, and it doesn't appear to be related to the event been broken due to having too many lines, that is a separate alert that may trigger a timestamp parsing issue (excluded from this alert as that issue needs to be resolved first).</p>
+        <p>Please note that you may see this particular warning on data that is sent to the nullQueue using a transforms.conf. Obviously you won't see this in the index but you will see the warning because the time parsing occurs before the transforms.conf occurs.</p>
+        <p>This alert now checks for at least 2 failures, and header entries can often trigger 2 entries in the log files about timestamp parsing failures.</p>
+        <p>Finally one strange edge case is a newline inserted into the log file (by itself with no content before/afterward) can trigger the warning but nothing will get indexed, multiline_event_extra_waittime, time_before_close and EVENT_BREAKER can resolve this edge case.</p>
+        <p>The investigation query may find zero data if the data was sent to the null queue by a transforms.conf as the time parsing occurs before the transforms occur. If this source/sourcetype has a null queue you may need to exclude it from this alert.</p>
+        <p>Note that the host= can be inaccurate if host overrides are in use in transforms.conf, if this query finds no results remove host=...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Future Dated Events</title>
+      <table>
+        <search>
+          <query>index=* _index_earliest=$splunk_issues_timerange.earliest$ _index_latest=$splunk_issues_timerange.latest$ | where _time&gt;_indextime+600 | eval time_in_future=_time-_indextime 
+| stats count, avg(time_in_future) as avg_time_in_future, max(time_in_future) as max_time_in_future by index, sourcetype, host 
+| eval avg_time_in_future_hours=round(avg_time_in_future/3600, 2), max_time_in_future_hours=round(max_time_in_future/3600, 2) | fields - avg_time_in_future, max_time_in_future
+| sort - avg_time_in_future_hours</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Data should not appear from the future...this alert finds that data so it can be investigated.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Old data appearing in Splunk indexes</title>
+      <table>
+        <search>
+          <query>| tstats count, max(_indextime) AS mostRecentlyIndexed, min(_time) AS earliest_time, max(_time) AS latest_time 
+    where _index_earliest=$splunk_issues_timerange.earliest$ _index_latest=$splunk_issues_timerange.latest$ earliest=0 latest=-30d@d
+    groupby index, sourcetype, source, host
+| sort earliest_time
+| `cs_human_readable_time_format(mostRecentlyIndexed)`
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Find data that appears to be logged in the past, this may indicate poor timestamp parsing (or we're just ingesting really old data).</p>
+        <p>Any data timestamped older than 30 days.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Time format has changed multiple log types in one sourcetype</title>
+      <table>
+        <search>
+          <query>index=_internal "DateParserVerbose - Accepted time format has changed" sourcetype=splunkd (source=*splunkd.log)
+| rex "source(?:=|::)(?&lt;source&gt;[^\|]+)\|host(?:=|::)(?&lt;host&gt;[^\|]+)\|(?&lt;sourcetype&gt;[^\|]+)"
+| eval message=coalesce(message,event_message)
+| stats count, min(_time) AS earliest_time, max(_time) AS latest_time by host, source, sourcetype, message
+| eval invesMaxTime=if(earliest_time=latest_time,latest_time+1,latest_time)
+| eval invesDataSource = replace(source, "\\\\", "\\\\\\\\")
+| eval potentialInvestigationQuery="sourcetype=\"" . sourcetype . "\" source=\"" . invesDataSource . "\" host=" . host . " earliest=" . earliest_time . " latest=" . invesMaxTime . " | eval start=substr(_raw, 0, 30) | cluster field=start"
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| fields - invesMaxTime, invesDataSource
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>This search detects when the time format has changed within the files 1 or more times, the time format per sourcetype should be consistent.</p>
+        <p>If no results are found, prepend the earliest=/latest= with _index_ (eg _index_earliest=...) and expand the timeframe searched over, as the parsed timestamps from the data does not have to exactly match the time the warnings appeared...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Timestamp parsing issues (combined)</title>
+      <table>
+        <search>
+          <query>index=_internal DateParserVerbose sourcetype=splunkd source=*splunkd.log
+| rex "source(?:=|::)(?&lt;Source&gt;[^\|]+)\|host(?:=|::)(?&lt;Host&gt;[^\|]+)\|(?&lt;Sourcetype&gt;[^\|]+)"
+| rex "(?&lt;msgs_suppressed&gt;\d+) similar messages suppressed."
+| eval Issue = case(like(_raw, "%too far away from the previous event's time%"), "Variability in date/event timestamp", like(_raw, "%suspiciously far away from the previous event's time%"), "Variability in date/event timestamp", like(_raw, "%outside of the acceptable time window%"), "Timestamp is too far outside acceptable time window", like(_raw, "%Failed to parse timestamp%"), "Reverting to last known good timestamp", like(_raw, "%Accepted time format has changed%"), "Attempting to learn new timestamp format", like(_raw, "%The same timestamp has been used%"), "More than 100k+ events have the same timestamp", 1=1, "fixme")
+| stats sum(msgs_suppressed) as msgs_suppressed, dc(Host) as Host_count, dc(Source) as Source_count, count, earliest(_time) as earliest_time, latest(_time) AS latest_time, latest(_raw) as sample_raw by Sourcetype, Issue
+| stats list(Issue) as Issues, list(msgs_suppressed) as msgs_suppressed, list(Host_count) as Host_count, list(Source_count) as Source_count, count, min(earliest_time) as earliest_time,  max(latest_time) AS latest_time, list(sample_raw) as sample_raw by Sourcetype
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>As found on https://runals.blogspot.com/2014/05/splunk-dateparserverbose-logs-part-2.html with minor modifications. Further queries available in the app https://splunkbase.splunk.com/app/1848/.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Too many events with the same timestamp</title>
+      <table>
+        <search>
+          <query>index=_internal "Too many events" source=*splunkd.log
+| rex "Too many events \((?P&lt;number&gt;[0-9]+.)"
+| eval message=coalesce(message,event_message)
+| rename data_host AS host, data_sourcetype AS sourcetype, data_source AS source
+| stats values(number) as number, values(message) as messages, count, earliest(_time) as earliest_time, latest(_time) AS latest_time, latest(_raw) as sample_raw by sourcetype, source, host
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>Too many events with the same timestamp have been found. This may be a sign of poor quality data, or a problematic log file.</p>
+        <p>You will need to set the time settings manually as the log does not provide the parsed time, only the indexed time the issue occurred at...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Timestamp - Valid Timestamp Invalid Parsed Time</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd (source=*splunkd.log) "outside of the acceptable time window. If this timestamp is correct, consider adjusting" 
+OR "is too far away from the previous event's time" 
+OR "is suspiciously far away from the previous event's time" 
+| rex "source::(?P&lt;source&gt;[^|]+)\|host::(?P&lt;host&gt;[^|]+)\|(?P&lt;sourcetype&gt;[^|]+)"
+| stats count, earliest(_time) as earliest_time, latest(_time) AS latest_time, latest(_raw) as sample_raw by sourcetype, source, host
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The timestamp parsing did run but the timestamp found did not match previous events so the time parsing may need a review.</p>
+        <p>The goal of this part of the search was to obtain the messages that are relating to this particular host/source/sourcetype, however since the message includes a time we cannot uses values(message) without getting a huge number of values, therefore we use cluster to obtain the unique values. Since we want the original start/end times we use labelonly=true</p>
+        <p>While 'A possible timestamp match (...) is outside of the acceptable time window' and 'Time parsed (...) is too far away from the previous event's time', result in the current indexing time been used, the 'Accepted time (...) is suspiciously far away from the previous event's time' is accepted and therefore we need to expand the investigation query time to include this time range as well!</p>
+        <p>Now that we have the first message for each labelled cluster, we now take all relevant message per host/source/sourcetype.</p>
+        <p>Please note that this query may need to be narrowed down further before running it, this is an example only...</p>
+      </html>
+    </panel>
+  </row>
+</form>

@@ -32,6 +32,14 @@
   <collection label="Settings">
     <view name="cs_configuration" />
     <view name="cs_splunk_admin_reports" />
+    <collection label="Splunk Admin Checks">
+      <view name="cs_splunk_admin_checks_general" />
+      <view name="cs_splunk_admin_checks_forwarders" />
+      <view name="cs_splunk_admin_checks_parsing" />
+      <view name="cs_splunk_admin_checks_indexer" />
+      <view name="cs_splunk_admin_checks_search_head" />
+      <view name="cs_splunk_admin_checks_searches" />
+    </collection>
     <view name="cs_sysmon_deploy_audit" />
     <view name="cs_o365_defender_atp_audit" />
     <view name="cs_all_alerts" />

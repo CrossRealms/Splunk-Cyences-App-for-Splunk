@@ -1,0 +1,178 @@
+<form theme="dark">
+  <label>Splunk Admin - Checks - Search Head</label>
+  <fieldset submitButton="false">
+    <input type="time" token="splunk_issues_timerange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Search Head - DataModel errors in splunkd</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log "ERROR DataModelObject" OR "ERROR DataModel" NOT "because KV Store initialization has not completed yet" NOT "KV Store is shutting down"
+| rex "(?s)^(\S+\s+){3}(?P&lt;error&gt;.*)"
+| stats count, latest(_time) AS mostrecent, earliest(_time) AS firstseen, values(host) AS hosts by error
+| eval mostrecent=strftime(mostrecent, "%+"), firstseen=strftime(firstseen, "%+")
+| table count, mostrecent, firstseen, hosts, error</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p/>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search Head - Detect MongoDB Errors</title>
+      <table>
+        <search>
+          <query>index=_internal source=*mongod.log (" E " OR " F " OR " W ") NOT "SSL: error"
+| eventstats max(_time) AS mostRecent, min(_time) AS firstSeen by host
+| bin _time span=10m 
+| stats values(_raw) AS logMessages, max(mostRecent) AS mostRecent, min(firstSeen) AS firstSeen by _time, host 
+| append 
+    [ | tstats count where index=_internal host=* source=*mongod.log by host, _time span=5m 
+    | timechart limit=0 partial=f span=5m sum(count) AS count by host 
+    | fillnull 
+    | untable _time, host, count 
+    | stats max(_time) AS mostRecent, min(_time) AS firstSeen, last(count) AS lastCount by host 
+    | where lastCount=0 
+    | eval logMessages="Zero log entries found at this time, mongod might not be running, please investigate" 
+    | fields - lastCount] 
+| `cs_human_readable_time_format(mostRecent)`
+| `cs_human_readable_time_format(firstSeen)`
+| fields host, firstSeen, mostRecent, logMessages</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The main goal of this alert errors which might not appear in splunkd.log but are critical to keeping the kvstore running on the search heads. Please check the mongod.log file for further information, the additional count field is simply determining that mongo is still logging...</p>
+        <p>Attempt to find errors in the mongod log and make sure the errors do not relate to shutdown events in the search head cluster. Since this does will ignore any events when either cluster shutsdown it might not be sensitive enough for some use cases...</p>
+        <p>One final symptom that appears when mongodb is dead is the logging just stops, zero data, however this proved to be tricky in Splunk so the below query uses a few tricks to ensure the data will show zero values even if the server stops reporting. timechart was recommended by splunkanswers as it creates a timebucket with null values if no data is found...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search Head - Detect searches hitting corrupt buckets</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunk_search_messages "corrupt" OR "corrupted"
+| rex ",\"(\[[^\]]+\]\[[^\]]+\]: )?\[(?P&lt;peer&gt;[^\]]+)"
+| rex field=path "'(?P&lt;diskloc&gt;[^\.]+)"
+| fillnull value="Unknown" diskloc peer bucket 
+| stats values(host) AS reportingHost, max(_time) AS mostRecent, first(_raw) AS raw by bucket, diskloc, peer
+| sort - mostRecent
+| eval mostRecent=strftime(mostRecent, "%+")
+| table mostRecent, diskloc, peer, reportingHost, bucket, raw</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Note this requires further testing due to switch to splunk_search_messages.</p>
+        <p>Attempt to find corrupt buckets appearing in the search heads dispatch/info.csv files, this will show that a user is seeing the "data may be corrupt" messages.</p>
+        <p>In a clustered environment this should auto-repair via the cluster master fixup list, messages such as "06-12-2018 07:31:47.160 +0000 INFO  ProcessTracker - (child_407__Fsck)  Fsck - (entire bucket) Rebuild for bucket='/opt/splunk/var/lib/splunk/indexname/db/db_1528466340_1520517600_38_A25ECA32-B33E-4469-8C76-22190FDCC8CB' took 86.26 seconds." should appear in the splunkd logs. In a non-clustered environment refer to the Splunk fsck documentation. You may also wish to try IndexerLevel - Corrupt buckets via DBInspect.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search Head - Indexer Peer Connection Failure</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunk:searchlog source!="*rsa_scheduler_*" ("error" "for peer") OR "Error connecting" OR "Got status" 
+| rex "for peer (?P&lt;peer&gt;[^\.]+)"
+| rex "ERROR\s+\S+\s+-\s+(sid:[^ ]+)?(?P&lt;message&gt;.*)"
+| bin _time span=1m
+| eval msgpeer = host + source + peer + _time
+| rex field=host "(?P&lt;host&gt;[^\.]+)"
+| stats dc(msgpeer) AS count, dc(eval(searchmatch("source=*scheduler_*"))) AS schedulerCount, values(host) AS reportingHost, values(message) AS message by peer, _time
+| eval errorFrom="search.log"
+| append
+    [ search index=_internal sourcetype=splunk_search_messages orig_component="DispatchThread" "Connection failed" OR "Unable to determine response" OR "Unable to distribute to peer"
+    | rex ",\"(\[[^\]]+\]\[[^\]]+\]: )?\[(?P&lt;peer&gt;[^\.\]]+).*?\] (?P&lt;message&gt;[^\"]+)"
+    | rex "Unable to distribute to peer named .* (?P&lt;message&gt;because.*?)\","
+    | rex field=uri "(?P&lt;IP&gt;[^:]+)"
+    | lookup dnslookup clientip as IP OUTPUT clienthost AS peer
+    | rex field=peer "(?P&lt;peer&gt;[^\.]+)"
+    | bin _time span=1m
+    | eval msgpeer = host + source + peer + _time
+    | rex field=host "(?P&lt;host&gt;[^\.]+)"
+    | stats dc(msgpeer) AS count, dc(eval(searchmatch("source=*scheduler_*"))) AS schedulerCount, values(host) AS reportingHost, values(message) AS message by peer, _time
+    | eval errorFrom="splunk_search_messages"
+        ]
+| stats sum(count) AS count, sum(schedulerCount) AS schedulerCount, values(reportingHost) AS reportingHost, values(message) AS message, values(errorFrom) AS errorFrom by peer, _time
+| eval countAndSchedulerCount = count . " / " . schedulerCount
+| table _time, peer, reportingHost, countAndSchedulerCount, message, errorFrom
+| sort - _time</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Further testing required. Detect failures from the search.log advising that the peer was unable to send a response, for example This can be caused by the peer unexpectedly closing or resetting the connection. Search results might be incomplete!...This requires the search.log to be indexed refer to props.conf in this app.</p>
+        <p>info.csv often reports failures as well but sometimes these are not in search.log and vice-versa. Unable to distribute to peer/Connection failed/Unable to determine response all appear to be some kind of failure. Attempting to use the [search] log_search_messages = true in the limits.conf file and then use the search_messages.log file to find what would normally appear in info.csv in the dispatch directory per-search...</p>
+        <p>Ignoring "HTTP error status message from" OR "HTTP client error" as they tend to appear when one of the previous examples is there...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search Head - KVStore Or Conf Replication Issues Are Occurring</title>
+      <table>
+        <search>
+          <query>index=_internal "Local KV Store has replication issues" OR "ConfReplicationThread - Error pulling configurations from captain" OR "ConfReplicationThread - The search head cluster captain * is disconnected; skipping configuration replication" OR ("SHCMasterHTTPProxy - Low Level http request " "socket_error") sourcetype=splunkd (source=*splunkd.log) 
+| cluster showcount=true 
+| eval message=coalesce(message,event_message)
+| fields _time, host, _raw, message, cluster_count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Detect search head issues related to extended search head downtime, in particular ConfReplication issues or KV store replication issues.</p>
+        <p>KVStore - http://docs.splunk.com/Documentation/Splunk/latest/Admin/ResyncKVstore , ConfReplication - http://docs.splunk.com/Documentation/Splunk/latest/DistSearch/HowconfrepoworksinSHC#Replication_synchronization_issues.</p>
+        <p>The search head cluster captain is disconnected can relate to a SH cluster restart *or* if outside a rolling restart this may require a restart of the problematic search head...</p>
+        <p>In addition to this you could also look for "Error pushing configurations to captain" consecutiveErrors&gt;1 , this would also hint at a potential issue although a small number of consecutive errors appears to be normal...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search Head - Long filenames may be causing issues</title>
+      <table>
+        <search>
+          <query>index=_internal ("ArchiveFile - Failed to write archive header for" "Pathname too long") OR ("ERROR Archiver - Unable to add entry") (source=*splunkd.log) sourcetype=splunkd 
+| cluster showcount=true
+| fields _time, _raw, cluster_count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Detect the issue where someone has created a file longer than 100 characters and the cluster is having issues with replication. The 100 character issue was confirmed in Splunk 6.5.2 during a support case.</p>
+      </html>
+    </panel>
+  </row>
+</form>

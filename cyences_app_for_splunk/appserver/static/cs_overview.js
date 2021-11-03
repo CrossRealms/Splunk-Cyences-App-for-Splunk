@@ -22,7 +22,6 @@ require([
         { id: 'crowdstrike_reports_link', url: baseURL.concat('cs_crowdstrike_reports')},
         { id: 'vpn_reports_link', url: baseURL.concat('cs_vpn_reports')},
         { id: 'auth_reports_link', url: baseURL.concat('cs_authentication_reports')},
-        { id: 'admin_reports_link', url: baseURL.concat('cs_splunk_admin_reports')},
         { id: 'malicious_reports_link', url: baseURL.concat('cs_malicious_ip_list')},
         { id: 'device_inventory_table_link', url: baseURL.concat('cs_device_inventory_table')},
         { id: 'lansweeper_link', url: baseURL.concat('cs_lansweeper')},
