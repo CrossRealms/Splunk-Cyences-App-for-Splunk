@@ -36,7 +36,7 @@
       <table>
         <search>
           <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
-| search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index", "Splunk Admin - Missing Forwarder","Splunk Admin - High Disk Usage Alert","Splunk Admin - Splunk License Violation") 
+| search "eai:acl.app"="cyences_app_for_splunk" title IN ("Splunk Admin - Missing Data in the Index","Splunk Admin - Missing Forwarder","Splunk Admin - High Disk Usage Alert","Splunk Admin - Splunk License Violation") 
 | fields title, disabled 
 | eval data=if(disabled=1, "Alert is disabled", "Alert is enabled") 
 | rename title as label 
@@ -169,6 +169,10 @@
       </table>
       <html>
         <p>Information updated hourly basis.</p>
+        <p>It mark index as missing if there is no data in last 1 hour. To change the the time duration for any index add an entry in the lookup file cs_missing_indexes_time_duration.csv ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_missing_indexes_time_duration.csv).</p>
+        <p>For example, lansweeper collects data every 4 hours (14400 seconds) so you can create csv file with below 2 lines. Note that the max_time_duration is in seconds.</p>
+        <p>index, max_time_duration</p>
+        <p>lansweeper, 14440</p>
       </html>
     </panel>
   </row>
