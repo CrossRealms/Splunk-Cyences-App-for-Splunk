@@ -1,4 +1,4 @@
-<form theme="dark">
+<form theme="dark" version="1.1">
   <label>Splunk Admin - Checks - Indexer</label>
   <fieldset submitButton="false">
     <input type="time" token="splunk_issues_timerange">
