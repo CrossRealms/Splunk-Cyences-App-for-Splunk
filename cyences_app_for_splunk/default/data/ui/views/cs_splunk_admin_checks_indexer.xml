@@ -1,0 +1,470 @@
+<form theme="dark" version="1.1">
+  <label>Splunk Admin - Checks - Indexer</label>
+  <fieldset submitButton="false">
+    <input type="time" token="splunk_issues_timerange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Unclean Shutdown - Fsck</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log "At restart after an unclean shutdown found bucket path" OR ("finished moving hot to warm" caller=init_roll) OR "OnlineFsck - Scheduled repair fsck* kind='entire bucket'"
+| rex field=path "(?P&lt;pathWithoutHot&gt;.*)(/|\\\\)\S+"
+| join type=left pathWithoutHot 
+    [| rest /services/data/indexes 
+    | fields homePath_expanded, title 
+    | rename homePath_expanded AS pathWithoutHot, title AS idxFromREST]
+| bin _time span=5m
+| eval idx=coalesce(idxFromREST, idx)
+| stats count(eval(searchmatch("unclean shutdown"))) AS uncleanCount, count(eval(searchmatch("Scheduled repair fsck"))) AS scheduledRepairCount, count(eval(searchmatch("finished moving hot to warm"))) AS hotToWarmCount, max(mostRecent) AS mostRecent by idx, host, _time
+| where uncleanCount&gt;0
+| eval mostRecent=strftime(mostRecent, "%+")</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>Attempt to detect if an indexer crash resulted in corrupt buckets, if so alert the admin so they are aware...</p>
+        <p>The indexer is likely going to print the line \"WARN  IndexerService - Indexer was started dirty: splunkd startup may take longer than usual; searches may not be accurate until background fsck completes.\", however we also want to know if buckets were corrupted. In a clustered environment the corrupt buckets should be added to the cluster master fixup list and repaired online, if a non-clustered environment refer to the Splunk fsck documentation. Note that I'm unable to find a log message to advise when the OnlineFsck completes in splunkd.log. You may also wish to refer to alert IndexerLevel - Corrupt buckets via DBInspect</p>
+        <p>FYI fixup lines in the splunkd log file may look like "06-12-2018 07:31:47.160 +0000 INFO  ProcessTracker - (child_407__Fsck)  Fsck - (entire bucket) Rebuild for bucket='/opt/splunk/var/lib/splunk/indexname/db/db_1528466340_1520517600_38_A25ECA32-B33E-4469-8C76-22190FDCC8CB' took 86.26 seconds."</p>
+        <p>#The message "At restart after an unclean shutdown found bucket path..." results in buckets being rolled/repaired. Users may see errors when running searches, such as "Failed to read size=2 event(s) from rawdata in bucket=...Rawdata may be corrupt, see search.log. Results may be incomplete!" (OR) "idx=_internal Could not read event: cd=(n/a). Results may be incomplete ! (logging only the first such error; enable DEBUG to see the rest)." This appears to resolve itself in Splunk 7+ when the fsck's complete. I have not determined how to find a completion time...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Replication queue issues to some peers</title>
+      <table>
+        <search>
+          <query>index=_internal "replication queue for " "full" sourcetype=splunkd (source=*splunkd.log)
+| rename peer AS guid 
+| join guid [| rest /services/search/distributed/peers splunk_server=local | fields guid peerName]
+| bin _time span=10m 
+| stats count by peerName, _time 
+| where count&gt;15</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>If the replication queue is full, then depending on the replication factor this can stop / slow indexing. Note this alert has been set to find many results to remove false alarms...</p>
+        <p>Unfortunately this setting is not tunable, at the time of writing (7.0.0) the queue size is 20. If the "has room now" appears shortly afterward this is not an issue.</p>
+        <p>More than 15 times.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Input - Refused TCP Connection</title>
+      <table>
+        <search>
+          <query>index=_internal TcpOutputFd "connection refused" sourcetype=splunkd (source=*splunkd.log) 
+| rex "Connect to (?P&lt;clientip&gt;[^:]+)" 
+| stats count by host, clientip
+| where count&gt;5
+| eval clientip = clientip." (".count.")"
+| stats values(clientip) as clientip by host</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The indexer not accepting TCP connections is either a serious performance issue or downtime.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Input - S2SFileReceiver Error</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd sourcetype=splunkd source=*splunkd.log "ERROR TcpInputProc - event=replicationData" OR "ERROR S2SFileReceiver - error alerting slave about" OR "ERROR S2SFileReceiver - error adding new summary replica to slave"
+| rex "(?P&lt;error&gt;ERROR [^-]+- [^=]+=)(?P&lt;postEquals&gt;[^ ]+) (?P&lt;postEquals2&gt;[^=]+=[^ ]+)"
+| rex field=err "(?P&lt;type&gt;type=.*)"
+| eval error=if(postEquals=="onFileAborted" OR postEquals=="replicationData",error . " " . postEquals . " " . postEquals2,error . " " . type)
+| stats count, earliest(_time) as earliest_time, latest(_time) AS latest_time, latest(_raw) as sample_raw by host, error
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>An attempt to detect excessive numbers of S2SFileReceiver / TcpInputProc failures on the indexing tier, these may indicate an issue. We are only looking for errors about replication data.</p>
+        <p>An indexer peer that was constantly logging "S2SFileReceiver...type=data_model already exists!" / "S2SFileReceiver...type=report_acceleration already exists!" has been fixed by restart (once so far)</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Input - Forwarders and Throughput</title>
+      <chart>
+        <search>
+          <query>index=_internal sourcetype=splunkd group=tcpin_connections (connectionType=cooked OR connectionType=cookedSSL) fwdType=* guid=* 
+| timechart minspan=1h dc(guid) as forwarder_count, per_second(kb) as tcp_KBps
+| rename forwarder_count as "Forwarder Count", tcp_KBps as "Throughput (KB/s)"</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"Forwarder Count"</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Queue - IndexWriter pause duration</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log TERM(INFO) (TERM(IndexWriter) TERM(paused)) OR TERM("Released") 
+| eval state=if(searchmatch("Released indexing throttle"),"stopped","started") 
+| sort 0 _time 
+| streamstats current=f global=f window=1 values(state) AS prev_state, latest(_time) AS start by host 
+| streamstats current=f global=f window=1 values(bucket) AS bucket by host, idx 
+| search state="stopped" AND prev_state="started" 
+| eval duration=_time-start 
+| table host, idx, duration, _time, start, bucket 
+| eval start=strftime(start, "%Y-%m-%d %H:%M:%S.%3N")</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p/>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Queue - Queues May Have Issues</title>
+      <table>
+        <search>
+          <query>index=_internal source=*metrics.log sourcetype=splunkd group=queue 
+| eval ingest_pipe = if(isnotnull(ingest_pipe), ingest_pipe, "none") | search ingest_pipe=*
+| eval name=case(name=="aggqueue","2 - Aggregation Queue",
+ name=="indexqueue", "4 - Indexing Queue",
+ name=="parsingqueue", "1 - Parsing Queue",
+ name=="typingqueue", "3 - Typing Queue",
+ name=="splunktcpin", "0 - TCP In Queue",
+ name=="tcpin_cooked_pqueue", "0 - TCP In Queue") 
+| eval max=if(isnotnull(max_size_kb),max_size_kb,max_size) 
+| eval curr=if(isnotnull(current_size_kb),current_size_kb,current_size) 
+| eval fill_perc=round((curr/max)*100,2) 
+| eval combined = host . "_pipe_" . ingest_pipe
+| stats Median(fill_perc) AS "fill_percentage", earliest(_time) as earliest_time, latest(_time) as latest_time by combined, name 
+| eval earliest_time=strftime(earliest_time, "%F %T %z")
+| eval latest_time=strftime(latest_time, "%F %T %z")
+| where (fill_percentage&gt;50 AND name!="4 - Indexing Queue") OR (fill_percentage&gt;90 AND name="4 - Indexing Queue")</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>This alert is borrowed from the monitoring console. When the queues are filled there is an issue in the indexer cluster!</p>
+        <p>indexing queue fill more than 90% and other queue fill more than 50%.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bucket - Data/Buckets have being frozen due to index sizing</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd (source=*splunkd.log) "BucketMover - will attempt to freeze" NOT "because frozenTimePeriodInSecs=" 
+| rex field=bkt "(rb_|db_)(?P&lt;newestDataInBucket&gt;\d+)_(?P&lt;oldestDataInBucket&gt;\d+)"
+| eval newestDataInBucket=strftime(newestDataInBucket, "%+"), oldestDataInBucket = strftime(oldestDataInBucket, "%+") 
+| eval message=coalesce(message,event_message)
+| table host, _time, message, oldestDataInBucket, newestDataInBucket</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The indexer is freezing buckets due to disk space pressure before the frozenTimePeriodInSecs limit has been reached, this could be a problem if it is not expected.</p>
+        <p>_introspection defaults to size based so exclude it.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bucket - Buckets rolling more frequently than expected</title>
+      <table>
+        <search>
+          <query>index=_internal "Will chill bucket" (source=*splunkd.log) sourcetype=splunkd "/db/db"  
+| rex "=/.*?(?P&lt;indexname&gt;[^/]+)(/[^/]+){2} " 
+| stats count by indexname 
+| sort - count 
+| where (count&gt;20)</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Buckets are moving from warm to cold very quickly (count&gt;20) and this could be an issue related to the sizing not been valid for the indexes.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bucket - Buckets corruption</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log IndexerService OR HotBucketRoller "corrupt" newly
+| stats values(Bucket) AS bucketList by idx, host
+| eval bucketCount=mvcount(bucketList)</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>For the alert version of this report refer to IndexerLevel - Unclean Shutdown - Fsck, you may also wish to try IndexerLevel - Corrupt buckets via DBInspect.</p>
+        <p>Attempt to find bucket corruption errors in the splunkd logs. this can also be found at search head level via the info.csv (not indexed by default). In a clustered environment a message such as "06-12-2018 07:31:47.160 +0000 INFO  ProcessTracker - (child_407__Fsck)  Fsck - (entire bucket) Rebuild for bucket='/opt/splunk/var/lib/splunk/indexname/db/db_1528466340_1520517600_38_A25ECA32-B33E-4469-8C76-22190FDCC8CB' took 86.26 seconds" may appear once the auto-repair has occurred. Finally it may appear if log_search_messages is set in limits.conf, the sourcetype will be splunk_search_messages.</p>
+      </html>
+    </panel>
+    <panel>
+      <title>Bucket - Corrupted Buckets via DBInspect</title>
+      <table>
+        <search>
+          <query>| dbinspect corruptonly=true index=*
+| regex path!="[\\\\/](\d+_|hot_)[^ ]+$"
+| table bucketId, corruptReason, index, modTime, path, splunk_server, state
+| eval command="splunk fsck repair --one-bucket --bucket-path=" + path + " &amp;"</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bucket - strings_metadata triggering bucket rolling</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log caller=strings_metadata 
+| cluster showcount=true 
+| stats sum(entries) AS count, values(host) AS hosts, values(event_message) AS event_messages by idx</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The caller=strings_metadata relates to maxMetaEntries in the indexes.conf.spec file, at the time of writing it is the maximum number of unique lines in .data files in a bucket, once exceeded it is rolled so this may cause premature bucket rolling.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Bucket - Rolling Hot Bucket Failure</title>
+      <table>
+        <title>??? - need to check query</title>
+        <search>
+          <query>index=_internal "Not rolling hot buckets on further errors to this target" sourcetype=splunkd (source=*splunkd.log)
+| table _time, host, _raw</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>If this alert fires, we are potentially out of disk in the hot section or something else has gone wrong.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Index - IndexConfig Warnings</title>
+      <table>
+        <search>
+          <query>index=_internal "WARN  IndexConfig" OR "ERROR IndexConfig" (source=*splunkd.log)
+| eval message=coalesce(message,event_message) 
+| stats count, earliest(_time) as earliest_time, latest(_time) AS latest_time by host, message
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>IndexConfig warnings are generally a problem.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Index - Index not Defined</title>
+      <table>
+        <search>
+          <query>index=_internal "Received event for unconfigured" sourcetype=splunkd source=*splunkd.log "IndexerService - Received event for unconfigured"
+| rex "index=(?P&lt;index&gt;[^ ]+).*source=\"source::(?P&lt;source&gt;[^\"]+)\" host=\"host::(?P&lt;host&gt;[^\"]+)"
+| eval message=coalesce(message,event_message)
+| stats values(host) as hosts, count, earliest(_time) as earliest_time, latest(_time) AS latest_time, latest(_raw) as sample_raw by index
+| `cs_human_readable_time_format(earliest_time)`
+| `cs_human_readable_time_format(latest_time)`
+| sort - count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Detect if data is been sent to the indexers to an index which is not yet configured.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Index - Data Spread Across Indexer</title>
+      <chart>
+        <title>Spread events across indexer</title>
+        <search>
+          <query>| tstats count WHERE index="*" by splunk_server _time span=10m | timechart minspan=1h sum(count) by splunk_server</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked100</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <chart>
+        <title>Spread data in KB/s in indexers</title>
+        <search>
+          <query>index=_internal source="*metrics.log" sourcetype=splunkd group=thruput name=index_thruput
+| eval ingest_pipe = if(isnotnull(ingest_pipe), ingest_pipe, "none") | search ingest_pipe=* 
+| timechart minspan=1h per_second(kb) by host</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+      <table>
+        <title>Uneven Indexed Data Across The Indexers</title>
+        <search>
+          <query>| tstats summariesonly=t count WHERE index="*" by splunk_server _time span=6h
+| sort _time 
+| eventstats sum(count) AS totalCountForTime, dc(splunk_server) AS indexers by _time 
+| eval perc=round((count/totalCountForTime)*100,2) 
+| eval expectedShare = 100 / indexers
+| eval perc = 100 - (expectedShare / perc)*100
+| where perc&gt;25 OR perc&lt;-25</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>If the balance of data between indexer cluster members becomes very unbalanced then the searches tend to spend more CPU on a particular indexer / search peer and this eventually creates issues.</p>
+        <p>Threshold is 25%.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search - Peer will not return results due to outdated generation</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd source=*splunkd.log "because the search head is using an outdated generation"
+| eval message=coalesce(message,event_message)
+| stats count, min(_time) AS firstSeen, max(_time) AS lastSeen, values(host) AS host by message
+| eval diff=lastSeen-firstSeen
+| where diff&gt;60
+| eval firstSeen = strftime(firstSeen, "%+"), lastSeen=strftime(lastSeen, "%+") 
+| table host, message, firstSeen, lastSeen, count</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>If the error Peer ... will not return any results for this search, because the search head is using an outdated generation then either the peer requires a restart or there is another issue here. Assuming the issue does not resolve itself quickly...</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search - Search Failures</title>
+      <table>
+        <search>
+          <query>index=_internal sourcetype=splunkd_remote_searches " ERROR StreamedSearch " OR " WARN StreamedSearch " NOT " INFO  StreamedSearch - " NOT "Connection closed by peer" NOT "Search process did not exit cleanly" NOT "Connection reset by peer" NOT "Broken pipe" NOT "Failed to start the search process."
+| rex "^.*sid=[^,]+, (?P&lt;message&gt;.*)" 
+| stats count, min(_time) AS firstSeen, max(_time) AS mostRecent, first(_raw) AS exampleMessage, values(host) AS hostList by message 
+| eval firstSeen=strftime(firstSeen, "%+"), mostRecent=strftime(mostRecent, "%+")</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>Attempt to detect search failures of interest, such as Search Factory: Unknown search command 'base64' so they can be fixed before it becomes an issue for multiple users. The search is generic to attempt to detect any new errors. Note that if you are running a modern Splunk version you may wish to use "SearchHeadLevel - Search Messages admins only" and "SearchHeadLevel - Search Messages user level" instead as they detect the issues at SH level.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search - Slow peer from remote searches</title>
+      <table>
+        <search>
+          <query>index=_internal source=*remote_searches.log TERM(terminated) 
+| regex search!="^(pretypeahead|copybuckets)" 
+| rex "(?s) elapsedTime=(?P&lt;elapsedTime&gt;[0-9\.]+), search='(?P&lt;search&gt;.*?)(', savedsearch_name|\", drop_count=\d+)" 
+| rex "terminated: search_id=(?P&lt;search_id&gt;[^,]+)" 
+| regex search="^(litsearch|mcatalog|mstats|mlitsearch|litmstats|tstats|presummarize)" 
+| regex search_id="^remote" 
+| stats last(_time) AS _time, avg(elapsedTime) AS avgelapsedtime, max(elapsedTime) AS maxelapsedtime by search_id, host 
+| eventstats max(maxelapsedtime) AS slowest, avg(avgelapsedtime) AS average by search_id 
+| eval slow=average+60
+| where maxelapsedtime&gt;slow AND maxelapsedtime==slowest 
+| bin _time span=5m 
+| stats count by host, _time 
+| where count&gt;10</query>
+          <earliest>$splunk_issues_timerange.earliest$</earliest>
+          <latest>$splunk_issues_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>This warning when occurring repetitively tends to indicate some kind of issue that will require the file to be manually removed. For example a zero sized metadata file that cannot be reaped by the dispatch reaper.</p>
+        <p>Tested stddev() but what if the search is smaller than normal and some indexers take 5X longer, if the search was 3 seconds who cares.</p>
+        <p>No. of count threshold: 10</p>
+      </html>
+    </panel>
+  </row>
+</form>
