@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.9.0
+* Version - 1.10.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,44 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.10.0 (November 2021) 
+* Azure Active Directory: Office 365 
+  * Added Office 365 alerts and dashboard panels to the Office 365 dashboard. 
+  * AuthorizationPolicy Change
+  * Policy Change
+  * Role Change
+  * Group Change
+  * User Change
+  * ServicePrincipal Change
+  * Application Change
+  * Other Changes
+* Splunk Admin Checks Dashboard 
+  * Added multiple dashboard panels to identify issues within a Splunk environment, as well as when performing an audit.
+    * General
+    * Forwarders, Data Inputs and Deployment Server
+    * Data Parsing
+    * Indexers, Buckets, Data and Indexes
+    * Search Head
+  * View all of the Splunk Admin Checks dashboards under Cyences Navigation > Settings.
+* Enhancements:
+  * Splunk Admin – Missing Data in Indexes Alert
+    * Provided a way to configure incoming data intervals for each index through a lookup.
+    * Visit the “Finetune Splunk Admin related alerts” section for more details.
+  * Fake Windows Process Alert – Reduce False Positives
+    * Added a lookup to exclude the false positives based on the file hashes.
+  * Common Ransomware Extension Alert
+    * Improved the alert query to reduce number of results while preserving the information.
+* Issues Fixed:
+  * Splunk App-Inspect failure (cloud compatibility issue) related to app.conf triggers have been fixed.
+
+Upgrade Guide from Version 1.9.0 to 1.10.0
+* Splunk Admin – Missing Data in the Index Alert
+  * Please visit “Finetune Splunk Admin related alerts” section in this document to get more information about it.
+* Common Ransomware Extension Alert Update
+  * As the query of the alert has been updated hence, please check your alert filter still works properly with the updated query post upgrade.
+  * For example, the field file_path has been removed, the field top10_file_location has been added, etc. 
+
+
 Version 1.9.0 (October 2021) 
 * Sysmon Deployment/Data-Onboarding Guide Updated. Please find more information here in the Upgrade Guide.
 * Meraki Firewall Log CIM Compatibility:
