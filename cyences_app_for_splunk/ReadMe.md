@@ -66,10 +66,10 @@ Version 1.10.0 (November 2021)
     * Search Head
   * View all of the Splunk Admin Checks dashboards under Cyences Navigation > Settings.
 * Enhancements:
-  * Splunk Admin – Missing Data in Indexes Alert
+  * Splunk Admin - Missing Data in Indexes Alert
     * Provided a way to configure incoming data intervals for each index through a lookup.
-    * Visit the “Finetune Splunk Admin related alerts” section for more details.
-  * Fake Windows Process Alert – Reduce False Positives
+    * Visit the "Finetune Splunk Admin related alerts" section for more details.
+  * Fake Windows Process Alert - Reduce False Positives
     * Added a lookup to exclude the false positives based on the file hashes.
   * Common Ransomware Extension Alert
     * Improved the alert query to reduce number of results while preserving the information.
@@ -77,11 +77,11 @@ Version 1.10.0 (November 2021)
   * Splunk App-Inspect failure (cloud compatibility issue) related to app.conf triggers have been fixed.
 
 Upgrade Guide from Version 1.9.0 to 1.10.0
-* Splunk Admin – Missing Data in the Index Alert
-  * Please visit “Finetune Splunk Admin related alerts” section in this document to get more information about it.
+* Splunk Admin - Missing Data in the Index Alert
+  * Please visit "Finetune Splunk Admin related alerts" section in this document to get more information about it.
 * Common Ransomware Extension Alert Update
   * As the query of the alert has been updated hence, please check your alert filter still works properly with the updated query post upgrade.
-  * For example, the field file_path has been removed, the field top10_file_location has been added, etc. 
+  * For example, the field file_path has been removed, the field top10_file_location has been added, etc.
 
 
 Version 1.9.0 (October 2021) 
@@ -90,14 +90,14 @@ Version 1.9.0 (October 2021)
   * Meraki logs added props to make network flow data compatibility with CIM data-model.
 * Enhancements:
   * Tenable/Qualys vulnerability proper coloring scheme for Device Inventory and Asset Intelligence dashboard.
-  * Tenable/Qualys – Active vulnerability count now excludes Information vulnerability.
+  * Tenable/Qualys - Active vulnerability count now excludes Information vulnerability.
   * Overview Dashboard:
-    * Hide unused products’ notable events. For O365 currently not running services and Antivirus current status related notable events.
-  * Tenable Dashboard - added panel for “All Traffic on All Vulnerable Hosts”.
+    * Hide unused products' notable events. For O365 currently not running services and Antivirus current status related notable events.
+  * Tenable Dashboard - added panel for "All Traffic on All Vulnerable Hosts".
   * Linux Sudo Access
     * Released Cyences Add-on version 1.0.2.
     * Fixed the issues with inappropriately generated alerts of Sudo access changed alert (Linux - Change in Sudo Access of Local Linux Account).
-  * AD – User Changed Alert
+  * AD - User Changed Alert
     * Added Message field in the alert result and dashboard panel to show what has changed.
   * Windows Dashboard - Windows Users and Privileges (EventCode=4672)
     * Added no. of logins by user along-side the user privileges.
@@ -107,7 +107,7 @@ Version 1.9.0 (October 2021)
   * Sysmon Deploy Audit Dashboard:
     * Fixed: shows no hosts with data present even though there is Sysmon data present.
   * Forensics Dashboard:
-    * Fixed the issue with missing fields in the “Notable Events” panel.
+    * Fixed the issue with missing fields in the "Notable Events" panel.
     * Also fixed the error shown at the top-right of the panel.
 
 
@@ -122,10 +122,10 @@ Upgrade Guide from Version 1.8.0 to 1.9.0
 
 
 Version 1.8.0 (September 2021) 
-* Tenable and Qualys – Correlation between Vulnerabilities and Network Telemetry 
+* Tenable and Qualys - Correlation between Vulnerabilities and Network Telemetry 
   * Added table that shows traffic on vulnerable ports for both Qualys and Tenable. User can see those details in the Tenable and Qualys dashboard. (New panels added at the last of the panel.) 
 * Fortigate VPN Support 
-  * Cyences App’s VPN dashboard now supports Fortigate VPN logs. 
+  * Cyences App's VPN dashboard now supports Fortigate VPN logs. 
 * New Windows Dashboard 
   * The Windows dashboard is now separated from Active Directory.
   * The Active Directory dashboard now has panels from the original dashboard.
@@ -137,13 +137,13 @@ Version 1.8.0 (September 2021)
   * Added panel Splunk Licensing report and added alert for Splunk licensing violation. 
   * Added panel Splunk Environment Disk usage report and added alert for Splunk instance disk usage more than 85% or disk space less than 6 GB. 
 * Enhancements: 
-  * Ransomware – Spike in the File Writes Alert 
+  * Ransomware - Spike in the File Writes Alert 
     * Improved by adding file locations alongside file writes count so we can identify whether the alert is false positive or ransomware right from the email alert. 
   * Tenable: Added CVE and solution field for tenable vulnerabilities. (Tenable dashboard and Asset Intelligence dashboard) 
   * Overview dashboard 
     * Improved drilldown for Splunk Admin panel that now auto set the filters on Splunk Admin dashboard. 
   * Network Reports dashboard 
-    * Added drilldown for “Port Scanning Attempts” map. 
+    * Added drilldown for "Port Scanning Attempts" map. 
   * AD Alerts 
     * Improved search queries for Active Directory related alerts. 
     * Added ComputerName field in the alert results. 
@@ -153,7 +153,7 @@ Version 1.8.0 (September 2021)
 
 Upgrade Guide from Version 1.7.0 to 1.8.0 
 * Fortigate VPN Data Collection 
-  * If you are using Fortinate Fortigate for VPN then follow the Data Onboarding > Fortigate VPN Logs section from the Guide to see how to collect the data and then you can utilize Cyences App’s VPN dashboard. 
+  * If you are using Fortinate Fortigate for VPN then follow the Data Onboarding > Fortigate VPN Logs section from the Guide to see how to collect the data and then you can utilize Cyences App's VPN dashboard. 
 * New Splunk Admin Alerts 
   * Enable new Splunk Admin alerts for Splunk licensing and Disk usage. 
 
@@ -196,7 +196,7 @@ Version 1.7.0 (August 2021)
 * Issues Fixed: 
   * Fixed minor python error on device inventory gen python custom command: Remove unused Float Validator and better error handling added. 
   * Fixed the python issue with Sophos custom command: variable conflict resolved. 
-  * Fixed the issue: Forensic dashboard do not show information about AD – User Locked Out notable events. 
+  * Fixed the issue: Forensic dashboard do not show information about AD - User Locked Out notable events. 
 
 Upgrade Guide from Version 1.6.0 to 1.7.0 
 * AWS Data Collection 
@@ -218,7 +218,7 @@ Version 1.6.1 (July 2021)
 
 Version 1.6.0 (July 2021)
 * Added Sophos Endpoint metadata collection (through Sophos central API) command.
-  * Added configuration part in Cyences configuration page’s to configure Sophos-central API.
+  * Added configuration part in Cyences configuration page's to configure Sophos-central API.
   * See Data Onboarding > Sophos Central Metadata through API section for more information.
 * New Device Inventory:
   * It uses better metadata information for endpoints from Sophos-central API. 
@@ -261,7 +261,7 @@ Version 1.5.0 (June 2021)
   * Fixed the Authentication CIM mapping for Office365/Azure success logins data.
 * Improved Office 365 dashboard.
   * Added Success and Login Failures with user filter and extended information in failure login panel like UserAgent, Location, etc.
-* Palo Alto Firewall – Added panel to show list of firewalls with VPN (Global Protect) data availability for auditing.
+* Palo Alto Firewall - Added panel to show list of firewalls with VPN (Global Protect) data availability for auditing.
 * Enhancements:
   * Added text selection drilldown to Asset Intelligence dashboard for better navigation through-out App in search for Host, IP Addresses and Usernames. (You can invoke the drilldown from anywhere in the App just by selecting IP Address or Hostname or Username.)
   * Improved Splunk Admin dashboard for missing forwarders. Now dashboard provides a way to remove decommissioned UF directly from the dashboard.
