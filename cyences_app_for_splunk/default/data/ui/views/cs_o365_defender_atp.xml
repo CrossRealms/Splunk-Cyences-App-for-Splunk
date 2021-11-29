@@ -46,7 +46,8 @@
         <search>
           <query>`cs_o365_defender_atp_alerts` computerDnsName=$tkn_host|s$
 | stats count, latest(_time) as _time, last(firstEventTime) as firstEventTime, last(lastEventTime) as lastEventTime, last(lastUpdateTime) as lastUpdateTime, last(resolvedTime) as resolvedTime, last(severity) as severity, last(status) as status, last(threatFamilyName) as threatFamilyName, last(threatName) as threatName, last(title) as title, last(investigationState) as investigationState, last(detectionSource) as detectionSource, last(assignedTo) as assignedTo, last(category) as category, last(classification) as classification, last(description) as description, last(incidentId) as incidentId, last(investigationId) as investigationId by detectorId, id, machineId, computerDnsName
-| eval firstEventTime=strftime(strptime(firstEventTime, "%FT%T.%7QZ"), "%F %T"), lastEventTime=strftime(strptime(lastEventTime, "%FT%T.%7QZ"), "%F %T"), lastUpdateTime=strftime(strptime(lastUpdateTime, "%FT%T.%7QZ"), "%F %T"), resolvedTime=strftime(strptime(resolvedTime, "%FT%T.%7QZ"), "%F %T")
+| eval firstEventTime=strptime(firstEventTime, "%FT%T.%7QZ"), lastEventTime=strptime(lastEventTime, "%FT%T.%7QZ"), lastUpdateTime=strptime(lastUpdateTime, "%FT%T.%7QZ"), resolvedTime=strptime(resolvedTime, "%FT%T.%7QZ")
+| `cs_human_readable_time_format(firstEventTime)` | `cs_human_readable_time_format(lastEventTime)` | `cs_human_readable_time_format(lastUpdateTime)` | `cs_human_readable_time_format(resolvedTime)`
 | table computerDnsName, count, firstEventTime, lastUpdateTime, resolvedTime, incidentId, title, threatFamilyName, threatName, category, classification, severity, status, investigationId, invenstigationState, assignedTo, detectionSource, detectorId, id, machineId</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>

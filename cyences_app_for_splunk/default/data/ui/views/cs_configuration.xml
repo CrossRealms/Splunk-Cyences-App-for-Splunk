@@ -658,6 +658,28 @@
         <div>
           <p>
             <b>
+              <center>Category: Microsoft Office 365 Defender ATP</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_o365_defender_atp_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_o365_defender_atp_alerts_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_defender_atp_alerts_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_defender_atp_alerts_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>
               <center>Category: VPN</center>
               <br/>
             </b>
