@@ -419,4 +419,50 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Decommission Linux Host from Lookup</title>
+      <input type="dropdown" token="tkn_remove_forwarder_dropdown">
+        <label>Host Name</label>
+        <search>
+          <query>|inputlookup cs_linux_user_list.csv | fields host | dedup host</query>
+        </search>
+        <change>
+          <condition match="'tkn_remove_forwarder_dropdown'=='tkn_remove_forwarder_text'">
+            <set token="tkn_remove_forwarder">$tkn_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_remove_forwarder"></unset>
+          </condition>
+        </change>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+      </input>
+      <input type="text" token="tkn_remove_forwarder_text">
+        <label>Re-type Host Name for Confirmation</label>
+        <change>
+          <condition match="'tkn_remove_forwarder_dropdown'='tkn_remove_forwarder_text'">
+            <set token="tkn_remove_forwarder">$tkn_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_remove_forwarder"></unset>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| inputlookup cs_linux_user_list.csv | search NOT host=$tkn_remove_forwarder|s$ | outputlookup cs_linux_user_list.csv | where host="DO-NOT-RETURN-ANYRESULTS"
+| append [| stats count | rename count as result | eval result="Host ".$tkn_remove_forwarder|s$." has been removed from the Lookup."]</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Query will remove the Host from the Linux User List Lookup and you will not see the host in the dashboard panel called "User List".</p>
+      </html>
+    </panel>
+  </row>
 </form>
