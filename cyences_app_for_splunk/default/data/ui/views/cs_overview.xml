@@ -243,16 +243,16 @@
       <title>Antivirus</title>
       <table>
         <search>
-          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *") | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike")`]
+          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
 | stats first(*) as * by savedsearch_name
-| `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike")` 
 | eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events"
+| `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
+| table Name, "Notable Events"
 | sort - "Notable Events"
-| eval Name=case(savedsearch_name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",savedsearch_name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",savedsearch_name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",savedsearch_name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),savedsearch_name)
+| eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
 | rename "Notable Events" as Count 
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
@@ -315,6 +315,9 @@
           </condition>
           <condition match="'row.Name'==&quot;Currently Stopped/Disabled Windows Defender RealTime Protection&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          </condition>
+          <condition match="'row.Name'==&quot;Defender ATP Alerts&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_defender_atp?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition>
             <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>

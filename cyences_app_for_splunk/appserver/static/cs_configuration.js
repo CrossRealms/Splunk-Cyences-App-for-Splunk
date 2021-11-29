@@ -122,6 +122,9 @@ require([
         { macro_name: 'cs_windows_defender_unable_to_download_offline_scan_filter', input_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter', button_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_malware_detected_filter', input_id: 'macro_cs_windows_defender_malware_detected_filter', button_id: 'macro_cs_windows_defender_malware_detected_filter_button', msg_id: 'macro_windows_defender_msg'},
 
+        /* O365 Defender ATP */
+        { macro_name: 'cs_o365_defender_atp_alerts_filter', input_id: 'macro_cs_o365_defender_atp_alerts_filter', button_id: 'macro_cs_o365_defender_atp_alerts_filter_button', msg_id: 'macro_o365_defender_atp_msg'},
+
         /* CrowdStrike */
         { macro_name: 'cs_crowdstrike_malware_detected_alert_filter', input_id: 'macro_cs_crowdstrike_malware_detected_alert_filter', button_id: 'macro_cs_crowdstrike_malware_detected_alert_filter_button', msg_id: 'macro_crowdstrike_msg'},
         { macro_name: 'cs_crowdstrike_malware_detected_report_filter', input_id: 'macro_cs_crowdstrike_malware_detected_report_filter', button_id: 'macro_cs_crowdstrike_malware_detected_report_filter_button', msg_id: 'macro_crowdstrike_msg'},
