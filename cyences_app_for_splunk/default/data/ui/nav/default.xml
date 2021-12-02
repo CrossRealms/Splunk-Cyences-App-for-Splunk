@@ -31,6 +31,7 @@
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
+    <view name="cs_decommision_host" />
     <view name="cs_splunk_admin_reports" />
     <collection label="Splunk Admin Checks">
       <view name="cs_splunk_admin_checks_general" />
