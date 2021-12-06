@@ -1,12 +1,35 @@
 <form theme="dark" version="1.1">
   <label>Decommission Host from Lookups</label>
+  <fieldset submitButton="false"></fieldset>
+  <search id="all_host_base_search">
+          <query>| tstats latest(_time) as _time where index=_internal by host
+| append [| inputlookup all_windows_hosts.csv | eval os="Windows"]
+| append [| inputlookup cs_linux_user_list.csv | eval os="Linux"]
+| stats max(_time) as _time, last(*) as * by host
+| fillnull _time 0 | sort 0 _time
+| eval _time=if(_time=0, "---", _time)
+| eval last_internal_event=strftime(_time, "%F %T %z")
+| fillnull last_internal_event value="No _internal events in last 7 days"
+| table host, last_internal_event, os</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
   <row>
+    <panel>
+      <title>Linux Lookup</title>
+      <table>
+        <search base="all_host_base_search" id="linux_hosts_base_search">
+          <query>| where os="Linux" | table host, last_internal_event</query>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
     <panel>
       <title>Decommission Linux Host from Linux Lookup</title>
       <input type="dropdown" token="tkn_nix_remove_forwarder_dropdown">
         <label>Host Name</label>
-        <search>
-          <query>|inputlookup cs_linux_user_list.csv | fields host | dedup host</query>
+        <search base="linux_hosts_base_search">
+          <query></query>
         </search>
         <change>
           <condition match="'tkn_nix_remove_forwarder_dropdown'=='tkn_nix_remove_forwarder_text'">
@@ -48,11 +71,20 @@
   </row>
   <row>
     <panel>
+      <title>Windows Lookup</title>
+      <table>
+        <search base="all_host_base_search" id="windows_hosts_base_search">
+          <query>| where os="Windows" | table host, last_internal_event</query>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
       <title>Decommission Windows Host from Windows Lookup</title>
       <input type="dropdown" token="tkn_win_remove_forwarder_dropdown">
         <label>Host Name</label>
-        <search>
-          <query>|inputlookup all_windows_hosts.csv  | fields host | dedup host</query>
+        <search base="windows_hosts_base_search">
+          <query></query>
         </search>
         <change>
           <condition match="'tkn_win_remove_forwarder_dropdown'=='tkn_win_remove_forwarder_text'">
