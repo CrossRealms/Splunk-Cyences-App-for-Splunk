@@ -232,18 +232,18 @@ require([
             attacker_drilldown: 'index=* `cs_authentication_indexes` tag=authentication action="failure" src=$row.src$'
         },
         "Authentication - Excessive Failed VPN Logins for a User": {
-            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth"',
+            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth"',
             system_compromised_search: "| stats sum(count) as count by app",
-            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" app=$row.app$',
+            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth" app=$row.app$',
             attacker_search: "| stats sum(count) as count by user",
-            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" user=$row.user$'
+            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth" user=$row.user$'
         },
         "Authentication - Excessive Failed VPN Logins from a Source": {
-            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth"',
+            contributing_events: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth"',
             system_compromised_search: "| stats sum(count) as count by app",
-            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" app=$row.app$',
+            system_compromised_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth" app=$row.app$',
             attacker_search: "| stats sum(count) as count by src",
-            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest="vpn_auth" src=$row.src$'
+            attacker_drilldown: 'index=* `cs_vpn_indexes` tag=authentication action="failure" dest_category="vpn_auth" src=$row.src$'
         },
         "AD - Group Changed": {
             contributing_events: '`cs_wineventlog_security` [| inputlookup cs_ad_audit_change_event_codes WHERE change_category="Group" | stats values(EventCode) AS EventCode,values(obj_type) AS obj_type | format] src_user_type="user" NOT((EventCode=4723 OR EventCode=4738) AND src_user!=user)'
