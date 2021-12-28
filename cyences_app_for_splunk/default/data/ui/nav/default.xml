@@ -10,6 +10,7 @@
       <view name="cs_gsuite_reports" />
       <view name="cs_network_reports" />
       <view name="cs_paloalto_firewall_reports" />
+      <view name="cs_dns_tracker" />
       <collection label="Antivirus">
         <view name="cs_sophos_reports" />
         <view name="cs_windows_defender_reports" />

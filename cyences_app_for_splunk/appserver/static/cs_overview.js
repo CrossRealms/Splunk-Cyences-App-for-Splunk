@@ -15,6 +15,7 @@ require([
         { id: 'aws_reports_link', url: baseURL.concat('cs_aws_user_activity')},
         { id: 'gsuite_reports_link', url: baseURL.concat('cs_gsuite_reports')},
         { id: 'network_reports_link', url: baseURL.concat('cs_network_reports')},
+        { id: 'dns_tracker_link', url: baseURL.concat('cs_dns_tracker')},
         { id: 'paf_reports_link', url: baseURL.concat('cs_paloalto_firewall_reports')},
         { id: 'sophos_reports_link', url: baseURL.concat('cs_sophos_reports')},
         { id: 'windowsdef_reports_link', url: baseURL.concat('cs_windows_defender_reports')},
