@@ -294,6 +294,15 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">Network Resolution(DNS)</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_datamodel_network_resolution_dns"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_datamodel_network_resolution_dns_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Authentication Data-Model</th>
             <th style="text-align:left">
               <input type="text" id="macro_datamodel_authentication"/>

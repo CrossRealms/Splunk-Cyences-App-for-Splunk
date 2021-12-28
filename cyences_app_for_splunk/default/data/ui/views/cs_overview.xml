@@ -34,6 +34,7 @@
         <div class="box" id="gsuite_reports_link">GSuite</div>
         <div class="box" id="network_reports_link">Network</div>
         <div class="box" id="paf_reports_link">Palo Alto Firewall</div>
+        <div class="box" id="dns_tracker_link">DNS Tracker</div>
         <div class="box" id="sophos_reports_link">Sophos</div>
         <div class="box" id="windowsdef_reports_link">Windows Defender</div>
         <div class="box" id="o365_defender_atp_link">Defender ATP</div>
