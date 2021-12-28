@@ -24,7 +24,7 @@
       <title>Top Categories</title>
       <chart>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.dest_category | rename DNS.* as * | stats sum(count) as count by dest_category</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.dest_category | rename DNS.* as * | stats sum(count) as count by dest_category</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -37,7 +37,7 @@
       <title>Record Types</title>
       <chart>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.record_type | rename DNS.* as *</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.record_type | rename DNS.* as *</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -53,7 +53,7 @@
       <title>DNS Log Volume over Time</title>
       <chart>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1s | timechart sum(count) as count span=1h</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1s | timechart sum(count) as count span=1h</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -66,7 +66,7 @@
       <title>Record Types over Time</title>
       <chart>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1h DNS.record_type | rename DNS.* as *  | xyseries _time, record_type, count</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1h DNS.record_type | rename DNS.* as *  | xyseries _time, record_type, count</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -81,7 +81,7 @@
       <title>Top Queries</title>
       <table>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query | rename DNS.* as * |sort - count | head 10</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query | rename DNS.* as * |sort - count | head 10</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -93,7 +93,7 @@
       <title>Top Non-success Code Queries</title>
       <table>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query DNS.reply_code | rename DNS.* as * |sort - count | head 10</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query DNS.reply_code | rename DNS.* as * |sort - count | head 10</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -107,7 +107,7 @@
       <title>Top Requesters</title>
       <table>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -119,7 +119,7 @@
       <title>Top Non-success Code Requesters</title>
       <table>
         <search>
-          <query>| tstats count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src DNS.reply_code | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src DNS.reply_code | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
