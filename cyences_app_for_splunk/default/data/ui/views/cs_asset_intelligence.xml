@@ -310,7 +310,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest="vpn_auth" AND $tkn_filter_authentication$ AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
+          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest_category="vpn_auth" AND $tkn_filter_authentication$ AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
         | iplocation src_ip
         | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
         | eval City = if(isnull(City) OR City="", "Unknown", City) | fields _time user action src_ip City Country
