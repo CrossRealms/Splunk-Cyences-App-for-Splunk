@@ -874,7 +874,11 @@
       </input>
       <event depends="$tkn_raw_events_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group") OR (extendedAuditEventCategory="GroupMembership") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory NOT extendedAuditEventCategory IN ("Application", "AuthorizationPolicy", "Policy", "Role", "User", "GroupMembership", "Group", "ServicePrincipal") NOT Operation IN ("UserLoggedIn", "UserLoginFailed")
+           command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$
+| `cs_o365_managementactivity_change_out`
+| `cs_o365_ad_other_change_internal_filter`
+| `cs_o365_ad_other_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -883,8 +887,12 @@
       </event>
       <table depends="$tkn_show_table_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group") OR (extendedAuditEventCategory="GroupMembership") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
-| `cs_o365_managementactivity_change_out`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory NOT extendedAuditEventCategory IN ("Application", "AuthorizationPolicy", "Policy", "Role", "User", "GroupMembership", "Group", "ServicePrincipal") NOT Operation IN ("UserLoggedIn", "UserLoginFailed")
+           command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
+| `cs_o365_managementactivity_change_out`
+| `cs_o365_ad_other_change_internal_filter`
+| `cs_o365_ad_other_change_filter`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
