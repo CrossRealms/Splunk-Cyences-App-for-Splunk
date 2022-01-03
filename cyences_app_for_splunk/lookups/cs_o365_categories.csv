@@ -1,6 +1,6 @@
 Action,Category
 "Add OAuth2PermissionGrant.",ServicePrincipal
-"Add a deletion-marked app role assignment grant to group as part of link removal.",""
+"Add a deletion-marked app role assignment grant to group as part of link removal.",Group
 "Add a deletion-marked app role assignment grant to user as part of link removal.",User
 "Add app role assignment grant to user.",User
 "Add app role assignment to group.",Group
@@ -31,7 +31,7 @@ Action,Category
 "Change user password.",User
 "Consent to application.",ServicePrincipal
 "Create application password for user.",User
-"Create company",""
+"Create company",Company
 "Create company settings",Company
 "Delete application password for user.",User
 "Delete application.",Application
