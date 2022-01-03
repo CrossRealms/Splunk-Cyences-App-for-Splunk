@@ -6,6 +6,7 @@
     <set token="tkn_show_table_role"></set>
     <set token="tkn_show_table_application"></set>
     <set token="tkn_show_table_group"></set>
+    <set token="tkn_show_table_group_membership"></set>
     <set token="tkn_show_table_user"></set>
     <set token="tkn_show_table_serviceprincipal"></set>
     <set token="tkn_show_table_other"></set>
@@ -584,6 +585,69 @@
   </row>
   <row>
     <panel>
+      <title>Azure Active Directory - GroupMembership Change/Update</title>
+      <input type="multiselect" token="tkn_command_group_membership">
+        <label>Command</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>command</fieldForLabel>
+        <fieldForValue>command</fieldForValue>
+        <search>
+          <query>| inputlookup cs_o365_categories.csv where Category="GroupMembership"
+    | rename Action as command</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_group_membership">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_group_membership">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_group_membership$==&quot;&quot;">
+            <unset token="tkn_show_table_group_membership"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_group_membership"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_group_membership$">
+        <search>
+          <query>`cs_o365_managementactivity_change("GroupMembership")` $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_group_membership_change_internal_filter` 
+| `cs_o365_group_membership_change_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_group$">
+        <search>
+          <query>`cs_o365_managementactivity_change("GroupMembership")` $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
+| `cs_o365_managementactivity_change_out` 
+| `cs_o365_group_membership_change_internal_filter` 
+| `cs_o365_group_membership_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Azure Active Directory - User Change/Update</title>
       <input type="multiselect" token="tkn_command_user">
         <label>Command</label>
@@ -810,7 +874,7 @@
       </input>
       <event depends="$tkn_raw_events_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group" command="Update User*") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group") OR (extendedAuditEventCategory="GroupMembership") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -819,7 +883,7 @@
       </event>
       <table depends="$tkn_show_table_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group" command="Update User*") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
+          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory (extendedAuditEventCategory="Company" OR extendedAuditEventCategory="Contact" OR extendedAuditEventCategory="Device" OR extendedAuditEventCategory="Domain" OR (extendedAuditEventCategory="Group") OR (extendedAuditEventCategory="GroupMembership") OR (extendedAuditEventCategory="User" command="Update Device*")) command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
 | `cs_o365_managementactivity_change_out`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>

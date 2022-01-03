@@ -30,8 +30,8 @@ Action,Category
 "Add app role assignment grant to user.",User
 "Remove app role assignment from user.",User
 "----------------------------------------Group Membership---",""
-"Add member to group.",Group
-"Remove member from group.",Group
+"Add member to group.",GroupMembership
+"Remove member from group.",GroupMembership
 "---------------------------------------------------Group---",""
 "Add group.",Group
 "Update group.",Group
