@@ -18,7 +18,7 @@
   <search id="forwarders_search">
     <query>| inputlookup cs_forwarders.csv
 | `cs_human_readable_time_format(last_connected)`
-| table hostname, forwarder_type, version, last_connected, os, arch, status</query>
+| table hostname, sourceIp, forwarder_type, version, last_connected, os, arch, status</query>
     <earliest>0</earliest>
     <latest></latest>
     <sampleRatio>1</sampleRatio>
