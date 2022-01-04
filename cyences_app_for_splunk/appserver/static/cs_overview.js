@@ -21,6 +21,7 @@ require([
         { id: 'windowsdef_reports_link', url: baseURL.concat('cs_windows_defender_reports')},
         { id: 'o365_defender_atp_link', url: baseURL.concat('cs_o365_defender_atp')},
         { id: 'crowdstrike_reports_link', url: baseURL.concat('cs_crowdstrike_reports')},
+        { id: 'kaspersky_reports_link', url: baseURL.concat('cs_kaspersky_reports')},
         { id: 'vpn_reports_link', url: baseURL.concat('cs_vpn_reports')},
         { id: 'auth_reports_link', url: baseURL.concat('cs_authentication_reports')},
         { id: 'malicious_reports_link', url: baseURL.concat('cs_malicious_ip_list')},

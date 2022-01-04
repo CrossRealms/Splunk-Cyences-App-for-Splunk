@@ -15,6 +15,7 @@ require([
         { macro_name: 'cs_sophos', input_id: 'macro_data_sophos', button_id: 'macro_data_sophos_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_windows_defender', input_id: 'macro_data_windows_defender', button_id: 'macro_data_windows_defender_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_crowdstrike_eventstream', input_id: 'macro_data_crowdstrike_eventstream', button_id: 'macro_data_crowdstrike_eventstream_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_kaspersky', input_id: 'macro_data_kaspersky', button_id: 'macro_data_kaspersky_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_o365', input_id: 'macro_data_o365', button_id: 'macro_data_o365_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_azure_securityscore', input_id: 'macro_data_azure_securityscore', button_id: 'macro_data_azure_securityscore_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_security', input_id: 'macro_data_wineventlog_security', button_id: 'macro_data_wineventlog_security_button', msg_id: 'macro_data_msg'},

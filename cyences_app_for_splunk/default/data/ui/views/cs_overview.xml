@@ -39,6 +39,7 @@
         <div class="box" id="windowsdef_reports_link">Windows Defender</div>
         <div class="box" id="o365_defender_atp_link">Defender ATP</div>
         <div class="box" id="crowdstrike_reports_link">CrowdStrike</div>
+        <div class="box" id="kaspersky_reports_link">CrowdStrike</div>
         <div class="box" id="vpn_reports_link">VPN</div>
         <div class="box" id="auth_reports_link">Authentication</div>
         <div class="box" id="malicious_reports_link">Malicious IP List</div>
