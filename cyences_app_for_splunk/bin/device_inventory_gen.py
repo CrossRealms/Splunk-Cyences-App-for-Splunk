@@ -29,14 +29,14 @@ def get_lookup_path(lookup_name):
 
 # DEVICE_INVENTORY_LOOKUP = get_lookup_path('cs_device_inventory_lookup.csv')
 DEVICE_INVENTORY_LOOKUP_COLLECTION = 'cs_device_inventory_collection'
-DEVICE_INVENTORY_LOOKUP_HEADERS = ['uuid', 'time', 'ip', 'hostname', 'mac_address', 'tenable_uuid', 'qualys_id', 'lansweeper_id', 'sophos_uuid', 'crowdstrike_userid', 'windows_defender_host']
+DEVICE_INVENTORY_LOOKUP_HEADERS = ['uuid', 'time', 'ip', 'hostname', 'mac_address', 'tenable_uuid', 'qualys_id', 'lansweeper_id', 'sophos_uuid', 'crowdstrike_userid', 'windows_defender_host', 'kaspersky_host']
 # DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX = {'uuid':0, 'time':1, 'ip':2, 'hostname':3, 'mac_address':4, 'tenable_uuid':5, 'qualys_id':6, 'lansweeper_id':7, 'sophos_uuid':8, 'crowdstrike_userid':9, 'windows_defender_host':10}
 # LOOKUP_KEY_UUID = 0
 # LOOKUP_KEY_TIME = 1
 # LOOKUP_KEY_IP = 2
 # LOOKUP_KEY_HOSTNAME = 3
 # LOOKUP_KEY_MAC_ADDRESS = 4
-DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX = {'uuid':'uuid', 'time':'time', 'ip':'ip', 'hostname':'hostname', 'mac_address':'mac_address', 'tenable_uuid':'tenable_uuid', 'qualys_id':'qualys_id', 'lansweeper_id':'lansweeper_id', 'sophos_uuid':'sophos_uuid', 'crowdstrike_userid':'crowdstrike_userid', 'windows_defender_host':'windows_defender_host'}
+DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX = {'uuid':'uuid', 'time':'time', 'ip':'ip', 'hostname':'hostname', 'mac_address':'mac_address', 'tenable_uuid':'tenable_uuid', 'qualys_id':'qualys_id', 'lansweeper_id':'lansweeper_id', 'sophos_uuid':'sophos_uuid', 'crowdstrike_userid':'crowdstrike_userid', 'windows_defender_host':'windows_defender_host','kaspersky_host':'kaspersky_host'}
 LOOKUP_KEY_UUID = 'uuid'
 LOOKUP_KEY_TIME = 'time'
 LOOKUP_KEY_IP = 'ip'
@@ -122,7 +122,7 @@ class DeviceInventoryGenCommand(EventingCommand):
             for i in data:
                 csv_data.append(
                     [i['uuid'], i['time'], '~~'.join(i['ip']), '~~'.join(i['hostname']), '~~'.join(i['mac_address']), 
-                    i['tenable_uuid'], i['qualys_id'], i['lansweeper_id'], i['sophos_uuid'], i['crowdstrike_userid'], i['windows_defender_host']])
+                    i['tenable_uuid'], i['qualys_id'], i['lansweeper_id'], i['sophos_uuid'], i['crowdstrike_userid'], i['windows_defender_host'], i['kaspersky_host']])
 
             backup_file = get_lookup_path('{}_{}.csv'.format(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX, datetime.today().strftime('%Y_%m_%d_%H_%M_%s')))
             self.update_csv_lookup(backup_file, csv_data)
@@ -348,6 +348,12 @@ class DeviceInventoryGenCommand(EventingCommand):
         except:
             record['crowdstrike_userid'] = []
 
+        try:
+            kaspersky_host = record['kaspersky_host'].strip()
+            record['kaspersky_host'] = [kaspersky_host] if kaspersky_host else []
+        except:
+            record['kaspersky_host'] = []
+
         return record
 
     
@@ -385,6 +391,8 @@ class DeviceInventoryGenCommand(EventingCommand):
                     ret = self.handle_record(record, product_uuid='crowdstrike_userid')
                 elif 'windows_defender_host' in record and record['windows_defender_host']:
                     ret = self.handle_record(record, product_uuid='windows_defender_host')
+                elif 'kaspersky_host' in record and record['kaspersky_host']:
+                    ret = self.handle_record(record, product_uuid='kaspersky_host')
 
                 logger.debug("Ret: {}".format(ret))
 
@@ -408,7 +416,8 @@ class DeviceInventoryGenCommand(EventingCommand):
                                 'tenable_uuid': ret['tenable_uuid'],
                                 'sophos_uuid': ret['sophos_uuid'],
                                 'windows_defender_host': ret['windows_defender_host'],
-                                'crowdstrike_userid': ret['crowdstrike_userid']
+                                'crowdstrike_userid': ret['crowdstrike_userid'],
+                                'kaspersky_host':ret['kaspersky_host']
                             }
                             logger.info("New device being added to list: {}".format(new_device))
                             self.device_inventory.append(new_device)

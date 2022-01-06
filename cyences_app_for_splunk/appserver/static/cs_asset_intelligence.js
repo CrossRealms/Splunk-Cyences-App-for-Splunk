@@ -48,6 +48,7 @@ function(mvc){
             let sophos = results[3];
             let defender = results[4];
             let crowdstrike = results[5];
+            let kaspersky = results[6];
 
             if(lansweeper > 0){
                 setToken("tkn_tablefields_lansweeper", ", lansweeper");
@@ -101,6 +102,15 @@ function(mvc){
             else{
                 setToken("tkn_tablefields_crowdstrike", "");
                 unsetToken("tkn_show_hide_crowdstrike");
+            }
+
+            if(kaspersky > 0){
+                setToken("tkn_tablefields_kaspersky", ", kaspersky_collected_by, kaspersky_version");
+                setToken("tkn_show_hide_kaspersky", "true");
+            }
+            else{
+                setToken("tkn_tablefields_kaspersky", "");
+                unsetToken("tkn_show_hide_kaspersky");
             }
 
         }
