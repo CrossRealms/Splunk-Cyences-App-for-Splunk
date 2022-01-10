@@ -41,7 +41,7 @@
   <row>
     <panel>
       <title>Assets Status in Kaspersky</title>
-      <chart>
+      <table>
         <search>
           <query>|  inputlookup cs_kaspersky_inventory 
 |  search hostname IN ($tkn_host$) ip IN ($tkn_ip$) 
@@ -49,8 +49,8 @@
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
-        <option name="charting.chart">markerGauge</option>
-      </chart>
+        <option name="drilldown">none</option>
+      </table>
     </panel>
   </row>
   <row>

@@ -86,7 +86,7 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="kaspersky">
-          <colorPalette type="map">{"Present": #03991a, "Absent": #363030}</colorPalette>
+          <colorPalette type="map">{"Present": #03991a, "-": #363030, "Disabled" : #a3030b}</colorPalette>
         </format>
       </table>
       <html>
