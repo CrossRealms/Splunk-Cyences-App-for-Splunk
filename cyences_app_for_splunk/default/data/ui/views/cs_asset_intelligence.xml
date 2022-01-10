@@ -86,7 +86,7 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="kaspersky">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Present": #03991a, "Absent": #363030}</colorPalette>
         </format>
       </table>
       <html>
@@ -389,7 +389,7 @@
       <event>
         <title>Kaspersky Events</title>
         <search>
-          <query>`cs_kaspersky` | rename dst as ip, dest as hostname , ProductName as kaspersky_collected_by, ProductVersion as kaspersky_version | search $tkn_filter_main$</query>
+          <query>`cs_kaspersky` | rename dst as ip, dest as hostname , ProductName as kaspersky_collected_by, ProductVersion as kaspersky_version ,macaddress as mac_address| search $tkn_filter_main$</query>
           <earliest>$tkn_timeRange_av_kaspersky.earliest$</earliest>
           <latest>$tkn_timeRange_av_kaspersky.latest$</latest>
         </search>

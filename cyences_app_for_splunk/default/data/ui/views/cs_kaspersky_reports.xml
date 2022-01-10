@@ -8,13 +8,57 @@
         <latest>now</latest>
       </default>
     </input>
+    <input type="text" token="tkn_host">
+      <label>Hostname</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_ip">
+      <label>IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
   </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Below Reports must be enabled.</p>
+      </html>
+      <table>
+        <search>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Kaspersky") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Assets Status in Kaspersky</title>
+      <chart>
+        <search>
+          <query>|  inputlookup cs_kaspersky_inventory 
+|  search hostname IN ($tkn_host$) ip IN ($tkn_ip$) 
+|  sort + kaspersky_status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">markerGauge</option>
+      </chart>
+    </panel>
+  </row>
   <row>
     <panel>
       <title>Attack Detected</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_ATTACK_DETECTED | table dest  application action AttackName Attack* signature TaskName user user_domain url</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_ATTACK_DETECTED dest IN ($tkn_host$) dst IN ($tkn_ip$) | table dest  application action AttackName Attack* signature TaskName user user_domain url</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -28,7 +72,7 @@
       <title>Virus Found</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -41,7 +85,7 @@
       <title>Virus Found and Passwd</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED | table _time dest   category  VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest   category  VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -54,7 +98,7 @@
       <title>Virus Found and Bloacked</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_BLOCKED | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_BLOCKED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -67,7 +111,7 @@
       <title>Application Database out of Date</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) | table  _time dest ProductName ProductVersion msg</query>
+          <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dst IN ($tkn_ip$)| table  _time dest ProductName ProductVersion msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -81,7 +125,7 @@
       <title>Suspicious Object Found</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_SUSPICIOUS_OBJECT_FOUND TERM(GNRL_EV_SUSPICIOUS_OBJECT_FOUND) | table  _time dest ProductName ProductVersion  user  VirusName   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_SUSPICIOUS_OBJECT_FOUND TERM(GNRL_EV_SUSPICIOUS_OBJECT_FOUND) dest IN ($tkn_host$) dst IN ($tkn_ip$) | table  _time dest ProductName ProductVersion  user  VirusName   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -94,7 +138,7 @@
       <title>Object Blocked</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_BLOCKED | table _time dest user category action signature TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_BLOCKED dest IN ($tkn_host$) dst IN ($tkn_ip$) | table _time dest user category action signature TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -107,7 +151,7 @@
       <title>Object Deleted</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_DELETED | table _time dest user category action signature TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_DELETED dest IN ($tkn_host$) dst IN ($tkn_ip$) | table _time dest user category action signature TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -120,7 +164,7 @@
       <title>Object Not Cured</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -133,7 +177,7 @@
       <title>Kaspersky Centralized Server Errors</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -146,7 +190,7 @@
       <title>Kaspersky Runtime Errors</title>
       <table>
         <search>
-          <query>`cs_kaspersky_index`  log_type IN (KLSRV_RUNTIME_ERROR)| dedup msg ProductName ProductVersion | table _time dest ProductName ProductVersion  msg</query>
+          <query>`cs_kaspersky`  log_type IN (KLSRV_RUNTIME_ERROR) dest IN ($tkn_host$) dst IN ($tkn_ip$)| dedup msg ProductName ProductVersion | table _time dest ProductName ProductVersion  msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>

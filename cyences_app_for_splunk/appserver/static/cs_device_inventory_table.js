@@ -290,7 +290,7 @@ function($, TableView, SearchManager, mvc, _){
             | rename NETWORK_ID as qualys_network_id
             | eval _time=strftime(time, "%F %T")
             | eval Select="CHECKBOX_THIS_".uuid
-            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid,kaspersky_collected_by,kaspersky_version, windows_defender_host
+            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid,kaspersky_collected_by,kaspersky_version,kaspersky_host, kaspersky_status windows_defender_host
             | transpose 0 header_field=uuid column_name=field`});
             // $container is the jquery object where we can put out content.
             // In this case we will render our chart and add it to the $container

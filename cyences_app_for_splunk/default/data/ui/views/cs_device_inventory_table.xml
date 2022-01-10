@@ -268,7 +268,7 @@
           <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="kaspersky">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Present": #03991a, "Absent": #363030}</colorPalette>
         </format>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>
