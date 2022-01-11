@@ -45,7 +45,7 @@
         <search>
           <query>|  inputlookup cs_kaspersky_inventory 
 |  search hostname IN ($tkn_host$) ip IN ($tkn_ip$) 
-|  sort + kaspersky_status</query>
+|  sort + kaspersky_status | fields - hostname, mac_address | `cs_human_readable_time_format(time,last_connected_time)`</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
