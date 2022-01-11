@@ -53,6 +53,7 @@ Version 1.11.0 (January 2022)
   * Added support for Kaspersky in the Device Inventory and Asset Intelligence.
 * DNS Dashboard
   * Added DNS Tracker dashboard for following use-cases: Top Categories, Record Types, DNS log volume over time, Top queries, Top non-success queries with reason, Top requesters, Top non-success queries from requesters
+  * It supports all DNS data sources that are CIM compliant.
 * Microsoft Defender ATP Alert
   * Added alert for security alerts from Microsoft ATP or Office 365 Advanced Threat Protection.
 * VPN Dashboard
