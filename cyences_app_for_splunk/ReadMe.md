@@ -10,7 +10,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.10.0
+* Version - 1.11.0
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -46,6 +46,36 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.11.0 (January 2022)
+* Kaspersky
+  * Added Kaspersky dashboard.
+    * Added required extractions required.
+  * Added support for Kaspersky in the Device Inventory and Asset Intelligence.
+* DNS Dashboard
+  * Added DNS Tracker dashboard for following use-cases: Top Categories, Record Types, DNS log volume over time, Top queries, Top non-success queries with reason, Top requesters, Top non-success queries from requesters
+* Microsoft Defender ATP Alert
+  * Added alert for security alerts from Microsoft ATP or Office 365 Advanced Threat Protection.
+* VPN Dashboard
+  * Added support for Cisco VPN (Logs from Cisco ISE and Cisco Estreamer).
+  * Change the field usage from field dest to dest_category="vpn_auth" for better CIM compatibility.
+    * This field is being used to show correct count of VPN logins.
+* Enhancements:
+  * Splunk Admin - Missing Indexes Alert
+    * Improved query performance for the alert drastically.
+  * Splunk Admin Dashboard - Missing Indexes Table
+    * Improved drilldown search query for Missing Indexes table under Splunk Admin dashboard for performance.
+  * Windows Defender Event Logs
+    * Added support for logs coming from Windows 10 hosts. (Resolved field extraction related issues for these logs.)
+  * Decommission Hosts from the lookups
+    * Added dashboard to remove the decommissioned hosts from the Windows hosts lookup and Linux hosts lookup.
+      * This is required to avoid false positive alerts and decommissioned hosts being shown in the dashboard.
+
+Upgrade Guide from Version 1.10.0 to 1.11.0
+•	The Cyences App now supports Kaspersky, see Onboarding document "Kaspersky Logs" if you wish to collect data for Kaspersky.
+•	The VPN dashboard now supports Cisco ISE (https://splunkbase.splunk.com/app/1915/) and Cisco Estreamer (https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN.
+•	The Cyences has a new dashboard called "DNS Tracker". It supports all the DNS related data compatible with CIM data-model. Example, Cisco Umbrella (https://splunkbase.splunk.com/app/3926/).
+
+
 Version 1.10.0 (November 2021) 
 * Azure Active Directory: Office 365 
   * Added Office 365 alerts and dashboard panels to the Office 365 dashboard. 
