@@ -16,6 +16,7 @@
         <view name="cs_windows_defender_reports" />
         <view name="cs_o365_defender_atp" />
         <view name="cs_crowdstrike_reports" />
+        <view name="cs_kaspersky_reports" />
       </collection>
       <view name="cs_vpn_reports" />
       <view name="cs_authentication_reports" />
