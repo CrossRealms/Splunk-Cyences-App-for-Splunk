@@ -2,7 +2,6 @@
 name: "pre-release"
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for every branch
 on:
   push:
     branches:
@@ -45,7 +44,7 @@ jobs:
 
       - uses: VatsalJagani/splunk-app-action@v1
         env:
-          SPLUNK_APP_ACTION_1: "find TA-cyences -type f -name *.sh -exec chmod +x '{}' \;"
+          SPLUNK_APP_ACTION_1: "find TA-cyences -type f -name *.sh -exec chmod +x '{}' \\;"
         with:
           app_dir: "TA-cyences"
           app_build_name: "TA-cyences"
