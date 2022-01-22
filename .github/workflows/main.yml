@@ -26,23 +26,23 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - name: "Generate App Build and Performing App Inspect Checks"
-        run: |
-          echo "Cyences App for Splunk"
+      # - name: "Generate App Build and Performing App Inspect Checks"
+      #   run: |
+      #     echo "Cyences App for Splunk"
 
-      - uses: VatsalJagani/splunk-app-action@v1
-        with:
-          app_dir: "cyences_app_for_splunk"
-          app_build_name: "cyences_app_for_splunk"
-          splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
-          splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
+      # - uses: VatsalJagani/splunk-app-action@v0.7
+      #   with:
+      #     app_dir: "cyences_app_for_splunk"
+      #     app_build_name: "cyences_app_for_splunk"
+      #     splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
+      #     splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
 
 
       - name: "Generate Add-on Build and Performing App Inspect Checks"
         run: |
           echo "Cyences Add-on for Splunk"
 
-      - uses: VatsalJagani/splunk-app-action@v1
+      - uses: VatsalJagani/splunk-app-action@v0.7
         env:
           SPLUNK_APP_ACTION_1: "find TA-cyences -type f -name *.sh -exec chmod +x '{}' \\;"
         with:
