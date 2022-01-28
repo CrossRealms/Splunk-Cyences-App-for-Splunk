@@ -306,6 +306,9 @@
         </format>
         <fields>["Name","Count"]</fields>
         <drilldown>
+          <condition match="'row.Name'==&quot;Windows Defender - Windows Defender RealTime Protection Disabled or Failed&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          </condition>
           <condition match="'row.Name'==&quot;Currently Disabled/Stopped Sophos Services&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
