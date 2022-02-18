@@ -48,7 +48,7 @@ The Sysmon Deploy Add-on for Cyences App (https://github.com/VatsalJagani/Splunk
 
 ## Sysmon EventCodes:
 
-![]()
+![alt](/docs/assets/sysmon_event_codes.png)
 
 * Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 
@@ -156,14 +156,14 @@ https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps
 
 ## How to Install and Configure the Splunk Add-on for Microsoft Office 365: 
 
-1. Install the Add-on on the Heavy Forwarder (Reference). 
+1. Install the Add-on on the Heavy Forwarder (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Configure Integration Application (Reference). 
-    * Configure Tenant (Reference). 
+    * Configure Integration Application (https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
+    * Configure Tenant (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
 
 3. Configure the Inputs on the Heavy Forwarder. 
-    * Configure Management Activity input (Reference and Reference2). 
+    * Configure Management Activity input (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs and https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI). 
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 reports to work only the input data for Management Activity is required. 
@@ -182,15 +182,15 @@ The Sophos Central Splunk Add-on is required to collect Sophos Central data.
 Splunkbase Download:
 https://splunkbase.splunk.com/app/4647/ 
  
-Installation Guide:
+Installation and Configuration Guide:
 https://splunkbase.splunk.com/app/4647/#/details 
 
 ## How to Install and Configure the Sophos Central Add-on: 
 
-1. Install the Add-on on the Heavy Forwarder (Reference). 
+1. Install the Add-on on the Heavy Forwarder. 
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Configure the Application (Reference). 
+    * Configure the Application. 
     * Create an index named **Sophos** or update the macro definition in the Cyences app (**Settings > Configuration**). 
 
 3. Install the Add-on on the Search Head. 
@@ -230,7 +230,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 3. Click **Save**.
 
-    ![]()
+    ![alt](/docs/assets/sophos_endpoint_api_config.png)
 
 ## How to verify the Sophos Central API configuration: 
 
@@ -243,14 +243,14 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 4. A successful configuration will display the total number of events with no errors.  
 
-    ![]()
+    ![alt](/docs/assets/sophos_endpoint_api_config.png)
 
 ## Estimated Data Size
 Data collected from Sophos will be stored in a KV Store lookup, so it will not affect your Splunk license. 
 
 ## **Windows Defender**
 
-To collect the Windows defender data, we’ll be using below input stanza to collect the data. This data collection requires **TA for Microsoft Windows Defender** for data parsing and field extraction. 
+To collect the Windows defender data, we’ll be using below input stanza to collect the data. This data collection requires **TA for Microsoft Windows Defender** (https://splunkbase.splunk.com/app/3734/) for data parsing and field extraction. 
 
 Enable the input stanzas below for the Microsoft Windows Defender TA. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 
@@ -269,17 +269,17 @@ The estimated data size depends on the number of hosts that are sending Windows 
 
 ## **CrowdStrike Event Streams Logs**
 
-In order to collect CrowdStrike’s Event Streams logs, the **CrowdStrike Falcon Event Streams Technical Add-On** is required for data parsing and field extraction. 
+In order to collect CrowdStrike’s Event Streams logs, the **CrowdStrike Falcon Event Streams Technical Add-On** (https://splunkbase.splunk.com/app/5082/) is required for data parsing and field extraction. 
 
 There are two main components that need to be configured for the CrowdStrike Add-on: 
 
 1. Add Account: 
 
-    ![]()
+    ![alt](/docs/assets/crowdstrike_config_add_account.png)
 
 2. Create New Input: 
 
-    ![]()
+    ![alt](/docs/assets/crowdstrike_config_new_input.png)
 
 3. Refer to the **CrowdStrike Resource Center: CrowdStrike Falcon Event Streams Add-On Guide** for the Add-on’s configuration steps (https://www.crowdstrike.com/resources/guides/how-to-install-falcon-event-streams-splunk-add-on/).
 
@@ -308,10 +308,10 @@ https://splunk.paloaltonetworks.com/installation.html
 
 ## How to Install and Configure the Palo Alto Add-on: 
 
-1. Install the Add-on on the Heavy Forwarder (Reference).   
+1. Install the Add-on on the Heavy Forwarder (Reference). (TODO - incorrect reference link)   
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Getting data into Splunk (Reference).	 
+    * Getting data into Splunk (https://splunk.paloaltonetworks.com/getting-data-in.html).	 
     * Create an index named **pan_log** or update the macro definition in Cyences’ configuration page.  
 
 3. Install the Add-on on the Search Head. 
@@ -333,10 +333,10 @@ https://splunkbase.splunk.com/app/2846/#/details
 
 ## How to Install and Configure the FortiGate Add-on: 
 
-1. Install the Add-on on the Heavy Forwarder (Reference).   
+1. Install the Add-on on the Heavy Forwarder (Reference) (TODO - incorrect reference link).   
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Getting data into Splunk (Reference).
+    * Getting data into Splunk (Reference) (TODO - incorrect reference link).
     * Create an index named **fortigate** or update the macro definition in Cyences’ configuration page.  
 
 3. Install the Add-on on the Search Head. 
@@ -359,7 +359,7 @@ https://splunkbase.splunk.com/app/2846/#/details
 
 5. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-    ![]()
+    ![alt](/docs/assets/edit_action_field.png)
 
 6. Your current configuration should look similar to this: 
     * if(isnull(action) OR action="","unknown",action) 
@@ -373,7 +373,7 @@ https://splunkbase.splunk.com/app/2846/#/details
 
 10. Enable the Acceleration, then click **Save**.  
 
-    ![]()
+    ![alt](/docs/assets/edit_acceleration.png)
 
 ## **Network/Firewall Logs**
 View the **Data Onboarding > Palo Alto Firewall Logs** section to see how to collect the network traffic logs from Palo Alto Firewall. 
@@ -631,8 +631,8 @@ The Input Add On for G Suite App is required to collect Google Suite data.
 Splunkbase Download: 
 https://splunkbase.splunk.com/app/3793/ 
 
-Installation and Configuration Guide: 
-G Suite Data Collection Blog (add link)
+Installation and Configuration Guide:
+https://docs.google.com/document/d/1HLCLtJ0Kvb5AZUrJQ2pDbRul_mB400xbeRqzaIUicPY/edit 
 
 The Cyences app only needs **Activity – Login** service data from the Input Add On for G Suite App. 
 

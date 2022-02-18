@@ -74,8 +74,7 @@ Both of the dashboards that were designed for Qualys and Tenable let Splunk user
 
 The Device Inventory dashboard contains a list of every asset or device present in an environment. 
 
-Image
-![]()
+![alt](/docs/assets/device_inventory.png)
 
 It is populated from a lookup which is built by scheduled reports. The lookup is generated from the following data sources (the table can still function even if one or more categories of data are not present): 
 
@@ -108,8 +107,7 @@ Sometimes it is confusing for Cyences’ algorithm to automatically merge two de
 * Click **Merge** to combine the selected device entries.  
 * This change will be reflected after the **Device Inventory** dashboard is refreshed. 
 
-Image 
-![]()
+![alt](/docs/assets/merge_device_ids.png)
 
 The **Product Device ID Conflicts Auto Merged** dashboard panel was designed for troubleshooting purposes by Splunk Administrators only. 
 
@@ -129,8 +127,7 @@ This dashboard displays the following information about devices:
 * Various authentication activities like RDP and Linux logins 
 * If an asset is involved in any kind of Splunk security alert
 
-Image 
-![]()
+![alt](/docs/assets/asset_intelligence_dashboard.png)
 
 (The screenshot above does not include the full dashboard)
 

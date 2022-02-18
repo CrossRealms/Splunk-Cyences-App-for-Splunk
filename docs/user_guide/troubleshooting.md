@@ -10,11 +10,11 @@ parent: User Guide
 
 ## VPN dashboard is not loading even though cs_vpn_indexes has data.
 
-Image![]()
+![alt](/docs/assets/vpn_dashboard_not_loading.png)
 
-* Verify that the Splunk Add-on for RWI - Executive Dashboard is installed. (add link)
+* Verify that the Splunk Add-on for RWI - Executive Dashboard is installed (https://splunkbase.splunk.com/app/5063/).
 
-* Verify that the Splunk CIM is installed and the Authentication data model is accelerated. (add link)
+* Verify that the Splunk CIM (https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated. (add link)
 
 * Verify that the CIM Authentication data model does not filter the VPN index (check the macro definition for `cim_Authentication_indexes`). 
 
@@ -86,7 +86,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 6. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-Image![]()
+![alt](/docs/assets/filesystem_calculated_fields_action_edit.png)
 
 7. Your current configuration should look similar to this: 
 
@@ -102,7 +102,7 @@ Image![]()
 
 11. Check the **Accelerate** box, then click **Save**.  
 
-Image![]()
+![alt](/docs/assets/endpoint_edit_acceleration.png)
 
 ## Reducing False Positives for the “Authentication - Bruteforce Attempt for a User” Alert 
 
@@ -126,8 +126,8 @@ Image![]()
 
 3. Click **auditd_authentication** (the default values should match with the following image). 
 
-Image![]()
+![alt](/docs/assets/auditd_authentication_before.png)
 
 4. Update the search string with the following contents, then click **Save**. 
 
-Image![]()
+![alt](/docs/assets/auditd_authentication_after.png)

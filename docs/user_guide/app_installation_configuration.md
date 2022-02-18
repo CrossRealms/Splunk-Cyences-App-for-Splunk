@@ -178,7 +178,7 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
-Image![]()
+![alt](/docs/assets/honeydb_config.png)
 
 ## **Configuration of Malicious IP Collector Server**
 
@@ -190,7 +190,7 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
-Image![]()
+![alt](/docs/assets/malicious_ip_collector_config.png)
 
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
@@ -200,7 +200,7 @@ Run the search below and it should return events with no errors:
 
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
-Image![]()
+![alt](/docs/assets/malicious_ip_lookupgen_search.png)
 
 ## **Sophos Central API Endpoints Configuration**
 
@@ -267,5 +267,4 @@ To clean up the lookups related to Device Inventory, follow the directions below
 
 Navigate to **Cyences App for Splunk > Settings > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
 
-**Caution:** We highly recommend that users run the search in the Last 60 days or another time range that is better suited for their environment, since the time range of the search will define which devices will be kept and the rest will be automatically removed. 
-
+**Caution:** We highly recommend that users run the search in the Last 60 days or another time range that is better suited for their environment, since the time range of the search will define which devices will be kept and the rest will be automatically removed.
