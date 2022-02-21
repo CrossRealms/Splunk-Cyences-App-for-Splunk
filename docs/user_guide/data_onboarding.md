@@ -48,7 +48,7 @@ The Sysmon Deploy Add-on for Cyences App (https://github.com/VatsalJagani/Splunk
 
 ## Sysmon EventCodes:
 
-![alt](/assets/sysmon_event_codes.png)
+![alt](/Splunk-Cyences-App-for-Splunk/docs/assets/sysmon_event_codes.png)
 
 * Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 
@@ -230,7 +230,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 3. Click **Save**.
 
-    ![alt](/assets/sophos_endpoint_api_config.png)
+    ![alt](docs/assets/sophos_endpoint_api_config.png)
 
 ## How to verify the Sophos Central API configuration: 
 
@@ -243,7 +243,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 4. A successful configuration will display the total number of events with no errors.  
 
-    ![alt](/assets/sophos_endpoint_api_config.png)
+    ![alt](/docs/assets/sophos_endpoint_api_config.png)
 
 ## Estimated Data Size
 Data collected from Sophos will be stored in a KV Store lookup, so it will not affect your Splunk license. 
@@ -275,7 +275,7 @@ There are two main components that need to be configured for the CrowdStrike Add
 
 1. Add Account: 
 
-    ![alt](/assets/crowdstrike_config_add_account.png)
+    ![alt](Splunk-Cyences-App-for-Splunk/docs/assets/crowdstrike_config_add_account.png)
 
 2. Create New Input: 
 
