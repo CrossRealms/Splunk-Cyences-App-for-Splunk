@@ -7,7 +7,7 @@
   </init>
   <label>Lansweeper</label>
   <search id="search_windows_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | join type=left id [| search `cs_lansweeper` `cs_lansweeper_timerange` sourcetype="lansweeper:antivirus:onprem"| where onAccessScanningEnabled=1 | stats latest(DisplayName) as active_antivirus by AssetID | rename AssetID as id]| rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User, active_antivirus | eval name_lower=lower(Name)
 | join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
@@ -15,7 +15,7 @@
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname | rename hostname as name_lower | eval Tenable="Present"]
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
-| table Site, Name,Description,State,  IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, Domain,User, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
+| table Site, Name,Description,State,  IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, Domain,User,active_antivirus, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
 | sort Name </query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
