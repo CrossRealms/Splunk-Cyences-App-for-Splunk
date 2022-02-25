@@ -49,4 +49,4 @@ We’re always looking to improve the Cyences app by incorporating new features 
 The Cyences App is a contribution-based project that anyone can provide suggestions for. Visit the Cyences website for more information and to offer general feedback:[https://cyences.com/welcome/](https://cyences.com/welcome/) 
 
 Visit the GitHub repo for more details: 
-https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk 
+[https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk) 

@@ -149,10 +149,10 @@ Data size with updated stanzas:
 The Splunk Add-on for Microsoft Office 365 will be required in order to collect management activity data. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/4055/ 
+[https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) 
 
 Installation Guide: 
-https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps 
+[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) 
 
 ## How to Install and Configure the Splunk Add-on for Microsoft Office 365: 
 
@@ -180,10 +180,10 @@ The total amount of data varies based on the size of your organization (our calc
 The Sophos Central Splunk Add-on is required to collect Sophos Central data. 
 
 Splunkbase Download:
-https://splunkbase.splunk.com/app/4647/ 
+[https://splunkbase.splunk.com/app/4647/](https://splunkbase.splunk.com/app/4647/) 
  
 Installation and Configuration Guide:
-https://splunkbase.splunk.com/app/4647/#/details 
+[https://splunkbase.splunk.com/app/4647/#/details](https://splunkbase.splunk.com/app/4647/#/details) 
 
 ## How to Install and Configure the Sophos Central Add-on: 
 
@@ -288,10 +288,10 @@ There are two main components that need to be configured for the CrowdStrike Add
 Use the following Add-on to collect the data from Kaspersky. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/4656/   
+[https://splunkbase.splunk.com/app/4656/](https://splunkbase.splunk.com/app/4656/)   
 
 Installation Guide: 
-https://splunkbase.splunk.com/app/4656/#/details 
+[https://splunkbase.splunk.com/app/4656/#/details](https://splunkbase.splunk.com/app/4656/#/details) 
 
 ## Estimated Data Size
 The Kaspersky data is not large in terms of license and storage usage but it depends on the number of hosts connected in Kaspersky. 
@@ -301,10 +301,10 @@ The Kaspersky data is not large in terms of license and storage usage but it dep
 The Palo Alto Add-on for Splunk is required to collect the firewall logs from the Palo Alto. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/2757/ 
+[https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) 
 
 Installation Guide: 
-https://splunk.paloaltonetworks.com/installation.html 
+[https://splunk.paloaltonetworks.com/installation.html](https://splunk.paloaltonetworks.com/installation.html) 
 
 ## How to Install and Configure the Palo Alto Add-on: 
 
@@ -326,10 +326,10 @@ The total amount of data varies based on the size of your organization (our calc
 The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/2846/ 
+[https://splunkbase.splunk.com/app/2846/](https://splunkbase.splunk.com/app/2846/) 
 
 Installation Guide: 
-https://splunkbase.splunk.com/app/2846/#/details 
+[https://splunkbase.splunk.com/app/2846/#/details](https://splunkbase.splunk.com/app/2846/#/details) 
 
 ## How to Install and Configure the FortiGate Add-on: 
 
@@ -399,10 +399,10 @@ Make sure to update the **VPN data** macro in the **Cyences > Settings > Configu
 The Lansweeper Add-on for Splunk is required to collect information about the assets from Lansweeper. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/5418/ 
+[https://splunkbase.splunk.com/app/5418/](https://splunkbase.splunk.com/app/5418/) 
 
 Installation and Configuration Guide: 
-https://splunkbase.splunk.com/app/5418/#/details 
+[https://splunkbase.splunk.com/app/5418/#/details](https://splunkbase.splunk.com/app/5418/#/details) 
 
 **Note:** Use index=**lansweeper** for data collection or update the macro definition for `cs_lansweeper` (**Settings > Configuration**).
 
@@ -415,10 +415,10 @@ The Lansweeper Add-on does not consume a ton of license usage since it only coll
 The Qualys Technology Add-on (TA) for Splunk is required to keep track of all the vulnerabilities on the assets/devices.  
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/2964/ 
+[https://splunkbase.splunk.com/app/2964/](https://splunkbase.splunk.com/app/2964/) 
 
 Installation and Configuration Guide: 
-https://www.qualys.com/docs/qualys-ta-for-splunk.pdf 
+[https://www.qualys.com/docs/qualys-ta-for-splunk.pdf](https://www.qualys.com/docs/qualys-ta-for-splunk.pdf) 
 
 **Note:** Use index=**qualys** for data collection or update the macro definition for `cs_qualys` (**Settings > Configuration**).
 
@@ -431,10 +431,10 @@ The Qualys Technology Add-on (TA) for Splunk does not consume a ton of license u
 The Tenable Add-on for Splunk is required to collect the vulnerabilities for each IT asset/device. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/4060/ 
+[https://splunkbase.splunk.com/app/4060/](https://splunkbase.splunk.com/app/4060/) 
 
 Installation and Configuration Guide: 
-https://docs.tenable.com/integrations/Splunk/Content/Splunk%20Add%20On.htm 
+[https://docs.tenable.com/integrations/Splunk/Content/Splunk%20Add%20On.htm](https://docs.tenable.com/integrations/Splunk/Content/Splunk%20Add%20On.htm) 
 
 **Note:** Use index=**tenable** for data collection or update the macro definition for `cs_tenable` (**Settings > Configuration**).
 
@@ -447,7 +447,7 @@ The Tenable Add-on for Splunk does not consume a ton of license usage, since it 
 Nessus Data Importer Add-on (https://splunkbase.splunk.com/app/2740) can be used to collect vulnerability related data from Nessus on-premise, but we do not recommend this Add-on since it has been archived by the developer. 
 
 Installation and Configuration Guide: 
-https://splunkbase.splunk.com/app/2740/#/details 
+[https://splunkbase.splunk.com/app/2740/#/details](https://splunkbase.splunk.com/app/2740/#/details) 
 
 **Note:** Use **sourcetype=nessus_json** for inputs.conf (file monitoring input). Use index=**tenable** for data collection or update the macro definition for `cs_tenable` (**Settings > Configuration**).
 
@@ -463,10 +463,10 @@ Limitations with Nessus Data Importer Add-on:
 Linux/Unix data is collected via the Splunk Add-on for Linux and Unix (*nix).  
 
 Splunkbase Download:
-https://splunkbase.splunk.com/app/833/ 
+[https://splunkbase.splunk.com/app/833/](https://splunkbase.splunk.com/app/833/) 
 
 Installation and Configuration Guide:
-https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About 
+[https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About](https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About) 
 
 Insert the input stanzas below for the Splunk Add-on for Linux and Unix (*nix) to collect auditing data. Each stanza should be placed in the inputs.conf file (create a local directory if necessary): 
 
@@ -542,7 +542,7 @@ Insert the input stanzas below for the Splunk Add-on for Linux and Unix (*nix) t
 We have created a specific shell script to collect information about which users have sudo privileges via a user list which has normal login privileges. Download the Cyences Add-on for Splunk to enable this feature. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/5659/ 
+[https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/) 
 
 Insert the input stanza below for the Cyences Add-on for Splunk. The stanza should be placed in the inputs.conf file (create a local directory if necessary): 
 
@@ -558,10 +558,10 @@ Insert the input stanza below for the Cyences Add-on for Splunk. The stanza shou
 The Microsoft Graph Security Score Add-on for Splunk is required to collect the Microsoft Azure/O365 Security Score information. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/5693/ 
+[https://splunkbase.splunk.com/app/5693/](https://splunkbase.splunk.com/app/5693/) 
 
 Installation and Configuration Guide: 
-https://splunkbase.splunk.com/app/5693/#/details 
+[https://splunkbase.splunk.com/app/5693/#/details](https://splunkbase.splunk.com/app/5693/#/details) 
 
 **Note:** Use index=**o365** for data collection or update the macro definition for `cs_azure_securityscore` (**Settings > Configuration**).
 
@@ -574,10 +574,10 @@ The Microsoft Graph Security Score Add-on should consume around 5-10MB per day.
 The Microsoft 365 Defender Add-on for Splunk will be used to collect Windows Defender ATP alert logs. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/4959/ 
+[https://splunkbase.splunk.com/app/4959/](https://splunkbase.splunk.com/app/4959/) 
 
 Installation and Configuration Guide: 
-https://splunkbase.splunk.com/app/4959/#/details 
+[https://splunkbase.splunk.com/app/4959/#/details](https://splunkbase.splunk.com/app/4959/#/details) 
 
 **Note:** Use index=**defenderatp** for data collection or update the macro definition for `cs_o365_defender_atp` (**Settings > Configuration**).
 
@@ -586,10 +586,10 @@ https://splunkbase.splunk.com/app/4959/#/details
 The Defender ATP Status Check Add-On will be used to collect Defender ATP Configuration Status check logs. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/5691 
+[https://splunkbase.splunk.com/app/5691](https://splunkbase.splunk.com/app/5691) 
 
 Installation and Configuration Guide: 
-https://splunkbase.splunk.com/app/5691/#/details 
+[https://splunkbase.splunk.com/app/5691/#/details](https://splunkbase.splunk.com/app/5691/#/details) 
 
 Install the Defender ATP Status Check Add-On on a heavy forwarder and universal forwarders (Windows).
 
@@ -613,10 +613,10 @@ Use the Microsoft Defender ATP Audit dashboard (**Settings > Microsoft 365 Defen
 The Splunk Add-on for Amazon Web Services is required to collect Amazon Web Services data. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/1876/ 
+[https://splunkbase.splunk.com/app/1876/](https://splunkbase.splunk.com/app/1876/) 
 
 Installation and Configuration Guide: 
-http://docs.splunk.com/Documentation/AddOns/latest/AWS/Description 
+[https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description](https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description) 
 
 **Note:** Use both index=**aws** and index=**summary** for data collection or update the macro definition for `cs_aws` (**Settings > Configuration**). 
 
@@ -629,10 +629,10 @@ The license usage consumed by the Splunk Add-On for Amazon Web Services is based
 The Input Add On for G Suite App is required to collect Google Suite data. 
 
 Splunkbase Download: 
-https://splunkbase.splunk.com/app/3793/ 
+[https://splunkbase.splunk.com/app/3793/](https://splunkbase.splunk.com/app/3793/) 
 
 Installation and Configuration Guide:
-https://docs.google.com/document/d/1HLCLtJ0Kvb5AZUrJQ2pDbRul_mB400xbeRqzaIUicPY/edit 
+[https://docs.google.com/document/d/1HLCLtJ0Kvb5AZUrJQ2pDbRul_mB400xbeRqzaIUicPY/edit](https://docs.google.com/document/d/1HLCLtJ0Kvb5AZUrJQ2pDbRul_mB400xbeRqzaIUicPY/edit) 
 
 The Cyences app only needs **Activity – Login** service data from the Input Add On for G Suite App. 
 
