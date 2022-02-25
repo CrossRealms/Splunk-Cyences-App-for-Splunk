@@ -11,8 +11,11 @@
 ##### Header 5
 
 ---
-Link
-(https://splunkbase.splunk.com/app/5351/)
+Link1
+[](https://splunkbase.splunk.com/app/5351/)
+
+Link2
+[This is also a link](https://splunkbase.splunk.com/app/5351/)
 
 ---
 Image
