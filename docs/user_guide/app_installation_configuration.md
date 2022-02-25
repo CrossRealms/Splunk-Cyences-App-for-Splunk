@@ -190,7 +190,7 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/2e7fff7bef25c9420f0abff85da113796048c84c/docs/assets/malicious_ip_collector_config.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/malicious_ip_collector_config.png?raw=true)
 
 
 
