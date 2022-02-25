@@ -8,7 +8,7 @@ parent: User Guide
 
 # Cyences App for Splunk
 
-Download the Cyences App for Splunk from Splunkbase: https://splunkbase.splunk.com/app/5351/ 
+Download the Cyences App for Splunk from Splunkbase:[https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/) 
 
 ## Overview 
 
@@ -46,7 +46,7 @@ For new Splunk users, Enterprise Security requires a lot of fine tuning in order
 
 We’re always looking to improve the Cyences app by incorporating new features when possible. The first build came equipped with the **Globally Detected Malicious IPs** dashboard, which is one of the more prominent features of the Cyences app. This dashboard helps monitor bad traffic and it contains other insightful information such as if an IP address is associated with a distributed denial-of-service (DDoS) attack. For more information, please refer to the Globally Detected Malicious IPs section. Version 1.2.0 of the Cyences app features a new component and that is the Device Inventory Table. It’s a vital tool that helps with the security audit process and requires zero configuration. It lists all the different devices present in an environment by correlating data from CrowdStrike, Lansweeper, Qualys, Sophos, Tenable, and Windows Defender. For more information, please refer to the **Device Inventory** section. 
 
-The Cyences App is a contribution-based project that anyone can provide suggestions for. Visit the Cyences website for more information and to offer general feedback: https://cyences.com/welcome/ 
+The Cyences App is a contribution-based project that anyone can provide suggestions for. Visit the Cyences website for more information and to offer general feedback:[https://cyences.com/welcome/](https://cyences.com/welcome/) 
 
 Visit the GitHub repo for more details: 
 https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk 

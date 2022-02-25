@@ -37,24 +37,24 @@ There are dependent apps which also need to be installed on the Search Head alon
 
 | App Name | Splunkbase Link | What is this used for? |            
 |--------|--------|-------------|
-| ES Content Update App | https://splunkbase.splunk.com/app/3449 | For some macro definitions and lookups |
-| Splunk Common Information Model (CIM) | https://splunkbase.splunk.com/app/1621/ | For data models 
-| Missile Map (Visualization) | https://splunkbase.splunk.com/app/3511/ | For custom map visualization (view network traffic on map) 
-| Splunk Add-on for RWI - Executive Dashboard | https://splunkbase.splunk.com/app/5063/ | For field extraction (VPN data) 
-| Splunk Add-on for Windows | https://splunkbase.splunk.com/app/742/ | For field extraction (AD/Windows data) 
-| Microsoft Sysmon Add-on | https://splunkbase.splunk.com/app/1914/ | For field extraction (Sysmon data) 
-| Splunk Add-on for O365 | https://splunkbase.splunk.com/app/4055/ | For field extraction (O365 audit data) 
-| Splunk Add-on for Palo Alto | https://splunkbase.splunk.com/app/2757/ | For field extraction (network traffic and GlobalProtect VPN data) 
-| Sophos Central Splunk Add-on | https://splunkbase.splunk.com/app/4647/ | For field extraction (Sophos data) 
-| TA for Microsoft Windows Defender | https://splunkbase.splunk.com/app/3734/ | For field extraction (Windows Defender data) 
-| CrowdStrike Falcon Event Streams Technical Add-On | https://splunkbase.splunk.com/app/5082/ | For field extraction (CrowdStrike Event Stream data) 
-| Lansweeper Add-on for Splunk | https://splunkbase.splunk.com/app/5418/ | For field extraction (Lansweeper assets data) 
-| Qualys Technology Add-on (TA) for Splunk | https://splunkbase.splunk.com/app/2964/ | For field extraction and to receive mapped information about Qualys vulnerabilities (signature, severity, category, etc.) 
-| Tenable Add-on for Splunk | https://splunkbase.splunk.com/app/4060/ | For field extraction and to receive mapped information about Tenable vulnerabilities
-| Splunk Add-on for Linux and Unix | https://splunkbase.splunk.com/app/833 | For field extraction for data from Linux hosts 
-| Microsoft 365 Defender Add-on for Splunk | https://splunkbase.splunk.com/app/4959 | For field extraction for alerts from Office 365 Defender ATP 
-| Splunk Add-on for Amazon Web Services | https://splunkbase.splunk.com/app/1876 | For field extraction (AWS data) 
-| Fortinet FortiGate Add-On for Splunk | https://splunkbase.splunk.com/app/2846 | For field extraction (FortiGate VPN data) 
+| ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some macro definitions and lookups |
+| Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
+| Missile Map (Visualization) |[https://splunkbase.splunk.com/app/3511/](https://splunkbase.splunk.com/app/3511/) | For custom map visualization (view network traffic on map) 
+| Splunk Add-on for RWI - Executive Dashboard |[https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
+| Splunk Add-on for Windows |[https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) | For field extraction (AD/Windows data) 
+| Microsoft Sysmon Add-on |[https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/) | For field extraction (Sysmon data) 
+| Splunk Add-on for O365 |[https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) | For field extraction (O365 audit data) 
+| Splunk Add-on for Palo Alto |[https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) | For field extraction (network traffic and GlobalProtect VPN data) 
+| Sophos Central Splunk Add-on |[https://splunkbase.splunk.com/app/4647/](https://splunkbase.splunk.com/app/4647/) | For field extraction (Sophos data) 
+| TA for Microsoft Windows Defender |[https://splunkbase.splunk.com/app/3734/](https://splunkbase.splunk.com/app/3734/) | For field extraction (Windows Defender data) 
+| CrowdStrike Falcon Event Streams Technical Add-On |[https://splunkbase.splunk.com/app/5082/](https://splunkbase.splunk.com/app/5082/) | For field extraction (CrowdStrike Event Stream data) 
+| Lansweeper Add-on for Splunk |[https://splunkbase.splunk.com/app/5418/](https://splunkbase.splunk.com/app/5418/) | For field extraction (Lansweeper assets data) 
+| Qualys Technology Add-on (TA) for Splunk |[https://splunkbase.splunk.com/app/2964/](https://splunkbase.splunk.com/app/2964/) | For field extraction and to receive mapped information about Qualys vulnerabilities (signature, severity, category, etc.) 
+| Tenable Add-on for Splunk |[https://splunkbase.splunk.com/app/4060/](https://splunkbase.splunk.com/app/4060/) | For field extraction and to receive mapped information about Tenable vulnerabilities
+| Splunk Add-on for Linux and Unix |[https://splunkbase.splunk.com/app/833](https://splunkbase.splunk.com/app/833) | For field extraction for data from Linux hosts 
+| Microsoft 365 Defender Add-on for Splunk |[https://splunkbase.splunk.com/app/4959](https://splunkbase.splunk.com/app/4959) | For field extraction for alerts from Office 365 Defender ATP 
+| Splunk Add-on for Amazon Web Services |[https://splunkbase.splunk.com/app/1876](https://splunkbase.splunk.com/app/1876) | For field extraction (AWS data) 
+| Fortinet FortiGate Add-On for Splunk |[https://splunkbase.splunk.com/app/2846](https://splunkbase.splunk.com/app/2846) | For field extraction (FortiGate VPN data) 
 | Other add-ons from which you are collecting data for in your environment | N/A | For field extraction 
 
 ## **Data Model Acceleration & Macros**

@@ -34,7 +34,7 @@ In other words, Windows machines are not generating WinEventLog Event ID 4950.
 
         auditpol.exe /set /category:"Policy Change" /subcategory:"MPSSVC rule-level Policy Change" /success:enable /failure:enable 
 
-* Reference: https://www.eventsentry.com/kb/429  
+* Reference:[https://www.eventsentry.com/kb/429](https://www.eventsentry.com/kb/429)  
 
 ## Windows firewall was disabled but the alert did not generate in the Cyences app. 
 

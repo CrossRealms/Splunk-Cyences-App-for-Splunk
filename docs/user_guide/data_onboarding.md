@@ -65,8 +65,8 @@ Run the search query below to verify that the data is being ingested:
 Currently, the idea is to use Sysmon data on Windows to get different file operations performed on the Windows hosts (https://splunkbase.splunk.com/app/1914/). 
 
 References: 
-* https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon 
-* https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/ 
+*[https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 
+*[https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/](https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/) 
 
 **Note:** Sysmon data action field conflict detected, please look at **Troubleshooting > Sysmon data action field issue** section in the document to make sure your environment does not have the same issue.
 
@@ -133,7 +133,7 @@ Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas a
     index = msad 
     targetDc = <The unique name of the domain controller you want to use for AD monitoring.> 
 
-Reference for admon input creation: https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory 
+Reference for admon input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
 
 **Note:** Use **renderXml=false** as field extraction may not work with XML format.
 
@@ -163,7 +163,7 @@ https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps
     * Configure Tenant (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
 
 3. Configure the Inputs on the Heavy Forwarder. 
-    * Configure Management Activity input (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs and https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI). 
+    * Configure Management Activity input -[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and[https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.) 
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 reports to work only the input data for Management Activity is required. 
@@ -220,7 +220,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 7. Click **Show Client Secret**. 
 
 8. Refer to the Sophos Central documentation link below for further assistance.  
-    * https://developer.sophos.com/getting-started 
+    *[https://developer.sophos.com/getting-started](https://developer.sophos.com/getting-started) 
 
 ## Sophos Central API Configuration for Cyences  
 
