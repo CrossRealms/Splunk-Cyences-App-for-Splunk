@@ -178,7 +178,7 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
-![alt](/assets/honeydb_config.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/honeydb_config.png?raw=true)
 
 ## **Configuration of Malicious IP Collector Server**
 
@@ -202,7 +202,7 @@ Run the search below and it should return events with no errors:
 
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
-![alt](/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/malicious_ip_lookupgen_search.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/malicious_ip_lookupgen_search.png?raw=true)
 
 ## **Sophos Central API Endpoints Configuration**
 

@@ -57,7 +57,7 @@ There are several security related reports to choose from and they are all locat
     * Port Scanning Attempts
     * Top Network Traffic
 
-![alt](/assets/network_reports.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/network_reports.png?raw=true)
 
 * Office 365 Reports
     * Activity Over World (Unique Users)
@@ -127,6 +127,6 @@ Splunk Admin reports displays information related to the Splunk environment; whi
 **Remove Decommissioned Forwarder**
 * Removes forwarders that are no longer in use.  
 
-![alt](/assets/splunk_admin_dashboard.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/splunk_admin_dashboard.png?raw=true)
 
-![alt](/assets/splunk_admin_dashboard_continued.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/splunk_admin_dashboard_continued.png?raw=true)

@@ -10,7 +10,7 @@ parent: User Guide
 
 ## VPN dashboard is not loading even though cs_vpn_indexes has data.
 
-![alt](/assets/vpn_dashboard_not_loading.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/vpn_dashboard_not_loading.png?raw=true)
 
 * Verify that the Splunk Add-on for RWI - Executive Dashboard is installed (https://splunkbase.splunk.com/app/5063/).
 
@@ -86,7 +86,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 6. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-![alt](/assets/filesystem_calculated_fields_action_edit.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/filesystem_calculated_fields_action_edit.png?raw=true)
 
 7. Your current configuration should look similar to this: 
 
@@ -102,7 +102,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 11. Check the **Accelerate** box, then click **Save**.  
 
-![alt](/assets/endpoint_edit_acceleration.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/endpoint_edit_acceleration.png?raw=true)
 
 ## Reducing False Positives for the “Authentication - Bruteforce Attempt for a User” Alert 
 
@@ -126,8 +126,8 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 3. Click **auditd_authentication** (the default values should match with the following image). 
 
-![alt](/assets/auditd_authentication_before.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/auditd_authentication_before.png?raw=true)
 
 4. Update the search string with the following contents, then click **Save**. 
 
-![alt](/assets/auditd_authentication_after.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/auditd_authentication_after.png?raw=true)
