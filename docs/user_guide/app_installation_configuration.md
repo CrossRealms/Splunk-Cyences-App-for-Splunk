@@ -190,7 +190,8 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
-![alt](/assets/malicious_ip_collector_config.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/2e7fff7bef25c9420f0abff85da113796048c84c/docs/assets/malicious_ip_collector_config.png)
+
 
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
@@ -200,7 +201,7 @@ Run the search below and it should return events with no errors:
 
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
-![alt](/assets/malicious_ip_lookupgen_search.png)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/2e7fff7bef25c9420f0abff85da113796048c84c/docs/assets/malicious_ip_lookupgen_search.png)
 
 ## **Sophos Central API Endpoints Configuration**
 
