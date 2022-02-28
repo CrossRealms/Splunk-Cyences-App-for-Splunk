@@ -30,11 +30,11 @@ color_scheme: light
 heading_anchors: true
 
 # footer
-footer_content: "Copyright &copy; 2021 CrossRealms International."
+footer_content: "Copyright &copy; 2022 CrossRealms International."
 
 # Footer last edited timestamp
-last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
-last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https://ruby-doc.org/stdlib-2.7.0/libdoc/time/rdoc/Time.html
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p"
 
 # Footer "Edit this page on GitHub" link text
-gh_edit_link: false # show or hide edit this page link
+gh_edit_link: false
