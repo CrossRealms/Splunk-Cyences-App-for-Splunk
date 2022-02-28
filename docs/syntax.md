@@ -1,4 +1,10 @@
-
+---
+layout: default
+title: Sample file to check the syntax
+permalink: /syntax
+nav_exclude: true
+search_exclude: true
+---
 
 # Header 1
 
