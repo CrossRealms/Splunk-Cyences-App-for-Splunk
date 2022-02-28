@@ -93,7 +93,7 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last 4 hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
 | cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
-| cs_qualys_linux_os | The Qualys data has different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | ("*Ubuntu*", "*Linux*", "*CentOS*") (TODO - formatting issue)
+| cs_qualys_linux_os | The Qualys data has different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
 
 ## **Filter Macros**
 

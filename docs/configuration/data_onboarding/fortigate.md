@@ -20,13 +20,13 @@ Installation Guide:
 
 ## How to Install and Configure the FortiGate Add-on: 
 
-1. Install the Add-on on the Heavy Forwarder (Reference) (TODO - incorrect reference link).   
+1. Install the Add-on on the Heavy Forwarder.
 
-2. Configure the Add-on on the Heavy Forwarder. 
-    * Getting data into Splunk (Reference) (TODO - incorrect reference link).
-    * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.  
+2. Configure the Add-on on the Heavy Forwarder.
+    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2846/#/details).
+    * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
 
-3. Install the Add-on on the Search Head. 
+3. Install the Add-on on the Search Head.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
