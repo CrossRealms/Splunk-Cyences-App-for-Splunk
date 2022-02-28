@@ -57,5 +57,5 @@ This section of the document has all release notes.
 ## Upgrade Guide from Version 1.10.0 to 1.11.0
 
 * The Cyences App now supports Kaspersky. Refer to the **Data Onboarding > Kaspersky Logs** section for more information regarding the data collection process. 
-* The VPN dashboard now supports Cisco ISE (https://splunkbase.splunk.com/app/1915/) and Estreamer (https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN. 
-* Cyences has a new dashboard called **DNS Tracker**. It supports all types of DNS related data that are compatible with the CIM data model. For example, the Cisco Umbrella Add-on (https://splunkbase.splunk.com/app/3926/).
+* The VPN dashboard now supports [Cisco ISE](https://splunkbase.splunk.com/app/1915/) and [Estreamer](https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN. 
+* Cyences has a new dashboard called **DNS Tracker**. It supports all types of DNS related data that are compatible with the CIM data model. For example, the [Cisco Umbrella Add-on](https://splunkbase.splunk.com/app/3926/).

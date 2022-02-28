@@ -24,13 +24,13 @@ This is a fantastic way to collect detailed information about your Windows endpo
 
 Instead of having to manually install Microsoft Sysmon on each and every Windows server in your environment, it would be optimal to install Sysmon on Windows machines via the Deployment Server (to learn more about the deployment server, click here). You can still manually install Sysmon, but that would be an exhaustive and time-consuming task if your environment contains tons of Windows servers. 
 
-The Sysmon Deploy Add-on for Cyences App (https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
+[The Sysmon Deploy Add-on for Cyences App](https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
 
 ### Install and Maintain Sysmon on Windows Machines from deployment-server 
 
 1. Use **Sysmon Deploy Add-on for Cyences App** to install Microsoft Sysmon on Windows machines. 
 
-2. Download the latest Add-on build file named **TA-sysmon-deploy-for-cyences.tgz** (https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/) 
+2. Download the latest Add-on build file named **TA-sysmon-deploy-for-cyences.tgz** - [https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/](https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/) 
 
 3. Extract the file under the deployment apps directory on the deployment server. 
 
@@ -58,7 +58,7 @@ Run the search query below to verify that the data is being ingested:
 
     index=epintel source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
 
-Currently, the idea is to use Sysmon data on Windows to get different file operations performed on the Windows hosts (https://splunkbase.splunk.com/app/1914/). 
+Currently, the idea is to use Sysmon data on Windows to get different file operations performed on the Windows hosts [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/). 
 
 References: 
 *[https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 

@@ -21,10 +21,10 @@ Installation and Configuration Guide:
 The Cyences app only needs **Activity - Login** service data from the Input Add On for G Suite App. 
 
 The following items should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
-* G Suite For Splunk 
-(https://splunkbase.splunk.com/app/3791/) 
-* TA for G Suite App 
-(https://splunkbase.splunk.com/app/3792/) 
+* G Suite For Splunk - 
+[https://splunkbase.splunk.com/app/3791/](https://splunkbase.splunk.com/app/3791/) 
+* TA for G Suite App - 
+[https://splunkbase.splunk.com/app/3792/](https://splunkbase.splunk.com/app/3792/) 
 
 **Note:** Use index=**gsuite** for data collection or update the macro definition for `cs_gsuite` (**Settings > Configuration**).
 

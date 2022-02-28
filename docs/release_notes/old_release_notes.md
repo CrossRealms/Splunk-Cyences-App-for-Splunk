@@ -148,7 +148,7 @@ parent: Release Notes
     * Refer to the **Data Onboarding > Sysmon** section to configure the Sysmon deployment and data collection process. 
 
 * ### Cyences Add-on Version 1.0.2 
-    * Update the Cyences Add-on to version 1.0.2 (https://splunkbase.splunk.com/app/5659/).
+    * Update the Cyences Add-on to version 1.0.2 - [https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/).
 
 ## Version 1.8.0 (September 2021)
 
@@ -266,8 +266,8 @@ parent: Release Notes
 
 * ### Added support for Tenable:SC and Nessus on-prem. 
     * Vulnerability related data can be found in the Tenable dashboard. 
-    * Cyences now supports data collected from Tenable:SC with the Tenable Add-on for Splunk (https://splunkbase.splunk.com/app/4060 - can be used to collect data from Tenable:IO or Tenable Cloud). 
-    * Cyences also supports data collected from Nessus Data Importer Add-on (https://splunkbase.splunk.com/app/2740). We do not recommend using this Add-on because the app has been archived by Splunk. 
+    * Cyences now supports data collected from Tenable:SC with the [Tenable Add-on for Splunk](https://splunkbase.splunk.com/app/4060) - can be used to collect data from Tenable:IO or Tenable Cloud). 
+    * Cyences also supports data collected from [Nessus Data Importer Add-on](https://splunkbase.splunk.com/app/2740). We do not recommend using this Add-on because the app has been archived by Splunk. 
     * View the **Data Onboarding > Tenable Data** section to see how to collect data from this Add-on. 
 
 * ### Added an alert for Active Directory: **AD - Group Membership Changed**
@@ -314,7 +314,7 @@ parent: Release Notes
     * View the **Data Onboarding > Microsoft 365 Defender ATP** section to see how to collect data for Windows Defender ATP alerts and configuration statuses from Windows machines. 
 * ### Sysmon data action field conflict detected  
     * View the **Troubleshooting > Sysmon data action field issue** section to resolve this issue if it is present in your environment. 
-* ### Cyences Add-on for Splunk has been updated to version 1.0.1 (https://splunkbase.splunk.com/app/5659/).  
+* ### Cyences Add-on for Splunk has been updated to version 1.0.1 - [https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/).
     * New update fixes a permission issue with the Linux sudo access data collection shell script. 
     * Upgrade the Cyences Add-on for Splunk on the deployment server/universal forwarder. 
 

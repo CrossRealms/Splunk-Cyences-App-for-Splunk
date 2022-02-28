@@ -10,7 +10,7 @@ grand_parent: Configuration
 
 ## **Windows WinEventLog**
 
-View the Splunk Add-on for Windows documentation to learn how to enable Security WinEventLog data (https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows). 
+View the Splunk Add-on for Windows documentation to learn how to enable Security WinEventLog data [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows). 
 
 Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 

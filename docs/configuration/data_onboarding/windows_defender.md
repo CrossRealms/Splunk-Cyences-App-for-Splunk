@@ -10,7 +10,7 @@ grand_parent: Configuration
 
 ## **Windows Defender**
 
-To collect the Windows defender data, we'll be using below input stanza to collect the data. This data collection requires **TA for Microsoft Windows Defender** (https://splunkbase.splunk.com/app/3734/) for data parsing and field extraction. 
+To collect the Windows defender data, we'll be using below input stanza to collect the data. This data collection requires [TA for Microsoft Windows Defender](https://splunkbase.splunk.com/app/3734/) for data parsing and field extraction. 
 
 Enable the input stanzas below for the Microsoft Windows Defender TA. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 

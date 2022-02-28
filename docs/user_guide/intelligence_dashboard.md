@@ -35,7 +35,7 @@ Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now be
 
 ## Lansweeper
 
-The Lansweeper dashboard is powered by Lansweeper's data (https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
+The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
 
 The Lansweeper dashboard in the Cyences app displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
 
@@ -58,7 +58,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 
 Qualys and Tenable are security solutions that are designed to detect vulnerabilities present in your environment.  
 
-The Qualys dashboard is powered by Qualys' data (https://www.qualys.com/) and the Tenable dashboard is powered by Tenable's data (https://www.tenable.com/). 
+The Qualys dashboard is powered by Qualys' data [https://www.qualys.com/](https://www.qualys.com/) and the Tenable dashboard is powered by Tenable's data [https://www.tenable.com/](https://www.tenable.com/). 
 
 The Cyences app utilizes the data provided by Qualys and Tenable to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
 

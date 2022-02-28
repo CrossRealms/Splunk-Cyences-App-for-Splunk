@@ -26,7 +26,7 @@ The Tenable Add-on for Splunk does not consume a ton of license usage, since it 
 
 ## Nessus Data Importer Add-on
 
-Nessus Data Importer Add-on (https://splunkbase.splunk.com/app/2740) can be used to collect vulnerability related data from Nessus on-premise, but we do not recommend this Add-on since it has been archived by the developer. 
+[Nessus Data Importer Add-on](https://splunkbase.splunk.com/app/2740) can be used to collect vulnerability related data from Nessus on-premise, but we do not recommend this Add-on since it has been archived by the developer. 
 
 Installation and Configuration Guide: 
 [https://splunkbase.splunk.com/app/2740/#/details](https://splunkbase.splunk.com/app/2740/#/details) 

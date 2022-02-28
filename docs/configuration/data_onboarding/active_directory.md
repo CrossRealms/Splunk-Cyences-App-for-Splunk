@@ -58,11 +58,11 @@ Installation Guide:
 
 ## How to Install and Configure the Splunk Add-on for Microsoft Office 365: 
 
-1. Install the Add-on on the Heavy Forwarder (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
+1. Install the Add-on on the Heavy Forwarder [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Configure Integration Application (https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
-    * Configure Tenant (https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
+    * Configure Integration Application [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
+    * Configure Tenant [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
 
 3. Configure the Inputs on the Heavy Forwarder. 
     * Configure Management Activity input -[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and[https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.) 

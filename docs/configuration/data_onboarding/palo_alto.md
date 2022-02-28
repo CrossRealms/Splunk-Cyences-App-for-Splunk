@@ -23,8 +23,8 @@ Installation Guide:
 1. Install the Add-on on the Heavy Forwarder (Reference). (TODO - incorrect reference link)   
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Getting data into Splunk (https://splunk.paloaltonetworks.com/getting-data-in.html).	 
-    * Create an index named **pan_log** or update the macro definition in Cyences’ configuration page.  
+    * Getting data into Splunk [https://splunk.paloaltonetworks.com/getting-data-in.html](https://splunk.paloaltonetworks.com/getting-data-in.html).	 
+    * Create an index named **pan_log** or update the macro definition in Cyences' configuration page.  
 
 3. Install the Add-on on the Search Head. 
 

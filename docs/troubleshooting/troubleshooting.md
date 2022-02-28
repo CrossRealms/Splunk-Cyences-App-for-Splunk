@@ -13,9 +13,9 @@ has_children: false
 
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/vpn_dashboard_not_loading.png?raw=true)
 
-* Verify that the Splunk Add-on for RWI - Executive Dashboard is installed (https://splunkbase.splunk.com/app/5063/).
+* Verify that the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) is installed.
 
-* Verify that the Splunk CIM (https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated. (add link)
+* Verify that the [Splunk CIM](https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated. (add link)
 
 * Verify that the CIM Authentication data model does not filter the VPN index (check the macro definition for `cim_Authentication_indexes`). 
 
@@ -58,7 +58,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 ## Sysmon data action field issue
 
-* Due to a conflict in props.conf for both the Sysmon Add-on (https://splunkbase.splunk.com/app/1914/) and Windows Add-on (https://splunkbase.splunk.com/app/742/), the **action** field is displaying incorrect values for Sysmon related data. 
+* Due to a conflict in props.conf for both the [Sysmon Add-on](https://splunkbase.splunk.com/app/1914/) and [Windows Add-on](https://splunkbase.splunk.com/app/742/), the **action** field is displaying incorrect values for Sysmon related data. 
 
 * The correct value for the **action** field should be **created**, but instead we are receiving **unknown** as the value for every event coming from Sysmon EventCode=11. 
 
