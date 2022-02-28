@@ -18,7 +18,7 @@
   <search id="forwarders_search">
     <query>| inputlookup cs_forwarders.csv
 | `cs_human_readable_time_format(last_connected)`
-| table hostname, forwarder_type, version, last_connected, os, arch, status</query>
+| table hostname, sourceIp, forwarder_type, version, last_connected, os, arch, status</query>
     <earliest>0</earliest>
     <latest></latest>
     <sampleRatio>1</sampleRatio>
@@ -28,7 +28,7 @@
     <panel>
       <html>
         <p>Displays information which is important for security, as well as the overall health of the Splunk environment.</p>
-        <p>Both the "Splunk Admin - Missing Data in the Index" and "Splunk Admin – Missing Forwarder" alerts have to be enabled beforehand in order to populate this dashboard.</p>
+        <p>Both the "Splunk Admin - Missing Data in the Index" and "Splunk Admin - Missing Forwarder" alerts have to be enabled beforehand in order to populate this dashboard.</p>
         <p>Both alerts are updated every hour.</p>
         <p>Data from the Overview page might not match with the data in the Splunk Admin dashboard if any filtering has taken place on forwarders or indexers with either the cs_splunk_admin_missing_forwarders or cs_splunk_admin_missing_indexes_filter macros. This dashboard displays all forwarders and indexes found in your Splunk environment.</p>
         <p>To remove a forwarder or index from this list, visit the "Differentiating Between Missing Indexes &amp; Forwarders and Removed Indexes &amp; Forwarders" section found <a href="https://cyences.com/cyences-app-for-splunk/" target="_blank">here</a>.</p>
@@ -164,15 +164,13 @@
         <option name="drilldown">row</option>
         <option name="rowNumbers">true</option>
         <drilldown>
-          <link target="_blank">search?q=index=$click.value|s$%20%7C%20timechart%20span=1h%20count&amp;earliest=-24h@h&amp;latest=now&amp;display.page.search.tab=visualizations&amp;display.general.type=visualizations&amp;display.visualizations.type=charting&amp;display.page.search.mode=fast</link>
+          <link target="_blank">search?q=%7C%20tstats%20prestats%3Dtrue%20count%20where%20index%3D$click.value|s$%20_index_earliest%3D-24h%40m%20_index_latest%3Dnow%20by%20_indextime%20%0A%7C%20eval%20_time%3D_indextime%20%7C%20timechart%20span%3D30m%20count&amp;earliest=0&amp;latest=&amp;display.page.search.tab=visualizations&amp;display.general.type=visualizations&amp;display.page.search.mode=fast</link>
         </drilldown>
       </table>
       <html>
         <p>Information updated hourly basis.</p>
         <p>It mark index as missing if there is no data in last 1 hour. To change the the time duration for any index add an entry in the lookup file cs_missing_indexes_time_duration.csv ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_missing_indexes_time_duration.csv).</p>
-        <p>For example, lansweeper collects data every 4 hours (14400 seconds) so you can create csv file with below 2 lines. Note that the max_time_duration is in seconds.</p>
-        <p>index, max_time_duration</p>
-        <p>lansweeper, 14440</p>
+        <p>Refer "Finetune Splunk Admin related alerts" section in the Cyences documentation for more information.</p>
       </html>
     </panel>
   </row>

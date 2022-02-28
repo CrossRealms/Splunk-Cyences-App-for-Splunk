@@ -112,6 +112,14 @@
               <button id="macro_data_crowdstrike_eventstream_button">Update</button> </th>
           </tr>
           <tr>
+            <th style="text-align:left">Kaspersky Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_kaspersky"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_kaspersky_button">Update</button> </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Office 365 Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_o365"/>
@@ -291,6 +299,15 @@
             </th>
             <th style="text-align:left">
               <button id="macro_datamodel_network_traffic_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">Network Resolution(DNS)</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_datamodel_network_resolution_dns"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_datamodel_network_resolution_dns_button">Update</button>
             </th>
           </tr>
           <tr>
@@ -650,6 +667,28 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_sophos_malware_detected_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: Microsoft Office 365 Defender ATP</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_o365_defender_atp_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_o365_defender_atp_alerts_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_defender_atp_alerts_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_defender_atp_alerts_filter_button">Update</button>
             </th>
           </tr>
         </table>

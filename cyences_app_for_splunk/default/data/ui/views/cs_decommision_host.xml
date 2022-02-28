@@ -1,0 +1,127 @@
+<form theme="dark" version="1.1">
+  <label>Decommission Host from Lookups</label>
+  <fieldset submitButton="false"></fieldset>
+  <search id="all_host_base_search">
+          <query>| tstats latest(_time) as _time where index=_internal by host
+| append [| inputlookup all_windows_hosts.csv | eval os="Windows"]
+| append [| inputlookup cs_linux_user_list.csv | eval os="Linux"]
+| stats max(_time) as _time, last(*) as * by host
+| fillnull _time 0 | sort 0 _time
+| eval _time=if(_time=0, "---", _time)
+| eval last_internal_event=strftime(_time, "%F %T %z")
+| fillnull last_internal_event value="No _internal events in last 7 days"
+| table host, last_internal_event, os</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+  <row>
+    <panel>
+      <title>Linux Lookup</title>
+      <table>
+        <search base="all_host_base_search" id="linux_hosts_base_search">
+          <query>| where os="Linux" | table host, last_internal_event</query>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Decommission Linux Host from Linux Lookup</title>
+      <input type="dropdown" token="tkn_nix_remove_forwarder_dropdown">
+        <label>Host Name</label>
+        <search base="linux_hosts_base_search">
+          <query></query>
+        </search>
+        <change>
+          <condition match="'tkn_nix_remove_forwarder_dropdown'=='tkn_nix_remove_forwarder_text'">
+            <set token="tkn_nix_remove_forwarder">$tkn_nix_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_nix_remove_forwarder"></unset>
+          </condition>
+        </change>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+      </input>
+      <input type="text" token="tkn_nix_remove_forwarder_text">
+        <label>Re-type Host Name for Confirmation</label>
+        <change>
+          <condition match="'tkn_nix_remove_forwarder_dropdown'='tkn_nix_remove_forwarder_text'">
+            <set token="tkn_nix_remove_forwarder">$tkn_nix_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_nix_remove_forwarder"></unset>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| inputlookup cs_linux_user_list.csv | search NOT host=$tkn_nix_remove_forwarder|s$ | outputlookup cs_linux_user_list.csv | where host="DO-NOT-RETURN-ANYRESULTS"
+| append [| stats count | rename count as result | eval result="Host ".$tkn_nix_remove_forwarder|s$." has been removed from the Lookup."]</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Query will remove the Host from the Linux User List Lookup and you will not see the host in the dashboard panel called "User List".</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows Lookup</title>
+      <table>
+        <search base="all_host_base_search" id="windows_hosts_base_search">
+          <query>| where os="Windows" | table host, last_internal_event</query>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Decommission Windows Host from Windows Lookup</title>
+      <input type="dropdown" token="tkn_win_remove_forwarder_dropdown">
+        <label>Host Name</label>
+        <search base="windows_hosts_base_search">
+          <query></query>
+        </search>
+        <change>
+          <condition match="'tkn_win_remove_forwarder_dropdown'=='tkn_win_remove_forwarder_text'">
+            <set token="tkn_win_remove_forwarder">$tkn_win_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_win_remove_forwarder"></unset>
+          </condition>
+        </change>
+        <fieldForLabel>host</fieldForLabel>
+        <fieldForValue>host</fieldForValue>
+      </input>
+      <input type="text" token="tkn_win_remove_forwarder_text">
+        <label>Re-type Host Name for Confirmation</label>
+        <change>
+          <condition match="'tkn_win_remove_forwarder_dropdown'='tkn_win_remove_forwarder_text'">
+            <set token="tkn_win_remove_forwarder">$tkn_win_remove_forwarder_dropdown$</set>
+          </condition>
+          <condition>
+            <unset token="tkn_win_remove_forwarder"></unset>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>| inputlookup all_windows_hosts.csv  | search NOT host=$tkn_win_remove_forwarder|s$ | outputlookup all_windows_hosts.csv | where host="DO-NOT-RETURN-ANYRESULTS"
+| append [| stats count | rename count as result | eval result="Host ".$tkn_win_remove_forwarder|s$." has been removed from the Lookup."]</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Query will remove the Host from the all_windows_hosts.csv Lookup.</p>
+      </html>
+    </panel>
+  </row>
+</form>

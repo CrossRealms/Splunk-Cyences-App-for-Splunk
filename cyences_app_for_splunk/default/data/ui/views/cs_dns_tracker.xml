@@ -1,0 +1,131 @@
+<form theme="dark" version="1.1">
+  <label>DNS Tracker</label>
+  <fieldset submitButton="false">
+    <input type="time" token="tkn_timerange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_src" searchWhenChanged="true">
+      <label>Requester (src)</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_query" searchWhenChanged="true">
+      <label>Query</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Top Categories</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.dest_category | rename DNS.* as * | stats sum(count) as count by dest_category</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Record Types</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.record_type | rename DNS.* as *</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.00001</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DNS Log Volume over Time</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1s | timechart sum(count) as count span=1h</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Record Types over Time</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by _time span=1h DNS.record_type | rename DNS.* as *  | xyseries _time, record_type, count</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Queries</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query | rename DNS.* as * |sort - count | head 10</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top Non-success Code Queries</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query DNS.reply_code | rename DNS.* as * |sort - count | head 10</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Requesters</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top Non-success Code Requesters</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src DNS.reply_code | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

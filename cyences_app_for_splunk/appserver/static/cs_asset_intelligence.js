@@ -40,7 +40,7 @@ function(mvc){
     var searchManagerResults = searchManager.data("results", {count: 0});
     searchManagerResults.on('data', function () {
         if (searchManagerResults.data()) {
-            // fields: (6) ["lansweeper", "qualys", "tenable", "sophos", "defender", "crowdstrike"]
+            // fields: (6) ["lansweeper", "qualys", "tenable", "sophos", "defender", "crowdstrike","kaspersky"]
             let results = searchManagerResults.data().rows[0];   // only one row of data is important for us
             let lansweeper = results[0];
             let qualys = results[1];
@@ -48,6 +48,7 @@ function(mvc){
             let sophos = results[3];
             let defender = results[4];
             let crowdstrike = results[5];
+            let kaspersky = results[6];
 
             if(lansweeper > 0){
                 setToken("tkn_tablefields_lansweeper", ", lansweeper");
@@ -101,6 +102,15 @@ function(mvc){
             else{
                 setToken("tkn_tablefields_crowdstrike", "");
                 unsetToken("tkn_show_hide_crowdstrike");
+            }
+
+            if(kaspersky > 0){
+                setToken("tkn_tablefields_kaspersky", ", kaspersky");
+                setToken("tkn_show_hide_kaspersky", "true");
+            }
+            else{
+                setToken("tkn_tablefields_kaspersky", "");
+                unsetToken("tkn_show_hide_kaspersky");
             }
 
         }

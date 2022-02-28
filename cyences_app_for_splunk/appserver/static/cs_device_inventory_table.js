@@ -277,19 +277,20 @@ function($, TableView, SearchManager, mvc, _){
 
             //update the search with the HOST_ID that we are interested in
             this._searchManager.set({ search: `| inputlookup cs_device_inventory where uuid IN ${search_uuids}
-            | mvexpand lansweeper_id | mvexpand tenable_uuid | mvexpand qualys_id | mvexpand sophos_uuid | mvexpand windows_defender_host | mvexpand crowdstrike_userid
-            | join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
-            | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen | fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
-            | join qualys_id type=left [| inputlookup cs_qualys_inventory | rename time as qualys_last_event | fields - ip, hostname, mac_address, tenable_uuid, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host]
-            | join sophos_uuid type=left [| inputlookup cs_sophos_inventory | rename time as sophos_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, crowdstrike_userid, windows_defender_host]
-            | join windows_defender_host type=left [| inputlookup cs_windows_defender_inventory | rename time as defender_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid]
-            | join crowdstrike_userid type=left [| inputlookup cs_crowdstrike_inventory | rename time as crowdstrike_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, windows_defender_host]
+            | mvexpand lansweeper_id | mvexpand tenable_uuid | mvexpand qualys_id | mvexpand sophos_uuid | mvexpand windows_defender_host | mvexpand crowdstrike_userid | mvexpand kaspersky_host
+            | join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host , kaspersky_host]
+            | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen | fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host , kaspersky_host]
+            | join qualys_id type=left [| inputlookup cs_qualys_inventory | rename time as qualys_last_event | fields - ip, hostname, mac_address, tenable_uuid, lansweeper_id, sophos_uuid, crowdstrike_userid, kaspersky_host, windows_defender_host]
+            | join sophos_uuid type=left [| inputlookup cs_sophos_inventory | rename time as sophos_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, crowdstrike_userid, kaspersky_host, windows_defender_host]
+            | join windows_defender_host type=left [| inputlookup cs_windows_defender_inventory | rename time as defender_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, kaspersky_host]
+            | join crowdstrike_userid type=left [| inputlookup cs_crowdstrike_inventory | rename time as crowdstrike_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, kaspersky_host, windows_defender_host]
+            | join kaspersky_host type=left [| inputlookup cs_kaspersky_inventory | rename time as kaspersky_last_event | fields - ip,hostname, mac_address, tenable_uuid, qualys_id, lansweeper_id, sophos_uuid, windows_defender_host, crowdstrike_userid]
             | stats values(*) as * by uuid
             | eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) | rename AssetType AS lansweeper_asset_type, Description as lansweeper_description
             | rename NETWORK_ID as qualys_network_id
             | eval _time=strftime(time, "%F %T")
             | eval Select="CHECKBOX_THIS_".uuid
-            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid, windows_defender_host
+            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid,kaspersky_collected_by,kaspersky_version,kaspersky_host, kaspersky_status windows_defender_host
             | transpose 0 header_field=uuid column_name=field`});
             // $container is the jquery object where we can put out content.
             // In this case we will render our chart and add it to the $container

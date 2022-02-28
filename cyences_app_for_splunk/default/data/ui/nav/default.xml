@@ -10,11 +10,13 @@
       <view name="cs_gsuite_reports" />
       <view name="cs_network_reports" />
       <view name="cs_paloalto_firewall_reports" />
+      <view name="cs_dns_tracker" />
       <collection label="Antivirus">
         <view name="cs_sophos_reports" />
         <view name="cs_windows_defender_reports" />
         <view name="cs_o365_defender_atp" />
         <view name="cs_crowdstrike_reports" />
+        <view name="cs_kaspersky_reports" />
       </collection>
       <view name="cs_vpn_reports" />
       <view name="cs_authentication_reports" />
@@ -31,6 +33,7 @@
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
+    <view name="cs_decommision_host" />
     <view name="cs_splunk_admin_reports" />
     <collection label="Splunk Admin Checks">
       <view name="cs_splunk_admin_checks_general" />

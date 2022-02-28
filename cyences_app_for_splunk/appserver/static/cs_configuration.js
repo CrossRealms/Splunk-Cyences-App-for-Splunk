@@ -15,6 +15,7 @@ require([
         { macro_name: 'cs_sophos', input_id: 'macro_data_sophos', button_id: 'macro_data_sophos_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_windows_defender', input_id: 'macro_data_windows_defender', button_id: 'macro_data_windows_defender_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_crowdstrike_eventstream', input_id: 'macro_data_crowdstrike_eventstream', button_id: 'macro_data_crowdstrike_eventstream_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_kaspersky', input_id: 'macro_data_kaspersky', button_id: 'macro_data_kaspersky_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_o365', input_id: 'macro_data_o365', button_id: 'macro_data_o365_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_azure_securityscore', input_id: 'macro_data_azure_securityscore', button_id: 'macro_data_azure_securityscore_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_wineventlog_security', input_id: 'macro_data_wineventlog_security', button_id: 'macro_data_wineventlog_security_button', msg_id: 'macro_data_msg'},
@@ -51,6 +52,7 @@ require([
         { macro_name: 'cs_summariesonly_endpoint', input_id: 'macro_datamodel_endpoint', button_id: 'macro_datamodel_endpoint_button', msg_id: 'macro_datamodel_msg'},
         { macro_name: 'cs_summariesonly_network_traffic', input_id: 'macro_datamodel_network_traffic', button_id: 'macro_datamodel_network_traffic_button', msg_id: 'macro_datamodel_msg'},
         { macro_name: 'cs_summariesonly_authentication', input_id: 'macro_datamodel_authentication', button_id: 'macro_datamodel_authentication_button', msg_id: 'macro_datamodel_msg'},
+        { macro_name: 'cs_summariesonly_network_resolution_dns', input_id: 'macro_datamodel_network_resolution_dns', button_id: 'macro_datamodel_network_resolution_dns_button', msg_id: 'macro_datamodel_msg'},
 
         /* Windows & AD */
         { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},
@@ -121,6 +123,9 @@ require([
         { macro_name: 'cs_windows_defender_antivirus_scan_failed_filter', input_id: 'macro_cs_windows_defender_antivirus_scan_failed_filter', button_id: 'macro_cs_windows_defender_antivirus_scan_failed_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_unable_to_download_offline_scan_filter', input_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter', button_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_malware_detected_filter', input_id: 'macro_cs_windows_defender_malware_detected_filter', button_id: 'macro_cs_windows_defender_malware_detected_filter_button', msg_id: 'macro_windows_defender_msg'},
+
+        /* O365 Defender ATP */
+        { macro_name: 'cs_o365_defender_atp_alerts_filter', input_id: 'macro_cs_o365_defender_atp_alerts_filter', button_id: 'macro_cs_o365_defender_atp_alerts_filter_button', msg_id: 'macro_o365_defender_atp_msg'},
 
         /* CrowdStrike */
         { macro_name: 'cs_crowdstrike_malware_detected_alert_filter', input_id: 'macro_cs_crowdstrike_malware_detected_alert_filter', button_id: 'macro_cs_crowdstrike_malware_detected_alert_filter_button', msg_id: 'macro_crowdstrike_msg'},
