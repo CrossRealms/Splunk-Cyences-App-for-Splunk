@@ -2,7 +2,7 @@
 layout: default
 title: Overview Dashboard
 permalink: /user_guide/overview_dashboard/
-nav_order: 3
+nav_order: 2
 parent: User Guide
 ---
 
@@ -28,6 +28,6 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 * It also monitors for high disk usage and license violations.
 
 ### Globally Detected Malicious IPs
-* The Globally Detected Malicious IPs is a list of all IP addresses found by Cyences’ reports. 
+* The Globally Detected Malicious IPs is a list of all IP addresses found by Cyences' reports. 
 * It is important to review this list as you may discover some bad IP addresses coming in and out of your firewall. 
 * Refer to the **Globally Detected Malicious IPs** section for more information. 

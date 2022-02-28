@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Reports Dashboard 
+title: Reports
 permalink: /user_guide/reports_dashboard/
-nav_order: 5
+nav_order: 4
 parent: User Guide
 ---
 
@@ -14,7 +14,7 @@ There are several security related reports to choose from and they are all locat
     * AD - Group Membership Changed
     * AD - Group Policy Changed
     * AD - User Account Locked Out
-    * AD - User Chanaged
+    * AD - User Changed
     * AD - Password Change Outside of Working Hours
 
 * Amazon Web Services Reports

@@ -1,14 +1,14 @@
 ---
 layout: default
-title: Intelligence Dashboard 
+title: Intelligence
 permalink: /user_guide/intelligence_dashboard/
-nav_order: 6
+nav_order: 5
 parent: User Guide
 ---
 
 # Intelligence 
 
-Cyences version 1.2.0 introduces a new drop-down option named Intelligence in the app’s navigation bar and it contains the following items:
+Cyences version 1.2.0 introduces a new drop-down option named Intelligence in the app's navigation bar and it contains the following items:
 
 * Asset Intelligence
 * Device Inventory
@@ -19,7 +19,7 @@ Cyences version 1.2.0 introduces a new drop-down option named Intelligence in th
 
 ## Globally Detected Malicious IPs
 
-The Globally Detected Malicious IPs list is generated from a combination of reports, scheduled reports, and a paid service through HoneyDB’s APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
+The Globally Detected Malicious IPs list is generated from a combination of reports, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
 
 * DDoS attacks on Palo Alto firewalls
 * Inbound traffic from blocked IPs
@@ -29,13 +29,13 @@ If an IP address is involved in any of the above scenarios, then it will automat
 
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/malicious_ip.png?raw=true)
 
-Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now being generated on the Malicious IP list server, which is deployed by CrossRealms International. This list is based on bad IP address activity that’s detected in Splunk environments across all installations where Cyences is configured. This list provides Splunk users with the latest globally detected malicious IP list and stores it back into the lookup within the Cyences app. This will result in a more robust list for Splunk users to rely on. For Splunk Admins, please refer to the **Configuration of Access Token for Malicious IP List** section to learn more about the API configuration process. 
+Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now being generated on the Malicious IP list server, which is deployed by CrossRealms International. This list is based on bad IP address activity that's detected in Splunk environments across all installations where Cyences is configured. This list provides Splunk users with the latest globally detected malicious IP list and stores it back into the lookup within the Cyences app. This will result in a more robust list for Splunk users to rely on. For Splunk Admins, please refer to the **Configuration of Access Token for Malicious IP List** section to learn more about the API configuration process. 
 
-**Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user’s environment.
+**Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user's environment.
 
 ## Lansweeper
 
-The Lansweeper dashboard is powered by Lansweeper’s data (https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
+The Lansweeper dashboard is powered by Lansweeper's data (https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
 
 The Lansweeper dashboard in the Cyences app displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
 
@@ -58,7 +58,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 
 Qualys and Tenable are security solutions that are designed to detect vulnerabilities present in your environment.  
 
-The Qualys dashboard is powered by Qualys’ data (https://www.qualys.com/) and the Tenable dashboard is powered by Tenable’s data (https://www.tenable.com/). 
+The Qualys dashboard is powered by Qualys' data (https://www.qualys.com/) and the Tenable dashboard is powered by Tenable's data (https://www.tenable.com/). 
 
 The Cyences app utilizes the data provided by Qualys and Tenable to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
 
@@ -99,7 +99,7 @@ The **Device Master Table** has been renamed to **Device Inventory Table** in ve
 
 **Note**: The remaining portion of the Device Inventory dashboard guide is meant for Administrators only.
 
-Sometimes it is confusing for Cyences’ algorithm to automatically merge two device entries together. In this case, Cyences will prompt the user to identify any device entries that can be merged together and the Splunk user will then be asked to manually merge these device entries together. This process is located in the **Possible Merge UUIDs (Devices) in Device Inventory** dashboard panel.
+Sometimes it is confusing for Cyences' algorithm to automatically merge two device entries together. In this case, Cyences will prompt the user to identify any device entries that can be merged together and the Splunk user will then be asked to manually merge these device entries together. This process is located in the **Possible Merge UUIDs (Devices) in Device Inventory** dashboard panel.
 
 * Expand any row to view more information about the device entry. 
 * Expanding a row will reveal the **Merge** button. 

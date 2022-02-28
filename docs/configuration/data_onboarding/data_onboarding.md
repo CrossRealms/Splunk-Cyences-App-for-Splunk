@@ -2,11 +2,14 @@
 layout: default
 title: Data Onboarding
 permalink: /configuration/data_onboarding/
-nav_order: 1
+nav_order: 2
 parent: Configuration
 has_children: true
 ---
 
 
-# Data Onboarding
-* How to collect data required by Cyences App.
+# Data Onboarding [Admin]
+
+The Cyences App uses data from multiple add-ons and the process for collecting this data will be outlined below. 
+
+**Note:** This data collection process does not cover an end-to-end configuration guide for third party add-ons. For any third-party add-ons, please visit their own configuration guide for complete details. 

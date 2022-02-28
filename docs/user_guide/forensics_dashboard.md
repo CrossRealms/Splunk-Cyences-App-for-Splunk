@@ -2,7 +2,7 @@
 layout: default
 title: Forensics Dashboard 
 permalink: /user_guide/forensics_dashboard/
-nav_order: 4
+nav_order: 3
 parent: User Guide
 ---
 
@@ -19,7 +19,7 @@ The Forensics dashboard is designed to give security engineers insightful inform
 * It contains valuable information that provides more insight about the matter such as: destination, file extensions, file names, file paths, IP addresses, sourcetypes, and much more.  
 
 ## All Contributing Events
-* The remainder of events that aren’t classified as notable events will fall under this category. 
+* The remainder of events that aren't classified as notable events will fall under this category. 
 
 ## Compromised Systems
 * This section outlines which systems the issue was detected on and includes relevant information like which hosts or sourcetypes have been affected.  
@@ -35,6 +35,6 @@ The Forensics dashboard is designed to give security engineers insightful inform
 * Describes what the purpose of the alert is, the severity of the alert, and scheduling details. 
 * This panel is useful if you are new to the Cyences App and want more information about the security use case or alert. 
 
-**Note**: The Forensics dashboard helps with investigating a security issue or to complete a forensics report, as it shows pertinent information about the compromised systems and signatures involved in their respective panels. If a Splunk user drilldowns on either of these dashboard panels, it’ll provide additional details about what other events were involved or where a similar problem is present. A broader way to access these events is to drilldown from the Alert Details dashboard panel to view the activity that was responsible for triggering the alert. For example, the following screenshot highlights a security breach.
+**Note**: The Forensics dashboard helps with investigating a security issue or to complete a forensics report, as it shows pertinent information about the compromised systems and signatures involved in their respective panels. If a Splunk user drilldowns on either of these dashboard panels, it'll provide additional details about what other events were involved or where a similar problem is present. A broader way to access these events is to drilldown from the Alert Details dashboard panel to view the activity that was responsible for triggering the alert. For example, the following screenshot highlights a security breach.
 
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/forensics_dashboard_drilldown.png?raw=true) 

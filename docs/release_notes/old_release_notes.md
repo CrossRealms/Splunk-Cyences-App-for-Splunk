@@ -1,63 +1,10 @@
 ---
 layout: default
-title: Release Notes 
-permalink: /user_guide/release_notes/
-nav_order: 7
-parent: User Guide
+title: Old Version Release Notes
+permalink: /release_notes/old_release_notes/
+nav_order: 2
+parent: Release Notes
 ---
-
-# Release Notes
-
-## Version 1.11.0 (January 2022)
-
-* ### Added Kaspersky dashboard
-    * Added the required field extractions. 
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/kaspersky.png?raw=true)
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/kaspersky_part_two.png?raw=true)
-
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/kaspersky_part_three.png?raw=true)
-
-* ### DNS dashboard 
-    * Added DNS Tracker dashboard for the following use-cases: Top Categories, Record Types, DNS Log Volume over Time, Record Types over Time, Top queries, Top Non-success Code Queries, Top Requesters, and Top Non-success queries Code Requesters.
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/dns_tracker.png?raw=true)
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/dns_tracker_continued.png?raw=true)
-
-* ### Microsoft Defender ATP Alert
-    * Added a security alert for Office 365 Advanced Threat Protection.
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/defender_atp_alert.png?raw=true)
-
-* ### VPN Dashboard
-    * Added support for Cisco VPN (logs from Cisco ISE and Estreamer are supported). 
-    * Changed the field name from field dest to dest_category=”vpn_auth” for better CIM compatibility. 
-
-        * This field is being used to display the correct count of VPN logins.
-
-* ### Enhancements:
-    * Splunk Admin - Missing Indexes Alert
-        * Improved the performance of the query.
-    * Splunk Admin Dashboard – Missing Indexes Table 
-        * Reduced the loading time of the search query after performing a drilldown.
-    * Windows Defender Event Logs
-        * Added support for logs coming from Windows 10 hosts (resolved field extraction related issues). 
-    * Decommission Hosts from Lookups 
-        * Added dashboard panels to remove the decommissioned hosts from the Windows hosts lookup, as well as the Linux hosts lookup.
-            * This is required to avoid false positive alerts. 
-
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/decommission_host_from_lookups.png?raw=true)
-
-## Upgrade Guide from Version 1.10.0 to 1.11.0
-
-* The Cyences App now supports Kaspersky. Refer to the **Data Onboarding > Kaspersky Logs** section for more information regarding the data collection process. 
-* The VPN dashboard now supports Cisco ISE (https://splunkbase.splunk.com/app/1915/) and Estreamer (https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN. 
-* Cyences has a new dashboard called **DNS Tracker**. It supports all types of DNS related data that are compatible with the CIM data model. For example, the Cisco Umbrella Add-on (https://splunkbase.splunk.com/app/3926/).
 
 ## Version 1.10.0 (November 2021)
 
@@ -101,15 +48,15 @@ parent: User Guide
 
         ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/splunk_admin_checks_search_head.png?raw=true)
 
-    *   From Cyences’ navigation bar, go to **Settings > Splunk Admin Checks** to view all of the Splunk Admin Checks dashboards. 
+    *   From Cyences' navigation bar, go to **Settings > Splunk Admin Checks** to view all of the Splunk Admin Checks dashboards. 
 
 * ### Enhancements: 
 
-    * Splunk Admin – Missing Data in Indexes Alert 
+    * Splunk Admin - Missing Data in Indexes Alert 
         * Provided a way to configure incoming data intervals for each index through a lookup. 
         * View the **Finetune Splunk Admin Related Alerts** section for more details.   
 
-    * Fake Windows Process Alert – Reduce False Positives 
+    * Fake Windows Process Alert - Reduce False Positives 
         * Added a lookup to exclude the false positives based on the file hashes.
 
     * Common Ransomware File Extensions Alert 
@@ -121,7 +68,7 @@ parent: User Guide
 
 ## Upgrade Guide from Version 1.9.0 to 1.10.0
 
-* ### Splunk Admin – Missing Data in the Index Alert 
+* ### Splunk Admin - Missing Data in the Index Alert 
     * View the **Finetune Splunk Admin Related Alerts** section for additional details.
 
 * ### Common Ransomware File Extensions Alert  
@@ -157,7 +104,7 @@ parent: User Guide
         * Released Cyences Add-on version 1.0.2. 
         * Fixed an issue where an inappropriate number of alerts was generated for the **Linux - Change in Sudo Access of Local Linux Account** alert. 
 
-    * Active Directory – User Changed Alert 
+    * Active Directory - User Changed Alert 
         *   Added a Message field to the alert results and dashboard panel to display what has changed. 
 
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/ad_user_changed.png?raw=true)
@@ -247,7 +194,7 @@ parent: User Guide
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/instance_disk_usage.png?raw=true)
 
 * ### Enhancements:
-    * Ransomware – Spike in the File Writes Alert 
+    * Ransomware - Spike in the File Writes Alert 
         * Added file locations (top 5) alongside the file writes count, so that users can identify whether the alert is a false positive or a legitimate ransomware attack right from the email notification itself.
         * Old: 
 
@@ -281,7 +228,7 @@ parent: User Guide
 ## Version 1.7.0 (August 2021)
 
 * ### Added **AWS** dashboard
-    * From Cyences’ navigation bar, go to **Control > Reports > AWS**. 
+    * From Cyences' navigation bar, go to **Control > Reports > AWS**. 
 
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/aws_dashboard_part1.png?raw=true)
 
@@ -290,7 +237,7 @@ parent: User Guide
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/aws_dashboard_part3.png?raw=true)
 
 * ### Added **G Suite** dashboard
-    * From Cyences’ navigation bar, go to **Control > Reports > G Suite**. 
+    * From Cyences' navigation bar, go to **Control > Reports > G Suite**. 
 
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/g_suite_dashboard_part1.png?raw=true)
 
@@ -306,7 +253,7 @@ parent: User Guide
     * Go to **Data Onboarding > Microsoft Azure Security Score** section for more information on how to collect data for this dashboard panel. 
 
 * ### Added **Microsoft 365 Defender ATP** dashboard  
-    * From Cyences’ navigation bar, go to **Antivirus > Microsoft 365 Defender ATP**. 
+    * From Cyences' navigation bar, go to **Antivirus > Microsoft 365 Defender ATP**. 
     * Displays alert information for Microsoft 365 Defender ATP alerts.  
 
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/microsoft365_defenderatp_dashboard.png?raw=true)
@@ -346,7 +293,7 @@ parent: User Guide
 * ### Issues Fixed:
     * Fixed a minor Python error for device inventory gen python custom command: Removed unused Float Validator and improved error handling was added. 
     * Fixed a Python issue with Sophos custom command: Variable conflict has been resolved. 
-    * Fixed an issue where the Notable Events dashboard panel was incorrectly displaying information for the AD – User Locked Out alert in the Forensics dashboard. 
+    * Fixed an issue where the Notable Events dashboard panel was incorrectly displaying information for the AD - User Locked Out alert in the Forensics dashboard. 
         * Old: 
 
         ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/forensics_dashboard_old.png?raw=true)
@@ -536,11 +483,11 @@ parent: User Guide
 * ### Issues Fixed: 
     * Fixed a user field extraction issue for Sophos Central data. 
     * Fixed a field extraction issue from WinEventLog data for Windows Firewall Disabled Alert and WinEventLog Cleared Alert. 
-    * Fixed an issue with the VPN dashboard’s search filters. 
+    * Fixed an issue with the VPN dashboard's search filters. 
     * Updated the macro definition for Common Ransomware File Extensions to avoid field value conflicts in the Common Ransomware File Extensions search. 
     * Fixed an issue with the Configuration page for macro updates where the macro value contains a backslash. 
     * Fixed the following search queries: Fake Windows Processes, Credential Compromise related search queries, and Palo Alto related search queries. 
-    * Fixed an issue where the selected time range wasn’t being applied during a drilldown from the Overview dashboard to the Forensics dashboard. 
+    * Fixed an issue where the selected time range wasn't being applied during a drilldown from the Overview dashboard to the Forensics dashboard. 
 
 ## Upgrade Guide from Version 1.2.0 to 1.3.0 
 
@@ -596,7 +543,7 @@ parent: User Guide
     * Added a drilldown option for Compromised System and Signature dashboard panels. 
     * Combined open alert query in search in the Alert Details panel. 
     * A minor issue with panel visibility was fixed. 
-    * Alert’s execution and notable events are now being stored in the events under the cyences index. 
+    * Alert's execution and notable events are now being stored in the events under the cyences index. 
         * There is no limit for how long a user will be able to view the notable events. 
 
 * ### Configuration page UI improvements: 
@@ -619,16 +566,16 @@ parent: User Guide
 
 * ### Malicious IP List updates:  
     * The report name has been changed to Globally Detected Malicious IPs. 
-    * The report now uploads data to Cyences’ Malicious IP server and retrieves back the latest results from the server, in addition to updating the lookup.
+    * The report now uploads data to Cyences' Malicious IP server and retrieves back the latest results from the server, in addition to updating the lookup.
 
 ## Upgrade Guide from version 1.0.0 to 1.1.0 
 
-* ### Sophos’ saved searches and alerts have been renamed: 
+* ### Sophos' saved searches and alerts have been renamed: 
     * If one or more alerts have been previously enabled, it will need to be re-enabled in order to function properly. 1.0 alerts will need to be removed altogether. 
 
 * ### Notable events for alerts are now stored in the index named **cyences** and its corresponding sourcetype is named **stash**: 
     * Create an index named cyences. 
-    * Copy and paste props.conf from the default directory to the local directory and update the sourcetype name from “cyences_stash” to “stash” in the local props.conf file.  
+    * Copy and paste props.conf from the default directory to the local directory and update the sourcetype name from "cyences_stash" to "stash" in the local props.conf file.  
 
 * ### Configure the Malicious-IP Collector: 
     * Go to **Settings > Configuration > Malicious-IP Collector**.
@@ -652,4 +599,4 @@ parent: User Guide
     * Sophos 
     * VPN 
 
-* ### Added App Configuration dashboard.  
+* ### Added App Configuration dashboard.
