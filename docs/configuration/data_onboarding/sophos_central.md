@@ -70,7 +70,8 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 1. From Cyences' navigation bar, click **Search**.
 
 2. Run the following search query: 
-    * | sophosinstancedetails all_endpoints=True 
+    
+        | sophosinstancedetails all_endpoints=True 
 
 3. If the search results return/s any errors, then there is something wrong with the configuration. 
 

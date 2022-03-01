@@ -49,10 +49,12 @@ Installation Guide:
     ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/edit_action_field.png?raw=true)
 
 6. Your current configuration should look similar to this: 
-    * if(isnull(action) OR action="","unknown",action) 
+    
+        if(isnull(action) OR action="","unknown",action) 
 
 7. Replace the above configuration/eval expression with the contents below: 
-    * case(sourcetype="fgt_event" AND subtype="vpn" AND vendor_action IN ("tunnel-up", "phase2-up"), "success", sourcetype="fgt_event" AND subtype="vpn" AND vendor_action="ssl-login-fail", "failure", isnull(action) OR action="", "unknown", 1==1, action) 
+    
+        case(sourcetype="fgt_event" AND subtype="vpn" AND vendor_action IN ("tunnel-up", "phase2-up"), "success", sourcetype="fgt_event" AND subtype="vpn" AND vendor_action="ssl-login-fail", "failure", isnull(action) OR action="", "unknown", 1==1, action) 
 
 8. Click **Save**. 
 

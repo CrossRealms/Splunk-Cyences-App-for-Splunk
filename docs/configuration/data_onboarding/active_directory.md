@@ -10,7 +10,7 @@ grand_parent: Configuration
 
 ## **Windows Active Directory Logs**
 
-Use the Windows Add-on to collect Active Directory related logs (https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
+Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
 
 This data is required for Active Directory related reports/alerts (Group Changes, Group Policy Changes and User Changes) and it is only compatible with plain text formatted events. 
 
@@ -58,14 +58,15 @@ Installation Guide:
 
 ## How to Install and Configure the Splunk Add-on for Microsoft Office 365: 
 
-1. Install the Add-on on the Heavy Forwarder [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
+1. Install the Add-on on the Heavy Forwarder. 
+    * [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
 
 2. Configure the Add-on on the Heavy Forwarder. 
-    * Configure Integration Application [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
-    * Configure Tenant [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
+    * Configure Integration Application: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
+    * Configure Tenant: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
 
 3. Configure the Inputs on the Heavy Forwarder. 
-    * Configure Management Activity input -[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and[https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.) 
+    * Configure Management Activity input: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI.) 
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 reports to work only the input data for Management Activity is required. 

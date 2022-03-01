@@ -140,7 +140,7 @@ parent: Release Notes
 
         ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/notable_events_new.png?raw=true)
 
- ## Upgrade Guide from Version 1.8.0 to 1.9.0
+## Upgrade Guide from Version 1.8.0 to 1.9.0
 
  * ### Sysmon Deployment/Data-Onboarding Guide Updated 
     * We have improved the Sysmon deployment and configuration guide by creating a simple Sysmon TA that has the latest binary, configuration file, and all known issues fixed with scripts and inputs for the Cyences App. 

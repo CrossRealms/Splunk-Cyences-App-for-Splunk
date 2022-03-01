@@ -15,7 +15,7 @@ has_children: false
 
 * Verify that the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) is installed.
 
-* Verify that the [Splunk CIM](https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated. (add link)
+* Verify that the [Splunk CIM](https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated.
 
 * Verify that the CIM Authentication data model does not filter the VPN index (check the macro definition for `cim_Authentication_indexes`). 
 
@@ -35,7 +35,7 @@ In other words, Windows machines are not generating WinEventLog Event ID 4950.
 
         auditpol.exe /set /category:"Policy Change" /subcategory:"MPSSVC rule-level Policy Change" /success:enable /failure:enable 
 
-* Reference:[https://www.eventsentry.com/kb/429](https://www.eventsentry.com/kb/429)  
+* Reference: [https://www.eventsentry.com/kb/429](https://www.eventsentry.com/kb/429)  
 
 ## Windows firewall was disabled but the alert did not generate in the Cyences app. 
 

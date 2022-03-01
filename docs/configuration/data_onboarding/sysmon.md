@@ -42,7 +42,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 **Note:** The Sysmon Deploy Add-on for Cyences App generates auditing logs in index=**windows** and actual Sysmon data in index=**epintel**. Sysmon collects several types of EventCodes from the Windows hosts. For the Cyences app, we will need to incorporate the following EventCodes: 1, 2, 5, 10, 11, and 25. 
 
-## Sysmon EventCodes:
+### Sysmon EventCodes:
 
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/sysmon_event_codes.png?raw=true)
 
@@ -52,7 +52,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 * Sysmon logs are only tested in XML format (see renderXml = 1 in inputs.conf stanza). 
 
-## Verify Data Collection 
+### Verify Data Collection 
 
 Run the search query below to verify that the data is being ingested:
 
