@@ -11,7 +11,7 @@ has_children: false
 
 ## VPN dashboard is not loading even though cs_vpn_indexes has data.
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vpn_dashboard_not_loading.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vpn_dashboard_not_loading.png?raw=true)
 
 * Verify that the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) is installed.
 
@@ -87,7 +87,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 6. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filesystem_calculated_fields_action_edit.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filesystem_calculated_fields_action_edit.png?raw=true)
 
 7. Your current configuration should look similar to this: 
 
@@ -103,7 +103,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 11. Check the **Accelerate** box, then click **Save**.  
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/endpoint_edit_acceleration.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/endpoint_edit_acceleration.png?raw=true)
 
 ## Reducing False Positives for the "Authentication - Bruteforce Attempt for a User" Alert 
 
@@ -127,8 +127,8 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 3. Click **auditd_authentication** (the default values should match with the following image). 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/auditd_authentication_before.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/auditd_authentication_before.png?raw=true)
 
 4. Update the search string with the following contents, then click **Save**. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/auditd_authentication_after.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/auditd_authentication_after.png?raw=true)

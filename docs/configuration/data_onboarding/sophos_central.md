@@ -63,7 +63,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 3. Click **Save**.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sophos_endpoint_api_config.png?raw=true)
+    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sophos_endpoint_api_config.png?raw=true)
 
 ## How to verify the Sophos Central API configuration: 
 
@@ -77,7 +77,7 @@ Cyences version 1.6 utilizes Sophos Central API to collect information about Sop
 
 4. A successful configuration will display the total number of events with no errors.  
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sophos_endpoint_api_config.png?raw=true)
+    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sophos_endpoint_api_config.png?raw=true)
 
 ## Estimated Data Size
 Data collected from Sophos will be stored in a KV Store lookup, so it will not affect your Splunk license. 
