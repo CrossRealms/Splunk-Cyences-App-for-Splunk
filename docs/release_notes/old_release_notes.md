@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Old Version Release Notes
+title: Previous Release Notes
 permalink: /release_notes/old_release_notes/
 nav_order: 2
 parent: Release Notes
