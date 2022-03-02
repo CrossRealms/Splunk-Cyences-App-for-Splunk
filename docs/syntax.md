@@ -25,7 +25,7 @@ Link2
 
 ---
 Image
-![alternate text](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/images/test.png?raw=true)
+![alternate text](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/images/test.png?raw=true)
 
 ---
 Bullet points

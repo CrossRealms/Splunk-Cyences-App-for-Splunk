@@ -46,7 +46,7 @@ Installation Guide:
 
 5. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/edit_action_field.png?raw=true)
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/edit_action_field.png?raw=true)
 
 6. Your current configuration should look similar to this: 
     
@@ -62,4 +62,4 @@ Installation Guide:
 
 10. Enable the Acceleration, then click **Save**.  
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/edit_acceleration.png?raw=true)
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/edit_acceleration.png?raw=true)

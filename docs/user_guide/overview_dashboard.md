@@ -9,7 +9,7 @@ parent: User Guide
 # Overview Dashboard
 The Overview dashboard displays the overall security status of the Splunk environment, in addition to highlighting present security issues as well. Triggered alerts will be visible in red. We specifically designed the Overview dashboard to be a single pane of glass for ease of use.
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/overview_dashboard.png?raw=true)
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/overview_dashboard.png?raw=true)
 
 ## Overview Dashboard Features:
 

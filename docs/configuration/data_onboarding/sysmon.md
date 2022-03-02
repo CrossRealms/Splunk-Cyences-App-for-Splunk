@@ -44,7 +44,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 ### Sysmon EventCodes:
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/CY-283-cyences-doc-migration/docs/assets/sysmon_event_codes.png?raw=true)
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sysmon_event_codes.png?raw=true)
 
 * Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 
