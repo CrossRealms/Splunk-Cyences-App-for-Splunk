@@ -33,6 +33,7 @@ require([
         { macro_name: 'cs_o365_defender_atp', input_id: 'macro_data_o365_defender_atp', button_id: 'macro_data_o365_defender_atp_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_aws', input_id: 'macro_data_aws', button_id: 'macro_data_aws_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_gsuite', input_id: 'macro_data_gsuite', button_id: 'macro_data_gsuite_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_cisco_ios', input_id: 'macro_data_cisco_ios', button_id: 'macro_data_cisco_ios_button', msg_id: 'macro_data_msg'},
 
         /* Other Macros */
         { macro_name: 'cs_ad_password_change_outside_working_hour_definition', input_id: 'macro_cs_ad_password_change_outside_working_hour_definition', button_id: 'macro_cs_ad_password_change_outside_working_hour_definition_button', msg_id: 'macro_other_msg'},
@@ -82,6 +83,16 @@ require([
         { macro_name: 'cs_o365_user_change_filter', input_id: 'macro_cs_o365_user_change_filter', button_id: 'macro_cs_o365_user_change_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_serviceprincipal_change_filter', input_id: 'macro_cs_o365_serviceprincipal_change_filter', button_id: 'macro_cs_o365_serviceprincipal_change_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_application_change_filter', input_id: 'macro_cs_o365_application_change_filter', button_id: 'macro_cs_o365_application_change_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_failed_login_due_to_mfs_filter', input_id: 'macro_cs_o365_failed_login_due_to_mfs_filter', button_id: 'macro_cs_o365_failed_login_due_to_mfs_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_failed_login_due_to_mfs_outside_country_filter', input_id: 'macro_cs_o365_failed_login_due_to_mfs_outside_country_filter', button_id: 'macro_cs_o365_failed_login_due_to_mfs_outside_country_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_failed_login_due_to_conditional_access_policy_filter', input_id: 'macro_cs_o365_failed_login_due_to_conditional_access_policy_filter', button_id: 'macro_cs_o365_failed_login_due_to_conditional_access_policy_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_daily_login_failure_filter', input_id: 'macro_cs_o365_daily_login_failure_filter', button_id: 'macro_cs_o365_daily_login_failure_filter_button', msg_id: 'macro_o365_msg'},
+        { macro_name: 'cs_o365_security_compliance_alert_filter', input_id: 'macro_cs_o365_security_compliance_alert_filter', button_id: 'macro_cs_o365_security_compliance_alert_filter_button', msg_id: 'macro_o365_msg'},
+
+        /* Email */
+        { macro_name: 'cs_email_increase_in_email_filter', input_id: 'macro_cs_email_increase_in_email_filter', button_id: 'macro_cs_email_increase_in_email_filter_button', msg_id: 'macro_email_msg'},
+        { macro_name: 'cs_email_daily_spam_email_filter', input_id: 'macro_cs_email_daily_spam_email_filter', button_id: 'macro_cs_email_daily_spam_email_filter_button', msg_id: 'macro_email_msg'},
+        { macro_name: 'cs_email_increase_over_baseline_limit_in_percentage', input_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage', button_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage_button', msg_id: 'macro_email_msg'},
 
         /* Network */
         { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_network_msg'},
@@ -99,6 +110,7 @@ require([
         { macro_name: 'cs_palo_blocked_ip_inbound_filter', input_id: 'macro_cs_palo_blocked_ip_inbound_filter', button_id: 'macro_cs_palo_blocked_ip_inbound_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_blocked_ip_outbound_filter', input_id: 'macro_cs_palo_blocked_ip_outbound_filter', button_id: 'macro_cs_palo_blocked_ip_outbound_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter', input_id: 'macro_cs_palo_malicious_ip_list_filter', button_id: 'macro_cs_palo_malicious_ip_list_filter_button', msg_id: 'macro_palo_msg'},
+        { macro_name: 'cs_palo_commit_filter', input_id: 'macro_cs_palo_commit_filter', button_id: 'macro_cs_palo_commit_filter_button', msg_id: 'macro_palo_msg'},
 
         /* Sophos */
         { macro_name: 'cs_sophos_update_errors_filter', input_id: 'macro_cs_sophos_update_errors_filter', button_id: 'macro_cs_sophos_update_errors_filter_button', msg_id: 'macro_sophos_msg'},
@@ -149,6 +161,10 @@ require([
         /* VPN */
         { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_vpn_msg'},
 
+        /* Cisco IOS */
+        { macro_name: 'cs_cisco_ios_new_connection_for_user_filter', input_id: 'macro_cs_cisco_ios_new_connection_for_user_filter', button_id: 'macro_cs_cisco_ios_new_connection_for_user_filter_button', msg_id: 'macro_cisco_ios_msg'},
+        { macro_name: 'cs_cisco_ios_device_failed_login_filter', input_id: 'macro_cs_cisco_ios_device_failed_login_filter', button_id: 'macro_cs_cisco_ios_device_failed_login_filter_button', msg_id: 'macro_cisco_ios_msg'},
+
         /* Authentication */
         { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_bruteforce_attempt_limit', input_id: 'macro_cs_authentication_bruteforce_attempt_limit', button_id: 'macro_cs_authentication_bruteforce_attempt_limit_button', msg_id: 'macro_authentication_msg'},
@@ -157,6 +173,7 @@ require([
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_limit', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_for_user_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_from_source_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button', msg_id: 'macro_authentication_msg'},
+        { macro_name: 'cs_authentication_successful_vpn_login_outside_home_country_filter', input_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter', button_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button', msg_id: 'macro_authentication_msg'},
 
         /* Splunk Admin */
         { macro_name: 'cs_splunk_admin_missing_indexes_filter', input_id: 'macro_cs_splunk_admin_missing_indexes_filter', button_id: 'macro_cs_splunk_admin_missing_indexes_filter_button', msg_id: 'macro_splunk_admin_msg'},
