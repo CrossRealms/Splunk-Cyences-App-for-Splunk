@@ -52,10 +52,10 @@
   </row>
   <row>
     <panel>
-      <title>Network Compromise</title>
+      <title>Network Compromise &amp; Cisco IOS</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Network Compromise")`</query>
+          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -204,10 +204,10 @@
       </table>
     </panel>
     <panel>
-      <title>Office 365</title>
+      <title>Office 365 &amp; Email</title>
       <table>
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("O365")` 
+          <query>| `cs_filter_savedsearches("O365|Email")` 
 | rename "Notable Events" as Count 
 | append 
     [| search `cs_o365` sourcetype="o365:service:status" source="*current*"  earliest=$timeRange.earliest$ latest=$timeRange.latest$
