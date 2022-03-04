@@ -272,6 +272,15 @@
               <button id="macro_data_gsuite_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">Cisco IOS Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_cisco_ios"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_cisco_ios_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>
@@ -715,6 +724,37 @@
           </tr>
         </table>
       </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: Cisco IOS</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_cisco_ios_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_cisco_ios_new_connection_for_user_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_cisco_ios_new_connection_for_user_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_cisco_ios_new_connection_for_user_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_cisco_ios_device_failed_login_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_cisco_ios_device_failed_login_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_cisco_ios_device_failed_login_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
     </panel>
     <panel>
       <html>
@@ -854,7 +894,92 @@
               <button id="macro_cs_o365_application_change_filter_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_failed_login_due_to_mfs_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_failed_login_due_to_mfs_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_failed_login_due_to_mfs_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_failed_login_due_to_mfs_outside_country_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_failed_login_due_to_mfs_outside_country_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_failed_login_due_to_mfs_outside_country_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_failed_login_due_to_conditional_access_policy_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_failed_login_due_to_conditional_access_policy_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_failed_login_due_to_conditional_access_policy_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_daily_login_failure_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_daily_login_failure_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_daily_login_failure_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_o365_security_compliance_alert_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_o365_security_compliance_alert_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_o365_security_compliance_alert_filter_button">Update</button>
+            </th>
+          </tr>
         </table>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: Email</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_email_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_email_increase_in_email_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_email_increase_in_email_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_email_increase_in_email_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_email_daily_spam_email_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_email_daily_spam_email_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_email_daily_spam_email_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_email_increase_over_baseline_limit_in_percentage</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_email_increase_over_baseline_limit_in_percentage"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_email_increase_over_baseline_limit_in_percentage_button">Update</button>
+            </th>
+          </tr>
+        </table>  
       </html>
       <html>
         <div>
@@ -995,6 +1120,15 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_palo_malicious_ip_list_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_palo_commit_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_palo_commit_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_palo_commit_filter_button">Update</button>
             </th>
           </tr>
         </table>
@@ -1195,6 +1329,15 @@
               </th>
               <th style="text-align:left">
                 <button id="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_successful_vpn_login_outside_home_country_filter</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_authentication_successful_vpn_login_outside_home_country_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button">Update</button>
               </th>
             </tr>
           </table>
