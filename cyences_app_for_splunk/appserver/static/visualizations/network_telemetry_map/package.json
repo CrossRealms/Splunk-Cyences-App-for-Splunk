@@ -1,15 +1,15 @@
 {
-  "name": "radial_flow_map",
+  "name": "network_telemetry_map",
   "version": "1.0.0",
-  "description": "Radial Flow Map",
+  "description": "Network Telemetry Map",
   "main": "visualization.js",
   "scripts": {
     "build": "/opt/splunk/bin/splunk cmd node ./node_modules/webpack/bin/webpack.js",
     "devbuild": "/opt/splunk/bin/splunk cmd node ./node_modules/webpack/bin/webpack.js --progress",
     "watch": "/opt/splunk/bin/splunk cmd node ./node_modules/webpack/bin/webpack.js -d --watch --progress"
   },
-  "author": "Mahir Chavda <mchavda@crossrealms.con>",
-  "license": "MIT",
+  "author": "CrossRealms International <crossrealms.com>",
+  "license": "Same as App",
   "devDependencies": {
     "webpack": "^1.12.6"
   },

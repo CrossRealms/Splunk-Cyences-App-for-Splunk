@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-    entry: 'radial_flow_map',
+    entry: 'network_telemetry_map',
     resolve: {
         root: [
             path.join(__dirname, 'src'),

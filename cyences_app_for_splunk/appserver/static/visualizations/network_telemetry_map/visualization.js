@@ -66,7 +66,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 	                // Save this.$el for convenience
 	                this.$el = $(this.el);
 	                // Add a css selector class
-	                this.$el.addClass('radial-flow-map');
+	                this.$el.addClass('network_telemetry_map');
 	            },
 
 	            getInitialDataParams: function () {
@@ -101,7 +101,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 
 	                function addArrowHeadDef() {
 	                    // Add arrowhead definition once after something is drawn on map
-	                    var svg = $(".radial-flow-map svg");
+	                    var svg = $(".network_telemetry_map svg");
 
 	                    var defs = getNode("defs", {});
 	                    var marker = getNode("marker", { id: "arrowhead", orient: "auto", markerWidth: "25", markerHeight: "40", refX: "0.1", refY: "2" });
