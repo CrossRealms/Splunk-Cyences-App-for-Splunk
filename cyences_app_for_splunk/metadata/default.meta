@@ -36,3 +36,7 @@ export = system
 [viewstates]
 access = read : [ * ], write : [ * ]
 export = system
+
+
+[visualizations/radial_flow_map]
+export = system

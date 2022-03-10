@@ -8,3 +8,7 @@ demo/RansomwareDemo.zip
 
 _site/**
 docs/.jekyll-cache/**
+
+node_modules
+__pycache__/
+*.pyc
