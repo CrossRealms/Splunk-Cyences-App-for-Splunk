@@ -3,14 +3,16 @@ define([
     'leaflet',
     'leaflet-curve',
     'api/SplunkVisualizationBase',
-    'api/SplunkVisualizationUtils'
+    'api/SplunkVisualizationUtils',
+    'splunkjs/mvc'
 ],
     function (
         $,
         L,
         LCurve,
         SplunkVisualizationBase,
-        SplunkVisualizationUtils
+        SplunkVisualizationUtils,
+        mvc
     ) {
 
         return SplunkVisualizationBase.extend({
@@ -151,27 +153,31 @@ define([
                         addArrowHeadDef()
                         isArrowHeadDefAdded = true;
                     }
-             
-                    const earliest = '-60m@m';
-                    const latest = 'now';
+
+                    const tokenname = "timerange";
+
                     const search = '| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` ' +
-                    ' | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)' +
-                    ' | iplocation src_ip | rename lat as start_lat, lon as start_lon' +
-                    ' | iplocation dest_ip | rename lat as end_lat, lon as end_lon' +
-                    ' | `cs_network_filter_internal_traffic`' +
-                    ' | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count<=`cs_network_traffic_top` | fields - fake_count' +
-                    ' | eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=(5*(count-min_value))/(max_value-min_value)+1' +
-                    ' | `cs_network_animate_pulse_traffic_map`' +
-                    ' | eval color=if(blocked=1, "#dc4e41", "#53a051")' +
-                    ' | fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked' +
-                    ' | `cs_network_traffic_map_filter`';
+                        ' | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)' +
+                        ' | iplocation src_ip | rename lat as start_lat, lon as start_lon' +
+                        ' | iplocation dest_ip | rename lat as end_lat, lon as end_lon' +
+                        ' | `cs_network_filter_internal_traffic`' +
+                        ' | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count<=`cs_network_traffic_top` | fields - fake_count' +
+                        ' | eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=(5*(count-min_value))/(max_value-min_value)+1' +
+                        ' | `cs_network_animate_pulse_traffic_map`' +
+                        ' | eval color=if(blocked=1, "#dc4e41", "#53a051")' +
+                        ' | fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked' +
+                        ' | `cs_network_traffic_map_filter`';
 
                     const search_condition = ` | search start_lat=${data.from[0]} start_lon=${data.from[1]} end_lat=${data.to[0]} end_lon=${data.to[1]}`;
-                    
-                    const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(search + search_condition);
+
 
                     $("." + classname).attr("marker-end", 'url(#arrowhead)');
                     $("." + classname).click(function () {
+                        const tokens = mvc.Components.get("default");
+                        const earliest = tokens.get(tokenname + ".earliest");
+                        const latest = tokens.get(tokenname + ".latest");
+
+                        const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(search + search_condition);
                         window.open(url);
                     });
                 })

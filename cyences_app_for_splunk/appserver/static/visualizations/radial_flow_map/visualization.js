@@ -1,4 +1,4 @@
-define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__) { return /******/ (function(modules) { // webpackBootstrap
+define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/mvc"], function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -49,13 +49,15 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    __webpack_require__(2),
 	    __webpack_require__(3),
 	    __webpack_require__(4),
-	    __webpack_require__(5)
+	    __webpack_require__(5),
+	    __webpack_require__(6)
 	], __WEBPACK_AMD_DEFINE_RESULT__ = function (
 	        $,
 	        L,
 	        LCurve,
 	        SplunkVisualizationBase,
-	        SplunkVisualizationUtils
+	        SplunkVisualizationUtils,
+	        mvc
 	    ) {
 
 	        return SplunkVisualizationBase.extend({
@@ -196,27 +198,31 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                        addArrowHeadDef()
 	                        isArrowHeadDefAdded = true;
 	                    }
-	             
-	                    const earliest = '-60m@m';
-	                    const latest = 'now';
+
+	                    const tokenname = "timerange";
+
 	                    const search = '| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` ' +
-	                    ' | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)' +
-	                    ' | iplocation src_ip | rename lat as start_lat, lon as start_lon' +
-	                    ' | iplocation dest_ip | rename lat as end_lat, lon as end_lon' +
-	                    ' | `cs_network_filter_internal_traffic`' +
-	                    ' | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count<=`cs_network_traffic_top` | fields - fake_count' +
-	                    ' | eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=(5*(count-min_value))/(max_value-min_value)+1' +
-	                    ' | `cs_network_animate_pulse_traffic_map`' +
-	                    ' | eval color=if(blocked=1, "#dc4e41", "#53a051")' +
-	                    ' | fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked' +
-	                    ' | `cs_network_traffic_map_filter`';
+	                        ' | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)' +
+	                        ' | iplocation src_ip | rename lat as start_lat, lon as start_lon' +
+	                        ' | iplocation dest_ip | rename lat as end_lat, lon as end_lon' +
+	                        ' | `cs_network_filter_internal_traffic`' +
+	                        ' | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count<=`cs_network_traffic_top` | fields - fake_count' +
+	                        ' | eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=(5*(count-min_value))/(max_value-min_value)+1' +
+	                        ' | `cs_network_animate_pulse_traffic_map`' +
+	                        ' | eval color=if(blocked=1, "#dc4e41", "#53a051")' +
+	                        ' | fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked' +
+	                        ' | `cs_network_traffic_map_filter`';
 
 	                    const search_condition = ` | search start_lat=${data.from[0]} start_lon=${data.from[1]} end_lat=${data.to[0]} end_lon=${data.to[1]}`;
-	                    
-	                    const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(search + search_condition);
+
 
 	                    $("." + classname).attr("marker-end", 'url(#arrowhead)');
 	                    $("." + classname).click(function () {
+	                        const tokens = mvc.Components.get("default");
+	                        const earliest = tokens.get(tokenname + ".earliest");
+	                        const latest = tokens.get(tokenname + ".latest");
+
+	                        const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(search + search_condition);
 	                        window.open(url);
 	                    });
 	                })
@@ -25391,6 +25397,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 /***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ })
 /******/ ])});;
