@@ -40,7 +40,6 @@ There are dependent apps which also need to be installed on the Search Head alon
 |--------|--------|-------------|
 | ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some macro definitions and lookups |
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
-| Missile Map (Visualization) | [https://splunkbase.splunk.com/app/3511/](https://splunkbase.splunk.com/app/3511/) | For custom map visualization (view network traffic on map) 
 | Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
 | Splunk Add-on for Windows | [https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) | For field extraction (AD/Windows data) 
 | Microsoft Sysmon Add-on | [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/) | For field extraction (Sysmon data) 
