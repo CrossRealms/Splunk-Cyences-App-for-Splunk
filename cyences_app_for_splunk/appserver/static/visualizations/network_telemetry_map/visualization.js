@@ -111,6 +111,10 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 	                    svg.append(defs);
 	                }
 
+	                function unescape(raw_string) {
+	                    return raw_string.replaceAll("&lt;", '<').replaceAll("&gt;", '>').replaceAll("&quot;", '"').replaceAll("&apos;", '`').replaceAll("&amp;", '&');
+	                }
+
 	                const sanitize = SplunkVisualizationUtils.escapeHtml;
 
 	                const url = '/splunkd/__raw/services/mbtiles/splunk-tiles/{z}/{x}/{y}';
@@ -177,8 +181,9 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 
 	                let isArrowHeadDefAdded = false;
 
-	                const tokenname = this.getConfig("timeRangeToken", config);
-	                const searchquery = this.getConfig("searchQuery", config);
+	                const tokenname = sanitize(this.getConfig("timeRangeToken", config));
+	                // Need to replace special characters two times in order to unescape properly 
+	                const searchquery = unescape(unescape(sanitize(this.getConfig("searchQuery", config))));
 
 	                formattedData.forEach(function (data, index) {
 	                    var startX = data.from[0];
