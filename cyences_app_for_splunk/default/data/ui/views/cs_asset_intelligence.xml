@@ -158,12 +158,19 @@
           <latest>now</latest>
         </default>
       </input>
-      <viz type="missile_map.missile_map">
+      <viz type="cyences_app_for_splunk.network_telemetry_map">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port  | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map` | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
+          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.src_ip   | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3 | `cs_network_animate_traffic_map` | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
           <earliest>$tkn_timeRange_qualys.earliest$</earliest>
           <latest>$tkn_timeRange_qualys.latest$</latest>
         </search>
+        <option name="cyences_app_for_splunk.network_telemetry_map.defaultColor">#0000FF</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.defaultWeight">5</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">35</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">-95</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">5</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.searchQuery">| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| search `cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` STATUS="ACTIVE" PORT=*  | stats count by IP PORT | eval field = "(All_Traffic.src_ip = \"".IP."\" AND All_Traffic.src_port = \"".PORT."\") OR (All_Traffic.dest_ip = \"".IP."\" AND All_Traffic.dest_port = \"".PORT."\")"  | appendpipe [| stats count | where count==0 | eval field="false()" | fields field]  | fields field | return 10000 $field ] by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port  | `drop_dm_object_name(All_Traffic)` | eventstats min(count) as min_value, max(count) as max_value | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3 | `cs_network_animate_traffic_map` | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | ` cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.timeRangeToken">tkn_timeRange_qualys</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </viz>
@@ -229,18 +236,31 @@
           <latest>now</latest>
         </default>
       </input>
-      <viz type="missile_map.missile_map">
+      <viz type="cyences_app_for_splunk.network_telemetry_map">
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search (vul_state="open" OR vul_state="reopened") AND vul_port!=0 | fields tenable_uuid, vul_port
            | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | rename hostname as host ] | makemv ip delim="~~" | makemv host delim="~~" | search $tkn_filter_ip_host$
            | stats count by ip vul_port | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")"
            | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] 
-           by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` 
-           | eventstats min(count) as min_value, max(count) as max_value | eval weight=(5*(count-min_value))/(max_value-min_value)+1 | `cs_network_animate_traffic_map`
+           by All_Traffic.dest_ip All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)` 
+           | eventstats min(count) as min_value, max(count) as max_value | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3 | `cs_network_animate_traffic_map`
            | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | `cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</query>
           <earliest>$tkn_timeRange_tenable.earliest$</earliest>
           <latest>$tkn_timeRange_tenable.latest$</latest>
         </search>
+        <option name="cyences_app_for_splunk.network_telemetry_map.defaultColor">#0000FF</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.defaultWeight">5</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">35</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">-95</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">5</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.searchQuery">| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic where [| inputlookup cs_tenable_vuln | search (vul_state="open" OR vul_state="reopened") AND vul_port!=0 | fields tenable_uuid, vul_port
+           | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | rename hostname as host ] | makemv ip delim="~~" | makemv host delim="~~" | search $tkn_filter_ip_host$
+           | stats count by ip vul_port | eval field = "(All_Traffic.src_ip = \"".ip."\" AND All_Traffic.src_port = \"".vul_port."\") OR (All_Traffic.dest_ip = \"".ip."\" AND All_Traffic.dest_port = \"".vul_port."\")"
+           | appendpipe [| stats count | where count==0 | eval field="false()" | fields field] | fields field | return 10000 $field ] 
+           by All_Traffic.dest_ip All_Traffic.dest_port All_Traffic.src_ip All_Traffic.src_port | `drop_dm_object_name(All_Traffic)` 
+           | eventstats min(count) as min_value, max(count) as max_value | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3 | `cs_network_animate_traffic_map`
+           | eval color= "#dc4e41" | iplocation src_ip | `cs_network_generate_location_for_internal_network(src_ip)` | rename lat as start_lat, lon as start_lon | iplocation dest_ip | `cs_network_generate_location_for_internal_network(dest_ip)` | rename lat as end_lat, lon as end_lon</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.timeRangeToken">tkn_timeRange_tenable</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </viz>
