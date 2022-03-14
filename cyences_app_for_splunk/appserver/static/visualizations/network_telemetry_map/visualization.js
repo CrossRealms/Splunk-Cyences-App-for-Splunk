@@ -181,9 +181,9 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 
 	                let isArrowHeadDefAdded = false;
 
-	                const tokenname = sanitize(this.getConfig("timeRangeToken", config));
+	                const tokenname = sanitize(this.getConfig("drilldownTimeRangeToken", config));
 	                // Need to replace special characters two times in order to unescape properly 
-	                const searchquery = unescape(unescape(sanitize(this.getConfig("searchQuery", config))));
+	                const searchquery = unescape(unescape(sanitize(this.getConfig("drilldownQuery", config))));
 
 	                formattedData.forEach(function (data, index) {
 	                    var startX = data.from[0];

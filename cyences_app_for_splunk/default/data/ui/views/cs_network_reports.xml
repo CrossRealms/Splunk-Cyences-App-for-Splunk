@@ -88,7 +88,7 @@ $tkn_filter_outbound_traffic$
         <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">35</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">-95</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">5</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.searchQuery">| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
+        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownQuery">| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
 $tkn_filter_outbound_traffic$
 | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)
 | iplocation src_ip | rename lat as start_lat, lon as start_lon
@@ -100,7 +100,7 @@ $tkn_filter_outbound_traffic$
 | eval color=if(blocked=1, "#dc4e41", "#53a051")
 | fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked
 | `cs_network_traffic_map_filter`</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.timeRangeToken">timeRange</option>
+        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTimeRangeToken">timeRange</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </viz>
