@@ -67,17 +67,17 @@
       </input>
       <viz type="cyences_app_for_splunk.network_telemetry_map">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
 $tkn_filter_outbound_traffic$
 | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)
-| iplocation src_ip | rename lat as start_lat, lon as start_lon
-| iplocation dest_ip | rename lat as end_lat, lon as end_lon
+| iplocation src_ip | rename lat as start_lat, lon as start_lon, Country as src_country, City as src_city, Region as src_region
+| iplocation dest_ip | rename lat as end_lat, lon as end_lon, Country as dest_country, City as dest_city, Region as dest_region
 | `cs_network_filter_internal_traffic`
 | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count&lt;=`cs_network_traffic_top` | fields - fake_count
 | eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3
 | `cs_network_animate_pulse_traffic_map`
 | eval color=if(blocked=1, "#dc4e41", "#53a051")
-| fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked
+| fields src_ip, src_country, src_city, src_region, dest_ip, dest_country, dest_city, dest_region, total_bytes, total_packets, blocked, start_lat, start_lon, end_lat, end_lon, color, weight
 | `cs_network_traffic_map_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -88,17 +88,14 @@ $tkn_filter_outbound_traffic$
         <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">35</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">-95</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">5</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownQuery">| tstats `cs_summariesonly_network_traffic` count from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
+        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownQuery">| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic by All_Traffic.src_ip, All_Traffic.dest_ip | `drop_dm_object_name(All_Traffic)` 
 $tkn_filter_outbound_traffic$
 | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked | eval blocked=if(isnull(blocked), 0, blocked)
-| iplocation src_ip | rename lat as start_lat, lon as start_lon
-| iplocation dest_ip | rename lat as end_lat, lon as end_lon
+| iplocation src_ip | rename lat as start_lat, lon as start_lon, Country as src_country, City as src_city, Region as src_region
+| iplocation dest_ip | rename lat as end_lat, lon as end_lon, Country as dest_country, City as dest_city, Region as dest_region
 | `cs_network_filter_internal_traffic`
 | sort -blocked, -count | streamstats count as fake_count by blocked  | where fake_count&lt;=`cs_network_traffic_top` | fields - fake_count
-| eventstats min(count) as min_value, max(count) as max_value by blocked | eval weight=((7-3)*(count-min_value))/(max_value-min_value)+3
-| `cs_network_animate_pulse_traffic_map`
-| eval color=if(blocked=1, "#dc4e41", "#53a051")
-| fields src_ip, start_lat, start_lon, dest_ip, end_lat, end_lon, weight, animate, pulse_at_start, color, blocked
+| fields src_ip, src_country, src_city, src_region, dest_ip, dest_country, dest_city, dest_region, total_bytes, total_packets, blocked, start_lat, start_lon, end_lat, end_lon
 | `cs_network_traffic_map_filter`</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTimeRangeToken">timeRange</option>
         <option name="drilldown">none</option>
