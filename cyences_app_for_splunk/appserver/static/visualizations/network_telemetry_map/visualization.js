@@ -191,6 +191,11 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 	                    var endX = data.to[0];
 	                    var endY = data.to[1];
 
+	                    if (Number.isNaN(startX) || Number.isNaN(startY) || Number.isNaN(endX) || Number.isNaN(endY)) {
+	                        console.log("Invalid lat lon");
+	                        return;
+	                    }
+
 	                    var xx = (startX + endX) / 2
 	                    var yy = (startY + endY) / 2
 	                    var ll = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
