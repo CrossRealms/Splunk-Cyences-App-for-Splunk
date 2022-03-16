@@ -208,39 +208,6 @@ Run the search below and it should return events with no errors:
 
 Refer to the **Data Onboarding > Sophos Central Metadata through API** section for more information. 
 
-## **Finetune Splunk Admin Related Alerts**
-
-Currently, there is no way for Splunk search to distinguish between a missing forwarder and a forwarder which was permanently removed. For example, if a Splunk admin/user has intentionally removed a forwarder, then the Splunk users will continuously get an alert about the missing forwarder in the Missing Forwarder List. The same scenario applies to the Missing Indexes List.  
-
-Use the **Remove Decommissioned Forwarder** dashboard panel in the Splunk Admin dashboard to remove the decommissioned forwarder from the list. 
-
-Alternatively, users can use the query below to achieve the same goal. 
-
-        | inputlookup cs_forwarders.csv | search NOT hostname="<hostname>" | outputlookup cs_forwarders.csv  
-
-* Replace the field value for **hostname** with the host name of the forwarder which is being removed. 
-
-To **remove an index from the list**, run the following search query: 
-
-        | inputlookup cs_indexes.csv | search NOT index="<index>" | outputlookup cs_indexes.csv 
-
-* Replace the field value for **index** with the index name which is being removed. 
-
-**Fine-tune missing indexes alert:**
-
-* Users can update the `cs_missing_indexes_time_duration.csv` lookup to specify time-internal for incoming data on each index so there will be not whole lot of unnecessary alert emails. 
-
-* For example, Lansweeper collects data every four hours, so users can run the query below to fine-tune the **lansweeper** index. 
-
-        | inputlookup cs_missing_indexes_time_duration.csv 
-
-        | append [| makeresults | eval index="lansweeper", max_time_duration=14400] 
-
-        | stats last(max_time_duration) as max_time_duration by index 
-
-        | outputlookup cs_missing_indexes_time_duration.csv 
-
-**Note:** The **max_time_duration** field is based on seconds.
 
 ## **Device Inventory**
 

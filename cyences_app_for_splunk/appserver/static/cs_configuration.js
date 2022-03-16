@@ -173,11 +173,7 @@ require([
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_limit', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_for_user_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_from_source_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_successful_vpn_login_outside_home_country_filter', input_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter', button_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button', msg_id: 'macro_authentication_msg'},
-
-        /* Splunk Admin */
-        { macro_name: 'cs_splunk_admin_missing_indexes_filter', input_id: 'macro_cs_splunk_admin_missing_indexes_filter', button_id: 'macro_cs_splunk_admin_missing_indexes_filter_button', msg_id: 'macro_splunk_admin_msg'},
-        { macro_name: 'cs_splunk_admin_missing_forwarders_filter', input_id: 'macro_cs_splunk_admin_missing_forwarders_filter', button_id: 'macro_cs_splunk_admin_missing_forwarders_filter_button', msg_id: 'macro_splunk_admin_msg'}
+        { macro_name: 'cs_authentication_successful_vpn_login_outside_home_country_filter', input_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter', button_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button', msg_id: 'macro_authentication_msg'}
     ];
    
     // Defining search and search manager

@@ -333,37 +333,6 @@
   </row>
   <row>
     <panel>
-      <title>Splunk Admin</title>
-      <table>
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Splunk Admin")` | search NOT savedsearch_name IN ("Splunk Admin - Missing Forwarder", "Splunk Admin - Missing Data in the Index")
-| rename "Notable Events" as Count
-| append [| inputlookup cs_forwarders.csv | search status="Missing" | `cs_splunk_admin_missing_forwarders_filter` | stats count | eval Name="Missing Forwarders"
-| append [| inputlookup cs_indexes.csv | search status="Missing" | `cs_splunk_admin_missing_indexes_internal_filter` | `cs_splunk_admin_missing_indexes_filter`| stats count | eval Name="Missing Indexes" ]
-| rename count as Count]</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="Count">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <fields>["Name","Count"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_splunk_admin_reports?form.tkn_indexes_status=Missing&amp;form.tkn_forwarders_status=Missing</link>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <title>Monthly Alerts</title>
       <input type="time" token="timeRange_long">
         <label>Time Range</label>
