@@ -208,15 +208,6 @@ require([
             attacker_drilldown: '`cs_crowdstrike_eventstream` "metadata.eventType"=DetectionSummaryEvent "event.UserName"=$row.UserName$'
         },
 
-        "Splunk Admin - Missing Data in the Index": {
-            system_compromised_search: "| stats count by index",
-            system_compromised_drilldown: 'index=$row.index$ | timechart count by host'
-        },
-        "Splunk Admin - Missing Forwarder": {
-            system_compromised_search: "| stats count, values(forwarder_type) as forwarder_type, values(version) as version, values(arch) as arch, values(os) as os by hostname",
-            system_compromised_drilldown: 'index=_internal host=$row.hostname$ | timechart count'
-        },
-
         "Authentication - Bruteforce Attempt for a User": {
             contributing_events: 'index=* `cs_authentication_indexes` tag=authentication action="failure"',
             system_compromised_search: "| stats sum(count) as count by app",

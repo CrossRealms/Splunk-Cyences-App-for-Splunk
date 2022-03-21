@@ -109,24 +109,3 @@ There are several security related reports to choose from and they are all locat
     * Update Errors
     * Windows Defender Health Report 
 
-## Splunk Admin Reports
-Splunk Admin reports displays information related to the Splunk environment; which can be useful in checking its overall health status to determine if it is operating properly. 
-
-**Splunk License Usage**
-* Provides a visual representation of how much data has been ingested per day, as well as the stack size.
-
-**Instance Disk Usage**
-* Provides a visual representation of how much disk usage each host is using.  
-
-**Indexes**
-* Notifies the Splunk user if there is any missing data for a particular index. 
-
-**Forwarders**
-* Notifies the Splunk user if any hosts have stopped sending data to Splunk. 
-
-**Remove Decommissioned Forwarder**
-* Removes forwarders that are no longer in use.  
-
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_dashboard.png?raw=true)
-
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_dashboard_continued.png?raw=true)

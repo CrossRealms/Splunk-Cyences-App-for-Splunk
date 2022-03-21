@@ -23,9 +23,6 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 
 **Note**: After installing the Cyences App, the Overview dashboard will be empty by default. The Overview dashboard only displays enabled alerts and they each have to be manually enabled. Refer to the **Enable Alerts and Reports** section to find out how to enable alerts/reports within the Cyences App.
 
-### Splunk Admin
-* Keeps track of any missing data across all of your Splunk indexes, as well as any forwarders that may be absent.
-* It also monitors for high disk usage and license violations.
 
 ### Globally Detected Malicious IPs
 * The Globally Detected Malicious IPs is a list of all IP addresses found by Cyences' reports. 

@@ -32,7 +32,6 @@ By default, the Cyences app provides a multitude of alerts and reports in the fo
 * Palo Alto Firewall 
 * Ransomware
 * Sophos
-* Splunk Admin
 * Unix
 * VPN
 * Windows

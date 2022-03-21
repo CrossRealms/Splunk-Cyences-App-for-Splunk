@@ -432,19 +432,6 @@ Version 1.0.0 (Nov 2020)
 
 
 
-LOOKUPS
--------
-The lookups directory will have lookups from the customer environment.
-
-1. all_windows_hosts.csv
-2. cs_ransomware_file_writes_upperbound.csv
-3. ip_range_blocked_list.csv (Current file has been taken from http://iplists.firehol.org/)
-4. ip_blocked_list.csv (Current file has been taken from https://honeydb.io/ sample list)
-5. cs_malicious_ip_list.csv (List contains the bad IP addresses involve in various activities like DDoS attack or it's an already blocked IP address and connecting through multiple firewalls.)
-6. cs_indexes.csv (Stores all the indexes present in the data and useful to determine missing data in the index.)
-7. cs_forwarders.csv (Stores the list of forwarders present in the environment to determine missing forwarder list.)
-
-
 OPEN SOURCE COMPONENTS AND LICENSES
 ------------------------------
 * NA
