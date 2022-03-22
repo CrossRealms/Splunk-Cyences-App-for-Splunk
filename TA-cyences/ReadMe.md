@@ -28,7 +28,7 @@ TOPOLOGY AND SETTING UP SPLUNK ENVIRONMENT
 
 INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
 ------------------------------------------------------------
-Visit https://cyences.com/cyences-app-for-splunk/ for the complete configuration guide.
+Visit https://vatsaljagani.github.io/Splunk-Cyences-App-for-Splunk/ for the complete configuration guide.
 
 
 UNINSTALL APP
