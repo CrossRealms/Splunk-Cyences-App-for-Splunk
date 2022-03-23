@@ -1,5 +1,4 @@
-
-[default]
+[<stanza name>]
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.defaultWeight = <number>
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.defaultColor = <hexcolorvalue>
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.mapLatitude = <float>
