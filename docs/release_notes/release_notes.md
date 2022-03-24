@@ -57,6 +57,7 @@ This section of the document has all release notes.
 
     * Lansweeper Dashboard
         * Added Antivirus Status to Lansweeper Dashboard.
+        * User needs to have x.y.z (TODO) version of Lansweeper Add-on and XYZ (TODO) input enabled in the Add-on to collect the Antivirus related data.
         * TODO - Need to update Lansweeper Add-on for this with a new input - Need to discuss with Bhavik
 
     * Enhanced search query of "Windows Defender - Windows Defender RealTime Protection Disabled or Failed" alert to reduce the false positives.
