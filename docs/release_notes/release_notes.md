@@ -9,53 +9,54 @@ has_children: true
 # Release Notes
 This section of the document has all release notes.
 
-## Version 1.11.0 (January 2022)
+## Version 2.0.0 (April 2022)
 
-* ### Added Kaspersky dashboard
-    * Added the required field extractions. 
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
+* ### Renamed the "0365 - O365 Service is not Operational" alert to "O365 - O365 Service is not Operational" to fix the type.
+    * User will require to reconfigure the new alert. 
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky.png?raw=true)
+* ### Fixed type in "cs_o365_categories.csv" lookup and Removed the incorrect filter from the macro "cs_o365_managementactivity_change(1)"
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_two.png?raw=true)
+* ### Added new panel "Azure Active Directory - GroupMembership Change/Update" under the "Office 365" dashboard. Also updated dashbaord to show the GroupMembership change related details
 
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
+* ### Added props/field extraction for the Windows DNS Logs (MSAD:NT6:DNS, isc:bind:query, isc:bind:queryerror sourcetypes) 
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_three.png?raw=true)
+* ### Enhaced search query of "Windows Defender - Windows Defender RealTime Protection Disabled or Failed" alert and changed cron job from every 15 minutes to every hour
 
-* ### DNS dashboard 
-    * Added DNS Tracker dashboard for the following use-cases: Top Categories, Record Types, DNS Log Volume over Time, Record Types over Time, Top queries, Top Non-success Code Queries, Top Requesters, and Top Non-success queries Code Requesters.
+* ### Added dest fields in the result of bruteforce related all 4 alerts.
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker.png?raw=true)
+* ### Added Antivirus Status to Lansweeper Dashboard
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker_continued.png?raw=true)
+* ### Added following new alerts. (by default they are disabled)
+    | Alert Name | Cron Schedule |
+    |------------|---------------|
+    | O365 - Login Failure Due To Multi Factor Authentication | Runs every hour |
+    | O365 - Login Failure Outside Home Country Due To Multi Factor Authentication | Runs every 30 minute |
+    | O365 - Login From Unknown User | Runs every 30 minute |
+    | O365 - Successful Login Outside Home Country | Runs every 30 minute |
+    | O365 - Authentication Blocked By Conditional Access Policy | Runs every hour |
+    | O365 - Daily Login Failure | Runs every day |
+    | AD - Password Change Outside Working Hour | Runs every day |
+    | Palo Alto Firewall - Commits | Runs every 15 minutes |
+    | O365 - Security Compliance Alert | Runs every hour | 
+    | Email- Hourly Increase In Emails Over Baseline | Runs evert hour |
+    | Email- Daily Spam Email | Runs every day |
+    | Authentication - Successful VPN Login Outside Home Country | Runs every hour |
+    | Cisco IOS - New Connection For User | Runs every 30 minute |
+    | Cisco IOS - Device Failed Login | Runs every 30 minute |
+    | O365 - Azure Active Directory - GroupMembership Change/Update | Runs every 30 minute | 
 
-* ### Microsoft Defender ATP Alert
-    * Added a security alert for Office 365 Advanced Threat Protection.
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/defender_atp_alert.png?raw=true)
+* ### The "Network Reports" and "Asset Intelligence" dashboard now uses the newly added custom vizualization "Network Telemetry Map" which has support for drilldown functionality to show the actual traffic details in the table format 
 
-* ### VPN Dashboard
-    * Added support for Cisco VPN (logs from Cisco ISE and Estreamer are supported). 
-    * Changed the field name from field dest to dest_category="vpn_auth" for better CIM compatibility. 
+    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
 
-        * This field is being used to display the correct count of VPN logins.
+* ### Removed the Splunk Admin related alerts and dashboards from the Cyences app
 
-* ### Enhancements:
-    * Splunk Admin - Missing Indexes Alert
-        * Improved the performance of the query.
-    * Splunk Admin Dashboard - Missing Indexes Table 
-        * Reduced the loading time of the search query after performing a drilldown.
-    * Windows Defender Event Logs
-        * Added support for logs coming from Windows 10 hosts (resolved field extraction related issues). 
-    * Decommission Hosts from Lookups 
-        * Added dashboard panels to remove the decommissioned hosts from the Windows hosts lookup, as well as the Linux hosts lookup.
-            * This is required to avoid false positive alerts. 
+* ### Fixed the device_inventory_gen command to handle the empy ip scenario
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/decommission_host_from_lookups.png?raw=true)
+* ### Updated "Dynamically Update Blocked IPs with HoneyDB" cronscedule from every 2 hour to every 8 hour to fix the api limit exceed issue.
 
-## Upgrade Guide from Version 1.10.0 to 1.11.0
-
-* The Cyences App now supports Kaspersky. Refer to the **Data Onboarding > Kaspersky Logs** section for more information regarding the data collection process. 
-* The VPN dashboard now supports [Cisco ISE](https://splunkbase.splunk.com/app/1915/) and [Estreamer](https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN. 
-* Cyences has a new dashboard called **DNS Tracker**. It supports all types of DNS related data that are compatible with the CIM data model. For example, the [Cisco Umbrella Add-on](https://splunkbase.splunk.com/app/3926/).
