@@ -82,7 +82,7 @@
   </row>
   <row>
     <panel>
-      <title>Virus Found and Password</title>
+      <title>Virus Found and Passed</title>
       <table>
         <search>
           <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest   category  VirusName TaskName msg user user_domain</query>
