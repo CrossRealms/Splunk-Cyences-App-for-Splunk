@@ -243,7 +243,10 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         if self.check_timestamp(data_pointer[LOOKUP_KEY_TIME]):
             # append ips
-            data_pointer[LOOKUP_KEY_IP] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_IP], ips)
+            try:
+                data_pointer[LOOKUP_KEY_IP] = self.combine_multivalued_field(data_pointer[LOOKUP_KEY_IP], ips)
+            except KeyError:
+                data_pointer[LOOKUP_KEY_IP] = ips
         else:
             # update ips
             data_pointer[LOOKUP_KEY_IP] = ips
