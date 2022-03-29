@@ -90,7 +90,7 @@
       </table>
     </panel>
     <panel>
-      <title>Top Non-success Code Queries</title>
+      <title>Most Unsuccessful Code Queries</title>
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.query DNS.reply_code | rename DNS.* as * |sort - count | head 10</query>
@@ -116,7 +116,7 @@
       </table>
     </panel>
     <panel>
-      <title>Top Non-success Code Requesters</title>
+      <title>Most Unsuccessful Code Requesters</title>
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) by DNS.src DNS.reply_code | rename DNS.* as * |sort - count | head 10 | rename src as Requester</query>

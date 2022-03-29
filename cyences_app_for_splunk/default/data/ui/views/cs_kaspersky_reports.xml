@@ -40,7 +40,7 @@
   </row>
   <row>
     <panel>
-      <title>Assets Status in Kaspersky</title>
+      <title>Status of Assets</title>
       <table>
         <search>
           <query>|  inputlookup cs_kaspersky_inventory 
@@ -82,7 +82,7 @@
   </row>
   <row>
     <panel>
-      <title>Virus Found and Passwd</title>
+      <title>Virus Found and Passed</title>
       <table>
         <search>
           <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest   category  VirusName TaskName msg user user_domain</query>
@@ -95,7 +95,7 @@
   </row>
   <row>
     <panel>
-      <title>Virus Found and Bloacked</title>
+      <title>Virus Found and Blocked</title>
       <table>
         <search>
           <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_BLOCKED dest IN ($tkn_host$) dst IN ($tkn_ip$)| table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
@@ -108,7 +108,7 @@
   </row>
   <row>
     <panel>
-      <title>Application Database out of Date</title>
+      <title>Application Database Out of Date</title>
       <table>
         <search>
           <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dst IN ($tkn_ip$)| table  _time dest ProductName ProductVersion msg</query>
