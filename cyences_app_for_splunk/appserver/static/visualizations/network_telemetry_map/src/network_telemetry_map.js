@@ -22,6 +22,10 @@ define([
                 this.$el = $(this.el);
                 // Add a css selector class
                 this.$el.addClass('network_telemetry_map');
+                //generate random string to avoid same class name when mulitple chart is used in the same dashboard
+                if (!this.randStr) {
+                    this.randStr = Math.random().toString(36).substring(2, 7);
+                }
             },
 
             getInitialDataParams: function () {
@@ -40,6 +44,7 @@ define([
             },
 
             updateView: function (data, config) {
+                var that = this;
 
                 this.$el.empty();
                 if (this.map) {
@@ -136,9 +141,13 @@ define([
 
                 let isArrowHeadDefAdded = false;
 
-                const tokenname = sanitize(this.getConfig("drilldownTimeRangeToken", config));
+                const drilldownTimeRangeToken = sanitize(this.getConfig("drilldownTimeRangeToken", config));
                 // Need to replace special characters two times in order to unescape properly 
-                const searchquery = unescape(unescape(sanitize(this.getConfig("drilldownQuery", config))));
+                const drilldownQuery = unescape(unescape(sanitize(this.getConfig("drilldownQuery", config))));
+
+                const drilldownTokenName = sanitize(this.getConfig("drilldownTokenName", config));
+                // Need to replace special characters two times in order to unescape properly 
+                const drilldownTokenValue = unescape(unescape(sanitize(this.getConfig("drilldownTokenValue", config))));
 
                 formattedData.forEach(function (data, index) {
                     var startX = data.from[0];
@@ -156,7 +165,7 @@ define([
                     var ll = Math.sqrt(Math.pow(startX - endX, 2) + Math.pow(startY - endY, 2));
                     cc = [xx + ll * 0.20, yy]
 
-                    let classname = "trafficpath" + index.toString();
+                    let classname = that.randStr + "-trafficpath" + index.toString();
 
                     var path = L.curve(['M', data.from, 'Q', cc, data.to],
                         { weight: data.weight, color: data.color, fill: false, className: classname }).addTo(map);
@@ -171,14 +180,24 @@ define([
 
                     $("." + classname).attr("marker-end", 'url(#arrowhead)');
 
-                    if (tokenname && searchquery) {
+                    if (drilldownTimeRangeToken && drilldownQuery) {
                         $("." + classname).click(function () {
                             const tokens = mvc.Components.get("default");
-                            const earliest = tokens.get(tokenname + ".earliest");
-                            const latest = tokens.get(tokenname + ".latest");
+                            const earliest = tokens.get(drilldownTimeRangeToken + ".earliest");
+                            const latest = tokens.get(drilldownTimeRangeToken + ".latest");
 
-                            const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(searchquery + search_condition);
+                            const url = 'search?earliest=' + encodeURIComponent(earliest) + '&latest=' + encodeURIComponent(latest) + '&q=' + encodeURIComponent(drilldownQuery + search_condition);
                             window.open(url);
+                        });
+                    }
+
+                    if (drilldownTokenName && drilldownTokenValue) {
+                        $("." + classname).click(function () {
+                            // Need to set both default and submitted token to make it work
+                            const defaultTokens = mvc.Components.getInstance('default');
+                            const submittedTokens = mvc.Components.getInstance('submitted');
+                            defaultTokens.set(drilldownTokenName, drilldownTokenValue + search_condition);
+                            submittedTokens.set(drilldownTokenName, drilldownTokenValue + search_condition);
                         });
                     }
                 })

@@ -6,3 +6,5 @@ display.visualizations.custom.network_telemetry_map.network_telemetry_map.mapLon
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.mapZoom = <number>
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.drilldownTimeRangeToken = <string>
 display.visualizations.custom.network_telemetry_map.network_telemetry_map.drilldownQuery = <string>
+display.visualizations.custom.network_telemetry_map.network_telemetry_map.drilldownTokenName = <string>
+display.visualizations.custom.network_telemetry_map.network_telemetry_map.drilldownTokenValue = <string>
