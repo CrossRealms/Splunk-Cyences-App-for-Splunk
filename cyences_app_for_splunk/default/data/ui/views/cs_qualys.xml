@@ -35,9 +35,9 @@
 | iplocation dest_ip
 | ` cs_network_generate_location_for_internal_network(dest_ip)`
 | table vul_ip, vul_port, src_ip, inbound_traffic, dest_ip, outbound_traffic, Country, Region, City</query>
-      <earliest>$timeRange.earliest$</earliest>
-      <latest>$timeRange.latest$</latest>
-    </search>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
   <row>
     <panel>
       <html>
@@ -106,38 +106,10 @@
     </panel>
   </row>
   <row>
-    <panel>
-      <title>Traffic on Vulnerable Ports</title>
-      <input type="time" token="timeRange">
-        <label></label>
-        <default>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <input type="multiselect" token="tkn_vul_severity_filter_in_traffic">
-        <label>Vulnerability Severity</label>
-        <choice value="critical">Critical</choice>
-        <choice value="high">High</choice>
-        <choice value="medium">Medium</choice>
-        <choice value="low">Low</choice>
-        <choice value="information">Information</choice>
-        <default>critical,high</default>
-        <prefix>severity IN (</prefix>
-        <suffix>)</suffix>
-        <valuePrefix>"</valuePrefix>
-        <valueSuffix>"</valueSuffix>
-        <delimiter>, </delimiter>
-      </input>
-      <table id="vulnerability_port_traffic_table">
-        <search base="vulnerability_port_traffic_search">
-          <query>| stats sum(inbound_traffic) as inbound_traffic, sum(outbound_traffic) as outbound_traffic by vul_ip, vul_port
-| sort - inbound_traffic, - outbound_traffic</query>
-        </search>
-        <option name="count">50</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
+    <html>
+      <div>
+        <p>To see network telemetry on this devices, please click <a href="/app/cyences_app_for_splunk/cs_network_reports" target="_black">here</a>.</p>
+      </div>
+    </html>
   </row>
 </form>
