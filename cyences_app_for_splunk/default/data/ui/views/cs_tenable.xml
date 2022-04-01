@@ -190,78 +190,10 @@
     </panel>
   </row>
   <row>
-    <panel>
-      <title>Traffic on Vulnerable Ports</title>
-      <input type="time" token="timeRange">
-        <label></label>
-        <default>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <input type="multiselect" token="tkn_vul_severity_filter_in_traffic">
-        <label>Vulnerability Severity</label>
-        <choice value="critical">Critical</choice>
-        <choice value="high">High</choice>
-        <choice value="medium">Medium</choice>
-        <choice value="low">Low</choice>
-        <choice value="information">Information</choice>
-        <default>critical,high</default>
-        <prefix>vul_severity IN (</prefix>
-        <suffix>)</suffix>
-        <valuePrefix>"</valuePrefix>
-        <valueSuffix>"</valueSuffix>
-        <delimiter>, </delimiter>
-      </input>
-      <table id="vulnerability_port_traffic_table">
-        <search base="vulnerability_port_traffic_search">
-          <query>| stats sum(inbound_traffic) as inbound_traffic, sum(outbound_traffic) as outbound_traffic by vul_ip, vul_port
-| sort - inbound_traffic, - outbound_traffic</query>
-        </search>
-        <option name="count">50</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>All Traffic on All Vulnerable Hosts</title>
-      <input type="checkbox" token="tkn_show_for_nessus_json">
-        <label></label>
-        <choice value="1">Show panel</choice>
-        <delimiter> </delimiter>
-      </input>
-      <input type="time" token="timeRange_for_nessus_json">
-        <label></label>
-        <default>
-          <earliest>-7d@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <input type="multiselect" token="tkn_vul_severity_filter_in_traffic">
-        <label>Vulnerability Severity</label>
-        <choice value="critical">Critical</choice>
-        <choice value="high">High</choice>
-        <choice value="medium">Medium</choice>
-        <choice value="low">Low</choice>
-        <choice value="information">Information</choice>
-        <default>critical,high</default>
-        <prefix>vul_severity IN (</prefix>
-        <suffix>)</suffix>
-        <valuePrefix>"</valuePrefix>
-        <valueSuffix>"</valueSuffix>
-        <delimiter>, </delimiter>
-      </input>
-      <table depends="$tkn_show_for_nessus_json$" id="vulnerability_port_traffic_table_for_nessus_json">
-        <search base="vulnerability_port_traffic_search_for_nessus_json">
-          <query>| stats sum(inbound_traffic) as inbound_traffic, sum(outbound_traffic) as outbound_traffic by vul_ip
-| sort - inbound_traffic, - outbound_traffic</query>
-        </search>
-        <option name="count">50</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
+    <html>
+      <div>
+        <p>To see network telemetry on this devices, please click <a href="/app/cyences_app_for_splunk/cs_network_reports" target="_black">here</a>.</p>
+      </div>
+    </html>
   </row>
 </form>

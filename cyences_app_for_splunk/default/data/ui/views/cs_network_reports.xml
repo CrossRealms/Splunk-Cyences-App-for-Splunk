@@ -1,6 +1,6 @@
 <form theme="dark" version="1.1">
   <label>Network Reports</label>
-  <description>Note: For the larger time range period map won't render all the events as the commands used in the search query (like. mvexpand, streamstat) has some limitation.</description>
+  <description>Note: For the larger time range map might not render all the events as the commands used in the search query (like mvexpand, streamstat) has some limitation set.</description>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -16,7 +16,7 @@
       <choice value="medium">Medium</choice>
       <choice value="low">Low</choice>
       <choice value="information">Information</choice>
-      <default>critical,high</default>
+      <default>critical,high,medium</default>
       <valuePrefix>"</valuePrefix>
       <valueSuffix>"</valueSuffix>
       <delimiter>, </delimiter>
@@ -118,8 +118,6 @@
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="cyences_app_for_splunk.network_telemetry_map.defaultColor">#0000FF</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.defaultWeight">5</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenName">traffic_query</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenValue">| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
@@ -152,63 +150,56 @@
 | sort 0 -is_vul, -action, -total_bytes 
 | eval total_KB = round(total_bytes/1024, 2) 
 | table src_ip, src_country, src_city, src_region, dest_ip, dest_port, dest_country, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">30</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">0</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">2</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </viz>
       <html>
       <style>
-      table, th, td {
+      .myinfo table, .myinfo th, .myinfo td, .myinfo tr {
       	border: 1px solid; 
         text-align: center;
-    
       }
-      th, tr {
-          padding: 15px
+      .myinfo th,.myinfo td, .myinfo tr {
+        padding: 5px
+      }
+      .myinfo {
+        margin-bottom: 15px;
       }
       </style>
-        <div>
+        <div class="myinfo">
           <p>
-            <b>Description:</b> Displays a traffic visual for the all vulnerable and top twenty not vulnerable networks for each action (allowed and blocked) with their respective source and destination pathways.</p>
-        </div>
-        <div>
-          <p>
-            <b>Traffic Color Mapping</b>
+            <b>How to read the chart?</b>
           </p>
           <table>
             <tr>
-              <th>Is Vulnerable</th>
-              <th>Action</th>
               <th>Color</th>
+              <th>Description</th>
             </tr>
             <tr>
-              <td>vulnerable</td>
-              <td>allowed</td>
-              <td>red</td>
+              <td>Red</td>
+              <td>Inbound traffic on the <b>vulnerable ports</b> that are <b>allowed</b> by the firewall.</td>
             </tr>
             <tr>
-              <td>vulnerable</td>
-              <td>blocked</td>
-              <td>orange</td>
+              <td>Orange</td>
+              <td>Inbound traffic on the <b>vulnerable ports</b> that are <b>blocked</b> by the firewall.</td>
             </tr>
             <tr>
-              <td>not vulnerable</td>
-              <td>blocked</td>
-              <td>blue</td>
+              <td>Blue</td>
+              <td>Other Inbound traffic is <b>blocked</b> by the firewall. (Only top 20)</td>
             </tr>
             <tr>
-              <td>not vulnerable</td>
-              <td>allowed</td>
-              <td>green</td>
+              <td>Green</td>
+              <td>Other Inbound traffic <b>allowed</b> by the firewall. (Only top 20)</td>
             </tr>
           </table>
+        </div>
+        <div>
+          <p><b>Vulnerable Port</b> - If there is at least one open vulnerability with severity selected by the user in the dashboard filter on the device on that specific port (detected by vulnerability scanners).</p>
         </div>
       </html>
     </panel>
     <panel>
-      <title>Outbount Network Telemetry</title>
+      <title>Outbound Network Telemetry</title>
       <viz type="cyences_app_for_splunk.network_telemetry_map">
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
@@ -252,8 +243,6 @@
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="cyences_app_for_splunk.network_telemetry_map.defaultColor">#0000FF</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.defaultWeight">5</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenName">traffic_query</option>
         <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenValue">| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
@@ -286,63 +275,56 @@
 | sort 0 -is_vul, -action, -total_bytes 
 | eval total_KB = round(total_bytes/1024, 2) 
 | table src_ip, src_country, dest_ip, dest_port, dest_country, dest_city, dest_region, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapLatitude">30</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapLongitude">0</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.mapZoom">2</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </viz>
       <html>
       <style>
-      table, th, td {
+      .myinfo table, .myinfo th, .myinfo td, .myinfo tr {
       	border: 1px solid; 
         text-align: center;
-    
       }
-      th, tr {
-          padding: 15px
+      .myinfo th,.myinfo td, .myinfo tr {
+        padding: 5px
+      }
+      .myinfo {
+        margin-bottom: 15px;
       }
       </style>
-        <div>
+        <div class="myinfo">
           <p>
-            <b>Description:</b> Displays a traffic visual for the top twenty networks for each action and is_vulnerable combination with their respective source and destination pathways.</p>
-        </div>
-        <div>
-          <p>
-            <b>Traffic Color Mapping</b>
+            <b>How to read the chart?</b>
           </p>
           <table>
             <tr>
-              <th>Is Vulnerable</th>
-              <th>Action</th>
               <th>Color</th>
+              <th>Description</th>
             </tr>
             <tr>
-              <td>vulnerable</td>
-              <td>allowed</td>
-              <td>red</td>
+              <td>Red</td>
+              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>allowed</b> by the firewall. (Only top 20)</td>
             </tr>
             <tr>
-              <td>vulnerable</td>
-              <td>blocked</td>
-              <td>orange</td>
+              <td>Orange</td>
+              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>blocked</b> by the firewall. (Only top 20)</td>
             </tr>
             <tr>
-              <td>not vulnerable</td>
-              <td>blocked</td>
-              <td>blue</td>
+              <td>Blue</td>
+              <td>Other Outbound traffic is <b>blocked</b> by the firewall. (Only top 20)</td>
             </tr>
             <tr>
-              <td>not vulnerable</td>
-              <td>allowed</td>
-              <td>green</td>
+              <td>Green</td>
+              <td>Other Outbound traffic <b>allowed</b> by the firewall. (Only top 20)</td>
             </tr>
           </table>
+        </div>
+        <div>
+            <p><b>Vulnerable Device</b> - If there is at least one open vulnerability with severity selected by the user in the dashboard filter.</p>
         </div>
       </html>
     </panel>
   </row>
-  <row>
+  <row depends="$traffic_query$">
     <panel>
       <title>DrillDown - Traffic Detail</title>
       <table>
