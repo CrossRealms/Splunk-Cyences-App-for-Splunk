@@ -123,9 +123,9 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 	                const sanitize = SplunkVisualizationUtils.escapeHtml;
 
 	                const url = '/splunkd/__raw/services/mbtiles/splunk-tiles/{z}/{x}/{y}';
-	                const lat = this.getConfig("mapLatitude", config) || 35;
-	                const lon = this.getConfig("mapLongitude", config) || -95;
-	                const zoom = this.getConfig("mapZoom", config) || 4;
+	                const lat = this.getConfig("mapLatitude", config) || 30;
+	                const lon = this.getConfig("mapLongitude", config) || 0;
+	                const zoom = this.getConfig("mapZoom", config) || 2;
 
 	                var map = this.map = L.map(this.el).setView([lat, lon], zoom);
 	                L.tileLayer(url).addTo(map);
@@ -166,7 +166,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils","splunkjs/m
 	                    }
 	                }
 	                const defaultColor = this.getConfig("defaultColor", config) || "#0000FF";
-	                const defaultWeight = this.getConfig("defaultWeight", config) || 1;
+	                const defaultWeight = this.getConfig("defaultWeight", config) || 3;
 
 	                var formattedData = dataRows.map(function (data) {
 	                    var start_lat = parseFloat(data[start_lat_idx]);
