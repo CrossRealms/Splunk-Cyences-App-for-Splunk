@@ -19,8 +19,15 @@ This section of the document has all release notes.
         * Users can now click on the traffic arrow and drilldown on them to see details about particular traffic.
         * The "Network Reports" and "Asset Intelligence" dashboard now uses the newly added custom visualization "Network Telemetry Map".
         ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
-    * Network Telemetry Chart now shows following information with relevant color code.
-        * TODO
+    * Removed the "Top Network Traffic" panel from the "Network Reports" dashboard and added following new panels to show the network traffic in better way.
+        * Inbound Network Telemetry
+        * Outbound Network Telemetry
+        * Internal Traffic
+
+* ### Removed following panels and added link to "Network Reports" dashbaord 
+    * Removed "Network Traffic to/from Vulnerable Ports (Detected from Qualys)" and "Network Traffic to/from Vulnerable Ports (Detected from Tenable)" panels from the "Asset Intelligence" dashboard.
+    * Removed "Traffic on Vulnerable Ports" panel from the "Qualys" dashboard.
+    * Removed "Traffic on Vulnerable Ports" and "All Traffic on All Vulnerable Hosts" panels from the "Tenable" dashboard.
 
 * ### Removed Splunk Admin related items
     * Removed all the Splunk Admin related alerts and dashboards from the App.
@@ -87,10 +94,24 @@ This section of the document has all release notes.
         * Fixed the issues with to handling the empty ip field scenario in device_inventory_gen command.
         * Fixed the issue without time-out issue with Malicious IP upload and download command.
 
+    * Renamed following panel title in the "DNS Tracker" dashboard.
+        * Top Non-success Code Queries -> Most Unsuccessful Code Queries
+        * Top Non-success Code Requesters -> Most Unsuccessful Code Requesters
 
+    * Renamed following panel title in the "Kaspersky" dashboard.
+        * Assets Status in Kaspersky -> Status of Assets
+        * Virus Found and Passwd -> Virus Found and Passed
+        * Virus Found and Bloacked -> Virus Found and Blocked
+        * Application Database out of Date -> Application Database Out of Date
 
 
 ## Upgrade Guide from 1.11.0 to 2.0.0
+
+* ### Removed all the Splunk Admin related alerts and dashboards from the App
+    * The existing splunk admin related alerts might not work after addon upgrade as all the admin related alerts and dashboard are removed in the v2.0.0
+
+* ### Renamed the "0365 - O365 Service is not Operational" alert to "O365 - O365 Service is not Operational" to fix the type.
+    * User will require to reconfigure the new alert.
 
 * TODO
 

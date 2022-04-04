@@ -55,7 +55,9 @@ There are several security related reports to choose from and they are all locat
 
 * Network Reports
     * Port Scanning Attempts
-    * Top Network Traffic
+    * Inbound Network Telemetry
+    * Outbound Network Telemetry
+    * Internal Traffic
 
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_reports.png?raw=true)
 
