@@ -7,7 +7,7 @@
   </init>
   <label>Lansweeper</label>
   <search id="search_windows_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | join type=left id [| search `cs_lansweeper` `cs_lansweeper_timerange` sourcetype="lansweeper:antivirus:onprem"| where onAccessScanningEnabled=1 | stats latest(DisplayName) as active_antivirus by AssetID | rename AssetID as id]| rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User, active_antivirus | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | join type=left id [| search `cs_lansweeper` `cs_lansweeper_timerange` sourcetype="lansweeper:antivirus:onprem"| where onAccessScanningEnabled=1 | stats latest(DisplayName) as active_antivirus by AssetID | rename AssetID as id]| rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User, active_antivirus | eval name_lower=lower(Name)
 | join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
@@ -22,7 +22,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_server_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange`  (AssetTypename="VMware vCenter server" OR AssetTypename="ESXi server") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress,Mac as MacAddress, OScode as OSVersion, version as Version,Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange`  (AssetTypename="VMware vCenter server" OR AssetTypename="ESXi server") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, version as Version,Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS="VMware *" `cs_qualys_timerange` | dedup IP | table IP | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname | rename hostname as name_lower | eval Tenable="Present"]
@@ -34,7 +34,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_vmware_guest_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename IN ("VMware Guest", "Hyper-V guest") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename IN ("VMware Guest", "Hyper-V guest") | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
 | join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
@@ -50,7 +50,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_linux_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Linux" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Linux" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
@@ -63,7 +63,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_mac_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Apple Mac" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Apple Mac" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion,Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN | eval name_lower=lower(Name)
 | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
@@ -76,7 +76,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_network_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Network device" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Network device" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
   | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
@@ -89,7 +89,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_webserver_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Webserver" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Webserver" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | eval name_lower=lower(Name)
   | join type=left IPAddress [| search `cs_qualys_hostsummary` OS IN `cs_qualys_linux_os` `cs_qualys_timerange` | dedup IP | table IP, OS | rename IP as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_tenable_inventory | makemv ip delim="~~" | mvexpand ip | dedup ip | table ip, tenable_os | rename ip as IPAddress | eval Tenable="Present"]
 | join type=left name_lower [| inputlookup cs_tenable_inventory | makemv hostname delim="~~" | mvexpand hostname | dedup hostname | table hostname, tenable_os | rename hostname as name_lower | eval Tenable="Present"]
@@ -102,7 +102,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_location_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Location" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Location" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
 | table Site, Name, State
 | sort Name </query>
     <earliest>-4h@m</earliest>
@@ -110,7 +110,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_monitor_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Monitor" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Monitor" | eval id=coalesce(AssetID,id) | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User
 | table Site, Name, State
 | sort Name </query>
     <earliest>-4h@m</earliest>
@@ -118,7 +118,7 @@
     <sampleRatio>1</sampleRatio>
   </search>
   <search id="search_other_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT AssetTypename IN ("Hyper-V guest", "VMware vCenter server", "ESXi server", "VMware Guest", "Windows", "Linux", "Apple Mac", "Network device", "Webserver", "Location", "Monitor") | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, IPAddress as IPAddress, Mac as MacAddress, OScode as OSVersion, Version as Version, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` NOT AssetTypename IN ("Hyper-V guest", "VMware vCenter server", "ESXi server", "VMware Guest", "Windows", "Linux", "Apple Mac", "Network device", "Webserver", "Location", "Monitor") | eval id=coalesce(AssetID,id)  | dedup id | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User,OS,IPLocation,Description, FQDN
 | table Site, Name,Description,State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,Type,OS, OSVersion, User
 | sort Name</query>
     <earliest>-4h@m</earliest>
