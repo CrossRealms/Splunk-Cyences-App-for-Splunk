@@ -100,9 +100,13 @@
       <title>Lansweeper $tkn_filter_main_label$</title>
       <table>
         <search>
-          <query>`cs_lansweeper` `cs_lansweeper_timerange` | rename IPAddress as ip, AssetName as host, Username as user | search $tkn_filter_main$ | eval id=coalesce(AssetID,id) | dedup id
-| rename AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Firstseen as FirstSeen, Lastseen as LastSeen, LastChanged as LastChanged 
-| table id, ip, host, user, MacAddress, State, Type, OS, OSVersion, OSRelease, OSname, SystemVersion, version, FQDN, GroupName, IPLocation, Domain, AssetDomain, Memory, Processor, Manufacturer, Model, Serialnumber, BuildNumber, LsAgentVersion, LastLsAgent, FirstSeen, LastSeen, LastChanged, Description</query>
+          <query>`cs_lansweeper` `cs_lansweeper_timerange` | rename IPAddress as ip, AssetName as host, Username as user | search $tkn_filter_main$ | eval id=coalesce(AssetID,id) 
+| rename AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Firstseen as FirstSeen, Lastseen as LastSeen 
+| eval antivirus = antivirus_name."#".antivirus_enabled 
+| table id, site_name, ip, host, user, MacAddress, State, Type, OS, OSVersion, OSRelease, OSname, SystemVersion, version, FQDN, GroupName, IPLocation, Domain, AssetDomain, Memory, Processor, Manufacturer, Model, Serialnumber, BuildNumber, LsAgentVersion, LastLsAgent, FirstSeen, LastSeen, LastChanged, Description, antivirus
+| stats values(GroupName) as GroupName, values(antivirus) as antivirus, values(Processor) as Processor, first(*) as * by id 
+| rex field=antivirus max_match=0 "(?&lt;antivirus_name&gt;[^#]+)#(?&lt;antivirus_enabled&gt;[^\n]+)"
+| table id, site_name, ip, host, user, MacAddress, State, Type, OS, OSVersion, OSRelease, OSname, antivirus_name, antivirus_enabled, SystemVersion, version, FQDN, GroupName, IPLocation, Domain, AssetDomain, Memory, Processor, Manufacturer, Model, Serialnumber, BuildNumber, LsAgentVersion, LastLsAgent, FirstSeen, LastSeen, LastChanged, Description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -112,11 +116,13 @@
     </panel>
   </row>
   <row>
+    <panel>
     <html>
       <div>
         <p>To see network telemetry on this devices, please click <a href="/app/cyences_app_for_splunk/cs_network_reports?form.tkn_ip=$tkn_ip_tmp$" target="_black">here</a>.</p>
       </div>
     </html>
+    </panel>
   </row>
   <row depends="$tkn_show_hide_qualys$">
     <panel>

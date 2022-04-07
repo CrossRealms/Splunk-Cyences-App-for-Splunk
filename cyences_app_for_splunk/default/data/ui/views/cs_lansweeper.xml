@@ -7,7 +7,14 @@
   </init>
   <label>Lansweeper</label>
   <search id="search_windows_assets">
-    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)  | dedup id | join type=left id [| search `cs_lansweeper` `cs_lansweeper_timerange` sourcetype="lansweeper:antivirus:onprem"| where onAccessScanningEnabled=1 | stats latest(DisplayName) as active_antivirus by AssetID | rename AssetID as id]| rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User | table Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User, active_antivirus | eval name_lower=lower(Name)
+    <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)
+| eval antivirus = antivirus_name."#".antivirus_enabled 
+| rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User 
+| table id, antivirus, Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User
+| stats values(antivirus) as antivirus, first(*) as * by id 
+| eval active_antivirus_mix = mvfilter(match(antivirus, "(1|true)$"))
+| rex field=active_antivirus_mix max_match=0 "(?&lt;active_antivirus&gt;[^#]+)#(?&lt;antivirus_enabled&gt;[^\n]+)"
+| eval name_lower=lower(Name)
 | join type="left" name_lower [| tstats count where `cs_wineventlog_security` `cs_wineventlog_security_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_Security="Present"]
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
