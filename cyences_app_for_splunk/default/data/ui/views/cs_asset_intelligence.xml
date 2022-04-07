@@ -102,7 +102,7 @@
         <search>
           <query>`cs_lansweeper` `cs_lansweeper_timerange` | rename IPAddress as ip, AssetName as host, Username as user | search $tkn_filter_main$ | eval id=coalesce(AssetID,id) 
 | rename AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Firstseen as FirstSeen, Lastseen as LastSeen 
-| eval antivirus = antivirus_name."#".antivirus_enabled 
+| eval antivirus = mvzip(antivirus_name, antivirus_enabled, "#") 
 | table id, site_name, ip, host, user, MacAddress, State, Type, OS, OSVersion, OSRelease, OSname, SystemVersion, version, FQDN, GroupName, IPLocation, Domain, AssetDomain, Memory, Processor, Manufacturer, Model, Serialnumber, BuildNumber, LsAgentVersion, LastLsAgent, FirstSeen, LastSeen, LastChanged, Description, antivirus
 | stats values(GroupName) as GroupName, values(antivirus) as antivirus, values(Processor) as Processor, first(*) as * by id 
 | rex field=antivirus max_match=0 "(?&lt;antivirus_name&gt;[^#]+)#(?&lt;antivirus_enabled&gt;[^\n]+)"

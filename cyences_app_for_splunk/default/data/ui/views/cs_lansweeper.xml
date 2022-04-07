@@ -8,7 +8,7 @@
   <label>Lansweeper</label>
   <search id="search_windows_assets">
     <query>`cs_lansweeper` `cs_lansweeper_timerange` AssetTypename="Windows" | eval id=coalesce(AssetID,id)
-| eval antivirus = antivirus_name."#".antivirus_enabled 
+| eval antivirus = mvzip(antivirus_name, antivirus_enabled, "#") 
 | rename site_name as Site, AssetName as Name, AssetTypename as Type, Statename as State, Userdomain as Domain, AssetGroup as GroupName, Mac as MacAddress, OScode as OSVersion, Username as User 
 | table id, antivirus, Site, Name,Description, State, Domain, IPAddress, MacAddress,IPLocation,FQDN ,OS, OSVersion, User
 | stats values(antivirus) as antivirus, first(*) as * by id 
