@@ -19,9 +19,11 @@ By default, the Cyences app provides a multitude of alerts and reports in the fo
 * Active Directory 
 * Amazon Web Services
 * Authentication
+* Cisco IOS
 * Credential, Endpoint, & Network Compromise
 * CrowdStrike
 * Defender ATP
+* Email
 * G Suite
 * Lansweeper
 * Linux

@@ -1,13 +1,18 @@
 ---
 layout: default
-title: Reports
-permalink: /user_guide/reports_dashboard/
+title: Alerts and Reports
+permalink: /user_guide/alerts_dashboards/
 nav_order: 4
 parent: User Guide
 ---
 
+# Alerts
+TODO: Ahad - Update the alert list as per latest cyences app
+
 # Reports
 There are several security related reports to choose from and they are all located under the **Reports** drop-down in the navigation bar (Control > Reports) of the Cyences App. These reports should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following reports: 
+
+TODO: Ahad - Update the report list as per latest cyences app
 
 * Active Directory & Windows Report
     * AD - Group Changed
