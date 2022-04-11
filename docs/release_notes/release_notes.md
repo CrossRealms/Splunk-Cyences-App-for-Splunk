@@ -62,10 +62,9 @@ This section of the document has all release notes.
     * Office 365 Dashboard
         * Added new panel "Azure Active Directory - GroupMembership Change/Update" under the "Office 365" dashboard. Also updated dashboard to show the GroupMembership change related details.
 
-    * Lansweeper Dashboard
-        * Added Antivirus Status to Lansweeper Dashboard.
-        * User needs to have x.y.z (TODO) version of Lansweeper Add-on and XYZ (TODO) input enabled in the Add-on to collect the Antivirus related data.
-        * TODO - Need to update Lansweeper Add-on for this with a new input - Need to discuss with Bhavik
+    * Antivirus detail in Lansweeper Dashboard
+        * Added Active Antivirus detail in the Lansweeper Dashboard.
+        * User needs to have x.y.z (TODO) version of Lansweeper Add-on to collect the Antivirus related data.
 
     * Enhanced search query of "Windows Defender - Windows Defender RealTime Protection Disabled or Failed" alert to reduce the false positives.
         * Changed cron job from every 15 minutes to every hour.
@@ -104,6 +103,8 @@ This section of the document has all release notes.
         * Virus Found and Bloacked -> Virus Found and Blocked
         * Application Database out of Date -> Application Database Out of Date
 
+    * Fixed the drilldown issue for Antivirus panel of the Overview dashboard.
+
 
 ## Upgrade Guide from 1.11.0 to 2.0.0
 
@@ -113,7 +114,9 @@ This section of the document has all release notes.
 * ### Renamed the "0365 - O365 Service is not Operational" alert to "O365 - O365 Service is not Operational" to fix the type.
     * User will require to reconfigure the new alert.
 
-* TODO
+* ### Antivirus detail in Lansweeper Dashboard
+    * Added Active Antivirus detail in the Lansweeper Dashboard.
+    * User needs to have x.y.z (TODO) version of Lansweeper Add-on to collect the Antivirus related data.
 
 
 Docs
