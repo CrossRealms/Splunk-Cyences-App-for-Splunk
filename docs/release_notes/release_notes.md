@@ -68,6 +68,11 @@ This section of the document has all release notes.
         * Added Active Antivirus detail in the Lansweeper Dashboard.
         * User needs to have 1.3.0 version of Lansweeper Add-on to collect the Antivirus related data.
 
+    * Updated following Antivirus releated alerts to reduce the false positive failure using the lansweeper asset data. The updated alerts will filter the host if host has any other antivirus enabled on it.
+        * Sophos - Endpoint Not Protected by Sophos
+        * Sophos - Sophos Service is not Running
+        * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
+
     * Enhanced search query of `Windows Defender - Windows Defender RealTime Protection Disabled or Failed` alert to reduce the false positives.
         * Changed default cron job from every 15 minutes to every hour.
 
