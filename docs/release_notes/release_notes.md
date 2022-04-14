@@ -24,11 +24,8 @@ has_children: true
             * Inbound Network Telemetry
             * Outbound Network Telemetry
             * Internal Traffic
-
-    * Added a link to the `Qualys` dashboard.
-        * The link redirects users to the `Network` dashboard which offers additional insight about network telemetry for a specified device.  
     
-    * Removed the following dashboard panels from various dashboards:
+    * Removed the following dashboard panels from various dashboards. User can see alternative panels on the `Network Reports` dashboard as mentioned above. User would also see link on the origial dashboard to let them to new location.
         * Removed the `Network Traffic to/from Vulnerable Ports (Detected from Qualys)` and `Network Traffic to/from Vulnerable Ports (Detected from Tenable)` dashboard panels from the `Asset Intelligence` dashboard.
         * Removed the `Traffic on Vulnerable Ports` dashboard panel from the `Qualys` dashboard.
         * Removed the `Traffic on Vulnerable Ports` and `All Traffic on All Vulnerable Hosts` dashboard panels from the `Tenable` dashboard.
@@ -44,7 +41,7 @@ has_children: true
     * Cisco IOS
         * Cisco IOS - New Connection For User
         * Cisco IOS - Device Failed Login
-    * Office 365:
+    * Office 365
         * O365 - Authentication Blocked By Conditional Access Policy
         * O365 - Daily Login Failure
         * O365 - Login Failure Due To Multi Factor Authentication
