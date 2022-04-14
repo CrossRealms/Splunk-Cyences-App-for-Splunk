@@ -7,113 +7,118 @@ has_children: true
 ---
 
 # Release Notes
-This section of the document has all release notes.
 
 ## Version 2.0.0 (April 2022)
 
-* ### New Documentation
-    * [This](https://vatsaljagani.github.io/Splunk-Cyences-App-for-Splunk) new documentation is created.
+* ### New Documentation Location
+    * The new location for the documentation can be found here: [This](https://vatsaljagani.github.io/Splunk-Cyences-App-for-Splunk).
 
 * ### New Network Telemetry
-    * A new in-app Network traffic map visualization added to enhance the functionality of the network traffic maps.
-        * Users can now click on the traffic arrow and drilldown on them to see details about particular traffic.
-        * The `Network Reports` and `Asset Intelligence` dashboard now uses the newly added custom visualization `Network Telemetry Map`.
+    * Network traffic map visualizations have been added to enhance the functionality of the network traffic maps.
+        * Users can now click on the network traffic arrow itself, which will result in a drilldown showing the details relevant to that traffic.
+        * The `Network Reports` and `Asset Intelligence` dashboards are now utilising the newly added custom visualizations from the `Network Telemetry Map`.
         ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
 
-    * Removed the `Top Network Traffic` panel from the `Network Reports` dashboard and added following new panels to show the network traffic in a better way.
-        * Inbound Network Telemetry
-        * Outbound Network Telemetry
-        * Internal Traffic
+    * Removed the `Top Network Traffic` dashboard panel from the `Network Reports` dashboard.
+        * The network traffic display has been enhanced by adding the following new dashboard panels:
+            * Inbound Network Telemetry
+            * Outbound Network Telemetry
+            * Internal Traffic
 
-    * Removed following panels and added link to `Network Reports` dashboard 
-        * Removed `Network Traffic to/from Vulnerable Ports (Detected from Qualys)` and `Network Traffic to/from Vulnerable Ports (Detected from Tenable)` panels from the `Asset Intelligence` dashboard.
-        * Removed `Traffic on Vulnerable Ports` panel from the `Qualys` dashboard.
-        * Removed `Traffic on Vulnerable Ports` and `All Traffic on All Vulnerable Hosts` panels from the `Tenable` dashboard.
+    * Added a link to the `Qualys` dashboard.
+        * The link redirects users to the `Network` dashboard which offers additional insight about network telemetry for a specified device.  
+    
+    * Removed the following dashboard panels from various dashboards:
+        * Removed the `Network Traffic to/from Vulnerable Ports (Detected from Qualys)` and `Network Traffic to/from Vulnerable Ports (Detected from Tenable)` dashboard panels from the `Asset Intelligence` dashboard.
+        * Removed the `Traffic on Vulnerable Ports` dashboard panel from the `Qualys` dashboard.
+        * Removed the `Traffic on Vulnerable Ports` and `All Traffic on All Vulnerable Hosts` dashboard panels from the `Tenable` dashboard.
 
 * ### Removed Splunk Admin related alerts and dashboards
-    * Removed all the Splunk Admin related alerts and dashboards from the App.
-    * Contact CrossRealms Support team to get the enhanced Admin Dashboards and Alerts.
+    * Removed all of the Splunk Admin related alerts and dashboards from the Cyences app.
+    * Contact CrossRealms' support team to get the enhanced Admin Dashboards and Alerts.
+        * Email: info@crossrealms.com / support@crossrealms.com
 
 * ### Added New Alerts
-    * Office 365 Related
-        * O365 - Login Failure Due To Multi Factor Authentication
-        * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
-        * O365 - Login From Unknown User
-        * O365 - Successful Login Outside Home Country
-        * O365 - Authentication Blocked By Conditional Access Policy
-        * O365 - Daily Login Failure
-        * O365 - Security Compliance Alert
-    * Office 365 Active Directory
-        * O365 - Azure Active Directory - GroupMembership Change/Update
     * Active Directory
         * AD - Password Change Outside Working Hour
-    * Palo Alto
-        * Palo Alto Firewall - Commits
-    * Office 365 Emails
-        * Email- Hourly Increase In Emails Over Baseline
-        * Email- Daily Spam Email
-    * VPN
-        * Authentication - Successful VPN Login Outside Home Country
     * Cisco IOS
         * Cisco IOS - New Connection For User
         * Cisco IOS - Device Failed Login
+    * Office 365:
+        * O365 - Authentication Blocked By Conditional Access Policy
+        * O365 - Daily Login Failure
+        * O365 - Login Failure Due To Multi Factor Authentication
+        * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
+        * O365 - Login From Unknown User
+        * O365 - Security Compliance Alert
+        * O365 - Successful Login Outside Home Country
+    * Office 365 Active Directory
+        * O365 - Azure Active Directory - GroupMembership Change/Update
+    * Office 365 Emails
+        * Email- Hourly Increase In Emails Over Baseline
+        * Email- Daily Spam Email
+    * Palo Alto
+        * Palo Alto Firewall - Commits
+    * VPN
+        * Authentication - Successful VPN Login Outside Home Country
 
 
 
 * ### Enhancements
     * Office 365 Dashboard
-        * Added new alert and panel `Azure Active Directory - GroupMembership Change/Update` under the `Office 365` dashboard.
+        * Added a new alert and dashboard panel called `Azure Active Directory - GroupMembership Change/Update`.
 
-    * Antivirus detail in Lansweeper Dashboard
-        * Added Active Antivirus detail in the Lansweeper Dashboard.
-        * User needs to have 1.3.0 version of Lansweeper Add-on to collect the Antivirus related data.
+    * Antivirus details have been added to the Lansweeper Dashboard.
+        * Added an `active_antivirus` column to multiple dashboard panels.
+        * Users needs to have version 1.3.0 of the Lansweeper Add-on to collect the Antivirus related data.
 
-    * Enhanced search query of `Windows Defender - Windows Defender RealTime Protection Disabled or Failed` alert to reduce the false positives.
-        * Changed default cron job from every 15 minutes to every hour.
+    * Enhanced the search query for the `Windows Defender - Windows Defender RealTime Protection Disabled or Failed` alert to reduce the number of false positives.
+        * Changed the default cron job from every 15 minutes to every hour.
 
-    * Bruteforce related alerts
-        * Added dest field in the result of bruteforce related all 4 alerts for better forensic investigation.
+    * Bruteforce alerts
+        * Added the dest field to the results of the following bruteforce related alerts for a more thorough forensic investigation:
             * Authentication - Bruteforce Attempt for a User
             * Authentication - Bruteforce Attempt from a Source
             * Authentication - Excessive Failed VPN Logins for a User
             * Authentication - Excessive Failed VPN Logins from a Source
 
     * Better support for DNS logs
-        * Added props/field-extraction for the Windows DNS Logs (MSAD:NT6:DNS, isc:bind:query, isc:bind:queryerror sourcetypes)
+        * Added props and field extractions for Windows DNS Logs (MSAD:NT6:DNS, isc:bind:query, & isc:bind:queryerror sourcetypes).
 
 
 
 * ### Bug Fixes and Typos
-    * Renamed the `0365 - O365 Service is not Operational` alert to `O365 - O365 Service is not Operational` to fix the type.
-        * User will require to reconfigure the new alert.
+    * Renamed the `0365 - O365 Service is not Operational` alert to `O365 - O365 Service is not Operational` since there was an accidental typo present.
+        * Users will be required to reconfigure the new alert.
     
-    * Improvement in Office 365 Active Directory related alerts and dashboard. It now shows some of the missing events.
+    * Improvements to Office 365 Active Directory related alerts and dashboards. It now displays some of the missing events.
 
-    * Fixed the issues Python commands.
-        * Fixed the issues with to handling the empty ip field scenario in device_inventory_gen command.
-        * Fixed the issue without time-out issue with Malicious IP upload and download command.
+    * Fixed some issues with Python commands.
+        * Fixed an issue when handling an empty ip field for the device_inventory_gen command.
+        * Fixed a time-out issue with Malicious IP upload and download commands.
 
-    * Renamed following panel title in the `DNS Tracker` dashboard.
-        * Top Non-success Code Queries -> Most Unsuccessful Code Queries
-        * Top Non-success Code Requesters -> Most Unsuccessful Code Requesters
+    * Renamed the following dashboard panel titles in the `DNS Tracker` dashboard:
+        * Top Non-success Code Queries -> Most Unsuccessful Code Queries.
+        * Top Non-success Code Requesters -> Most Unsuccessful Code Requesters.
 
-    * Renamed following panel title in the `Kaspersky` dashboard.
-        * Assets Status in Kaspersky -> Status of Assets
-        * Virus Found and Passwd -> Virus Found and Passed
-        * Virus Found and Bloacked -> Virus Found and Blocked
-        * Application Database out of Date -> Application Database Out of Date
+    * Renamed the following dashboard panel titles in the `Kaspersky` dashboard.
+        * Assets Status in Kaspersky -> Status of Assets.
+        * Virus Found and Passwd -> Virus Found and Passed.
+        * Virus Found and Bloacked -> Virus Found and Blocked.
+        * Application Database out of Date -> Application Database Out of Date.
 
-    * Fixed the drilldown issue for the Antivirus panel of the Overview dashboard.
+    * Fixed a drilldown issue for the Antivirus dashboard panel in the Overview dashboard.
 
 
 ## Upgrade Guide from 1.11.0 to 2.0.0
 
 * ### Removed Splunk Admin related alerts and dashboards
-    * The existing Splunk Admin related alerts will not work after the App upgrade.
-    * Contact CrossRealms Support team to get the enhanced Admin Dashboards and Alerts.
+    * The pre-existing Splunk Admin related alerts will not work after upgrading the app.
+    * Contact CrossRealms' support team to get the enhanced Admin Dashboards and Alerts.
+        * Email: info@crossrealms.com / support@crossrealms.com
 
-* ### Lansweeper Add-on requires to be updated to v1.3.0
-    * User needs to have 1.3.0 version of Lansweeper Add-on to collect the Antivirus related data.
+* ### Lansweeper Add-on Version 1.3.0
+    * Users need to have version 1.3.0 of the Lansweeper Add-on to collect antivirus related data.
 
-* ### The `O365 - O365 Service is not Operational` alert requires to be re-configured.
-    * User will require to reconfigure the new alert as it has been renamed.
+* ### The `O365 - O365 Service is not Operational` alert needs to be reconfigured.
+    * Users will be required to reconfigure the new alert as it has been renamed.

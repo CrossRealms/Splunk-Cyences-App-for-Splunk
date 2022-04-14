@@ -55,7 +55,7 @@
   </row>
   <row>
     <panel>
-      <title>Login Challenge</title>
+      <title>Login Challenged</title>
       <table>
         <title>User was asked for extra login question due to suspicious login activity</title>
         <search>
@@ -84,7 +84,7 @@
   </row>
   <row>
     <panel>
-      <title>Success Logins</title>
+      <title>Successful Logins</title>
       <table>
         <search>
           <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_success" | stats latest(_time) as last_login_time, count, values(ipAddress) as ipAddress, values(login_type) as login_type, values(login_challenge_method) as login_challenge_method by user | eval last_login_time=strftime(last_login_time, "%F %T") | sort - count</query>
@@ -98,7 +98,7 @@
   </row>
   <row>
     <panel>
-      <title>Password Update</title>
+      <title>Password Updated</title>
       <table>
         <search>
           <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="password_edit" | stats latest(_time) as _time, count, values(ipAddress) as ipAddress by user | sort - count</query>
