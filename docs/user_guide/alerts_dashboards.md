@@ -1,15 +1,15 @@
 ---
 layout: default
-title: Alerts and Reports
+title: Alerts and Dashboards
 permalink: /user_guide/alerts_dashboards/
 nav_order: 4
 parent: User Guide
 ---
 
-# Alerts
-There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App. Alerts are disabled by default. Alerts should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts: 
+# Alerts & Dashboards (Security Use-cases)
 
-TODO: Ahad - Update the alert list as per latest cyences app
+## Alerts
+There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App. Alerts are disabled by default. Alerts should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts: 
 
 * Active Directory Alerts
     * AD - Group Changed
@@ -41,6 +41,7 @@ TODO: Ahad - Update the alert list as per latest cyences app
 
 * Network Compromised Alert
     * Network Compromise - Basic Scanning
+    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
 
 * Office 365 Alerts
     * O365 - Azure Active Directory - Application Change/Update
@@ -62,14 +63,9 @@ TODO: Ahad - Update the alert list as per latest cyences app
 
 * Ransomware Alerts
     * Ransomware - Common Ransomware File Extensions
-    * Ransomware - Common Ransomware Notes
-    * Ransomware - Endpoint Compromise - Fake Windows Processes
-    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
-    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows
-    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
+    * Ransomware - Common Ransomware Notes 
     * Ransomware - Scheduled tasks used in BadRabbit ransomware
     * Ransomware - Spike in File Writes
-    * Ransomware - Windows - Windows Event Log Cleared
 
 * Sophos Alerts
     * Sophos - Endpoint Not Protected by Sophos
@@ -85,6 +81,10 @@ TODO: Ahad - Update the alert list as per latest cyences app
 
 * Windows Alerts
     * Windows - Endpoint Compromise - Windows Firewall Disabled Event
+    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
+    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows
+    * Ransomware - Endpoint Compromise - Fake Windows Processes
+    * Ransomware - Windows - Windows Event Log Cleared
     * Windows - Hosts Missing Update
     * Windows - Windows Process Tampering Detected
 
@@ -92,10 +92,9 @@ TODO: Ahad - Update the alert list as per latest cyences app
     * Windows Defender - Endpoint Not Protected by Windows Defender
     * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
 
-# Reports
-There are several security related reports to choose from and they are all located under the **Reports** drop-down in the navigation bar (Control > Reports) of the Cyences App. Reports should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following reports: 
 
-TODO: Ahad - Update the report list as per latest cyences app
+## Dashboard Panels
+There are several security related reports to choose from and they are all located under the **Reports** drop-down in the navigation bar (Control > Reports) of the Cyences App. Reports should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following reports(as dashboard panels): 
 
 * Active Directory & Windows Reports
     * AD - Group Changed
