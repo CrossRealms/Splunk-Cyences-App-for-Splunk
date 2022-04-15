@@ -99,15 +99,7 @@ has_children: true
         * Fixed an issue when handling an empty ip field for the device_inventory_gen command.
         * Fixed a time-out issue with Malicious IP upload and download commands.
 
-    * Renamed the following dashboard panel titles in the `DNS Tracker` dashboard:
-        * Top Non-success Code Queries -> Most Unsuccessful Code Queries.
-        * Top Non-success Code Requesters -> Most Unsuccessful Code Requesters.
-
-    * Renamed the following dashboard panel titles in the `Kaspersky` dashboard.
-        * Assets Status in Kaspersky -> Status of Assets.
-        * Virus Found and Passwd -> Virus Found and Passed.
-        * Virus Found and Bloacked -> Virus Found and Blocked.
-        * Application Database out of Date -> Application Database Out of Date.
+    * Renamed the some of the panel titles in the `DNS Tracker`, `GSuite` `Kaspersky`, `Office 365` and `Windows Defender` dashboard.
 
     * Fixed a drilldown issue for the Antivirus dashboard panel in the Overview dashboard.
 
