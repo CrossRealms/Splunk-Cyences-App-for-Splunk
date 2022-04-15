@@ -130,7 +130,7 @@
       </table>
     </panel>
     <panel>
-      <title>Antimalware/Antimalware Engine Dropped Support for Operating System</title>
+      <title>Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS</title>
       <table>
         <title>EventCodes=2041, 2042</title>
         <search>

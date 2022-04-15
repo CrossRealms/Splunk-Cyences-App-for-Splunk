@@ -7,55 +7,112 @@ has_children: true
 ---
 
 # Release Notes
-This section of the document has all release notes.
 
-## Version 1.11.0 (January 2022)
+## Version 2.0.0 (April 2022)
 
-* ### Added Kaspersky dashboard
-    * Added the required field extractions. 
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
+* ### New Documentation Location
+    * The new location for the documentation can be found here: [This](https://vatsaljagani.github.io/Splunk-Cyences-App-for-Splunk).
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky.png?raw=true)
+* ### New Network Telemetry
+    * Network traffic map visualizations have been added to enhance the functionality of the network traffic maps.
+        * Users can now click on the network traffic arrow itself, which will result in a drilldown showing the details relevant to that traffic.
+        * The `Network Reports` and `Asset Intelligence` dashboards are now utilising the newly added custom visualizations from the `Network Telemetry Map`.
+        ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_two.png?raw=true)
+    * Removed the `Top Network Traffic` dashboard panel from the `Network Reports` dashboard.
+        * The network traffic display has been enhanced by adding the following new dashboard panels:
+            * Inbound Network Telemetry
+            * Outbound Network Telemetry
+            * Internal Traffic
+    
+    * Removed the following dashboard panels from various dashboards. User can see alternative panels on the `Network Reports` dashboard as mentioned above. User would also see link on the origial dashboard to let them to new location.
+        * Removed the `Network Traffic to/from Vulnerable Ports (Detected from Qualys)` and `Network Traffic to/from Vulnerable Ports (Detected from Tenable)` dashboard panels from the `Asset Intelligence` dashboard.
+        * Removed the `Traffic on Vulnerable Ports` dashboard panel from the `Qualys` dashboard.
+        * Removed the `Traffic on Vulnerable Ports` and `All Traffic on All Vulnerable Hosts` dashboard panels from the `Tenable` dashboard.
 
-    * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
+* ### Removed Splunk Admin related alerts and dashboards
+    * Removed all of the Splunk Admin related alerts and dashboards from the Cyences app.
+    * Contact CrossRealms' support team to get the enhanced Admin Dashboards and Alerts.
+        * Email: info@crossrealms.com / support@crossrealms.com
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_three.png?raw=true)
+* ### Added New Alerts
+    * Active Directory
+        * AD - Password Change Outside Working Hour
+    * Cisco IOS
+        * Cisco IOS - New Connection For User
+        * Cisco IOS - Device Failed Login
+    * Office 365
+        * O365 - Authentication Blocked By Conditional Access Policy
+        * O365 - Daily Login Failure
+        * O365 - Login Failure Due To Multi Factor Authentication
+        * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
+        * O365 - Login From Unknown User
+        * O365 - Security Compliance Alert
+        * O365 - Successful Login Outside Home Country
+    * Office 365 Active Directory
+        * O365 - Azure Active Directory - GroupMembership Change/Update
+    * Office 365 Emails
+        * Email- Hourly Increase In Emails Over Baseline
+        * Email- Daily Spam Email
+    * Palo Alto
+        * Palo Alto Firewall - Commits
+    * VPN
+        * Authentication - Successful VPN Login Outside Home Country
 
-* ### DNS dashboard 
-    * Added DNS Tracker dashboard for the following use-cases: Top Categories, Record Types, DNS Log Volume over Time, Record Types over Time, Top queries, Top Non-success Code Queries, Top Requesters, and Top Non-success queries Code Requesters.
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker.png?raw=true)
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker_continued.png?raw=true)
+* ### Enhancements
+    * Office 365 Dashboard
+        * Added a new alert and dashboard panel called `Azure Active Directory - GroupMembership Change/Update`.
 
-* ### Microsoft Defender ATP Alert
-    * Added a security alert for Office 365 Advanced Threat Protection.
+    * Antivirus details have been added to the Lansweeper Dashboard.
+        * Added an `active_antivirus` column to multiple dashboard panels.
+        * Users needs to have version 1.3.0 of the Lansweeper Add-on to collect the Antivirus related data.
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/defender_atp_alert.png?raw=true)
+    * Updated the following Antivirus releated alerts to reduce the number of false positives using Lansweeper's asset data. The updated alerts will filter the host if it has any other antivirus enabled on it.
+        * Sophos - Endpoint Not Protected by Sophos
+        * Sophos - Sophos Service is not Running
+        * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
 
-* ### VPN Dashboard
-    * Added support for Cisco VPN (logs from Cisco ISE and Estreamer are supported). 
-    * Changed the field name from field dest to dest_category="vpn_auth" for better CIM compatibility. 
+    * Enhanced the search query for the `Windows Defender - Windows Defender RealTime Protection Disabled or Failed` alert to reduce the number of false positives.
+        * Changed the default cron job from every 15 minutes to every hour.
 
-        * This field is being used to display the correct count of VPN logins.
+    * Bruteforce alerts
+        * Added the dest field to the results of the following bruteforce related alerts for a more thorough forensic investigation:
+            * Authentication - Bruteforce Attempt for a User
+            * Authentication - Bruteforce Attempt from a Source
+            * Authentication - Excessive Failed VPN Logins for a User
+            * Authentication - Excessive Failed VPN Logins from a Source
 
-* ### Enhancements:
-    * Splunk Admin - Missing Indexes Alert
-        * Improved the performance of the query.
-    * Splunk Admin Dashboard - Missing Indexes Table 
-        * Reduced the loading time of the search query after performing a drilldown.
-    * Windows Defender Event Logs
-        * Added support for logs coming from Windows 10 hosts (resolved field extraction related issues). 
-    * Decommission Hosts from Lookups 
-        * Added dashboard panels to remove the decommissioned hosts from the Windows hosts lookup, as well as the Linux hosts lookup.
-            * This is required to avoid false positive alerts. 
+    * Better support for DNS logs
+        * Added props and field extractions for Windows DNS Logs (MSAD:NT6:DNS, isc:bind:query, & isc:bind:queryerror sourcetypes).
 
-    ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/decommission_host_from_lookups.png?raw=true)
 
-## Upgrade Guide from Version 1.10.0 to 1.11.0
 
-* The Cyences App now supports Kaspersky. Refer to the **Data Onboarding > Kaspersky Logs** section for more information regarding the data collection process. 
-* The VPN dashboard now supports [Cisco ISE](https://splunkbase.splunk.com/app/1915/) and [Estreamer](https://splunkbase.splunk.com/app/3662/) data to show authentication activities from VPN. 
-* Cyences has a new dashboard called **DNS Tracker**. It supports all types of DNS related data that are compatible with the CIM data model. For example, the [Cisco Umbrella Add-on](https://splunkbase.splunk.com/app/3926/).
+* ### Bug Fixes and Typos
+    * Renamed the `0365 - O365 Service is not Operational` alert to `O365 - O365 Service is not Operational` since there was an accidental typo present.
+        * Users will be required to reconfigure the new alert.
+    
+    * Improvements to Office 365 Active Directory related alerts and dashboards. It now displays some of the missing events.
+
+    * Fixed some issues with Python commands.
+        * Fixed an issue when handling an empty ip field for the device_inventory_gen command.
+        * Fixed a time-out issue with Malicious IP upload and download commands.
+
+    * Renamed the some of the panel titles in the `DNS Tracker`, `GSuite` `Kaspersky`, `Office 365` and `Windows Defender` dashboard.
+
+    * Fixed a drilldown issue for the Antivirus dashboard panel in the Overview dashboard.
+
+
+## Upgrade Guide from 1.11.0 to 2.0.0
+
+* ### Removed Splunk Admin related alerts and dashboards
+    * The pre-existing Splunk Admin related alerts will not work after upgrading the app.
+    * Contact CrossRealms' support team to get the enhanced Admin Dashboards and Alerts.
+        * Email: info@crossrealms.com / support@crossrealms.com
+
+* ### Lansweeper Add-on Version 1.3.0
+    * Users need to have version 1.3.0 of the Lansweeper Add-on to collect antivirus related data.
+
+* ### The `O365 - O365 Service is not Operational` alert needs to be reconfigured.
+    * Users will be required to reconfigure the new alert as it has been renamed.

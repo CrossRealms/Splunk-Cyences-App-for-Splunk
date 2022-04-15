@@ -63,9 +63,10 @@ For optimal performance, it is recommended to enable the data model acceleration
 
 | Data Model | Macro Name | Data-model Acceleration Time  |            
 |--------|--------|-------------|
-| Endpoint | cs_summariesonly_endpoint | 7 days (Minimum) 
-| Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum)
-| Authentication | cs_summariesonly_authentication | 7 day (Minimum) 
+| Endpoint | cs_summariesonly_endpoint | 7 days (Minimum) |
+| Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum) |
+| Authentication | cs_summariesonly_authentication | 7 day (Minimum) |
+| Network Resolution (DNS) | cs_summariesonly_network_resolution_dns |  7 day (Minimum) |
 
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 

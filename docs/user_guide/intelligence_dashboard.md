@@ -121,8 +121,6 @@ This dashboard displays the following information about devices:
 * Qualys or Tenable information and vulnerabilities 
     * Also, if there is any traffic on the vulnerable ports for a device 
 * Sophos + Windows Defender (Antivirus) status and related events 
-* Network traffic information to/from the asset
-    * Additionally, the color red is used to show bad traffic on the map, so Splunk users can immediately identify where the bad traffic is coming from.
 * VPN activities from the device or by the selected user
 * Various authentication activities like RDP and Linux logins 
 * If an asset is involved in any kind of Splunk security alert

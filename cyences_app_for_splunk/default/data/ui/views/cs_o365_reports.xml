@@ -158,7 +158,7 @@
   </row>
   <row>
     <panel>
-      <title>O365 :  Activity Over World (Unique Users)</title>
+      <title>O365: Activity Over World (Unique Users)</title>
       <map>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity"  $tkn_host$| iplocation ClientIP | geostats latfield=lat longfield=lon dc(UserId)  by Workload</query>
@@ -313,7 +313,7 @@
   </row>
   <row>
     <panel>
-      <title>O365 : Security &amp; Compliance Center: Alert Details</title>
+      <title>O365: Security &amp; Compliance Center: Alert Details</title>
       <table>
         <search>
           <query>`cs_o365` sourcetype=o365:management:activity  Workload=SecurityComplianceCenter Operation=AlertTriggered $tkn_host$
