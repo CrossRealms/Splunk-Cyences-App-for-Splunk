@@ -8,7 +8,6 @@ OVERVIEW
 --------
 The Cyences App for Splunk is a Splunk App to provide complete security to the environment. It does not contain data collection mechanism. It contains useful security alerts/reports and dashboards.
 
-
 * Author - CrossRealms International Inc.
 * Creates Index - False
 * Compatible with:
