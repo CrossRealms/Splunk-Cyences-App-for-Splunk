@@ -167,7 +167,28 @@
       <table>
         <title>System Events</title>
         <search>
-          <query>`cs_palo` sourcetype="pan:system" $tkn_threat_severity$ dvc=$tkn_threat_palo_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$
+          <query>`cs_palo` sourcetype="pan:system" $tkn_threat_severity$ dvc=$tkn_threat_palo_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$  NOT "license for"
+| table dvc, dvc_name, _time, log_subtype, severity, description, signature, action, user, src, serial_number</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+        </format>
+        <format type="color" field="action">
+          <colorPalette type="map">{"failure":#F7BC38,"success":#A2CC3E}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>License Events</title>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype="pan:system" "license for"
 | table dvc, dvc_name, _time, log_subtype, severity, description, signature, action, user, src, serial_number</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
