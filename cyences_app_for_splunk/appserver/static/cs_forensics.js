@@ -97,11 +97,11 @@ require([
         },
         
         "Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole": {
-            contributing_events: '`cs_palo` sourcetype="pan:traffic" dest_ip="72.5.65.111"',
+            contributing_events: '`cs_palo` (sourcetype="pan:traffic" OR sourcetype="pan:threat") dest_ip="72.5.65.111"',
             system_compromised_search: "| stats sum(count) as count by dvc_name, rule, app, http_category",
-            system_compromised_drilldown: '`cs_palo` sourcetype="pan:traffic" dest_ip="72.5.65.111" dvc_name=$row.dvc_name$',
+            system_compromised_drilldown: '`cs_palo` (sourcetype="pan:traffic" OR sourcetype="pan:threat") dest_ip="72.5.65.111" dvc_name=$row.dvc_name$',
             attacker_search: "| stats sum(count) as count by src_ip",
-            attacker_drilldown: '`cs_palo` sourcetype="pan:traffic" src_ip=$row.src_ip$'
+            attacker_drilldown: '`cs_palo` (sourcetype="pan:traffic" OR sourcetype="pan:threat") dest_ip="72.5.65.111" src_ip=$row.src_ip$'
         },
         "Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert": {
             contributing_events: '`cs_palo` sourcetype="pan:threat" severity IN ("high" "critical")',
