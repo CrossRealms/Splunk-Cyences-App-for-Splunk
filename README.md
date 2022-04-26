@@ -20,7 +20,6 @@ This project is to build a Splunk App that allows user to visualize the security
 Development has started under the observation of `CrossRealms International`. But the goal is to make it collaborative development.
 
 
-
 ## Documentation
 Cyences Documentation is powered by Jekyll and is present under doc directory.
 
