@@ -73,12 +73,6 @@ There are several security related alerts to choose from and they are all locate
     * Sophos - Sophos RealTime Protection Disabled
     * Sophos - Sophos Service is not Running
 
-* Splunk Admin Alerts
-    * Splunk Admin - High Disk Usage Alert
-    * Splunk Admin - Missing Data in the Index
-    * Splunk Admin - Missing Forwarder
-    * Splunk Admin - Splunk License Violation
-
 * Windows Alerts
     * Windows - Endpoint Compromise - Windows Firewall Disabled Event
     * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
