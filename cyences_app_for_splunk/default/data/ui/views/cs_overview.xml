@@ -251,8 +251,8 @@
 | eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
 | `cs_daily_alerts`
+| table savedsearch_name, "Notable Events"
 | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
-| table Name, "Notable Events"
 | sort - "Notable Events"
 | eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
 | rename "Notable Events" as Count 
@@ -325,7 +325,7 @@
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_defender_atp?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition>
-            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.Name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
         </drilldown>
       </table>
