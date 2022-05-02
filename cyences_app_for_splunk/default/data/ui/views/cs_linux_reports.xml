@@ -12,7 +12,8 @@
   | eval cpu_freq=cpu_freq+" "+cpu_freq_unit 
   | fields - cpu_freq_unit
   | stats latest(*) as * by host | eval SystemUpTime=toString(SystemUpTime,"duration")
-  | table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
+  | table host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime
+  | fillnull value="-" host, machine_architecture_name, os_release, os_name, os_version, RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_type, SystemUpTime</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
   </search>
