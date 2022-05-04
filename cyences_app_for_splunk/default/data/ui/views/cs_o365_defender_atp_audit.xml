@@ -49,7 +49,7 @@
           <latest>now</latest>
         </default>
       </input>
-      <input type="text" token="tkn_host_error_messages">
+      <input type="text" token="tkn_host_error_message">
         <label>Host</label>
         <default>*</default>
         <prefix>*</prefix>
