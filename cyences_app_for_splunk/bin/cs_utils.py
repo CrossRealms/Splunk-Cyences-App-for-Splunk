@@ -85,3 +85,11 @@ def get_cyences_api_key(session_key, logger):
             break
     logger.debug("Got API key.")
     return {'api_url': api_url, 'auth_token': auth_token, 'cust_id': cust_id}
+
+
+def check_url_scheme(url, logger):
+    """Check the url scheme. If it is not https then raise exception"""
+    err_msg = "The url must start with https scheme. url={}".format(url)
+    if not url.startswith("https://"):
+        logger.error(err_msg)
+        raise Exception(err_msg)

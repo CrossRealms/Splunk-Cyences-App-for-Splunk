@@ -26,6 +26,8 @@ class MaliciousIPUploaderCommand(StreamingCommand):
                 yield {"Error Message": "MaliciousIP Collector Configuration not found in the cs_configurations.conf file."}
                 return
 
+            cs_utils.check_url_scheme(api_config['api_url'], logger)
+
             for record in records:
                 api_payload.append(
                     {

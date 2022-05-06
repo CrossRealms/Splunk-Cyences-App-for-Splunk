@@ -61,6 +61,7 @@ class SophosEndpointDetails(GeneratingCommand):
             response_json = response.json()
             current_page = 1
             for i in response_json.get("items"):
+                cs_utils.check_url_scheme(i.get('apiHost'), logger)
                 SOPHOS_TENANT_DICT[i.get('id')] = i.get('apiHost')
             total_pages = response_json.get('pages').get('total')
             while current_page <= total_pages:
@@ -69,6 +70,7 @@ class SophosEndpointDetails(GeneratingCommand):
                 response = requests.get(SOPHOS_TENANT_FROM_ORGANIZATION_PAGINATION_URL + str(current_page), headers=header)
                 response_json = response.json()
                 for i in response_json.get("items"):
+                    cs_utils.check_url_scheme(i.get('apiHost'), logger)
                     SOPHOS_TENANT_DICT[i.get('id')] = i.get('apiHost')
 
         else:
@@ -83,7 +85,9 @@ class SophosEndpointDetails(GeneratingCommand):
         if(response.status_code == 200):
             response_json = response.json()
             if(response_json.get("idType")=="tenant"):
-                SOPHOS_TENANT_DICT[response_json.get("id")] = response_json.get("apiHosts").get("dataRegion")
+                url = response_json.get("apiHosts").get("dataRegion")
+                cs_utils.check_url_scheme(url, logger)
+                SOPHOS_TENANT_DICT[response_json.get("id")] = url
             elif(response_json.get("idType")=="organization"):
                 self.get_tenant_from_organization(barier_token,response_json.get("id"))
         else:

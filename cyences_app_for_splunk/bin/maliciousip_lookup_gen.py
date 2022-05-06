@@ -65,6 +65,8 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
                 yield {"Error Message": "MaliciousIP Collector Configuration not found in the cs_configurations.conf file."}
                 return
 
+            cs_utils.check_url_scheme(api_config['api_url'], logger)
+
             # request for data
             if self.generate_events or self.update_lookup:
                 data = self.request_malicious_ips(api_config)
