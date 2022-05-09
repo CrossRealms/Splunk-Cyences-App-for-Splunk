@@ -5,15 +5,15 @@
 | append [| inputlookup cs_device_inventory | mvexpand hostname | mvexpand ip | fields ip, hostname]
 | stats sum(count) as count, values(ip) as ip by hostname | where count&gt;0
 | mvexpand ip | dedup ip | fields ip 
-| stats values(ip) as ip | eval dns_server_filter=mvjoin(ip, "\", \"")
-| eval dns_server_filter="NOT DNS.src IN (\"".dns_server_filter."\")"
-| eval dns_to_dns_requests="DNS.src IN (\"".dns_server_filter."\")"</query>
+| stats values(ip) as ip | eval dns_server_filter_original=mvjoin(ip, "\", \"")
+| eval dns_server_filter="NOT DNS.src IN (\"".dns_server_filter_original."\")"
+| eval dns_to_dns_requests="DNS.src IN (\"".dns_server_filter_original."\")"</query>
     <earliest>$tkn_timerange.earliest$</earliest>
     <latest>$tkn_timerange.latest$</latest>
     <done>
       <set token="tkn_dns_server_ip_filter">$result.dns_server_filter$</set>
       <set token="tkn_dont_show_dns_logs">$result.dns_server_filter$</set>
-      <set token="tkn_only_dnd_to_dns_filter">$result.dns_to_dns_requests$</set>
+      <set token="tkn_only_dns_to_dns_filter">$result.dns_to_dns_requests$</set>
     </done>
   </search>
   <fieldset submitButton="false">
@@ -52,7 +52,7 @@
           </condition>
         </change>
       </input>
-      <html>Filteing for DNS Servers itself making requests to other DNS servers - $tkn_dont_show_dns_logs$</html>
+      <html>Filtering for DNS Servers itself making requests to other DNS servers - $tkn_dont_show_dns_logs$</html>
     </panel>
   </row>
   <row>
@@ -223,11 +223,11 @@
       <title>Internal DNS Server to DNS Server Requests</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("Query to external server", "Response from external server") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_only_dnd_to_dns_filter$ by DNS.src host | rename DNS.* as * 
-| stats sum(count) as count by host, src
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("Query to external server", "Response from external server") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_only_dns_to_dns_filter$ by DNS.src host | rename DNS.* as * 
 | join type=left src [| inputlookup cs_device_inventory | mvexpand ip | fields ip, hostname | rename ip as src | eval hostname=mvjoin(hostname,"|")]
 | eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
 | rename host as Requester, src as Responder
+| table Requester, Responder, count
 | sort 0 - count</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
