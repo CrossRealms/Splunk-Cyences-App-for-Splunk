@@ -211,16 +211,15 @@
       <table>
         <search>
           <query>`cs_vpn_indexes` dest_category="vpn_auth" action="success" $User$
-| stats values(src) as src_ip, values(private_ip) as private_ip by action, user, _time 
+| fields _time user action private_ip src City Country
 | eval private_ip = if(private_ip="0.0.0.0", null(), private_ip) 
-| search user="*" 
-| iplocation src_ip 
+| iplocation src 
 | eval Country = if(isnull(Country) OR Country="", "Unknown", Country) 
 | eval City = if(isnull(City) OR City="", "Unknown", City) 
 | search $Country$ $City$ 
 | `cs_vpn_dashboard_filter` 
-| fields _time user action private_ip src_ip City Country 
-| rename user as User, action as Status, src_ip as "SourceIP", private_ip as "PrivateIP" 
+| table _time user action private_ip src City Country 
+| rename user as User, action as Status, src as "SourceIP", private_ip as "PrivateIP" 
 | sort - _time</query>
           <earliest>$time.earliest$</earliest>
           <latest>$time.latest$</latest>
