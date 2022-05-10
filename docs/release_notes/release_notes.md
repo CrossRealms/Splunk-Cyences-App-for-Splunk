@@ -40,8 +40,8 @@ has_children: true
 
     * Fixed the `Linux/Unix` dashboard to show results when some fields in the data are not present.
 
-    ### Cloud Compatibility Issue Fixed
-        * Fixed the cloud vetting issue to make addon cloud compatible by validating that the App only makes requests to secure HTTPS URLs.
+* ### Cloud Compatibility Issue Fixed
+   * Fixed the cloud vetting issue to make addon cloud compatible by validating that the App only makes requests to secure HTTPS URLs.
 
 
 ## Upgrade Guide from 2.0.0 to 2.1.0
