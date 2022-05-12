@@ -4,6 +4,7 @@
     <collection label="Reports">
       <view name="cs_ad_reports" />
       <view name="cs_windows_reports" />
+      <view name="cs_windows_patch" />
       <view name="cs_linux_reports" />
       <view name="cs_o365_reports" />
       <view name="cs_aws_user_activity" />
