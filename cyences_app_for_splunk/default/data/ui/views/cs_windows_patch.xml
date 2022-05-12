@@ -1,0 +1,122 @@
+<form theme="dark" version="1.1">
+  <init>
+    <set token="tkn_patch_numbers">*</set>
+  </init>
+  <label>Windows Patch</label>
+  <search id="data_check">
+    <query>| tstats count where `cs_wineventlog_system` by host 
+| eval data="Data Present" 
+| inputlookup all_windows_hosts.csv append=true 
+| stats first(data) as data by host 
+| fillnull value="Data Not Present" data
+| appendpipe 
+    [ where data="Data Not Present"
+    | mvcombine host 
+    | eval temp_host=mvjoin(host, "\", \"") 
+    | eval host_filter="(NOT host IN (\"".temp_host."\"))" 
+    | eval extra_event=1]
+| sort extra_event</query>
+    <earliest>$timerange.earliest$</earliest>
+    <latest>$timerange.latest$</latest>
+    <done>
+      <set token="tkn_host_filter">$result.host_filter$</set>
+    </done>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="host" searchWhenChanged="true">
+      <label>Host</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="patch_numbers" searchWhenChanged="true">
+      <label>Patch Numbers</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <change>
+        <condition>
+          <eval token="tkn_patch_numbers">"(\"".mvjoin(split(replace(trim($patch_numbers$, " ,"), "\\s*,\\s*", ","), ","), "\" OR \"")."\")"</eval>
+        </condition>
+      </change>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Data Check</title>
+        <search base="data_check">
+          <query>search host="$host$" 
+| where isnull(extra_event) 
+| table host data 
+| sort data host</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Windows Update Events</title>
+        <search>
+          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
+| eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
+| append 
+    [| inputlookup all_windows_hosts.csv 
+    | search host="$host$" $tkn_host_filter$ 
+    | eval no_event="No Update Event Found"] 
+| stats first(message) as message, first(no_event) as no_event by host 
+| eval message = if(isnull(message), no_event, message) 
+| table host message 
+| sort host</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="message">
+          <colorPalette type="map">{"No Update Event Found": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events</title>
+        <search>
+          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 ("Microsoft Endpoint Protection" OR "Microsoft Defender Antivirus") 
+| eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
+| append 
+    [| inputlookup all_windows_hosts.csv 
+    | search host="$host$" $tkn_host_filter$ 
+    | eval no_event="No Update Event Found"] 
+| stats first(message) as message, first(no_event) as no_event by host 
+| eval message = if(isnull(message), no_event, message) 
+| table host message 
+| sort host</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="message">
+          <colorPalette type="map">{"No Update Event Found": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>
