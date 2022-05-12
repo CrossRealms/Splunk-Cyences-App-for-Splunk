@@ -4,12 +4,10 @@
   </init>
   <label>Windows Patch</label>
   <search id="data_check">
-    <query>| tstats count where `cs_wineventlog_system` host="$host$" by host 
+    <query>| tstats count where `cs_wineventlog_system` by host 
 | eval data="Data Present" 
-| append 
-    [| inputlookup all_windows_hosts.csv 
-    | search host="$host$"] 
-| stats values(data) as data by host 
+| inputlookup all_windows_hosts.csv append=true 
+| stats first(data) as data by host 
 | fillnull value="Data Not Present" data
 | appendpipe 
     [ where data="Data Not Present"
@@ -53,11 +51,13 @@
       <table>
         <title>Data Check</title>
         <search base="data_check">
-          <query>where isnull(extra_event)
+          <query>search host="$host$" 
+| where isnull(extra_event) 
 | table host data 
 | sort data host</query>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="data">
           <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
@@ -76,7 +76,7 @@
     [| inputlookup all_windows_hosts.csv 
     | search host="$host$" $tkn_host_filter$ 
     | eval no_event="No Update Event Found"] 
-| stats values(message) as message, values(no_event) as no_event by host 
+| stats first(message) as message, first(no_event) as no_event by host 
 | eval message = if(isnull(message), no_event, message) 
 | table host message 
 | sort host</query>
@@ -103,7 +103,7 @@
     [| inputlookup all_windows_hosts.csv 
     | search host="$host$" $tkn_host_filter$ 
     | eval no_event="No Update Event Found"] 
-| stats values(message) as message, values(no_event) as no_event by host 
+| stats first(message) as message, first(no_event) as no_event by host 
 | eval message = if(isnull(message), no_event, message) 
 | table host message 
 | sort host</query>
