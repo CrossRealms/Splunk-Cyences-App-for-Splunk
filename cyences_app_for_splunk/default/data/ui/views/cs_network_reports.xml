@@ -63,6 +63,9 @@
         </search>
         <option name="drilldown">all</option>
         <option name="mapping.type">marker</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20dc(All_Traffic.dest_port)%20as%20dc_port%20from%20datamodel%3DNetwork_Traffic%20by%20All_Traffic.src_ip%20%7C%20%60drop_dm_object_name(All_Traffic)%60%20%7C%20search%20%60cs_filter_private_ips%60%0A%7C%20where%20dc_port%3E%3D%60cs_network_scanning_min_dc_ports%60%0A%7C%20%60cs_network_scanning_map_filter%60%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
       </map>
       <html>
         <div>
