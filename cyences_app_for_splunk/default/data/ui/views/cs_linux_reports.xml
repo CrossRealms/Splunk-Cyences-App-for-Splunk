@@ -207,8 +207,9 @@
       <table>
         <search>
           <query>`cs_linux_success_login` host=$tkn_host|s$ user IN ($tkn_success_login_USERNAME$)
-| table _time, host, src_ip, user 
-| stats count, values(src_ip) as src_ips by host, user 
+| stats count, values(_time) as time, values(src_ip) as src_ips by host, user 
+| table time, host, user, count, src_ips 
+| `cs_human_readable_time_format(time)` 
 | sort - count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -229,9 +230,9 @@
       <table>
         <search>
           <query>`cs_linux_failed_login` host=$tkn_host|s$ user IN ($tkn_failed_login_USERNAME$)
-| rename src as src_ip 
-| table _time, host, user, src_ip, app
-| stats count, values(src_ip) as src_ips by host, user app
+| stats count, values(_time) as time, values(src) as src_ips by host, user, app 
+| table time, host, user, app, count, src_ips 
+| `cs_human_readable_time_format(time)` 
 | sort - count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
