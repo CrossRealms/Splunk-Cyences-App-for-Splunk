@@ -175,6 +175,7 @@ require([
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_from_source_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_successful_vpn_login_outside_home_country_filter', input_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter', button_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button', msg_id: 'macro_authentication_msg'},
 
+        /* GSuite */
         { macro_name: 'cs_gsuite_multiple_password_changes_filter', input_id: 'macro_cs_gsuite_multiple_password_changes_filter', button_id: 'macro_cs_gsuite_multiple_password_changes_filter_button', msg_id: 'macro_gsuite_msg'}
     ];
    
