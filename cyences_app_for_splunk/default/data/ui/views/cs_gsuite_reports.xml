@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>GSuite</label>
+  <label>G Suite</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -18,8 +18,8 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> User can collect Gsuite data with <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>.</p>
-        <p>Recommendation: Do not keep any of the GSuite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
+        <p><b>Data Collection:</b> User can collect G Suite data with <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>.</p>
+        <p>Recommendation: Do not keep any of the G Suite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
       </html>
       <table>
         <search>

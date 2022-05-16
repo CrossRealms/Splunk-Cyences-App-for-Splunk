@@ -264,7 +264,7 @@
             </th>
           </tr>
           <tr>
-            <th style="text-align:left">GSuite Data</th>
+            <th style="text-align:left">G Suite Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_gsuite"/>
             </th>
@@ -751,6 +751,28 @@
             </th>
             <th style="text-align:left">
               <button id="macro_cs_cisco_ios_device_failed_login_filter_button">Update</button>
+            </th>
+          </tr>
+        </table>
+      </html>
+      <html>
+        <div>
+          <p>
+            <b>
+              <center>Category: G Suite</center>
+              <br/>
+            </b>
+          </p>
+        </div>
+        <p id="macro_gsuite_msg"/>
+        <table style="width:80%">
+          <tr>
+            <th style="text-align:left">cs_gsuite_multiple_password_changes_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_gsuite_multiple_password_changes_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_gsuite_multiple_password_changes_filter_button">Update</button>
             </th>
           </tr>
         </table>
