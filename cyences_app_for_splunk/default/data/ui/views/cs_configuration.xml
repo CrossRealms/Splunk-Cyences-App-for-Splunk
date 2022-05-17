@@ -1310,12 +1310,12 @@
               </th>
             </tr>
             <tr>
-              <th style="text-align:left">cs_authentication_vpn_login_attemp_outside_working_hour_filter</th>
+              <th style="text-align:left">cs_authentication_vpn_login_attemps_outside_working_hour_filter</th>
               <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_vpn_login_attemp_outside_working_hour_filter"/>
+                <input type="text" id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter"/>
               </th>
               <th style="text-align:left">
-                <button id="macro_cs_authentication_vpn_login_attemp_outside_working_hour_filter_button">Update</button>
+                <button id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter_button">Update</button>
               </th>
             </tr>
             <tr>
