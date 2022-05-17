@@ -1309,6 +1309,33 @@
                 <button id="macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button">Update</button>
               </th>
             </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_vpn_login_attemps_outside_working_hour_filter</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_new_location_login_pct_limit</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_authentication_new_location_login_pct_limit"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_new_location_login_pct_limit_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_authentication_successful_vpn_login_from_new_location_filter</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_authentication_successful_vpn_login_from_new_location_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_authentication_successful_vpn_login_from_new_location_filter_button">Update</button>
+              </th>
+            </tr>
           </table>
         </html>
         <html>
