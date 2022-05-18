@@ -245,6 +245,11 @@ require([
         "AD - User Changed": {
             contributing_events: '`cs_wineventlog_security` [| inputlookup cs_ad_audit_change_event_codes WHERE change_category="User" | stats values(EventCode) AS EventCode,values(obj_type) AS obj_type | format] src_user_type="user" NOT((EventCode=4723 OR EventCode=4738) AND src_user!=user)'
         },
+        "G Suite - Multiple Password Changes in Short Time Period": {
+            contributing_events: '`cs_gsuite_login_events` event_name="password_edit"',
+            system_compromised_search: '| stats sum(count) as count, values(ipAddress) as ipAddress by user',
+            system_compromised_drilldown: '`cs_gsuite_login_events` event_name="password_edit" user=$row.user$'
+        },
     };
 
 
