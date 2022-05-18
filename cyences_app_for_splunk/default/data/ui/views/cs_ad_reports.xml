@@ -124,7 +124,7 @@
         <search>
           <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
           | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
-          | table _time, user, host, Account_Domain, Account_Name, msad_action, action, Password_Last_Set, EventCode, EventCodeDescription | `cs_ad_password_change_outside_working_hour_filter`</query>
+          | table _time, ComputerName, Target_Account_Name, Target_Account_Domain, Subject_Account_Name Subject_Account_Domain Caller_Workstation, msad_action, action, EventCode | `cs_ad_password_change_outside_working_hour_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
