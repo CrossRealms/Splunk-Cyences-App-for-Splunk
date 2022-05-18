@@ -272,33 +272,6 @@
   </row>
   <row>
     <panel>
-      <title>Open Ports</title>
-      <input type="dropdown" token="tkn_open_ports_proto">
-        <label>Proto</label>
-        <choice value="*">All</choice>
-        <choice value="(Proto=&quot;udp&quot;)">udp</choice>
-        <choice value="(Proto=&quot;tcp&quot;)">tcp</choice>
-        <default>*</default>
-        <initialValue>*</initialValue>
-      </input>
-      <input type="text" token="tkn_open_ports_port">
-        <label>Port</label>
-        <default>*</default>
-        <initialValue>*</initialValue>
-      </input>
-      <table>
-        <search>
-          <query>`cs_linux_open_ports` host=$tkn_host|s$ | search  $tkn_open_ports_proto$ Port IN ($tkn_open_ports_port$) | dedup host, Proto, Port | table host, _time , Proto, Port</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <title>Interfaces on Hosts</title>
       <table>
         <search>
