@@ -253,7 +253,7 @@ require([
         "G Suite - Bulk User Creation or Deletion": {
             contributing_events: '`cs_gsuite` sourcetype="gapps:report:admin" eventtype IN ("gapps_aa_create_user", "gapps_aa_delete_user")',
             attacker_search: "| stats sum(total_actions) as count by admin",
-            attacker_drilldown: '`cs_gsuite` sourcetype="gapps:report:admin" eventtype IN ("gapps_aa_create_user", "gapps_aa_delete_user") | rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin | search admin=$row.admin|s$'
+            attacker_drilldown: '`cs_gsuite` sourcetype="gapps:report:admin" eventtype IN ("gapps_aa_create_user", "gapps_aa_delete_user") | rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin | search admin=$row.admin|s$ | stats count by user'
         },
     };
 
