@@ -775,6 +775,15 @@
               <button id="macro_cs_gsuite_multiple_password_changes_filter_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">cs_gsuite_bulk_user_creation_deletion_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="cs_gsuite_bulk_user_creation_deletion_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_gsuite_bulk_user_creation_deletion_filter_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>

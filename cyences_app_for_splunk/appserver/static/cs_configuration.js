@@ -179,7 +179,8 @@ require([
         { macro_name: 'cs_authentication_successful_vpn_login_from_new_location_filter', input_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter', button_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter_button', msg_id: 'macro_authentication_msg'},
 
         /* GSuite */
-        { macro_name: 'cs_gsuite_multiple_password_changes_filter', input_id: 'macro_cs_gsuite_multiple_password_changes_filter', button_id: 'macro_cs_gsuite_multiple_password_changes_filter_button', msg_id: 'macro_gsuite_msg'}
+        { macro_name: 'cs_gsuite_multiple_password_changes_filter', input_id: 'macro_cs_gsuite_multiple_password_changes_filter', button_id: 'macro_cs_gsuite_multiple_password_changes_filter_button', msg_id: 'macro_gsuite_msg'},
+        { macro_name: 'cs_gsuite_bulk_user_creation_deletion_filter', input_id: 'macro_cs_gsuite_bulk_user_creation_deletion_filter', button_id: 'macro_cs_gsuite_bulk_user_creation_deletion_filter_button', msg_id: 'macro_gsuite_msg'}
     ];
    
     // Defining search and search manager
