@@ -531,6 +531,24 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">cs_ad_bulk_user_creation_deletion_count_limit</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_bulk_user_creation_deletion_count_limit"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_bulk_user_creation_deletion_count_limit_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_bulk_user_creation_deletion_filter</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_bulk_user_creation_deletion_filter"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_bulk_user_creation_deletion_filter_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">cs_windows_host_missing_update_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_windows_host_missing_update_filter"/>
