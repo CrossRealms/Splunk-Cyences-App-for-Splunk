@@ -124,4 +124,34 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>User Created</title>
+      <table>
+        <search>
+          <query>`cs_gsuite` sourcetype="gapps:report:admin" eventtype=gapps_aa_create_user 
+| rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin
+| table _time, admin, user</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>User Deleted</title>
+      <table>
+        <search>
+          <query>`cs_gsuite` sourcetype="gapps:report:admin" eventtype=gapps_aa_delete_user 
+| rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin
+| table _time, admin, user</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
 </form>
