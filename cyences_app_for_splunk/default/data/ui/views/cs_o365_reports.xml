@@ -135,23 +135,24 @@
       <!-- Service Status Reference - https://docs.microsoft.com/en-us/dotnet/api/microsoft.exchange.servicestatus.tenantcommunications.data.servicestatus?view=o365-service-communications -->
       <table id="my_table_with_default_sort">
         <search>
-          <query>`cs_o365` sourcetype="o365:service:status" $tkn_host$ source="*CurrentStatus"
-| stats latest(Status) as Status latest(_time) as _time by WorkloadDisplayName host 
+          <query>`cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus")) $tkn_host$ 
+| eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
+| stats latest(Status) as Status latest(_time) as _time by Service host 
 | rename _time as "LastUpdatedTime" 
 | convert ctime(LastUpdatedTime) as LastUpdatedTime 
-| table LastUpdatedTime host Work* Status 
+| table LastUpdatedTime host Service Status 
 | sort host Status 
-| eval Status_temp=Status
-| eval Status=case(Status_temp=="ServiceInterruption",0,Status_temp=="ServiceDegradation",1,Status_temp=="RestoringService",2,Status_temp=="ExtendedRecovery",3,Status_temp=="Investigating",4,Status_temp=="ServiceRestored",5,Status_temp=="FalsePositive",6,Status_temp=="PostIncidentReviewPublished",7,Status_temp=="InformationUnavailable",8,Status_temp=="ServiceOperational",99) 
-| fieldformat  Status=Status_temp</query>
+| eval Status_temp=lower(Status) 
+| eval Status=case(Status_temp=="serviceinterruption",0,Status_temp=="servicedegradation",1,Status_temp=="restoringservice",2,Status_temp=="extendedrecovery",3,Status_temp=="investigating",4,Status_temp=="servicerestored",5,Status_temp=="falsepositive",6,Status_temp=="postincidentreviewpublished",7,Status_temp=="informationunavailable",8,Status_temp=="serviceoperational",99) 
+| fieldformat Status=Status_temp</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <fields>LastUpdatedTime,host,WorkloadDisplayName, Status</fields>
+        <fields>LastUpdatedTime,host,Service,Status</fields>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="Status">
-          <colorPalette type="map">{"ServiceOperational":#499547,"ServiceDegradation":#DC4E41,"RestoringService":#F8BE34,"FalsePositive":#006D9C,"Investigating":#F1813F,"ServiceRestored":#4FA484,"InformationAvailable":#E86DD3,"PIRPublished":#E86DD3}</colorPalette>
+          <colorPalette type="map">{"serviceoperational":#499547,"servicedegradation":#DC4E41,"restoringservice":#F8BE34,"falsepositive":#006D9C,"investigating":#F1813F,"servicerestored":#4FA484,"informationavailable":#E86DD3,"pirpublished":#E86DD3}</colorPalette>
         </format>
       </table>
     </panel>
