@@ -119,4 +119,37 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Listening Ports on Host</title>
+      <input type="dropdown" token="transport" searchWhenChanged="true">
+        <label>transport</label>
+        <choice value="*">All</choice>
+        <choice value="TCP">TCP</choice>
+        <choice value="UDP">UDP</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="port" searchWhenChanged="true">
+        <label>port</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>index IN (wineventlog, windows, msad) sourcetype=Script:ListeningPorts host=$tkn_host$ transport=$transport$ dest_port=$port$
+| fillnull value="-" appname
+| dedup host, transport, dest_port, pid, appname 
+| table host, _time , transport, dest_port, pid, appname</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>The appname field is available from Splunk Add-on for Windows v8.4.0 and later.</p>
+      </html>
+    </panel>
+  </row>
 </form>
