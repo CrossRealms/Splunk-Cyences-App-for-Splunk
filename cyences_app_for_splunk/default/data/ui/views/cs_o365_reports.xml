@@ -174,6 +174,27 @@
   </row>
   <row>
     <panel>
+      <title>Login by Location</title>
+      <map>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation IN("UserLoggedIn", "UserLoginFailed") $tkn_host$ 
+| iplocation ClientIP 
+| geostats count(UserId) by ResultStatus</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="mapping.fieldColors">{"Success": #008000, "Failed": #ff0000}</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_o365%60%20sourcetype%3D%22o365%3Amanagement%3Aactivity%22%20Workload%3DAzureActiveDirectory%20Operation%20IN(%22UserLoggedIn%22%2C%20%22UserLoginFailed%22)%20$tkn_host$%20%0A%7C%20iplocation%20ClientIP%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%20%0A%7C%20table%20_time%20ResultStatus%20UserId%20ClientIP%20City%20Region%20Country&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Office 365/Azure - Successful Logins</title>
       <input type="text" token="tkn__user" searchWhenChanged="true">
         <label>User</label>
