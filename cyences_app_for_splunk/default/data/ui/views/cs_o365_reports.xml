@@ -217,7 +217,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* $tkn_host$| iplocation ClientIP | search $tkn_drop__country$ user=$tkn__user|s$ | stats count, latest(_time) as Last_Success_Login, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - host | `cs_human_readable_time_format(Last_Success_Login)` | `cs_o365_success_login_outside_country_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT LogonError=* $tkn_host$| iplocation ClientIP | search $tkn_drop__country$ user=$tkn__user|s$ | stats count, values(user_type) as user_type, values(authentication_method) as authentication_method, latest(_time) as Last_Success_Login, values(ClientIP) as ClientIPs, values(Country) as Country, values(Region) as Region, values(City) as City by host, user | fields - host | `cs_human_readable_time_format(Last_Success_Login)` | `cs_o365_success_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -277,7 +277,7 @@
 | iplocation ClientIP 
 | search $tkn_drop_country$  user=$tkn_user|s$
 | eval ExtendedProperties=mvzip('ExtendedProperties{}.Name','ExtendedProperties{}.Value'," : ") 
-| stats count, latest(_time) as Last_Failed_Login, values(ExtendedProperties) as ExtendedProperties, values(Country) as Country, values(Region) as Region, values(City) as City by host, user, LogonError, ClientIP 
+| stats count, values(user_type) as user_type, values(authentication_method) as authentication_method, latest(_time) as Last_Failed_Login, values(ExtendedProperties) as ExtendedProperties, values(Country) as Country, values(Region) as Region, values(City) as City by host, user, LogonError, ClientIP 
 | fields - host | `cs_human_readable_time_format(Last_Failed_Login)`
 | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
