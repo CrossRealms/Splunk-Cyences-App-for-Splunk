@@ -31,7 +31,7 @@ has_children: true
     * Added `Listening Ports on Host` panel in the `Windows Reports` dashboard. For the data collection, User need to enable the `win_listening_ports` scripted input.
 
 * ### Office 365 alert and dashboard improvement
-    * Updated the alerts and dashboard to use the new o365:service:healthIssue sourcetype (as the o365:service:status sourcetype is retired)
+    * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (as the `o365:service:status` sourcetype is retired by the Add-on)
     * Added `Login by location` map in the `Office 365` dashboard.
     * Added `authentication_method` and `user_type` fields in the o365 login related alerts and panels.
 
@@ -55,6 +55,6 @@ has_children: true
 
 ## Upgrade Guide from 2.1.0 to 2.2.0
 
-* User need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows addon to populate the `Listening Ports on Host` panel of `Windows Reports` dashboard.
+* User need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` panel of `Windows Reports` dashboard.
 
 * The `openPorts.sh` scripted input is no longer reqired for Cyences App. User can disable the input from the Splunk Add-on for Linux and Unix addon.
