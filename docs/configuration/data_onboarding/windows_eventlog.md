@@ -14,6 +14,10 @@ View the Splunk Add-on for Windows documentation to learn how to enable Security
 
 Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 
+    [script://.\bin\win_listening_ports.bat]
+    disabled = 0
+    index=windows
+
     [WinEventLog://Security] 
     disabled = 0 
     blacklist3 = EventCode="5156" 
