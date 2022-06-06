@@ -22,7 +22,7 @@ has_children: true
            
    * G Suite
       * `G Suite - Multiple Password Changes in Short Time Period` 
-      * `G Suite - Bulk User Creation or Deletion` alert to find bulk user creation or deletion.
+      * `G Suite - Bulk User Creation or Deletion` 
 
 * ### Enhancements 
 
