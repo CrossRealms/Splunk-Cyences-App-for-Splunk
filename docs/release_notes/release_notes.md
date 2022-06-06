@@ -8,53 +8,61 @@ has_children: true
 
 # Release Notes
 
-## Version 2.2.0 (Jun 2022)
+## Version 2.2.0 (June 2022)
 
 
-* ### New dashboard `Windows Patch` for the windows update events.
+* ### New Windows Dashboard 
+    * Added `Windows Patch` dashboard to monitor for Windows update related events.
 
-* ### VPN dashboard improvement
-    * Added `Successful Session` panel.
-    * Added drilldown on `Connected Workforce by Location` map
+* ### Added New Alerts
 
-* ### Ransomware alert improvement
-    * Enhanced filters for paths to reduce false positives for both report `Ransomware - Calculate UpperBound for Spike in File Writes` and alert `Ransomware - Spike in File Writes`.
+   * Active Directory
+      * `AD - Multiple Password Changes in Short Time Period` 
+      * `AD - Bulk User Creation or Deletion` 
+           
+   * G Suite
+      * `G Suite - Multiple Password Changes in Short Time Period` 
+      * `G Suite - Bulk User Creation or Deletion` alert to find bulk user creation or deletion.
 
-* ### Network Reports dashboard improvement 
-    * Added drilldown for `Port Scanning Attempts` map in `Network Reports` dashboard
+* ### Enhancements 
 
-* ### Linux/Unix dashboard improvement
-    * Added time field in the `Success Login by Host, Users` and `Failed Login by Host, Users` panels in the `Linux/Unix` dashboard
-    * Removed the `Open Ports` panel as `Listening Ports on Host` panel provides same details with more fields.
+* Active Directory 
+    * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
 
-* ### Windows Reports dashboard improvement
-    * Added `Listening Ports on Host` panel in the `Windows Reports` dashboard. For the data collection, User need to enable the `win_listening_ports` scripted input.
+* G Suite
+    * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
 
-* ### Office 365 alert and dashboard improvement
-    * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (as the `o365:service:status` sourcetype is retired by the Add-on)
-    * Added `Login by location` map in the `Office 365` dashboard.
-    * Added `authentication_method` and `user_type` fields in the o365 login related alerts and panels.
+* Linux/Unix 
+    * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
+    * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
 
-* ### Active Directory alert and dashboard improvement
-    * Added new alert `AD - Multiple Password Changes in Short Time Period` to find the mulitple password change in the short time period.
-    * Added new alert `AD - Bulk User Creation or Deletion` to find the bulk user creation or deletion.
-    * Added 
-    * Enhanced the `AD - Password Change Outside Working Hour` alert and panel to show adiitional improtant fields.
+* Network Reports   
+    * Added drilldown to the `Port Scanning Attempts` map.
 
-* ### G Suite new alert
-    * Added new alert `G Suite - Multiple Password Changes in Short Time Period` to find the mulitple password change in the short time period.
-    * Added new alert `G Suite - Bulk User Creation or Deletion` to find the bulk user creation or deletion.
-    * Added `User Created` and `User Deleted` panels in the G Suite dashboard.
+* Office 365
+    * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
+    * Added `Login by location` map to the `Office 365` dashboard.
+    * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
+
+* Ransomware Alerts
+    * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
+
+* VPN 
+    * Added `Successful Session` dashboard panel.
+    * Added drilldown to the `Connected Workforce by Location` map.
+
+* Windows Reports 
+    * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
 
 
 * ### Bug Fixes
-    * Fixed a drilldown issue for the `Login Details` panel in the `VPN` dashboard.
+    * Fixed a drilldown issue for the `Login Details` dashboard panel in the `VPN` dashboard.
 
     * Fixed the source value in the `cs_sysmon macro` macro.
 
 
 ## Upgrade Guide from 2.1.0 to 2.2.0
 
-* User need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` panel of `Windows Reports` dashboard.
+* Users need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` dashboard panel in the `Windows Reports` dashboard.
 
-* The `openPorts.sh` scripted input is no longer reqired for Cyences App. User can disable the input from the Splunk Add-on for Linux and Unix addon.
+* The `openPorts.sh` scripted input is no longer reqired for the Cyences App. Users can disable the input from Splunk Add-on for Linux and Unix.
