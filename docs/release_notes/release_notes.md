@@ -26,33 +26,33 @@ has_children: true
 
 * ### Enhancements 
 
-* Active Directory 
-    * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
+    * Active Directory 
+        * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
 
-* G Suite
-    * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
+    * G Suite
+        * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
 
-* Linux/Unix 
-    * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
-    * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
+    * Linux/Unix 
+        * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
+        * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
 
-* Network Reports   
-    * Added drilldown to the `Port Scanning Attempts` map.
+    * Network Reports   
+        * Added drilldown to the `Port Scanning Attempts` map.
 
-* Office 365
-    * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
-    * Added `Login by location` map to the `Office 365` dashboard.
-    * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
+    * Office 365
+        * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
+        * Added `Login by location` map to the `Office 365` dashboard.
+        * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
 
-* Ransomware Alerts
-    * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
+    * Ransomware Alerts
+        * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
 
-* VPN 
-    * Added `Successful Session` dashboard panel.
-    * Added drilldown to the `Connected Workforce by Location` map.
+    * VPN 
+        * Added `Successful Session` dashboard panel.
+        * Added drilldown to the `Connected Workforce by Location` map.
 
-* Windows Reports 
-    * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
+    * Windows Reports 
+        * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
 
 
 * ### Bug Fixes
