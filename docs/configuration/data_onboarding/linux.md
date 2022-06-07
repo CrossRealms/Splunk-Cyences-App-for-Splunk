@@ -20,12 +20,6 @@ Installation and Configuration Guide:
 
 Insert the input stanzas below for the Splunk Add-on for Linux and Unix (*nix) to collect auditing data. Each stanza should be placed in the inputs.conf file (create a local directory if necessary): 
 
-    [script://./bin/openPorts.sh] 
-    interval = 3600 
-    sourcetype = openPorts 
-    source = openPorts 
-    disabled = 0 
-    index = os 
 
     [script://./bin/df.sh] 
     interval = 3600 

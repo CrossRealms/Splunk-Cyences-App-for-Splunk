@@ -8,42 +8,61 @@ has_children: true
 
 # Release Notes
 
-## Version 2.1.0 (May 2022)
+## Version 2.2.0 (June 2022)
 
 
-* ### Ransomware alert improvement
-    * Added filters for paths to reduce false positives for both report `Ransomware - Calculate UpperBound for Spike in File Writes` and alert `Ransomware - Spike in File Writes`.
+* ### New Windows Dashboard 
+    * Added `Windows Patch` dashboard to monitor for Windows update related events.
 
-    * Increased minimun file write limit from 20 to 3000 to reduce the false positive.
+* ### Added New Alerts
 
-    * Added `top5_file_extension`, `avg`, and `stdev` field in the `Ransomware - Spike in File Writes` alert.
+   * Active Directory
+      * `AD - Multiple Password Changes in Short Time Period` 
+      * `AD - Bulk User Creation or Deletion` 
+           
+   * G Suite
+      * `G Suite - Multiple Password Changes in Short Time Period` 
+      * `G Suite - Bulk User Creation or Deletion` 
 
-    * Added `parent_process_path` field in the `Ransomware - Endpoint Compromise - Fake Windows Processes` alert.
+* ### Enhancements 
 
-* ### Palo Alto Firewall System alert and dashboard improvement
-    * Excluded the License related events from the `Palo Alto High System Alert` alert and `System Events` panel in the Palo Alto dashboard.
-    * Added a new `License Events` panel to show all Palo Alto license-related events.
+* Active Directory 
+    * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
 
-* ### Palo Alto Firewall DNS Sinkhole improvement
-    * Added `url` field in the `Palo Alto DNS Sinkhole` alert and forensic searches.
+* G Suite
+    * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
 
-* ### DNS Tracker dashboard improvement.
-    * Added hostname details for any IP field to easily identify the machine based on the information available in Device Inventory lookup.
-    * Separated panels to show information about `actual hosts making DNS requests` vs `DNS servers making DNS requests to other internal DNS servers` vs `DNS servers requesting external DNS servers`. 
-        * This will give more clarity about who is the actual requester, how well each internal DNS server is performing, any malicious behavior by a client/source, lots of malicious/incorrect responses received from a specific external DNS server, etc.
+* Linux/Unix 
+    * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
+    * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
+
+* Network Reports   
+    * Added drilldown to the `Port Scanning Attempts` map.
+
+* Office 365
+    * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
+    * Added `Login by location` map to the `Office 365` dashboard.
+    * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
+
+* Ransomware Alerts
+    * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
+
+* VPN 
+    * Added `Successful Session` dashboard panel.
+    * Added drilldown to the `Connected Workforce by Location` map.
+
+* Windows Reports 
+    * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
 
 
 * ### Bug Fixes
-    * Fixed a drilldown issue for the `Antivirus` panel in the `Overview` dashboard.
+    * Fixed a drilldown issue for the `Login Details` dashboard panel in the `VPN` dashboard.
 
-    * Fixed the token name to populate the `PowerShell Script Execution Error` panel of `Microsoft 365 Defender ATP Audit` dashboard.
-
-    * Fixed the `Linux/Unix` dashboard to show results when some fields in the data are not present.
-
-* ### Cloud Compatibility Issue Fixed
-   * Fixed the cloud vetting issue to make addon cloud compatible by validating that the App only makes requests to secure HTTPS URLs.
+    * Fixed the source value in the `cs_sysmon macro` macro.
 
 
-## Upgrade Guide from 2.0.0 to 2.1.0
+## Upgrade Guide from 2.1.0 to 2.2.0
 
-* No upgrade guide needed.
+* Users need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` dashboard panel in the `Windows Reports` dashboard.
+
+* The `openPorts.sh` scripted input is no longer reqired for the Cyences App. Users can disable the input from Splunk Add-on for Linux and Unix.
