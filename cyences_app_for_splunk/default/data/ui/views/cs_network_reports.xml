@@ -1,6 +1,5 @@
 <form theme="dark" version="1.1">
   <label>Network Reports</label>
-  <description>Note: For the larger time range map might not render all the events as the commands used in the search query (like mvexpand, streamstat) has some limitation set.</description>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -78,7 +77,7 @@
   <row>
     <panel>
       <title>Inbound Network Telemetry</title>
-      <viz type="cyences_app_for_splunk.network_telemetry_map">
+      <map>
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
@@ -106,56 +105,21 @@
 | rex field=single_field "^(?&lt;src_ip&gt;[^#]+)#(?&lt;action&gt;[^#]+)#(?&lt;total_bytes&gt;[^#]+)#(?&lt;total_packets&gt;[^#]+)$" 
 | fillnull is_vul 
 | stats sum(total_bytes) as total_bytes, sum(total_packets) as total_packets by src_ip dest_ip action is_vul 
-| sort 0 -is_vul, -action, -total_bytes 
-| streamstats count as fake_count by is_vul action 
-| search is_vul=1 OR fake_count&lt;=`cs_network_traffic_top` 
-| fields - fake_count 
-| eventstats min(total_bytes) as min_value, max(total_bytes) as max_value by is_vul action 
-| eval weight=((7-3)*(total_bytes-min_value))/(max_value-min_value)+3 
-| eval color=case(is_vul=1 and action="allowed", "#FF0000", is_vul=1 and action="blocked", "#FFA500", is_vul=0 and action="blocked", "#0000FF", is_vul=0 and action="allowed", "#008000") 
+| eval color=case(is_vul=1 and action="allowed", "red", is_vul=1 and action="blocked", "orange", is_vul=0 and action="blocked", "blue", is_vul=0 and action="allowed", "green") 
 | iplocation src_ip 
 | rename lat as start_lat, lon as start_lon, Country as src_country, City as src_city, Region as src_region 
-| eval end_lat=`cs_network_home_location_lat`, end_lon=`cs_network_home_location_lon`, dest_country=`cs_home_country` 
-| eval total_KB = round(total_bytes/1024, 2) 
-| table src_ip, src_country, src_city, src_region, dest_ip, dest_country, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon, color, weight</query>
+| eval end_lat=`cs_network_home_location_lat`, end_lon=`cs_network_home_location_lon`, dest_country=`cs_home_country`
+| geostats latfield=start_lat longfield=start_lon count by color</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenName">traffic_query</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenValue">| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
-| `drop_dm_object_name(All_Traffic)` 
-| append 
-    [| inputlookup cs_tenable_vuln 
-    | search (vul_state="open" OR vul_state="reopened") vul_port!=0 vul_severity IN ($tkn_vul_severity$) 
-    | fields tenable_uuid, vul_port 
-    | join tenable_uuid type=left 
-        [| inputlookup cs_tenable_inventory 
-        | table tenable_uuid, ip] 
-    | makemv ip delim="~~" 
-    | stats count by ip vul_port 
-    | rename ip as dest_ip vul_port as dest_port 
-    | eval is_vul = 1 ] 
-| append 
-    [| search `cs_qualys_vuln` `cs_qualys_timerange` STATUS="ACTIVE" PORT=* severity IN ($tkn_vul_severity$) 
-    | fields IP PORT 
-    | stats count by IP PORT 
-    | rename IP as dest_ip PORT as dest_port 
-    | eval is_vul = 1 ] 
-| eval single_field = src_ip."#".action."#".total_bytes."#".total_packets 
-| stats count, values(single_field) as single_field, values(is_vul) as is_vul by dest_ip dest_port 
-| search single_field="*" 
-| mvexpand single_field 
-| rex field=single_field "^(?&lt;src_ip&gt;[^#]+)#(?&lt;action&gt;[^#]+)#(?&lt;total_bytes&gt;[^#]+)#(?&lt;total_packets&gt;[^#]+)$" 
-| fillnull is_vul 
-| iplocation src_ip 
-| rename lat as start_lat, lon as start_lon, Country as src_country, City as src_city, Region as src_region 
-| eval end_lat=`cs_network_home_location_lat`, end_lon=`cs_network_home_location_lon`, dest_country=`cs_home_country` 
-| sort 0 -is_vul, -action, -total_bytes 
-| eval total_KB = round(total_bytes/1024, 2) 
-| table src_ip, src_country, src_city, src_region, dest_ip, dest_port, dest_country, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </viz>
+        <option name="drilldown">all</option>
+        <option name="mapping.fieldColors">{"red": #FF0000, "orange": #FFA500,  "blue": #0000FF, "green": #008000}</option>
+        <option name="mapping.type">marker</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20count%2C%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20sum(All_Traffic.packets)%20as%20total_packets%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20by%20All_Traffic.src_ip%2C%20All_Traffic.dest_ip%2C%20All_Traffic.dest_port%2C%20All_Traffic.action%20%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20append%20%0D%0A%20%20%20%20%5B%7C%20inputlookup%20cs_tenable_vuln%20%0D%0A%20%20%20%20%7C%20search%20(vul_state%3D%22open%22%20OR%20vul_state%3D%22reopened%22)%20vul_port!%3D0%20vul_severity%20IN%20($tkn_vul_severity$)%20%0D%0A%20%20%20%20%7C%20fields%20tenable_uuid%2C%20vul_port%20%0D%0A%20%20%20%20%7C%20join%20tenable_uuid%20type%3Dleft%20%0D%0A%20%20%20%20%20%20%20%20%5B%7C%20inputlookup%20cs_tenable_inventory%20%0D%0A%20%20%20%20%20%20%20%20%7C%20table%20tenable_uuid%2C%20ip%5D%20%0D%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0D%0A%20%20%20%20%7C%20stats%20count%20by%20ip%20vul_port%20%0D%0A%20%20%20%20%7C%20rename%20ip%20as%20dest_ip%20vul_port%20as%20dest_port%20%0D%0A%20%20%20%20%7C%20eval%20is_vul%20%3D%201%20%5D%20%0D%0A%7C%20append%20%0D%0A%20%20%20%20%5B%7C%20search%20%60cs_qualys_vuln%60%20%60cs_qualys_timerange%60%20STATUS%3D%22ACTIVE%22%20PORT%3D*%20severity%20IN%20($tkn_vul_severity$)%20%0D%0A%20%20%20%20%7C%20fields%20IP%20PORT%20%0D%0A%20%20%20%20%7C%20stats%20count%20by%20IP%20PORT%20%0D%0A%20%20%20%20%7C%20rename%20IP%20as%20dest_ip%20PORT%20as%20dest_port%20%0D%0A%20%20%20%20%7C%20eval%20is_vul%20%3D%201%20%5D%20%0D%0A%7C%20eval%20single_field%20%3D%20src_ip.%22%23%22.action.%22%23%22.total_bytes.%22%23%22.total_packets%20%0D%0A%7C%20stats%20count%2C%20values(single_field)%20as%20single_field%2C%20values(is_vul)%20as%20is_vul%20by%20dest_ip%20dest_port%20%0D%0A%7C%20search%20single_field%3D%22*%22%20%0D%0A%7C%20mvexpand%20single_field%20%0D%0A%7C%20rex%20field%3Dsingle_field%20%22%5E(%3F%3Csrc_ip%3E%5B%5E%23%5D%2B)%23(%3F%3Caction%3E%5B%5E%23%5D%2B)%23(%3F%3Ctotal_bytes%3E%5B%5E%23%5D%2B)%23(%3F%3Ctotal_packets%3E%5B%5E%23%5D%2B)%22%20%0D%0A%7C%20fillnull%20is_vul%20%0D%0A%7C%20iplocation%20src_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%0D%0A%7C%20rename%20lat%20as%20start_lat%2C%20lon%20as%20start_lon%2C%20Country%20as%20src_country%2C%20City%20as%20src_city%2C%20Region%20as%20src_region%20%0D%0A%7C%20eval%20end_lat%3D%60cs_network_home_location_lat%60%2C%20end_lon%3D%60cs_network_home_location_lon%60%2C%20dest_country%3D%60cs_home_country%60%20%0D%0A%7C%20eval%20total_KB%20%3D%20round(total_bytes%2F1024%2C%202)%20%0D%0A%7C%20table%20src_ip%2C%20src_country%2C%20src_city%2C%20src_region%2C%20dest_ip%2C%20dest_port%2C%20dest_country%2C%20action%2C%20is_vul%2C%20total_KB%2C%20total_packets%2C%20start_lat%2C%20start_lon%2C%20end_lat%2C%20end_lon%0D%0A%7C%20sort%200%20-is_vul%2C%20-action%2C%20-total_bytes&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
       <html>
       <style>
       .myinfo table, .myinfo th, .myinfo td, .myinfo tr {
@@ -188,11 +152,11 @@
             </tr>
             <tr>
               <td>Blue</td>
-              <td>Other Inbound traffic is <b>blocked</b> by the firewall. (Only top 20)</td>
+              <td>Other Inbound traffic is <b>blocked</b> by the firewall.</td>
             </tr>
             <tr>
               <td>Green</td>
-              <td>Other Inbound traffic <b>allowed</b> by the firewall. (Only top 20)</td>
+              <td>Other Inbound traffic <b>allowed</b> by the firewall.</td>
             </tr>
           </table>
         </div>
@@ -203,7 +167,7 @@
     </panel>
     <panel>
       <title>Outbound Network Telemetry</title>
-      <viz type="cyences_app_for_splunk.network_telemetry_map">
+      <map>
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
@@ -231,56 +195,21 @@
 | rex field=single_field "^(?&lt;dest_ip&gt;[^#]+)#(?&lt;dest_port&gt;[^#]+)#(?&lt;action&gt;[^#]+)#(?&lt;total_bytes&gt;[^#]+)#(?&lt;total_packets&gt;[^#]+)$" 
 | fillnull is_vul 
 | stats sum(total_bytes) as total_bytes, sum(total_packets) as total_packets by src_ip dest_ip action is_vul 
-| sort 0 -is_vul, -action, -total_bytes 
-| streamstats count as fake_count by is_vul action 
-| search fake_count&lt;=`cs_network_traffic_top` 
-| fields - fake_count 
-| eventstats min(total_bytes) as min_value, max(total_bytes) as max_value by is_vul action 
-| eval weight=((7-3)*(total_bytes-min_value))/(max_value-min_value)+3 
-| eval color=case(is_vul=1 and action="allowed", "#FF0000", is_vul=1 and action="blocked", "#FFA500", is_vul=0 and action="blocked", "#0000FF", is_vul=0 and action="allowed", "#008000") 
+| eval color=case(is_vul=1 and action="allowed", "red", is_vul=1 and action="blocked", "orange", is_vul=0 and action="blocked", "blue", is_vul=0 and action="allowed", "green") 
 | iplocation dest_ip 
 | rename lat as end_lat, lon as end_lon, Country as dest_country, City as dest_city, Region as dest_region 
-| eval start_lat=`cs_network_home_location_lat`, start_lon=`cs_network_home_location_lon`, src_country=`cs_home_country` 
-| eval total_KB = round(total_bytes/1024, 2) 
-| table src_ip, src_country, dest_ip, dest_country, dest_city, dest_region, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon, color, weight</query>
+| eval start_lat=`cs_network_home_location_lat`, start_lon=`cs_network_home_location_lon`, src_country=`cs_home_country`
+| geostats latfield=end_lat longfield=end_lon count by color</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenName">traffic_query</option>
-        <option name="cyences_app_for_splunk.network_telemetry_map.drilldownTokenValue">| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action 
-| `drop_dm_object_name(All_Traffic)` 
-| append 
-    [| inputlookup cs_tenable_vuln 
-    | search (vul_state="open" OR vul_state="reopened") vul_severity IN ($tkn_vul_severity$) 
-    | fields tenable_uuid 
-    | join tenable_uuid type=left 
-        [| inputlookup cs_tenable_inventory 
-        | table tenable_uuid, ip] 
-    | makemv ip delim="~~" 
-    | stats count by ip 
-    | rename ip as src_ip 
-    | eval is_vul = 1 ] 
-| append 
-    [| search `cs_qualys_vuln` `cs_qualys_timerange` STATUS="ACTIVE" severity IN ($tkn_vul_severity$) 
-    | fields IP 
-    | stats count by IP 
-    | rename IP as src_ip 
-    | eval is_vul = 1 ] 
-| eval single_field = dest_ip."#".dest_port."#".action."#".total_bytes."#".total_packets  
-| stats count, values(single_field) as single_field, values(is_vul) as is_vul by src_ip 
-| search single_field="*" 
-| mvexpand single_field 
-| rex field=single_field "^(?&lt;dest_ip&gt;[^#]+)#(?&lt;dest_port&gt;[^#]+)#(?&lt;action&gt;[^#]+)#(?&lt;total_bytes&gt;[^#]+)#(?&lt;total_packets&gt;[^#]+)$" 
-| fillnull is_vul 
-| iplocation dest_ip 
-| rename lat as end_lat, lon as end_lon, Country as dest_country, City as dest_city, Region as dest_region 
-| eval start_lat=`cs_network_home_location_lat`, start_lon=`cs_network_home_location_lon`, src_country=`cs_home_country` 
-| sort 0 -is_vul, -action, -total_bytes 
-| eval total_KB = round(total_bytes/1024, 2) 
-| table src_ip, src_country, dest_ip, dest_port, dest_country, dest_city, dest_region, action, is_vul, total_KB, total_packets, start_lat, start_lon, end_lat, end_lon</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </viz>
+        <option name="drilldown">all</option>
+        <option name="mapping.fieldColors">{"red": #FF0000, "orange": #FFA500, "blue": #0000FF, "green": #008000}</option>
+        <option name="mapping.type">marker</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20count%2C%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20sum(All_Traffic.packets)%20as%20total_packets%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20by%20All_Traffic.src_ip%2C%20All_Traffic.dest_ip%2C%20All_Traffic.dest_port%2C%20All_Traffic.action%20%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20append%20%0D%0A%20%20%20%20%5B%7C%20inputlookup%20cs_tenable_vuln%20%0D%0A%20%20%20%20%7C%20search%20(vul_state%3D%22open%22%20OR%20vul_state%3D%22reopened%22)%20vul_severity%20IN%20($tkn_vul_severity$)%20%0D%0A%20%20%20%20%7C%20fields%20tenable_uuid%20%0D%0A%20%20%20%20%7C%20join%20tenable_uuid%20type%3Dleft%20%0D%0A%20%20%20%20%20%20%20%20%5B%7C%20inputlookup%20cs_tenable_inventory%20%0D%0A%20%20%20%20%20%20%20%20%7C%20table%20tenable_uuid%2C%20ip%5D%20%0D%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0D%0A%20%20%20%20%7C%20stats%20count%20by%20ip%20%0D%0A%20%20%20%20%7C%20rename%20ip%20as%20src_ip%20%0D%0A%20%20%20%20%7C%20eval%20is_vul%20%3D%201%20%5D%20%0D%0A%7C%20append%20%0D%0A%20%20%20%20%5B%7C%20search%20%60cs_qualys_vuln%60%20%60cs_qualys_timerange%60%20STATUS%3D%22ACTIVE%22%20severity%20IN%20($tkn_vul_severity$)%20%0D%0A%20%20%20%20%7C%20fields%20IP%20%0D%0A%20%20%20%20%7C%20stats%20count%20by%20IP%20%0D%0A%20%20%20%20%7C%20rename%20IP%20as%20src_ip%20%0D%0A%20%20%20%20%7C%20eval%20is_vul%20%3D%201%20%5D%20%0D%0A%7C%20eval%20single_field%20%3D%20dest_ip.%22%23%22.dest_port.%22%23%22.action.%22%23%22.total_bytes.%22%23%22.total_packets%20%20%0D%0A%7C%20stats%20count%2C%20values(single_field)%20as%20single_field%2C%20values(is_vul)%20as%20is_vul%20by%20src_ip%20%0D%0A%7C%20search%20single_field%3D%22*%22%20%0D%0A%7C%20mvexpand%20single_field%20%0D%0A%7C%20rex%20field%3Dsingle_field%20%22%5E(%3F%3Cdest_ip%3E%5B%5E%23%5D%2B)%23(%3F%3Cdest_port%3E%5B%5E%23%5D%2B)%23(%3F%3Caction%3E%5B%5E%23%5D%2B)%23(%3F%3Ctotal_bytes%3E%5B%5E%23%5D%2B)%23(%3F%3Ctotal_packets%3E%5B%5E%23%5D%2B)%22%20%0D%0A%7C%20fillnull%20is_vul%20%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%0D%0A%7C%20rename%20lat%20as%20end_lat%2C%20lon%20as%20end_lon%2C%20Country%20as%20dest_country%2C%20City%20as%20dest_city%2C%20Region%20as%20dest_region%20%0D%0A%7C%20eval%20start_lat%3D%60cs_network_home_location_lat%60%2C%20start_lon%3D%60cs_network_home_location_lon%60%2C%20src_country%3D%60cs_home_country%60%20%0D%0A%7C%20eval%20total_KB%20%3D%20round(total_bytes%2F1024%2C%202)%20%0D%0A%7C%20table%20src_ip%2C%20src_country%2C%20dest_ip%2C%20dest_port%2C%20dest_country%2C%20dest_city%2C%20dest_region%2C%20action%2C%20is_vul%2C%20total_KB%2C%20total_packets%2C%20start_lat%2C%20start_lon%2C%20end_lat%2C%20end_lon%0D%0A%7C%20sort%200%20-is_vul%2C%20-action%2C%20-total_bytes&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
       <html>
       <style>
       .myinfo table, .myinfo th, .myinfo td, .myinfo tr {
@@ -305,19 +234,19 @@
             </tr>
             <tr>
               <td>Red</td>
-              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>allowed</b> by the firewall. (Only top 20)</td>
+              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>allowed</b> by the firewall.</td>
             </tr>
             <tr>
               <td>Orange</td>
-              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>blocked</b> by the firewall. (Only top 20)</td>
+              <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>blocked</b> by the firewall.</td>
             </tr>
             <tr>
               <td>Blue</td>
-              <td>Other Outbound traffic is <b>blocked</b> by the firewall. (Only top 20)</td>
+              <td>Other Outbound traffic is <b>blocked</b> by the firewall.</td>
             </tr>
             <tr>
               <td>Green</td>
-              <td>Other Outbound traffic <b>allowed</b> by the firewall. (Only top 20)</td>
+              <td>Other Outbound traffic <b>allowed</b> by the firewall.</td>
             </tr>
           </table>
         </div>
