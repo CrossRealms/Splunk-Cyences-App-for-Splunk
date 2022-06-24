@@ -3,7 +3,7 @@
     "displayName": "Cyences Vulnerabilities",
     "description": "Vulnerabilities Data Model for Cyences App",
     "objectSummary": {
-        "Event-Based": 4,
+        "Event-Based": 1,
         "Transaction-Based": 0,
         "Search-Based": 0
     },
@@ -206,6 +206,90 @@
                     "comment": ""
                 },
                 {
+                    "fieldName": "type",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "type",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "has_patch",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "has_patch",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "in_the_news",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "in_the_news",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "description",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "description",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "solution",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "solution",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "published_time",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "published_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "cpe",
+                    "owner": "Vulnerabilities",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "cpe",
+                    "comment": ""
+                },
+                {
                     "fieldName": "_time",
                     "owner": "BaseEvent",
                     "type": "timestamp",
@@ -304,31 +388,6 @@
                     "comment": "",
                     "calculationType": "Eval",
                     "expression": "if(isnotnull(cve) AND cve!=\"\",lower(cve),null())"
-                },
-                {
-                    "outputFields": [
-                        {
-                            "fieldName": "dest",
-                            "owner": "Vulnerabilities",
-                            "type": "string",
-                            "fieldSearch": "",
-                            "required": false,
-                            "multivalue": false,
-                            "hidden": false,
-                            "editable": true,
-                            "displayName": "dest",
-                            "comment": {
-                                "description": "The host with the discovered vulnerability. You can alias this from more specific fields, such as dest_host, dest_ip, or dest_name.",
-                                "recommended": true
-                            }
-                        }
-                    ],
-                    "calculationID": "Vulnerabilities_fillnull_dest",
-                    "owner": "Vulnerabilities",
-                    "editable": true,
-                    "comment": "",
-                    "calculationType": "Eval",
-                    "expression": "if(isnull(dest) OR dest=\"\",\"unknown\",dest)"
                 },
                 {
                     "outputFields": [
@@ -445,72 +504,9 @@
                 }
             ],
             "lineage": "Vulnerabilities"
-        },
-        {
-            "objectName": "High_Critical_Vulnerabilities",
-            "displayName": "High Or Critical Vulnerabilities",
-            "parentName": "Vulnerabilities",
-            "comment": {
-                "tags": [
-                    "vulnerability",
-                    "report"
-                ]
-            },
-            "fields": [],
-            "calculations": [],
-            "constraints": [
-                {
-                    "search": "(severity=\"high\" OR severity=\"critical\")",
-                    "owner": "Vulnerabilities.High_Critical_Vulnerabilities"
-                }
-            ],
-            "lineage": "Vulnerabilities.High_Critical_Vulnerabilities"
-        },
-        {
-            "objectName": "Medium_Vulnerabilities",
-            "displayName": "Medium Vulnerabilities",
-            "parentName": "Vulnerabilities",
-            "comment": {
-                "tags": [
-                    "vulnerability",
-                    "report"
-                ]
-            },
-            "fields": [],
-            "calculations": [],
-            "constraints": [
-                {
-                    "search": "severity=\"medium\"",
-                    "owner": "Vulnerabilities.Medium_Vulnerabilities"
-                }
-            ],
-            "lineage": "Vulnerabilities.Medium_Vulnerabilities"
-        },
-        {
-            "objectName": "Low_Informational_Vulnerabilities",
-            "displayName": "Low Or Informational Vulnerabilities",
-            "parentName": "Vulnerabilities",
-            "comment": {
-                "tags": [
-                    "vulnerability",
-                    "report"
-                ]
-            },
-            "fields": [],
-            "calculations": [],
-            "constraints": [
-                {
-                    "search": "(severity=\"low\" OR severity=\"informational\")",
-                    "owner": "Vulnerabilities.Low_Informational_Vulnerabilities"
-                }
-            ],
-            "lineage": "Vulnerabilities.Low_Informational_Vulnerabilities"
         }
     ],
     "objectNameList": [
-        "Vulnerabilities",
-        "High_Critical_Vulnerabilities",
-        "Medium_Vulnerabilities",
-        "Low_Informational_Vulnerabilities"
+        "Vulnerabilities"
     ]
 }
