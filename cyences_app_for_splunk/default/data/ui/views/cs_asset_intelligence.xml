@@ -132,7 +132,7 @@
   </row>
   <row>
     <panel>
-      <title>Host Summary $tkn_filter_ip_host_label$</title>
+      <title>Host Vulnerability Summary $tkn_filter_ip_host_label$</title>
       <input type="dropdown" token="tkn_vendor_product_host_summary" searchWhenChanged="true">
         <label>Vendor Product</label>
         <choice value="*">All</choice>

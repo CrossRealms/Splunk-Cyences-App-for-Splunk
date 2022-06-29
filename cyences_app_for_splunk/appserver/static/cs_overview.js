@@ -10,6 +10,7 @@ require([
     let report_links = [
         { id: 'ad_reports_link', url: baseURL.concat('cs_ad_reports')},
         { id: 'windows_reports_link', url: baseURL.concat('cs_windows_reports')},
+        { id: 'windows_patch_link', url: baseURL.concat('cs_windows_patch')},
         { id: 'linux_reports_link', url: baseURL.concat('cs_linux_reports')},
         { id: 'o365_reports_link', url: baseURL.concat('cs_o365_reports')},
         { id: 'aws_reports_link', url: baseURL.concat('cs_aws_user_activity')},
@@ -27,8 +28,7 @@ require([
         { id: 'malicious_reports_link', url: baseURL.concat('cs_malicious_ip_list')},
         { id: 'device_inventory_table_link', url: baseURL.concat('cs_device_inventory_table')},
         { id: 'lansweeper_link', url: baseURL.concat('cs_lansweeper')},
-        { id: 'qualys_link', url: baseURL.concat('cs_qualys')},
-        { id: 'tenable_link', url: baseURL.concat('cs_tenable')},
+        { id: 'vulnerability_link', url: baseURL.concat('cs_vulnerability')},
     ];
 
     // Iterate through the link and add the onClick method

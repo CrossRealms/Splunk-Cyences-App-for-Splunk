@@ -28,6 +28,7 @@
       <html>
         <div class="box" id="ad_reports_link">Active Directory</div>
         <div class="box" id="windows_reports_link">Windows</div>
+        <div class="box" id="windows_patch_link">Windows Patch</div>
         <div class="box" id="linux_reports_link">Linux</div>
         <div class="box" id="o365_reports_link">Office 365</div>
         <div class="box" id="aws_reports_link">AWS</div>
@@ -45,8 +46,7 @@
         <div class="box" id="malicious_reports_link">Malicious IP List</div>
         <div class="box" id="device_inventory_table_link">Device Inventory</div>
         <div class="box" id="lansweeper_link">Lansweeper</div>
-        <div class="box" id="qualys_link">Qualys</div>
-        <div class="box" id="tenable_link">Tenable</div>
+        <div class="box" id="vulnerability_link">Vulnerability</div>
       </html>
     </panel>
   </row>
