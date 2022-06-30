@@ -23,6 +23,7 @@ require([
         { macro_name: 'cs_ad_active_directory', input_id: 'macro_data_ad_active_directory', button_id: 'macro_data_ad_active_directory_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_ad_health_logs', input_id: 'macro_data_ad_health_logs', button_id: 'macro_data_ad_health_logs_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_sysmon', input_id: 'macro_data_sysmon', button_id: 'macro_data_sysmon_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_fortigate', input_id: 'macro_data_fortigate', button_id: 'macro_data_fortigate_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_authentication_indexes', input_id: 'macro_data_authentication', button_id: 'macro_data_authentication_button', msg_id: 'macro_data_msg'},

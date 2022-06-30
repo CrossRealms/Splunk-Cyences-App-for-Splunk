@@ -238,4 +238,33 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Elapsed Time Per Session</title>
+      <table>
+        <search>
+          <query>`cs_vpn_indexes` eventtype="cs_*_vpn_logout" duration=* $User$ 
+| eval SourceIP=coalesce(public_ip, src), PrivateIP=if(coalesce(private_ip, tunnelip)="0.0.0.0", null(), coalesce(private_ip, tunnelip)) 
+| fillnull value="Unknown" SourceIP 
+| dedup _time user SourceIP 
+| iplocation SourceIP 
+| eval Country = if(isnull(Country) OR Country="", "Unknown", Country) 
+| eval City = if(isnull(City) OR City="", "Unknown", City) 
+| search $Country$ $City$ 
+| `cs_vpn_dashboard_filter` 
+| eval duration = tostring(duration, "duration") 
+| table _time user SourceIP PrivateIP duration City Country 
+| rename user as User, duration as Duration</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_vpn_indexes%60%20TERM($row.User$)%20user%3D$row.User$%20TERM($row.SourceIP$)%20src%3D$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
 </form>
