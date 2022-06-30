@@ -183,6 +183,15 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">FortiGate Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_fortigate"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_fortigate_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Palo Alto Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_palo"/>
