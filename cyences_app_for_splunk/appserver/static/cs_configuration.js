@@ -180,6 +180,8 @@ require([
         { macro_name: 'cs_authentication_vpn_login_attemps_outside_working_hour_filter', input_id: 'macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter', button_id: 'macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_new_location_login_pct_limit', input_id: 'macro_cs_authentication_new_location_login_pct_limit', button_id: 'macro_cs_authentication_new_location_login_pct_limit_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_successful_vpn_login_from_new_location_filter', input_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter', button_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter_button', msg_id: 'macro_authentication_msg'},
+        { macro_name: 'cs_authentication_vpn_session_duration_limit', input_id: 'macro_cs_authentication_vpn_session_duration_limit', button_id: 'macro_cs_authentication_vpn_session_duration_limit_button', msg_id: 'macro_authentication_msg'},
+        { macro_name: 'cs_authentication_vpn_long_running_session_disconnected_filter', input_id: 'macro_cs_authentication_vpn_long_running_session_disconnected_filter', button_id: 'macro_cs_authentication_vpn_long_running_session_disconnected_filter_button', msg_id: 'macro_authentication_msg'},
 
         /* GSuite */
         { macro_name: 'cs_gsuite_multiple_password_changes_filter', input_id: 'macro_cs_gsuite_multiple_password_changes_filter', button_id: 'macro_cs_gsuite_multiple_password_changes_filter_button', msg_id: 'macro_gsuite_msg'},
