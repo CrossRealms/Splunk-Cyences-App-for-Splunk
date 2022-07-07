@@ -55,7 +55,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 
 ## Vulnerability
 
-Supported Vendor Products: Qualys, Tenable IO, Tenable Nessus, CrowdStrike Spotlight
+Supported Vendor Products: Qualys, Tenable IO, Nessus, CrowdStrike Spotlight
 
 The above vendor security solutions are designed to detect vulnerabilities present in your environment.  
 

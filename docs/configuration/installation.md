@@ -67,8 +67,8 @@ For optimal performance, it is recommended to enable the data model acceleration
 | Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum) |
 | Authentication | cs_summariesonly_authentication | 7 day (Minimum) |
 | Network Resolution (DNS) | cs_summariesonly_network_resolution_dns |  7 day (Minimum) |
-| Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities |  1 year (Minimum) |
-| Cyences_Assets | cs_summariesonly_cyences_assets |  1 year (Minimum) |
+| Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities |  1 month (Minimum) |
+| Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
 
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 

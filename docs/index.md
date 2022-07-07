@@ -45,7 +45,7 @@ Apart from alerts and reports, the Cyences App also integrates with some other w
 * Device Inventory Table
 * Globally Detected Malicious IPs
 * Lansweeper
-* Vulnerability
+* Vulnerability (Qualys, Tenable, CrowdStrike Spotlight)
 
 How does the Cyences app differentiate itself from Enterprise Security?
 

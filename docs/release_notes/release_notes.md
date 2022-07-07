@@ -10,22 +10,6 @@ has_children: true
 
 ## Version 2.3.0 (July 2022)
 
-* ### New Cyences_Vulnerabilities and Cyences_Assets datamodel
-
-    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
-
-    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Tenable Nessus and CrowdStrike Spotlight vulnerability events to map with `Cyences_Vulnerabilities` datamodel.
-
-    * Added field extraction, eventtypes and tags for Qualys and Tenable asset events to map with `Cyences_Assets` datamodel.
-
-    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
-
-    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
-
-    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
-
-    * Replaced `Qualys Host Summary` and `Tenable Vulnerabilities` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Summary` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
-
 * ### New Vulnerability Dashboard
 
     * Replaced `Tenable` and `Qualys` dashboard with a new `Vulnerability` dashboard.
@@ -34,6 +18,22 @@ has_children: true
 
    * Authentication
       * `Authentication - Long Running VPN Session Disconnected`
+
+* ### New Cyences_Vulnerabilities and Cyences_Assets datamodel (Important for Splunk Admins Only)
+
+    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
+
+    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Nessus and CrowdStrike Spotlight vulnerability events to map with `Cyences_Vulnerabilities` datamodel.
+
+    * Added field extraction, eventtypes and tags for Qualys, Tenable IO and CrowdStrike Spotlight asset events to map with `Cyences_Assets` datamodel.
+
+    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
+
+    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
+
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
+
+    * Replaced `Qualys Host Summary` and `Tenable Host Summary` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Vulnerabilities` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
 
 * ### Enhancements 
 
@@ -64,7 +64,7 @@ has_children: true
 * ### Bug Fixes
 
     * Forensics
-        * Resolved the Search dropdown issue for `O365 - Azure Active Directory -*` dropdown values.
+        * Resolved the search dropdown issue for `O365 - Azure Active Directory -*` alerts on the `Overview` to `Forensics` dashboard.
 
     * Office 365
         * Resolved the duplicate event issue for O365 management activity related alerts and dashboard.
@@ -73,7 +73,7 @@ has_children: true
 
 ## Upgrade Guide from 2.2.0 to 2.3.0
 
-* After App Upgrade, Run the `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` with last 1 year time range to populate `cs_all_assets` and `cs_all_vuln` lookups with historical data.
+* After App Upgrade, Run the `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` with the last 1-year or longer time range as necessary to populate the historical data in the `cs_all_assets` and `cs_all_vuln` lookups. Make sure to use `summariesonly=false` in the search to cover all the data.
 
 * Enable the `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel acceleration to improve the search query performance. For datamodel acceleration steps refer: Doc Home page -> Configuration -> App Installation and Configuration -> Data Model Acceleration & Macros
 
