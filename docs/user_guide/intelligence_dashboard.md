@@ -14,8 +14,7 @@ Cyences version 1.2.0 introduces a new drop-down option named Intelligence in th
 * Device Inventory
 * Globally Detected Malicious IPs
 * Lansweeper
-* Qualys
-* Tenable
+* Vulnerability
 
 ## Globally Detected Malicious IPs
 
@@ -54,21 +53,18 @@ The Lansweeper dashboard in the Cyences app displays information about every IT 
 
 The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System for improved security on those assets. 
 
-## Qualys and Tenable
+## Vulnerability
 
-Qualys and Tenable are security solutions that are designed to detect vulnerabilities present in your environment.  
+Supported Vendor Products: Qualys, Tenable IO, Tenable Nessus, CrowdStrike Spotlight
 
-The Qualys dashboard is powered by Qualys' data [https://www.qualys.com/](https://www.qualys.com/) and the Tenable dashboard is powered by Tenable's data [https://www.tenable.com/](https://www.tenable.com/). 
+The above vendor security solutions are designed to detect vulnerabilities present in your environment.  
 
-The Cyences app utilizes the data provided by Qualys and Tenable to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
+The Cyences app utilizes the data provided by those vendor product to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/qualys_dashboard.png?raw=true)
+The dashboard is designed to view Vulnerability count by severity, Host wise vulnerability summary, Vulnerability list. Splunk users can further use drilldown capability to view vulnerability list for a single host, list of hosts affected by a vulnerability.
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/tenable_dashboard.png?raw=true)
 
-Both of the dashboards that were designed for Qualys and Tenable let Splunk users expand any row within the table to view all of the potential vulnerabilities that are associated with the selected device. 
-
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerabilities_table.png?raw=true)
+![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
 
 ## Device Inventory
 
@@ -118,8 +114,8 @@ This dashboard shows detailed information about a specific asset or device. The 
 This dashboard displays the following information about devices: 
 
 * Lansweeper information 
-* Qualys or Tenable information and vulnerabilities 
-    * Also, if there is any traffic on the vulnerable ports for a device 
+* Host Vulnerability Summary
+* Host Vulnerabilities
 * Sophos + Windows Defender (Antivirus) status and related events 
 * VPN activities from the device or by the selected user
 * Various authentication activities like RDP and Linux logins 

@@ -8,61 +8,73 @@ has_children: true
 
 # Release Notes
 
-## Version 2.2.0 (June 2022)
+## Version 2.3.0 (July 2022)
 
+* ### New Cyences_Vulnerabilities and Cyences_Assets datamodel
 
-* ### New Windows Dashboard 
-    * Added `Windows Patch` dashboard to monitor for Windows update related events.
+    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
+
+    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Tenable Nessus and CrowdStrike Spotlight vulnerability events to map with `Cyences_Vulnerabilities` datamodel.
+
+    * Added field extraction, eventtypes and tags for Qualys and Tenable asset events to map with `Cyences_Assets` datamodel.
+
+    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
+
+    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
+
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
+
+    * Replaced `Qualys Host Summary` and `Tenable Vulnerabilities` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Summary` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
+
+* ### New Vulnerability Dashboard
+
+    * Replaced `Tenable` and `Qualys` dashboard with a new `Vulnerability` dashboard.
 
 * ### Added New Alerts
 
-   * Active Directory
-      * `AD - Multiple Password Changes in Short Time Period` 
-      * `AD - Bulk User Creation or Deletion` 
-           
-   * G Suite
-      * `G Suite - Multiple Password Changes in Short Time Period` 
-      * `G Suite - Bulk User Creation or Deletion` 
+   * Authentication
+      * `Authentication - Long Running VPN Session Disconnected`
 
 * ### Enhancements 
 
-    * Active Directory 
-        * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
+    * Network Reports
+        * Updated Map chart from `network_telemetry_map` to Splunk Map to show all the traffic instead of top 20 traffic detail.
 
-    * G Suite
-        * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
-
-    * Linux/Unix 
-        * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
-        * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
-
-    * Network Reports   
-        * Added drilldown to the `Port Scanning Attempts` map.
-
-    * Office 365
-        * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
-        * Added `Login by location` map to the `Office 365` dashboard.
-        * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
-
-    * Ransomware Alerts
-        * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
-
+    * Palo Alto Firewall
+        * Added `dvc_name` field in the `List of Firewall Devices` dashboard panel.
+    
     * VPN 
-        * Added `Successful Session` dashboard panel.
-        * Added drilldown to the `Connected Workforce by Location` map.
+        * Added `Elapsed Time Per Session` dashboard panel.
 
-    * Windows Reports 
-        * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
+    * Updated splunklib to the latest version (v1.7.0)
 
+    * Renamed below eventtypes to follow consistence naming convention.
+        | Before | Now |
+        |---|---|
+        | cs_palo_gp_old_login | cs_palo_gp_old_vpn_login |
+        | cs_palo_gp_old_logout | cs_palo_gp_old_vpn_logout |
+        | cs_palo_gp_new_login | cs_palo_gp_new_vpn_login |
+        | cs_palo_gp_new_connected | cs_palo_gp_new_vpn_connected |
+        | cs_palo_gp_new_logout | cs_palo_gp_new_logout |
+
+    * Added `src_ip`, `src` and `private_ip` field extraction for the Cisco VPN logoff event.
+
+    * Added `cs_fortigate` macro.
 
 * ### Bug Fixes
-    * Fixed a drilldown issue for the `Login Details` dashboard panel in the `VPN` dashboard.
 
-    * Fixed the source value in the `cs_sysmon macro` macro.
+    * Forensics
+        * Resolved the Search dropdown issue for `O365 - Azure Active Directory -*` dropdown values.
+
+    * Office 365
+        * Resolved the duplicate event issue for O365 management activity related alerts and dashboard.
 
 
-## Upgrade Guide from 2.1.0 to 2.2.0
 
-* Users need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` dashboard panel in the `Windows Reports` dashboard.
+## Upgrade Guide from 2.2.0 to 2.3.0
 
-* The `openPorts.sh` scripted input is no longer reqired for the Cyences App. Users can disable the input from Splunk Add-on for Linux and Unix.
+* After App Upgrade, Run the `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` with last 1 year time range to populate `cs_all_assets` and `cs_all_vuln` lookups with historical data.
+
+* Enable the `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel acceleration to improve the search query performance. For datamodel acceleration steps refer: Doc Home page -> Configuration -> App Installation and Configuration -> Data Model Acceleration & Macros
+
+* The `Tenable` and `Qualys` dashboard will be replaced with a new `Vulnerability` dashboard.
