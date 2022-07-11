@@ -25,7 +25,7 @@ has_children: true
 
     * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Nessus and CrowdStrike Spotlight vulnerability events to map with `Cyences_Vulnerabilities` datamodel.
 
-    * Added field extraction, eventtypes and tags for Qualys, Tenable IO and CrowdStrike Spotlight asset events to map with `Cyences_Assets` datamodel.
+    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Nessus and CrowdStrike Spotlight asset events to map with `Cyences_Assets` datamodel.
 
     * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
 
