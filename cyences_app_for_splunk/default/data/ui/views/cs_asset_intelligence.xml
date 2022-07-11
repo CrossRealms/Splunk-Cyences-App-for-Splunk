@@ -203,6 +203,8 @@
 | makemv host delim="~~" 
 | makemv mac_address delim="~~" 
 | search $tkn_filter_ip_host$ 
+| `cs_human_readable_time_format(first_found)`
+| `cs_human_readable_time_format(last_found)`
 | eval sort_field=case(severity="critical",1, severity="high",2, severity="medium",3, severity="low",4, severity="informational",5, 1=1, 6) 
 | sort sort_field
 | table asset_id vul_id signature category type severity status cve cvss cpe protocol port has_patch in_the_news published_time first_found last_found solution description</query>
