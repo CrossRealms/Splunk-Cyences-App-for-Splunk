@@ -8,6 +8,12 @@
         <latest>now</latest>
       </default>
     </input>
+    <input type="text" token="tkn_search_common">
+        <label>Common Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
   </fieldset>
   <row>
     <panel>
@@ -33,9 +39,16 @@
   <row>
     <panel>
       <title>AD - Group Changed</title>
+      <input type="text" token="tkn_search_group_changed">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`ms_obj_changes_base_cat_customised("groupchanged")` 
+| search $tkn_search_common|s$ $tkn_search_group_changed|s$
 | `ms_obj_group_change_out` 
 | fields - member_obj_lkp 
 | rename adminuser as "Administrator",msad_action as "Action",group_obj_nm as "Group Name",MSADGroupType as "Group Type",MSADGroupClass AS "Group Class",signature as "Changes" | `cs_ad_group_changed_filter`</query>
@@ -51,9 +64,16 @@
   <row>
     <panel>
       <title>AD - Group Membership Changed</title>
+      <input type="text" token="tkn_search_group_membership_changed">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`ms_obj_changes_base_cat_customised("groupmembershipchanged")`
+| search $tkn_search_common|s$ $tkn_search_group_membership_changed|s$
 | `ms_obj_groupmembership_change_out`
 | rename  group_obj_nm as "Target_Group",MSADGroupClass as "Class",msad_action AS "Action",member AS "Target Member",member_obj_lkp AS "Target Member Lookup",MSADGroupType as "Type",adminuser as "Admin User",MSADChanges as "Changes"
 | `cs_ad_group_membership_changed_filter`</query>
@@ -69,9 +89,16 @@
   <row>
     <panel>
       <title>AD - Group Policy Changed</title>
+      <input type="text" token="tkn_search_group_policy_changed">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`ms_obj_changes_base_cat_customised("grouppolicychanged")`
+| search $tkn_search_common|s$ $tkn_search_group_policy_changed|s$
 | fields _time, session_id, src_nt_domain, src_user,Object_Name_Guid,displayName,dir_svcs_action,AttributeLDAPDisplayName,AttributeValue,MSADChangedAttributes,Correlation_ID,signature,msad_action,Old_DN,New_DN
 | fillnull value="" Correlation_ID,msad_action
 | eval adminuser=if(isnull(src_nt_domain),src_user,src_nt_domain."\\".src_user) 
@@ -99,9 +126,16 @@
   <row>
     <panel>
       <title>AD - User Changed</title>
+      <input type="text" token="tkn_search_user_changed">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`ms_obj_changes_base_cat_customised("userchanged")`
+| search $tkn_search_common|s$ $tkn_search_user_changed|s$
 | `ms_obj_user_change_out`
 | rename adminuser as "Administrator",msad_action as "Action",dest_user_subject as "Target User ID",MSADChanges as "Changes" | `cs_ad_user_changed_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -120,9 +154,16 @@
   <row>
     <panel>
       <title>AD - Password Change Outside of Working Hours</title>
+      <input type="text" token="tkn_search_password_change_outside_working_hour">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
+          | search $tkn_search_common|s$ $tkn_search_password_change_outside_working_hour|s$
           | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
           | table _time, ComputerName, Target_Account_Name, Target_Account_Domain, Subject_Account_Name Subject_Account_Domain Caller_Workstation, msad_action, action, EventCode | `cs_ad_password_change_outside_working_hour_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -134,16 +175,23 @@
       </table>
       <html>
         <p>
-          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.\</p>
+          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.</p>
       </html>
     </panel>
   </row>
   <row>
     <panel>
       <title>AD - User Account Locked Out</title>
+      <input type="text" token="tkn_search_user_locked_out">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`cs_wineventlog_security` (EventCode=4740) 
+| search $tkn_search_common|s$ $tkn_search_user_locked_out|s$
 | eval Account_Name=mvfilter(NOT match(Account_Name, "\$")) 
 | fields ComputerName Account_Domain Account_Name Caller_Computer_Name | fields - _raw
 | rename ComputerName as "Domain_Controller", Account_Domain as User_Domain ,Account_Name as "User_Name", Caller_Computer_Name as "Source_Computer_Name"
@@ -161,9 +209,16 @@
   <row>
     <panel>
       <title>Successful Logons</title>
+      <input type="text" token="tkn_search_successful_logon">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode="4624" 
+| search $tkn_search_common|s$ $tkn_search_successful_logon|s$
 | eval User_Domain = if(mvcount(Account_Domain)==2, mvindex(Account_Domain, 1), Account_Domain) 
 | eval User_Name = if(mvcount(Account_Name)==2, mvindex(Account_Name, 1), Account_Name) 
 | rename Workstation_Name as Source_ComputerName 
@@ -182,9 +237,16 @@
   <row>
     <panel>
       <title>Failed Logons</title>
+      <input type="text" token="tkn_search_failed_logon">
+        <label>Search</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode="4625" 
+| search $tkn_search_common|s$ $tkn_search_failed_logon|s$
 | eval User_Domain = if(mvcount(Account_Domain)==2, mvindex(Account_Domain, 1), Account_Domain) 
 | eval User_Name = if(mvcount(Account_Name)==2, mvindex(Account_Name, 1), Account_Name) 
 | rename Workstation_Name as Source_ComputerName 
