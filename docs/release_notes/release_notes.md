@@ -36,6 +36,8 @@ has_children: true
     * Replaced `Qualys Host Summary` and `Tenable Host Summary` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Vulnerabilities` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
 
 * ### Enhancements 
+    * Active Directory
+        * Added more filters in the Active Directory dashboard
 
     * Network Reports
         * Updated Map chart from `network_telemetry_map` to Splunk Map to show all the traffic instead of top 20 traffic detail.
