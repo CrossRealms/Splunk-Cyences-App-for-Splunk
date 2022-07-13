@@ -60,6 +60,7 @@ CONTRIBUTORS
 * Preston Carter
 * Ahad Ghani
 * Bhavik Bhalodia
+* Mahir Chavda
 
 
 SUPPORT

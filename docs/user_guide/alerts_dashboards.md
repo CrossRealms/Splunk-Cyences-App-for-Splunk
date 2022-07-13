@@ -23,6 +23,7 @@ There are several security related alerts to choose from and they are all locate
     * Authentication - Bruteforce Attempt from a Source
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
 
 * Credentials Compromised Alerts
     * Credential Compromise - Windows - Credential Dump From Registry via Reg exe
@@ -195,7 +196,7 @@ There are several security related reports to choose from and they are all locat
     * Internal Traffic
     * Outbound Network Telemetry
     * Port Scanning Attempts
-  
+
 ![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_reports.png?raw=true)
 
 * Office 365 Reports
@@ -226,8 +227,6 @@ There are several security related reports to choose from and they are all locat
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
 
-* Qualys Report
-
 * Sophos Reports 
     * Application Blocked
     * Certificate/License Expiration Messages
@@ -243,13 +242,15 @@ There are several security related reports to choose from and they are all locat
     * Web Control Violation
     * Web Filtering Blocked
 
-* Tenable Report
+* Vulnerability Report
 
 * VPN Reports
     * Connected Workforce by Location
+    * Elapsed Time Per Session
     * Logins by Country
     * Logins by Success/Failure
     * Login Details
+    * Successful Session
     * Successful vs Failed Logins
     * Unique Users by Country
 

@@ -8,61 +8,55 @@ has_children: true
 
 # Release Notes
 
-## Version 2.2.0 (June 2022)
+## Version 2.3.0 (July 2022)
 
+* ### New Vulnerability Dashboard
 
-* ### New Windows Dashboard 
-    * Added `Windows Patch` dashboard to monitor for Windows update related events.
+    * Replaced `Tenable` and `Qualys` dashboard with a new `Vulnerability` dashboard.
 
-* ### Added New Alerts
+    * Replaced `Qualys Host Summary` and `Tenable Host Summary` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Vulnerabilities` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
 
-   * Active Directory
-      * `AD - Multiple Password Changes in Short Time Period` 
-      * `AD - Bulk User Creation or Deletion` 
-           
-   * G Suite
-      * `G Suite - Multiple Password Changes in Short Time Period` 
-      * `G Suite - Bulk User Creation or Deletion` 
+* ### VPN Related Enhancements
 
-* ### Enhancements 
+    * Added `Authentication - Long Running VPN Session Disconnected` alert.
 
-    * Active Directory 
-        * Made improvements to the `AD - Password Change Outside Working Hour` alert and dashboard panel to display additional fields.
+    * Added `Elapsed Time Per Session` dashboard panel in the `VPN` dashboard.
 
-    * G Suite
-        * Added `User Created` and `User Deleted` dashboard panels to the G Suite dashboard.
+* ### Enhancements
 
-    * Linux/Unix 
-        * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
-        * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
+    * Active Directory
+        * Added more filters in the Active Directory dashboard
 
-    * Network Reports   
-        * Added drilldown to the `Port Scanning Attempts` map.
+    * Network Reports
+        * Updated Map chart from `network_telemetry_map` to Splunk Map to show all the traffic instead of top 20 traffic detail.
 
-    * Office 365
-        * Updated the alerts and dashboard to use the new `o365:service:healthIssue` sourcetype (`o365:service:status` sourcetype has been retired by the Add-on).
-        * Added `Login by location` map to the `Office 365` dashboard.
-        * Added `authentication_method` and `user_type` fields for O365 login related alerts and dashboard panels.
-
-    * Ransomware Alerts
-        * Enhanced filters for paths to reduce false positives for both `Ransomware - Calculate UpperBound for Spike in File Writes` and `Ransomware - Spike in File Writes`.
-
-    * VPN 
-        * Added `Successful Session` dashboard panel.
-        * Added drilldown to the `Connected Workforce by Location` map.
-
-    * Windows Reports 
-        * Added `Listening Ports on Host` dashboard panel to the `Windows Reports` dashboard. For data collection, users need to enable the `win_listening_ports` scripted input.
-
+    * Palo Alto Firewall
+        * Added `dvc_name` field in the `List of Firewall Devices` dashboard panel.
 
 * ### Bug Fixes
-    * Fixed a drilldown issue for the `Login Details` dashboard panel in the `VPN` dashboard.
 
-    * Fixed the source value in the `cs_sysmon macro` macro.
+    * Forensics
+        * Resolved the search dropdown issue for `O365 - Azure Active Directory -*` alerts on the `Overview` to `Forensics` dashboard.
 
+    * Office 365
+        * Resolved the duplicate event issue for O365 management activity related alerts and dashboard.
 
-## Upgrade Guide from 2.1.0 to 2.2.0
+* ### For Splunk Admins Only
 
-* Users need to enable the `win_listening_ports` scripted input from the Splunk Add-on for Windows to populate the `Listening Ports on Host` dashboard panel in the `Windows Reports` dashboard.
+    * Updated splunklib to the latest version (v1.7.0)
 
-* The `openPorts.sh` scripted input is no longer reqired for the Cyences App. Users can disable the input from Splunk Add-on for Linux and Unix.
+    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
+
+    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
+
+    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
+
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
+
+## Upgrade Guide from 2.2.0 to 2.3.0
+
+* After App Upgrade, Run the `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` with the last 1-year or longer time range as necessary to populate the historical data in the `cs_all_assets` and `cs_all_vuln` lookups. Make sure to use `summariesonly=false` in the search to cover all the data.
+
+* Enable the `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel acceleration to improve the search query performance. For datamodel acceleration steps refer: Doc Home page -> Configuration -> App Installation and Configuration -> Data Model Acceleration & Macros
+
+* The `Tenable` and `Qualys` dashboard will be replaced with a new `Vulnerability` dashboard.
