@@ -14,28 +14,16 @@ has_children: true
 
     * Replaced `Tenable` and `Qualys` dashboard with a new `Vulnerability` dashboard.
 
-* ### Added New Alerts
-
-   * Authentication
-      * `Authentication - Long Running VPN Session Disconnected`
-
-* ### New Cyences_Vulnerabilities and Cyences_Assets datamodel (Important for Splunk Admins Only)
-
-    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
-
-    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Nessus and CrowdStrike Spotlight vulnerability events to map with `Cyences_Vulnerabilities` datamodel.
-
-    * Added field extraction, eventtypes and tags for Qualys, Tenable IO, Nessus and CrowdStrike Spotlight asset events to map with `Cyences_Assets` datamodel.
-
-    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
-
-    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
-
-    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
-
     * Replaced `Qualys Host Summary` and `Tenable Host Summary` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Vulnerabilities` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
 
-* ### Enhancements 
+* ### VPN Related Enhancements
+
+    * Added `Authentication - Long Running VPN Session Disconnected` alert.
+
+    * Added `Elapsed Time Per Session` dashboard panel in the `VPN` dashboard.
+
+* ### Enhancements
+
     * Active Directory
         * Added more filters in the Active Directory dashboard
 
@@ -44,24 +32,6 @@ has_children: true
 
     * Palo Alto Firewall
         * Added `dvc_name` field in the `List of Firewall Devices` dashboard panel.
-    
-    * VPN 
-        * Added `Elapsed Time Per Session` dashboard panel.
-
-    * Updated splunklib to the latest version (v1.7.0)
-
-    * Renamed below eventtypes to follow consistence naming convention.
-        | Before | Now |
-        |---|---|
-        | cs_palo_gp_old_login | cs_palo_gp_old_vpn_login |
-        | cs_palo_gp_old_logout | cs_palo_gp_old_vpn_logout |
-        | cs_palo_gp_new_login | cs_palo_gp_new_vpn_login |
-        | cs_palo_gp_new_connected | cs_palo_gp_new_vpn_connected |
-        | cs_palo_gp_new_logout | cs_palo_gp_new_logout |
-
-    * Added `src_ip`, `src` and `private_ip` field extraction for the Cisco VPN logoff event.
-
-    * Added `cs_fortigate` macro.
 
 * ### Bug Fixes
 
@@ -71,7 +41,17 @@ has_children: true
     * Office 365
         * Resolved the duplicate event issue for O365 management activity related alerts and dashboard.
 
+* ### For Splunk Admins Only
 
+    * Updated splunklib to the latest version (v1.7.0)
+
+    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
+
+    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
+
+    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
+
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
 
 ## Upgrade Guide from 2.2.0 to 2.3.0
 
