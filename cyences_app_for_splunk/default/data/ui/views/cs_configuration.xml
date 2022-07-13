@@ -337,6 +337,24 @@
               <button id="macro_datamodel_authentication_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">Cyences Vulnerabilities Data-Model</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_datamodel_cyences_vulnerabilities"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_datamodel_cyences_vulnerabilities_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">Cyences Assets Data-Model</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_datamodel_cyences_assets"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_datamodel_cyences_assets_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>

@@ -1,0 +1,211 @@
+{
+    "modelName": "Cyences_Assets",
+    "displayName": "Cyences Assets",
+    "description": "",
+    "objectSummary": {
+        "Event-Based": 1,
+        "Transaction-Based": 0,
+        "Search-Based": 0
+    },
+    "objects": [
+        {
+            "objectName": "Assets",
+            "displayName": "Assets",
+            "parentName": "BaseEvent",
+            "comment": "",
+            "fields": [
+                {
+                    "fieldName": "asset_id",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "asset_id",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "os",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "os",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "state",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "state",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "vendor_product",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "vendor_product",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "last_scan_time",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "last_scan_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "asset_type",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "asset_type",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "os_version",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "os_version",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "user",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "user",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "asset_hostname",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "asset_hostname",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "asset_ip",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "asset_ip",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "asset_mac_address",
+                    "owner": "Assets",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "asset_mac_address",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "_time",
+                    "owner": "BaseEvent",
+                    "type": "timestamp",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "_time",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "host",
+                    "owner": "BaseEvent",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "host",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "source",
+                    "owner": "BaseEvent",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "source",
+                    "comment": ""
+                },
+                {
+                    "fieldName": "sourcetype",
+                    "owner": "BaseEvent",
+                    "type": "string",
+                    "fieldSearch": "",
+                    "required": false,
+                    "multivalue": false,
+                    "hidden": false,
+                    "editable": true,
+                    "displayName": "sourcetype",
+                    "comment": ""
+                }
+            ],
+            "calculations": [],
+            "constraints": [
+                {
+                    "search": "(`cs_cim_assets_indexes`) tag=asset tag=cyences",
+                    "owner": "Assets"
+                }
+            ],
+            "lineage": "Assets"
+        }
+    ],
+    "objectNameList": [
+        "Assets"
+    ]
+}

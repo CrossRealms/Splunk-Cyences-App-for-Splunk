@@ -55,6 +55,8 @@ require([
         { macro_name: 'cs_summariesonly_network_traffic', input_id: 'macro_datamodel_network_traffic', button_id: 'macro_datamodel_network_traffic_button', msg_id: 'macro_datamodel_msg'},
         { macro_name: 'cs_summariesonly_authentication', input_id: 'macro_datamodel_authentication', button_id: 'macro_datamodel_authentication_button', msg_id: 'macro_datamodel_msg'},
         { macro_name: 'cs_summariesonly_network_resolution_dns', input_id: 'macro_datamodel_network_resolution_dns', button_id: 'macro_datamodel_network_resolution_dns_button', msg_id: 'macro_datamodel_msg'},
+        { macro_name: 'cs_summariesonly_cyences_vulnerabilities', input_id: 'macro_datamodel_cyences_vulnerabilities', button_id: 'macro_datamodel_cyences_vulnerabilities_button', msg_id: 'macro_datamodel_msg'},
+        { macro_name: 'cs_summariesonly_cyences_assets', input_id: 'macro_datamodel_cyences_assets', button_id: 'macro_datamodel_cyences_assets_button', msg_id: 'macro_datamodel_msg'},
 
         /* Windows & AD */
         { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},

@@ -1,5 +1,10 @@
 <form theme="dark" script="cs_asset_intelligence.js" version="1.1">
   <label>Asset Intelligence</label>
+  <init>
+    <!-- For Dev Only
+      <set token="for_dev_only">1</set>
+    -->
+  </init>
   <search id="base_inventory_table">
     <query>| `cs_device_inventory_data_format`</query>
     <earliest>0</earliest>
@@ -38,6 +43,7 @@
   </row>
   <row depends="$for_dev_only$">
     <panel>
+      <title>For Dev Only</title>
       <html>
         <br/>Device Inventory -&gt; $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
@@ -124,77 +130,84 @@
       </html>
     </panel>
   </row>
-  <row depends="$tkn_show_hide_qualys$">
+  <row>
     <panel>
-      <title>Qualys Host Summary $tkn_filter_ip_only_label$</title>
-      <event>
+      <title>Host Vulnerability Summary $tkn_filter_ip_host_label$</title>
+      <input type="dropdown" token="tkn_vendor_product_host_summary" searchWhenChanged="true">
+        <label>Vendor Product</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>vendor_product</fieldForLabel>
+        <fieldForValue>vendor_product</fieldForValue>
         <search>
-          <query>`cs_qualys_hostsummary` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>| inputlookup cs_all_vuln | fields vendor_product | dedup vendor_product</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
         </search>
-        <option name="list.drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </event>
-    </panel>
-    <panel>
-      <title>Qualys Vulnerabilities</title>
+      </input>
       <table>
         <search>
-          <query>`cs_qualys_vuln` IP IN $tkn_filter_ip_only$ `cs_qualys_timerange` | dedup HOST_ID, QID
-| eval status_id=if(STATUS="NEW" OR STATUS="ACTIVE" OR STATUS="RE-OPENED", 1, 0)
-| sort - status_id, - SEVERITY, HOST_ID | rename vuln_category as CATEGORY, vendor_severity as SEVERITY
-| table HOST_ID, QID, SEVERITY, signature, CATEGORY, STATUS, TYPE, PUBLISHED_DATETIME, PATCHABLE, TIMES_FOUND, VULN_TYPE, PROTOCOL, PORT, PCI_FLAG, LAST_FOUND_DATETIME, cve</query>
+          <query>| inputlookup cs_all_vuln where vendor_product="$tkn_vendor_product_host_summary$" 
+| stats count, first(last_scan_time) as last_scan_time, count(eval(status="open" OR status="reopened")) as active, count(eval(status="fixed")) as fixed by dest_id, severity 
+| stats first(last_scan_time) as last_scan_time, sum(count) as total_vuln, sum(eval(if(severity="informational", count, 0))) as info_vuln, sum(eval(if(severity="low", count, 0))) as low_vuln, sum(eval(if(severity="medium", count, 0))) as medium_vuln, sum(eval(if(severity="high", count, 0))) as high_vuln, sum(eval(if(severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(severity="informational", active, 0))) as info_active_vuln, sum(eval(if(severity="low", active, 0))) as low_active_vuln, sum(eval(if(severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(severity="high", active, 0))) as high_active_vuln, sum(eval(if(severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(severity="critical", fixed, 0))) as critical_fixed_vuln by dest_id 
+| rename dest_id as asset_id 
+| lookup cs_all_assets asset_id OUTPUT asset_ip as ip, asset_hostname as host, asset_mac_address as mac_address, os, state 
+| makemv ip delim="~~" 
+| makemv host delim="~~" 
+| makemv mac_address delim="~~" 
+| search $tkn_filter_ip_host$ 
+| table asset_id, ip, host, mac_address, os, state, total_vuln, fixed_vuln, active_vuln, critical_active_vuln, high_active_vuln, medium_active_vuln, low_active_vuln, info_active_vuln, last_scan_time 
+| sort - active_vuln</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <option name="wrap">false</option>
-        <format type="color" field="SEVERITY">
-          <colorPalette type="map">{"Urgent":#c90000, "Critical": #d96704, "Serious" : #dbb300}</colorPalette>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="critical_active_vuln">
+          <colorPalette type="list">[#c90000]</colorPalette>
+          <scale type="threshold">1</scale>
         </format>
-        <format type="color" field="STATUS">
-          <colorPalette type="map">{"ACTIVE":#c90000}</colorPalette>
+        <format type="color" field="high_active_vuln">
+          <colorPalette type="list">[#d96704]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+        <format type="color" field="medium_active_vuln">
+          <colorPalette type="list">[#dbb300]</colorPalette>
+          <scale type="threshold">1</scale>
         </format>
       </table>
     </panel>
   </row>
-  <row depends="$tkn_show_hide_tenable$">
+  <row>
     <panel>
-      <title>Tenable Summary $tkn_filter_ip_host_label$</title>
-      <table>
+      <title>Host Vulnerabilities $tkn_filter_ip_host_label$</title>
+      <input type="dropdown" token="tkn_vendor_product_vuln" searchWhenChanged="true">
+        <label>Vendor Product</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>vendor_product</fieldForLabel>
+        <fieldForValue>vendor_product</fieldForValue>
         <search>
-          <query>| inputlookup cs_tenable_vuln
-| stats max(_time) as _time, count, count(eval(vul_state="open" OR vul_state="reopened")) as active, count(eval(vul_state="fixed")) as fixed by tenable_uuid, vul_severity 
-| stats max(_time) as _time, sum(count) as total_vuln, sum(eval(if(vul_severity="informational", count, 0))) as info_vuln, sum(eval(if(vul_severity="low", count, 0))) as low_vuln, sum(eval(if(vul_severity="medium", count, 0))) as medium_vuln, sum(eval(if(vul_severity="high", count, 0))) as high_vuln, sum(eval(if(vul_severity="critical", count, 0))) as critical_vuln, sum(active) as active_vuln, sum(eval(if(vul_severity="informational", active, 0))) as info_active_vuln, sum(eval(if(vul_severity="low", active, 0))) as low_active_vuln, sum(eval(if(vul_severity="medium", active, 0))) as medium_active_vuln, sum(eval(if(vul_severity="high", active, 0))) as high_active_vuln, sum(eval(if(vul_severity="critical", active, 0))) as critical_active_vuln, sum(fixed) as fixed_vuln, sum(eval(if(vul_severity="informational", fixed, 0))) as info_fixed_vuln, sum(eval(if(vul_severity="low", fixed, 0))) as low_fixed_vuln, sum(eval(if(vul_severity="medium", fixed, 0))) as medium_fixed_vuln, sum(eval(if(vul_severity="high", fixed, 0))) as high_fixed_vuln, sum(eval(if(vul_severity="critical", fixed, 0))) as critical_fixed_vuln by tenable_uuid
-| append [| inputlookup cs_tenable_inventory | rename hostname as host] | stats values(*) as *, max(time) as time by tenable_uuid
-| makemv ip delim="~~" | makemv host delim="~~"
-| search $tkn_filter_ip_host$
-| rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen
-| fields - tenable_last_event, created_at, first_*, has_plugin_results
-| table ip, host, mac_address, tenable_os, tenable_state, total_vuln, active_vuln, critical_active, high_active, fixed_vuln, medium_active, low_active, info_active, last_seen, has_agent, tenable_network_name, tenable_fqdn, tenable_netbios, last_*, *
-| eval critical_active=if(critical_active=0, null(), critical_active), high_active=if(high_active=0, null(), high_active) | sort - active_vuln
-| transpose header_field=tenable_uuid include_empty=false column_name="Fields"</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>| inputlookup cs_all_vuln | fields vendor_product | dedup vendor_product</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
         </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
-    <panel>
-      <title>Tenable Vulnerabilities</title>
+      </input>
       <table>
         <search>
-          <query>| inputlookup cs_tenable_vuln 
-| join tenable_uuid type=left [| inputlookup cs_tenable_inventory | table tenable_uuid, ip, hostname | rename hostname as host ]
- | makemv ip delim="~~" | makemv host delim="~~"
-| search $tkn_filter_ip_host$
-| eval vul_state_id = if(vul_state="open" OR vul_state="reopened", 1, 0)
-| sort -vul_state_id, -vul_severity_id, +tenable_uuid
-| table tenable_uuid, vul_id, vul_severity, vul_name, vul_state, vul_family, vul_has_patch, vul_port, vul_protocol, vul_risk_factor, vul_cve, vul_solution, vul_type, vul_version, last_fixed, last_found, vul_cpe, vul_in_the_news, vul_synopsis, vul_description</query>
+          <query>| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND vendor_product="$tkn_vendor_product_vuln$"
+| rename dest_id as asset_id 
+| lookup cs_all_assets asset_id OUTPUT asset_ip as ip, asset_hostname as host, asset_mac_address as mac_address, os, state 
+| makemv ip delim="~~" 
+| makemv host delim="~~" 
+| makemv mac_address delim="~~" 
+| search $tkn_filter_ip_host$ 
+| `cs_human_readable_time_format(first_found)`
+| `cs_human_readable_time_format(last_found)`
+| eval sort_field=case(severity="critical",1, severity="high",2, severity="medium",3, severity="low",4, severity="informational",5, 1=1, 6) 
+| sort sort_field
+| table asset_id vul_id signature category type severity status cve cvss cpe protocol port has_patch in_the_news published_time first_found last_found solution description</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -202,10 +215,10 @@
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <option name="wrap">false</option>
-        <format type="color" field="vul_severity">
+        <format type="color" field="severity">
           <colorPalette type="map">{"critical":#c90000, "high": #d96704, "medium" : #dbb300}</colorPalette>
         </format>
-        <format type="color" field="vul_status">
+        <format type="color" field="status">
           <colorPalette type="map">{"open":#c90000, "reopened":#c90000}</colorPalette>
         </format>
       </table>

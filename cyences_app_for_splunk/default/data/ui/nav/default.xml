@@ -29,8 +29,7 @@
     <view name="cs_device_inventory_table" />
     <view name="cs_asset_intelligence" />
     <view name="cs_lansweeper" />
-    <view name="cs_qualys" />
-    <view name="cs_tenable" />
+    <view name="cs_vulnerability" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
