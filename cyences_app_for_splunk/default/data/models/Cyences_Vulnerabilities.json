@@ -206,30 +206,6 @@
                     "comment": ""
                 },
                 {
-                    "fieldName": "type",
-                    "owner": "Vulnerabilities",
-                    "type": "string",
-                    "fieldSearch": "",
-                    "required": false,
-                    "multivalue": false,
-                    "hidden": false,
-                    "editable": true,
-                    "displayName": "type",
-                    "comment": ""
-                },
-                {
-                    "fieldName": "has_patch",
-                    "owner": "Vulnerabilities",
-                    "type": "string",
-                    "fieldSearch": "",
-                    "required": false,
-                    "multivalue": false,
-                    "hidden": false,
-                    "editable": true,
-                    "displayName": "has_patch",
-                    "comment": ""
-                },
-                {
                     "fieldName": "in_the_news",
                     "owner": "Vulnerabilities",
                     "type": "string",
@@ -263,18 +239,6 @@
                     "hidden": false,
                     "editable": true,
                     "displayName": "solution",
-                    "comment": ""
-                },
-                {
-                    "fieldName": "published_time",
-                    "owner": "Vulnerabilities",
-                    "type": "string",
-                    "fieldSearch": "",
-                    "required": false,
-                    "multivalue": false,
-                    "hidden": false,
-                    "editable": true,
-                    "displayName": "published_time",
                     "comment": ""
                 },
                 {
@@ -362,7 +326,7 @@
                     "editable": true,
                     "comment": "",
                     "calculationType": "Eval",
-                    "expression": "if(isnull(category) OR category=\"\",\"unknown\",category)"
+                    "expression": "coalesce(vuln_category, category)"
                 },
                 {
                     "outputFields": [
@@ -495,6 +459,72 @@
                     "comment": "",
                     "calculationType": "Eval",
                     "expression": "case(isnotnull(vendor_product),vendor_product,isnotnull(vendor) AND vendor!=\"unknown\" AND isnotnull(product) AND product!=\"unknown\",vendor.\" \".product,isnotnull(vendor) AND vendor!=\"unknown\" AND (isnull(product) OR product=\"unknown\"),vendor.\" unknown\",(isnull(vendor) OR vendor=\"unknown\") AND isnotnull(product) AND product!=\"unknown\",\"unknown \".product,isnotnull(sourcetype),sourcetype,1=1,\"unknown\")"
+                },
+                {
+                    "outputFields": [
+                        {
+                            "fieldName": "type",
+                            "owner": "Vulnerabilities",
+                            "type": "string",
+                            "fieldSearch": "",
+                            "required": false,
+                            "multivalue": false,
+                            "hidden": false,
+                            "editable": true,
+                            "displayName": "type",
+                            "comment": ""
+                        }
+                    ],
+                    "calculationID": "kq7xixij02a",
+                    "owner": "Vulnerabilities",
+                    "editable": true,
+                    "comment": "",
+                    "calculationType": "Eval",
+                    "expression": "coalesce(type, VULN_TYPE)"
+                },
+                {
+                    "outputFields": [
+                        {
+                            "fieldName": "has_patch",
+                            "owner": "Vulnerabilities",
+                            "type": "string",
+                            "fieldSearch": "",
+                            "required": false,
+                            "multivalue": false,
+                            "hidden": false,
+                            "editable": true,
+                            "displayName": "has_patch",
+                            "comment": ""
+                        }
+                    ],
+                    "calculationID": "24qfvua09hii",
+                    "owner": "Vulnerabilities",
+                    "editable": true,
+                    "comment": "",
+                    "calculationType": "Eval",
+                    "expression": "coalesce(has_patch, PATCHABLE)"
+                },
+                {
+                    "outputFields": [
+                        {
+                            "fieldName": "published_time",
+                            "owner": "Vulnerabilities",
+                            "type": "string",
+                            "fieldSearch": "",
+                            "required": false,
+                            "multivalue": false,
+                            "hidden": false,
+                            "editable": true,
+                            "displayName": "published_time",
+                            "comment": ""
+                        }
+                    ],
+                    "calculationID": "84dpzmcuf7g",
+                    "owner": "Vulnerabilities",
+                    "editable": true,
+                    "comment": "",
+                    "calculationType": "Eval",
+                    "expression": "coalesce(published_time, PUBLISHED_DATETIME)"
                 }
             ],
             "constraints": [
