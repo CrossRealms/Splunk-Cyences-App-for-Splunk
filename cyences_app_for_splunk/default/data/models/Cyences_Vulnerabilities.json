@@ -324,7 +324,7 @@
                     "calculationID": "Vulnerabilities_fillnull_category",
                     "owner": "Vulnerabilities",
                     "editable": true,
-                    "comment": "",
+                    "comment": "The Qualys addon already has category field extraction which is not the correct field for this datamodel. To use correct field (vuln_category), we are using the vuln_category field first in the coalesce.",
                     "calculationType": "Eval",
                     "expression": "coalesce(vuln_category, category)"
                 },
