@@ -44,3 +44,43 @@
     font-weight:normal;
     white-space:nowrap;
 }
+
+
+/* Small loader - loading circle (without progress bar) */
+.load {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spin {
+    background-color: #00000020;
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    border: 3px solid #00000000;
+    border-top: 3px solid #ffffff;
+    animation: loading 2s linear infinite;
+}
+
+.loading {
+    position: absolute;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes loading {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Success and Failure Messages */
+.success_msg {
+    color: green;
+}
+
+.error_msg {
+    color: red;
+}

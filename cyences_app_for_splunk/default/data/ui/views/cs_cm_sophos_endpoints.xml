@@ -1,0 +1,107 @@
+<form theme="dark" script="cs_cm_sophos_endpoints.js" version="1.1">
+  <label>Sophos Endpoints - Counter Measures</label>
+  <search id="all_sophos_endpoint_details">
+    <query>| sophosinstancedetails all_endpoints=True | extract
+| eval assignedProducts = mvzip('assignedProducts{}.code', mvzip('assignedProducts{}.version', 'assignedProducts{}.status', " - "), " - ") | fields - "assignedProducts{}*"
+| eval services = mvzip('health.services.serviceDetails{}.name', 'health.services.serviceDetails{}.status', " - ") | fields - "health.services.serviceDetails{}*"
+| rename "associatedPerson.name" as User, "isolation.status" as IsIsolated, "os.name" as OS
+| eval IPs = mvappend('ipv4Addresses{}', 'ipv6Addresses{}')
+| table id, hostname, User, IsIsolated, isolation*, health*, IPs, assignedProducts, OS, lastSeenAt, services, tamperProtectionEnabled, macAddresses*, type, lockdown*</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <title>Sophos Endpoints</title>
+      <input type="text" token="tkn_sophos_user">
+        <label>User</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+      </input>
+      <input type="text" token="tkn_sophos_hostname">
+        <label>Hostname</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+      </input>
+      <input type="text" token="tkn_sophos_ip">
+        <label>IP</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+      </input>
+      <table>
+        <search base="all_sophos_endpoint_details">
+          <query>| search User=$tkn_sophos_user|s$ hostname=$tkn_sophos_hostname|s$ IPs=$tkn_sophos_ip|s$ | table id, hostname, User, IsIsolated, isolation*, health*, IPs, OS</query>
+        </search>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="$row.IsIsolated$==&quot;notIsolated&quot;">
+            <set token="tkn_sophos_endpoint_action">Isolate</set>
+            <set token="tkn_sophos_selected_uuid">$row.id$</set>
+          </condition>
+          <condition match="$row.IsIsolated$==&quot;isolated&quot;">
+            <set token="tkn_sophos_endpoint_action">Deisolate</set>
+            <set token="tkn_sophos_selected_uuid">$row.id$</set>
+          </condition>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row depends="$tkn_sophos_selected_uuid$">
+    <panel>
+      <table>
+        <title>Selected Sophos Endpoint</title>
+        <search base="all_sophos_endpoint_details">
+          <query>| search id=$tkn_sophos_selected_uuid$ | table id, hostname, User, IsIsolated, isolation*, health*, IPs, assignedProducts, OS, lastSeenAt, services, tamperProtectionEnabled, macAddresses*, type, lockdown*
+| transpose column_name="Label"</query>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <input type="button" class="btn btn-primary pull-left" id="btn_isolate_sophos_endpoint" value="$tkn_sophos_endpoint_action$ Selected Instance" style="margin-left: 20px;"/>
+        <!-- If we keep token in the value of a button somehow Splunk stop calling onClick handler -->
+        <!-- Found the root cause for it. Because if you have token inside HTML, HTML will not be generated until the token is set. And JS will run the handler before the HTML is generated. Hence handler is never regitered on the right component. -->
+        <!-- Solution - Register on change event on the token and on callback function register onClick event. -->
+        <p id="isolate_sophos_endpoint_message"/>
+        <span class="isolate_sophos_endpoint_loader"/>
+      </html>
+      <html>
+        <div class="modal fade" id="isolate_sophos_endpoint_myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sophos Endpoint Protection Authorization</h4>
+                <button type="button" class="close modelclosebutton" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">Close</span>
+                </button>
+              </div>
+              <div class="modal-body mx-3">
+                <div>
+                  <p id="isolate_sophos_endpoint_modalMessage"/>
+                  <span class="isolate_sophos_endpoint_loader"/>
+                </div>
+                <div class="md-form mb-5">
+                  <i class="fas fa-envelope prefix grey-text"/>
+                  <input type="text" id="isolate_sophos_endpoint_username" class="form-control validate" style="width: 100%;" placeholder="Client ID"/>
+                </div>
+                <div class="md-form mb-4">
+                  <i class="fas fa-lock prefix grey-text"/>
+                  <input type="password" id="isolate_sophos_endpoint_password" class="form-control validate" style="width: 100%;" placeholder="Client Secret"/>
+                </div>
+              </div>
+              <div class="modal-footer d-flex justify-content-center text-center">
+                <button class="btn btn-success modelconfirmbutton" id="isolate_sophos_endpoint_modelConfirmButton">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+</form>

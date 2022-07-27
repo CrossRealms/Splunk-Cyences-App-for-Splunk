@@ -31,6 +31,9 @@
     <view name="cs_lansweeper" />
     <view name="cs_vulnerability" />
   </collection>
+  <collection label="Counter Measures">
+    <view name="cs_cm_sophos_endpoints" />
+  </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
     <view name="cs_decommision_host" />
