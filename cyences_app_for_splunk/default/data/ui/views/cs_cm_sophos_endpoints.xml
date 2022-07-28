@@ -68,39 +68,7 @@
         <!-- If we keep token in the value of a button somehow Splunk stop calling onClick handler -->
         <!-- Found the root cause for it. Because if you have token inside HTML, HTML will not be generated until the token is set. And JS will run the handler before the HTML is generated. Hence handler is never regitered on the right component. -->
         <!-- Solution - Register on change event on the token and on callback function register onClick event. -->
-        <p id="isolate_sophos_endpoint_message"/>
-        <span class="isolate_sophos_endpoint_loader"/>
-      </html>
-      <html>
-        <div class="modal fade" id="isolate_sophos_endpoint_myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Sophos Endpoint Protection Authorization</h4>
-                <button type="button" class="close modelclosebutton" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">Close</span>
-                </button>
-              </div>
-              <div class="modal-body mx-3">
-                <div>
-                  <p id="isolate_sophos_endpoint_modalMessage"/>
-                  <span class="isolate_sophos_endpoint_loader"/>
-                </div>
-                <div class="md-form mb-5">
-                  <i class="fas fa-envelope prefix grey-text"/>
-                  <input type="text" id="isolate_sophos_endpoint_username" class="form-control validate" style="width: 100%;" placeholder="Client ID"/>
-                </div>
-                <div class="md-form mb-4">
-                  <i class="fas fa-lock prefix grey-text"/>
-                  <input type="password" id="isolate_sophos_endpoint_password" class="form-control validate" style="width: 100%;" placeholder="Client Secret"/>
-                </div>
-              </div>
-              <div class="modal-footer d-flex justify-content-center text-center">
-                <button class="btn btn-success modelconfirmbutton" id="isolate_sophos_endpoint_modelConfirmButton">Confirm</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div id="isolate_sophos_endpoint_add_modal_here"></div>
       </html>
     </panel>
   </row>

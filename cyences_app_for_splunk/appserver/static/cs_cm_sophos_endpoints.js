@@ -49,6 +49,41 @@ function($, Loader, MessageUpdater, SearchManager, mvc, _){
 
 
     /* Common Credential Modal Functionality */
+    function addModalToHTML(id){
+        let credentialModalHTMLTemplate = `<p id="isolate_sophos_endpoint_message"/>
+        <span class="isolate_sophos_endpoint_loader"/>
+        <div class="modal fade" id="${id}_myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Sophos Endpoint Protection Authorization</h4>
+              <button type="button" class="close modelclosebutton" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">Close</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              <div>
+                <p id="${id}_modalMessage"/>
+                <span class="${id}_loader"/>
+              </div>
+              <div class="md-form mb-5">
+                <i class="fas fa-envelope prefix grey-text"/>
+                <input type="text" id="${id}_username" class="form-control validate" style="width: 100%;" placeholder="Client ID"/>
+              </div>
+              <div class="md-form mb-4">
+                <i class="fas fa-lock prefix grey-text"/>
+                <input type="password" id="${id}_password" class="form-control validate" style="width: 100%;" placeholder="Client Secret"/>
+              </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center text-center">
+              <button class="btn btn-success modelconfirmbutton" id="${id}_modelConfirmButton">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+      $(`#${id}_add_modal_here`).html(credentialModalHTMLTemplate);
+    }
+
     function hideCredentialModel(id){
         $(`#${id}_myModal`).modal('hide');
         $(`#${id}_myModal`).hide();
@@ -168,6 +203,7 @@ function($, Loader, MessageUpdater, SearchManager, mvc, _){
     }
 
     defaultTokens.on('change:tkn_sophos_endpoint_action', function(){
+        addModalToHTML(SOPHOS_ENDPOINT_ISOLATION_ID);   // We need to add html after Splunk unhides the hidden panel as otherwise Splunk re-writes the content of the HTML panel
         $(`#btn_${SOPHOS_ENDPOINT_ISOLATION_ID}`).click(function(){
             isolateSophosEndpointButtonClickEventHandler();
         });
