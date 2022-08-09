@@ -199,3 +199,42 @@ class SophosAPIUtils:
                     yield item
 
                 current_page = current_page + 1
+
+
+    def isolate_endpoint(self, uuid, comment):
+        if uuid=="" or uuid==" ":
+            raise Exception("No endpoint_uuid provided.")
+
+        for tenant in self.sophos_tenant_dict:
+            self.logger.debug("checking under tenant:{}".format(tenant))
+            requestHeaders = self.get_request_header(tenant)
+            response = requests.get("{}/endpoint/v1/endpoints/{}".format(self.sophos_tenant_dict[tenant], uuid), headers=requestHeaders)
+            # TODO - Need to replace isolation endpoint here
+            self.logger.debug("Status-Code:{}, Response-Text:{}".format(response.status_code, response.text))
+
+            if response.ok:
+                return str(response.text)
+            else:
+                err_msg = "Error while isolating the endpoint. Status-Code:{}, Response-Text:{}".format(response.status_code, response.text)
+                self.logger.error(err_msg)
+                raise Exception(err_msg)
+        
+        raise Exception('Unable to find the endpoint UUID. - {}'.format(uuid))
+
+        isolation_url = SOPHOS_ENDPOINT_ISOLATION.format({'dataRegion': 'TODO', 'endpointId': uuid})
+        data = {
+            "enabled": True,
+            "comment": comment
+        }
+
+        for tenant in self.sophos_tenant_dict:
+            requestHeaders = self.get_request_header(tenant)
+
+            response = requests.get(self.sophos_tenant_dict[tenant]+"/endpoint/v1/endpoints/"+str(uuid), headers=requestHeaders)
+            # response = requests.patch(isolation_url, data=data, headers=requestHeaders)
+            # response = requests.patch("{}/endpoint/v1/endpoints/{}/isolation".format(self.sophos_tenant_dict[tenant], uuid), data=data, headers=requestHeaders)
+
+            if response.ok:
+                return response.json()
+            else:
+                self.logger.error("Error while isolating the endpoint")
