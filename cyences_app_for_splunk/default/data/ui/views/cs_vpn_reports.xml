@@ -253,8 +253,8 @@
 | search $Country$ $City$ 
 | `cs_vpn_dashboard_filter` 
 | eval duration = tostring(duration, "duration") 
-| table _time user SourceIP PrivateIP duration City Country 
-| rename user as User, duration as Duration</query>
+| table _time user description SourceIP PrivateIP duration City Country 
+| rename user as User, duration as Duration, description as Reason</query>
           <earliest>$time.earliest$</earliest>
           <latest>$time.latest$</latest>
         </search>
