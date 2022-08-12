@@ -143,12 +143,15 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count as count from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Authentication where `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
 | `drop_dm_object_name(Authentication)`
 | eval over_field=user."|".app
-| chart sum(count) as count over over_field by action
+| chart sum(count) as count, max(last_login) as last_login over over_field by action
 | rex field=over_field "(?&lt;user&gt;[^\|]*)\|(?&lt;app&gt;.*)" | fields - over_field
-| table user, app, success, failure
+| rename "count: failure" as failure, "count: success" as success, "last_login: success" as last_success_login, "last_login: failure" as last_failed_login
+| `cs_human_readable_time_format(last_success_login)`
+| `cs_human_readable_time_format(last_failed_login)`
+| table user, app, success, last_success_login, failure, last_failed_login
 | fillnull success, failure value=0
 | sort -failure, -success</query>
           <earliest>$timeRange.earliest$</earliest>
