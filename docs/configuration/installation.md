@@ -25,12 +25,7 @@ The Cyences App needs to be installed on the Search Head.
     * Enter **cyences** for the Index Name. 
     * Click **Save**. 
 
-5. The props.conf sourcetype needs to be changed. 
-    * Copy **props.conf** from the default directory of the App ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/default/props.conf) into local directory ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/local). 
-    * Open the newly copied props.conf file from the local directory. 
-    * Update the stanza name from **[cyences_stash]** to **[stash]**. 
-
-6. Restart Splunk after installing all dependencies. 
+5. Restart Splunk after installing all dependencies. 
 
 ## **Dependency Installation on Search Head**
 
