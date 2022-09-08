@@ -21,9 +21,7 @@ define([
                 callback - Function -> The function to call when the request is complete: (err, response).
             */
             service.request(endpoint, method, null, null, {"data": data}, null, function(error, response){
-                debugger;
-            // service.post(endpoint, {"data": data}, function(error, response){
-                console.log("API Response: ", response);
+
                 if(response && response.data.entry[0].content['success'] && response.data.entry[0].content['success'] != ''){
                     resolve(response.data.entry[0].content['success']);
                 }

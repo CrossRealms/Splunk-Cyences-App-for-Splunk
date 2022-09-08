@@ -1,0 +1,16 @@
+<form theme="dark" version="1.1" script="cs_cm_palo_ip_block.js" >
+  <label>Palo Alto Firewall IP Block - Counter Measures</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <input type="text" token="tkn_ip_address">
+        <label>IP Address</label>
+      </input>
+      <html>
+        <input type="button" class="btn btn-primary pull-left" id="btn_block_ip" value="Block" style="margin-left: 20px;"/>
+        <input type="button" class="btn btn-primary pull-left" id="btn_allow_ip" value="Allow" style="margin-left: 20px;"/>
+        <div id="palo_ip_block_add_modal_here"/>
+      </html>
+    </panel>
+  </row>
+</form>

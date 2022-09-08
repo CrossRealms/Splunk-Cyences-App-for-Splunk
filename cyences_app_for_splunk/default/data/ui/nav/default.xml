@@ -33,6 +33,7 @@
   </collection>
   <collection label="Counter Measures">
     <view name="cs_cm_sophos_endpoints" />
+    <view name="cs_cm_palo_alto_firewall_ip_block" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />

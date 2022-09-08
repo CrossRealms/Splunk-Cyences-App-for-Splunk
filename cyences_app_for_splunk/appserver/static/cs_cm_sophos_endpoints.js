@@ -24,14 +24,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
 
 
     async function sophosIsolateEndpoint(){
-        // TODO - read token to find which endpoint to isolate
-        console.log("U.....");
-        // TODO - Use POST RestEndpoint instead of search to avoid putting client ID and Client Secret in the search history
-        // let results = await executeAsyncSearch(`search index=test | stats count | eval client_id="${sophosEndpointClientID}", client_secret="${sophosEndpointClientSecret}"`);
-        // console.log("search results", results);
-        debugger;
 
-        // TODO - return true or false depending on status or validation and message as well
         let data = {
             action: sophosEndpointAction,
             client_id: sophosEndpointClientID,
@@ -42,11 +35,10 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
         let res;
         try{
             res = await executeAsyncRestCall(`/CounterMeasureSophosEndpoint/${sophosEndpointAction}`, 'POST', null, data);
-            console.log("rest call response", res);
             return [true, `The endpoint id=${selectedSophosEndpointId} has been successfully ${sophosEndpointAction}.`];
         }
         catch(err){
-            return [false, `Unexpected error occurred during sophos endpoint. Err:${err}`]
+            return [false, `Unexpected error occurred. Error: ${err}`]
         }
     }
 
@@ -80,7 +72,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
             CMUtils.enableButton(ISOLATE_BUTTON_ID);
         }
         else{
-            modal_message.setMessage('Please enter the Sophos Endpoint Protection Client ID and Client Secret to validate yourself for the job.');
+            modal_message.setMessage('Please enter the Sophos Endpoint Protection Client ID and Client Secret');
             await CMUtils.showCredentialModel(
                 id = MAIN_ID,
                 pageMessageComponent = page_message,
@@ -91,7 +83,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
     }
 
     defaultTokens.on('change:tkn_sophos_endpoint_action', function(){
-        CMUtils.addModalToHTML(MAIN_ID);   // We need to add html after Splunk unhides the hidden panel as otherwise Splunk re-writes the content of the HTML panel
+        CMUtils.addModalToHTML(MAIN_ID, usernamePlaceholder="Client ID", passwordPlaceholder="Client Secret");   // We need to add html after Splunk unhides the hidden panel as otherwise Splunk re-writes the content of the HTML panel
         $(ISOLATE_BUTTON_ID).click(function(){
             isolateSophosEndpointButtonClickEventHandler();
         });

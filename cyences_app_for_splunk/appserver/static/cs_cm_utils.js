@@ -15,7 +15,7 @@ define([
         }
 
         /* Common Credential Modal Functionality */
-        static addModalToHTML(id){
+        static addModalToHTML(id, usernamePlaceholder="Username", passwordPlaceholder="Password"){
             let credentialModalHTMLTemplate = `<p id="${id}_message"/>
             <span class="${id}_loader"/>
             <div class="modal fade" id="${id}_myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
@@ -34,11 +34,11 @@ define([
                 </div>
                 <div class="md-form mb-5">
                     <i class="fas fa-envelope prefix grey-text"/>
-                    <input type="text" id="${id}_username" class="form-control validate" style="width: 100%;" placeholder="Client ID"/>
+                    <input type="text" id="${id}_username" class="form-control validate" style="width: 100%;" placeholder="${usernamePlaceholder}"/>
                 </div>
                 <div class="md-form mb-4">
                     <i class="fas fa-lock prefix grey-text"/>
-                    <input type="password" id="${id}_password" class="form-control validate" style="width: 100%;" placeholder="Client Secret"/>
+                    <input type="password" id="${id}_password" class="form-control validate" style="width: 100%;" placeholder="${passwordPlaceholder}"/>
                 </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center text-center">
@@ -66,7 +66,7 @@ define([
             CMUtils.disableButton("button.modelconfirmbutton");
     
             let [isSuccess, message] = await callbackActionFunction(username, password);
-            debugger;
+
             if(isSuccess){
                 pageMessageComponent.setSuccessMessage(message);
                 modalMessageComponent.setSuccessMessage(message);
