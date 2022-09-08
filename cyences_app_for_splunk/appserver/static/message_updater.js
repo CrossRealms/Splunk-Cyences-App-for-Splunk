@@ -15,8 +15,8 @@ define([
         }
 
         setFailureMessage(msg) {
-            $(this.jqueryHtmlElement).addClass('success_msg');
-            $(this.jqueryHtmlElement).removeClass('error_msg');
+            $(this.jqueryHtmlElement).addClass('error_msg');
+            $(this.jqueryHtmlElement).removeClass('success_msg');
             $(this.jqueryHtmlElement).text(msg);
         }
 
