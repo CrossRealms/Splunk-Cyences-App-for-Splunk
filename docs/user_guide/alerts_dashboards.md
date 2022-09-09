@@ -197,7 +197,7 @@ There are several security related reports to choose from and they are all locat
     * Outbound Network Telemetry
     * Port Scanning Attempts
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_reports.png?raw=true)
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_reports.png?raw=true)
 
 * Office 365 Reports
     * Azure Active Directory - Application Change/Update
