@@ -5,7 +5,7 @@ from sophos_endpoint_api_utils import SophosAPIUtils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('cm_sophos_endpoint', logging.DEBUG)
+logger = logger_manager.setup_logging('rh_cm_sophos_endpoint', logging.DEBUG)
 
 
 class CounterMeasureSophosEndpointRest(admin.MConfigHandler):
@@ -33,7 +33,6 @@ class CounterMeasureSophosEndpointRest(admin.MConfigHandler):
         logger.info("started rest endpoint.")
         # Update the Sophos configuration
         try:
-            logger.debug("callerArgs: {}".format(self.callerArgs))
             data = json.loads(self.callerArgs['data'][0])
             logger.debug("data: {}".format(data))
             endpoint_uuid = str(data['endpoint_uuid'])
@@ -41,7 +40,7 @@ class CounterMeasureSophosEndpointRest(admin.MConfigHandler):
             client_id = str(data['client_id'])
             client_secret = str(data['client_secret'])
         except Exception as e:
-            msg = 'Data is not in proper format. Error:{}, callerArgs:{}'.format(e, self.callerArgs)
+            msg = 'Data is not in proper format. Error:{}'.format(e)
             logger.error(msg)
             conf_info['action']['error'] = msg
             return

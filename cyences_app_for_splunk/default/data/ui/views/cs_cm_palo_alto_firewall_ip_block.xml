@@ -1,10 +1,13 @@
-<form theme="dark" version="1.1" script="cs_cm_palo_ip_block.js" >
+<form theme="dark" version="1.1" script="cs_cm_palo_ip_block.js">
   <label>Counter Measures - Palo Alto Firewall - IP Block/Allow</label>
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
       <input type="text" token="tkn_ip_address">
         <label>IP Address</label>
+      </input>
+      <input type="text" token="tkn_firewall_ip">
+        <label>Palo Alto Firewall IP</label>
       </input>
       <html>
         <input type="button" class="btn btn-primary pull-left" id="btn_block_ip" value="Block" style="margin-left: 20px;"/>

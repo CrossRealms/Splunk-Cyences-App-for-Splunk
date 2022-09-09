@@ -15,7 +15,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
     let defaultTokens = mvc.Components.getInstance('default');
 
     let paloUsername, paloPassword;
-    let ipAddress, paloAction;
+    let ipAddress, paloAction, firewall_ip;
     let MAIN_ID = "palo_ip_block";
     let BLOCK_IP_BUTTON_ID = `#btn_block_ip`;
     let ALLOW_IP_BUTTON_ID = `#btn_allow_ip`;
@@ -39,7 +39,8 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
             action: paloAction,
             username: paloUsername,
             password: paloPassword,
-            ip_address: ipAddress
+            ip_address: ipAddress,
+            firewall_ip: firewall_ip,
         }
 
         let res;
@@ -61,6 +62,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
 
     async function paloBlockIPButtonClickEventHandler(){
         ipAddress = defaultTokens.get('tkn_ip_address');
+        firewall_ip = defaultTokens.get('tkn_firewall_ip');
 
         if(paloUsername && paloUsername!="" && paloPassword && paloPassword!=""){
             page_message.setMessage('Please wait...');
