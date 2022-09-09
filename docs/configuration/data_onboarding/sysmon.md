@@ -24,13 +24,13 @@ This is a fantastic way to collect detailed information about your Windows endpo
 
 Instead of having to manually install Microsoft Sysmon on each and every Windows server in your environment, it would be optimal to install Sysmon on Windows machines via the Deployment Server (to learn more about the deployment server, click here). You can still manually install Sysmon, but that would be an exhaustive and time-consuming task if your environment contains tons of Windows servers. 
 
-[The Sysmon Deploy Add-on for Cyences App](https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
+[The Sysmon Deploy Add-on for Cyences App](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
 
 ### Install and Maintain Sysmon on Windows Machines from deployment-server 
 
 1. Use **Sysmon Deploy Add-on for Cyences App** to install Microsoft Sysmon on Windows machines. 
 
-2. Download the latest Add-on build file named **TA-sysmon-deploy-for-cyences.tgz** - [https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/](https://github.com/VatsalJagani/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/) 
+2. Download the latest Add-on build file named **TA-sysmon-deploy-for-cyences.tgz** - [https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App/releases/) 
 
 3. Extract the file under the deployment apps directory on the deployment server. 
 
@@ -44,7 +44,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 ### Sysmon EventCodes:
 
-![alt](https://github.com/VatsalJagani/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sysmon_event_codes.png?raw=true)
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/sysmon_event_codes.png?raw=true)
 
 * Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 
