@@ -83,7 +83,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
     }
 
     defaultTokens.on('change:tkn_sophos_endpoint_action', function(){
-        CMUtils.addModalToHTML(MAIN_ID, usernamePlaceholder="Client ID", passwordPlaceholder="Client Secret");   // We need to add html after Splunk unhides the hidden panel as otherwise Splunk re-writes the content of the HTML panel
+        CMUtils.addModalToHTML(MAIN_ID, "Sophos Endpoint Protection Authorization", usernamePlaceholder="Client ID", passwordPlaceholder="Client Secret");   // We need to add html after Splunk unhides the hidden panel as otherwise Splunk re-writes the content of the HTML panel
         $(ISOLATE_BUTTON_ID).click(function(){
             isolateSophosEndpointButtonClickEventHandler();
         });

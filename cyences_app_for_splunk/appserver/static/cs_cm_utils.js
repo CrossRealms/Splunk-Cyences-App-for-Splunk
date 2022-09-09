@@ -15,14 +15,14 @@ define([
         }
 
         /* Common Credential Modal Functionality */
-        static addModalToHTML(id, usernamePlaceholder="Username", passwordPlaceholder="Password"){
+        static addModalToHTML(id, title, usernamePlaceholder="Username", passwordPlaceholder="Password"){
             let credentialModalHTMLTemplate = `<p id="${id}_message"/>
             <span class="${id}_loader"/>
             <div class="modal fade" id="${id}_myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
             <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Sophos Endpoint Protection Authorization</h4>
+                <h4 class="modal-title w-100 font-weight-bold">${title}</h4>
                 <button type="button" class="close modelclosebutton" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">Close</span>
                 </button>

@@ -33,7 +33,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
         CMUtils.enableButton(ALLOW_IP_BUTTON_ID);
     }
 
-    async function paloBlockIPEndpoint(){
+    async function paloBlockIP(){
 
         let data = {
             action: paloAction,
@@ -52,14 +52,14 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
         }
     }
 
-    async function paloBlockIPEndpointCallbackFunction(username, password){
+    async function paloBlockIPCallbackFunction(username, password){
         paloUsername = username;
         paloPassword = password;
-        return await paloBlockIPEndpoint();
+        return await paloBlockIP();
     }
 
 
-    async function paloBlockIPEndpointButtonClickEventHandler(){
+    async function paloBlockIPButtonClickEventHandler(){
         ipAddress = defaultTokens.get('tkn_ip_address');
 
         if(paloUsername && paloUsername!="" && paloPassword && paloPassword!=""){
@@ -67,7 +67,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
             loader.add();
             disableButtons();
 
-            let [isSuccess, message] = await paloBlockIPEndpoint();
+            let [isSuccess, message] = await paloBlockIP();
             if(isSuccess){
                 page_message.setSuccessMessage(message);
                 modal_message.setSuccessMessage(message);
@@ -87,18 +87,18 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
                 pageMessageComponent = page_message,
                 modalMessageComponent = modal_message,
                 loaderComponent = loader,
-                callbackActionFunction = paloBlockIPEndpointCallbackFunction);
+                callbackActionFunction = paloBlockIPCallbackFunction);
         }
     }
 
-    CMUtils.addModalToHTML(MAIN_ID);
+    CMUtils.addModalToHTML(MAIN_ID, "Palo Alto Firewall Authorization");
     $(BLOCK_IP_BUTTON_ID).click(function(){
         paloAction = "block"
-        paloBlockIPEndpointButtonClickEventHandler();
+        paloBlockIPButtonClickEventHandler();
     });
     $(ALLOW_IP_BUTTON_ID).click(function(){
         paloAction = "allow"
-        paloBlockIPEndpointButtonClickEventHandler();
+        paloBlockIPButtonClickEventHandler();
     });
 
 });

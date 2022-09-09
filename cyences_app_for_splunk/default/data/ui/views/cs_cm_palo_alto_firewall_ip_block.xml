@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1" script="cs_cm_palo_ip_block.js" >
-  <label>Palo Alto Firewall IP Block - Counter Measures</label>
+  <label>Counter Measures - Palo Alto Firewall - IP Block/Allow</label>
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
