@@ -34,7 +34,6 @@ class CounterMeasureSophosEndpointRest(admin.MConfigHandler):
         # Update the Sophos configuration
         try:
             data = json.loads(self.callerArgs['data'][0])
-            logger.debug("data: {}".format(data))
             endpoint_uuid = str(data['endpoint_uuid'])
             action = str(data['action'])
             client_id = str(data['client_id'])

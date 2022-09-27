@@ -34,7 +34,6 @@ class CounterMeasurePaloIPBlockRest(admin.MConfigHandler):
 
         try:
             data = json.loads(self.callerArgs['data'][0])
-            logger.debug("data: {}".format(data))
             ip_address = str(data['ip_address'])
             action = str(data['action'])
             username = str(data['username'])
@@ -47,21 +46,21 @@ class CounterMeasurePaloIPBlockRest(admin.MConfigHandler):
             return
 
         try:
-            palo_api = PaloFirewallAPIUtils(logger, self.getSessionKey(), firewall_ip, username, password)
+            palo_api = PaloFirewallAPIUtils(logger, self.getSessionKey(), firewall_ip, username, password, verify=False)
 
             if action == 'block':
                 logger.debug("Performing action={} for {} ip address".format(action, ip_address))
-                conf_info['action']['success'] = palo_api.block_ip(ip_address)
+                conf_info['action']['success'] = palo_api.register_ips([ip_address])
             elif action == 'allow':
                 logger.debug("Performing action={} for {} ip address".format(action, ip_address))
-                conf_info['action']['success'] = palo_api.allow_ip(ip_address)
+                conf_info['action']['success'] = palo_api.unregister_ips([ip_address])
             else:
                 msg = "Action={} is not allowed.".format(action)
                 logger.error(msg)
                 conf_info['action']['error'] = msg
 
         except Exception as e:
-            err_msg = "Error Occurred while performing action={} for {} ip address - Error: {}".format(action, ip_address, e)
+            err_msg = "Unable to perform action={} for {} ip address. {}".format(action, ip_address, e)
             logger.exception(err_msg)
             conf_info['action']['error'] = err_msg
 

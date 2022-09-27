@@ -49,7 +49,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
             return [true, `The ${ipAddress} has been successfully ${paloAction}ed.`];
         }
         catch(err){
-            return [false, `Unexpected error occurred. Error: ${err}`]
+            return [false, err]
         }
     }
 
