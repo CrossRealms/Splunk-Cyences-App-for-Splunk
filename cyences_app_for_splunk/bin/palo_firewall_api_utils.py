@@ -3,7 +3,7 @@ import urllib.parse
 import requests
 from defusedxml.ElementTree import fromstring
 
-CYENCES_TAG = "malicious"  # TODO: Update like splunk_cyences_malicious
+CYENCES_TAG = "cyences_blocked_ips"
 
 REGISTER_ENTRY = """
 <entry ip="{ip_address}" persistent="{persistent}">
