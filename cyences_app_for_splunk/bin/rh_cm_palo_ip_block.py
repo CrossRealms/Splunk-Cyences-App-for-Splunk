@@ -48,11 +48,11 @@ class CounterMeasurePaloIPBlockRest(admin.MConfigHandler):
         try:
             palo_api = PaloFirewallAPIUtils(logger, self.getSessionKey(), firewall_ip, username, password, verify=False)
 
-            if action == 'block':
-                logger.debug("Performing action={} for {} ip address".format(action, ip_address))
+            if action == "get":
+                conf_info['action']['success'] = json.dumps(palo_api.get_registered_ips())
+            elif action == 'block':
                 conf_info['action']['success'] = palo_api.register_ips([ip_address])
             elif action == 'allow':
-                logger.debug("Performing action={} for {} ip address".format(action, ip_address))
                 conf_info['action']['success'] = palo_api.unregister_ips([ip_address])
             else:
                 msg = "Action={} is not allowed.".format(action)

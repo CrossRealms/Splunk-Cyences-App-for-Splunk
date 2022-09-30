@@ -65,23 +65,19 @@ define([
             CMUtils.disableButton("button.modelclosebutton");
             CMUtils.disableButton("button.modelconfirmbutton");
     
-            let [isSuccess, message] = await callbackActionFunction(username, password);
+            let [isSuccess, message] = await callbackActionFunction(username, password, pageMessageComponent, modalMessageComponent, loaderComponent);
 
             if(isSuccess){
-                pageMessageComponent.setSuccessMessage(message);
                 modalMessageComponent.setSuccessMessage(message);
-    
                 CMUtils.hideCredentialModel(id);
-                loaderComponent.remove();
             }
             else{
-                pageMessageComponent.setFailureMessage(message);
                 modalMessageComponent.setFailureMessage(message);
-    
                 CMUtils.enableButton("button.modelclosebutton");
                 CMUtils.enableButton("button.modelconfirmbutton");
-                loaderComponent.remove();
             }
+
+            loaderComponent.remove();
         }
 
         

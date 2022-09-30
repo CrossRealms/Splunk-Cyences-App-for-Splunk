@@ -108,6 +108,8 @@ class PaloFirewallAPIUtils:
 
         encoded_payload = urllib.parse.urlencode({"cmd": payload})
 
+        self.logger.info("Registering {}".format(ip_addresses))
+
         response = requests.post(
             self.api_url,
             params={"type": "user-id"},
@@ -127,6 +129,8 @@ class PaloFirewallAPIUtils:
 
         encoded_payload = urllib.parse.urlencode({"cmd": payload})
 
+        self.logger.info("Unregistering {}".format(ip_addresses))
+
         response = requests.post(
             self.api_url,
             params={"type": "user-id"},
@@ -136,3 +140,47 @@ class PaloFirewallAPIUtils:
         )
 
         return self.parse_response(response)
+    
+    def get_registered_ips(self):
+        params = {
+            "type": "op",
+            "cmd": "<show><object><registered-ip><tag><entry name='{}'/></tag></registered-ip></object></show>".format(CYENCES_TAG)
+        }
+
+        self.logger.info("Getting registered ip")
+
+        response = requests.get(
+            self.api_url,
+            params=params,
+            verify=self.verify,
+            headers=self.common_header,
+        )
+
+        self.logger.debug(
+            "API status_code:{}, Response: {}".format(
+                response.status_code, response.text
+            )
+        )
+        root = fromstring(response.text)
+
+        if response.status_code == 200:
+
+            status = root.get("status", "").lower()
+
+            if status == "success":
+                ips = []
+                for child in root.iter("entry"):
+                    ips.append(child.attrib)
+                return ips
+            
+            else:
+                raise Exception("Failed to get registered ip")
+
+        elif response.status_code == 403:
+            error_msg = "Error: {}".format(list(root.iter("msg"))[0].text)
+            raise Exception(error_msg)
+
+        else:
+            raise Exception("Unexpected error: {}".format(response.text))
+
+
