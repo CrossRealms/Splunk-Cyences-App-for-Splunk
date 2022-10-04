@@ -20,7 +20,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
     // For palo ip block operation
     let PALO_IP_BLOCK_MAIN_ID = "palo_ip_block";
     let BLOCK_IP_BUTTON_ID = `#btn_block_ip`;
-    let ALLOW_IP_BUTTON_ID = `#btn_allow_ip`;
+    let UNBLOCK_IP_BUTTON_ID = `#btn_unblock_ip`;
     let palo_ip_block_loader = new Loader(`.${PALO_IP_BLOCK_MAIN_ID}_loader`);
     let palo_ip_block_page_message = new MessageUpdater(`#${PALO_IP_BLOCK_MAIN_ID}_message`);
     let palo_ip_block_modal_message = new MessageUpdater(`#${PALO_IP_BLOCK_MAIN_ID}_modalMessage`);
@@ -35,13 +35,13 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
 
     function disableButtons() {
         CMUtils.disableButton(BLOCK_IP_BUTTON_ID);
-        CMUtils.disableButton(ALLOW_IP_BUTTON_ID);
+        CMUtils.disableButton(UNBLOCK_IP_BUTTON_ID);
         CMUtils.disableButton(SHOW_BLOCKED_IP_BUTTON_ID);
     }
 
     function enableButtons() {
         CMUtils.enableButton(BLOCK_IP_BUTTON_ID);
-        CMUtils.enableButton(ALLOW_IP_BUTTON_ID);
+        CMUtils.enableButton(UNBLOCK_IP_BUTTON_ID);
         CMUtils.enableButton(SHOW_BLOCKED_IP_BUTTON_ID);
     }
 
@@ -209,7 +209,7 @@ function($, Loader, MessageUpdater, executeAsyncRestCall, CMUtils, mvc, _){
         paloAction = "block"
         paloBlockIPButtonClickEventHandler();
     });
-    $(ALLOW_IP_BUTTON_ID).click(function(){
+    $(UNBLOCK_IP_BUTTON_ID).click(function(){
         paloAction = "allow"
         paloBlockIPButtonClickEventHandler();
     });
