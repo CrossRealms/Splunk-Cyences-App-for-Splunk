@@ -341,7 +341,7 @@
           <query>`cs_o365` sourcetype=o365:management:activity  Workload=SecurityComplianceCenter Operation=AlertTriggered $tkn_host$
 | dedup AlertId
 | rex field=Data "\"(?&lt;email&gt;[\w\d\.\-]+\@[\w\d\.]+)\""
-| stats count by _time, Severity, Status, email, Name, Comments, Category, AlertType, Data | fields - count
+| table _time, Severity, Status, email, Name, Comments, Category, AlertType, Data 
 | sort -_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
