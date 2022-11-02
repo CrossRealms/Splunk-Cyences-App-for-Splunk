@@ -5,7 +5,7 @@
   </init>
   <search id="bs0">
     <query>
-      | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest_category="vpn_auth" AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s
+      | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest_category="vpn_auth" AND `cs_vpn_indexes` by _time Authentication.action Authentication.user Authentication.dest span=1s
       | rename Authentication.* as *
     </query>
     <earliest>$time.earliest$</earliest>
@@ -195,8 +195,8 @@
       <title>Login Details</title>
       <table>
         <search base="bs1">
-          <query>| fields _time user action src_ip City Country
-| rename user as User, action as Status, src_ip as "SourceIP"
+          <query>| fields _time dest user action src_ip City Country
+| rename dest as Dest, user as User, action as Status, src_ip as "SourceIP"
 | sort - _time</query>
         </search>
         <option name="count">5</option>
@@ -215,15 +215,15 @@
       <table>
         <search>
           <query>`cs_vpn_indexes` dest_category="vpn_auth" action="success" $User$
-| fields _time user action private_ip src City Country
+| fields _time dest user action private_ip src City Country
 | eval private_ip = if(private_ip="0.0.0.0", null(), private_ip) 
 | iplocation src 
 | eval Country = if(isnull(Country) OR Country="", "Unknown", Country) 
 | eval City = if(isnull(City) OR City="", "Unknown", City) 
 | search $Country$ $City$ 
 | `cs_vpn_dashboard_filter` 
-| table _time user action private_ip src City Country 
-| rename user as User, action as Status, src as "SourceIP", private_ip as "PrivateIP" 
+| table _time dest user action private_ip src City Country 
+| rename dest as Dest, user as User, action as Status, src as "SourceIP", private_ip as "PrivateIP" 
 | sort - _time</query>
           <earliest>$time.earliest$</earliest>
           <latest>$time.latest$</latest>
@@ -253,8 +253,8 @@
 | search $Country$ $City$ 
 | `cs_vpn_dashboard_filter` 
 | eval duration = tostring(duration, "duration") 
-| table _time user description SourceIP PrivateIP duration City Country 
-| rename user as User, duration as Duration, description as Reason</query>
+| table _time dest user description SourceIP PrivateIP duration City Country 
+| rename dest as Dest, user as User, duration as Duration, description as Reason</query>
           <earliest>$time.earliest$</earliest>
           <latest>$time.latest$</latest>
         </search>
