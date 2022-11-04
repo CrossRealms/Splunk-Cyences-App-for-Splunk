@@ -1,13 +1,15 @@
 <form theme="dark" stylesheet="cs_overview.css" script="cs_overview.js" version="1.1">
   <label>Overview</label>
   <search id="basesearch">
-    <query>`cs_cyences_index` | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name]
+    <query>`cs_cyences_index` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
+| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity]
+| eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
 | eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events"
+| table savedsearch_name, "Notable Events", cyences_severity
 | sort - "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
@@ -145,7 +147,10 @@
           <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
-        <fields>["Name","Notable Events"]</fields>
+        <format type="color" field="cyences_severity">
+          <colorPalette type="map">{"1":#00ff00, "2":#0000ff, "3":#0000ff, "4":#0000ff, "5":#ff0000}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events", "cyences_severity"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
