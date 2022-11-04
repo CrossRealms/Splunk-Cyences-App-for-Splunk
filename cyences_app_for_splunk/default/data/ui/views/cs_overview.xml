@@ -7,12 +7,13 @@
 | eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
 | search disabled=0 is_scheduled=1 
-| eval problem=if(isnull(problems), 0, problems)
-| eval problem = cyences_severity."|".problem
+| eval problems=if(isnull(problems), 0, problems)
+| eval cyences_severity=if(problems==0, 0, cyences_severity)
+| eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events"
-| sort - "Notable Events"</query>
+| sort - cyences_severity
+| table savedsearch_name, "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>
@@ -57,7 +58,7 @@
   <row>
     <panel>
       <title>Network Compromise &amp; Cisco IOS</title>
-      <table>
+      <table id="tbl_network_compromise">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS")`</query>
         </search>
@@ -70,10 +71,6 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -82,7 +79,7 @@
     </panel>
     <panel>
       <title>Authentication</title>
-      <table>
+      <table id="tbl_authentication">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Authentication")`</query>
         </search>
@@ -95,10 +92,6 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -107,7 +100,7 @@
     </panel>
     <panel>
       <title>Credential Compromise</title>
-      <table>
+      <table id="tbl_credential_compromise">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Credential Compromise")`</query>
         </search>
@@ -120,19 +113,15 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
-    <panel id="tbl_ransomware">
+    <panel>
       <title>Ransomware</title>
-      <table>
+      <table id="tbl_ransomware">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Ransomware")`</query>
         </search>
@@ -145,14 +134,7 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <format type="color" field="cyences_severity">
-          <colorPalette type="map">{"1":#00ff00, "2":#0000ff, "3":#0000ff, "4":#0000ff, "5":#ff0000}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events", "cyences_severity"]</fields>
+        <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
         </drilldown>
@@ -162,7 +144,7 @@
   <row>
     <panel>
       <title>Linux/Unix</title>
-      <table>
+      <table id="tbl_linux">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Linux")`</query>
         </search>
@@ -175,10 +157,6 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -187,7 +165,7 @@
     </panel>
     <panel>
       <title>Active Directory &amp; Windows</title>
-      <table>
+      <table id="tbl_ad_windows">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Windows|AD")`</query>
         </search>
@@ -200,10 +178,6 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -212,10 +186,9 @@
     </panel>
     <panel>
       <title>Office 365 &amp; Email</title>
-      <table>
+      <table id="tbl_o365">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("O365|Email")` 
-| rename "Notable Events" as Count 
 | append 
     [| search `cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus"))  earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
@@ -223,7 +196,11 @@
     | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
     | stats count as Count
     | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently not Operational O365 Services"]</query>
+    | eval Name="Currently not Operational O365 Services"
+    | eval cyences_severity=5
+    | eval Count = cyences_severity."|".Count
+    | rename Count as "Notable Events"]
+ | sort - cyences_severity</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -234,11 +211,7 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Count">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <fields>["Name","Count"]</fields>
+        <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <condition match="'row.Name'==&quot;Currently not Operational O365 Services&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -251,19 +224,18 @@
     </panel>
     <panel>
       <title>Antivirus</title>
-      <table>
+      <table id="tbl_antivirus">
         <search>
-          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | stats count as problems by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled | rename title as savedsearch_name | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
+          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
+| eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
-| eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events"
 | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
-| sort - "Notable Events"
+| eval Count=if(isnull(problems), 0, problems)
 | eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
-| rename "Notable Events" as Count 
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields _time host dhost type 
@@ -271,7 +243,8 @@
     | where type=="Event::Endpoint::ServiceNotRunning" 
     | stats count as Count
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently Disabled/Stopped Sophos Services"] 
+    | eval Name="Currently Disabled/Stopped Sophos Services"
+    | eval cyences_severity = 5] 
 | append
     [| search `cs_sophos` type="Event::Endpoint::Sav*" host="*" dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields host dhost type 
@@ -279,14 +252,16 @@
     | where type=="Event::Endpoint::SavDisabled" 
     | stats count as Count
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"]
+    | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"
+    | eval cyences_severity = 5]
 | append
     [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=stopped) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
       | fields EventCode, host 
       | stats latest(EventCode) as EventCode by host 
       | stats count(eval(EventCode!=1150 AND EventCode!=1151)) as Count 
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-      | eval Name="Currently Disabled/Stopped Windows Defender Services"]
+      | eval Name="Currently Disabled/Stopped Windows Defender Services"
+    | eval cyences_severity = 5]
 | append
     [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
     | fields RTP_state host 
@@ -294,8 +269,13 @@
     | where RTP_state=="Disabled" 
     | stats count as Count 
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"]
-| sort - Count</query>
+    | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
+    | eval cyences_severity = 5]
+| eval cyences_severity=if(Count==0, 0, cyences_severity)
+| sort - cyences_severity
+| eval problem = cyences_severity."|".Count
+| rename problem as "Notable Events"
+| table savedsearch_name, Name, "Notable Events"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -308,11 +288,7 @@
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
         </format>
-        <format type="color" field="Count">
-          <colorPalette type="list">[#03991A,#A3030B]</colorPalette>
-          <scale type="threshold">1</scale>
-        </format>
-        <fields>["Name","Count"]</fields>
+        <fields>["Name","Notable Events"]</fields>
         <drilldown>
           <condition match="'row.Name'==&quot;Windows Defender - Windows Defender RealTime Protection Disabled or Failed&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
@@ -349,18 +325,21 @@
           <latest>now</latest>
         </default>
       </input>
-      <table>
+      <table id="tbl_monthly_alerts">
         <search>
-          <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts`
-| stats count as problems by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | rename title as savedsearch_name | fields savedsearch_name, disabled, is_scheduled]
+          <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
+| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | rename title as savedsearch_name, "alert.severity" as severity | fields savedsearch_name, disabled, is_scheduled, severity]
+| eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
 | search savedsearch_name IN `cs_monthly_alerts`
-| eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1
-| table savedsearch_name, "Notable Events"
-| rename savedsearch_name as Name
-| sort - "Notable Events"</query>
+| eval problems=if(isnull(problems), 0, problems)
+| eval cyences_severity=if(problems==0, 0, cyences_severity)
+| eval problem = cyences_severity."|".problems
+| sort - cyences_severity
+| rename savedsearch_name as Name, problem as "Notable Events"
+| table Name, "Notable Events"</query>
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
@@ -372,10 +351,6 @@
         </format>
         <format type="color" field="is_scheduled">
           <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="Notable Events">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
-          <scale type="threshold">1</scale>
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>

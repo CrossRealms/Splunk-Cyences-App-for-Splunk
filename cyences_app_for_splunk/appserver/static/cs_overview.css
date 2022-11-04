@@ -48,25 +48,26 @@
 }
 
 .severity-5 {
-    background-color: red;
+    background-color: red !important;
 }
 
 .severity-4 {
-    background-color: orange;
+    background-color: orange !important;
 }
 
 .severity-3 {
-    background-color: yellow;
+    background-color: yellow !important;
 }
 
 .severity-2 {
-    background-color: yellowgreen;
+    background-color: yellowgreen !important;
 }
 
 .severity-1 {
-    background-color: green;
+    background-color: green !important;
 }
 
 .no-notable-events {
-    background-color: green;
+    background-color: green !important;
+    ;
 }

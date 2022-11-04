@@ -1,7 +1,10 @@
 require([
     'jquery',
+    'underscore',
+    'splunkjs/mvc',
+    'splunkjs/mvc/tableview',
     'splunkjs/mvc/simplexml/ready!'
-], function ($) {
+], function ($, _, mvc, TableView) {
 
     'use strict';
     let baseURL = window.location.href.split('cs_overview')[0];
@@ -57,9 +60,9 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_ransomware"];
-    for (i=0;i<tableIDs.length;i++) {
-        var sh = mvc.Components.get(tableIDs[i]);
+    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_o365", "tbl_antivirus", "tbl_monthly_alerts" ];
+    for (let i=0;i<tableIDs.length;i++) {
+        var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
             sh.getVisualization(function(tableView) {
                 // Add custom cell renderer and force re-render
