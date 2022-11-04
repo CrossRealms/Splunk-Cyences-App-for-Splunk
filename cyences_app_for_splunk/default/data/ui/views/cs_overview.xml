@@ -6,11 +6,12 @@
 | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity]
 | eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
-| eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
-| eval cyences_cell_renderer = cyences_severity."|".'Notable Events'
+| eval problem=if(isnull(problems), 0, problems)
+| eval problem = cyences_severity."|".problem
+| rename problem as "Notable Events"
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events", cyences_severity, cyences_cell_renderer
+| table savedsearch_name, "Notable Events"
 | sort - "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
@@ -129,7 +130,7 @@
         </drilldown>
       </table>
     </panel>
-    <panel>
+    <panel id="tbl_ransomware">
       <title>Ransomware</title>
       <table>
         <search base="basesearch">

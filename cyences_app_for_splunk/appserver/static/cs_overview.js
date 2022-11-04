@@ -42,7 +42,7 @@ require([
     // Adding cell render to colorize the notable events based on severity
     var CustomSeverityColorRenderer = TableView.BaseCellRenderer.extend({
         canRender: function(cell) {
-            return _(['cyences_cell_renderer']).contains(cell.field);
+            return _(['Notable Events']).contains(cell.field);
         },
         render: function($td, cell) {
             var severity = cell.value.split("|")[0];
@@ -57,7 +57,7 @@ require([
         }
     });
 
-    var tableIDs = ["my_table", "table2"];
+    var tableIDs = ["tbl_ransomware"];
     for (i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.get(tableIDs[i]);
         if(typeof(sh)!="undefined") {
