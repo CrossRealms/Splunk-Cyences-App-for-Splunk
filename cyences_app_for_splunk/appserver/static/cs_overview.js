@@ -38,4 +38,35 @@ require([
         });
     });
 
+
+    // Adding cell render to colorize the notable events based on severity
+    var CustomSeverityColorRenderer = TableView.BaseCellRenderer.extend({
+        canRender: function(cell) {
+            return _(['cyences_cell_renderer']).contains(cell.field);
+        },
+        render: function($td, cell) {
+            var severity = cell.value.split("|")[0];
+            var notableEventsCount = cell.value.split("|")[1];
+
+            if (notableEventsCount > 0){
+                $td.addClass(`severity-${severity}`).html(notableEventsCount);
+            }
+            else{
+                $td.addClass(`no-notable-events`).html(notableEventsCount);
+            }
+        }
+    });
+
+    var tableIDs = ["my_table", "table2"];
+    for (i=0;i<tableIDs.length;i++) {
+        var sh = mvc.Components.get(tableIDs[i]);
+        if(typeof(sh)!="undefined") {
+            sh.getVisualization(function(tableView) {
+                // Add custom cell renderer and force re-render
+                tableView.table.addCellRenderer(new CustomSeverityColorRenderer());
+                tableView.table.render();
+            });
+        }
+    }
+
 });

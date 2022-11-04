@@ -8,8 +8,9 @@
 | stats first(*) as * by savedsearch_name
 | eval "Notable Events"=if(isnull(problems), 0, problems)
 | search disabled=0 is_scheduled=1 
+| eval cyences_cell_renderer = cyences_severity."|".'Notable Events'
 | `cs_daily_alerts`
-| table savedsearch_name, "Notable Events", cyences_severity
+| table savedsearch_name, "Notable Events", cyences_severity, cyences_cell_renderer
 | sort - "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>

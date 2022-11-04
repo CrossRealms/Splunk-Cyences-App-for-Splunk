@@ -46,3 +46,27 @@
 .box:hover::before {
     left: 100%;
 }
+
+.severity-5 {
+    background-color: red;
+}
+
+.severity-4 {
+    background-color: orange;
+}
+
+.severity-3 {
+    background-color: yellow;
+}
+
+.severity-2 {
+    background-color: yellowgreen;
+}
+
+.severity-1 {
+    background-color: green;
+}
+
+.no-notable-events {
+    background-color: green;
+}
