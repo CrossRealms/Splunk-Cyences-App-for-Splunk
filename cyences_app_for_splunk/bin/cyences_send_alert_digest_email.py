@@ -63,15 +63,23 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
             logger.info("Custom command CyencesAlertDigestEmailCommand loaded.")
             self.check_session_key(records)
             results = self.results_by_alert(records)
+
+            # TODO - To handle the large email, we can do following:
+            # 1. Make results a sorted dict (so we can group same type of alerts in possibly same email)
+            # 2. Decide results dict into multiple dict maximum of 10/15 alerts in one email.
+            # 3. Follow the below process per chunk of results dict, have a numbered subject for emails, like digest 1, digest 2, etc
+
             html_body = self.htmlResultsBody(results)
 
             logger.debug("html_body: {}".format(html_body))
 
             cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token, self.alert_name)
-            cyences_email_utility.send(to=self.to, subject='Cyences Alert Digest Email', html_body=html_body)
+            subject = 'Cyences Alert Digest Email'
+            cyences_email_utility.send(to=self.to, subject=subject, html_body=html_body)
 
-            for r in records:
-                yield r
+            yield {
+                "msg" : "Email sent. subject={}".format(subject)
+            }
 
         except:
             logger.exception("Exception in command CyencesAlertDigestEmailCommand.")
