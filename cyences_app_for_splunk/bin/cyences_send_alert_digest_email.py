@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 
-import os
 import sys
-import json
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
 from splunklib.searchcommands.validators import Validator
-from splunk import rest
 
-import cs_utils
 from cyences_email_utility import CyencesEmailHTMLBodyBuilder, CyencesEmailUtility
 
 import logging
@@ -20,6 +16,7 @@ logger = logger_manager.setup_logging('send_alert_digest_email', logging.DEBUG)
 @Configuration()
 class CyencesAlertDigestEmailCommand(EventingCommand):
 
+    to = Option(name='to', require=True)
     alert_name = Option(name="alert_name", require=True)
     results_link = Option(name="results_link", require=False, default=None)
     trigger_time = Option(name="trigger_time", require=False, default=None)
@@ -63,7 +60,7 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
 
     def transform(self, records):
         try:
-            logger.info("custom command loaded.")
+            logger.info("Custom command CyencesAlertDigestEmailCommand loaded.")
             self.check_session_key(records)
             results = self.results_by_alert(records)
             html_body = self.htmlResultsBody(results)
@@ -71,10 +68,11 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
             full_email_html = CyencesEmailHTMLBodyBuilder.htmlRootTemplate().render(body=html_body)
             logger.debug("full_email_html: {}".format(full_email_html))
 
-            cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token)
-            cyences_email_utility.send(to='vjagani@crossrealms.com', subject='Cyences Alert Digest Email', htmlBody=full_email_html)
+            cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token, self.alert_name)
+            cyences_email_utility.send(to=self.to, subject='Cyences Alert Digest Email', htmlBody=full_email_html)
 
-            yield records
+            for r in records:
+                yield r
 
         except:
             logger.exception("Exception in command CyencesAlertDigestEmailCommand.")
