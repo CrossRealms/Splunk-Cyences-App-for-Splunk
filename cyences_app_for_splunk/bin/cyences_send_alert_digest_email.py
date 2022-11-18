@@ -34,14 +34,6 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
             raise Exception("unable to find session key.")
 
 
-    def read_cyences_alert_digest_email_action_default_configs(self):
-        _, serverContent = rest.simpleRequest(
-            "/servicesNS/nobody/{}/configs/conf-alert_actions?output_mode=json".format(cs_utils.APP_NAME), 
-            method='GET', sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
-        default_configs = json.loads(serverContent)
-        return default_configs
-
-
     def results_by_alert(self, results):
         alerts = {}
 
