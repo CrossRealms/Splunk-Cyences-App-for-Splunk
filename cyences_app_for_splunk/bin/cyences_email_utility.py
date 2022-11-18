@@ -107,6 +107,7 @@ class CyencesEmailUtility:
             self.update_email_configs(alert_level_email_configs)
 
         self.fix_default_email_configs()
+        self.logger.info("Final email configs after fix: {}".format(self.emailConfigs))
 
         self.set_smtp_creds()
 
@@ -117,8 +118,6 @@ class CyencesEmailUtility:
             method='GET', sessionKey=self.session_key, raiseAllErrors=True)
 
         default_configs = json.loads(serverContent)
-        self.logger.debug("alert_actions/email full_json: {}".format(default_configs))
-
         default_configs = default_configs['entry'][0]['content']
         self.logger.debug("alert_actions/email config: {}".format(default_configs))
 
@@ -257,11 +256,11 @@ class CyencesEmailUtility:
         emailBody = MIMEMultipart('alternative')
         email.attach(emailBody)
 
+        self.buildEmailHeaders(email, to, cc, bcc, subject)
+        self.logger.info("email headers: {}".format(email.as_string()))
+
         # Attaching email body
         emailBody.attach(MIMEText(htmlBody, 'html', _charset=CHARSET))
-
-        self.buildEmailHeaders(email, to, cc, bcc, subject)
-
 
         recipients = [r.strip() for r in self.recipients]
         validRecipients = []
@@ -278,9 +277,15 @@ class CyencesEmailUtility:
                                 % (subject, recipient, self.emailConfigs['allowedDomainList']))
                 else:
                     validRecipients.append(recipient)
+
+            if len(validRecipients) != len(recipients):
+                self.logger.error("Not all of the recipient email domains are on the allowed domain list. Sending emails only to %s" % str(validRecipients))
+
         else:
             validRecipients = recipients
-
+        
+        if len(validRecipients) == 0:
+            raise Exception("The email domains of the recipients are not among those on the allowed domain list.")
 
         mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", results_link="%s", recipients="%s", server="%s"' % (
             subject,
@@ -289,8 +294,9 @@ class CyencesEmailUtility:
             str(validRecipients),
             str(self.emailConfigs['mailserver'])
         )
-        try:
+        self.logger.info(mail_log_msg)
 
+        try:
             # setup the Open SSL Context
             sslHelper = ssl_context.SSLHelper()
             serverConfJSON = sslHelper.getServerSettings(self.session_key)
@@ -304,17 +310,15 @@ class CyencesEmailUtility:
             if not self.emailConfigs['use_ssl']:
                 smtp = secure_smtplib.SecureSMTP(host=self.emailConfigs['mailserver'])
             else:
+                # TODO - This is not tested yet
                 smtp = secure_smtplib.SecureSMTP_SSL(host=self.emailConfigs['mailserver'], sslContext=ctx)
 
 
             if self.emailConfigs['use_tls']:
                 smtp.starttls(ctx)
+
             if len(self.emailConfigs['username']) > 0 and self.emailConfigs['password'] is not None and len(self.emailConfigs['password']) >0:
                 smtp.login(self.emailConfigs['username'], self.emailConfigs['password'])
-
-            if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
-                if len(validRecipients) == 0:
-                    raise Exception("The email domains of the recipients are not among those on the allowed domain list.")
 
             try:
                 # mail_options SMTPUTF8 allows UTF8 message serialization
@@ -322,14 +326,9 @@ class CyencesEmailUtility:
             except SMTPNotSupportedError:
                 # sendmail is not configured to handle UTF8
                 smtp.sendmail(self.emailConfigs['from'], validRecipients, email.as_string())
-            
-            smtp.quit()
-            if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
-                if validRecipients != recipients:
-                    raise Exception("Not all of the recipient email domains are on the allowed domain list. Sending emails only to %s" % str(validRecipients))
 
-            self.logger.info(mail_log_msg)
+            smtp.quit()
 
         except Exception as e:
-            self.logger.error(mail_log_msg)
+            self.logger.error(e)
             raise
