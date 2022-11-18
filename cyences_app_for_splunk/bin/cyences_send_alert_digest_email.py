@@ -65,11 +65,10 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
             results = self.results_by_alert(records)
             html_body = self.htmlResultsBody(results)
 
-            full_email_html = CyencesEmailHTMLBodyBuilder.htmlRootTemplate().render(body=html_body)
-            logger.debug("full_email_html: {}".format(full_email_html))
+            logger.debug("html_body: {}".format(html_body))
 
             cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token, self.alert_name)
-            cyences_email_utility.send(to=self.to, subject='Cyences Alert Digest Email', htmlBody=full_email_html)
+            cyences_email_utility.send(to=self.to, subject='Cyences Alert Digest Email', html_body=html_body)
 
             for r in records:
                 yield r
