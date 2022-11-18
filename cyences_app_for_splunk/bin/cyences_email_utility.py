@@ -1,0 +1,335 @@
+
+import os
+import sys
+import json
+import socket
+import re
+import copy
+
+from splunk import rest
+from splunk.util import normalizeBoolean
+import splunk.ssl_context as ssl_context
+import splunk.secure_smtplib as secure_smtplib
+from mako import template
+
+from email.header import Header
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from smtplib import SMTPNotSupportedError
+
+import cs_utils
+
+
+CHARSET = "UTF-8"
+EMAIL_DELIM = re.compile('\s*[,;]\s*')
+
+
+class CyencesEmailHTMLBodyBuilder:
+
+    @staticmethod
+    def htmlTableTemplate():
+        return template.Template('''
+            % if len(results) > 0:
+            <div style="margin:0">
+                <div style="overflow: auto; width: 100%;">
+                    <h3 style="margin-top: 5px;">${title}</h3>
+                    <table cellpadding="0" cellspacing="0" border="0" class="results" style="margin: 20px;">
+                        <tbody>
+                            <% cols = [] %>
+                            <tr>
+                            % for key,val in results[0].items():
+                                % if not key.startswith("_") or key == "_raw" or key == "_time":
+                                    <% cols.append(key) %>
+                                    <th style="text-align: left; padding: 4px 8px; margin-bottom: 0px; border-bottom: 1px dotted #c3cbd4;">${key|h}</th>
+                                % endif
+                            % endfor
+                            </tr>
+                            % for result in results:
+                                <tr valign="top">
+                                % for col in cols:
+                                    <td style="text-align: left; padding: 4px 8px; margin-top: 0px; margin-bottom: 0px; border-bottom: 1px dotted #c3cbd4;">
+                                        % if isinstance(result.get(col), list):
+                                            % for val in result.get(col):
+                                                <pre style="font-family: helvetica, arial, sans-serif; white-space: pre-wrap; margin:0px;">${val|h}</pre>
+                                            % endfor
+                                        % else:
+                                            <pre style="font-family: helvetica, arial, sans-serif; white-space: pre-wrap; margin:0px;">${result.get(col)|h}</pre>
+                                        % endif
+                                    </td>
+                                % endfor
+                                </tr>
+                            % endfor
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            % else:
+                    <div class="results" style="margin: 20px;">No results found.</div>
+            % endif
+            ''')
+
+
+    @staticmethod
+    def htmlRootTemplate():
+        return template.Template('''
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                </head>
+                <body style="font-size: 14px; font-family: helvetica, arial, sans-serif; padding: 20px 0; margin: 0; color: #333;">
+                    ${body}
+                </body>
+            </html>
+                ''')
+
+
+
+def normalizeEmail(email, field, recipients):
+    emailList = EMAIL_DELIM.split(email[field])
+    recipients.extend(emailList)
+    stripped = ','.join([str(elem) for elem in emailList])
+    email.replace_header(field, stripped)
+
+
+
+
+class CyencesEmailUtility:
+    def __init__(self, logger, session_key, alert_name=None) -> None:
+        self.logger = logger
+        self.session_key = session_key
+        
+        self.emailConfigs = self.get_default_email_configs()
+        self.originalEmailConfigs = copy.deepcopy(self.emailConfigs)
+
+        if alert_name:
+            alert_level_email_configs = self.savedsearch_level_overridden_email_configs(alert_name)
+            self.update_email_configs(alert_level_email_configs)
+
+        self.fix_default_email_configs()
+
+        self.set_smtp_creds()
+
+
+    def get_default_email_configs(self):
+        _, serverContent = rest.simpleRequest(
+            "/services/configs/conf-alert_actions/email?output_mode=json",
+            method='GET', sessionKey=self.session_key, raiseAllErrors=True)
+
+        default_configs = json.loads(serverContent)
+        self.logger.debug("alert_actions/email full_json: {}".format(default_configs))
+
+        default_configs = default_configs['entry'][0]['content']
+        self.logger.debug("alert_actions/email config: {}".format(default_configs))
+
+        return default_configs
+    
+
+    def savedsearch_level_overridden_email_configs(self, alert_name):
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/-/{}/saved/searches/{}?output_mode=json".format(cs_utils.APP_NAME, alert_name),
+            method='GET', sessionKey=self.session_key, raiseAllErrors=True)
+
+        alert_all_configs = json.loads(serverContent)
+        alert_all_configs = alert_all_configs['entry'][0]['content']
+        self.logger.debug("saved/searches/<alert> all_config: {}".format(alert_all_configs))
+
+        # keeping only action.email related config with parameter names only
+        alert_email_config = {}
+        for key, value in alert_all_configs.items():
+            if key.startswith('action.email.'):
+                alert_email_config[key.lstrip('action.email.')] = value
+        
+        self.logger.debug("alert level email settings: {}".format(alert_email_config))
+
+        return alert_email_config
+    
+
+    def update_email_configs(self, config_to_override):
+        self.emailConfigs.update(config_to_override)
+
+
+    def fix_default_email_configs(self):
+        sender = self.emailConfigs['from']
+
+        # make sure the sender is a valid email address
+        if sender.find("@") == -1:
+            sender = sender + '@' + socket.gethostname()
+            if sender.endswith("@"):
+                sender = sender + 'localhost'
+        self.emailConfigs['from'] = sender
+        
+        self.emailConfigs['use_ssl'] = normalizeBoolean(self.emailConfigs['use_ssl'])
+        self.emailConfigs['use_tls'] = normalizeBoolean(self.emailConfigs['use_tls'])
+        self.emailConfigs['allowedDomainList'] = self.emailConfigs['allowedDomainList'].strip()
+
+
+    def buildEmailHeaders(self, email, to, cc, bcc, subject):
+        email['From'] = self.emailConfigs['from']
+        email['To'] = to
+        email['Cc'] = cc
+        email['Bcc'] = bcc
+        email['Subject'] = Header(subject, CHARSET)
+
+        recipients = []
+
+        if email['To']:
+            normalizeEmail(email, 'To', recipients)
+        if email['Cc']:
+            normalizeEmail(email, 'Cc', recipients)
+        if email['Bcc']:
+            recipients.extend(EMAIL_DELIM.split(email['Bcc']))
+            del email['Bcc']    # delete bcc from header after adding to recipients
+        
+        self.recipients = recipients
+    
+        # email['Date'] = utils.formatdate(localtime=True)
+
+        '''
+        if priority:
+            # look up better name
+            val = IMPORTANCE_MAP.get(priority.lower(), '')
+            # unknown value, use value user supplied
+            if not val:
+                val = priority
+            email['X-Priority'] = val
+        '''
+
+        '''
+        # trace info
+        if ssContent.get('name'):
+            email['X-Splunk-Name'] = ssContent.get('name')
+        if ssContent.get('owner'):
+            email['X-Splunk-Owner'] = ssContent.get('owner')
+        if ssContent.get('app'):
+            email['X-Splunk-App'] = ssContent.get('app')
+        email['X-Splunk-SID'] = sid
+        email['X-Splunk-ServerName'] = serverInfoContent.get('serverName')
+        email['X-Splunk-Version'] = serverInfoContent.get('version')
+        email['X-Splunk-Build'] = serverInfoContent.get('build')
+        '''
+
+
+    def set_smtp_creds(self):
+        username = self.emailConfigs.get("username" , "")
+        password = self.emailConfigs.get("password" , "")
+
+        # fetch credentials from the endpoint if none are supplied or password is encrypted
+        if (len(username) == 0 and len(password) == 0) or (password.startswith('$1$') or password.startswith('$7$')) :
+            username, password = self._get_smtp_creds_util()
+            self.emailConfigs['username'] = username
+            self.emailConfigs['password'] = password
+
+
+    def _get_smtp_creds_util(self):
+        try:
+            if 'auth_username' in self.originalEmailConfigs and 'clear_password' in self.originalEmailConfigs:
+                encrypted_password = self.originalEmailConfigs['clear_password']
+                splunkhome = os.environ.get('SPLUNK_HOME')
+                if splunkhome == None:
+                    self.logger.error('getCredentials - unable to retrieve credentials; SPLUNK_HOME not set')
+                    return None
+                #if splunk home has white spaces in path
+                splunkhome='\"' + splunkhome + '\"'
+                if sys.platform == "win32":
+                    encr_passwd_env = "\"set \"ENCRYPTED_PASSWORD=" + encrypted_password + "\" "
+                    commandparams = ["cmd", "/C", encr_passwd_env, "&&", os.path.join(splunkhome, "bin", "splunk"), "show-decrypted", "--value", "\"\"\""]
+                else:
+                    encr_passwd_env = "ENCRYPTED_PASSWORD='" + encrypted_password + "'"
+                    commandparams = [encr_passwd_env, os.path.join(splunkhome, "bin", "splunk"), "show-decrypted", "--value", "''"]
+                command = ' '.join(commandparams)
+                stream = os.popen(command)
+                clear_password = stream.read()
+                #the decrypted password is appended with a '\n'
+                if len(clear_password) >= 1:
+                    clear_password = clear_password[:-1]
+                return self.originalEmailConfigs['auth_username'], clear_password
+        except Exception as e:
+            self.logger.error("Could not get email credentials from splunk, using no credentials. Error: %s" % (str(e)))
+
+        return '', ''
+
+
+    def send(self, to, cc='', bcc='', subject='Splunk Alert', htmlBody='', results_link=''):
+
+        email = MIMEMultipart('mixed')
+        email.preamble = 'This is a multi-part message in MIME format.'
+        emailBody = MIMEMultipart('alternative')
+        email.attach(emailBody)
+
+        # Attaching email body
+        emailBody.attach(MIMEText(htmlBody, 'html', _charset=CHARSET))
+
+        self.buildEmailHeaders(email, to, cc, bcc, subject)
+
+
+        recipients = [r.strip() for r in self.recipients]
+        validRecipients = []
+        if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
+            domains = []
+            domains.extend(EMAIL_DELIM.split(self.emailConfigs['allowedDomainList']))
+            domains = [d.strip() for d in domains]
+            domains = [d.lower() for d in domains]
+            recipients = [r.lower() for r in recipients]
+            for recipient in recipients:
+                dom = recipient.partition("@")[2]
+                if not dom in domains:
+                    self.logger.error("For subject=%s, email recipient=%s is not among the alowedDomainList=%s in alert_actions.conf file. Removing it from the recipients list."
+                                % (subject, recipient, self.emailConfigs['allowedDomainList']))
+                else:
+                    validRecipients.append(recipient)
+        else:
+            validRecipients = recipients
+
+
+        mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", results_link="%s", recipients="%s", server="%s"' % (
+            subject,
+            email['Subject'],
+            results_link,
+            str(validRecipients),
+            str(self.emailConfigs['mailserver'])
+        )
+        try:
+
+            # setup the Open SSL Context
+            sslHelper = ssl_context.SSLHelper()
+            serverConfJSON = sslHelper.getServerSettings(self.session_key)
+            # Pass in settings from alert_actions.conf into context
+            ctx = sslHelper.createSSLContextFromSettings(
+                sslConfJSON=self.originalEmailConfigs,
+                serverConfJSON=serverConfJSON,
+                isClientContext=True)
+
+            # send the mail
+            if not self.emailConfigs['use_ssl']:
+                smtp = secure_smtplib.SecureSMTP(host=self.emailConfigs['mailserver'])
+            else:
+                smtp = secure_smtplib.SecureSMTP_SSL(host=self.emailConfigs['mailserver'], sslContext=ctx)
+
+
+            if self.emailConfigs['use_tls']:
+                smtp.starttls(ctx)
+            if len(self.emailConfigs['username']) > 0 and self.emailConfigs['password'] is not None and len(self.emailConfigs['password']) >0:
+                smtp.login(self.emailConfigs['username'], self.emailConfigs['password'])
+
+            if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
+                if len(validRecipients) == 0:
+                    raise Exception("The email domains of the recipients are not among those on the allowed domain list.")
+
+            try:
+                # mail_options SMTPUTF8 allows UTF8 message serialization
+                smtp.sendmail(self.emailConfigs['from'], validRecipients, email.as_string(), mail_options=["SMTPUTF8"])
+            except SMTPNotSupportedError:
+                # sendmail is not configured to handle UTF8
+                smtp.sendmail(self.emailConfigs['from'], validRecipients, email.as_string())
+            
+            smtp.quit()
+            if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
+                if validRecipients != recipients:
+                    raise Exception("Not all of the recipient email domains are on the allowed domain list. Sending emails only to %s" % str(validRecipients))
+
+            self.logger.info(mail_log_msg)
+
+        except Exception as e:
+            self.logger.error(mail_log_msg)
+            raise
