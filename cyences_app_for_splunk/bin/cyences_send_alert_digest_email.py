@@ -18,7 +18,7 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
 
     alert_name = Option(name="alert_name", require=True)
     to = Option(name='to', require=False, default=None)
-    severity = Option(name='severity', require=False, default=None)
+    severity = Option(name='cyences_severity', require=False, default=None)
     results_link = Option(name="results_link", require=False, default=None)
     trigger_time = Option(name="trigger_time", require=False, default=None)
     results_file = Option(name="results_file", require=False, default=None)
@@ -83,7 +83,7 @@ class CyencesAlertDigestEmailCommand(EventingCommand):
             cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token, self.alert_name)
 
             param_to = cyences_email_utility.emailConfigs.get("param.to")
-            param_severity = cyences_email_utility.emailConfigs.get("param.severity")
+            param_severity = cyences_email_utility.emailConfigs.get("param.cyences_severity")
 
             final_to = self.to if self.to is not None else param_to
             final_severity = self.severity if self.severity is not None else param_severity
