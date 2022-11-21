@@ -146,11 +146,14 @@ class CyencesEmailUtility:
         alert_all_configs = alert_all_configs['entry'][0]['content']
         self.logger.debug("saved/searches/<alert> all_config: {}".format(alert_all_configs))
 
-        # keeping only action.email related config with parameter names only
+        # keeping only action.email and action.cyences_alert_digest_email_action related config with parameter names only
         alert_email_config = {}
         for key, value in alert_all_configs.items():
             if key.startswith('action.email.') and key.lstrip('action.email.')!='':
                 alert_email_config[key.lstrip('action.email.')] = value
+            elif key.startswith('action.cyences_alert_digest_email_action.') and key.lstrip('action.cyences_alert_digest_email_action.')!='':
+                alert_email_config[key.lstrip('action.cyences_alert_digest_email_action.')] = value
+
         
         self.logger.debug("alert level email settings: {}".format(alert_email_config))
 

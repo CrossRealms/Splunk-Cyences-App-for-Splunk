@@ -1,0 +1,10 @@
+<form>
+    <splunk-control-group label="To" help="Comma separated list of email addresses.">
+        <splunk-text-input name="action.cyences_alert_digest_email_action.param.to" id="to">
+        </splunk-text-input>
+    </splunk-control-group>
+    <splunk-control-group label="Severity" help="Comma separated list of severities. ie. critical,high,medium,low,info">
+        <splunk-text-input name="action.cyences_alert_digest_email_action.param.severity" id="severity">
+        </splunk-text-input>
+    </splunk-control-group>
+</form>
