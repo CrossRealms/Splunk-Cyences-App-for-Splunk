@@ -434,4 +434,62 @@ require([
     $(`#sophos_endpoint_button`).on("click", function(){
         updateSophosEndpointConfiguration();
     });
+
+
+   function getCommonEmailAlertActionConfiguration(){
+        let service = mvc.createService();
+        service.get('/servicesNS/-/cyences_app_for_splunk/configs/conf-alert_actions/cyences_send_email_action', {}, function(error, response){
+            if(response && response.data.entry[0].content){
+                let content = response.data.entry[0].content;
+                $("#cyences_email_default_to").val(content['param.default_to']);
+                $("#cyences_email_cyences_severity").val(content['param.cyences_severity']);
+            }
+            else if(error && error['error']){
+                let msg_location = "#cyences_email_msg";
+                $(msg_location).addClass('error_msg');
+                $(msg_location).removeClass('success_msg');
+                $(msg_location).text(`Unable to get the default configuration, may be there is no configuration. Please set the configuration and save.`);
+                console.log(error);
+            }
+            else{
+                console.log("Unknown error while getting Common Email Alert Action Configuration.");
+            }
+
+        });
+    }
+
+    getCommonEmailAlertActionConfiguration();
+
+    function updateCommonEmailAlertActionConfiguration(){
+        let default_to = $("#cyences_email_default_to").val();
+        let cyences_severity = $("#cyences_email_cyences_severity").val();
+        let service = mvc.createService();
+        let data = {
+            "param.default_to": default_to,
+            "param.cyences_severity": cyences_severity
+        };
+        service.post("/servicesNS/-/cyences_app_for_splunk/configs/conf-alert_actions/cyences_send_email_action", data, function(error, response){
+            if(response && response.data.entry[0].content){
+                let msg_location = "#cyences_email_msg";
+                $(msg_location).removeClass('error_msg');
+                $(msg_location).addClass('success_msg');
+                $(msg_location).text("Common Email Alert Action configuration saved successfully.");
+            }
+            else if(error && error['error']){
+                let msg_location = "#cyences_email_msg";
+                $(msg_location).addClass('error_msg');
+                $(msg_location).removeClass('success_msg');
+                $(msg_location).text(`Unable to save the configuration. Error: ${error['error']}`);
+                console.log(error);
+            }
+            else{
+                console.log("Unknown error while getting Common Email Alert Action Configuration.");
+            }
+        });
+    }
+
+    $(`#cyences_email_button`).on("click", function(){
+        updateCommonEmailAlertActionConfiguration();
+    });
+
 });

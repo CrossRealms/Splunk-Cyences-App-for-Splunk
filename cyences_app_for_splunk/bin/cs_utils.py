@@ -93,3 +93,17 @@ def check_url_scheme(url, logger):
     if not url.startswith("https://"):
         logger.error(err_msg)
         raise Exception(err_msg)
+
+
+def is_true(val):
+    return str(val).lower() in ('1', 'true', 'yes')
+
+
+def convert_to_set(val):
+    '''convert comma separated string into set'''
+    if val is None:
+        final_set = set()
+    else:
+        final_set = {item.strip() for item in val.lower().split(',') if item.strip()}
+    
+    return final_set
