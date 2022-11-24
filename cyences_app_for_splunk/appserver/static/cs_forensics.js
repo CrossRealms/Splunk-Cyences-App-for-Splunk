@@ -1,8 +1,9 @@
 require([
     'jquery',
     'splunkjs/mvc',
+    'splunkjs/mvc/searchmanager',
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc) {
+], function ($, mvc, SearchManager) {
 
     'use strict';
     let submittedTokens = mvc.Components.getInstance('submitted');
@@ -11,7 +12,8 @@ require([
     let all_alerts = {};
 
     // Defining search and search manager
-    var searchString = `| rest /servicesNS/-/cyences_app_for_splunk/saved/searches splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" 
+    var searchString = `| rest /servicesNS/-/cyences_app_for_splunk/saved/searches splunk_server=local 
+        | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1"
         | rename action.cyences_notable_event_action.* as *
         | table title, contributing_events, system_compromised_search, system_compromised_drilldown, attacker_search, attacker_drilldown`;
     var searchManager = new SearchManager({
@@ -68,7 +70,7 @@ require([
             submittedTokens.set("contributing_events_search", `${all_alerts[savedsearch_name].contributing_events} | sort - count`);
         }
         else {
-            submittedTokens.unset("contributing_events");
+            submittedTokens.unset("contributing_events_search");
             console.log("No forensic search to see contributing events.");
         }
 
