@@ -7,11 +7,11 @@
         <p id="cyences_email_msg"/>
         <div>
           Default Email Recipients: <input type="text" id="cyences_email_to_default" style="margin-bottom:5px;"/>
-          <br>(comma separated list of email addresses who wish to receive all Cyences alerts as email)
-          <br>
+          <br/>(comma separated list of email addresses who wish to receive all Cyences alerts as email)
+          <br/>
           Severities: <input type="text" id="cyences_email_cyences_severities"/>
-          <br>(comma separated list of alert severities to be send in the emails. Default: critical only)
-          <br>
+          <br/>(comma separated list of alert severities to be send in the emails. Default: critical only)
+          <br/>
           <button id="cyences_email_button">Save</button>
         </div>
       </html>
