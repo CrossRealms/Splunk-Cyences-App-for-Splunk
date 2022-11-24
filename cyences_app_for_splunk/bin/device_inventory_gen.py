@@ -16,7 +16,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
+logger = logger_manager.setup_logging('device_inventory_command', logging.INFO)
 
 IS_DEBUGGING_MODE = False
 
@@ -113,7 +113,7 @@ class DeviceInventoryGenCommand(EventingCommand):
         for filename in os.listdir(LOOKUP_DIR):
             f = os.path.join(LOOKUP_DIR, filename)
             if f.startswith(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX) and os.stat(f).st_mtime < now - 7 * 86400:   # remove older than 7 days file
-                logger.debug("Removing file: {}".format(filename))
+                logger.info("Removing file: {}".format(filename))
                 # os.remove(f)
 
     def take_backup_of_lookup_only_updated_entries(self, data):

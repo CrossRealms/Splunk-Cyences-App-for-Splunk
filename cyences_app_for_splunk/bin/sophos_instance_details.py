@@ -10,7 +10,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('sophos_details_command', logging.DEBUG)
+logger = logger_manager.setup_logging('sophos_details_command', logging.INFO)
 
 APP_NAME = 'cyences_app_for_splunk'
 CONF_FILE = 'cs_configurations'

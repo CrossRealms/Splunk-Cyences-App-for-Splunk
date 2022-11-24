@@ -9,7 +9,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('upload_malicious_ip', logging.DEBUG)
+logger = logger_manager.setup_logging('upload_malicious_ip', logging.INFO)
 
 
 
@@ -49,9 +49,9 @@ class MaliciousIPUploaderCommand(StreamingCommand):
             }
             resp = None
             try:
-                logger.debug("Uploading malicious Ip list to Cyences API.")
+                logger.info("Uploading malicious Ip list to Cyences API.")
                 resp = requests.post(endpoint_url, json=payload, headers=auth_header, timeout=cs_utils.CYENCES_NETWORK_CALL_TIMEOUT)
-                logger.debug("Cyences API request completed.")
+                logger.info("Cyences API request completed.")
                 resp.raise_for_status()
                 yield {'success': True, 'message': "Successfully Uploaded Ips to API."}
                 logger.info("Response received {}".format(resp.json()))

@@ -8,7 +8,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('malicious_ip_lookup_gen', logging.DEBUG)
+logger = logger_manager.setup_logging('malicious_ip_lookup_gen', logging.INFO)
 
 
 HEADERS = ['description','ip','ip_location','last_seen']
@@ -24,12 +24,12 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
 
 
     def request_malicious_ips(self, api_config):
-        logger.debug("Getting malicious Ip list from Cyences API.")
+        logger.info("Getting malicious Ip list from Cyences API.")
         auth_header = {
             "Authorization": "Bearer {}".format(api_config['auth_token'])
         }
         response = requests.get("{}{}".format(api_config['api_url'].rstrip('/'), '/api/v1/ip'), headers=auth_header, timeout=cs_utils.CYENCES_NETWORK_CALL_TIMEOUT)
-        logger.debug("Got malicious Ip list response.")
+        logger.info("Got malicious Ip list response.")
         return response.json()['data']
 
 
