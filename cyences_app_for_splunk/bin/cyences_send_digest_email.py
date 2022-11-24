@@ -3,7 +3,6 @@
 import sys
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
-from splunklib.searchcommands.validators import Validator
 
 import cs_utils
 from cyences_email_utility import CyencesEmailHTMLBodyBuilder, CyencesEmailUtility
