@@ -49,7 +49,7 @@
   <row>
     <panel>
       <table>
-        <title>Data Check</title>
+        <title>WinEventLog System Logs Status</title>
         <search base="data_check">
           <query>search host="$host$" 
 | where isnull(extra_event) 
@@ -70,7 +70,7 @@
       <table>
         <title>Windows Update Events</title>
         <search>
-          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
+          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 SourceName="Microsoft-Windows-WindowsUpdateClient" NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
 | eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
 | append 
     [| inputlookup all_windows_hosts.csv 
