@@ -12,7 +12,7 @@ require([
 
     // Defining search and search manager
     var searchString = `| rest /servicesNS/-/cyences_app_for_splunk/saved/searches splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" 
-        | rename action.cyences_alert_action.* as *
+        | rename action.cyences_notable_event_action.* as *
         | table title, contributing_events, system_compromised_search, system_compromised_drilldown, attacker_search, attacker_drilldown`;
     var searchManager = new SearchManager({
         preview: true,
