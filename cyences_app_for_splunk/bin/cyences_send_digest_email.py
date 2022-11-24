@@ -60,7 +60,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 try:
                     event['__cyences_severity'] = ALERT_SEVERITIES[event['cyences_severity']]  # Add addition information for sorting
                 except:
-                    logger.warn('Unable to decode alert severity {} for alert_name={}'.format(event['cyences_severity'], alert_name))
+                    logger.warning('Unable to decode alert severity {} for alert_name={}'.format(event['cyences_severity'], alert_name))
                     continue
             else:
                 event['__cyences_severity'] = 100
@@ -130,11 +130,11 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             final_severities = self.severities if self.severities is not None else param_severities
 
             if final_email_to.strip() == '':
-                logger.warn("Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured.")
+                logger.warning("Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured.")
                 return
             
             if final_severities.strip() == '':
-                logger.warn("Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty.")
+                logger.warning("Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty.")
                 return
             
             final_email_to = cs_utils.convert_to_set(final_email_to)

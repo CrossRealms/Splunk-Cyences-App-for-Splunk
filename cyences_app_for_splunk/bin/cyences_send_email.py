@@ -49,7 +49,7 @@ class CyencesSendEmailCommand(EventingCommand):
             final_to = email_to_include.difference(email_to_exclude)
 
             if disable_email or len(cyences_severities) == 0 or len(final_to) == 0:
-                logger.warn("Please check the Cyences Send Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
+                logger.warning("Please check the Cyences Send Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
                 return
 
             filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severities]

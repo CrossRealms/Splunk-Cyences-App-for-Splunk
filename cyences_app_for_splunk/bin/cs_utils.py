@@ -145,6 +145,6 @@ class ConfigHandler:
             PREFIX = 'action.{}.'.format(alert_action_name)
             if key.startswith(PREFIX) and key.lstrip(PREFIX)!='':
                 alert_action_config_for_alert[key.lstrip(PREFIX)] = value
-        self.logger.debug("Alert ({}) specific config for alert action ({}): {}".format(savedsearches_config_object['title'], alert_action_name, alert_config))
+        self.logger.debug("Alert specific config for alert action ({}): {}".format(alert_action_name, savedsearches_config_object))
 
         return alert_action_config_for_alert
