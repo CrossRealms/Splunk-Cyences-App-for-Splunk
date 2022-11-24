@@ -2,6 +2,32 @@
   <label>Configuration</label>
   <row>
     <panel>
+      <title>Common Email Alert Action Configuration</title>
+      <html>
+        <p id="cyences_email_msg"/>
+        <table style="width:60%">
+          <tr>
+            <th style="text-align:left">Default Email Recipient</th>
+            <th style="text-align:left">
+              <input type="text" id="cyences_email_default_to" style="margin-bottom:5px;"/>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">Severity</th>
+            <th style="text-align:left">
+              <input type="text" id="cyences_email_cyences_severity"/>
+            </th>
+            <th style="text-align:left">
+              <button id="cyences_email_button">Save</button>
+            </th>
+          </tr>
+        </table>
+        <div>*Enter comma values.</div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>HoneyDB Configuration</title>
       <html>
         <p id="honeydb_msg"/>

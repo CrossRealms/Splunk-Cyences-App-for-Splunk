@@ -1,0 +1,17 @@
+
+<form>
+    <div class="control-group">
+        <label class="control-label" for="disable_email">Disable Email</label>
+        <div class="controls">
+            <input type="checkbox" name="action.cyences_send_email_action.param.disable_email" id="disable_email" value="1"/>
+        </div>
+    </div>
+    <splunk-control-group label="Exclude To" help="Comma separated email addresses.">
+        <splunk-text-input name="action.cyences_send_email_action.param.exclude_to" id="exclude_to">
+        </splunk-text-input>
+    </splunk-control-group>
+    <splunk-control-group label="Severity" help="Comma separated severities. ie. critical,high,medium,low,info">
+        <splunk-text-input name="action.cyences_send_email_action.param.cyences_severity" id="cyences_severity">
+        </splunk-text-input>
+    </splunk-control-group>
+</form>
