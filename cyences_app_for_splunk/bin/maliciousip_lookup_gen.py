@@ -57,8 +57,10 @@ class UpdateMaliciousIPLookup(GeneratingCommand):
  
     def generate(self):
         try:
+            session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
+
             # Read API Info
-            api_config = cs_utils.get_cyences_api_key(self.search_results_info.auth_token, logger)
+            api_config = cs_utils.get_cyences_api_key(session_key, logger)
 
             if not api_config['api_url'] or not api_config['auth_token']:
                 logger.error("MaliciousIP Collector Configuration not found in the cs_configurations.conf file.")

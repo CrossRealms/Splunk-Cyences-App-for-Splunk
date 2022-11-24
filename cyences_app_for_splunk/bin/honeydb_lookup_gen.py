@@ -28,7 +28,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
 
     def get_api_info(self):
         logger.debug("Getting HoneyDB API Info.")
-        sessionKey = self.search_results_info.auth_token
+        sessionKey = self.session_key
         _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=sessionKey)
         data = json.loads(serverContent)['entry']
         api_id = ''
@@ -75,6 +75,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
  
     def generate(self):
         try:
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
             # Read API ID and API Key
             api_id, api_key = self.get_api_info()
 
@@ -112,5 +113,6 @@ class UpdateHoneyDBLookup(GeneratingCommand):
         except Exception as e:
             logger.exception("Error in honeydb_lookup_gen command: {}".format(e))
             raise e
- 
+
+
 dispatch(UpdateHoneyDBLookup, sys.argv, sys.stdin, sys.stdout, __name__)

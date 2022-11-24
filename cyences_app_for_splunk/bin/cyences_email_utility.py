@@ -95,12 +95,6 @@ class CyencesEmailHTMLBodyBuilder:
             ''')
 
 
-def normalizeEmail(email, field, recipients):
-    emailList = EMAIL_DELIM.split(email[field])
-    recipients.extend(emailList)
-    stripped = ','.join([str(elem) for elem in emailList])
-    email.replace_header(field, stripped)
-
 
 
 class CyencesEmailUtility:
@@ -135,7 +129,7 @@ class CyencesEmailUtility:
         self.logger.debug("alert_actions/email config: {}".format(default_configs))
 
         return default_configs
-    
+
 
     def savedsearch_level_overridden_email_configs(self, alert_name):
         _, serverContent = rest.simpleRequest(
@@ -181,19 +175,21 @@ class CyencesEmailUtility:
 
     def buildEmailHeaders(self, email, to, cc, bcc, subject):
         email['From'] = self.emailConfigs['from']
-        email['To'] = to
-        email['Cc'] = cc
-        email['Bcc'] = bcc
+
         email['Subject'] = Header(subject, CHARSET)
 
         recipients = []
 
-        if email['To']:
-            normalizeEmail(email, 'To', recipients)
-        if email['Cc']:
-            normalizeEmail(email, 'Cc', recipients)
-        if email['Bcc']:
-            recipients.extend(EMAIL_DELIM.split(email['Bcc']))
+        if to:
+            email['To'] = ','.join(to)
+            email.replace_header('To', email['To'])
+            recipients.extend(to)
+        if cc:
+            email['Cc'] = ','.join(cc)
+            email.replace_header('Cc', email['Cc'])
+            recipients.extend(cc)
+        if bcc:
+            recipients.extend(bcc)
             del email['Bcc']    # delete bcc from header after adding to recipients
         
         self.recipients = recipients
@@ -265,7 +261,7 @@ class CyencesEmailUtility:
         return '', ''
 
 
-    def send(self, to, cc='', bcc='', subject='Splunk Alert', html_body='', results_link=''):
+    def send(self, to, cc=[], bcc=[], subject='Splunk Alert', html_body='', results_link=''):
 
         subject = 'Splunk Alert: {}'.format(subject)
 

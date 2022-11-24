@@ -19,35 +19,24 @@ ALERT_ACTION_NAME = 'cyences_send_digest_email_action'
 class CyencesSendDigestEmailCommand(EventingCommand):
 
     alert_name = Option(name="alert_name", require=True)
-    to = Option(name='to', require=False, default=None)
-    severity = Option(name='cyences_severity', require=False, default=None)
+    email_to = Option(name='email_to', require=False, default=None)
+    severities = Option(name='cyences_severities', require=False, default=None)
     results_link = Option(name="results_link", require=False, default=None)
     trigger_time = Option(name="trigger_time", require=False, default=None)
     results_file = Option(name="results_file", require=False, default=None)
 
 
-    def check_session_key(self, records):
-        if not self.search_results_info or not self.search_results_info.auth_token:
-            logger.debug("Unable to find session key in the custom command. Logging records, if any.")
-            for r in records:
-                logger.debug(r)
-            raise Exception("unable to find session key.")
-
-
-    def results_by_alert(self, results, severity_str, exclude_alert_str):
-
-        severity_filter = cs_utils.convert_to_set(severity_str)
-        exclude_alert = cs_utils.convert_to_set(exclude_alert_str)
+    def results_by_alert(self, results, severity_filter, alerts_to_exclude):
 
         logger.debug("severity_filter={}".format(severity_filter))
-        logger.debug("exclude_alert={}".format(exclude_alert))
+        logger.debug("alerts_to_exclude={}".format(alerts_to_exclude))
         alerts = {}
 
         for event in results:
             alert_name = event['alert_name']
 
             # Skip event if alert_name in the exclude_alert
-            if alert_name.lower() in exclude_alert:
+            if alert_name.lower() in alerts_to_exclude:
                 continue
 
             # skip event if and cyences_severity is not matching with severity_filter
@@ -75,36 +64,36 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 full_html_body += CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=events, title=title)
         return full_html_body
 
-    def parse_alert_config(self, config_object):
-        alert_config = {}
-        for key, value in config_object.items():
-            PREFIX = 'action.{}.'.format(ALERT_ACTION_NAME)
-            if key.startswith(PREFIX) and key.lstrip(PREFIX)!='':
-                alert_config[key.lstrip(PREFIX)] = value
-        return alert_config
 
     def transform(self, records):
         try:
             logger.info("Custom command CyencesSendDigestEmailCommand loaded.")
-            self.check_session_key(records)
+            session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
+            config_handler = cs_utils.ConfigHandler(logger)
 
-            cyences_email_utility = CyencesEmailUtility(logger, self.search_results_info.auth_token, self.alert_name)
+            cyences_email_utility = CyencesEmailUtility(logger, session_key, self.alert_name)
 
-            alert_config = self.parse_alert_config(cyences_email_utility.alert_all_configs)
+            alert_action_config_for_alert = config_handler.extract_alert_action_params_from_savedsearches_config(cyences_email_utility.alert_all_configs, ALERT_ACTION_NAME)
 
-            param_to = alert_config.get("param.to", '')
-            param_severity = alert_config.get("param.cyences_severity", '')
-            param_exclude_alert = alert_config.get("param.exclude_alert", '')
+            param_email_to = alert_action_config_for_alert.get("param.email_to", '')
+            param_severities = alert_action_config_for_alert.get("param.cyences_severities", '')
+            param_exclude_alerts = cs_utils.convert_to_set(alert_action_config_for_alert.get("param.exclude_alerts", ''))
 
-            final_to = self.to if self.to is not None else param_to
-            final_severity = self.severity if self.severity is not None else param_severity
+            final_email_to = self.email_to if self.email_to is not None else param_email_to
+            final_severities = self.severities if self.severities is not None else param_severities
 
-            if final_to.strip() == '' or final_severity.strip() == '':
-                logger.warn("Please check the Cyences Send Digest Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
-
+            if final_email_to.strip() == '':
+                logger.warn("Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured.")
                 return
+            
+            if final_severities.strip() == '':
+                logger.warn("Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty.")
+                return
+            
+            final_email_to = cs_utils.convert_to_set(final_email_to)
+            final_severities = cs_utils.convert_to_set(final_severities)
 
-            results = self.results_by_alert(records, final_severity, param_exclude_alert)
+            results = self.results_by_alert(records, final_severities, param_exclude_alerts)
             html_body = self.htmlResultsBody(results)
 
             # logger.debug("html_body: {}".format(html_body))
@@ -113,9 +102,8 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 return
 
             subject='Cyences Alert Digest Email'
-            cyences_email_utility.send(to=final_to, subject=subject, html_body=html_body)
+            cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
             logger.info("Email sent. subject={}".format(subject))
-
 
         except:
             logger.exception("Exception in command CyencesSendDigestEmailCommand.")

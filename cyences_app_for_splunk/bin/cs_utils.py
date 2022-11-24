@@ -95,15 +95,56 @@ def check_url_scheme(url, logger):
         raise Exception(err_msg)
 
 
-def is_true(val):
+def is_true(val: str):
     return str(val).lower() in ('1', 'true', 'yes')
 
 
-def convert_to_set(val):
+def convert_to_set(val: str, to_lower_all=True):
     '''convert comma separated string into set'''
-    if val is None:
-        final_set = set()
-    else:
-        final_set = {item.strip() for item in val.lower().split(',') if item.strip()}
+    if val is None or val.strip() == '':
+        return set()
     
-    return final_set
+    if to_lower_all:
+        return { item.strip() for item in val.strip().lower().split(',') if item.strip() }
+
+    return { item.strip() for item in val.strip().split(',') if item.strip() }
+
+
+
+class GetSessionKey:
+    def __init__(self, logger) -> None:
+        self.logger = logger
+    
+    def from_custom_command(self, custom_command_obj):
+        if not custom_command_obj.search_results_info or not custom_command_obj.search_results_info.auth_token:
+            self.logger.error("Unable to get session key in the custom command.")
+            raise Exception("Unable to get session key.")
+        return custom_command_obj.search_results_info.auth_token
+
+
+
+class ConfigHandler:
+    def __init__(self, logger) -> None:
+        self.logger = logger
+
+    def get_alert_action_default_config(self, alert_action_name):
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/-/{}/configs/conf-alert_actions/{}?output_mode=json".format(APP_NAME, alert_action_name),
+            method='GET', sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+
+        default_configs = json.loads(serverContent)
+        default_configs = default_configs['entry'][0]['content']
+        self.logger.debug("alert_action_name={}, config={}".format(alert_action_name, default_configs))
+
+        return default_configs
+
+
+    def extract_alert_action_params_from_savedsearches_config(self, savedsearches_config_object, alert_action_name):
+        alert_action_config_for_alert = {}
+        for key, value in savedsearches_config_object.items():
+            PREFIX = 'action.{}.'.format(alert_action_name)
+            if key.startswith(PREFIX) and key.lstrip(PREFIX)!='':
+                alert_action_config_for_alert[key.lstrip(PREFIX)] = value
+        self.logger.debug("Alert ({}) specific config for alert action ({}): {}".format(savedsearches_config_object['title'], alert_action_name, alert_config))
+
+        return alert_action_config_for_alert

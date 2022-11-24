@@ -23,5 +23,5 @@ class UpdateMacroDefinition(GeneratingCommand):
                                     method="POST", sessionKey=sessionKey, postargs=data, raiseAllErrors=True)
         yield {"msg": "Macro has been updated."}
 
- 
+
 dispatch(UpdateMacroDefinition, sys.argv, sys.stdin, sys.stdout, __name__)

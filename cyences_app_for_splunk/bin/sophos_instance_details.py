@@ -29,7 +29,7 @@ class SophosEndpointDetails(GeneratingCommand):
     all_endpoints    = Option(name="all_endpoints",require=False,default=False)
 
     def get_client_details(self):
-        sessionKey = self.search_results_info.auth_token
+        sessionKey = self.session_key
         _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(APP_NAME,CONF_FILE), sessionKey=sessionKey)
         data = json.loads(serverContent)['entry']
         client_id = ''
@@ -159,8 +159,9 @@ class SophosEndpointDetails(GeneratingCommand):
 
 
     def generate(self):
-
         try:
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
+
             ip = self.ip
             hostname = self.hostname
             uuid = self.uuid
@@ -210,6 +211,5 @@ class SophosEndpointDetails(GeneratingCommand):
             logger.exception("Error Occurred while fetching instance details. Error: {}".format(e))
             self.write_warning("Error Occurred while fetching instance details. Go to Inspect Job and check search logs")
 
-        
- 
+
 dispatch(SophosEndpointDetails, sys.argv, sys.stdin, sys.stdout, __name__)

@@ -441,14 +441,14 @@ require([
         service.get('/servicesNS/-/cyences_app_for_splunk/configs/conf-alert_actions/cyences_send_email_action', {}, function(error, response){
             if(response && response.data.entry[0].content){
                 let content = response.data.entry[0].content;
-                $("#cyences_email_default_to").val(content['param.default_to']);
-                $("#cyences_email_cyences_severity").val(content['param.cyences_severity']);
+                $("#cyences_email_to_default").val(content['param.email_to_default']);
+                $("#cyences_email_cyences_severities").val(content['param.cyences_severities']);
             }
             else if(error && error['error']){
                 let msg_location = "#cyences_email_msg";
                 $(msg_location).addClass('error_msg');
                 $(msg_location).removeClass('success_msg');
-                $(msg_location).text(`Unable to get the default configuration, may be there is no configuration. Please set the configuration and save.`);
+                $(msg_location).text(`Unable to get the default cyences email alert action configuration, may be there is no configuration. Please set the configuration and save.`);
                 console.log(error);
             }
             else{
@@ -461,12 +461,12 @@ require([
     getCommonEmailAlertActionConfiguration();
 
     function updateCommonEmailAlertActionConfiguration(){
-        let default_to = $("#cyences_email_default_to").val();
-        let cyences_severity = $("#cyences_email_cyences_severity").val();
+        let email_to_default = $("#cyences_email_to_default").val();
+        let cyences_severities = $("#cyences_email_cyences_severities").val();
         let service = mvc.createService();
         let data = {
-            "param.default_to": default_to,
-            "param.cyences_severity": cyences_severity
+            "param.email_to_default": email_to_default,
+            "param.cyences_severities": cyences_severities
         };
         service.post("/servicesNS/-/cyences_app_for_splunk/configs/conf-alert_actions/cyences_send_email_action", data, function(error, response){
             if(response && response.data.entry[0].content){

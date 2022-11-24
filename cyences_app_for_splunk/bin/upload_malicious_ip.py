@@ -17,9 +17,10 @@ logger = logger_manager.setup_logging('upload_malicious_ip', logging.DEBUG)
 class MaliciousIPUploaderCommand(StreamingCommand):
     
     def stream(self, records):
+        session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
         try:
             api_payload = []
-            api_config = cs_utils.get_cyences_api_key(self.search_results_info.auth_token, logger)
+            api_config = cs_utils.get_cyences_api_key(session_key, logger)
 
             if not api_config['api_url'] or not api_config['auth_token']:
                 logger.error("MaliciousIP Collector Configuration not found in the cs_configurations.conf file.")
@@ -71,6 +72,6 @@ class MaliciousIPUploaderCommand(StreamingCommand):
         except Exception as e:
             logger.exception("Error in upload_malicious_ip command: {}".format(e))
             raise e
-        
+
 
 dispatch(MaliciousIPUploaderCommand, sys.argv, sys.stdin, sys.stdout, __name__)

@@ -2,27 +2,18 @@
   <label>Configuration</label>
   <row>
     <panel>
-      <title>Common Email Alert Action Configuration</title>
+      <title>Cyences Action - Send Email - Default/Common Configuration</title>
       <html>
         <p id="cyences_email_msg"/>
-        <table style="width:60%">
-          <tr>
-            <th style="text-align:left">Default Email Recipient</th>
-            <th style="text-align:left">
-              <input type="text" id="cyences_email_default_to" style="margin-bottom:5px;"/>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">Severity</th>
-            <th style="text-align:left">
-              <input type="text" id="cyences_email_cyences_severity"/>
-            </th>
-            <th style="text-align:left">
-              <button id="cyences_email_button">Save</button>
-            </th>
-          </tr>
-        </table>
-        <div>*Enter comma values.</div>
+        <div>
+          Default Email Recipients: <input type="text" id="cyences_email_to_default" style="margin-bottom:5px;"/>
+          <br>(comma separated list of email addresses who wish to receive all Cyences alerts as email)
+          <br>
+          Severities: <input type="text" id="cyences_email_cyences_severities"/>
+          <br>(comma separated list of alert severities to be send in the emails. Default: critical only)
+          <br>
+          <button id="cyences_email_button">Save</button>
+        </div>
       </html>
     </panel>
   </row>
