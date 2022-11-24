@@ -11,7 +11,7 @@ from cyences_email_utility import CyencesEmailHTMLBodyBuilder, CyencesEmailUtili
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('send_digest_email_action', logging.DEBUG)
+logger = logger_manager.setup_logging('send_digest_email_action', logging.INFO)
 
 ALERT_ACTION_NAME = 'cyences_send_digest_email_action'
 
@@ -100,7 +100,8 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             final_severity = self.severity if self.severity is not None else param_severity
 
             if final_to.strip() == '' or final_severity.strip() == '':
-                logger.warn("Please check to or cyences_severity or default_to configuration")
+                logger.warn("Please check the Cyences Send Digest Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
+
                 return
 
             results = self.results_by_alert(records, final_severity, param_exclude_alert)

@@ -13,7 +13,7 @@ from cyences_email_utility import CyencesEmailHTMLBodyBuilder, CyencesEmailUtili
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('send_email_action', logging.DEBUG)
+logger = logger_manager.setup_logging('send_email_action', logging.INFO)
 
 ALERT_ACTION_NAME = 'cyences_send_email_action'
 
@@ -75,12 +75,14 @@ class CyencesSendEmailCommand(EventingCommand):
             default_to = cs_utils.convert_to_set(config.get("param.default_to"))
             cyences_severity = cs_utils.convert_to_set(config.get("param.cyences_severity"))
             exclude_to = cs_utils.convert_to_set(config.get("param.exclude_to"))
+            include_to = cs_utils.convert_to_set(config.get("param.include_to"))
             disable_email = cs_utils.is_true(config.get("param.disable_email"))
 
-            final_to = default_to.difference(exclude_to)
+            include_to.update(default_to)
+            final_to = include_to.difference(exclude_to)
 
             if disable_email or len(cyences_severity) == 0 or len(final_to) == 0:
-                logger.warn("Please check disable_email or cyences_severity or default_to configuration")
+                logger.warn("Please check the Cyences Send Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
                 return
 
             filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severity]
