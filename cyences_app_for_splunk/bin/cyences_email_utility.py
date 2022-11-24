@@ -263,7 +263,7 @@ class CyencesEmailUtility:
             return recipients
 
 
-    def send(self, to, cc=[], bcc=[], subject='Splunk Alert', html_body='', results_link=''):
+    def send(self, to, cc=[], bcc=[], subject='Splunk Alert', html_body=''):
 
         subject = 'Splunk Alert: {}'.format(subject)
 
@@ -283,14 +283,13 @@ class CyencesEmailUtility:
 
         # Remove recipients if it's not from allowedDomainList
         validRecipients = self.filter_recipients_if_not_in_allowed_domains(self.recipients)
-        
+
         if len(validRecipients) == 0:
             raise Exception("The email domains of the recipients are not among those on the allowed domain list.")
 
-        mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", results_link="%s", recipients="%s", server="%s"' % (
+        mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", recipients="%s", server="%s"' % (
             subject,
             email['Subject'],
-            results_link,
             str(validRecipients),
             str(self.emailConfigs['mailserver'])
         )

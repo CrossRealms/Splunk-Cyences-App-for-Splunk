@@ -20,9 +20,6 @@ class CyencesSendDigestEmailCommand(EventingCommand):
     alert_name = Option(name="alert_name", require=True)
     email_to = Option(name='email_to', require=False, default=None)
     severities = Option(name='cyences_severities', require=False, default=None)
-    results_link = Option(name="results_link", require=False, default=None)
-    trigger_time = Option(name="trigger_time", require=False, default=None)
-    results_file = Option(name="results_file", require=False, default=None)
 
 
     def results_by_alert(self, results, severity_filter, alerts_to_exclude):
