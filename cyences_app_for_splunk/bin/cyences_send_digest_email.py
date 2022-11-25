@@ -60,15 +60,17 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                     continue
 
                 try:
-                    event['__cyences_severity'] = ALERT_SEVERITIES[event['cyences_severity']]  # Add addition information for sorting
+                    event['__cyences_severity'] = ALERT_SEVERITIES[severity]  # Add addition information for sorting
                 except:
-                    logger.warning('Unable to decode alert severity {} for alert_name={}'.format(event['cyences_severity'], alert_name))
+                    logger.warning('Unable to decode alert severity {} for alert_name={}'.format(severity, alert_name))
                     continue
             else:
                 event['__cyences_severity'] = 100
 
             if alert_name not in alerts:
-                alerts[alert_name] = []
+                alerts[alert_name] = {
+                    'events': []
+                }
 
             # Removing the internal fields
             for k, v in tuple(event.items()):
@@ -77,17 +79,27 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 if k == FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS or v == '':
                     event.pop(k)
 
-            alerts[alert_name].append(event)
+            alerts[alert_name]['events'].append(event)
 
         return alerts
 
 
     def limit_no_of_events_per_alert(self, results):
-        for alert_name, events in results.items():
+        for alert_name, data in results.items():
+            events = data['events']
             sorted_events = sorted(events, key=lambda x: x['__cyences_severity'])
             if len(sorted_events) > self.max_results_per_alert:
-                results[alert_name] = sorted_events[0:self.max_results_per_alert]
-
+                data['is_truncated'] = True
+                data['total_entries'] = len(events)
+                data['entries_displaying'] = self.max_results_per_alert
+                data['events'] = sorted_events[0:self.max_results_per_alert]
+            else:
+                data['is_truncated'] = False
+                data['total_entries'] = len(events)
+                data['entries_displaying'] = data['total_entries']
+                data['events'] = sorted_events
+            
+            data[alert_name] = data
         return results
 
 
@@ -112,9 +124,10 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
     def convert_results_to_html_body(self, results):
         full_html_body = ''
-        for title, events in results.items():
+        for title, data in results.items():
+            events = data['events']
             if len(events) > 0:
-                full_html_body += CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=events, title=title)
+                full_html_body += CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=events, title=title, is_table_truncated=data['is_truncated'], total_entries=data['total_entries'], entries_displaying=data['entries_displaying'])
         return full_html_body
 
 
@@ -136,41 +149,47 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             final_severities = self.severities if self.severities is not None else param_severities
 
             if final_email_to.strip() == '':
-                logger.warning("Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured.")
-                return
-            
-            if final_severities.strip() == '':
-                logger.warning("Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty.")
-                return
-            
-            final_email_to = cs_utils.convert_to_set(final_email_to)
-            final_severities = cs_utils.convert_to_set(final_severities)
+                msg = "Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured."
+                logger.warning(msg)
+                yield {
+                    'msg': msg
+                }
+            elif final_severities.strip() == '':
+                msg = "Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty."
+                logger.warning(msg)
+                yield {
+                    'msg': msg
+                }
 
-            results = self.filter_results_and_group_by_alert(records, final_severities, param_exclude_alerts)
-            results = self.limit_no_of_events_per_alert(results)
-            list_of_result_chunks = self.divide_alerts_in_chunks(results)
+            else:
+                final_email_to = cs_utils.convert_to_set(final_email_to)
+                final_severities = cs_utils.convert_to_set(final_severities)
 
-            email_counter = 1
-            for result_chunk in list_of_result_chunks:
-                html_body = self.convert_results_to_html_body(result_chunk)
-                # logger.debug("html_body: {}".format(html_body))  # too large log
+                results = self.filter_results_and_group_by_alert(records, final_severities, param_exclude_alerts)
+                results = self.limit_no_of_events_per_alert(results)
+                list_of_result_chunks = self.divide_alerts_in_chunks(results)
 
-                if html_body.strip() != '':
-                    if len(list_of_result_chunks) <= 1:
-                        subject = self.alert_name
+                email_counter = 1
+                for result_chunk in list_of_result_chunks:
+                    html_body = self.convert_results_to_html_body(result_chunk)
+                    # logger.debug("html_body: {}".format(html_body))  # too large log
+
+                    if html_body.strip() != '':
+                        if len(list_of_result_chunks) <= 1:
+                            subject = self.alert_name
+                        else:
+                            subject = '{} Part-{}'.format(self.alert_name, email_counter)
+
+                        cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
+
+                        yield {
+                            "msg" : "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
+                        }
                     else:
-                        subject = '{} Part-{}'.format(self.alert_name, email_counter)
-
-                    cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
-
-                    yield {
-                        "msg" : "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
-                    }
-                else:
-                    logger.info("No matching event found")
-                    yield {
-                        "msg" : "No matching event found"
-                    }
+                        logger.info("No matching event found")
+                        yield {
+                            "msg" : "No matching event found"
+                        }
         except:
             logger.exception("Exception in command CyencesSendDigestEmailCommand.")
             self.write_error("Exception in command CyencesSendDigestEmailCommand.")

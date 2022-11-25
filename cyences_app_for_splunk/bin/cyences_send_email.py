@@ -47,21 +47,44 @@ class CyencesSendEmailCommand(EventingCommand):
             email_to_include.update(email_to_default)
             final_to = email_to_include.difference(email_to_exclude)
 
-            if disable_email or len(cyences_severities) == 0 or len(final_to) == 0:
-                logger.warning("Please check the Cyences Send Email alert action configuration. The alert action is disabled. OR no severity is selected. OR Email is not configured.")
-                return
+            if disable_email:
+                msg = "Sending email is disabled."
+                logger.warning(msg)
+                yield {
+                    'msg': msg
+                }
+            elif len(cyences_severities) == 0:
+                msg = "Please check Cyences Send Email alert action configuration no severities selected."
+                logger.warning(msg)
+                yield {
+                    'msg': msg
+                }
+            elif len(final_to) == 0:
+                msg = "Please check the Cyences Send Email alert action configuration no email recipients configured."
+                logger.warning(msg)
+                yield {
+                    'msg': msg
+                }
+            
+            else:
+                filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severities]
 
-            filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severities]
+                if len(filtered_records) == 0:
+                    msg = "No matching event found"
+                    logger.info(msg)
+                    yield {
+                        'msg': msg
+                    }
 
-            if len(filtered_records) == 0:
-                logger.info("No matching event found")
-                return
-        
-            html_body = CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=filtered_records, title=self.alert_name)
+                html_body = CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=filtered_records)
 
-            cyences_email_utility.send(to=final_to, subject=self.alert_name, html_body=html_body)
-            logger.info("Email sent. subject={}".format(self.alert_name))
+                cyences_email_utility.send(to=final_to, subject=self.alert_name, html_body=html_body)
 
+                log_msg = "Email sent. subject={}, no_of_results={}".format(self.alert_name, len(filtered_records))
+                logger.info(log_msg)
+                yield {
+                    "msg" : log_msg
+                }
         except:
             logger.exception("Exception in command CyencesSendEmailCommand.")
             self.write_error("Exception in command CyencesSendEmailCommand.")

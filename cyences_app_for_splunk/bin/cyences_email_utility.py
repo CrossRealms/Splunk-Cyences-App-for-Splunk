@@ -33,7 +33,9 @@ class CyencesEmailHTMLBodyBuilder:
             % if len(results) > 0:
             <div style="margin:0">
                 <div style="overflow: auto; width: 100%;">
-                    <h3 style="margin-top: 5px;">${title}</h3>
+                    % if title: 
+                        <h3 style="margin-top: 15px;">${title}</h3>
+                    % endif
                     <table cellpadding="0" cellspacing="0" border="0" class="results" style="margin: 20px;">
                         <tbody>
                             <% cols = [] %>
@@ -62,10 +64,13 @@ class CyencesEmailHTMLBodyBuilder:
                             % endfor
                         </tbody>
                     </table>
+                    % if is_table_truncated:
+                        <p>The above table is truncated. Total results were ${total_entries} and here we are displaying only ${entries_displaying}.</p>
+                    % endif
                 </div>
             </div>
             % else:
-                    <div class="results" style="margin: 20px;">No results found.</div>
+                <div class="results" style="margin: 20px;">No results found.</div>
             % endif
             ''')
 
