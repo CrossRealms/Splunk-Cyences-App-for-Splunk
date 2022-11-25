@@ -14,6 +14,7 @@ logger = logger_manager.setup_logging('send_digest_email_action', logging.INFO)
 
 
 ALERT_ACTION_NAME = 'cyences_send_digest_email_action'
+FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS = 'search_name'
 
 
 # We'll be sorting this in ascending order
@@ -44,7 +45,8 @@ class CyencesSendDigestEmailCommand(EventingCommand):
         alerts = {}
 
         for event in results:
-            alert_name = event['alert_name']
+            # logger.debug("Event: {}".format(event))
+            alert_name = event[FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS]
 
             # Skip event if alert_name in the exclude_alert
             if alert_name.lower() in alerts_to_exclude:
@@ -72,7 +74,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             for k, v in tuple(event.items()):
                 if k.startswith("_"):
                     continue
-                if k == 'alert_name' or v == '':
+                if k == FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS or v == '':
                     event.pop(k)
 
             alerts[alert_name].append(event)
@@ -96,10 +98,14 @@ class CyencesSendDigestEmailCommand(EventingCommand):
         for alert_name in sorted(results):
             result_chunk[alert_name] = results[alert_name]
             counter += 1
-            if counter > self.max_alerts_per_email:
+            if counter >= self.max_alerts_per_email:
+                # logger.debug('counter:{}, alert_name:{} result_chunk:{}'.format(counter, alert_name, result_chunk))
                 list_of_result_chunks.append(result_chunk)
                 result_chunk = dict()
                 counter = 0
+
+        if counter > 0:
+            list_of_result_chunks.append(result_chunk)
         
         return list_of_result_chunks
 
@@ -141,18 +147,19 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             final_severities = cs_utils.convert_to_set(final_severities)
 
             results = self.filter_results_and_group_by_alert(records, final_severities, param_exclude_alerts)
-            list_of_result_chunks = self.limit_no_of_events_per_alert(results)
+            results = self.limit_no_of_events_per_alert(results)
+            list_of_result_chunks = self.divide_alerts_in_chunks(results)
 
             email_counter = 1
             for result_chunk in list_of_result_chunks:
                 html_body = self.convert_results_to_html_body(result_chunk)
-                logger.debug("html_body: {}".format(html_body))
+                # logger.debug("html_body: {}".format(html_body))  # too large log
 
                 if html_body.strip() != '':
                     if len(list_of_result_chunks) <= 1:
-                        subject = 'Cyences Alert Digest Email'
+                        subject = self.alert_name
                     else:
-                        subject = 'Cyences Alert Digest Email Part-{}'.format(email_counter)
+                        subject = '{} Part-{}'.format(self.alert_name, email_counter)
 
                     cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
 
@@ -166,7 +173,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                     }
         except:
             logger.exception("Exception in command CyencesSendDigestEmailCommand.")
-            raise
+            self.write_error("Exception in command CyencesSendDigestEmailCommand.")
 
 
 dispatch(CyencesSendDigestEmailCommand, sys.argv, sys.stdin, sys.stdout, __name__)
