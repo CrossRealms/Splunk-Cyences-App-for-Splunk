@@ -75,16 +75,17 @@ class CyencesSendEmailCommand(EventingCommand):
                     yield {
                         'msg': msg
                     }
+                
+                else:
+                    html_body = CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=filtered_records)
 
-                html_body = CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=filtered_records)
+                    cyences_email_utility.send(to=final_to, subject=self.alert_name, html_body=html_body)
 
-                cyences_email_utility.send(to=final_to, subject=self.alert_name, html_body=html_body)
-
-                log_msg = "Email sent. subject={}, no_of_results={}".format(self.alert_name, len(filtered_records))
-                logger.info(log_msg)
-                yield {
-                    "msg" : log_msg
-                }
+                    log_msg = "Email sent. subject={}, no_of_results={}".format(self.alert_name, len(filtered_records))
+                    logger.info(log_msg)
+                    yield {
+                        "msg" : log_msg
+                    }
         except:
             logger.exception("Exception in command CyencesSendEmailCommand.")
             self.write_error("Exception in command CyencesSendEmailCommand.")
