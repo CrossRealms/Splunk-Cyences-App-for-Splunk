@@ -124,13 +124,14 @@ class GetSessionKey:
 
 
 class ConfigHandler:
-    def __init__(self, logger) -> None:
+    def __init__(self, logger, session_key) -> None:
         self.logger = logger
+        self.session_key = session_key
 
     def get_alert_action_default_config(self, alert_action_name):
         _, serverContent = rest.simpleRequest(
             "/servicesNS/-/{}/configs/conf-alert_actions/{}?output_mode=json".format(APP_NAME, alert_action_name),
-            method='GET', sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+            method='GET', sessionKey=self.session_key, raiseAllErrors=True)
 
         default_configs = json.loads(serverContent)
         default_configs = default_configs['entry'][0]['content']

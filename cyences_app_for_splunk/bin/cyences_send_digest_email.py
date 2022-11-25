@@ -122,7 +122,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
         try:
             logger.info("Custom command CyencesSendDigestEmailCommand loaded.")
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
-            config_handler = cs_utils.ConfigHandler(logger)
+            config_handler = cs_utils.ConfigHandler(logger, session_key)
 
             cyences_email_utility = CyencesEmailUtility(logger, session_key, self.alert_name)
 

@@ -2,7 +2,6 @@
 
 import sys
 
-from splunk import rest
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
 
 import cs_utils
@@ -28,7 +27,7 @@ class CyencesSendEmailCommand(EventingCommand):
         try:
             logger.info("Custom command CyencesSendEmailCommand loaded.")
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
-            config_handler = cs_utils.ConfigHandler(logger)
+            config_handler = cs_utils.ConfigHandler(logger, session_key)
 
             cyences_email_utility = CyencesEmailUtility(logger, session_key, self.alert_name)
 
@@ -65,7 +64,7 @@ class CyencesSendEmailCommand(EventingCommand):
 
         except:
             logger.exception("Exception in command CyencesSendEmailCommand.")
-            raise
+            self.write_error("Exception in command CyencesSendEmailCommand.")
 
 
 dispatch(CyencesSendEmailCommand, sys.argv, sys.stdin, sys.stdout, __name__)
