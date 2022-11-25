@@ -65,7 +65,7 @@ class CyencesEmailHTMLBodyBuilder:
                         </tbody>
                     </table>
                     % if is_table_truncated:
-                        <p>The above table is truncated. Total results were ${total_entries} and here we are displaying only ${entries_displaying}.</p>
+                        <p style="margin-bottom: 10px; font-size: 11px; color: #999;">The above table is truncated. Showing ${entries_displaying} results out of ${total_entries}.</p>
                     % endif
                 </div>
             </div>
