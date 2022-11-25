@@ -38,7 +38,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
                 api_id = i['content']['api_id']
                 api_key = cs_utils.CredentialManager(sessionKey).get_credential(api_id)
                 break
-        logger.info("Got API info.")
+        logger.info("Got HoneyDB API info.")
         return api_id, api_key
 
     def request_bad_hosts(self, api_id, api_key):
