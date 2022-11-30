@@ -33,7 +33,9 @@ class CyencesEmailHTMLBodyBuilder:
             % if len(results) > 0:
             <div style="margin:0">
                 <div style="overflow: auto; width: 100%;">
-                    <h3 style="margin-top: 5px;">${title}</h3>
+                    % if title: 
+                        <h3 style="margin-top: 15px;">${title}</h3>
+                    % endif
                     <table cellpadding="0" cellspacing="0" border="0" class="results" style="margin: 20px;">
                         <tbody>
                             <% cols = [] %>
@@ -62,10 +64,13 @@ class CyencesEmailHTMLBodyBuilder:
                             % endfor
                         </tbody>
                     </table>
+                    % if is_table_truncated:
+                        <p style="margin-bottom: 10px; font-size: 11px; color: #999;">The above table is truncated. Showing ${entries_displaying} results out of ${total_entries}.</p>
+                    % endif
                 </div>
             </div>
             % else:
-                    <div class="results" style="margin: 20px;">No results found.</div>
+                <div class="results" style="margin: 20px;">No results found.</div>
             % endif
             ''')
 
@@ -94,12 +99,6 @@ class CyencesEmailHTMLBodyBuilder:
             <p style="margin: 20px; font-size: 11px; color: #999;">${footerBreaks}</p>
             ''')
 
-
-def normalizeEmail(email, field, recipients):
-    emailList = EMAIL_DELIM.split(email[field])
-    recipients.extend(emailList)
-    stripped = ','.join([str(elem) for elem in emailList])
-    email.replace_header(field, stripped)
 
 
 
@@ -135,7 +134,7 @@ class CyencesEmailUtility:
         self.logger.debug("alert_actions/email config: {}".format(default_configs))
 
         return default_configs
-    
+
 
     def savedsearch_level_overridden_email_configs(self, alert_name):
         _, serverContent = rest.simpleRequest(
@@ -181,48 +180,24 @@ class CyencesEmailUtility:
 
     def buildEmailHeaders(self, email, to, cc, bcc, subject):
         email['From'] = self.emailConfigs['from']
-        email['To'] = to
-        email['Cc'] = cc
-        email['Bcc'] = bcc
+
         email['Subject'] = Header(subject, CHARSET)
 
         recipients = []
 
-        if email['To']:
-            normalizeEmail(email, 'To', recipients)
-        if email['Cc']:
-            normalizeEmail(email, 'Cc', recipients)
-        if email['Bcc']:
-            recipients.extend(EMAIL_DELIM.split(email['Bcc']))
+        if to:
+            email['To'] = ','.join(to)
+            email.replace_header('To', email['To'])
+            recipients.extend(to)
+        if cc:
+            email['Cc'] = ','.join(cc)
+            email.replace_header('Cc', email['Cc'])
+            recipients.extend(cc)
+        if bcc:
+            recipients.extend(bcc)
             del email['Bcc']    # delete bcc from header after adding to recipients
         
         self.recipients = recipients
-    
-        # email['Date'] = utils.formatdate(localtime=True)
-
-        '''
-        if priority:
-            # look up better name
-            val = IMPORTANCE_MAP.get(priority.lower(), '')
-            # unknown value, use value user supplied
-            if not val:
-                val = priority
-            email['X-Priority'] = val
-        '''
-
-        '''
-        # trace info
-        if ssContent.get('name'):
-            email['X-Splunk-Name'] = ssContent.get('name')
-        if ssContent.get('owner'):
-            email['X-Splunk-Owner'] = ssContent.get('owner')
-        if ssContent.get('app'):
-            email['X-Splunk-App'] = ssContent.get('app')
-        email['X-Splunk-SID'] = sid
-        email['X-Splunk-ServerName'] = serverInfoContent.get('serverName')
-        email['X-Splunk-Version'] = serverInfoContent.get('version')
-        email['X-Splunk-Build'] = serverInfoContent.get('build')
-        '''
 
 
     def set_smtp_creds(self):
@@ -263,12 +238,41 @@ class CyencesEmailUtility:
             self.logger.error("Could not get email credentials from splunk, using no credentials. Error: %s" % (str(e)))
 
         return '', ''
+    
+
+    def filter_recipients_if_not_in_allowed_domains(self, recipients):
+        if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
+            validRecipients = []
+
+            domains = []
+            domains.extend(EMAIL_DELIM.split(self.emailConfigs['allowedDomainList']))
+            domains = [d.strip() for d in domains]
+            domains = [d.lower() for d in domains]
+
+            recipients = [r.lower() for r in recipients]
+
+            for recipient in recipients:
+                dom = recipient.partition("@")[2]
+                if not dom in domains:
+                    self.logger.error("Email recipient=%s is not among the allowedDomainList=%s in alert_actions.conf file. Removing it from the recipients list."
+                                % (recipient, self.emailConfigs['allowedDomainList']))
+                else:
+                    validRecipients.append(recipient)
+
+            if len(validRecipients) != len(recipients):
+                self.logger.error("Not all of the recipient email domains are on the allowed domain list. Sending emails only to %s" % str(validRecipients))
+            
+            return validRecipients
+
+        else:
+            return recipients
 
 
-    def send(self, to, cc='', bcc='', subject='Splunk Alert', html_body='', results_link=''):
+    def send(self, to, cc=[], bcc=[], subject='Splunk Alert', html_body=''):
 
         subject = 'Splunk Alert: {}'.format(subject)
 
+        # Define Email
         email = MIMEMultipart('mixed')
         email.preamble = 'This is a multi-part message in MIME format.'
         emailBody = MIMEMultipart('alternative')
@@ -277,40 +281,20 @@ class CyencesEmailUtility:
         self.buildEmailHeaders(email, to, cc, bcc, subject)
         self.logger.info("email headers: {}".format(email.as_string()))
 
-        # Attaching email body
+        # Attaching content to email body
         html_footer_content = CyencesEmailHTMLBodyBuilder.htmlFooterTemplate().render(footer='This email is generated by Cyences App for Splunk. (Build By: CrossRealms International)', re=re, filters=filters)
         full_html_body = CyencesEmailHTMLBodyBuilder.htmlRootTemplate().render(body=html_body, footer=html_footer_content)
         emailBody.attach(MIMEText(full_html_body, 'html', _charset=CHARSET))
 
-        recipients = [r.strip() for r in self.recipients]
-        validRecipients = []
-        if self.emailConfigs['allowedDomainList'] != "" and self.emailConfigs['allowedDomainList'] != None:
-            domains = []
-            domains.extend(EMAIL_DELIM.split(self.emailConfigs['allowedDomainList']))
-            domains = [d.strip() for d in domains]
-            domains = [d.lower() for d in domains]
-            recipients = [r.lower() for r in recipients]
-            for recipient in recipients:
-                dom = recipient.partition("@")[2]
-                if not dom in domains:
-                    self.logger.error("For subject=%s, email recipient=%s is not among the alowedDomainList=%s in alert_actions.conf file. Removing it from the recipients list."
-                                % (subject, recipient, self.emailConfigs['allowedDomainList']))
-                else:
-                    validRecipients.append(recipient)
+        # Remove recipients if it's not from allowedDomainList
+        validRecipients = self.filter_recipients_if_not_in_allowed_domains(self.recipients)
 
-            if len(validRecipients) != len(recipients):
-                self.logger.error("Not all of the recipient email domains are on the allowed domain list. Sending emails only to %s" % str(validRecipients))
-
-        else:
-            validRecipients = recipients
-        
         if len(validRecipients) == 0:
             raise Exception("The email domains of the recipients are not among those on the allowed domain list.")
 
-        mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", results_link="%s", recipients="%s", server="%s"' % (
+        mail_log_msg = 'Sending email. subject="%s", encoded_subject="%s", recipients="%s", server="%s"' % (
             subject,
             email['Subject'],
-            results_link,
             str(validRecipients),
             str(self.emailConfigs['mailserver'])
         )

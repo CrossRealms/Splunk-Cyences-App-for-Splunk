@@ -9,7 +9,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('upload_malicious_ip', logging.DEBUG)
+logger = logger_manager.setup_logging('upload_malicious_ip', logging.INFO)
 
 
 
@@ -17,9 +17,10 @@ logger = logger_manager.setup_logging('upload_malicious_ip', logging.DEBUG)
 class MaliciousIPUploaderCommand(StreamingCommand):
     
     def stream(self, records):
+        session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
         try:
             api_payload = []
-            api_config = cs_utils.get_cyences_api_key(self.search_results_info.auth_token, logger)
+            api_config = cs_utils.get_cyences_api_key(session_key, logger)
 
             if not api_config['api_url'] or not api_config['auth_token']:
                 logger.error("MaliciousIP Collector Configuration not found in the cs_configurations.conf file.")
@@ -48,9 +49,9 @@ class MaliciousIPUploaderCommand(StreamingCommand):
             }
             resp = None
             try:
-                logger.debug("Uploading malicious Ip list to Cyences API.")
+                logger.info("Uploading malicious Ip list to Cyences API.")
                 resp = requests.post(endpoint_url, json=payload, headers=auth_header, timeout=cs_utils.CYENCES_NETWORK_CALL_TIMEOUT)
-                logger.debug("Cyences API request completed.")
+                logger.info("Cyences API request completed.")
                 resp.raise_for_status()
                 yield {'success': True, 'message': "Successfully Uploaded Ips to API."}
                 logger.info("Response received {}".format(resp.json()))
@@ -71,6 +72,6 @@ class MaliciousIPUploaderCommand(StreamingCommand):
         except Exception as e:
             logger.exception("Error in upload_malicious_ip command: {}".format(e))
             raise e
-        
+
 
 dispatch(MaliciousIPUploaderCommand, sys.argv, sys.stdin, sys.stdout, __name__)

@@ -10,7 +10,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('honeydb_lookup_gen', logging.DEBUG)
+logger = logger_manager.setup_logging('honeydb_lookup_gen', logging.INFO)
 
 
 HONEYDB_URL = 'https://honeydb.io/api/bad-hosts'
@@ -27,18 +27,17 @@ class UpdateHoneyDBLookup(GeneratingCommand):
     generate_events = Option(name="generate_events", require=False, validate=validators.Boolean(), default=False)
 
     def get_api_info(self):
-        logger.debug("Getting HoneyDB API Info.")
-        sessionKey = self.search_results_info.auth_token
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=sessionKey)
+        logger.info("Getting HoneyDB API Info.")
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.session_key)
         data = json.loads(serverContent)['entry']
         api_id = ''
         api_key = ''
         for i in data:
             if i['name'] == 'honeydb':
                 api_id = i['content']['api_id']
-                api_key = cs_utils.CredentialManager(sessionKey).get_credential(api_id)
+                api_key = cs_utils.CredentialManager(self.session_key).get_credential(api_id)
                 break
-        logger.debug("Got API info.")
+        logger.info("Got HoneyDB API info.")
         return api_id, api_key
 
     def request_bad_hosts(self, api_id, api_key):
@@ -48,9 +47,9 @@ class UpdateHoneyDBLookup(GeneratingCommand):
             --header "X-HoneyDb-ApiKey: <enter your api_key here>" \
             https://honeydb.io/api/bad-hosts
         '''
-        logger.debug("Requesting bad hosts list from honeydb.")
+        logger.info("Requesting bad hosts list from honeydb.")
         response = requests.get(HONEYDB_URL, headers={"X-HoneyDb-ApiId": api_id, "X-HoneyDb-ApiKey": api_key}, timeout=cs_utils.CYENCES_NETWORK_CALL_TIMEOUT)
-        logger.debug("Got response.")
+        logger.info("Got response.")
         # The response.content will be in bytes it needs to be decoded
         data = response.content.decode("utf-8")
         # Convert the data to csv format
@@ -75,6 +74,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
  
     def generate(self):
         try:
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
             # Read API ID and API Key
             api_id, api_key = self.get_api_info()
 
@@ -112,5 +112,6 @@ class UpdateHoneyDBLookup(GeneratingCommand):
         except Exception as e:
             logger.exception("Error in honeydb_lookup_gen command: {}".format(e))
             raise e
- 
+
+
 dispatch(UpdateHoneyDBLookup, sys.argv, sys.stdin, sys.stdout, __name__)

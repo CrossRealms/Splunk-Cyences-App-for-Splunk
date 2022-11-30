@@ -10,7 +10,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('sophos_details_command', logging.DEBUG)
+logger = logger_manager.setup_logging('sophos_details_command', logging.INFO)
 
 SOPHOS_AUTH_URL = 'https://id.sophos.com/api/v2/oauth2/token'
 SOPHOS_WHOAMI_URL = 'https://api.central.sophos.com/whoami/v1'
@@ -27,15 +27,16 @@ class SophosEndpointDetails(GeneratingCommand):
     all_endpoints    = Option(name="all_endpoints",require=False,default=False)
 
     def get_client_details(self):
-        sessionKey = self.search_results_info.auth_token
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, cs_utils.CYENCES_CONF_FILE), sessionKey=sessionKey)
+
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, cs_utils.CYENCES_CONF_FILE), sessionKey=self.session_key)
+
         data = json.loads(serverContent)['entry']
         client_id = ''
         client_secret = ''
         for i in data:
             if i['name'] == 'cs_sophos_endpoint':
                 client_id = i['content']['client_id']
-                client_secret = cs_utils.CredentialManager(sessionKey).get_credential(client_id)
+                client_secret = cs_utils.CredentialManager(self.session_key).get_credential(client_id)
                 break
         return client_id,client_secret
 
@@ -157,8 +158,9 @@ class SophosEndpointDetails(GeneratingCommand):
 
 
     def generate(self):
-
         try:
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
+
             ip = self.ip
             hostname = self.hostname
             uuid = self.uuid
@@ -208,6 +210,5 @@ class SophosEndpointDetails(GeneratingCommand):
             logger.exception("Error Occurred while fetching instance details. Error: {}".format(e))
             self.write_warning("Error Occurred while fetching instance details. Go to Inspect Job and check search logs")
 
-        
- 
+
 dispatch(SophosEndpointDetails, sys.argv, sys.stdin, sys.stdout, __name__)
