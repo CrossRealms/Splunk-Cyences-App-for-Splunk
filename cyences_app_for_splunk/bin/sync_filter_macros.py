@@ -95,7 +95,14 @@ class SyncFilterMacros(GeneratingCommand):
             savedsearches = self.get_saved_searches()
             macros = self.get_macros()
 
+            run_upgrade_steps = cs_utils.is_true(
+                macros["cy_run_filter_macro_upgrade_steps"]
+            )
+
             logger.info("reverse option={}".format(self.reverse))
+            logger.info(
+                "cy_run_filter_macro_upgrade_steps option={}".format(run_upgrade_steps)
+            )
             for name, content in savedsearches.items():
                 param_name = content.get(FILTER_MACRO_NAME_KEY)
                 param_value = content.get(
@@ -120,14 +127,23 @@ class SyncFilterMacros(GeneratingCommand):
                 if param_value == current_macro_value:
                     continue
 
-                if self.reverse:
+                if self.reverse or run_upgrade_steps:
                     # Update the savedsearch param with macro value
                     self.update_savedsearch(
                         name, {FILTER_MACRO_VALUE_KEY: current_macro_value}
                     )
+
                 else:
                     # Update the macro with savedsearch param value
                     self.update_macro(param_name, {"definition": param_value})
+
+            # Update upgrade macro value to 0 as one time upgrade is done
+            # FYI: The upgrade steps will be executed once on the fresh install as well. But i think that is okay as schedule search runs every 5 minute.
+            if run_upgrade_steps:
+                self.update_macro(
+                    "cy_run_filter_macro_upgrade_steps", {"definition": "0"}
+                )
+                logger.info("Upgrade steps are performed and upgrade macro is updated.")
 
             yield {"msg": "Successfully completed"}
         except Exception as e:
