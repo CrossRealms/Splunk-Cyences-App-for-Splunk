@@ -27,7 +27,7 @@ class HoneyDBConfRestcall(admin.MConfigHandler):
     def handleList(self, conf_info):
         # Get HoneyDB API key
         try:
-            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
+            _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.getSessionKey())
             data = json.loads(serverContent)['entry']
             api_id = ''
             api_key = '******'
@@ -53,7 +53,7 @@ class HoneyDBConfRestcall(admin.MConfigHandler):
 
         try:
             # Store API ID
-            rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, HONEYDB_STANZA), postargs={'api_id': api_id}, method='POST', sessionKey=self.getSessionKey())
+            rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE, HONEYDB_STANZA), postargs={'api_id': api_id}, method='POST', sessionKey=self.getSessionKey())
 
             # Store API Key
             cs_utils.CredentialManager(self.getSessionKey()).store_credential(api_id, api_key)
