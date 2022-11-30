@@ -27,7 +27,7 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
     def handleList(self, conf_info):
         # Get MaliciousIP Collector Configuration
         try:
-            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
+            _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.getSessionKey())
             data = json.loads(serverContent)['entry']
             api_url = ''
             auth_token = '******'
@@ -53,15 +53,15 @@ class MaliciousIPConfRestcall(admin.MConfigHandler):
 
         try:
             # Store API ID
-            rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, MALICIOUS_IP_STANZA), postargs={'api_url': api_url}, method='POST', sessionKey=self.getSessionKey())
-            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
+            rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE, MALICIOUS_IP_STANZA), postargs={'api_url': api_url}, method='POST', sessionKey=self.getSessionKey())
+            _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.getSessionKey())
             data = json.loads(serverContent)['entry']
             cust_id = ''
             for i in data:
                 if i['name'] == 'maliciousip':
                     cust_id = i['content'].get('cust_id','')
                     if cust_id == '':
-                        rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, MALICIOUS_IP_STANZA), postargs={'cust_id': uuid.uuid4().hex}, method='POST', sessionKey=self.getSessionKey())
+                        rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE, MALICIOUS_IP_STANZA), postargs={'cust_id': uuid.uuid4().hex}, method='POST', sessionKey=self.getSessionKey())
             # Store API Key
             cs_utils.CredentialManager(self.getSessionKey()).store_credential(api_url, auth_token)
 
