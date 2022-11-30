@@ -59,79 +59,34 @@ require([
         { macro_name: 'cs_summariesonly_cyences_assets', input_id: 'macro_datamodel_cyences_assets', button_id: 'macro_datamodel_cyences_assets_button', msg_id: 'macro_datamodel_msg'},
 
         /* Windows & AD */
-        { macro_name: 'cs_ad_group_changed_filter', input_id: 'macro_cs_ad_group_changed_filter', button_id: 'macro_cs_ad_group_changed_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_group_membership_changed_filter', input_id: 'macro_cs_ad_group_membership_changed_filter', button_id: 'macro_cs_ad_group_membership_changed_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_group_policy_changed_filter', input_id: 'macro_cs_ad_group_policy_changed_filter', button_id: 'macro_cs_ad_group_policy_changed_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_user_changed_filter', input_id: 'macro_cs_ad_user_changed_filter', button_id: 'macro_cs_ad_user_changed_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_user_locked_out_filter', input_id: 'macro_cs_ad_user_locked_out_filter', button_id: 'macro_cs_ad_user_locked_out_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_password_change_outside_working_hour_filter', input_id: 'macro_cs_ad_password_change_outside_working_hour_filter', button_id: 'macro_cs_ad_password_change_outside_working_hour_filter_button', msg_id: 'macro_windows_msg'},
         { macro_name: 'cs_ad_bulk_user_creation_deletion_count_limit', input_id: 'macro_cs_ad_bulk_user_creation_deletion_count_limit', button_id: 'macro_cs_ad_bulk_user_creation_deletion_count_limit_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_ad_bulk_user_creation_deletion_filter', input_id: 'macro_cs_ad_bulk_user_creation_deletion_filter', button_id: 'macro_cs_ad_bulk_user_creation_deletion_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_windows_host_missing_update_filter', input_id: 'macro_cs_windows_host_missing_update_filter', button_id: 'macro_cs_windows_host_missing_update_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_windows_firewall_disabled_filter', input_id: 'macro_cs_windows_firewall_disabled_filter', button_id: 'macro_cs_windows_firewall_disabled_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_windows_wmi_lateral_movement_filter', input_id: 'macro_cs_windows_wmi_lateral_movement_filter', button_id: 'macro_cs_windows_wmi_lateral_movement_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_windows_event_log_cleared_filter', input_id: 'macro_cs_windows_event_log_cleared_filter', button_id: 'macro_cs_windows_event_log_cleared_filter_button', msg_id: 'macro_windows_msg'},
-        { macro_name: 'cs_windows_process_tampering_filter', input_id: 'macro_cs_windows_process_tampering_filter', button_id: 'macro_cs_windows_process_tampering_filter_button', msg_id: 'macro_windows_msg'},
 
         /* O365 */
-        { macro_name: 'cs_o365_success_login_outside_country_filter', input_id: 'macro_cs_o365_success_login_outside_country_filter', button_id: 'macro_cs_o365_success_login_outside_country_filter_button', msg_id: 'macro_o365_msg'},
         { macro_name: 'cs_o365_failed_login_outside_country_filter', input_id: 'macro_cs_o365_failed_login_outside_country_filter', button_id: 'macro_cs_o365_failed_login_outside_country_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_login_by_unknown_userid_filter', input_id: 'macro_cs_o365_login_by_unknown_userid_filter', button_id: 'macro_cs_o365_login_by_unknown_userid_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_dlp_exchange_filter', input_id: 'macro_cs_o365_dlp_exchange_filter', button_id: 'macro_cs_o365_dlp_exchange_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_dlp_sharepoint_filter', input_id: 'macro_cs_o365_dlp_sharepoint_filter', button_id: 'macro_cs_o365_dlp_sharepoint_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_external_users_filter', input_id: 'macro_cs_o365_external_users_filter', button_id: 'macro_cs_o365_external_users_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_service_not_operational_filter', input_id: 'macro_cs_o365_service_not_operational_filter', button_id: 'macro_cs_o365_service_not_operational_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_authorizationpolicy_change_filter', input_id: 'macro_cs_o365_authorizationpolicy_change_filter', button_id: 'macro_cs_o365_authorizationpolicy_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_policy_change_filter', input_id: 'macro_cs_o365_policy_change_filter', button_id: 'macro_cs_o365_policy_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_role_change_filter', input_id: 'macro_cs_o365_role_change_filter', button_id: 'macro_cs_o365_role_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_group_change_filter', input_id: 'macro_cs_o365_group_change_filter', button_id: 'macro_cs_o365_group_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_user_change_filter', input_id: 'macro_cs_o365_user_change_filter', button_id: 'macro_cs_o365_user_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_serviceprincipal_change_filter', input_id: 'macro_cs_o365_serviceprincipal_change_filter', button_id: 'macro_cs_o365_serviceprincipal_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_application_change_filter', input_id: 'macro_cs_o365_application_change_filter', button_id: 'macro_cs_o365_application_change_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_failed_login_due_to_mfs_filter', input_id: 'macro_cs_o365_failed_login_due_to_mfs_filter', button_id: 'macro_cs_o365_failed_login_due_to_mfs_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_failed_login_due_to_mfs_outside_country_filter', input_id: 'macro_cs_o365_failed_login_due_to_mfs_outside_country_filter', button_id: 'macro_cs_o365_failed_login_due_to_mfs_outside_country_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_failed_login_due_to_conditional_access_policy_filter', input_id: 'macro_cs_o365_failed_login_due_to_conditional_access_policy_filter', button_id: 'macro_cs_o365_failed_login_due_to_conditional_access_policy_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_daily_login_failure_filter', input_id: 'macro_cs_o365_daily_login_failure_filter', button_id: 'macro_cs_o365_daily_login_failure_filter_button', msg_id: 'macro_o365_msg'},
-        { macro_name: 'cs_o365_security_compliance_alert_filter', input_id: 'macro_cs_o365_security_compliance_alert_filter', button_id: 'macro_cs_o365_security_compliance_alert_filter_button', msg_id: 'macro_o365_msg'},
 
         /* Email */
-        { macro_name: 'cs_email_increase_in_email_filter', input_id: 'macro_cs_email_increase_in_email_filter', button_id: 'macro_cs_email_increase_in_email_filter_button', msg_id: 'macro_email_msg'},
-        { macro_name: 'cs_email_daily_spam_email_filter', input_id: 'macro_cs_email_daily_spam_email_filter', button_id: 'macro_cs_email_daily_spam_email_filter_button', msg_id: 'macro_email_msg'},
         { macro_name: 'cs_email_increase_over_baseline_limit_in_percentage', input_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage', button_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage_button', msg_id: 'macro_email_msg'},
 
         /* Network */
-        { macro_name: 'cs_scanning_basic_scanning_filter', input_id: 'macro_cs_scanning_basic_scanning_filter', button_id: 'macro_cs_scanning_basic_scanning_filter_button', msg_id: 'macro_network_msg'},
-        { macro_name: 'cs_tor_traffic_filter', input_id: 'macro_cs_tor_traffic_filter', button_id: 'macro_cs_tor_traffic_filter_button', msg_id: 'macro_network_msg'},
         { macro_name: 'cs_network_traffic_map_filter', input_id: 'macro_cs_network_traffic_map_filter', button_id: 'macro_cs_network_traffic_map_filter_button', msg_id: 'macro_network_msg'},
         { macro_name: 'cs_network_scanning_map_filter', input_id: 'macro_cs_network_scanning_map_filter', button_id: 'macro_cs_network_scanning_map_filter_button', msg_id: 'macro_network_msg'},
 
         /* Palo Alto */
-        { macro_name: 'cs_palo_dns_sinkhole_filter', input_id: 'macro_cs_palo_dns_sinkhole_filter', button_id: 'macro_cs_palo_dns_sinkhole_filter_button', msg_id: 'macro_palo_msg'},
-        { macro_name: 'cs_palo_high_threats_alert_filter', input_id: 'macro_cs_palo_high_threats_alert_filter', button_id: 'macro_cs_palo_high_threats_alert_filter_button', msg_id: 'macro_palo_msg'},
-        { macro_name: 'cs_palo_high_system_alerts_filter', input_id: 'macro_cs_palo_high_system_alerts_filter', button_id: 'macro_cs_palo_high_system_alerts_filter_button', msg_id: 'macro_palo_msg'},
-        { macro_name: 'cs_palo_wildfire_filter', input_id: 'macro_cs_palo_wildfire_filter', button_id: 'macro_cs_palo_wildfire_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_ddos_prevented_filter', input_id: 'macro_cs_palo_ddos_prevented_filter', button_id: 'macro_cs_palo_ddos_prevented_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_firewall_login_failure_filter', input_id: 'macro_cs_palo_firewall_login_failure_filter', button_id: 'macro_cs_palo_firewall_login_failure_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_blocked_ip_inbound_filter', input_id: 'macro_cs_palo_blocked_ip_inbound_filter', button_id: 'macro_cs_palo_blocked_ip_inbound_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_blocked_ip_outbound_filter', input_id: 'macro_cs_palo_blocked_ip_outbound_filter', button_id: 'macro_cs_palo_blocked_ip_outbound_filter_button', msg_id: 'macro_palo_msg'},
         { macro_name: 'cs_palo_malicious_ip_list_filter', input_id: 'macro_cs_palo_malicious_ip_list_filter', button_id: 'macro_cs_palo_malicious_ip_list_filter_button', msg_id: 'macro_palo_msg'},
-        { macro_name: 'cs_palo_commit_filter', input_id: 'macro_cs_palo_commit_filter', button_id: 'macro_cs_palo_commit_filter_button', msg_id: 'macro_palo_msg'},
 
         /* Sophos */
         { macro_name: 'cs_sophos_update_errors_filter', input_id: 'macro_cs_sophos_update_errors_filter', button_id: 'macro_cs_sophos_update_errors_filter_button', msg_id: 'macro_sophos_msg'},
-        { macro_name: 'cs_sophos_endpoint_not_protected_filter', input_id: 'macro_cs_sophos_endpoint_not_protected_filter', button_id: 'macro_cs_sophos_endpoint_not_protected_filter_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_endpoint_outofdate_filter', input_id: 'macro_cs_sophos_endpoint_outofdate_filter', button_id: 'macro_cs_sophos_endpoint_outofdate_filter_button', msg_id: 'macro_sophos_msg'},
-        { macro_name: 'cs_sophos_realtime_protection_disabled_filter', input_id: 'macro_cs_sophos_realtime_protection_disabled_filter', button_id: 'macro_cs_sophos_realtime_protection_disabled_filter_button', msg_id: 'macro_sophos_msg'},
-        { macro_name: 'cs_sophos_service_not_running_filter', input_id: 'macro_cs_sophos_service_not_running_filter', button_id: 'macro_cs_sophos_service_not_running_filter_button', msg_id: 'macro_sophos_msg'},
-        { macro_name: 'cs_sophos_failed_to_cleanup_threat_filter', input_id: 'macro_cs_sophos_failed_to_cleanup_threat_filter', button_id: 'macro_cs_sophos_failed_to_cleanup_threat_filter_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_core_restore_failed_filter', input_id: 'macro_cs_sophos_core_restore_failed_filter', button_id: 'macro_cs_sophos_core_restore_failed_filter_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_expiration_messages_filter', input_id: 'macro_cs_sophos_expiration_messages_filter', button_id: 'macro_cs_sophos_expiration_messages_filter_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_exploit_prevented', input_id: 'macro_cs_sophos_exploit_prevented', button_id: 'macro_cs_sophos_exploit_prevented_button', msg_id: 'macro_sophos_msg'},
         { macro_name: 'cs_sophos_malware_detected', input_id: 'macro_cs_sophos_malware_detected', button_id: 'macro_cs_sophos_malware_detected_button', msg_id: 'macro_sophos_msg'},
 
         /* Windows Defender */
-        { macro_name: 'cs_windows_defender_endpoint_not_protected', input_id: 'macro_cs_windows_defender_endpoint_not_protected', button_id: 'macro_cs_windows_defender_endpoint_not_protected_button', msg_id: 'macro_windows_defender_msg'},
-        { macro_name: 'cs_windows_defender_realtime_protection_disabled_filter', input_id: 'macro_cs_windows_defender_realtime_protection_disabled_filter', button_id: 'macro_cs_windows_defender_realtime_protection_disabled_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_update_errors_filter', input_id: 'macro_cs_windows_defender_update_errors_filter', button_id: 'macro_cs_windows_defender_update_errors_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_antivirus_expired_filter', input_id: 'macro_cs_windows_defender_antivirus_expired_filter', button_id: 'macro_cs_windows_defender_antivirus_expired_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_antivirus_dropped_support_for_os_filter', input_id: 'macro_cs_windows_defender_antivirus_dropped_support_for_os_filter', button_id: 'macro_cs_windows_defender_antivirus_dropped_support_for_os_filter_button', msg_id: 'macro_windows_defender_msg'},
@@ -141,53 +96,20 @@ require([
         { macro_name: 'cs_windows_defender_unable_to_download_offline_scan_filter', input_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter', button_id: 'macro_cs_windows_defender_unable_to_download_offline_scan_filter_button', msg_id: 'macro_windows_defender_msg'},
         { macro_name: 'cs_windows_defender_malware_detected_filter', input_id: 'macro_cs_windows_defender_malware_detected_filter', button_id: 'macro_cs_windows_defender_malware_detected_filter_button', msg_id: 'macro_windows_defender_msg'},
 
-        /* O365 Defender ATP */
-        { macro_name: 'cs_o365_defender_atp_alerts_filter', input_id: 'macro_cs_o365_defender_atp_alerts_filter', button_id: 'macro_cs_o365_defender_atp_alerts_filter_button', msg_id: 'macro_o365_defender_atp_msg'},
-
         /* CrowdStrike */
-        { macro_name: 'cs_crowdstrike_malware_detected_alert_filter', input_id: 'macro_cs_crowdstrike_malware_detected_alert_filter', button_id: 'macro_cs_crowdstrike_malware_detected_alert_filter_button', msg_id: 'macro_crowdstrike_msg'},
         { macro_name: 'cs_crowdstrike_malware_detected_report_filter', input_id: 'macro_cs_crowdstrike_malware_detected_report_filter', button_id: 'macro_cs_crowdstrike_malware_detected_report_filter_button', msg_id: 'macro_crowdstrike_msg'},
         { macro_name: 'cs_crowdstrike_malware_prevented_filter', input_id: 'macro_cs_crowdstrike_malware_prevented_filter', button_id: 'macro_cs_crowdstrike_malware_prevented_filter_button', msg_id: 'macro_crowdstrike_msg'},
-
-        /* Ransomware */
-        { macro_name: 'cs_spike_in_file_writes_filter', input_id: 'macro_cs_spike_in_file_writes_filter', button_id: 'macro_cs_spike_in_file_writes_filter_button', msg_id: 'macro_ransomware_msg'},
-        { macro_name: 'cs_system_processes_run_from_unexpected_locations_filter', input_id: 'macro_cs_system_processes_run_from_unexpected_locations_filter', button_id: 'macro_cs_system_processes_run_from_unexpected_locations_filter_button', msg_id: 'macro_ransomware_msg'},
-        { macro_name: 'cs_common_ransomware_extensions_filter', input_id: 'macro_cs_common_ransomware_extensions_filter', button_id: 'macro_cs_common_ransomware_extensions_filter_button', msg_id: 'macro_ransomware_msg'},
-        { macro_name: 'cs_common_ransomware_notes_filter', input_id: 'macro_cs_common_ransomware_notes_filter', button_id: 'macro_cs_common_ransomware_notes_filter_button', msg_id: 'macro_ransomware_msg'},
-        { macro_name: 'cs_usn_journal_deletion_filter', input_id: 'macro_cs_usn_journal_deletion_filter', button_id: 'macro_cs_usn_journal_deletion_filter_button', msg_id: 'macro_ransomware_msg'},
-        { macro_name: 'cs_scheduled_tasks_used_in_badrabbit_ransomware_filter', input_id: 'macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter', button_id: 'macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_button', msg_id: 'macro_ransomware_msg'},
-        
-        /* Credential Compromise */
-        { macro_name: 'cs_attempted_credential_dump_from_registry_via_reg_exe_filter', input_id: 'macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter', button_id: 'macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_button', msg_id: 'macro_credential_msg'},
-        { macro_name: 'cs_detect_credential_dumping_through_lsass_access_filter', input_id: 'macro_cs_detect_credential_dumping_through_lsass_access_filter', button_id: 'macro_cs_detect_credential_dumping_through_lsass_access_filter_button', msg_id: 'macro_credential_msg'},
-        { macro_name: 'cs_credential_dumping_via_symlink_to_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_button', msg_id: 'macro_credential_msg'},
-        { macro_name: 'cs_credential_dumping_via_copy_command_from_shadow_copy_filter', input_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter', button_id: 'macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button', msg_id: 'macro_credential_msg'},
 
         /* VPN */
         { macro_name: 'cs_vpn_dashboard_filter', input_id: 'macro_cs_vpn_dashboard_filter', button_id: 'macro_cs_vpn_dashboard_filter_button', msg_id: 'macro_vpn_msg'},
 
-        /* Cisco IOS */
-        { macro_name: 'cs_cisco_ios_new_connection_for_user_filter', input_id: 'macro_cs_cisco_ios_new_connection_for_user_filter', button_id: 'macro_cs_cisco_ios_new_connection_for_user_filter_button', msg_id: 'macro_cisco_ios_msg'},
-        { macro_name: 'cs_cisco_ios_device_failed_login_filter', input_id: 'macro_cs_cisco_ios_device_failed_login_filter', button_id: 'macro_cs_cisco_ios_device_failed_login_filter_button', msg_id: 'macro_cisco_ios_msg'},
-
         /* Authentication */
         { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_bruteforce_attempt_limit', input_id: 'macro_cs_authentication_bruteforce_attempt_limit', button_id: 'macro_cs_authentication_bruteforce_attempt_limit_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_bruteforce_attempt_for_user_filter', input_id: 'macro_cs_authentication_bruteforce_attempt_for_user_filter', button_id: 'macro_cs_authentication_bruteforce_attempt_for_user_filter_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_bruteforce_attempt_from_source_filter', input_id: 'macro_cs_authentication_bruteforce_attempt_from_source_filter', button_id: 'macro_cs_authentication_bruteforce_attempt_from_source_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_limit', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_excessive_vpn_login_failure_for_user_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_for_user_filter_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_excessive_vpn_login_failure_from_source_filter', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_successful_vpn_login_outside_home_country_filter', input_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter', button_id: 'macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_vpn_login_attemps_outside_working_hour_filter', input_id: 'macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter', button_id: 'macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_new_location_login_pct_limit', input_id: 'macro_cs_authentication_new_location_login_pct_limit', button_id: 'macro_cs_authentication_new_location_login_pct_limit_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_successful_vpn_login_from_new_location_filter', input_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter', button_id: 'macro_cs_authentication_successful_vpn_login_from_new_location_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_vpn_session_duration_limit', input_id: 'macro_cs_authentication_vpn_session_duration_limit', button_id: 'macro_cs_authentication_vpn_session_duration_limit_button', msg_id: 'macro_authentication_msg'},
-        { macro_name: 'cs_authentication_vpn_long_running_session_disconnected_filter', input_id: 'macro_cs_authentication_vpn_long_running_session_disconnected_filter', button_id: 'macro_cs_authentication_vpn_long_running_session_disconnected_filter_button', msg_id: 'macro_authentication_msg'},
 
-        /* GSuite */
-        { macro_name: 'cs_gsuite_multiple_password_changes_filter', input_id: 'macro_cs_gsuite_multiple_password_changes_filter', button_id: 'macro_cs_gsuite_multiple_password_changes_filter_button', msg_id: 'macro_gsuite_msg'},
-        { macro_name: 'cs_gsuite_bulk_user_creation_deletion_filter', input_id: 'macro_cs_gsuite_bulk_user_creation_deletion_filter', button_id: 'macro_cs_gsuite_bulk_user_creation_deletion_filter_button', msg_id: 'macro_gsuite_msg'}
     ];
    
     // Defining search and search manager

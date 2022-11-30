@@ -513,136 +513,6 @@
         <div>
           <p>
             <b>
-              <center>Category: Active Directory &amp; Windows</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_windows_msg"/>
-        <table style="width:70%">
-          <tr>
-            <th style="text-align:left">cs_ad_group_changed_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_group_changed_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_group_changed_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_group_membership_changed_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_group_membership_changed_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_group_membership_changed_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_group_policy_changed_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_group_policy_changed_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_group_policy_changed_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_user_changed_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_user_changed_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_user_changed_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_user_locked_out_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_user_locked_out_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_user_locked_out_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_password_change_outside_working_hour_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_password_change_outside_working_hour_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_password_change_outside_working_hour_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_bulk_user_creation_deletion_count_limit</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_bulk_user_creation_deletion_count_limit"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_bulk_user_creation_deletion_count_limit_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_ad_bulk_user_creation_deletion_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_ad_bulk_user_creation_deletion_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_ad_bulk_user_creation_deletion_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_host_missing_update_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_host_missing_update_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_host_missing_update_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_firewall_disabled_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_firewall_disabled_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_firewall_disabled_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_wmi_lateral_movement_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_wmi_lateral_movement_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_wmi_lateral_movement_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_event_log_cleared_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_event_log_cleared_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_event_log_cleared_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_process_tampering_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_process_tampering_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_process_tampering_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-      </html>
-      <html>
-        <div>
-          <p>
-            <b>
               <center>Category: Sophos</center>
               <br/>
             </b>
@@ -660,48 +530,12 @@
             </th>
           </tr>
           <tr>
-            <th style="text-align:left">cs_sophos_endpoint_not_protected_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_sophos_endpoint_not_protected_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_sophos_endpoint_not_protected_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
             <th style="text-align:left">cs_sophos_endpoint_outofdate_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_sophos_endpoint_outofdate_filter"/>
             </th>
             <th style="text-align:left">
               <button id="macro_cs_sophos_endpoint_outofdate_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_sophos_realtime_protection_disabled_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_sophos_realtime_protection_disabled_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_sophos_realtime_protection_disabled_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_sophos_service_not_running_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_sophos_service_not_running_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_sophos_service_not_running_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_sophos_failed_to_cleanup_threat_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_sophos_failed_to_cleanup_threat_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_sophos_failed_to_cleanup_threat_filter_button">Update</button>
             </th>
           </tr>
           <tr>
@@ -746,28 +580,6 @@
         <div>
           <p>
             <b>
-              <center>Category: Microsoft Office 365 Defender ATP</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_o365_defender_atp_msg"/>
-        <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_o365_defender_atp_alerts_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_defender_atp_alerts_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_defender_atp_alerts_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-      </html>
-      <html>
-        <div>
-          <p>
-            <b>
               <center>Category: VPN</center>
               <br/>
             </b>
@@ -786,68 +598,6 @@
           </tr>
         </table>
       </html>
-      <html>
-        <div>
-          <p>
-            <b>
-              <center>Category: Cisco IOS</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_cisco_ios_msg"/>
-        <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_cisco_ios_new_connection_for_user_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_cisco_ios_new_connection_for_user_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_cisco_ios_new_connection_for_user_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_cisco_ios_device_failed_login_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_cisco_ios_device_failed_login_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_cisco_ios_device_failed_login_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-      </html>
-      <html>
-        <div>
-          <p>
-            <b>
-              <center>Category: G Suite</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_gsuite_msg"/>
-        <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_gsuite_multiple_password_changes_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_gsuite_multiple_password_changes_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_gsuite_multiple_password_changes_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_gsuite_bulk_user_creation_deletion_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="cs_gsuite_bulk_user_creation_deletion_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_gsuite_bulk_user_creation_deletion_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-      </html>
     </panel>
     <panel>
       <html>
@@ -862,174 +612,12 @@
         <p id="macro_o365_msg"/>
         <table style="width:80%">
           <tr>
-            <th style="text-align:left">cs_o365_success_login_outside_country_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_success_login_outside_country_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_success_login_outside_country_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
             <th style="text-align:left">cs_o365_failed_login_outside_country_filter</th>
             <th style="text-align:left">
               <input type="text" id="macro_cs_o365_failed_login_outside_country_filter"/>
             </th>
             <th style="text-align:left">
               <button id="macro_cs_o365_failed_login_outside_country_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_login_by_unknown_userid_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_login_by_unknown_userid_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_login_by_unknown_userid_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_dlp_exchange_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_dlp_exchange_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_dlp_exchange_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_dlp_sharepoint_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_dlp_sharepoint_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_dlp_sharepoint_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_external_users_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_external_users_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_external_users_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_service_not_operational_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_service_not_operational_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_service_not_operational_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_authorizationpolicy_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_authorizationpolicy_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_authorizationpolicy_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_policy_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_policy_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_policy_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_role_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_role_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_role_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_group_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_group_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_group_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_user_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_user_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_user_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_serviceprincipal_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_serviceprincipal_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_serviceprincipal_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_application_change_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_application_change_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_application_change_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_failed_login_due_to_mfs_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_failed_login_due_to_mfs_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_failed_login_due_to_mfs_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_failed_login_due_to_mfs_outside_country_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_failed_login_due_to_mfs_outside_country_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_failed_login_due_to_mfs_outside_country_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_failed_login_due_to_conditional_access_policy_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_failed_login_due_to_conditional_access_policy_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_failed_login_due_to_conditional_access_policy_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_daily_login_failure_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_daily_login_failure_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_daily_login_failure_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_o365_security_compliance_alert_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_o365_security_compliance_alert_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_o365_security_compliance_alert_filter_button">Update</button>
             </th>
           </tr>
         </table>
@@ -1045,24 +633,6 @@
         </div>
         <p id="macro_email_msg"/>
         <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_email_increase_in_email_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_email_increase_in_email_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_email_increase_in_email_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_email_daily_spam_email_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_email_daily_spam_email_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_email_daily_spam_email_filter_button">Update</button>
-            </th>
-          </tr>
           <tr>
             <th style="text-align:left">cs_email_increase_over_baseline_limit_in_percentage</th>
             <th style="text-align:left">
@@ -1085,24 +655,6 @@
         </div>
         <p id="macro_network_msg"/>
         <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_scanning_basic_scanning_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_scanning_basic_scanning_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_scanning_basic_scanning_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_tor_traffic_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_tor_traffic_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_tor_traffic_filter_button">Update</button>
-            </th>
-          </tr>
           <tr>
             <th style="text-align:left">cs_network_traffic_map_filter</th>
             <th style="text-align:left">
@@ -1134,42 +686,6 @@
         </div>
         <p id="macro_palo_msg"/>
         <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_palo_dns_sinkhole_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_palo_dns_sinkhole_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_palo_dns_sinkhole_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_palo_high_threats_alert_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_palo_high_threats_alert_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_palo_high_threats_alert_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_palo_high_system_alerts_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_palo_high_system_alerts_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_palo_high_system_alerts_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_palo_wildfire_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_palo_wildfire_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_palo_wildfire_filter_button">Update</button>
-            </th>
-          </tr>
           <tr>
             <th style="text-align:left">cs_palo_ddos_prevented_filter</th>
             <th style="text-align:left">
@@ -1215,15 +731,6 @@
               <button id="macro_cs_palo_malicious_ip_list_filter_button">Update</button>
             </th>
           </tr>
-          <tr>
-            <th style="text-align:left">cs_palo_commit_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_palo_commit_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_palo_commit_filter_button">Update</button>
-            </th>
-          </tr>
         </table>
       </html>
       <html>
@@ -1237,15 +744,6 @@
         </div>
         <p id="macro_crowdstrike_msg"/>
         <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_crowdstrike_malware_detected_alert_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_crowdstrike_malware_detected_alert_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_crowdstrike_malware_detected_alert_filter_button">Update</button>
-            </th>
-          </tr>
           <tr>
             <th style="text-align:left">cs_crowdstrike_malware_detected_report_filter</th>
             <th style="text-align:left">
@@ -1270,55 +768,6 @@
   </row>
   <row>
     <panel>
-      <html>
-        <div>
-          <p>
-            <b>
-              <center>Category: Credential Compromise</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_credential_msg"/>
-        <table style="width:60%">
-          <tr>
-            <th style="text-align:left">cs_attempted_credential_dump_from_registry_via_reg_exe_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_attempted_credential_dump_from_registry_via_reg_exe_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_detect_credential_dumping_through_lsass_access_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_detect_credential_dumping_through_lsass_access_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_detect_credential_dumping_through_lsass_access_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_credential_dumping_via_symlink_to_shadow_copy_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_credential_dumping_via_symlink_to_shadow_copy_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_credential_dumping_via_copy_command_from_shadow_copy_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_credential_dumping_via_copy_command_from_shadow_copy_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-        </html>
         <html>
           <div>
             <p>
@@ -1349,66 +798,12 @@
               </th>
             </tr>
             <tr>
-              <th style="text-align:left">cs_authentication_bruteforce_attempt_for_user_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_bruteforce_attempt_for_user_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_bruteforce_attempt_for_user_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_bruteforce_attempt_from_source_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_bruteforce_attempt_from_source_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_bruteforce_attempt_from_source_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
               <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_limit</th>
               <th style="text-align:left">
                 <input type="text" id="macro_cs_authentication_excessive_vpn_login_failure_limit"/>
               </th>
               <th style="text-align:left">
                 <button id="macro_cs_authentication_excessive_vpn_login_failure_limit_button">Update</button>
-              </th>
-            </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_for_user_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_excessive_vpn_login_failure_for_user_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_excessive_vpn_login_failure_for_user_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_excessive_vpn_login_failure_from_source_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_excessive_vpn_login_failure_from_source_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_successful_vpn_login_outside_home_country_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_successful_vpn_login_outside_home_country_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_successful_vpn_login_outside_home_country_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_vpn_login_attemps_outside_working_hour_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_vpn_login_attemps_outside_working_hour_filter_button">Update</button>
               </th>
             </tr>
             <tr>
@@ -1421,15 +816,6 @@
               </th>
             </tr>
             <tr>
-              <th style="text-align:left">cs_authentication_successful_vpn_login_from_new_location_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_successful_vpn_login_from_new_location_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_successful_vpn_login_from_new_location_filter_button">Update</button>
-              </th>
-            </tr>
-            <tr>
               <th style="text-align:left">cs_authentication_vpn_session_duration_limit</th>
               <th style="text-align:left">
                 <input type="text" id="macro_cs_authentication_vpn_session_duration_limit"/>
@@ -1438,85 +824,8 @@
                 <button id="macro_cs_authentication_vpn_session_duration_limit_button">Update</button>
               </th>
             </tr>
-            <tr>
-              <th style="text-align:left">cs_authentication_vpn_long_running_session_disconnected_filter</th>
-              <th style="text-align:left">
-                <input type="text" id="macro_cs_authentication_vpn_long_running_session_disconnected_filter"/>
-              </th>
-              <th style="text-align:left">
-                <button id="macro_cs_authentication_vpn_long_running_session_disconnected_filter_button">Update</button>
-              </th>
-            </tr>
           </table>
         </html>
-        <html>
-        <div>
-          <p>
-            <br/>
-            <b>
-              <center>Category: Ransomware</center>
-              <br/>
-            </b>
-          </p>
-        </div>
-        <p id="macro_ransomware_msg"/>
-        <table style="width:64%">
-          <tr>
-            <th style="text-align:left">cs_spike_in_file_writes_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_spike_in_file_writes_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_spike_in_file_writes_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_system_processes_run_from_unexpected_locations_filter (Fake Windows Proccess)</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_system_processes_run_from_unexpected_locations_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_system_processes_run_from_unexpected_locations_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_common_ransomware_extensions_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_common_ransomware_extensions_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_common_ransomware_extensions_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_common_ransomware_notes_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_common_ransomware_notes_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_common_ransomware_notes_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_usn_journal_deletion_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_usn_journal_deletion_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_usn_journal_deletion_filter_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_scheduled_tasks_used_in_badrabbit_ransomware_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_scheduled_tasks_used_in_badrabbit_ransomware_filter_button">Update</button>
-            </th>
-          </tr>
-        </table>
-    </html>
     <html>
         <div>
           <p>
@@ -1528,24 +837,6 @@
         </div>
         <p id="macro_windows_defender_msg"/>
         <table style="width:80%">
-          <tr>
-            <th style="text-align:left">cs_windows_defender_endpoint_not_protected</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_defender_endpoint_not_protected"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_defender_endpoint_not_protected_button">Update</button>
-            </th>
-          </tr>
-          <tr>
-            <th style="text-align:left">cs_windows_defender_realtime_protection_disabled_filter</th>
-            <th style="text-align:left">
-              <input type="text" id="macro_cs_windows_defender_realtime_protection_disabled_filter"/>
-            </th>
-            <th style="text-align:left">
-              <button id="macro_cs_windows_defender_realtime_protection_disabled_filter_button">Update</button>
-            </th>
-          </tr>
           <tr>
             <th style="text-align:left">cs_windows_defender_update_errors_filter</th>
             <th style="text-align:left">
