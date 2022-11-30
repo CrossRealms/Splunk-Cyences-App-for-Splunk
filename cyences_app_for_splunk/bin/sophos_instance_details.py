@@ -12,8 +12,6 @@ import logging
 import logger_manager
 logger = logger_manager.setup_logging('sophos_details_command', logging.DEBUG)
 
-APP_NAME = 'cyences_app_for_splunk'
-CONF_FILE = 'cs_configurations'
 SOPHOS_AUTH_URL = 'https://id.sophos.com/api/v2/oauth2/token'
 SOPHOS_WHOAMI_URL = 'https://api.central.sophos.com/whoami/v1'
 SOPHOS_TENANT_FROM_ORGANIZATION_URL = "https://api.central.sophos.com/organization/v1/tenants?pageTotal=true"
@@ -30,7 +28,7 @@ class SophosEndpointDetails(GeneratingCommand):
 
     def get_client_details(self):
         sessionKey = self.search_results_info.auth_token
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(APP_NAME,CONF_FILE), sessionKey=sessionKey)
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, cs_utils.CYENCES_CONF_FILE), sessionKey=sessionKey)
         data = json.loads(serverContent)['entry']
         client_id = ''
         client_secret = ''

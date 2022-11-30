@@ -29,7 +29,7 @@ class UpdateHoneyDBLookup(GeneratingCommand):
     def get_api_info(self):
         logger.debug("Getting HoneyDB API Info.")
         sessionKey = self.search_results_info.auth_token
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=sessionKey)
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=sessionKey)
         data = json.loads(serverContent)['entry']
         api_id = ''
         api_key = ''

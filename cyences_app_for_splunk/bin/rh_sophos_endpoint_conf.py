@@ -27,7 +27,7 @@ class SophosConfRestcall(admin.MConfigHandler):
     def handleList(self, conf_info):
         # Get Sophos Configuration
         try:
-            _, serverContent = rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}?output_mode=json".format(CONF_FILE), sessionKey=self.getSessionKey())
+            _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.getSessionKey())
             data = json.loads(serverContent)['entry']
             client_id = ''
             client_secret = '******'
@@ -53,7 +53,7 @@ class SophosConfRestcall(admin.MConfigHandler):
 
         try:
             # Store Client ID
-            rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-{}/{}?output_mode=json".format(CONF_FILE, SOPHOS_STANZA), postargs={'client_id': client_id}, method='POST', sessionKey=self.getSessionKey())
+            rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE, SOPHOS_STANZA), postargs={'client_id': client_id}, method='POST', sessionKey=self.getSessionKey())
 
             # Store Client Secret
             cs_utils.CredentialManager(self.getSessionKey()).store_credential(client_id, client_secret)
