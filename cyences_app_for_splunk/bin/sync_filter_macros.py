@@ -90,11 +90,12 @@ class SyncFilterMacros(GeneratingCommand):
 
     def generate(self):
         try:
-            self.session_key = self.search_results_info.auth_token
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
 
             savedsearches = self.get_saved_searches()
             macros = self.get_macros()
 
+            logger.info("reverse option={}".format(self.reverse))
             for name, content in savedsearches.items():
                 param_name = content.get(FILTER_MACRO_NAME_KEY)
                 param_value = content.get(
@@ -103,7 +104,8 @@ class SyncFilterMacros(GeneratingCommand):
 
                 current_macro_value = macros[param_name]
                 logger.debug(
-                    "param_name={}, param_value={}, current_macro_value={}".format(
+                    "Alert={}, param_name={}, param_value={}, current_macro_value={}".format(
+                        name,
                         param_name,
                         param_value,
                         current_macro_value,
