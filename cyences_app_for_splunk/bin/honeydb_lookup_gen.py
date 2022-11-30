@@ -28,15 +28,14 @@ class UpdateHoneyDBLookup(GeneratingCommand):
 
     def get_api_info(self):
         logger.info("Getting HoneyDB API Info.")
-        sessionKey = self.search_results_info.auth_token
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=sessionKey)
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.session_key)
         data = json.loads(serverContent)['entry']
         api_id = ''
         api_key = ''
         for i in data:
             if i['name'] == 'honeydb':
                 api_id = i['content']['api_id']
-                api_key = cs_utils.CredentialManager(sessionKey).get_credential(api_id)
+                api_key = cs_utils.CredentialManager(self.session_key).get_credential(api_id)
                 break
         logger.info("Got HoneyDB API info.")
         return api_id, api_key

@@ -28,8 +28,7 @@ class SophosEndpointDetails(GeneratingCommand):
 
     def get_client_details(self):
 
-        sessionKey = self.session_key
-        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, cs_utils.CYENCES_CONF_FILE), sessionKey=sessionKey)
+        _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, cs_utils.CYENCES_CONF_FILE), sessionKey=self.session_key)
 
         data = json.loads(serverContent)['entry']
         client_id = ''
@@ -37,7 +36,7 @@ class SophosEndpointDetails(GeneratingCommand):
         for i in data:
             if i['name'] == 'cs_sophos_endpoint':
                 client_id = i['content']['client_id']
-                client_secret = cs_utils.CredentialManager(sessionKey).get_credential(client_id)
+                client_secret = cs_utils.CredentialManager(self.session_key).get_credential(client_id)
                 break
         return client_id,client_secret
 
