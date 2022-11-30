@@ -16,7 +16,7 @@ import cs_utils
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('device_inventory_command', logging.DEBUG)
+logger = logger_manager.setup_logging('device_inventory_command', logging.INFO)
 
 IS_DEBUGGING_MODE = False
 
@@ -62,7 +62,7 @@ class DeviceInventoryGenCommand(EventingCommand):
     def read_kvstore_lookup(self, collection_name):
         _, serverContent = rest.simpleRequest(
             "/servicesNS/nobody/{}/storage/collections/data/{}?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
-            method='GET', sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+            method='GET', sessionKey=self.session_key, raiseAllErrors=True)
         lookup_data = json.loads(serverContent)
         return lookup_data
 
@@ -74,14 +74,14 @@ class DeviceInventoryGenCommand(EventingCommand):
                 jsonargs=json.dumps(updated_data)
                 _ = rest.simpleRequest(
                     "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
-                    method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+                    method='POST', jsonargs=jsonargs, sessionKey=self.session_key, raiseAllErrors=True)
             else:
                 updated_data_full = [updated_data[i:i + 800] for i in range(0, len(updated_data), 800)]   # send max 800 in each chunk
                 for chunk in updated_data_full:
                     jsonargs=json.dumps(chunk)
                     _ = rest.simpleRequest(
                         "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(cs_utils.APP_NAME, collection_name), 
-                        method='POST', jsonargs=jsonargs, sessionKey=self.search_results_info.auth_token, raiseAllErrors=True)
+                        method='POST', jsonargs=jsonargs, sessionKey=self.session_key, raiseAllErrors=True)
             logger.info("Updated {} entries in the lookup.".format(len(updated_data)))
         else:
             logger.info("No entries to update in the KVStore lookup.")
@@ -113,7 +113,7 @@ class DeviceInventoryGenCommand(EventingCommand):
         for filename in os.listdir(LOOKUP_DIR):
             f = os.path.join(LOOKUP_DIR, filename)
             if f.startswith(DEVICE_INVENTORY_LOOKUP_BACKUP_PREFIX) and os.stat(f).st_mtime < now - 7 * 86400:   # remove older than 7 days file
-                logger.debug("Removing file: {}".format(filename))
+                logger.info("Removing file: {}".format(filename))
                 # os.remove(f)
 
     def take_backup_of_lookup_only_updated_entries(self, data):
@@ -137,7 +137,7 @@ class DeviceInventoryGenCommand(EventingCommand):
 
     
     def get_pointer_in_data(self, field, value, time=None):
-        logger.debug("Finding field:{}, value:{}".format(field, value))
+        logger.info("Finding field:{}, value:{}".format(field, value))
         field_index = DEVICE_INVENTORY_LOOKUP_HEADERS_KEY_INDEX[field]
         if field in ['hostname', 'mac_address']:   # not being used for mac_address currently
             for i in self.device_inventory:
@@ -145,7 +145,7 @@ class DeviceInventoryGenCommand(EventingCommand):
                     lookup_values = i[field_index]
                     for val in value:
                         if val in lookup_values:
-                            logger.debug("Found lookup entry:{}".format(i))
+                            logger.info("Found lookup entry:{}".format(i))
                             return i
                 except KeyError:
                     continue   # If lookup entry do not have hostname of mac_address then continue with other entries
@@ -359,18 +359,10 @@ class DeviceInventoryGenCommand(EventingCommand):
 
         return record
 
-    
-    def check_session_key(self, records):
-        if not self.search_results_info or not self.search_results_info.auth_token:
-            logger.debug("Unable to find session key in the custom command. Logging records, if any.")
-            for r in records:
-                logger.debug(r)
-            raise Exception("unable to find session key.")
-
 
     def transform(self, records):
         try:
-            self.check_session_key(records)
+            self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
             self.device_inventory = None
             self.updated_entries = []
             self.current_time = self.ipmatchstarttime

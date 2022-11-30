@@ -1,14 +1,14 @@
 <form>
-    <splunk-control-group label="To" help="Comma separated email addresses.">
-        <splunk-text-input name="action.cyences_send_digest_email_action.param.to" id="to">
+    <splunk-control-group label="Email Recipients" help="Comma separated email addresses.">
+        <splunk-text-input name="action.cyences_send_digest_email_action.param.email_to" id="email_to">
         </splunk-text-input>
     </splunk-control-group>
-    <splunk-control-group label="Severity" help="Comma separated severities. ie. critical,high,medium,low,info">
-        <splunk-text-input name="action.cyences_send_digest_email_action.param.cyences_severity" id="cyences_severity">
+    <splunk-control-group label="Severities" help="Comma separated severities. ie. critical,high,medium,low,info">
+        <splunk-text-input name="action.cyences_send_digest_email_action.param.cyences_severities" id="cyences_severities">
         </splunk-text-input>
     </splunk-control-group>
-    <splunk-control-group label="Exclude Alert" help="Comma separated alert names.">
-        <splunk-text-area name="action.cyences_send_digest_email_action.param.exclude_alert" id="exclude_alert">
+    <splunk-control-group label="Exclude Alerts" help="Comma separated alert titles to exclude from alert digest email.">
+        <splunk-text-area name="action.cyences_send_digest_email_action.param.exclude_alerts" id="exclude_alerts">
         </splunk-text-area>
     </splunk-control-group>
 </form>

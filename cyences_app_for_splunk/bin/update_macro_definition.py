@@ -4,7 +4,7 @@ import json
 
 from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration, Option
 from splunk import rest
-
+import cs_utils
 
 @Configuration()
 class UpdateMacroDefinition(GeneratingCommand):
@@ -19,9 +19,9 @@ class UpdateMacroDefinition(GeneratingCommand):
         data = {
             "definition": self.macro_definition
         }
-        rest.simpleRequest("/servicesNS/nobody/cyences_app_for_splunk/configs/conf-macros/{}?output_mode=json".format(self.macro_name),
+        rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-macros/{}?output_mode=json".format(cs_utils.APP_NAME, self.macro_name),
                                     method="POST", sessionKey=sessionKey, postargs=data, raiseAllErrors=True)
         yield {"msg": "Macro has been updated."}
 
- 
+
 dispatch(UpdateMacroDefinition, sys.argv, sys.stdin, sys.stdout, __name__)
