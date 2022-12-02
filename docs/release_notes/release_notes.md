@@ -39,8 +39,8 @@ has_children: true
 --> <TODO> try to increase number of alerts in the email to 20 or maybe 30 to see we send minimum number of emails. 
 
 
-* ### Alert Filter Configuration from Saved Searches, Reports and Alerts Page 
-    * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Saved Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
+* ### Alert Filter Configuration from Searches, Reports and Alerts Page 
+    * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
     <TODO - Screenshot>
     * This is much less confusing as earlier users had to find which macro is related to which alert. Now user can see the configuration right underneath the alert configuration.
     * Your macro update may not happen in real-time as we are doing the update every 5 minutes.
@@ -73,7 +73,7 @@ has_children: true
         * It now supports CrowdStrike Spotlight data.
     
     * AD - User Change alert
-        * Added filter for common MFA Service users making changes on Office 365 to reduce a lot of false positives.
+        * Added filter to reduce number of false positives.
     
     * Forensics Page
         * Some alerts were missing the searches for drilldowns and contributing events panel. Added now.
