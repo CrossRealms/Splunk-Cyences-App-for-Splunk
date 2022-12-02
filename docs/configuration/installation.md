@@ -110,7 +110,7 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 
 ## **Filter Macros**
 
---> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the savedsearches page of Splunk.
+--> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the "searches, reports and alerts" page of Splunk.
 
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
