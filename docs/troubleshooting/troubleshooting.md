@@ -48,15 +48,15 @@ In other words, Windows machines are not generating WinEventLog Event ID 4950.
         `cs_wineventlog_security` EventCode=4950 Type="Enable Windows Defender Firewall" Value=No | rename Changed_Profile AS ProfileChanged, Type AS SettingType, Value as SettingValue | table host, EventCode, ProfileChanged, SettingType, SettingValue 
         | `cs_windows_firewall_disabled_filter` 
 
-## The Tenable dashboard does not display every asset and vulnerability by default. 
 
-Refer to the **App Installation and Configuration > Device Inventory** section for more information. 
+## Device Inventory dashboard does not display every device by default. 
 
-## The Device Inventory dashboard does not display every device by default. 
+Refer to the **App Installation and Configuration > Device Inventory > Backfill Device Inventory** section for more information.
 
-Refer to the **App Installation and Configuration > Device Inventory** section for more information.
 
 ## Sysmon data action field issue
+
+--> <TODO-Mahir> - Is this still valid?
 
 * Due to a conflict in props.conf for both the [Sysmon Add-on](https://splunkbase.splunk.com/app/1914/) and [Windows Add-on](https://splunkbase.splunk.com/app/742/), the **action** field is displaying incorrect values for Sysmon related data. 
 
@@ -107,7 +107,7 @@ Refer to the **App Installation and Configuration > Device Inventory** section f
 
 ## Reducing False Positives for the "Authentication - Bruteforce Attempt for a User" Alert 
 
-* Recently, we found false positives for this alert that are tied to sourcetype=linux:audit. 
+* We found false positives for this alert that are tied to sourcetype=linux:audit. 
 
 * This will continue to occur in environments where the **Linux Auditd Technology Add-On (TA-linux_auditd)** is being used.  
 
