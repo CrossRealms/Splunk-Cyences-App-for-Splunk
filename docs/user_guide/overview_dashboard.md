@@ -7,9 +7,11 @@ parent: User Guide
 ---
 
 # Overview Dashboard
-The Overview dashboard displays the overall security status of the Splunk environment, in addition to highlighting present security issues as well. Triggered alerts will be visible in red. We specifically designed the Overview dashboard to be a single pane of glass for ease of use.
+The Overview dashboard displays the overall security status of the Splunk environment, in addition to highlighting present security issues as well. We specifically designed the Overview dashboard to be a single pane of glass for ease of use.
 
 ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/overview_dashboard.png?raw=true)
+
+--> <TODO-Ahad> - update the screenshot
 
 ## Overview Dashboard Features:
 
@@ -21,7 +23,11 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 * Clicking on any row within a dashboard panel retrieves more information about the selected alert. By doing so, it will automatically redirect the Splunk user to the Forensics dashboard. Refer to the **Forensics Dashboard** section for more information. 
 * The **Monthly Alerts** section focuses on important aspects of your environment that are less active, but are still necessary to keep track of (i.e., Windows Hosts Missing Update).
 
+--> <TODO-Ahad> - Can we update the above description with the new severity based notable events showing with different color. And also there is multi-select filter for severity selection.
+
 **Note**: After installing the Cyences App, the Overview dashboard will be empty by default. The Overview dashboard only displays enabled alerts and they each have to be manually enabled. Refer to the **Enable Alerts and Reports** section to find out how to enable alerts/reports within the Cyences App.
+
+--> <TODO-Mahir> - shall we enable the alerts by default? What's the status now. Can we update the above line accordingly.
 
 
 ### Globally Detected Malicious IPs

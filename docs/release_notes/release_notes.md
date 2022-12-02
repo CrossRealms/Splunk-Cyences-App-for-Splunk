@@ -96,3 +96,7 @@ has_children: true
 
 ## Upgrade Guide from 2.3.0 to 3.0.0
 
+* Overview Dashboard
+    * We are no longer showing the alerts on the Overview page which did not trigger by default.
+    * Users can select a checkbox called "Show alerts that did not trigger" to see them.
+        * <TODO-Mahir> - something to be implemented.
