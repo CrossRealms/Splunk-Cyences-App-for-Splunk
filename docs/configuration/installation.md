@@ -11,7 +11,7 @@ parent: Configuration
 
 ## **App Installation**
 
-The Cyences App needs to be installed on the Search Head.  
+The Cyences App needs to be installed on the Search Head only.
 
 1. From the Splunk Web home screen, click the gear icon next to **Apps**. 
 
@@ -23,12 +23,7 @@ The Cyences App needs to be installed on the Search Head.
     * Navigate to **Settings > Indexes**. 
     * Click on **New Index**. 
     * Enter **cyences** for the Index Name. 
-    * Click **Save**. 
-
-5. The props.conf sourcetype needs to be changed. 
-    * Copy **props.conf** from the default directory of the App ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/default/props.conf) into local directory ($SPLUNK_HOME/etc/apps/cyences_app_for_splunk/local). 
-    * Open the newly copied props.conf file from the local directory. 
-    * Update the stanza name from **[cyences_stash]** to **[stash]**. 
+    * Click **Save**.
 
 6. Restart Splunk after installing all dependencies. 
 
@@ -36,11 +31,17 @@ The Cyences App needs to be installed on the Search Head.
 
 There are dependent apps which also need to be installed on the Search Head along with the Cyences app itself (follow the same steps mentioned in the previous section to install the apps).
 
-| App Name | Splunkbase Link | What is this used for? |            
+| App Name | Splunkbase Link | What is this used for? |
 |--------|--------|-------------|
-| ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some macro definitions and lookups |
+| ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some lookups
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
 | Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
+
+* Note - Other Add-ons are necessary as per data you have. Ex. If you have Windows data on Splunk you need to have Splunk Add-on for Windows. Please see data onboarding section for more information.
+
+
+--> <TODO-Ahad> - remove below list from here and need to be included in the Data-Onboarding section instead.
+
 | Splunk Add-on for Windows | [https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) | For field extraction (AD/Windows data) 
 | Microsoft Sysmon Add-on | [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/) | For field extraction (Sysmon data) 
 | Splunk Add-on for O365 | [https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) | For field extraction (O365 audit data) 
@@ -57,6 +58,7 @@ There are dependent apps which also need to be installed on the Search Head alon
 | Fortinet FortiGate Add-On for Splunk | [https://splunkbase.splunk.com/app/2846](https://splunkbase.splunk.com/app/2846) | For field extraction (FortiGate VPN data) 
 | Other add-ons from which you are collecting data for in your environment | N/A | For field extraction 
 
+
 ## **Data Model Acceleration & Macros**
 
 For optimal performance, it is recommended to enable the data model acceleration for the CIM data models which are being used. 
@@ -66,17 +68,23 @@ For optimal performance, it is recommended to enable the data model acceleration
 | Endpoint | cs_summariesonly_endpoint | 7 days (Minimum) |
 | Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum) |
 | Authentication | cs_summariesonly_authentication | 7 day (Minimum) |
-| Network Resolution (DNS) | cs_summariesonly_network_resolution_dns |  7 day (Minimum) |
-| Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities |  1 month (Minimum) |
+| Network Resolution (DNS) | cs_summariesonly_network_resolution_dns | 7 day (Minimum) |
+| Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities | 1 month (Minimum) |
 | Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
 
+--> <TODO-Mahir> - can we exclude above two from the configuration page and keep the acceleration enabled by default?
+
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
+
+--> <TODO-Ahad> - add screenshot
 
 The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
 
 ## **Data Source Macros**
 
 Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
+
+--> <TODO-Ahad> - add screenshot
 
 ## **Other Macros**
 
@@ -97,7 +105,12 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
 | cs_qualys_linux_os | The Qualys data has different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
 
+--> <TODO-Ahad> - make sure this list is up to date
+--> <TODO-Ahad> - add screenshot
+
 ## **Filter Macros**
+
+--> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the savedsearches page of Splunk.
 
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
@@ -148,6 +161,12 @@ Both the **firstTime_hour** and **lastTime_hour** fields are generated by the `c
 The above two alerts are generating **firstTime** and **lastTime** fields, which indicates the first and last event time during the course of the selected time range. In some cases, the alert time field could be **event_time** instead of **_time**. If necessary, Splunk users can substitute one of these fields for one of the following: event_ptime, event_date, etc.
 
 **Note:** Basic knowledge of Splunk's Search Processing Language (SPL) is required.
+
+
+## **Configuration of Email Addresses for Critical Alerts**
+* <TODO-Ahad/Mahir> - write full details
+* <TODO-Ahad> - add screenshot
+
 
 ## **Honey DB Configuration**
 
