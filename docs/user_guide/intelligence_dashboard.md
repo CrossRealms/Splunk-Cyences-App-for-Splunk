@@ -13,8 +13,6 @@ Cyences version 1.2.0 introduces a new drop-down option named Intelligence in th
 * Asset Intelligence
 * Device Inventory
 * Globally Detected Malicious IPs
-* Lansweeper
-* Vulnerability
 
 ## Globally Detected Malicious IPs
 
@@ -33,6 +31,8 @@ Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now be
 **Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user's environment.
 
 ## Lansweeper
+
+--> <TODO-Ahad> - Let's find another place to put this section, as Lansweeper does not fit with intelligence anymore.
 
 The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
 
@@ -54,6 +54,8 @@ The Lansweeper dashboard in the Cyences app displays information about every IT 
 The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System for improved security on those assets. 
 
 ## Vulnerability
+
+--> <TODO-Ahad> - Let's find another place to put this section, as Vulnerabilities does not fit with intelligence anymore.
 
 Supported Vendor Products: Qualys, Tenable IO, Nessus, CrowdStrike Spotlight
 

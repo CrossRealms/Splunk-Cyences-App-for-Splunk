@@ -8,6 +8,20 @@ parent: User Guide
 
 # Alerts & Dashboards (Security Use-cases)
 
+
+--> <TODO-Ahad> - Can we group by category instead?
+   - like * ## Windows
+            * ### Alerts
+                * fr
+                * sdg
+            * ### Dashboard panels
+                * sdfg
+                * sfg
+
+
+--> <TODO-Ahad> - Need to gather the latest list with proper category
+
+
 ## Alerts
 There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App. Alerts are disabled by default. Alerts should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts: 
 
