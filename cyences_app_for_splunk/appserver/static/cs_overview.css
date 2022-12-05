@@ -53,12 +53,12 @@
 }
 
 .severity-4 {
-    background-color: #FF5500 !important;
+    background-color: orange !important;
     color: white !important;
 }
 
 .severity-3 {
-    background-color: orange !important;
+    background-color: #FFD301 !important;
     color: white !important;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .severity-1 {
-    background-color: green !important;
+    background-color: yellowgreen !important;
     color: white !important;
 }
 
