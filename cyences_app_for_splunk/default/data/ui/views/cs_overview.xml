@@ -3,15 +3,15 @@
   <search id="basesearch">
     <query>`cs_cyences_index` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1"  | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity]
 | eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
-| search disabled=0 is_scheduled=1 
+| search disabled=0 is_scheduled=1 problems!=0
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
-| `cs_daily_alerts`
+| search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort - cyences_severity
 | table savedsearch_name, "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
@@ -195,6 +195,7 @@
     | stats latest(Status) as Status latest(_time) as _time by Service host 
     | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
     | stats count as Count
+    | where Count > 0
     | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently not Operational O365 Services"
     | eval cyences_severity=5
@@ -228,11 +229,11 @@
         <search>
           <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
 | eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
-| search disabled=0 is_scheduled=1 
-| `cs_daily_alerts`
+| search disabled=0 is_scheduled=1 problems!=0
+| search NOT savedsearch_name IN `cs_monthly_alerts`
 | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
 | eval Count=if(isnull(problems), 0, problems)
 | eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
@@ -242,6 +243,7 @@
     | stats latest(type) as type by host, dhost 
     | where type=="Event::Endpoint::ServiceNotRunning" 
     | stats count as Count
+    | where Count > 0
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Disabled/Stopped Sophos Services"
     | eval cyences_severity = 5] 
@@ -251,6 +253,7 @@
     | stats latest(type) as type by host, dhost 
     | where type=="Event::Endpoint::SavDisabled" 
     | stats count as Count
+    | where Count > 0
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"
     | eval cyences_severity = 5]
@@ -259,6 +262,7 @@
       | fields EventCode, host 
       | stats latest(EventCode) as EventCode by host 
       | stats count(eval(EventCode!=1150 AND EventCode!=1151)) as Count 
+      | where Count > 0
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
       | eval Name="Currently Disabled/Stopped Windows Defender Services"
     | eval cyences_severity = 5]
@@ -268,6 +272,7 @@
     | stats latest(RTP_state) as RTP_state by host 
     | where RTP_state=="Disabled" 
     | stats count as Count 
+    | where Count > 0
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
     | eval cyences_severity = 5]
@@ -329,11 +334,11 @@
         <search>
           <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | rename title as savedsearch_name, "alert.severity" as severity | fields savedsearch_name, disabled, is_scheduled, severity]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | rename title as savedsearch_name, "alert.severity" as severity | fields savedsearch_name, disabled, is_scheduled, severity]
 | eval cyences_severity = coalesce(cyences_severity, severity)
 | stats first(*) as * by savedsearch_name
 | search savedsearch_name IN `cs_monthly_alerts`
-| search disabled=0 is_scheduled=1
+| search disabled=0 is_scheduled=1 problems!=0
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | eval problem = cyences_severity."|".problems
