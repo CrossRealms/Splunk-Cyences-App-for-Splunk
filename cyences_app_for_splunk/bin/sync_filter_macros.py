@@ -109,7 +109,7 @@ class SyncFilterMacros(GeneratingCommand):
                     FILTER_MACRO_VALUE_KEY, "search *"
                 )  # The savedsearch endpoint does not provide default alert action param values
 
-                current_macro_value = macros[param_name]
+                current_macro_value = macros.get(param_name)
                 logger.debug(
                     "Alert={}, param_name={}, param_value={}, current_macro_value={}".format(
                         name,
