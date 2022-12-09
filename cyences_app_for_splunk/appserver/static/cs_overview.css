@@ -46,3 +46,33 @@
 .box:hover::before {
     left: 100%;
 }
+
+.severity-5 {
+    background-color: red !important;
+    color: white !important;
+}
+
+.severity-4 {
+    background-color: orange !important;
+    color: white !important;
+}
+
+.severity-3 {
+    background-color: #FFD301 !important;
+    color: white !important;
+}
+
+.severity-2 {
+    background-color: yellowgreen !important;
+    color: white !important;
+}
+
+.severity-1 {
+    background-color: yellowgreen !important;
+    color: white !important;
+}
+
+.no-notable-events {
+    background-color: green !important;
+    color: white !important;
+}

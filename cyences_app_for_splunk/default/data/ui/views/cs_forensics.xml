@@ -13,7 +13,7 @@
       <fieldForLabel>title</fieldForLabel>
       <fieldForValue>title</fieldForValue>
       <search>
-        <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | fields title | search NOT title IN `cs_reports`</query>
+        <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | fields title</query>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
@@ -22,9 +22,23 @@
   <row>
     <panel>
       <title>Notable Events</title>
+      <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
+        <label>Severity</label>
+        <choice value="critical">critical</choice>
+        <choice value="high">high</choice>
+        <choice value="medium">medium</choice>
+        <choice value="low">low</choice>
+        <choice value="info">info</choice>
+        <default>critical,high,medium</default>
+        <prefix>(</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>,</delimiter>
+      </input>
       <table>
         <search id="all_results">
-          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ 
+          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ cyences_severity IN $tkn_severity$
 | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
 | rename * AS X_*_NEW 
 | foreach * [ eval newFieldName=replace("&lt;&lt;FIELD&gt;&gt;", "\s+", "_"), {newFieldName}='&lt;&lt;FIELD&gt;&gt;' ] | fields - "* *", newFieldName 
@@ -39,6 +53,9 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
+        <format type="color" field="cyences_severity">
+          <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
+        </format>
       </table>
     </panel>
   </row>
