@@ -32,7 +32,7 @@ class CyencesSendEmailCommand(EventingCommand):
             cyences_email_utility = CyencesEmailUtility(logger, session_key, self.alert_name)
 
             alert_action_config = config_handler.get_alert_action_default_config(ALERT_ACTION_NAME)
-            alert_specific_action_config = config_handler.extract_alert_action_params_from_savedsearches_config(alert_action_config, ALERT_ACTION_NAME)
+            alert_specific_action_config = config_handler.extract_alert_action_params_from_savedsearches_config(cyences_email_utility.alert_all_configs, ALERT_ACTION_NAME)
 
             alert_action_config.update(alert_specific_action_config)
 
