@@ -49,6 +49,10 @@ require([
         { macro_name: 'cs_sysmon_timerange', input_id: 'macro_cs_sysmon_timerange', button_id: 'macro_cs_sysmon_timerange_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_qualys_timerange', input_id: 'macro_cs_qualys_timerange', button_id: 'macro_cs_qualys_timerange_button', msg_id: 'macro_other_msg'},
         { macro_name: 'cs_qualys_linux_os', input_id: 'macro_cs_qualys_linux_os', button_id: 'macro_cs_qualys_linux_os_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_ad_important_role', input_id: 'macro_cs_ad_important_role', button_id: 'macro_cs_ad_important_role_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_ad_important_policy', input_id: 'macro_cs_ad_important_policy', button_id: 'macro_cs_ad_important_policy_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_ad_important_user', input_id: 'macro_cs_ad_important_user', button_id: 'macro_cs_ad_important_user_button', msg_id: 'macro_other_msg'},
+        { macro_name: 'cs_ad_important_group', input_id: 'macro_cs_ad_important_group', button_id: 'macro_cs_ad_important_group_button', msg_id: 'macro_other_msg'},
 
         /* Data-model */
         { macro_name: 'cs_summariesonly_endpoint', input_id: 'macro_datamodel_endpoint', button_id: 'macro_datamodel_endpoint_button', msg_id: 'macro_datamodel_msg'},

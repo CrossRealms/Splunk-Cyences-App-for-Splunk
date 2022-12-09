@@ -493,6 +493,42 @@
               <button id="macro_cs_qualys_linux_os_button">Update</button>
             </th>
           </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_important_role (e.g. "val1", "val2")</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_important_role"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_important_role_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_important_policy (e.g. "val1", "val2")</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_important_policy"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_important_policy_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_important_user (e.g. "val1", "val2")</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_important_user"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_important_user_button">Update</button>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align:left">cs_ad_important_group (e.g. "val1", "val2")</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_cs_ad_important_group"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_cs_ad_important_group_button">Update</button>
+            </th>
+          </tr>
         </table>
       </html>
     </panel>
