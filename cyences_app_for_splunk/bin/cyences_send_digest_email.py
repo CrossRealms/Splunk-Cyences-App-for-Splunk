@@ -139,11 +139,15 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
             cyences_email_utility = CyencesEmailUtility(logger, session_key, self.alert_name)
 
-            alert_action_config_for_alert = config_handler.extract_alert_action_params_from_savedsearches_config(cyences_email_utility.alert_all_configs, ALERT_ACTION_NAME)
+            alert_action_config = config_handler.get_alert_action_default_config(ALERT_ACTION_NAME)
+            alert_specific_action_config = config_handler.extract_alert_action_params_from_savedsearches_config(cyences_email_utility.alert_all_configs, ALERT_ACTION_NAME)
 
-            param_email_to = alert_action_config_for_alert.get("param.email_to", '')
-            param_severities = alert_action_config_for_alert.get("param.cyences_severities", '')
-            param_exclude_alerts = cs_utils.convert_to_set(alert_action_config_for_alert.get("param.exclude_alerts", ''))
+            alert_action_config.update(alert_specific_action_config)
+
+
+            param_email_to = alert_action_config.get("param.email_to", '')
+            param_severities = alert_action_config.get("param.cyences_severities", '')
+            param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
 
             final_email_to = self.email_to if self.email_to is not None else param_email_to
             final_severities = self.severities if self.severities is not None else param_severities
@@ -181,9 +185,10 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                             subject = '{} Part-{}'.format(self.alert_name, email_counter)
 
                         cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
-
+                        log_msg =  "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
+                        logger.info(log_msg)
                         yield {
-                            "msg" : "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
+                            "msg" : log_msg
                         }
                     else:
                         logger.info("No matching event found")
