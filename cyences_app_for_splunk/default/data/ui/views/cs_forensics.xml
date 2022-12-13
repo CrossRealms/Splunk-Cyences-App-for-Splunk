@@ -24,12 +24,12 @@
       <title>Notable Events</title>
       <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
         <label>Severity</label>
-        <choice value="critical">critical</choice>
-        <choice value="high">high</choice>
-        <choice value="medium">medium</choice>
-        <choice value="low">low</choice>
-        <choice value="info">info</choice>
-        <default>critical,high,medium</default>
+        <choice value="5">critical</choice>
+        <choice value="4">high</choice>
+        <choice value="3">medium</choice>
+        <choice value="2">low</choice>
+        <choice value="1">info</choice>
+        <default>5,4,3</default>
         <prefix>(</prefix>
         <suffix>)</suffix>
         <valuePrefix>"</valuePrefix>
@@ -38,7 +38,8 @@
       </input>
       <table>
         <search id="all_results">
-          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ cyences_severity IN $tkn_severity$
+          <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+| search cyences_severity IN $tkn_severity$
 | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
 | rename * AS X_*_NEW 
 | foreach * [ eval newFieldName=replace("&lt;&lt;FIELD&gt;&gt;", "\s+", "_"), {newFieldName}='&lt;&lt;FIELD&gt;&gt;' ] | fields - "* *", newFieldName 
@@ -46,7 +47,9 @@
 | fields - X_*_NEW 
 | rename orig_* as * 
 | `cs_human_readable_time_format(_time, alert_time)` 
-| table alert_time, event_tim*, *</query>
+| table alert_time, event_tim*, cyences_severity, *
+| fieldformat cyences_severity=case(cyences_severity==5, "critical", cyences_severity==4, "high", cyences_severity==3, "medium", cyences_severity==2, "low", cyences_severity==1, "info")
+| sort - cyences_severity</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
