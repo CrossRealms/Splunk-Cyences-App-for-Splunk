@@ -7,16 +7,18 @@
   <search id="basesearch">
     <query>`cs_cyences_index` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | search cyences_severity IN $tkn_severity$
-| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1"  | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity]
-| eval cyences_severity = coalesce(cyences_severity, severity)
-| stats first(*) as * by savedsearch_name
-| search disabled=0 is_scheduled=1 cyences_severity IN $tkn_severity$ $tkn_not_triggered_alert_filter_1$
+| stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
+| stats first(*) as * by savedsearch_name, cyences_severity
+| search NOT savedsearch_name IN `cs_monthly_alerts`
+| sort savedsearch_name, cyences_severity
+| streamstats count as newcount by savedsearch_name
+| where (cyences_severity!="unknown" OR newcount=1)
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
+| search $tkn_not_triggered_alert_filter_1$
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
-| search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort - cyences_severity
 | table savedsearch_name, "Notable Events"</query>
     <earliest>$timeRange.earliest$</earliest>
@@ -265,14 +267,16 @@
         <search>
           <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
-| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | fields title, disabled, is_scheduled, "alert.severity" | rename title as savedsearch_name, "alert.severity" as severity | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
-| eval cyences_severity = coalesce(cyences_severity, severity)
-| stats first(*) as * by savedsearch_name
-| search disabled=0 is_scheduled=1 cyences_severity IN $tkn_severity$ $tkn_not_triggered_alert_filter_1$
+| stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
+| stats first(*) as * by savedsearch_name, cyences_severity
 | search NOT savedsearch_name IN `cs_monthly_alerts`
+| sort savedsearch_name, cyences_severity
+| streamstats count as newcount by savedsearch_name
+| where (cyences_severity!="unknown" OR newcount=1)
 | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
 | eval Count=if(isnull(problems), 0, problems)
+| search $tkn_not_triggered_alert_filter_1$
 | eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
@@ -283,7 +287,8 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Disabled/Stopped Sophos Services"
-    | eval cyences_severity = 5] 
+    | eval cyences_severity = 5
+    | search cyences_severity IN $tkn_severity$] 
 | append
     [| search `cs_sophos` type="Event::Endpoint::Sav*" host="*" dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields host dhost type 
@@ -293,7 +298,8 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"
-    | eval cyences_severity = 5]
+    | eval cyences_severity = 5
+    | search cyences_severity IN $tkn_severity$]
 | append
     [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=stopped) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
       | fields EventCode, host 
@@ -302,7 +308,8 @@
       $tkn_not_triggered_alert_filter_2$
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
       | eval Name="Currently Disabled/Stopped Windows Defender Services"
-    | eval cyences_severity = 5]
+    | eval cyences_severity = 5
+    | search cyences_severity IN $tkn_severity$]
 | append
     [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
     | fields RTP_state host 
@@ -312,8 +319,8 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
-    | eval cyences_severity = 5]
-| search cyences_severity IN $tkn_severity$
+    | eval cyences_severity = 5
+    | search cyences_severity IN $tkn_severity$]
 | eval cyences_severity=if(Count==0, 0, cyences_severity)
 | sort - cyences_severity
 | eval problem = cyences_severity."|".Count
@@ -372,14 +379,16 @@
         <search>
           <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | search cyences_severity IN $tkn_severity$
-| stats count as problems, max(cyences_severity) as cyences_severity by category, alert_name | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | rename title as savedsearch_name, "alert.severity" as severity | fields savedsearch_name, disabled, is_scheduled, severity]
-| eval cyences_severity = coalesce(cyences_severity, severity)
-| stats first(*) as * by savedsearch_name
+| stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
+| stats first(*) as * by savedsearch_name, cyences_severity
 | search savedsearch_name IN `cs_monthly_alerts`
-| search disabled=0 is_scheduled=1 cyences_severity IN $tkn_severity$  $tkn_not_triggered_alert_filter_1$
+| sort savedsearch_name, cyences_severity
+| streamstats count as newcount by savedsearch_name
+| where (cyences_severity!="unknown" OR newcount=1)
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
+| search $tkn_not_triggered_alert_filter_1$
 | eval problem = cyences_severity."|".problems
 | sort - cyences_severity
 | rename savedsearch_name as Name, problem as "Notable Events"
