@@ -20,7 +20,7 @@
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
 | sort - cyences_severity
-| table savedsearch_name, "Notable Events"</query>
+| table savedsearch_name, "Notable Events", cyences_severity</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>
@@ -110,7 +110,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
@@ -131,7 +131,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
@@ -152,7 +152,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
@@ -173,7 +173,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
@@ -196,7 +196,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
@@ -256,7 +256,7 @@
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition>
-            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
           </condition>
         </drilldown>
       </table>
@@ -325,7 +325,7 @@
 | sort - cyences_severity
 | eval problem = cyences_severity."|".Count
 | rename problem as "Notable Events"
-| table savedsearch_name, Name, "Notable Events"</query>
+| table savedsearch_name, Name, "Notable Events", cyences_severity</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -359,7 +359,7 @@
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_defender_atp?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition>
-            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
           </condition>
         </drilldown>
       </table>
@@ -392,7 +392,7 @@
 | eval problem = cyences_severity."|".problems
 | sort - cyences_severity
 | rename savedsearch_name as Name, problem as "Notable Events"
-| table Name, "Notable Events"</query>
+| table Name, "Notable Events", cyences_severity</query>
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
@@ -407,7 +407,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.Name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.Name$&amp;form.timeRange.earliest=$timeRange_long.earliest$&amp;form.timeRange.latest=$timeRange_long.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
