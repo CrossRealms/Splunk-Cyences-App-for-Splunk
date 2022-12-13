@@ -54,7 +54,7 @@ require([
             if (notableEventsCount > 0){
                 $td.addClass(`severity-${severity}`).html(notableEventsCount);
             }
-            else{
+            else if (notableEventsCount == 0){
                 $td.addClass(`no-notable-events`).html(notableEventsCount);
             }
         }
