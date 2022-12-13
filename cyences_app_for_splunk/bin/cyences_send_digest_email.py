@@ -183,6 +183,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                             subject = self.alert_name
                         else:
                             subject = '{} Part-{}'.format(self.alert_name, email_counter)
+                            email_counter += 1
 
                         cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
                         log_msg =  "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
