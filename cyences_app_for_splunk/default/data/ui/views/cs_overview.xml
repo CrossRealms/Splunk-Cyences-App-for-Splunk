@@ -40,7 +40,7 @@
         <choice value="3">medium</choice>
         <choice value="2">low</choice>
         <choice value="1">info</choice>
-        <default>5,4,3</default>
+        <default>5,4,3,2,1</default>
         <prefix>(</prefix>
         <suffix>)</suffix>
         <valuePrefix>"</valuePrefix>
