@@ -14,13 +14,15 @@
 | sort savedsearch_name, cyences_severity
 | streamstats count as newcount by savedsearch_name
 | where (cyences_severity!="unknown" OR newcount=1)
+| join savedsearch_name [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title, action.cyences_notable_event_action.category | rename title as savedsearch_name, "action.cyences_notable_event_action.category" as category | eval category = split(category, ","), category=mvmap(category, trim(category))]
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | search $tkn_not_triggered_alert_filter_1$
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
 | sort - cyences_severity
-| table savedsearch_name, "Notable Events", cyences_severity</query>
+| table savedsearch_name, "Notable Events", cyences_severity, category  | search category="Authentication"</query>
+<!-- TODO: need to update rest of query to use the new category field. The search in multivalue field is not working as expected. so might need to use regex for searching specific category-->
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>

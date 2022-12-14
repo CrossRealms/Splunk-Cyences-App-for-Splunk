@@ -91,10 +91,11 @@ class RenameSavedSearch(GeneratingCommand):
                 diff = set(old_content.items()) - set(new_content.items())
                 payload = {item[0]: item[1] for item in diff}
 
-                if payload:
-                    self.update_savedsearch(new_savedsearch, payload)
+                # TODO: Commenting this lines. Need to first check which parameter we want to ignore and which one needs to be updated.
+                # if payload:
+                #     self.update_savedsearch(new_savedsearch, payload)
 
-                self.delete_savedsearch(old_savedsearch)
+                # self.delete_savedsearch(old_savedsearch)
 
             success_msg = "Successfully completed"
             logger.info(success_msg)
