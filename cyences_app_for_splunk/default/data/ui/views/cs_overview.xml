@@ -217,7 +217,7 @@
         </format>
         <fields>["Name","Notable Events"]</fields>
         <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$</link>
         </drilldown>
       </table>
     </panel>
