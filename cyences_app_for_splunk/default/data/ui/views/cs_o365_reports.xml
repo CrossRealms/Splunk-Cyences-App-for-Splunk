@@ -319,13 +319,13 @@
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload=MicrosoftTeams Operation=MemberAdded Members{}.UPN=*\#ext\#* $tkn_host$
-| rename Members{}.UPN AS memberUpn 
-| eval memberUpn =lower(memberUpn) 
-| rex field=memberUpn "(?&lt;email&gt;.*)\#ext\#" 
-| rex mode=sed field=email "s/_(?!.*_)/@/g" 
-| rex field=email "@(?&lt;target_domain&gt;.*)" 
-| stats count by memberUpn 
-| table memberUpn | rename memberUpn as "External Users"</query>
+| rename Members{}.UPN AS memberUpn
+| eval UserId =lower(UserId)  | rex field=UserId "@(?&lt;src_domain&gt;.*)"
+| eval memberUpn =lower(memberUpn)  | rex field=memberUpn "(?&lt;email&gt;.*)\#ext\#" | rex mode=sed field=email "s/_(?!.*_)/@/g" | rex field=email "@(?&lt;target_domain&gt;.*)" 
+| where target_domain != src_domain
+| stats values(email) as email, values(target_domain) as target_domain, values(ClientIP) as ClientIP by CreationTime, CommunicationType, ItemName, UserId, src_domain 
+| fields CreationTime, email, CommunicationType, ItemName, ClientIP, UserId, target_domain
+| rename CreationTime AS "Timestamp" ItemName AS "Item Name" UserId AS "Added By" email AS "External User" CommunicationType AS "Added To" target_domain AS "External Domain"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
