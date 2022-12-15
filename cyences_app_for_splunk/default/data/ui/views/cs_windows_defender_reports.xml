@@ -218,11 +218,16 @@
     <panel>
       <title>Malware Detected</title>
       <table>
-        <title>EventCodes=1006, 1015, 1116</title>
+        <title>EventCodes=1006, 1007, 1008, 1015, 1116, 1117, 1118</title>
         <search>
-          <query>`cs_windows_defender` EventCode IN (1006, 1015, 1116) $tkn_host$
-| eval EventCodeDescription=case(EventCode=1006, "Antimalware engine found malware", EventCode=1015, "Antimalware platform found malware", EventCode=1116, "Antimalware platform detected suspicious behaviour")
-| table _time, Computer, EventCode, EventCodeDescription, Threat_Name, Threat_ID, severity, Category_Name, Detection_User, Process_Name, Path 
+          <query>`cs_windows_defender` EventCode IN(1006, 1007, 1008, 1015, 1116, 1117, 1118) $tkn_host$
+| fields Detection_Time, Computer, EventCode, Threat_Name, severity, action, Category_Name, Detection_User, Additional_Actions_String, Threat_ID, Detection_ID, Process_Name, Path 
+| eval EventCodeDescription=case(EventCode==1006 ,"1006 - Antimalware engine found malware or other potentially unwanted software.", EventCode==1007 ,"1007 - Antimalware platform performed an action to protect your system.", EventCode==1008 ,"1008 - Antimalware platform performed an action to protect your system, but the action failed.", EventCode==1015 ,"1015 - Antimalware platform detected suspicious behavior.", EventCode==1116 ,"1116 - Antimalware platform detected malware or other potentially unwanted software.", EventCode==1117 ,"1117 - Antimalware platform performed an action to protect your system.", EventCode==1118 ,"1118 - Antimalware platform performed an action to protect your system, but the action failed.") 
+| stats values(*) as * by Detection_ID, Computer, Threat_ID 
+| eval cyences_severity = if(in(action, "blocked", "deleted"), "info", severity) 
+| eval action = if(mvcount(action)&gt;1, mvfilter(!match(action,"deferred")), action) 
+| table Detection_Time, Computer, EventCodeDescription, Threat_Name, severity, cyences_severity, action, Category_Name, Detection_User, Additional_Actions_String, Threat_ID, Detection_ID, Process_Name, Path 
+| rename Additional_Actions_String as Additional_Action 
 | `cs_windows_defender_malware_detected_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
