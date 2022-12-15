@@ -11,6 +11,51 @@ require([
 
     let all_alerts = {};
 
+    let savedsearch_name;
+    let system_compromised_drilldown;
+    let attacker_drilldown;
+
+    function setSearchQueryTokens() {
+        savedsearch_name = submittedTokens.get("tkn_savedsearch");
+        console.log(`Updated savedsearch token ${savedsearch_name}`);
+
+        if (all_alerts[savedsearch_name] === undefined) {
+            console.log(`Data is not loaded for ${savedsearch_name}`);
+            return;
+        }
+
+        // Contributing Events
+        if (all_alerts[savedsearch_name].contributing_events) {
+            submittedTokens.set("contributing_events_search", `${all_alerts[savedsearch_name].contributing_events} | sort - count`);
+        }
+        else {
+            submittedTokens.unset("contributing_events_search");
+            console.log("No forensic search to see contributing events.");
+        }
+
+        // Compromised Systems
+        if (all_alerts[savedsearch_name].system_compromised_search) {
+            submittedTokens.set("system_compromised_search", `${all_alerts[savedsearch_name].system_compromised_search} | sort - count`);
+            submittedTokens.set("system_compromised_drilldown", all_alerts[savedsearch_name].system_compromised_drilldown);
+            system_compromised_drilldown = all_alerts[savedsearch_name].system_compromised_drilldown;
+        }
+        else {
+            submittedTokens.unset("system_compromised_search");
+            console.log("No forensic search present for finding compromised system.");
+        }
+
+        // Attackers / Signature
+        if (all_alerts[savedsearch_name].attacker_search) {
+            submittedTokens.set("attacker_search", `${all_alerts[savedsearch_name].attacker_search} | sort - count`);
+            submittedTokens.set("attacker_drilldown", all_alerts[savedsearch_name].attacker_drilldown);
+            attacker_drilldown = all_alerts[savedsearch_name].attacker_drilldown;
+        }
+        else {
+            submittedTokens.unset("attacker_search");
+            console.log("No forensic search present for finding attacker.");
+        }
+    }
+
     // Defining search and search manager
     var searchString = `| rest /servicesNS/-/cyences_app_for_splunk/saved/searches splunk_server=local 
         | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1"
@@ -49,53 +94,13 @@ require([
                     all_alerts[alert_name]['attacker_drilldown'] = row[5];
                 }
             });
+            // load search queries after the alerts data is fetched
+            setSearchQueryTokens()
         }
     });
 
-    let savedsearch_name;
-    let system_compromised_drilldown;
-    let attacker_drilldown;
 
-    submittedTokens.on("change:tkn_savedsearch", function () {
-        // TODO - need to validate this executes after all_alerts object gets set
-        savedsearch_name = submittedTokens.get("tkn_savedsearch");
-        console.log(`Updated savedsearch token ${savedsearch_name}`);
-
-        if (all_alerts[savedsearch_name] === undefined) {
-            return;
-        }
-
-        // Contributing Events
-        if (all_alerts[savedsearch_name].contributing_events) {
-            submittedTokens.set("contributing_events_search", `${all_alerts[savedsearch_name].contributing_events} | sort - count`);
-        }
-        else {
-            submittedTokens.unset("contributing_events_search");
-            console.log("No forensic search to see contributing events.");
-        }
-
-        // Compromised Systems
-        if (all_alerts[savedsearch_name].system_compromised_search) {
-            submittedTokens.set("system_compromised_search", `${all_alerts[savedsearch_name].system_compromised_search} | sort - count`);
-            submittedTokens.set("system_compromised_drilldown", all_alerts[savedsearch_name].system_compromised_drilldown);
-            system_compromised_drilldown = all_alerts[savedsearch_name].system_compromised_drilldown;
-        }
-        else {
-            submittedTokens.unset("system_compromised_search");
-            console.log("No forensic search present for finding compromised system.");
-        }
-
-        // Attackers / Signature
-        if (all_alerts[savedsearch_name].attacker_search) {
-            submittedTokens.set("attacker_search", `${all_alerts[savedsearch_name].attacker_search} | sort - count`);
-            submittedTokens.set("attacker_drilldown", all_alerts[savedsearch_name].attacker_drilldown);
-            attacker_drilldown = all_alerts[savedsearch_name].attacker_drilldown;
-        }
-        else {
-            submittedTokens.unset("attacker_search");
-            console.log("No forensic search present for finding attacker.");
-        }
-    });
+    submittedTokens.on("change:tkn_savedsearch", setSearchQueryTokens);
 
 
     function getTableHeaders(tableId) {
