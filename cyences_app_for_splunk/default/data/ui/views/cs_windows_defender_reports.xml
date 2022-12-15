@@ -222,8 +222,7 @@
         <search>
           <query>`cs_windows_defender` EventCode IN (1006, 1015, 1116) $tkn_host$
 | eval EventCodeDescription=case(EventCode=1006, "Antimalware engine found malware", EventCode=1015, "Antimalware platform found malware", EventCode=1116, "Antimalware platform detected suspicious behaviour")
-| rename Name as Threat_Name, Id as Threat_Id
-| table _time, host, EventCode, EventCodeDescription, Threat_Name, Threat_Id, Severity, Category, Path, Detection_Origin, Detection_Type, Detection_Source, Status, Process_Name
+| table _time, Computer, EventCode, EventCodeDescription, Threat_Name, Threat_ID, severity, Category_Name, Detection_User, Process_Name, Path 
 | `cs_windows_defender_malware_detected_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
