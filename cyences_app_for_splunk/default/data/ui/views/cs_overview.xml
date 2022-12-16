@@ -66,7 +66,7 @@
   </fieldset>
   <row>
     <panel>
-      <title>Reports</title>
+      <title>Dashboards</title>
       <html>
         <div class="box" id="ad_reports_link">Active Directory</div>
         <div class="box" id="windows_reports_link">Windows</div>

@@ -1,7 +1,7 @@
 <nav search_view="search">
   <view name="cs_overview" default="true" />
   <view name="cs_forensics" />
-  <collection label="Reports">
+  <collection label="Dashboards">
     <view name="cs_ad_reports" />
     <view name="cs_windows_reports" />
     <view name="cs_windows_patch" />
@@ -27,8 +27,8 @@
     <view name="cs_lansweeper" />
   </collection>
   <collection label="Intelligence">
-    <view name="cs_asset_intelligence" />
     <view name="cs_device_inventory_table" />
+    <view name="cs_asset_intelligence" />
     <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="Settings">
