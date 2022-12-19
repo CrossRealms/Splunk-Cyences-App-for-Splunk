@@ -1,35 +1,35 @@
 <nav search_view="search">
-  <collection label="Control">
-    <view name="cs_overview" default="true" />
-    <collection label="Reports">
-      <view name="cs_ad_reports" />
-      <view name="cs_windows_reports" />
-      <view name="cs_windows_patch" />
-      <view name="cs_linux_reports" />
+  <view name="cs_overview" default="true" />
+  <view name="cs_forensics" />
+  <collection label="Dashboards">
+    <view name="cs_ad_reports" />
+    <view name="cs_windows_reports" />
+    <view name="cs_windows_patch" />
+    <view name="cs_linux_reports" />
+    <collection label="Cloud Tenancies">
       <view name="cs_o365_reports" />
       <view name="cs_aws_user_activity" />
       <view name="cs_gsuite_reports" />
-      <view name="cs_network_reports" />
-      <view name="cs_paloalto_firewall_reports" />
-      <view name="cs_dns_tracker" />
-      <collection label="Antivirus">
-        <view name="cs_sophos_reports" />
-        <view name="cs_windows_defender_reports" />
-        <view name="cs_o365_defender_atp" />
-        <view name="cs_crowdstrike_reports" />
-        <view name="cs_kaspersky_reports" />
-      </collection>
-      <view name="cs_vpn_reports" />
-      <view name="cs_authentication_reports" />
     </collection>
+    <view name="cs_network_reports" />
+    <view name="cs_paloalto_firewall_reports" />
+    <view name="cs_vpn_reports" />
+    <collection label="Antivirus">
+      <view name="cs_sophos_reports" />
+      <view name="cs_windows_defender_reports" />
+      <view name="cs_o365_defender_atp" />
+      <view name="cs_crowdstrike_reports" />
+      <view name="cs_kaspersky_reports" />
+    </collection>
+    <view name="cs_dns_tracker" />
+    <view name="cs_vulnerability" />
+    <view name="cs_authentication_reports" />
+    <view name="cs_lansweeper" />
   </collection>
-  <view name="cs_forensics" />
   <collection label="Intelligence">
-    <view name="cs_malicious_ip_list" />
     <view name="cs_device_inventory_table" />
     <view name="cs_asset_intelligence" />
-    <view name="cs_lansweeper" />
-    <view name="cs_vulnerability" />
+    <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="Settings">
     <view name="cs_configuration" />
