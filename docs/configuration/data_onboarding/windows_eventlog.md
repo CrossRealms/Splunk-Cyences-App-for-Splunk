@@ -2,11 +2,10 @@
 layout: default
 title: Windows EventLog
 permalink: /configuration/data_onboarding/windows_eventlog/
-nav_order: 2
+nav_order: 
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Windows WinEventLog**
 

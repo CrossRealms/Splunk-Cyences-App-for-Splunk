@@ -1,13 +1,20 @@
 ---
 layout: default
-title: FortiGate
-permalink: /configuration/data_onboarding/network_devices/fortigate/
-nav_order: 2
-parent: Network Devices
-grand_parent: Data Onboarding
+title: VPN
+permalink: /configuration/data_onboarding/vpn/
+nav_order: 12
+parent: Data Onboarding
+grand_parent: Configuration
+has_children: true
 ---
 
-## **FortiGate VPN Logs**
+## **VPN**
+
+## **Cisco Anyconnect**
+
+--> <TODO> refer to official documentation (add link)
+
+## **FortiGate VPN Logs** (redirect users to data onboarding > network devices > fortigate)
 
 The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
 
@@ -26,6 +33,8 @@ Installation Guide:
     * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
 
 3. Install the Add-on on the Search Head.
+
+Make sure to update the **VPN data** macro in the **Cyences > Settings > Configuration** page from **index=pan_log** to **index=fortigate**.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
@@ -62,3 +71,7 @@ Installation Guide:
 10. Enable the Acceleration, then click **Save**.  
 
     ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/edit_acceleration.png?raw=true)
+
+
+## **GlobalProtect (Palo Alto) VPN** 
+If your organization is using GlobalProtect VPN, then the required data can be collected via Palo Alto's logs. Refer to the **Data Onboarding > Network Devices > Palo Alto Firewall Logs** section for more information regarding the data collection process. 

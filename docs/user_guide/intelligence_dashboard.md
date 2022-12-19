@@ -30,44 +30,6 @@ Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now be
 
 **Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user's environment.
 
-## Lansweeper
-
---> <TODO-Ahad> - Let's find another place to put this section, as Lansweeper does not fit with intelligence anymore.
-
-The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
-
-The Lansweeper dashboard in the Cyences app displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
-
-* Apple Macintosh 
-* ESXi servers
-* Hyper-V Guests
-* Location
-* Linux
-* Monitor
-* Network devices
-* Other devices
-* VMware Guests
-* VMware vCenter services
-* Web Servers
-* Windows
-
-The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System for improved security on those assets. 
-
-## Vulnerability
-
---> <TODO-Ahad> - Let's find another place to put this section, as Vulnerabilities does not fit with intelligence anymore.
-
-Supported Vendor Products: Qualys, Tenable IO, Nessus, CrowdStrike Spotlight
-
-The above vendor security solutions are designed to detect vulnerabilities present in your environment.  
-
-The Cyences app utilizes the data provided by those vendor product to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
-
-The dashboard is designed to view Vulnerability count by severity, Host wise vulnerability summary, Vulnerability list. Splunk users can further use drilldown capability to view vulnerability list for a single host, list of hosts affected by a vulnerability.
-
-
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
-
 ## Device Inventory
 
 The Device Inventory dashboard contains a list of every asset or device present in an environment. 

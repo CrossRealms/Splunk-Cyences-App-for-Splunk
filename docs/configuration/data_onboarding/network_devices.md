@@ -1,13 +1,19 @@
 ---
 layout: default
-title: FortiGate
-permalink: /configuration/data_onboarding/network_devices/fortigate/
-nav_order: 2
-parent: Network Devices
-grand_parent: Data Onboarding
+title: Network Devices
+permalink: /configuration/data_onboarding/network_devices/
+nav_order: 10
+parent: Data Onboarding
+grand_parent: Configuration
 ---
 
-## **FortiGate VPN Logs**
+## **Network Devices**
+
+## **Cisco IOS**
+
+--> <TODO Vatsal>
+
+## **FortiGate VPN Logs** (should this be here or in the VPN section? If not, then need to add description.) 
 
 The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
 
@@ -26,6 +32,8 @@ Installation Guide:
     * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
 
 3. Install the Add-on on the Search Head.
+
+Make sure to update the **VPN data** macro in the **Cyences > Settings > Configuration** page from **index=pan_log** to **index=fortigate**.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
@@ -62,3 +70,29 @@ Installation Guide:
 10. Enable the Acceleration, then click **Save**.  
 
     ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/edit_acceleration.png?raw=true)
+
+
+## **Palo Alto Firewall Logs**
+
+The Palo Alto Add-on for Splunk is required to collect the firewall logs from the Palo Alto. 
+
+Splunkbase Download: 
+[https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) 
+
+Installation Guide: 
+[https://splunk.paloaltonetworks.com/installation.html](https://splunk.paloaltonetworks.com/installation.html) 
+
+## How to Install and Configure the Palo Alto Add-on: 
+
+1. Install the Add-on on the Heavy Forwarder.
+
+2. Configure the Add-on on the Heavy Forwarder.
+    * Getting data into Splunk [https://splunk.paloaltonetworks.com/getting-data-in.html](https://splunk.paloaltonetworks.com/getting-data-in.html).
+    * Create an index named **pan_log** or update the macro definition in Cyences' configuration page.  
+
+3. Install the Add-on on the Search Head.
+
+## Estimated Data Size  
+The Palo Alto Add-on consumes around 8-10GB of license usage per day. 
+
+The total amount of data varies based on the size of your organization (our calculations are based on organizations with around fifty regular users). 

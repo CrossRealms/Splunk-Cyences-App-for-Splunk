@@ -2,13 +2,14 @@
 layout: default
 title: Active Directory
 permalink: /configuration/data_onboarding/active_directory/
-nav_order: 4
+nav_order: 1
 parent: Data Onboarding
 grand_parent: Configuration
 ---
 
+# **Active Directory / Azure Active Directory**
 
-## **Windows Active Directory Logs**
+## **Windows Active Directory Logs** 
 
 Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
 

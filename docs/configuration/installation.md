@@ -37,7 +37,7 @@ There are dependent apps which also need to be installed on the Search Head alon
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
 | Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
 
-* Note - Other Add-ons are necessary as per data you have. Ex. If you have Windows data on Splunk you need to have Splunk Add-on for Windows. Please see data onboarding section for more information.
+* Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.
 
 
 --> <TODO-Ahad> - remove below list from here and need to be included in the Data-Onboarding section instead.
@@ -92,25 +92,29 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 
 | Macro Name | Description | Default Value |            
 |--------|--------|-------------|
-| cs_ad_password_change_outside_working_hour_definition | Definition of outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm). | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour<6 OR date_hour>19 
-| cs_home_country | Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of country. (Add quotes around the value in the macro definition. The country name should be compatible with the iplocation command). | "United States"
-| Home Location Latitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be shown at this latitude on the map. | 41.881832 
-| Home Location Longitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be shown at this longitude on the map. | -87.623177 
-| cs_palo_search_blocked_ip_lookup_name | Lookup for blocked IP list (default is ip_blocked_list, which is storing the blocked IP list from HoneyDB). | ip_blocked_list 
-| cs_palo_malicious_ip_list_filter_old_results | Update the value between the quotes only (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
+| cs_ad_password_change_outside_working_hour_definition | Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm). | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour<6 OR date_hour>19 
+| cs_home_country (enclosed in double quotes) | Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of home country. The country name should be compatible with the iplocation command (add quotes around the value in the macro definition). | "United States"
+| Home Location Latitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map. | 41.881832 
+| Home Location Longitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map. | -87.623177 
+| cs_palo_search_blocked_ip_lookup_name | Lookup for blocked IP list (default is ip_blocked_list, which stores the blocked IP list from HoneyDB). | ip_blocked_list 
+| cs_palo_malicious_ip_list_filter_old_results | Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
 | cs_lansweeper_timerange | The Lansweeper dashboard searches Lansweeper data in the last four hours by default. | earliest=-4h@h latest=now 
 | cs_wineventlog_security_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last 4 hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
+| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
+| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
-| cs_qualys_linux_os | The Qualys data has different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
+| cs_qualys_linux_os | Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
+| cs_ad_important_role (e.g. "val1","val2") | Need to add description (?) | ""
+| cs_ad_important_policy (e.g. "val1","val2") | Need to add description (?) | ""
+| cs_ad_important_user (e.g. "val1","val2") | Need to add description (?) | ""
+| cs_ad_important_group (e.g. "val1","val2") | Need to add description (?) | "SAMPLE_GRP_11","SAMPLE_GRP_22"
 
---> <TODO-Ahad> - make sure this list is up to date
+--> <TODO-Ahad> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*)
 --> <TODO-Ahad> - add screenshot
 
 ## **Filter Macros**
 
---> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the "searches, reports and alerts" page of Splunk.
+--> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the "searches, reports and alerts" page of Splunk. (How do you perform this?)
 
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
@@ -163,8 +167,14 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 **Note:** Basic knowledge of Splunk's Search Processing Language (SPL) is required.
 
 
-## **Configuration of Email Addresses for Critical Alerts**
-* <TODO-Ahad/Mahir> - write full details
+## **Cyences Action - Send Email - Default/Common Configuration** (email address configuration for Cyences alerts)
+ 
+* <TODO-Ahad/Mahir> - write full details (completed)
+
+(comma separated list of email addresses who wish to receive all Cyences alerts in the form of an email based on the desired severity level(s))
+
+(comma separated list of alert severity levels that are included in the email; default - critical severity only)
+
 * <TODO-Ahad> - add screenshot
 
 

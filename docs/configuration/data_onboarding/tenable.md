@@ -1,14 +1,13 @@
 ---
 layout: default
-title: Tenable/Nessus
-permalink: /configuration/data_onboarding/tenable/
-nav_order: 15
-parent: Data Onboarding
-grand_parent: Configuration
+title: Tenable
+permalink: /configuration/data_onboarding/vulnerability/tenable/
+nav_order: 3
+parent: Vulnerability
+grand_parent: Data Onboarding
 ---
 
-
-## **Tenable Data**
+## **Tenable**
 
 The Tenable Add-on for Splunk is required to collect the vulnerabilities for each IT asset/device. 
 

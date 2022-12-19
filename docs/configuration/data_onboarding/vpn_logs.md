@@ -2,11 +2,10 @@
 layout: default
 title: VPN Logs
 permalink: /configuration/data_onboarding/vpn_logs/
-nav_order: 12
+nav_order: 
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **VPN Data Logs**
 

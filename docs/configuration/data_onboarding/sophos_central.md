@@ -1,12 +1,11 @@
 ---
 layout: default
 title: Sophos Central
-permalink: /configuration/data_onboarding/sophos_central/
-nav_order: 5
+permalink: /configuration/data_onboarding/antivirus_antimalware/sophos_central/
+nav_order: 4
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Sophos Central Events**
 

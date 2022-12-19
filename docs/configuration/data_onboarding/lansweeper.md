@@ -2,11 +2,10 @@
 layout: default
 title: Lansweeper
 permalink: /configuration/data_onboarding/lansweeper/
-nav_order: 13
+nav_order: 9
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Lansweeper Data**
 

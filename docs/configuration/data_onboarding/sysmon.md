@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Sysmon Data
-permalink: /configuration/data_onboarding/sysmon/
+title: Sysmon 
+permalink: /configuration/data_onboarding/windows/sysmon
 nav_order: 2
 parent: Data Onboarding
 grand_parent: Configuration
----
 
+---
 
 ## **Sysmon**
 

@@ -1,12 +1,11 @@
 ---
 layout: default
 title: Kaspersky
-permalink: /configuration/data_onboarding/kaspersky/
-nav_order: 8
+permalink: /configuration/data_onboarding/antivirus_antimalware/kaspersky/
+nav_order: 2
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Kaspersky Logs**
 

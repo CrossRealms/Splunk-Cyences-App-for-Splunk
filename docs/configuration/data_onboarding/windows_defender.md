@@ -1,12 +1,11 @@
 ---
 layout: default
 title: Windows Defender
-permalink: /configuration/data_onboarding/windows_defender/
-nav_order: 6
+permalink: /configuration/data_onboarding/antivirus_antimalware/windows_defender/
+nav_order: 5
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Windows Defender**
 

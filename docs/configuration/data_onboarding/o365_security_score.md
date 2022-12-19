@@ -1,12 +1,11 @@
 ---
 layout: default
 title: Microsoft Azure Security Score
-permalink: /configuration/data_onboarding/o365_security_score/
-nav_order: 17
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/cloud_tenancies/microsoft_o365/o365_security_score/
+nav_order: 1
+parent: Microsoft Office 365
+grand_parent: Cloud Tenancies
 ---
-
 
 ## **Microsoft Azure Security Score**
 
@@ -22,4 +21,3 @@ Installation and Configuration Guide:
 
 ## Estimated Data Size
 The Microsoft Graph Security Score Add-on should consume around 5-10MB per day. 
-

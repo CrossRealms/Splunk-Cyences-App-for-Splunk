@@ -1,12 +1,11 @@
 ---
 layout: default
-title: Microsoft 365 Defender ATP
-permalink: /configuration/data_onboarding/o365_defender_atp/
-nav_order: 18
+title: Office 365 Defender ATP
+permalink: /configuration/data_onboarding/antivirus_antimalware/o365_defender_atp/
+nav_order: 3
 parent: Data Onboarding
 grand_parent: Configuration
 ---
-
 
 ## **Microsoft 365 Defender ATP**
 
