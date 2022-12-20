@@ -7,7 +7,7 @@ parent: Vulnerability
 grand_parent: Data Onboarding
 ---
 
-## **Tenable**
+## **Tenable Data**
 
 The Tenable Add-on for Splunk is required to collect the vulnerabilities for each IT asset/device. 
 

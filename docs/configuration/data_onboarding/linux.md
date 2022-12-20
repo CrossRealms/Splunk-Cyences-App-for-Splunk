@@ -7,7 +7,6 @@ parent: Data Onboarding
 grand_parent: Configuration
 ---
 
-
 ## **Linux/Unix Data**
 
 Linux/Unix data is collected via the Splunk Add-on for Linux and Unix (*nix).  

@@ -3,11 +3,16 @@ layout: default
 title: Windows Patch
 permalink: /configuration/data_onboarding/windows/windows_patch/
 nav_order: 1
-parent: Data Onboarding
-grand_parent: Configuration
-
+parent: Windows
+grand_parent: Data Onboarding
 ---
 
-## **Windows Patch**
+## **Windows Patch Data**
 
---> <TODO>?
+--> <TODO Vatsal>
+
+Add Windows Patch as a subpoint 
+
+Looking for WinEventLog:System log & EventCode 19
+
+Refer to WinEventLog data collection guide (add link) 

@@ -7,7 +7,7 @@ parent: Microsoft Office 365
 grand_parent: Cloud Tenancies
 ---
 
-## **Microsoft Azure Security Score**
+## **Microsoft Azure Security Score Data**
 
 The Microsoft Graph Security Score Add-on for Splunk is required to collect the Microsoft Azure/O365 Security Score information. 
 

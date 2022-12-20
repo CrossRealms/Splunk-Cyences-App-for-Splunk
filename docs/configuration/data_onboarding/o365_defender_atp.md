@@ -3,11 +3,11 @@ layout: default
 title: Office 365 Defender ATP
 permalink: /configuration/data_onboarding/antivirus_antimalware/o365_defender_atp/
 nav_order: 3
-parent: Data Onboarding
-grand_parent: Configuration
+parent: Antivirus Antimalware
+grand_parent: Data Onboarding
 ---
 
-## **Microsoft 365 Defender ATP**
+## **Microsoft 365 Defender ATP Data**
 
 The Microsoft 365 Defender Add-on for Splunk will be used to collect Windows Defender ATP alert logs. 
 

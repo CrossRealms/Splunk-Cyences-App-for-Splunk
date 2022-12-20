@@ -59,6 +59,3 @@ The Cyences App uses data from multiple add-ons and the process for collecting t
     * CrowdStrike Spotlight
     * Qualys
     * Tenable 
-
-
---> <TODO-Ahad> - Let's try to keep the consistent format all the sub-pages wherever possible. Simplify the configuration as there are lot of details added on all the pages they are unnecessarily creating confusion. We also need to add page for anything which is missing. (completed)

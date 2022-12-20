@@ -7,7 +7,7 @@ parent: Cloud Tenancies
 grand_parent: Data Onboarding
 ---
 
-## **G Suite**
+## **G Suite Data**
 
 The Input Add On for G Suite App is required to collect Google Suite data. 
 

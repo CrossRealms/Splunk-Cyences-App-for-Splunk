@@ -3,11 +3,11 @@ layout: default
 title: CrowdStrike Event Stream
 permalink: /configuration/data_onboarding/antivirus_antimalware/crowdstrike/
 nav_order: 1
-parent: Data Onboarding
-grand_parent: Configuration
+parent: Antivirus Antimalware
+grand_parent: Data Onboarding
 ---
 
-## **CrowdStrike Event Streams Logs**
+## **CrowdStrike Event Streams Data**
 
 In order to collect CrowdStrike's Event Streams logs, the [CrowdStrike Falcon Event Streams Technical Add-On](https://splunkbase.splunk.com/app/5082/) is required for data parsing and field extraction. 
 

@@ -9,7 +9,7 @@ grand_parent: Configuration
 
 # **Active Directory / Azure Active Directory**
 
-## **Windows Active Directory Logs** 
+## **Windows Active Directory Data** 
 
 Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
 
@@ -47,7 +47,7 @@ Data size with updated stanzas:
 
 **Note:** The data size tends to vary based on how large the Active Directory environment is, but generally it consumes very little license usage overall.
 
-## **Microsoft Office 365 Management Activities**
+## **Microsoft Office 365 Management Activities Data**
 
 The Splunk Add-on for Microsoft Office 365 will be required in order to collect management activity data. 
 

@@ -7,7 +7,7 @@ parent: Network Devices
 grand_parent: Data Onboarding
 ---
 
-## **Palo Alto Firewall Logs**
+## **Palo Alto Firewall Data**
 
 The Palo Alto Add-on for Splunk is required to collect the firewall logs from the Palo Alto. 
 

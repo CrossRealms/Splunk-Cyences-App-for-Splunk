@@ -7,10 +7,18 @@ parent: Vulnerability
 grand_parent: Data Onboarding
 ---
 
-## **CrowdStrike Spotlight**
+## **CrowdStrike Spotlight Data**
 
---> <TODO>
+The CrowdStrike Falcon Spotlight Vulnerability Data Add-on for Splunk is required to allow Cyences to retrieve CrowdStrike Spotlight Vulnerabiltiy data from CrowdStrike Falcon instances via API. 
 
-Need to add description.
+Splunkbase Download:
+[https://splunkbase.splunk.com/app/6167](https://splunkbase.splunk.com/app/6167)
 
-Use link as reference (https://splunkbase.splunk.com/app/6167)
+Installation and Configuration Guide:
+[https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/](https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/)
+
+**Note:** Use index=**?** for data collection or update the macro definition for `nothing for CrowdStrike spotlight?` (**Settings > Configuration**).
+--><TODO Vatsal>
+
+## Estimated Data Size
+--><TODO Vatsal>

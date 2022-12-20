@@ -3,11 +3,11 @@ layout: default
 title: Sophos Central
 permalink: /configuration/data_onboarding/antivirus_antimalware/sophos_central/
 nav_order: 4
-parent: Data Onboarding
-grand_parent: Configuration
+parent: Antivirus Antimalware
+grand_parent: Data Onboarding
 ---
 
-## **Sophos Central Events**
+## **Sophos Central Data**
 
 The Sophos Central Splunk Add-on is required to collect Sophos Central data. 
 

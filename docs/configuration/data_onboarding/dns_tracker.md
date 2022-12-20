@@ -7,6 +7,6 @@ parent: Data Onboarding
 grand_parent: Configuration
 ---
 
-## **DNS Tracker**
+## **DNS Tracker Data**
 
 --> <TODO Vatsal>

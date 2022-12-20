@@ -1,13 +1,13 @@
 ---
 layout: default
-title: FortiGate
-permalink: /configuration/data_onboarding/network_devices/fortigate/
+title: Fortinet FortiGate
+permalink: /configuration/data_onboarding/network_devices/fortinet_fortigate/
 nav_order: 2
 parent: Network Devices
 grand_parent: Data Onboarding
 ---
 
-## **FortiGate VPN Logs**
+## **Fortinet FortiGate VPN Data**
 
 The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
 
@@ -26,6 +26,8 @@ Installation Guide:
     * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
 
 3. Install the Add-on on the Search Head.
+
+**Note:** Make sure to update the **VPN data** macro in the **Cyences > Settings > Configuration** page from **index=pan_log** to **index=fortigate**.
 
 ## FortiGate VPN Support and issue with action field extraction 
 

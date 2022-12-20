@@ -7,7 +7,7 @@ parent: Cloud Tenancies
 grand_parent: Data Onboarding
 ---
 
-## **Amazon Web Services**
+## **Amazon Web Services Data**
 
 The Splunk Add-on for Amazon Web Services is required to collect Amazon Web Services data. 
 

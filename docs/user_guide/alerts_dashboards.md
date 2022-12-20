@@ -168,7 +168,6 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Failed Logins
     * Office 365/Azure - Login from Unknown UserId (UserID*)
     * Office 365/Azure - Successful Logins
-    * 
 
 ## DNS Tracker
 * Alerts:
