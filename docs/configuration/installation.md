@@ -6,7 +6,6 @@ nav_order: 3
 parent: Configuration
 ---
 
-
 # App Installation & Configuration [Admin]
 
 ## **App Installation**
@@ -38,26 +37,6 @@ There are dependent apps which also need to be installed on the Search Head alon
 | Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
 
 * Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.
-
-
---> <TODO-Ahad> - remove below list from here and need to be included in the Data-Onboarding section instead.
-
-| Splunk Add-on for Windows | [https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) | For field extraction (AD/Windows data) 
-| Microsoft Sysmon Add-on | [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/) | For field extraction (Sysmon data) 
-| Splunk Add-on for O365 | [https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) | For field extraction (O365 audit data) 
-| Splunk Add-on for Palo Alto | [https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) | For field extraction (network traffic and GlobalProtect VPN data) 
-| Sophos Central Splunk Add-on | [https://splunkbase.splunk.com/app/4647/](https://splunkbase.splunk.com/app/4647/) | For field extraction (Sophos data) 
-| TA for Microsoft Windows Defender | [https://splunkbase.splunk.com/app/3734/](https://splunkbase.splunk.com/app/3734/) | For field extraction (Windows Defender data) 
-| CrowdStrike Falcon Event Streams Technical Add-On | [https://splunkbase.splunk.com/app/5082/](https://splunkbase.splunk.com/app/5082/) | For field extraction (CrowdStrike Event Stream data) 
-| Lansweeper Add-on for Splunk | [https://splunkbase.splunk.com/app/5418/](https://splunkbase.splunk.com/app/5418/) | For field extraction (Lansweeper assets data) 
-| Qualys Technology Add-on (TA) for Splunk | [https://splunkbase.splunk.com/app/2964/](https://splunkbase.splunk.com/app/2964/) | For field extraction and to receive mapped information about Qualys vulnerabilities (signature, severity, category, etc.) 
-| Tenable Add-on for Splunk | [https://splunkbase.splunk.com/app/4060/](https://splunkbase.splunk.com/app/4060/) | For field extraction and to receive mapped information about Tenable vulnerabilities
-| Splunk Add-on for Linux and Unix | [https://splunkbase.splunk.com/app/833](https://splunkbase.splunk.com/app/833) | For field extraction for data from Linux hosts 
-| Microsoft 365 Defender Add-on for Splunk | [https://splunkbase.splunk.com/app/4959](https://splunkbase.splunk.com/app/4959) | For field extraction for alerts from Office 365 Defender ATP 
-| Splunk Add-on for Amazon Web Services | [https://splunkbase.splunk.com/app/1876](https://splunkbase.splunk.com/app/1876) | For field extraction (AWS data) 
-| Fortinet FortiGate Add-On for Splunk | [https://splunkbase.splunk.com/app/2846](https://splunkbase.splunk.com/app/2846) | For field extraction (FortiGate VPN data) 
-| Other add-ons from which you are collecting data for in your environment | N/A | For field extraction 
-
 
 ## **Data Model Acceleration & Macros**
 
@@ -109,7 +88,7 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_ad_important_user (e.g. "val1","val2") | Need to add description (?) | ""
 | cs_ad_important_group (e.g. "val1","val2") | Need to add description (?) | "SAMPLE_GRP_11","SAMPLE_GRP_22"
 
---> <TODO-Ahad> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*)
+--> <TODO-Mahir> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*) ?
 --> <TODO-Ahad> - add screenshot
 
 ## **Filter Macros**
@@ -169,7 +148,7 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 ## **Cyences Action - Send Email - Default/Common Configuration** (email address configuration for Cyences alerts)
  
-* <TODO-Ahad/Mahir> - write full details (completed)
+* <TODO-Ahad/Mahir> - write full details (refer to pre-release 3.0 notes)
 
 (comma separated list of email addresses who wish to receive all Cyences alerts in the form of an email based on the desired severity level(s))
 
@@ -224,8 +203,6 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/malicious_ip_collector_config.png?raw=true)
 
-
-
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
 How to test whether the configuration is functioning correctly? 
@@ -239,7 +216,6 @@ Run the search below and it should return events with no errors:
 ## **Sophos Central API Endpoints Configuration**
 
 Refer to the **Data Onboarding > Sophos Central Metadata through API** section for more information. 
-
 
 ## **Device Inventory**
 
