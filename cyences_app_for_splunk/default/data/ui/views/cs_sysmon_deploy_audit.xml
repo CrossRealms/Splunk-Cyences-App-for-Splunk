@@ -5,13 +5,15 @@
   </init>
   <label>Sysmon Deploy Audit</label>
   <search id="base_search">
-    <query>`cs_sysmon_deploy_audit_data` ("No updates found" OR "Install complete!") | dedup host | table host | eval ta_sysmon_deploy_status="Updated"
+    <query>`cs_sysmon_deploy_audit_data` ("Sysmon already up to date" OR "Install complete!" OR "sysmon_version") | fields host, sysmon_version | eval sysmon_install_status="Updated" | eval sysmon_version = replace(sysmon_version, "(.*\s)([vV][\d\.]+)(\s.*)", "\2")
+| stats first(*) as * by host
+| append [| search `cs_sysmon_deploy_audit_data` ("No updates found" OR "Update found, installing" OR "No config update found" OR "config update found, installing") | dedup host | eval sysmon_config_status="Updated" | table host sysmon_config_status]
 | append [| search `cs_sysmon` | fields host | stats count by host| table host | eval data="Present"]
 | stats first(*) as * by host
 | fillnull data value="Absent"
-| fillnull ta_sysmon_deploy_status value="-"
-| sort ta_sysmon_deploy_status, data
-| table host, ta_sysmon_deploy_status, data</query>
+| fillnull sysmon_install_status, sysmon_config_status, sysmon_version value="-"
+| sort sysmon_install_status, sysmon_config_status, data
+| table host, sysmon_install_status, sysmon_config_status, sysmon_version, data</query>
     <earliest>-24h@h</earliest>
     <latest>now</latest>
     <sampleRatio>1</sampleRatio>
@@ -41,7 +43,10 @@
         <format type="color" field="data">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
-        <format type="color" field="ta_sysmon_deploy_status">
+        <format type="color" field="sysmon_install_status">
+          <colorPalette type="map">{"Updated":#00700b, "-":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="sysmon_config_status">
           <colorPalette type="map">{"Updated":#00700b, "-":#bd0d00}</colorPalette>
         </format>
         <drilldown>
