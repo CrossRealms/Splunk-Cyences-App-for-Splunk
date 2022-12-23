@@ -1,7 +1,17 @@
+# For GitHub Pages
+# Comment out for local development
+remote_theme: just-the-docs/just-the-docs 
 
-remote_theme: pmarsceill/just-the-docs
-# theme: "just-the-docs"
+baseurl: "/Splunk-Cyences-App-for-Splunk"
+url: "https://CrossRealms.github.io"
 
+#---
+
+# For local development
+# Comment out when deploying 
+# theme: just-the-docs
+
+#---
 
 logo: "/assets/cyences-logo.png"
 
@@ -30,7 +40,7 @@ color_scheme: light
 heading_anchors: true
 
 # footer
-footer_content: "Copyright &copy; 2022 CrossRealms International."
+footer_content: "Copyright &copy; 2023 CrossRealms International."
 
 # Footer last edited timestamp
 last_edit_timestamp: true
@@ -38,3 +48,29 @@ last_edit_time_format: "%b %e %Y at %I:%M %p"
 
 # Footer "Edit this page on GitHub" link text
 gh_edit_link: false
+
+exclude:
+  # from https://github.com/jekyll/jekyll/blob/master/lib/site_template/_config.yml:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  # specific to the theme website:
+  - bin/
+  - lib/
+  - "*.gemspec"
+  - "*.gem"
+  - LICENSE.txt
+  - package.json
+  - package-lock.json
+  - Rakefile
+  - README.md
+  # Custom
+  - Dockerfile
+  - docker-compose.yml

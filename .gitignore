@@ -7,6 +7,7 @@ demo/RansomwareDemo/**
 demo/RansomwareDemo.zip
 
 _site/**
+docs/_site/**
 docs/.jekyll-cache/**
 
 node_modules

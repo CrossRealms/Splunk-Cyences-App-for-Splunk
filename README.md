@@ -24,18 +24,13 @@ Development has started under the observation of `CrossRealms International`. Bu
 Cyences Documentation is powered by Jekyll and is present under doc directory.
 
 References:
-* https://pmarsceill.github.io/just-the-docs/
-* https://github.com/pmarsceill/just-the-docs
+* https://github.com/just-the-docs/just-the-docs
+* https://just-the-docs.github.io/just-the-docs/
 
-#### Local Installation of Jekyll
-* Install Jekyll (along with dependencies Ruby)
-  * https://jekyllrb.com/docs/installation/
-* gem install just-the-docs
-* gem install webrick
-* Temporary update the _config.yml file to enable the local version of just-the-doc.
-  * Uncomment the theme attribute and comment the remote_theme attribute.
-* Serve the doc locally:
-  * jekyll serve -s <Repo-Dir>\Splunk-Cyences-App-for-Splunk\docs -d <Repo-Dir>\Splunk-Cyences-App-for-Splunk\_site
+#### Run jekyll document site locally for development
+* Make sure you have docker installed on the machine
+* cd docs # navigate to docs directory in your terminal
+* Run `docker compose up`
 * Go to: http://127.0.0.1:4000
 
 
