@@ -18,7 +18,7 @@ Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps)
 
 **Note:** Use index=**o365** for data collection or update the macro definition for `?` (**Settings > Configuration**).
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>
 
 ## Estimated Data Size
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>

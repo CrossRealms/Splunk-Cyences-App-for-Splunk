@@ -7,16 +7,14 @@ nav_order: 1
 
 # Cyences Documentation
 
-## Download
-Download the Cyences App for Splunk from Splunkbase: [https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/)
+Splunkbase Download Add-on:
+[https://splunkbase.splunk.com/app/5659](https://splunkbase.splunk.com/app/5659)
 
-
---> <TODO-Ahad> - Below two sections we'll be copy pasting as it is on the Splunkbase's details page, so please write it accordingly. - https://splunkbase.splunk.com/app/5351
+Splunkbase Download App:
+[https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/)
 
 ## Overview
-The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal; continuous quarterly enhancements are occurring towards achieving that goal. (update if neccessary?)
-
-The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. Our vision is a single dashboard showcasing the entire security profile of any user's environment from the office to the cloud and everything else in between. The forensic interface based on the MITRE ATT&CK framework is well equipped to quickly identify areas of concern with first to market countermeasures. These measures that are commonly used in security incidents allow Splunk users to take swift action against hackers. Cyences was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators; continuous quarterly enhancements will occur to achieve that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI. (update if necessary?)
+The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators; continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
 By default, the Cyences app provides a multitude of alerts and reports in the following categories:
 
@@ -52,7 +50,6 @@ By default, the Cyences app provides a multitude of alerts and reports in the fo
     * Cisco IOS
     * Fortinet FortiGate 
     * Palo Alto Networks
-    --> <TODO-Mahir> - please validate, add if anything is missing
 
 * Ransomware
 
@@ -60,15 +57,11 @@ By default, the Cyences app provides a multitude of alerts and reports in the fo
     * Cisco Anyconnect 
     * Fortinet FortiGate
     * GlobalProtect (Palo Alto)
-    --> <TODO-Mahir> - please validate, add if anything is missing
 
 * Vulnerability
     * CrowdStrike Spotlight
     * Qualys
     * Tenable 
-
-
---> <TODO-Mahir> - Let's categorize the navigation as above if not yet 
 
 
 Apart from alerts and reports, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
@@ -77,8 +70,6 @@ Apart from alerts and reports, the Cyences App also integrates with some other w
 * Device Inventory Table
 * Globally Detected Malicious IPs
 
-
---> <TODO-Mahir> - let's keep only above 3 in the intelligence section, rest move to reports section in the navigation. (which is where?)
 
 How does the Cyences app differentiate itself from Enterprise Security?
 

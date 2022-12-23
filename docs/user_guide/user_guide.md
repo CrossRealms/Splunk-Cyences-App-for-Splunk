@@ -36,7 +36,7 @@ The following sources and their respective data need to be onboarded into your S
 * Windows Defender Logs (Antivirus)
 * WinEventLog
 
---> <TODO-Vatsal> remove the above list if it's not necessary.
+--> <TODO Vatsal> remove the above list if it's not necessary.
 
 View the **Data Onboarding [Admin]** section for more information.
 

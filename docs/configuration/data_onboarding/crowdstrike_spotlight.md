@@ -18,7 +18,7 @@ Installation and Configuration Guide:
 [https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/](https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/)
 
 **Note:** Use index=**?** for data collection or update the macro definition for `nothing for CrowdStrike spotlight?` (**Settings > Configuration**).
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>
 
 ## Estimated Data Size
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>

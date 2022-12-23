@@ -9,7 +9,7 @@ grand_parent: Configuration
 
 ## **Windows WinEventLog Data** 
 Where does this go? Add to windows or make it a sub category?
---> <TODO Vatsal>
+--> <TODO Vatsal/Mahir>
 
 View the Splunk Add-on for Windows documentation to learn how to enable Security WinEventLog data [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows). 
 

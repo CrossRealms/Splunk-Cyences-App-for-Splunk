@@ -19,7 +19,7 @@ Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview)
 
 **Note:** Use index=**windows** for data collection 'WinEventLog Security Data & 'WinEventLog System Data'(or update the macro definition for ? or is this portion uneccessary?)
---> <TODO Vatsal>
+--> <TODO Vatsal/Mahir>
 
 ## Estimated Data Size
---> <TODO Vatsal>
+--> <TODO Vatsal/Mahir>

@@ -9,7 +9,7 @@ grand_parent: Data Onboarding
 
 ## **Windows Patch Data**
 
---> <TODO Vatsal>
+--> <TODO Vatsal/Mahir>
 
 Add Windows Patch as a subpoint 
 

@@ -17,8 +17,8 @@ There are several security related alerts to choose from and they are all locate
     * AD - Group Changed
     * AD - Group Membership Changed
     * AD - Group Policy Changed
-    * AD - Multiple Password Changes in Short Time Period (in a Short Period of Time*)
-    * AD - Password Change Outside Working Hour (Hours*)
+    * AD - Multiple Password Changes in Short Time Period 
+    * AD - Password Change Outside Working Hour 
     * AD - User Changed
     * AD - User Locked Out
 * Dashboards:
@@ -58,9 +58,9 @@ There are several security related alerts to choose from and they are all locate
     * All Alerts
 * Sophos Alerts:
     * Sophos - Endpoint Not Protected by Sophos
-    * Sophos - Failed to clean up threat by Sophos (Clean Up Threat*)
+    * Sophos - Failed to clean up threat by Sophos 
     * Sophos - Sophos RealTime Protection Disabled 
-    * Sophos - Sophos Service is not Running (Not*)
+    * Sophos - Sophos Service is not Running 
 * Sophos Dashboards:
     * Application Blocked
     * Certificate/License Expiration Messages
@@ -80,8 +80,8 @@ There are several security related alerts to choose from and they are all locate
     * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
 * Windows Defender Dashboards:
     * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
-    * Antimalware will Drop Support for Operating System Soon (Will*)
-    * Antimalware will Expire Soon (Will*)
+    * Antimalware will Drop Support for Operating System Soon 
+    * Antimalware will Expire Soon 
     * Antivirus Expired
     * Antivirus Scan Failed
     * Malware Detected
@@ -118,7 +118,7 @@ There are several security related alerts to choose from and they are all locate
     * Total Activities 
 * G Suite Alerts:
     * G Suite - Bulk User Creation or Deletion
-    * G Suite - Multiple Password Changes in Short Time Period (in a Short Period of Time*)
+    * G Suite - Multiple Password Changes in Short Time Period 
 * G Suite Dashboards:
     * Login Challenged
     * Login Failures
@@ -138,14 +138,14 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Azure Active Directory - Role Change/Update
     * O365 - Azure Active Directory - ServicePrincipal Change/Update
     * O365 - Azure Active Directory - User Change/Update 
-    * O365 - DLP event in Exchange (Event*)
-    * O365 - DLP event in SharePoint (Event*) 
+    * O365 - DLP event in Exchange 
+    * O365 - DLP event in SharePoint 
     * O365 - Daily Login Failure
     * O365 - External User Added to Microsoft Teams
     * O365 - Login Failure Due To Multi Factor Authentication
     * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
     * O365 - Login From Unknown User
-    * O365 - O365 Service is not Operational (Not*)
+    * O365 - O365 Service is not Operational 
     * O365 - Security Compliance Alert
     * O365 - Successful Login Outside Home Country
 * Microsoft Office 365 Dashboards: 
@@ -159,14 +159,14 @@ There are several security related alerts to choose from and they are all locate
     * Azure Active Directory - ServicePrincipal Change/Update
     * Azure Active Directory - User Change/Update
     * Azure - Current Security Score
-    * Azure - Current Security Score(In Percentage) (Percentage*)
+    * Azure - Current Security Score(In Percentage) 
     * External Users Added to Teams
     * Login by Location
     * O365: Activity Over World (Unique Users)
     * O365: Security & Compliance Center: Alert Details
-    * Office 365: Service Status (O365*)
+    * Office 365: Service Status 
     * Office 365/Azure - Failed Logins
-    * Office 365/Azure - Login from Unknown UserId (UserID*)
+    * Office 365/Azure - Login from Unknown UserId 
     * Office 365/Azure - Successful Logins
 
 ## DNS Tracker
@@ -174,17 +174,17 @@ There are several security related alerts to choose from and they are all locate
     * N/A
 * Dashboards:
     * DNS Log Volume Over Time
-    * DNS Rquesters (Requesters*)
+    * DNS Rquesters 
     * DNS Server
     * DNS Server No. of Queries Received 
-    * DNS Server No. of Queries Send to External DNS Server (Sent*)
+    * DNS Server No. of Queries Send to External DNS Server 
     * Internal DNS Server to DNS Server Requests
     * Record Types 
-    * Record Types over Time (Over*)
+    * Record Types over Time 
     * Top Categories
-    * Top External DNS Servers being Queried (Being*)
-    * Top Non-success Code Queries (Unsuccessful*)
-    * Top Non-success Code Requesters (Unsuccessful*)
+    * Top External DNS Servers being Queried 
+    * Top Non-success Code Queries 
+    * Top Non-success Code Requesters 
     * Top Queries
     * Top Requesters 
 
@@ -225,7 +225,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * VMWare/Hyper-V Guests - Linux
     * VMWare/Hyper-V Guests - Other
     * VMWare/Hyper-V Guests - Windows
-    * VMWare vCenter server and ESXi server (Server* Server*)
+    * VMWare vCenter server and ESXi server 
     * Web Servers
     * Windows Devices 
 
@@ -262,25 +262,67 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
     * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows 
     * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
-    * Ransomware - Scheduled tasks used in BadRabbit ransomware (Tasks Used in BadRabbit Ransomware*)
+    * Ransomware - Scheduled tasks used in BadRabbit ransomware 
     * Ransomware - Spike in File Writes
     * Ransomware - Windows - Windows Event Log Cleared
 * Ransomware Dashboards:
     * N/A
 
 ## VPN
-* Cisco Anyconnect Alerts: (duplicate alerts from authentication section for all 3)
-    * N/A
-* Cisco Anyconnect Dashboards: (use VPN dashboard panels for all 3)
-    * N/A
+* Cisco Anyconnect Alerts:
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
+    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login Outside Home Country
+    * Authentication - VPN Login Attempts Outside Working Hours
+* Cisco Anyconnect Dashboards: 
+    * Connected Workforce by Location
+    * Elapsed Time Per Session
+    * Login Details
+    * Logins by Country
+    * Logins by Success/Failure 
+    * Successful Session
+    * Successful vs Failed Logins
+    * Unique Users by Country
 * Fortinet FortiGate Alerts:
-    * N/A
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
+    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login Outside Home Country
+    * Authentication - VPN Login Attempts Outside Working Hours
 * Fortinet FortiGate Dashboards:
-    * N/A
+    * Connected Workforce by Location
+    * Elapsed Time Per Session
+    * Login Details
+    * Logins by Country
+    * Logins by Success/Failure 
+    * Successful Session
+    * Successful vs Failed Logins
+    * Unique Users by Country
 * GlobalProtect (Palo Alto) Alerts:
-    * N/A
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
+    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login Outside Home Country
+    * Authentication - VPN Login Attempts Outside Working Hours
 * GlobalProtect (Palo Alto) Dashboards:
-    * N/A
+    * Connected Workforce by Location
+    * Elapsed Time Per Session
+    * Login Details
+    * Logins by Country
+    * Logins by Success/Failure 
+    * Successful Session
+    * Successful vs Failed Logins
+    * Unique Users by Country
 
 ## Vulnerability 
 
@@ -299,12 +341,18 @@ The Vulnerability dashboard is designed to view the vulnerability count by sever
 * CrowdStrike Spotlight Alerts:
     * N/A
 * CrowdStrike Spotlight Dashboards: 
-    * List Vulnerability dashboard panels
+    * New Vulnerability Found Over Time
+    * Vulnerabilities 
+    * Vulnerability Count By Severity
 * Qualys Alerts:
     * N/A
 * Qualys Dashboards:
-    * List Vulnerability dashboard panels
+    * New Vulnerability Found Over Time
+    * Vulnerabilities 
+    * Vulnerability Count By Severity
 * Tenable Alerts:
     * N/A
 * Tenable Dashboards:
-    * List Vulnerability dashboard panels
+    * New Vulnerability Found Over Time
+    * Vulnerabilities 
+    * Vulnerability Count By Severity

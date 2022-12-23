@@ -10,4 +10,4 @@ grand_parent: Configuration
 ## **Network Devices**
 
 **Note** Make sure that whichever integration is being used is mapped with the CIM **Network_Traffic** data model. 
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>

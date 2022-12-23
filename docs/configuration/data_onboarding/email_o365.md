@@ -18,7 +18,7 @@ Installation and Configuration Guide:
 [https://splunkbase.splunk.com/app/3720](https://splunkbase.splunk.com/app/3720)
 
 **Note:** Use index=**o365** for data collection or update the macro definition for `?` (**Settings > Configuration**).
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>
 
 ## Estimated Data Size
---><TODO Vatsal>
+--><TODO Vatsal/Mahir>
