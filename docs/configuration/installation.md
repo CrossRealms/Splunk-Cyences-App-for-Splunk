@@ -38,7 +38,7 @@ There are dependent apps which also need to be installed on the Search Head alon
 
 * Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.
 
-## **Data Model Acceleration & Macros**
+## **Data Model Acceleration and Macros**
 
 For optimal performance, it is recommended to enable the data model acceleration for the CIM data models which are being used. 
 
@@ -51,11 +51,9 @@ For optimal performance, it is recommended to enable the data model acceleration
 | Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities | 1 month (Minimum) |
 | Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
 
---> <TODO-Mahir> - can we exclude above two from the configuration page and keep the acceleration enabled by default?
-
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 
---> <TODO-Ahad> - add screenshot
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_models_acceleration.png?raw=true)
 
 The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
 
@@ -63,7 +61,7 @@ The default definition for the data model macros is summariesonly=**false** and 
 
 Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
---> <TODO-Ahad> - add screenshot
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_source_macros.png?raw=true)
 
 ## **Other Macros**
 
@@ -83,29 +81,56 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
 | cs_qualys_linux_os | Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
-| cs_ad_important_role (e.g. "val1","val2") | Need to add description (?) | ""
-| cs_ad_important_policy (e.g. "val1","val2") | Need to add description (?) | ""
-| cs_ad_important_user (e.g. "val1","val2") | Need to add description (?) | ""
-| cs_ad_important_group (e.g. "val1","val2") | Need to add description (?) | "SAMPLE_GRP_11","SAMPLE_GRP_22"
+| cs_ad_important_role (e.g. "val1","val2") | List of important | ""
+| cs_ad_important_policy (e.g. "val1","val2") | List of important policy | ""
+| cs_ad_important_user (e.g. "val1","val2") | List of important user | ""
+| cs_ad_important_group (e.g. "val1","val2") | List of important group | ""
 
---> <TODO-Mahir> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*) ?
---> <TODO-Ahad> - add screenshot
+--> <TODO-Mahir> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*) ? completed
+--> <TODO-Ahad> - add screenshot (should I wait until the descriptions and values get updated for cs_ad_important_*) okay to do
 
 ## **Filter Macros**
 
---> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the "searches, reports and alerts" page of Splunk. (How do you perform this?)
-
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
-Locate a search in which a filter of the result set is needed and obtain the macro name from this list. Update the macro definition based on the use case. The default value for all macros is:
+### How to Update Filter Value
+1. Open the **Cyences App for Splunk**.
+2. Navigate to **Settings > Searches, reports, and alerts** and select **All** for the **Owner** filter.
+3. Find the alert for which you would like to update filter for and Click **Edit > Edit Alert**.
+4. Update the **Filter Macro Value** field under **When triggered > Cyences Action - Notable Event**.
+**Note:** The default value for every macro is: __| search *__ (this would return all results). 
 
-    | search *
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filter_macro.png?raw=true)
 
-This would return all results pertaining to the macro of interest. 
+**Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
-Navigate to **Settings > Configuration** and scroll down to the **Filter Macros** section to view and update several macro definitions pertaining to the categorized alerts.  
+## Filter Alert Results Based on the Time of the Event
 
-## Filter alert results based on the time of the event
+* Up until Cyences 2.3.0, users have been able to set up an email notification for alerts via Splunk's default method, even with regular Splunk use-cases. This is not always a good idea as some alerts may contain a lot of false positives which leads to a lot of unnecessary noise. Additionally, not every alert needs to be immediately received via email.
+
+Cyences 3.0.0 introduces two new email settings:
+
+1. Regular Alert Digest Email
+    * Sends notification about triggered notable events in the last 24 hours for every Cyences alert in a single email alert.
+    * By default, the digest email will include both high and medium severity level notable events, but users can adjust the severity level as needed.
+    * The alert will be sent once every day.
+        * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
+
+**Note:** Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information.  
+
+2. Critical Alert Email
+    * Sends an immediate email whenever an alert triggers if the notable event is of critical severity.
+    * Users receive an immediate notification about important items within the email.
+    * Users do not have to configure their email address for every alert in order to receive critical alert emails. Users will be able to configure it through Cyences Configuration page.
+        * Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.
+        * Users can customize the severity level for this email setting as needed. 
+    --><TODO Mahir> add screenshot (ask if the LastPass logo can be removed from default email recipients?)
+    * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
+        * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/cyences_email_configuration.png?raw=true)
+
+**Note** Users can continue to use the default Splunk email functionality as desired and independently of the aforementioned Cyences email settings.
 
 Since version 1.4.0, time-based filtering has been made available to every alert in the Cyences App. Let's go over a use case to understand what that is, why you need it, and how to apply it. 
 
@@ -145,17 +170,9 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 **Note:** Basic knowledge of Splunk's Search Processing Language (SPL) is required.
 
+## **Cyences Alert Email Configuration**
 
-## **Cyences Action - Send Email - Default/Common Configuration** (email address configuration for Cyences alerts)
- 
-* <TODO-Ahad/Mahir> - write full details (refer to pre-release 3.0 notes)
-
-(comma separated list of email addresses who wish to receive all Cyences alerts in the form of an email based on the desired severity level(s))
-
-(comma separated list of alert severity levels that are included in the email; default - critical severity only)
-
-* <TODO-Ahad> - add screenshot
-
+Refer to the **User Guide** > **Cyences Email** section for more information. 
 
 ## **Honey DB Configuration**
 
