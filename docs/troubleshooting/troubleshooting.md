@@ -56,8 +56,6 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 ## Sysmon data action field issue
 
---> <TODO-Mahir> - Is this still valid?
-
 * Due to a conflict in props.conf for both the [Sysmon Add-on](https://splunkbase.splunk.com/app/1914/) and [Windows Add-on](https://splunkbase.splunk.com/app/742/), the **action** field is displaying incorrect values for Sysmon related data. 
 
 * The correct value for the **action** field should be **created**, but instead we are receiving **unknown** as the value for every event coming from Sysmon EventCode=11. 

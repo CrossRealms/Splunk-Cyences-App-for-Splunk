@@ -1,16 +1,15 @@
 ---
 layout: default
 title: Kaspersky
-permalink: /configuration/data_onboarding/kaspersky/
-nav_order: 8
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/antivirus_antimalware/kaspersky/
+nav_order: 2
+parent: Antivirus Antimalware
+grand_parent: Data Onboarding
 ---
 
+## **Kaspersky Data**
 
-## **Kaspersky Logs**
-
-Use the following Add-on to collect the data from Kaspersky. 
+Use the following add-on to collect data from Kaspersky. 
 
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/4656/](https://splunkbase.splunk.com/app/4656/)   

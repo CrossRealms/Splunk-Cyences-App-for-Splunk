@@ -18,6 +18,7 @@ The following sources and their respective data need to be onboarded into your S
 * Firewall Logs
 * Fortigate VPN Logs
 * G Suite
+* Kaspersky
 * Lansweeper
 * Linux
 * Microsoft Graph Security Score (Azure)
@@ -31,8 +32,11 @@ The following sources and their respective data need to be onboarded into your S
 * Tenable
 * Unix
 * VPN
+* Windows (same thing as WinEventLog?)
 * Windows Defender Logs (Antivirus)
 * WinEventLog
+
+--> <TODO Vatsal> remove the above list if it's not necessary.
 
 View the **Data Onboarding [Admin]** section for more information.
 

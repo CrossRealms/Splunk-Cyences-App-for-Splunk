@@ -1,14 +1,14 @@
 ---
 layout: default
-title: Sysmon Data
-permalink: /configuration/data_onboarding/sysmon/
+title: Microsoft Sysmon 
+permalink: /configuration/data_onboarding/windows/sysmon
 nav_order: 2
-parent: Data Onboarding
-grand_parent: Configuration
+parent: Windows
+grand_parent: Data Onboarding
+
 ---
 
-
-## **Sysmon**
+## **Microsoft Sysmon Data**
 
 ### Sysmon Overview
 
@@ -26,7 +26,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 [The Sysmon Deploy Add-on for Cyences App](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
 
-### Install and Maintain Sysmon on Windows Machines from deployment-server 
+### Install and Maintain Sysmon on Windows Machines from Deployment Server 
 
 1. Use **Sysmon Deploy Add-on for Cyences App** to install Microsoft Sysmon on Windows machines. 
 

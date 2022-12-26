@@ -1,12 +1,11 @@
 ---
 layout: default
 title: Qualys
-permalink: /configuration/data_onboarding/qualys/
-nav_order: 14
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/vulnerability/qualys/
+nav_order: 2
+parent: Vulnerability
+grand_parent: Data Onboarding
 ---
-
 
 ## **Qualys Data**
 

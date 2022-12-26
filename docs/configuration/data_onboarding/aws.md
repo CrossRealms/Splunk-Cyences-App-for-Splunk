@@ -1,14 +1,13 @@
 ---
 layout: default
-title: AWS
-permalink: /configuration/data_onboarding/aws/
-nav_order: 19
-parent: Data Onboarding
-grand_parent: Configuration
+title: Amazon Web Services
+permalink: /configuration/data_onboarding/cloud_tenancies/aws/
+nav_order: 1
+parent: Cloud Tenancies
+grand_parent: Data Onboarding
 ---
 
-
-## **AWS**
+## **Amazon Web Services Data**
 
 The Splunk Add-on for Amazon Web Services is required to collect Amazon Web Services data. 
 
@@ -22,4 +21,4 @@ Installation and Configuration Guide:
 
 ## Estimated Data Size
 
-The license usage consumed by the Splunk Add-On for Amazon Web Services is based on the size of your environment, the number of users, and the amount of user activity taking place in your environment. 
+The license usage consumed by the Splunk Add-On for Amazon Web Services is based on the size of your environment, the number of users, and the amount of user activity taking place in your environment.

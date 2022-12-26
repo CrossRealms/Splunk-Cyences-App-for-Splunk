@@ -1,14 +1,15 @@
 ---
 layout: default
-title: Windows EventLog
+title: Windows WinEventLog
 permalink: /configuration/data_onboarding/windows_eventlog/
-nav_order: 2
+nav_order: 
 parent: Data Onboarding
 grand_parent: Configuration
 ---
 
-
-## **Windows WinEventLog**
+## **Windows WinEventLog Data** 
+Where does this go? Add to windows or make it a sub category?
+--> <TODO Vatsal/Mahir>
 
 View the Splunk Add-on for Windows documentation to learn how to enable Security WinEventLog data [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows). 
 
