@@ -6,7 +6,6 @@ nav_order: 3
 parent: Configuration
 ---
 
-
 # App Installation & Configuration [Admin]
 
 ## **App Installation**
@@ -37,29 +36,9 @@ There are dependent apps which also need to be installed on the Search Head alon
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
 | Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data) 
 
-* Note - Other Add-ons are necessary as per data you have. Ex. If you have Windows data on Splunk you need to have Splunk Add-on for Windows. Please see data onboarding section for more information.
+* Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.
 
-
---> <TODO-Ahad> - remove below list from here and need to be included in the Data-Onboarding section instead.
-
-| Splunk Add-on for Windows | [https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) | For field extraction (AD/Windows data) 
-| Microsoft Sysmon Add-on | [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/) | For field extraction (Sysmon data) 
-| Splunk Add-on for O365 | [https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) | For field extraction (O365 audit data) 
-| Splunk Add-on for Palo Alto | [https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) | For field extraction (network traffic and GlobalProtect VPN data) 
-| Sophos Central Splunk Add-on | [https://splunkbase.splunk.com/app/4647/](https://splunkbase.splunk.com/app/4647/) | For field extraction (Sophos data) 
-| TA for Microsoft Windows Defender | [https://splunkbase.splunk.com/app/3734/](https://splunkbase.splunk.com/app/3734/) | For field extraction (Windows Defender data) 
-| CrowdStrike Falcon Event Streams Technical Add-On | [https://splunkbase.splunk.com/app/5082/](https://splunkbase.splunk.com/app/5082/) | For field extraction (CrowdStrike Event Stream data) 
-| Lansweeper Add-on for Splunk | [https://splunkbase.splunk.com/app/5418/](https://splunkbase.splunk.com/app/5418/) | For field extraction (Lansweeper assets data) 
-| Qualys Technology Add-on (TA) for Splunk | [https://splunkbase.splunk.com/app/2964/](https://splunkbase.splunk.com/app/2964/) | For field extraction and to receive mapped information about Qualys vulnerabilities (signature, severity, category, etc.) 
-| Tenable Add-on for Splunk | [https://splunkbase.splunk.com/app/4060/](https://splunkbase.splunk.com/app/4060/) | For field extraction and to receive mapped information about Tenable vulnerabilities
-| Splunk Add-on for Linux and Unix | [https://splunkbase.splunk.com/app/833](https://splunkbase.splunk.com/app/833) | For field extraction for data from Linux hosts 
-| Microsoft 365 Defender Add-on for Splunk | [https://splunkbase.splunk.com/app/4959](https://splunkbase.splunk.com/app/4959) | For field extraction for alerts from Office 365 Defender ATP 
-| Splunk Add-on for Amazon Web Services | [https://splunkbase.splunk.com/app/1876](https://splunkbase.splunk.com/app/1876) | For field extraction (AWS data) 
-| Fortinet FortiGate Add-On for Splunk | [https://splunkbase.splunk.com/app/2846](https://splunkbase.splunk.com/app/2846) | For field extraction (FortiGate VPN data) 
-| Other add-ons from which you are collecting data for in your environment | N/A | For field extraction 
-
-
-## **Data Model Acceleration & Macros**
+## **Data Model Acceleration and Macros**
 
 For optimal performance, it is recommended to enable the data model acceleration for the CIM data models which are being used. 
 
@@ -72,11 +51,9 @@ For optimal performance, it is recommended to enable the data model acceleration
 | Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities | 1 month (Minimum) |
 | Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
 
---> <TODO-Mahir> - can we exclude above two from the configuration page and keep the acceleration enabled by default?
-
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 
---> <TODO-Ahad> - add screenshot
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_models_acceleration.png?raw=true)
 
 The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
 
@@ -84,7 +61,7 @@ The default definition for the data model macros is summariesonly=**false** and 
 
 Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
---> <TODO-Ahad> - add screenshot
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_source_macros.png?raw=true)
 
 ## **Other Macros**
 
@@ -92,37 +69,68 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 
 | Macro Name | Description | Default Value |            
 |--------|--------|-------------|
-| cs_ad_password_change_outside_working_hour_definition | Definition of outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm). | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour<6 OR date_hour>19 
-| cs_home_country | Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of country. (Add quotes around the value in the macro definition. The country name should be compatible with the iplocation command). | "United States"
-| Home Location Latitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be shown at this latitude on the map. | 41.881832 
-| Home Location Longitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be shown at this longitude on the map. | -87.623177 
-| cs_palo_search_blocked_ip_lookup_name | Lookup for blocked IP list (default is ip_blocked_list, which is storing the blocked IP list from HoneyDB). | ip_blocked_list 
-| cs_palo_malicious_ip_list_filter_old_results | Update the value between the quotes only (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
+| cs_ad_password_change_outside_working_hour_definition | Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm). | where date_wday="Saturday" OR date_wday="Sunday" OR date_hour<6 OR date_hour>19 
+| cs_home_country (enclosed in double quotes) | Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of home country. The country name should be compatible with the iplocation command (add quotes around the value in the macro definition). | "United States"
+| Home Location Latitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map. | 41.881832 
+| Home Location Longitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map. | -87.623177 
+| cs_palo_search_blocked_ip_lookup_name | Lookup for blocked IP list (default is ip_blocked_list, which stores the blocked IP list from HoneyDB). | ip_blocked_list 
+| cs_palo_malicious_ip_list_filter_old_results | Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
 | cs_lansweeper_timerange | The Lansweeper dashboard searches Lansweeper data in the last four hours by default. | earliest=-4h@h latest=now 
 | cs_wineventlog_security_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last 4 hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
+| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
+| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
-| cs_qualys_linux_os | The Qualys data has different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
+| cs_qualys_linux_os | Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
+| cs_ad_important_role (e.g. "val1","val2") | List of important | ""
+| cs_ad_important_policy (e.g. "val1","val2") | List of important policy | ""
+| cs_ad_important_user (e.g. "val1","val2") | List of important user | ""
+| cs_ad_important_group (e.g. "val1","val2") | List of important group | ""
 
---> <TODO-Ahad> - make sure this list is up to date
---> <TODO-Ahad> - add screenshot
+--> <TODO-Mahir> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*) ? completed
+--> <TODO-Ahad> - add screenshot (should I wait until the descriptions and values get updated for cs_ad_important_*) okay to do
 
 ## **Filter Macros**
 
---> <TODO-Ahad/Mahir> - Add full details with screenshot on how to configure filter macros from the "searches, reports and alerts" page of Splunk.
-
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
-Locate a search in which a filter of the result set is needed and obtain the macro name from this list. Update the macro definition based on the use case. The default value for all macros is:
+### How to Update Filter Value
+1. Open the **Cyences App for Splunk**.
+2. Navigate to **Settings > Searches, reports, and alerts** and select **All** for the **Owner** filter.
+3. Find the alert for which you would like to update filter for and Click **Edit > Edit Alert**.
+4. Update the **Filter Macro Value** field under **When triggered > Cyences Action - Notable Event**.
+**Note:** The default value for every macro is: __| search *__ (this would return all results). 
 
-    | search *
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filter_macro.png?raw=true)
 
-This would return all results pertaining to the macro of interest. 
+**Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
-Navigate to **Settings > Configuration** and scroll down to the **Filter Macros** section to view and update several macro definitions pertaining to the categorized alerts.  
+## Filter Alert Results Based on the Time of the Event
 
-## Filter alert results based on the time of the event
+* Up until Cyences 2.3.0, users have been able to set up an email notification for alerts via Splunk's default method, even with regular Splunk use-cases. This is not always a good idea as some alerts may contain a lot of false positives which leads to a lot of unnecessary noise. Additionally, not every alert needs to be immediately received via email.
+
+Cyences 3.0.0 introduces two new email settings:
+
+1. Regular Alert Digest Email
+    * Sends notification about triggered notable events in the last 24 hours for every Cyences alert in a single email alert.
+    * By default, the digest email will include both high and medium severity level notable events, but users can adjust the severity level as needed.
+    * The alert will be sent once every day.
+        * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
+
+**Note:** Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information.  
+
+2. Critical Alert Email
+    * Sends an immediate email whenever an alert triggers if the notable event is of critical severity.
+    * Users receive an immediate notification about important items within the email.
+    * Users do not have to configure their email address for every alert in order to receive critical alert emails. Users will be able to configure it through Cyences Configuration page.
+        * Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.
+        * Users can customize the severity level for this email setting as needed. 
+    --><TODO Mahir> add screenshot (ask if the LastPass logo can be removed from default email recipients?)
+    * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
+        * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
+    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/cyences_email_configuration.png?raw=true)
+
+**Note** Users can continue to use the default Splunk email functionality as desired and independently of the aforementioned Cyences email settings.
 
 Since version 1.4.0, time-based filtering has been made available to every alert in the Cyences App. Let's go over a use case to understand what that is, why you need it, and how to apply it. 
 
@@ -162,11 +170,9 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 **Note:** Basic knowledge of Splunk's Search Processing Language (SPL) is required.
 
+## **Cyences Alert Email Configuration**
 
-## **Configuration of Email Addresses for Critical Alerts**
-* <TODO-Ahad/Mahir> - write full details
-* <TODO-Ahad> - add screenshot
-
+Refer to the **User Guide** > **Cyences Email** section for more information. 
 
 ## **Honey DB Configuration**
 
@@ -214,8 +220,6 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/malicious_ip_collector_config.png?raw=true)
 
-
-
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
 How to test whether the configuration is functioning correctly? 
@@ -229,7 +233,6 @@ Run the search below and it should return events with no errors:
 ## **Sophos Central API Endpoints Configuration**
 
 Refer to the **Data Onboarding > Sophos Central Metadata through API** section for more information. 
-
 
 ## **Device Inventory**
 

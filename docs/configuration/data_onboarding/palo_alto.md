@@ -1,14 +1,13 @@
 ---
 layout: default
 title: Palo Alto
-permalink: /configuration/data_onboarding/palo_alto/
-nav_order: 9
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/network_devices/palo_alto/
+nav_order: 3
+parent: Network Devices
+grand_parent: Data Onboarding
 ---
 
-
-## **Palo Alto Firewall Logs**
+## **Palo Alto Firewall Data**
 
 The Palo Alto Add-on for Splunk is required to collect the firewall logs from the Palo Alto. 
 
@@ -32,4 +31,3 @@ Installation Guide:
 The Palo Alto Add-on consumes around 8-10GB of license usage per day. 
 
 The total amount of data varies based on the size of your organization (our calculations are based on organizations with around fifty regular users). 
-

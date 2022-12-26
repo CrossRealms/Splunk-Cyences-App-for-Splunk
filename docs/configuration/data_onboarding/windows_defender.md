@@ -1,14 +1,13 @@
 ---
 layout: default
 title: Windows Defender
-permalink: /configuration/data_onboarding/windows_defender/
-nav_order: 6
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/antivirus_antimalware/windows_defender/
+nav_order: 5
+parent: Antivirus Antimalware
+grand_parent: Data Onboarding
 ---
 
-
-## **Windows Defender**
+## **Windows Defender Data**
 
 To collect the Windows defender data, we'll be using below input stanza to collect the data. This data collection requires [TA for Microsoft Windows Defender](https://splunkbase.splunk.com/app/3734/) for data parsing and field extraction. 
 

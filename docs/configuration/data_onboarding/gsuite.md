@@ -1,14 +1,13 @@
 ---
 layout: default
 title: GSuite
-permalink: /configuration/data_onboarding/gsuite/
-nav_order: 20
-parent: Data Onboarding
-grand_parent: Configuration
+permalink: /configuration/data_onboarding/cloud_tenancies/gsuite/
+nav_order: 2
+parent: Cloud Tenancies 
+grand_parent: Data Onboarding
 ---
 
-
-## **G Suite**
+## **G Suite Data**
 
 The Input Add On for G Suite App is required to collect Google Suite data. 
 
