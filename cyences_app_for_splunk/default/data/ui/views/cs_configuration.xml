@@ -129,6 +129,14 @@
               <button id="macro_data_crowdstrike_eventstream_button">Update</button> </th>
           </tr>
           <tr>
+            <th style="text-align:left">CrowdStrike Spotlight Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_crowdstrike_vuln"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_crowdstrike_vuln_button">Update</button> </th>
+          </tr>
+          <tr>
             <th style="text-align:left">Kaspersky Data</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_kaspersky"/>
