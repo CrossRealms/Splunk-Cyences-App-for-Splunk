@@ -13,7 +13,7 @@ grand_parent: Configuration
 
 Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
 
-This data is required for Active Directory related reports/alerts (Group Changes, Group Policy Changes and User Changes) and it is only compatible with plain text formatted events. 
+This data is required for Active Directory related dashboards/alerts (Group Changes, Group Policy Changes and User Changes) and it is only compatible with plain text formatted events. 
 
 Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 
@@ -70,7 +70,7 @@ Installation Guide:
     * Configure Management Activity input: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI). 
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
-    * Enable other inputs based on your needs, but in order for Office 365 reports to work only the input data for Management Activity is required. 
+    * Enable other inputs based on your needs, but in order for Office 365 dashboards to work only the input data for Management Activity is required. 
 
 4. Install the Add-on on the Search Head. 
 
