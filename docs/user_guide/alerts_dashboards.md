@@ -328,4 +328,4 @@ Dashboard panels:
 * Vulnerabilities 
 * Vulnerability Count By Severity
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
+![alt](/assets/vulnerability_dashboard.png)

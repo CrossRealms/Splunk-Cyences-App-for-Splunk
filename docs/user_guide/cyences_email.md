@@ -39,7 +39,7 @@ Cyences 3.0.0 introduces two new email settings:
     * By default, the digest email will include both high and medium severity level notable events, but users can adjust the severity level as needed.
     * The alert will be sent once every day.
         * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
+    ![alt](/assets/digest_email_configuration.png)
 
 **Note:** Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information.  
 
@@ -52,6 +52,6 @@ Cyences 3.0.0 introduces two new email settings:
     --><TODO Mahir> add screenshot (ask if the LastPass logo can be removed from default email recipients?)
     * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
         * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/cyences_email_configuration.png?raw=true)
+    ![alt](/assets/cyences_email_configuration.png)
 
 **Note** Users can continue to use the default Splunk email functionality as desired and independently of the aforementioned Cyences email settings.
