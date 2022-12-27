@@ -16,7 +16,7 @@ Cyences version 1.2.0 introduces a new drop-down option named Intelligence in th
 
 ## Globally Detected Malicious IPs
 
-The Globally Detected Malicious IPs list is generated from a combination of reports, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
+The Globally Detected Malicious IPs list is generated from a combination of dashboards, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
 
 * DDoS attacks on Palo Alto firewalls
 * Inbound traffic from blocked IPs

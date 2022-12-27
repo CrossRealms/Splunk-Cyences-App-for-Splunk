@@ -17,8 +17,6 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://splunkbase.splunk.com/app/3720](https://splunkbase.splunk.com/app/3720)
 
-**Note:** Use index=**o365** for data collection or update the macro definition for `?` (**Settings > Configuration**).
---><TODO Vatsal/Mahir>
+**Note:** Please configure the index value in **Office 365 Data** from **Data Source Macros** section under Cyences Configuration page.
 
-## Estimated Data Size
---><TODO Vatsal/Mahir>
+[comment]: <> (TODO_LATER: add estimated data size)
