@@ -26,7 +26,7 @@ parent: Release Notes
     * Active Directory
         * Added more filters in the Active Directory dashboard
 
-    * Network Telemetry
+    * Network Reports
         * Updated Map chart from `network_telemetry_map` to Splunk Map to show all the traffic instead of top 20 traffic detail.
 
     * Palo Alto Firewall
@@ -50,7 +50,7 @@ parent: Release Notes
 
     * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
 
-    * Updated `Lansweeper` and `Network Telemetry` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
 
 ## Upgrade Guide from 2.2.0 to 2.3.0
 
@@ -89,7 +89,7 @@ parent: Release Notes
         * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
         * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
 
-    * Network Telemetry 
+    * Network Reports 
         * Added drilldown to the `Port Scanning Attempts` map.
 
     * Office 365
@@ -170,16 +170,16 @@ parent: Release Notes
 * ### New Network Telemetry
     * Network traffic map visualizations have been added to enhance the functionality of the network traffic maps.
         * Users can now click on the network traffic arrow itself, which will result in a drilldown showing the details relevant to that traffic.
-        * The `Network Telemetry` and `Asset Intelligence` dashboards are now utilising the newly added custom visualizations from the `Network Telemetry Map`.
+        * The `Network Reports` and `Asset Intelligence` dashboards are now utilising the newly added custom visualizations from the `Network Telemetry Map`.
         ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
 
-    * Removed the `Top Network Traffic` dashboard panel from the `Network Telemetry` dashboard.
+    * Removed the `Top Network Traffic` dashboard panel from the `Network Reports` dashboard.
         * The network traffic display has been enhanced by adding the following new dashboard panels:
             * Inbound Network Telemetry
             * Outbound Network Telemetry
             * Internal Traffic
     
-    * Removed the following dashboard panels from various dashboards. User can see alternative panels on the `Network Telemetry` dashboard as mentioned above. User would also see link on the origial dashboard to let them to new location.
+    * Removed the following dashboard panels from various dashboards. User can see alternative panels on the `Network Reports` dashboard as mentioned above. User would also see link on the origial dashboard to let them to new location.
         * Removed the `Network Traffic to/from Vulnerable Ports (Detected from Qualys)` and `Network Traffic to/from Vulnerable Ports (Detected from Tenable)` dashboard panels from the `Asset Intelligence` dashboard.
         * Removed the `Traffic on Vulnerable Ports` dashboard panel from the `Qualys` dashboard.
         * Removed the `Traffic on Vulnerable Ports` and `All Traffic on All Vulnerable Hosts` dashboard panels from the `Tenable` dashboard.
@@ -524,7 +524,7 @@ parent: Release Notes
         * Added CVE and a solution field for tenable related vulnerabilities. 
     * Overview dashboard 
         * Improved the drilldown action for the Splunk Admin dashboard panel, so that it automatically applies the same set of search filters from the Overview dashboard to the Splunk Admin dashboard. 
-    * Network Telemetry dashboard 
+    * Network Reports dashboard 
         * Added a drilldown option to the **Port Scanning Attempts** map. 
     * Active Directory alerts 
         * Improved search queries for Active Directory related alerts. 
@@ -909,7 +909,7 @@ parent: Release Notes
     * Active Directory & Windows 
     * Authentication 
     * Malicious IP List 
-    * Network Telemetry
+    * Network Reports
     * Office 365 
     * Palo Alto 
     * Sophos 
