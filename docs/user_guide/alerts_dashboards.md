@@ -8,7 +8,7 @@ parent: User Guide
 
 # Alerts & Dashboards (security use-cases)
 
-There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App (alerts are disabled by default). There are also several security related dashboards to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and dashboards should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and dashboards (as dashboard panels):
+There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (**Settings > Settings > Searches, Reports and Alerts**) of the Cyences App (alerts are disabled by default). There are also several security related dashboards to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and dashboards should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and dashboards (as dashboard panels):
 
 
 ## Active Directory
@@ -37,8 +37,6 @@ There are several security related alerts to choose from and they are all locate
 * CrowdStrike Dashboards:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
-* Kaspersky Alerts:
-    * N/A
 * Kaspersky Dashboards:
     * Attack Detected
     * Application Database Out of Date
@@ -106,8 +104,6 @@ There are several security related alerts to choose from and they are all locate
     * User Authentication Activities 
 
 ## Cloud Tenancies
-* Amazon Web Services Alerts:
-    * N/A
 * Amazone Web Services Dashboards:
     * Active Users
     * Error Activities
@@ -170,8 +166,6 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Successful Logins
 
 ## DNS Tracker
-* Alerts:
-    * N/A
 * Dashboards:
     * DNS Log Volume Over Time
     * DNS Rquesters 
@@ -191,9 +185,7 @@ There are several security related alerts to choose from and they are all locate
 ## Email
 * Microsoft Office 365 Alerts:
     * Email - Daily Spam Email 
-    * Email - Hourly Increase in Emails Over Baseline 
-* Microsoft Office 365 Dashboards:
-    * N/A
+    * Email - Hourly Increase in Emails Over Baseline
 
 ## Lansweeper (asset management tool)
 The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences app mainly uses this data for IT discovery and inventory. This dashboard displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
@@ -213,8 +205,6 @@ The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper
 
 The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System logs for improved security on those assets.
 
-* Alerts:
-    * N/A
 * Dashboards:
     * Apple Mac Devices
     * Linux Devices
@@ -233,12 +223,6 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
-* Cisco IOS Dashboards:
-    * N/A
-* Fortinet FortiGate Alerts:
-    * N/A
-* Fortinet FortiGate Dashboards:
-    * N/A
 * Palo Alto Networks Alerts:
     * Palo Alto Firewall - Commits 
     * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
@@ -265,8 +249,6 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Ransomware - Scheduled tasks used in BadRabbit ransomware 
     * Ransomware - Spike in File Writes
     * Ransomware - Windows - Windows Event Log Cleared
-* Ransomware Dashboards:
-    * N/A
 
 ## VPN
 * Cisco Anyconnect Alerts:
@@ -338,21 +320,7 @@ The Vulnerability dashboard is designed to view the vulnerability count by sever
 ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
 
 
-* CrowdStrike Spotlight Alerts:
-    * N/A
-* CrowdStrike Spotlight Dashboards: 
-    * New Vulnerability Found Over Time
-    * Vulnerabilities 
-    * Vulnerability Count By Severity
-* Qualys Alerts:
-    * N/A
-* Qualys Dashboards:
-    * New Vulnerability Found Over Time
-    * Vulnerabilities 
-    * Vulnerability Count By Severity
-* Tenable Alerts:
-    * N/A
-* Tenable Dashboards:
-    * New Vulnerability Found Over Time
-    * Vulnerabilities 
-    * Vulnerability Count By Severity
+Dashboard panels: 
+* New Vulnerability Found Over Time
+* Vulnerabilities 
+* Vulnerability Count By Severity
