@@ -219,7 +219,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Web Servers
     * Windows Devices 
 
-## Network Devices (network reports dashboard)
+## Network Devices
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
@@ -237,6 +237,13 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Outbound Traffic to Blocked IPs
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
+
+## Network Telemetry
+TODO Vatsal: Add short description
+    * Port Scanning Attempts
+    * Inbound Network Telemetry
+    * Outbound Network Telemetry
+    * Internal Traffic
 
 ## Ransomware
 * Ransomware Alerts:
@@ -316,11 +323,9 @@ The Cyences app utilizes the data provided by the aforementioned vendor products
 
 The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
 
-
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
-
-
 Dashboard panels: 
 * New Vulnerability Found Over Time
 * Vulnerabilities 
 * Vulnerability Count By Severity
+
+![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)

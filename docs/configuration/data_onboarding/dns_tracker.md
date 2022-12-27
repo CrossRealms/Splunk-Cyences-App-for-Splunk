@@ -9,4 +9,4 @@ grand_parent: Configuration
 
 ## **DNS Tracker Data**
 
---> <TODO Vatsal/Mahir>
+All the addons that has CIM compatibility with the **Network_Resolution** datamodel will also work with the Cyences DNS related alerts and dashboards.
