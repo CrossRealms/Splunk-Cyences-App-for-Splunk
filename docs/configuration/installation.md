@@ -77,17 +77,16 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_palo_malicious_ip_list_filter_old_results | Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
 | cs_lansweeper_timerange | The Lansweeper dashboard searches Lansweeper data in the last four hours by default. | earliest=-4h@h latest=now 
 | cs_wineventlog_security_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
-| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
+| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security (TODO Ahad: what needs to be changed?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
+| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (TODO Ahad: what needs to be changed?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
 | cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
 | cs_qualys_linux_os | Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
-| cs_ad_important_role (e.g. "val1","val2") | List of important | ""
+| cs_ad_important_role (e.g. "val1","val2") | List of important role | ""
 | cs_ad_important_policy (e.g. "val1","val2") | List of important policy | ""
 | cs_ad_important_user (e.g. "val1","val2") | List of important user | ""
 | cs_ad_important_group (e.g. "val1","val2") | List of important group | ""
 
---> <TODO-Mahir> - make sure this list is up to date (completed, but lacking descriptions and values for cs_ad_important_*) ? completed
---> <TODO-Ahad> - add screenshot (should I wait until the descriptions and values get updated for cs_ad_important_*) okay to do
+TODO Ahad: - add screenshot - good to go
 
 ## **Filter Macros**
 
@@ -98,39 +97,16 @@ Certain macros are being used to whitelist (filter) a specific set of results. T
 2. Navigate to **Settings > Searches, reports, and alerts** and select **All** for the **Owner** filter.
 3. Find the alert for which you would like to update filter for and Click **Edit > Edit Alert**.
 4. Update the **Filter Macro Value** field under **When triggered > Cyences Action - Notable Event**.
-**Note:** The default value for every macro is: __| search *__ (this would return all results). 
+**Note:** The default value for every macro is: `search *` (this would return all results). 
+
+Filter example:
+* To filter the events related to service account, User can add `search NOT user="service-user"` in the filter macro
 
 ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filter_macro.png?raw=true)
 
 **Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
 ## Filter Alert Results Based on the Time of the Event
-
-* Up until Cyences 2.3.0, users have been able to set up an email notification for alerts via Splunk's default method, even with regular Splunk use-cases. This is not always a good idea as some alerts may contain a lot of false positives which leads to a lot of unnecessary noise. Additionally, not every alert needs to be immediately received via email.
-
-Cyences 3.0.0 introduces two new email settings:
-
-1. Regular Alert Digest Email
-    * Sends notification about triggered notable events in the last 24 hours for every Cyences alert in a single email alert.
-    * By default, the digest email will include both high and medium severity level notable events, but users can adjust the severity level as needed.
-    * The alert will be sent once every day.
-        * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
-
-**Note:** Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information.  
-
-2. Critical Alert Email
-    * Sends an immediate email whenever an alert triggers if the notable event is of critical severity.
-    * Users receive an immediate notification about important items within the email.
-    * Users do not have to configure their email address for every alert in order to receive critical alert emails. Users will be able to configure it through Cyences Configuration page.
-        * Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.
-        * Users can customize the severity level for this email setting as needed. 
-    --><TODO Mahir> add screenshot (ask if the LastPass logo can be removed from default email recipients?)
-    * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
-        * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/cyences_email_configuration.png?raw=true)
-
-**Note** Users can continue to use the default Splunk email functionality as desired and independently of the aforementioned Cyences email settings.
 
 Since version 1.4.0, time-based filtering has been made available to every alert in the Cyences App. Let's go over a use case to understand what that is, why you need it, and how to apply it. 
 
@@ -142,11 +118,11 @@ Filter examples:
 
 * For the **Authentication - Bruteforce Attempt for a User** alert: 
 
-        | search NOT sources="192.168.2.2."
+        search NOT sources="192.168.2.2"
 
 * For the **Authentication - Bruteforce Attempt from a Source** alert: 
 
-        | search NOT src="192.168.2.2."
+        search NOT src="192.168.2.2"
 
 The downside to this is that the time range of the filter itself is very wide, because the system is only making an attempt at midnight, but the user is filtering the system as a whole (which is critical for security). What if that machine was compromised? The more optimal solution would be to filter for that specific system, but only during a certain period of time. 
 
@@ -154,11 +130,11 @@ Filter example:
 
 * For the **Authentication - Bruteforce Attempt for a User** alert: 
 
-        | `cs_generate_time_fields_for_filter` | search NOT (((firstTime_hour>=1) OR (firstTime_hour<2)) ((lastTime_hour>=1) OR (lastTime_hour<2)) sources="192.168.2.2") | `cs_remove_time_fields_for_filter`
+        `cs_generate_time_fields_for_filter` | search NOT (((firstTime_hour>=1) OR (firstTime_hour<2)) ((lastTime_hour>=1) OR (lastTime_hour<2)) sources="192.168.2.2") | `cs_remove_time_fields_for_filter`
 
 * For the **Authentication - Bruteforce Attempt from a Source** alert: 
 
-        | `cs_generate_time_fields_for_filter` | search NOT (((firstTime_hour>=1) OR (firstTime_hour<2)) ((lastTime_hour>=1) OR (lastTime_hour<2)) src="192.168.2.2") | `cs_remove_time_fields_for_filter` 
+        `cs_generate_time_fields_for_filter` | search NOT (((firstTime_hour>=1) OR (firstTime_hour<2)) ((lastTime_hour>=1) OR (lastTime_hour<2)) src="192.168.2.2") | `cs_remove_time_fields_for_filter` 
 
 Both the **firstTime_hour** and **lastTime_hour** fields are generated by the `cs_generate_time_fields_for_filter` macro. There are other fields that the user could use, such as:
 * firstTime_ptime (epoch time for firstTime) 
@@ -170,9 +146,12 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 **Note:** Basic knowledge of Splunk's Search Processing Language (SPL) is required.
 
+
 ## **Cyences Alert Email Configuration**
 
 Refer to the **User Guide** > **Cyences Email** section for more information. 
+TODO Mahir: Add link later
+
 
 ## **Honey DB Configuration**
 
