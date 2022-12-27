@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>Network Reports</label>
+  <label>Network Telemetry</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -30,7 +30,7 @@
   <row>
     <panel>
       <html>
-        <p>Network Reports</p>
+        <p>Network Telemetry</p>
         <p>
           <b>Data Collection:</b> All types of network traffic data are mapped with the Network_Traffic CIM data model.</p>
       </html>
