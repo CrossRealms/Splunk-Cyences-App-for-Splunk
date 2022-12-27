@@ -44,13 +44,13 @@ EventCodes 566 & 4662 should already be blacklisted in the default inputs.conf f
 
 Windows EventLog from AD servers (security logs) are only tested in plain text format (see renderXml = false in inputs.conf stanza) in the Cyences App.  
 
-Also, Active Directory related dashboards/alerts (Group Changes, Group Policy Changes, and User Changes) only works with plain text formatted events. 
+Also, Active Directory related alerts/dashboards (Group Changes, Group Policy Changes, and User Changes) only works with plain text formatted events. 
 
-**Note:** Please configure the index value in **WinEventLog Security Data** and **WinEventLog System Data** from **Data Source Macros** section under Cyences Configuration page.
+**Note:** Configure the index value for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 ### Estimated Data Size
 Data size with updated stanzas:
-* WinEventLog:Security:  0.8-1.2GB per host per day 
+* WinEventLog:Security: 0.8-1.2GB per host per day 
 * WinEventLog:System: 0.1-0.3GB per host per day
 
 **Note:** The data provided for **WinEventLog:Security** tends to vary from host to host as a lot of it is based on the overall usage of the system.

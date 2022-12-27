@@ -9,4 +9,4 @@ grand_parent: Configuration
 
 ## **Authentication** 
 
-All the addons that has CIM compatibility with the **Authentication** datamodel will also work with the Cyences Authentication related alerts and dashboards.
+Add-ons that have CIM compatibility with the **Authentication** datamodel will also work with Cyences' authentication related alerts and dashboards.

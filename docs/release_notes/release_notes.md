@@ -36,8 +36,8 @@ has_children: true
             ![alt](/assets/cyences_email_configuration.png)
         3. Users can continue to use regular Splunk email functionality independently of above two.
 
-        - Also add screenshot how we show clearly on the email that message is truncated.
-    * Please refer [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration) for the email configuration
+        --><TODO Mahir> add screenshot how we show clearly on the email that message is truncated.
+    * Refer to the [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration) section for more information regarding the email configuration process for Cyences.
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
     * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
@@ -93,4 +93,4 @@ has_children: true
     * Users can still view every alert by unchecking the **Hide Not Triggered Alerts** filter. 
 
 * Custom Alert Digest Email
-    * User need to configure the email address to use the new feature. Please refer [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration)
+    * Users must configure their email address in order to use this feature. Refer to the [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration) section for more information. 
