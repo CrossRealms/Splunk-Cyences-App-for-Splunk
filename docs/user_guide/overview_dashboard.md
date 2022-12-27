@@ -9,7 +9,7 @@ parent: User Guide
 # Overview Dashboard
 The Overview dashboard displays the overall security status of the Splunk environment, in addition to highlighting present security issues as well. We specifically designed the Overview dashboard to be a single pane of glass for ease of use.
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/overview_dashboard.png?raw=true)
+![alt](/assets/overview_dashboard.png)
 
 --> <TODO-Ahad> - update the screenshot (Is there another Splunk instance besides Cerberus that has the updated view? Cerb SH isn't showing any notable events under Credential Compromise and there's an error sign next to the Antivirus section. Wait until Mahir is done.)
 

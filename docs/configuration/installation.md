@@ -53,7 +53,7 @@ For optimal performance, it is recommended to enable the data model acceleration
 
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_models_acceleration.png?raw=true)
+![alt](/assets/data_models_acceleration.png)
 
 The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
 
@@ -61,7 +61,7 @@ The default definition for the data model macros is summariesonly=**false** and 
 
 Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/data_source_macros.png?raw=true)
+![alt](/assets/data_source_macros.png)
 
 ## **Other Macros**
 
@@ -102,7 +102,7 @@ Certain macros are being used to whitelist (filter) a specific set of results. T
 Filter example:
 * To filter the events related to service account, User can add `search NOT user="service-user"` in the filter macro
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filter_macro.png?raw=true)
+![alt](/assets/filter_macro.png)
 
 **Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
@@ -185,7 +185,7 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/honeydb_config.png?raw=true)
+![alt](/assets/honeydb_config.png)
 
 ## **Configuration of Malicious IP Collector Server**
 
@@ -197,7 +197,7 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/malicious_ip_collector_config.png?raw=true)
+![alt](/assets/malicious_ip_collector_config.png)
 
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
@@ -207,7 +207,7 @@ Run the search below and it should return events with no errors:
 
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/malicious_ip_lookupgen_search.png?raw=true)
+![alt](/assets/malicious_ip_lookupgen_search.png)
 
 ## **Sophos Central API Endpoints Configuration**
 

@@ -27,13 +27,13 @@ has_children: true
             * Which will send notifications about triggered notable events for all the alerts of Cyences in a single alert.
             * We by default will include High and Medium severity notable events in this email. But the user can change this preference.
             * The alert will be sent once every day.
-            ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
+            ![alt](/assets/digest_email_configuration.png)
         2. Critical Alert Email
             * We'll be sending email immediately when an alert triggers if the notable event has Critical severity as this is what user would want to see.
             * So, users get immediate notification on important items in the email.
             * Another enhancement is that user don't have to configure their email addresses on all the alerts to get critical alerts. The users should be able to configure it through Cyences Configuration page.
             * Also, user has option to exclude themselves from specific alerts or include their email addresses to only specific address.
-            ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/cyences_email_configuration.png?raw=true)
+            ![alt](/assets/cyences_email_configuration.png)
         3. Users can continue to use regular Splunk email functionality independently of above two.
 
         - Also add screenshot how we show clearly on the email that message is truncated.
@@ -41,7 +41,7 @@ has_children: true
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
     * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/filter_macro.png?raw=true)
+    ![alt](/assets/filter_macro.png)
     * This is much less confusing as earlier users had to find which macro is related to which alert. Now user can see the configuration right underneath the alert configuration.
     * Your macro update may not happen in real-time as we are doing the update every 5 minutes.
     * We also handled Cyences App upgrade scenario programmatically, so users don't have to worry about configuring all those macros again at the new place.
