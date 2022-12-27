@@ -12,33 +12,7 @@ This section of the document is about how to utilize the Cyences App.
 ---
 
 ### Data Collection
-The following sources and their respective data need to be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App: 
-* Amazon Web Services
-* CrowdStrike EventStream Data (Antivirus)
-* Firewall Logs
-* Fortigate VPN Logs
-* G Suite
-* Kaspersky
-* Lansweeper
-* Linux
-* Microsoft Graph Security Score (Azure)
-* Network Logs
-* Office 365 Defender ATP (Advanced Threat Protection)
-* Office 365 Management Events 
-* Palo Alto Logs
-* Qualys 
-* Sophos Central (Antivirus) 
-* Sysmon
-* Tenable
-* Unix
-* VPN
-* Windows (same thing as WinEventLog?)
-* Windows Defender Logs (Antivirus)
-* WinEventLog
-
---> <TODO Vatsal> remove the above list if it's not necessary.
-
-View the **Data Onboarding [Admin]** section for more information.
+Data need to be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App: View the [Data Onboarding](/configuration/data_onboarding/) section for more detail.
 
 ### Configuration 
 
