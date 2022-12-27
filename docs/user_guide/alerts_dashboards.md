@@ -239,7 +239,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * System Alerts and Threats
 
 ## Network Telemetry
-TODO Vatsal: Add short description
+--><TODO Vatsal>: Add short description
     * Port Scanning Attempts
     * Inbound Network Telemetry
     * Outbound Network Telemetry
@@ -323,7 +323,7 @@ The Cyences app utilizes the data provided by the aforementioned vendor products
 
 The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
 
-Dashboard panels: 
+Dashboards: 
 * New Vulnerability Found Over Time
 * Vulnerabilities 
 * Vulnerability Count By Severity

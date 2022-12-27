@@ -9,4 +9,4 @@ has_children: true
 ---
 
 ## **Network Devices**
-All the addons that has CIM compatibility with the **Network_Traffic** datamodel will also work with the Cyences Network_Traffic related alerts and dashboards.
+Add-ons that have CIM compatibility with the **Network_Traffic** datamodel will also work with Cyences' network traffic related alerts and dashboards.

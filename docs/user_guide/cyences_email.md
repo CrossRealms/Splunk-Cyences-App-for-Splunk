@@ -49,7 +49,7 @@ Cyences 3.0.0 introduces two new email settings:
     * Users do not have to configure their email address for every alert in order to receive critical alert emails. Users will be able to configure it through Cyences Configuration page.
         * Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.
         * Users can customize the severity level for this email setting as needed. 
-    --><TODO Mahir> add screenshot (ask if the LastPass logo can be removed from default email recipients?)
+    ![alt](/assets/cyences_action_send_email_default_common_config.png)
     * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
         * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
     ![alt](/assets/cyences_email_configuration.png)

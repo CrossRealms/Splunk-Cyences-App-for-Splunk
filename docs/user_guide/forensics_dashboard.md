@@ -11,10 +11,7 @@ The Forensics dashboard is designed to give security engineers insightful inform
 
 The dashboard also helps with completing a forensics dashboard regarding a security issue, as it shows pertinent information about the compromised systems and signatures involved in their respective panels. If a Splunk user drilldowns on either of these dashboard panels (Compromised Systems and Signature), it will provide additional details about which other events were involved or where a similar problem is present. A broader way to access these events is to drilldown from the Alert Details dashboard panel to view the activity that was responsible for triggering the alert.
 
-
 ![alt](/assets/forensics_dashboard.png)
-
---> <TODO-Ahad> - update screenshot
 
 ## Forensics Dashboard Features:
 

@@ -13,7 +13,7 @@ grand_parent: Configuration
 
 Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
 
-This data is required for Active Directory related dashboards/alerts (Group Changes, Group Policy Changes and User Changes) and it is only compatible with plain text formatted events. 
+This data is required for Active Directory related alerts/dashboards (Group Changes, Group Policy Changes, and User Changes) and it is only compatible with plain text formatted events. 
 
 Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
 

@@ -2,7 +2,7 @@
 layout: default
 title: VPN
 permalink: /configuration/data_onboarding/vpn/
-nav_order: 12
+nav_order: 11
 parent: Data Onboarding
 grand_parent: Configuration
 has_children: false
@@ -15,11 +15,13 @@ The Cisco Endpoint Security Analytics (CESA) Add-on and App are both required fo
 Splunkbase Download Add-on:
 [https://splunkbase.splunk.com/app/4221](https://splunkbase.splunk.com/app/4221)
 
+Splunkbase Download App:
+[https://splunkbase.splunk.com/app/2992](https://splunkbase.splunk.com/app/2992)
 
 Installation and Configuration Guide:
 [https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html](https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html)
 
-**Note:** Please configure the index value in **VPN Data** from **Data Source Macros** section under Cyences Configuration page.
+**Note:** Configure the index value for **VPN Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 [comment]: <> (TODO_LATER: add estimated data size)
 

@@ -75,18 +75,18 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | Home Location Longitude (for Network Traffic Map) | Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map. | -87.623177 
 | cs_palo_search_blocked_ip_lookup_name | Lookup for blocked IP list (default is ip_blocked_list, which stores the blocked IP list from HoneyDB). | ip_blocked_list 
 | cs_palo_malicious_ip_list_filter_old_results | Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address). | cs_palo_malicious_ip_list_filter_previous_results("-7d@h")
-| cs_lansweeper_timerange | The Lansweeper dashboard searches Lansweeper data in the last four hours by default. | earliest=-4h@h latest=now 
-| cs_wineventlog_security_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the last four hours by default to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
-| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:Security (TODO Ahad: what needs to be changed?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
-| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Security (TODO Ahad: what needs to be changed?) data in the last four hours by default to see if the asset collects WinEventLog:Security (?) data. | earliest=-4h@h latest=now 
-| cs_qualys_timerange | The Cyences App searches Qualys data in the last twenty-four hours for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
+| cs_lansweeper_timerange | The Lansweeper dashboard searches Lansweeper data in the specified timerange. | earliest=-4h@h latest=now 
+| cs_wineventlog_security_timerange | The Lansweeper dashboard searches the WinEventLog:Security data in the specified timerange to see if the asset collects WinEventLog:Security data. | earliest=-4h@h latest=now 
+| cs_wineventlog_system_timerange | The Lansweeper dashboard searches the WinEventLog:System data in the specified timerange to see if the asset collects WinEventLog:System data. | earliest=-4h@h latest=now 
+| cs_sysmon_timerange | The Lansweeper dashboard searches the WinEventLog:Microsoft-Windows-Sysmon/Operational data in the specified timerange to see if the asset collects WinEventLog:Microsoft-Windows-Sysmon/Operational data. | earliest=-4h@h latest=now 
+| cs_qualys_timerange | The Cyences App searches Qualys data in the specified timerange for vulnerability information regarding the assets. | earliest=-7d@h latest=now 
 | cs_qualys_linux_os | Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard. | `("*Ubuntu*", "*Linux*", "*CentOS*")`
-| cs_ad_important_role (e.g. "val1","val2") | List of important role | ""
-| cs_ad_important_policy (e.g. "val1","val2") | List of important policy | ""
-| cs_ad_important_user (e.g. "val1","val2") | List of important user | ""
-| cs_ad_important_group (e.g. "val1","val2") | List of important group | ""
+| cs_ad_important_role (e.g. "val1","val2") | List of important roles | ""
+| cs_ad_important_policy (e.g. "val1","val2") | List of important policies | ""
+| cs_ad_important_user (e.g. "val1","val2") | List of important users | ""
+| cs_ad_important_group (e.g. "val1","val2") | List of important groups | ""
 
-TODO Ahad: - add screenshot - good to go
+![alt](/assets/other_macros.png)
 
 ## **Filter Macros**
 
@@ -100,7 +100,7 @@ Certain macros are being used to whitelist (filter) a specific set of results. T
 **Note:** The default value for every macro is: `search *` (this would return all results). 
 
 Filter example:
-* To filter the events related to service account, User can add `search NOT user="service-user"` in the filter macro
+* In order to filter the events related to a service account, users can add `search NOT user="service-user"` to the filter macro.
 
 ![alt](/assets/filter_macro.png)
 
