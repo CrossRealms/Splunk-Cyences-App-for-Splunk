@@ -8,7 +8,7 @@ parent: User Guide
 
 # Alerts & Dashboards (security use-cases)
 
-There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App (alerts are disabled by default). There are also several security related reports to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and reports should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and reports (as dashboard panels):
+There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (Settings > Settings > Searches, Reports and Alerts) of the Cyences App (alerts are disabled by default). There are also several security related dashboards to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and dashboards should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and dashboards (as dashboard panels):
 
 
 ## Active Directory

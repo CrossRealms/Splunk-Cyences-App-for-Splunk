@@ -38,7 +38,7 @@ EventCodes 566 & 4662 should already be blacklisted in the default inputs.conf f
 
 Windows EventLog from AD servers (security logs) are only tested in plain text format (see renderXml = false in inputs.conf stanza) in the Cyences App.  
 
-Also, Active Directory related reports/alerts (Group Changes, Group Policy Changes, and User Changes) only works with plain text formatted events. 
+Also, Active Directory related dashboards/alerts (Group Changes, Group Policy Changes, and User Changes) only works with plain text formatted events. 
 
 ## Estimated Data Size
 Data size with updated stanzas:

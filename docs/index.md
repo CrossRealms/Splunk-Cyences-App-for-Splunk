@@ -16,7 +16,7 @@ Splunkbase Download App:
 ## Overview
 The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators; continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
-By default, the Cyences app provides a multitude of alerts and reports in the following categories:
+By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
 
 * Active Directory / Azure Active Directory 
 * Linux / Unix 
@@ -64,7 +64,7 @@ By default, the Cyences app provides a multitude of alerts and reports in the fo
     * Tenable 
 
 
-Apart from alerts and reports, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
+Apart from alerts and dashboards, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
 
 * Asset Intelligence 
 * Device Inventory Table
