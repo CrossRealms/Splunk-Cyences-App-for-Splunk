@@ -27,7 +27,7 @@ has_children: true
             * Which will send notifications about triggered notable events for all the alerts of Cyences in a single alert.
             * We by default will include High and Medium severity notable events in this email. But the user can change this preference.
             * The alert will be sent once every day.
-            ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuraiton.png?raw=true)
+            ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/digest_email_configuration.png?raw=true)
         2. Critical Alert Email
             * We'll be sending email immediately when an alert triggers if the notable event has Critical severity as this is what user would want to see.
             * So, users get immediate notification on important items in the email.
@@ -37,6 +37,7 @@ has_children: true
         3. Users can continue to use regular Splunk email functionality independently of above two.
 
         - Also add screenshot how we show clearly on the email that message is truncated.
+    * Please refer [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration) for the email configuration
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
     * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
@@ -90,3 +91,6 @@ has_children: true
 * Overview Dashboard
     * By default, non-triggered alerts will remain hidden. 
     * Users can still view every alert by unchecking the **Hide Not Triggered Alerts** filter. 
+
+* Custom Alert Digest Email
+    * User need to configure the email address to use the new feature. Please refer [Configuration > App Installation and Configuration](/configuration/installation/#cyences-alert-email-configuration)
