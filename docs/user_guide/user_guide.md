@@ -12,14 +12,15 @@ This section of the document is about how to utilize the Cyences App.
 ---
 
 ### Data Collection
-Data must be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App. Refer to the [Data Onboarding](/configuration/data_onboarding/) section for more information.
+Data must be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App. Refer to the [Data Onboarding](/data_onboarding/) section for more information.
 
 ### Configuration 
 
-View the **App Installation & Configuration [Admin]** section for installation and configuration information regarding the following topics:
+View the [Installation/Configuration](/configuration) section for installation and configuration information regarding the following topics:
 * App installation
 * Dependency installation
 * Macro configurations
+* Cyences Email Settings for Alerts
 
 ### Enable Alerts and Reports
 
