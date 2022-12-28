@@ -8,16 +8,13 @@ has_children: true
 
 # Release Notes
 
---> <TODO Ahad> review release notes to cover all points
 
 ## Version 3.0.0 (December 2022)
 
 * ### Alert Severity and Categorization
     * From Cyences 3.0.0 each alert that comes with Cyences will have a field called cyences_severity in the results which will allow to categorize the notable events and help users prioritize the notable event to focus on.
-    * Below is how the Overview page will look now:
-        <TODO - Screenshot>
     * Overview page also has filter to filter to see notable events for specific severities.
-        <TODO -Screenshot>
+        ![alt](/assets/overview_dashboard.png)
 
 
 * ### Custom Alert Digest Email
@@ -36,7 +33,6 @@ has_children: true
             ![alt](/assets/cyences_email_configuration.png)
         3. Users can continue to use regular Splunk email functionality independently of above two.
 
-        --><TODO Mahir> add screenshot how we show clearly on the email that message is truncated.
     * Refer to the [Installation/Configuration](/configuration/#cyences-email-settings-for-alerts) section for more information regarding the email configuration process for Cyences.
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
@@ -55,11 +51,11 @@ has_children: true
         * We'll be adding device (dest) details on VPN dashboard and alert.
             * So, for example, if you are using Global Protect, you should be able to see which Palo Alto generated that event.
         * Added the Reason field into "Elapsed Time Per Session" panel to show reason of VPN session termination.
-        <TODO - vpn_dashboard_enhancement_300.png>
+        ![alt](/assets/vpn_dashboard_enhancement_v300.png)
 
     * Authentication Dashboard
         * Added last successful and last failed login timestamp in the table. 
-        * <TODO - Screenshot>
+        ![alt](/assets/palo_login_time_v300.png)
     
     * Vulnerability Dashboard
         * It now supports CrowdStrike Spotlight data.
