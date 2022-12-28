@@ -80,7 +80,6 @@ Version 1.2.0 of the Cyences app features a new component and that is the Device
 TODO: Add asset intelligence, network telemetry and email description. one liner/short info about feature
 --> <TODO-Ahad/Vatsal> - Please add what we are doing with Network Telemetry dashboard. (Correlation of vulnerabilities data with Network data.)
 --> <TODO-Ahad/Vatsal> - Please add high level paragraph for Device Inventory and Asset Intelligence here. Remove it's relevant details from the below paragraph to avoid duplication.
---> <TODO-Mahir> - Please rename Network Reports (dashboard) to Network Telemetry (dashboard).
 
 The Cyences App is a contribution-based project that anyone can provide suggestions for. Refer to the following link to offer general feedback or to report an issue: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues)
 
