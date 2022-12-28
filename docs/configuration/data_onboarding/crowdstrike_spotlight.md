@@ -17,6 +17,6 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/](https://www.crowdstrike.com/resources/guides/crowdstrike-falcon-spotlight-vulnerability-data-add-on-for-splunk/)
 
-**Note:** Please configure the index value in **CrowdStrike Spotlight Data** from **Data Source Macros** section under Cyences Configuration page.
+**Note:** Configure the index value for **CrowdStrike Spotlight Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 [comment]: <> (TODO_LATER: add estimated data size)

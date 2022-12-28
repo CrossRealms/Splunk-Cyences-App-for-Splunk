@@ -11,8 +11,6 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 
 ![alt](/assets/overview_dashboard.png)
 
---> <TODO-Ahad> - update the screenshot (Is there another Splunk instance besides Cerberus that has the updated view? Cerb SH isn't showing any notable events under Credential Compromise and there's an error sign next to the Antivirus section. Wait until Mahir is done.)
-
 ## Overview Dashboard Features:
 
 ### Alerts

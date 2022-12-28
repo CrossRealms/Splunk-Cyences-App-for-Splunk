@@ -17,7 +17,6 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps)
 
-
-**Note:** Please configure the index value in **Office 365 Data** from **Data Source Macros** section under Cyences Configuration page.
+**Note:** Configure the index value for **Office 365 Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 [comment]: <> (TODO_LATER: add estimated data size)
