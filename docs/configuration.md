@@ -148,16 +148,6 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 ## **Cyences Email Settings for Alerts**
 
-TODO: review once
-
-The configuration process for Cyences email alert settings consist of three components. 
-
-1. Send Digest Email - sent once a day, contains all alerts triggered in 24 hours (default - medium and high severity only; users can customize settings), only applicable to the alert that's being configured (add screenshot). **Note** Maximum of 15 notable events per alert & if there are more than 10 alerts triggered than users will receive digest emails in parts (1, 2, etc.). 
-
-2. Cyences Action - Send Email - users won’t have to manually configure their email for every Cyences alert. They’ll be able to add their email address for each alert from a single source (Cyences Configuration page). 
-
-3. Cyences Action - Send Email - Default/Common Configuration - Cyences configuration page to get all emails (default - critical severity; users can customize severity levels). If you want to override the settings for a particular alert, go to the individual alert and remove your email address from the Cyences Action - Send Email Exclude Recipients section. Add email address to Include Additional Recipients if you only want to receive emails for a specific alert. Mention disable email option. 
-
 Up until Cyences 2.3.0, users have been able to set up an email notification for alerts via Splunk's default method, even with regular Splunk use-cases. This is not always a good idea as some alerts may contain a lot of false positives which leads to a lot of unnecessary noise. Additionally, not every alert needs to be immediately received via email.
 
 Cyences 3.0.0 introduces two new email settings:
@@ -169,7 +159,7 @@ Cyences 3.0.0 introduces two new email settings:
         * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
     ![alt](/assets/digest_email_configuration.png)
 
-**Note:** Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information.  
+**Note:** Users may receive multiple digest emails as there is a limit of 10 alerts per digest email and each alert will be limited to 15 notable events with the total result count information.  
 
 2. Critical Alert Email
     * Sends an immediate email whenever an alert triggers if the notable event is of critical severity.
