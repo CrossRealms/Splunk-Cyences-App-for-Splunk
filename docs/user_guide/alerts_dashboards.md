@@ -239,7 +239,10 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * System Alerts and Threats
 
 ## Network Telemetry
---><TODO Vatsal>: Add short description
+Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
+(Basically we correlate data from vulnerability tools like Qualys or Tenable and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
+
+* Dashboard panels:
     * Port Scanning Attempts
     * Inbound Network Telemetry
     * Outbound Network Telemetry
