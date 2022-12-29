@@ -44,6 +44,8 @@ has_children: true
 
 * ### Enhancements
 
+    * "Network Reports" dashboard is now renamed as "Network Telemetry".
+
     * Windows - Fake Windows Processes alert
         * Added more filter to reduce the false positives.
     
@@ -90,3 +92,5 @@ has_children: true
 
 * Custom Alert Digest Email
     * Users must configure their email address in order to use this feature. Refer to the [Installation/Configuration](/configuration/#cyences-email-settings-for-alerts) section for more information. 
+
+* "Network Reports" dashboard is now renamed as "Network Telemetry".
