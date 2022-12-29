@@ -9,7 +9,7 @@ has_children: true
 # Release Notes
 
 
-## Version 3.0.0 (December 2022)
+## Version 3.0.0 (January 2023)
 
 * ### Alert Severity and Categorization
     * From Cyences 3.0.0 each alert that comes with Cyences will have a field called cyences_severity in the results which will allow to categorize the notable events and help users prioritize the notable event to focus on.
