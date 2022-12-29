@@ -14,7 +14,7 @@ Splunkbase Download App:
 [https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/)
 
 ## Overview
-The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators; continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
+The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators. The forensic interface based on the MITRE ATT&CK framework to quickly identify areas of concern. continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
 By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
 
@@ -80,7 +80,6 @@ Version 1.2.0 of the Cyences app features a new component and that is the Device
 TODO: Add asset intelligence, network telemetry and email description. one liner/short info about feature
 --> <TODO-Ahad/Vatsal> - Please add what we are doing with Network Telemetry dashboard. (Correlation of vulnerabilities data with Network data.)
 --> <TODO-Ahad/Vatsal> - Please add high level paragraph for Device Inventory and Asset Intelligence here. Remove it's relevant details from the below paragraph to avoid duplication.
---> <TODO-Mahir> - Please rename Network Reports (dashboard) to Network Telemetry (dashboard).
 
 The Cyences App is a contribution-based project that anyone can provide suggestions for. Refer to the following link to offer general feedback or to report an issue: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues)
 

@@ -2,7 +2,7 @@
 layout: default
 title: Intelligence
 permalink: /user_guide/intelligence_dashboard/
-nav_order: 6
+nav_order: 5
 parent: User Guide
 ---
 

@@ -21,7 +21,7 @@ There are several security related alerts to choose from and they are all locate
     * AD - Password Change Outside Working Hour 
     * AD - User Changed
     * AD - User Locked Out
-* Dashboards:
+* Dashboard panels:
     * AD - Group Changed
     * AD - Group Membership Changed
     * AD - Group Policy Changed
@@ -34,10 +34,10 @@ There are several security related alerts to choose from and they are all locate
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
     * CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike
-* CrowdStrike Dashboards:
+* CrowdStrike Dashboard panels:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
-* Kaspersky Dashboards:
+* Kaspersky Dashboard panels:
     * Attack Detected
     * Application Database Out of Date
     * Kaspersky Centralized Server Errors
@@ -52,14 +52,14 @@ There are several security related alerts to choose from and they are all locate
     * Virus Found and Passed
 * Office 365 Defender ATP Alerts:
     * Defender ATP - Defender ATP Alerts
-* Office 365 Defender ATP Dashboards:
+* Office 365 Defender ATP Dashboard panels:
     * All Alerts
 * Sophos Alerts:
     * Sophos - Endpoint Not Protected by Sophos
     * Sophos - Failed to clean up threat by Sophos 
     * Sophos - Sophos RealTime Protection Disabled 
     * Sophos - Sophos Service is not Running 
-* Sophos Dashboards:
+* Sophos Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
     * Core Restore Failed
@@ -76,7 +76,7 @@ There are several security related alerts to choose from and they are all locate
 * Windows Defender Alerts:
     * Windows Defender - Endpoint Not Protected by Windows Defender
     * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
-* Windows Defender Dashboards:
+* Windows Defender Dashboard panels:
     * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
     * Antimalware will Drop Support for Operating System Soon 
     * Antimalware will Expire Soon 
@@ -97,14 +97,14 @@ There are several security related alerts to choose from and they are all locate
     * Authentication - Successful VPN Login From New Location
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
-* Dashboards:
+* Dashboard panels:
     * All Authentications
     * Application Authentication Success Rate
     * Authentication Failure Reasons Over Time
     * User Authentication Activities 
 
 ## Cloud Tenancies
-* Amazone Web Services Dashboards:
+* Amazone Web Services Dashboard panels:
     * Active Users
     * Error Activities
     * Most Recent User Activity Grouped by Event Name
@@ -115,7 +115,7 @@ There are several security related alerts to choose from and they are all locate
 * G Suite Alerts:
     * G Suite - Bulk User Creation or Deletion
     * G Suite - Multiple Password Changes in Short Time Period 
-* G Suite Dashboards:
+* G Suite Dashboard panels:
     * Login Challenged
     * Login Failures
     * Login Types
@@ -144,7 +144,7 @@ There are several security related alerts to choose from and they are all locate
     * O365 - O365 Service is not Operational 
     * O365 - Security Compliance Alert
     * O365 - Successful Login Outside Home Country
-* Microsoft Office 365 Dashboards: 
+* Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Change/Update
     * Azure Active Directory - AuthorizationPolicy Change/Update
     * Azure Active Directory - Group Change/Update
@@ -166,7 +166,7 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Successful Logins
 
 ## DNS Tracker
-* Dashboards:
+* Dashboard panels:
     * DNS Log Volume Over Time
     * DNS Rquesters 
     * DNS Server
@@ -205,7 +205,7 @@ The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper
 
 The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System logs for improved security on those assets.
 
-* Dashboards:
+* Dashboard panels:
     * Apple Mac Devices
     * Linux Devices
     * Location
@@ -229,7 +229,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Palo Alto Firewall - Network Compromise - Palo Alto High System Alert
     * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
     * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
-* Palo Alto Networks Dashboards:
+* Palo Alto Networks Dashboard panels:
     * DDoS Attack Prevented by Palo Alto Firewall
     * Inbound Traffic from Blocked IPs 
     * License Events
@@ -267,7 +267,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Successful VPN Login From New Location
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
-* Cisco Anyconnect Dashboards: 
+* Cisco Anyconnect Dashboard panels: 
     * Connected Workforce by Location
     * Elapsed Time Per Session
     * Login Details
@@ -285,7 +285,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Successful VPN Login From New Location
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
-* Fortinet FortiGate Dashboards:
+* Fortinet FortiGate Dashboard panels:
     * Connected Workforce by Location
     * Elapsed Time Per Session
     * Login Details
@@ -303,7 +303,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Successful VPN Login From New Location
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
-* GlobalProtect (Palo Alto) Dashboards:
+* GlobalProtect (Palo Alto) Dashboard panels:
     * Connected Workforce by Location
     * Elapsed Time Per Session
     * Login Details
@@ -323,7 +323,7 @@ The Cyences app utilizes the data provided by the aforementioned vendor products
 
 The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
 
-Dashboards: 
+Dashboard panels:
 * New Vulnerability Found Over Time
 * Vulnerabilities 
 * Vulnerability Count By Severity
