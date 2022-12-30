@@ -12,75 +12,75 @@ has_children: true
 ## Version 3.0.0 (January 2023)
 
 * ### Alert Severity and Categorization
-    * From Cyences 3.0.0 each alert that comes with Cyences will have a field called cyences_severity in the results which will allow to categorize the notable events and help users prioritize the notable event to focus on.
-    * Overview page also has filter to filter to see notable events for specific severities.
-        ![alt](/assets/overview_dashboard.png)
+    * The Overview dashboard will now display different colors for notable events based on their severity level. This way users can prioritize their security investigation at a quick glance. 
+        ![alt](/assets/overview_dashboard_severity_level_colors.png)
+    * A new filter has been added to the Overview dashboard which allows users to filter notable events based on the severity level.  
+        ![alt](/assets/overview_dashboard_severity_level_filter.png)
 
 
 * ### Custom Alert Digest Email
-    * Till not with Cyences 2.3.0 and earlier and even with regular Splunk use-cases users can set an email notification. Which is not a good idea always as some alerts may have a lot of false positives which bombard the Inbox. Also, not all severity alerts need to be received by email immediately all the time.
-    * Cyences 3.0.0 introduced 2 things to resolve this:
+    * The way Splunk currently handles alerts, users are only able to set up email notifications, which is not always optimal as some alerts may generate a lot of false positives. Not every alert needs to be received by email, especially those labeled with lower severity levels. 
+    * Cyences 3.0.0 has introduced two new email settings to reduce noise:
         1. Regular Alert Digest Email
-            * Which will send notifications about triggered notable events for all the alerts of Cyences in a single alert.
-            * We by default will include High and Medium severity notable events in this email. But the user can change this preference.
-            * The alert will be sent once every day.
+            * Sends notifications about triggered notable events for each Cyences alert in a single email. 
+            * By default, this will include both high and medium severity notable events, but users can adjust the severity level to their desired preference.  
+            * The alert digest email will be sent once a day. 
             ![alt](/assets/digest_email_configuration.png)
         2. Critical Alert Email
-            * We'll be sending email immediately when an alert triggers if the notable event has Critical severity as this is what user would want to see.
-            * So, users get immediate notification on important items in the email.
-            * Another enhancement is that user don't have to configure their email addresses on all the alerts to get critical alerts. The users should be able to configure it through Cyences Configuration page.
-            * Also, user has option to exclude themselves from specific alerts or include their email addresses to only specific address.
+            * Sends an email immediately after an alert gets triggered if the notable event has been labeled with a critical severity level.
+            * Users will receive an immediate notification about important items within the email.
+            * Another enhancement is that users will not have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source (Cyences Configuration page).  
+            ![alt](/assets/cyences_action_send_email_default_common_config.png)
+            * Also, users have an option to exclude themselves from specific alerts or to include their email addresses for only specific alerts.
             ![alt](/assets/cyences_email_configuration.png)
-        3. Users can continue to use regular Splunk email functionality independently of above two.
+        3. Users can continue to use the default email notification method that Splunk provides if they want to for any specific alert.  
 
     * Refer to the [Installation/Configuration](/configuration/#cyences-email-settings-for-alerts) section for more information regarding the email configuration process for Cyences.
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
-    * Now Cyences will allow to configure the filter macros (to filter the the false positives of alert) right from Splunk's "Searches, Reports and Alerts" page instead of from the Cyences Configuration page.
+    * Users are now able to configure Cyences’ filter macros (to filter out the false positives of an alert) right from Splunk’s navigation bar (Settings > Searches, Reports, and Alerts) instead of from Cyences’ configuration page. 
     ![alt](/assets/filter_macro.png)
-    * This is much less confusing as earlier users had to find which macro is related to which alert. Now user can see the configuration right underneath the alert configuration.
-    * Your macro update may not happen in real-time as we are doing the update every 5 minutes.
-    * We also handled Cyences App upgrade scenario programmatically, so users don't have to worry about configuring all those macros again at the new place.
+    * This change was made to avoid confusion, as users had to figure out which macro is related to which alert. Users can now view the configuration right underneath the alert configuration section.  
+    * Macro updates may not happen in real-time as App is performing the update every five minutes.
+    * CrossRealms has also handled the Cyences app upgrade scenario for this, so users do not have to worry about configuring every macro again.
 
 * ### Enhancements
 
-    * "Network Reports" dashboard is now renamed as "Network Telemetry".
+    * AD - User Changed Alert
+        * Added a filter to reduce the number of false positives.
 
-    * Windows - Fake Windows Processes alert
-        * Added more filter to reduce the false positives.
-    
-    * VPN Dashboard/Alert
-        * We'll be adding device (dest) details on VPN dashboard and alert.
-            * So, for example, if you are using Global Protect, you should be able to see which Palo Alto generated that event.
-        * Added the Reason field into "Elapsed Time Per Session" panel to show reason of VPN session termination.
+     * Authentication Dashboard
+        * Added the last successful login and last failed login timestamps to the table. 
+        * ![alt](/assets/user_authentication_activity_timestamps.png)
+
+    * Forensics Dashboard
+        * Added search queries for specific alerts which are necessary to perform drilldowns and to populate the contributing events dashboard panel.
+
+    * VPN Alert & Dashboard
+        * Added a Destination field to the VPN dashboard and alert. 
+            * For example (if you are using Global Protect), users can see which Palo device generated a particular event. 
+        * Added a Reason field to the “Elapsed Time Per Session” dashboard panel to display the reason for a VPN session termination. 
         ![alt](/assets/vpn_dashboard_enhancement_v300.png)
 
-    * Authentication Dashboard
-        * Added last successful and last failed login timestamp in the table. 
-        ![alt](/assets/palo_login_time_v300.png)
-    
     * Vulnerability Dashboard
-        * It now supports CrowdStrike Spotlight data.
-    
-    * AD - User Change alert
-        * Added filter to reduce number of false positives.
-    
-    * Forensics Page
-        * Some alerts were missing the searches for drilldowns and contributing events panel. Added now.
+        * CrowdStrike Spotlight data is now supported.
+
+     * Windows - Fake Windows Processes Alert
+        * Added filters to reduce the number of false positives.
 
 
 * ### Bug Fixes
 
-* Windows Patch dashboard and Windows Host Missing Update alert
-    * In some cases, alert and dashboard were including data which wasn't related to Windows Update Events due to EventCode conflict. Fixed the issue.
+    * Windows Host Missing Update Alert & Windows Patch Dashboard 
+        * In some cases, both the alert and dashboard included data that were not related to Windows Update Events due to an EventCode conflict. This issue has been resolved.  
 
-* Fixed the issue with some notable events showing the wrong timestamp information.
-    * Cyences notable events data is now logged under sourcetype="cyences:notable:events".
+    * Fixed an issue where some notable events displayed the incorrect timestamp information.  
+        * The data for Cyences notable events are now logged under sourcetype="cyences:notable:events".
 
-* [For Admins only] Improved logging.
-    * Fixed the issue of truncated internal Cyences logs.
-    * Moved default log level for custom commands to INFO to reduce number logs in the internal index.
-    * Added more info logs to custom commands for better troubleshooting.
+    * Improved Logging [For Admins Only]
+        * Fixed an issue where Cyences internal logs were being truncated.
+        * Moved the default log level for custom commands to INFO in order to reduce the number of logs in the internal index.
+        * Added more info logs to custom commands for improved troubleshooting.
 
 
 
