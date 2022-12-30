@@ -148,31 +148,27 @@ The above two alerts are generating **firstTime** and **lastTime** fields, which
 
 ## **Cyences Email Settings for Alerts**
 
-Up until Cyences 2.3.0, users have been able to set up an email notification for alerts via Splunk's default method, even with regular Splunk use-cases. This is not always a good idea as some alerts may contain a lot of false positives which leads to a lot of unnecessary noise. Additionally, not every alert needs to be immediately received via email.
+The way Splunk currently handles alerts, users are only able to set up email notifications, which is not always optimal as some alerts may generate a lot of false positives. Not every alert needs to be received by email, especially those labeled with lower severity levels. 
 
-Cyences 3.0.0 introduces two new email settings:
-
+Cyences 3.0.0 contains two new email settings to reduce noise:
 1. Regular Alert Digest Email
-    * Sends notification about triggered notable events in the last 24 hours for every Cyences alert in a single email alert.
-    * By default, the digest email will include both high and medium severity level notable events, but users can adjust the severity level as needed.
-    * The alert will be sent once every day.
-        * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert.
+    * Sends notifications about triggered notable events in the last twenty-four hours for each Cyences alert in a single email. 
+    * By default, this will include both high and medium severity notable events, but users can adjust the severity level as needed.  
+    * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert. 
     ![alt](/assets/digest_email_configuration.png)
-
-**Note:** Users may receive multiple digest emails as there is a limit of 10 alerts per digest email and each alert will be limited to 15 notable events with the total result count information.  
-
+    * The alert digest email will be sent once a day.
+        * Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information. 
 2. Critical Alert Email
-    * Sends an immediate email whenever an alert triggers if the notable event is of critical severity.
-    * Users receive an immediate notification about important items within the email.
-    * Users do not have to configure their email address for every alert in order to receive critical alert emails. Users will be able to configure it through Cyences Configuration page.
-        * Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.
-        * Users can customize the severity level for this email setting as needed. 
+    * Sends an email immediately after an alert gets triggered if the notable event has been labeled with a critical severity level (default setting). Users can customize the severity level for this email setting as needed. 
+    * Users will receive an immediate notification about important items within the email.
+    * Users will no longer have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source. Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.  
     ![alt](/assets/cyences_action_send_email_default_common_config.png)
-    * Users also have an option to exclude themselves from specific alerts or include their email addresses for specific alerts.
-        * This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
+    * Users have an option to exclude themselves from specific alerts, to include their email addresses for specific alerts, or to disable an email altogether. This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
     ![alt](/assets/cyences_email_configuration.png)
+    * To override the email setting for a particular alert, go to the individual alert and remove the email address from the **Exclude Recipients** section. 
+    * Add an email address to the **Include Additional Recipients** section if you only want to receive emails for a specific alert.
 
-**Note** Users can continue to use the default Splunk email functionality as desired and independently of the aforementioned Cyences email settings.
+**Note** Users can continue to use Splunk's default email functionality as desired for any alert and independently of the aforementioned Cyences email settings.
 
 
 ## **Honey DB Configuration**
