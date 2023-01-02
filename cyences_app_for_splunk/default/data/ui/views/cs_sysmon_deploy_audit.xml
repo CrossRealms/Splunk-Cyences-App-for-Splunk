@@ -5,8 +5,8 @@
   </init>
   <label>Sysmon Deploy Audit</label>
   <search id="base_search">
-    <query>`cs_sysmon_deploy_audit_data` ("Sysmon already up to date" OR "Install complete!" OR "sysmon_version") | fields host, sysmon_version | eval sysmon_install_status="Updated" | eval sysmon_version = replace(sysmon_version, "(.*\s)([vV][\d\.]+)(\s.*)", "\2")
-| stats first(*) as * by host
+    <query>`cs_sysmon_deploy_audit_data` ("Sysmon already up to date" OR "Install complete!" OR "sysmon_version") | fields host, sysmon_version, _time | eval sysmon_install_status="Updated" | eval sysmon_version = replace(sysmon_version, "(.*\s)([vV][\d\.]+)(\s.*)", "\2")
+| stats latest(*) as * by host
 | append [| search `cs_sysmon_deploy_audit_data` ("No updates found" OR "Update found, installing" OR "No config update found" OR "config update found, installing") | dedup host | eval sysmon_config_status="Updated" | table host sysmon_config_status]
 | append [| search `cs_sysmon` | fields host | stats count by host| table host | eval data="Present"]
 | stats first(*) as * by host
