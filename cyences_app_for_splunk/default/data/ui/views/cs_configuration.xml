@@ -833,6 +833,24 @@
               </th>
             </tr>
             <tr>
+              <th style="text-align:left">cs_bruteforce_from_user_additional_filter</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_bruteforce_from_user_additional_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_bruteforce_from_user_additional_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
+              <th style="text-align:left">cs_bruteforce_from_source_additional_filter</th>
+              <th style="text-align:left">
+                <input type="text" id="macro_cs_bruteforce_from_source_additional_filter"/>
+              </th>
+              <th style="text-align:left">
+                <button id="macro_cs_bruteforce_from_source_additional_filter_button">Update</button>
+              </th>
+            </tr>
+            <tr>
               <th style="text-align:left">cs_authentication_bruteforce_attempt_limit</th>
               <th style="text-align:left">
                 <input type="text" id="macro_cs_authentication_bruteforce_attempt_limit"/>

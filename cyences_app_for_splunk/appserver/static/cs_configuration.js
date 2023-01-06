@@ -110,6 +110,8 @@ require([
 
         /* Authentication */
         { macro_name: 'cs_authentication_app_filter', input_id: 'macro_cs_authentication_app_filter', button_id: 'macro_cs_authentication_app_filter_button', msg_id: 'macro_authentication_msg'},
+        { macro_name: 'cs_bruteforce_from_user_additional_filter', input_id: 'macro_cs_bruteforce_from_user_additional_filter', button_id: 'macro_cs_bruteforce_from_user_additional_filter_button', msg_id: 'macro_authentication_msg'},
+        { macro_name: 'cs_bruteforce_from_source_additional_filter', input_id: 'macro_cs_bruteforce_from_source_additional_filter', button_id: 'macro_cs_bruteforce_from_source_additional_filter_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_bruteforce_attempt_limit', input_id: 'macro_cs_authentication_bruteforce_attempt_limit', button_id: 'macro_cs_authentication_bruteforce_attempt_limit_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_excessive_vpn_login_failure_limit', input_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit', button_id: 'macro_cs_authentication_excessive_vpn_login_failure_limit_button', msg_id: 'macro_authentication_msg'},
         { macro_name: 'cs_authentication_new_location_login_pct_limit', input_id: 'macro_cs_authentication_new_location_login_pct_limit', button_id: 'macro_cs_authentication_new_location_login_pct_limit_button', msg_id: 'macro_authentication_msg'},
