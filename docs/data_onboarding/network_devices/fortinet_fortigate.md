@@ -47,7 +47,7 @@ Installation Guide:
 
 5. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-    ![alt](/assets/edit_action_field.png)
+    ![alt]({{ site.baseurl }}/assets/edit_action_field.png)
 
 6. Your current configuration should look similar to this: 
     
@@ -63,4 +63,4 @@ Installation Guide:
 
 10. Enable the Acceleration, then click **Save**.  
 
-    ![alt](/assets/edit_acceleration.png)
+    ![alt]({{ site.baseurl }}/assets/edit_acceleration.png)

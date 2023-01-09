@@ -55,7 +55,7 @@ Email notifications are disabled by default for all alerts.
 3. Under **App**: select **Cyences App for Splunk (cyences_app_for_splunk)**. 
 4. Click **+ Add Actions** and in the dialog box select the **Send email** action.
 
-![alt](/assets/edit_alert_send_email_action.png)
+![alt]({{ site.baseurl }}/assets/edit_alert_send_email_action.png)
 
 5. Complete the necessary field values (i.e., "To", "Subject", "Message", etc.)
 6. Click **Save**.

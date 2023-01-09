@@ -24,7 +24,7 @@ The Globally Detected Malicious IPs list is generated from a combination of dash
 
 If an IP address is involved in any of the above scenarios, then it will automatically be added to the list. The goal of Globally Detected Malicious IPs is to assist Splunk users to learn even more about their environment and to help identify suspicious activity in order to take the appropriate security measures to strengthen their network. Do not let your business become the next victim. For more information, please refer to the **Globally Detected Malicious IPs** dashboard. 
 
-![alt](/assets/malicious_ip.png)
+![alt]({{ site.baseurl }}/assets/malicious_ip.png)
 
 Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now being generated on the Malicious IP list server, which is deployed by CrossRealms International. This list is based on bad IP address activity that's detected in Splunk environments across all installations where Cyences is configured. This list provides Splunk users with the latest globally detected malicious IP list and stores it back into the lookup within the Cyences app. This will result in a more robust list for Splunk users to rely on. For Splunk Admins, please refer to the **Configuration of Access Token for Malicious IP List** section to learn more about the API configuration process. 
 
@@ -34,7 +34,7 @@ Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now be
 
 The Device Inventory dashboard contains a list of every asset or device present in an environment. 
 
-![alt](/assets/device_inventory.png)
+![alt]({{ site.baseurl }}/assets/device_inventory.png)
 
 It is populated from a lookup which is built by scheduled reports. The lookup is generated from the following data sources (the table can still function even if one or more categories of data are not present): 
 
@@ -67,7 +67,7 @@ Sometimes it is confusing for Cyences' algorithm to automatically merge two devi
 * Click **Merge** to combine the selected device entries.  
 * This change will be reflected after the **Device Inventory** dashboard is refreshed. 
 
-![alt](/assets/merge_device_ids.png)
+![alt]({{ site.baseurl }}/assets/merge_device_ids.png)
 
 The **Product Device ID Conflicts Auto Merged** dashboard panel was designed for troubleshooting purposes by Splunk Administrators only. 
 
@@ -85,7 +85,7 @@ This dashboard displays the following information about devices:
 * Various authentication activities like RDP and Linux logins 
 * If an asset is involved in any kind of Splunk security alert
 
-![alt](/assets/asset_intelligence_dashboard.png)
+![alt]({{ site.baseurl }}/assets/asset_intelligence_dashboard.png)
 
 (The screenshot above does not include the full dashboard)
 

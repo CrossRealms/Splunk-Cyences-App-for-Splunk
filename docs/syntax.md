@@ -25,7 +25,7 @@ Link2
 
 ---
 Image
-![alternate text](/assets/test.png)
+![alternate text]({{ site.baseurl }}/assets/test.png)
 
 ---
 Bullet points
