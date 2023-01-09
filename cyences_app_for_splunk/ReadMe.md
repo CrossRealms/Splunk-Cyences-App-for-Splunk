@@ -11,7 +11,6 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 * Author - CrossRealms International Inc.
 * Creates Index - False
 * Compatible with:
-   * Splunk Enterprise version: 8.2, 8.1, 8.0
    * OS: Platform Independent
    * Browser: Google Chrome, Mozilla Firefox, Safari
 
@@ -66,6 +65,6 @@ CONTRIBUTORS
 SUPPORT
 -------
 * Contact - CrossRealms International Inc.
-  * US: +1-312-2784445
+  * US: +1-312-278-4445
 * License Agreement - https://d38o4gzaohghws.cloudfront.net/static/misc/eula.html
-* Copyright - Copyright CrossRealms Internationals, 2022
+* Copyright - Copyright CrossRealms Internationals, 2023

@@ -7,6 +7,61 @@ parent: Release Notes
 ---
 
 
+## Version 2.3.0 (July 2022)
+
+* ### New Vulnerability Dashboard
+
+    * Replaced `Tenable` and `Qualys` dashboard with a new `Vulnerability` dashboard.
+
+    * Replaced `Qualys Host Summary` and `Tenable Host Summary` with a new  `Host Vulnerability Summary` dashboard panel. Similarly replaced `Qualys Vulnerabilities` and `Tenable Vulnerabilities` with a new `Host Vulnerabilities` dashboard panel in the `Asset Intelligence` dashboard.
+
+* ### VPN Related Enhancements
+
+    * Added `Authentication - Long Running VPN Session Disconnected` alert.
+
+    * Added `Elapsed Time Per Session` dashboard panel in the `VPN` dashboard.
+
+* ### Enhancements
+
+    * Active Directory
+        * Added more filters in the Active Directory dashboard
+
+    * Network Reports
+        * Updated Map chart from `network_telemetry_map` to Splunk Map to show all the traffic instead of top 20 traffic detail.
+
+    * Palo Alto Firewall
+        * Added `dvc_name` field in the `List of Firewall Devices` dashboard panel.
+
+* ### Bug Fixes
+
+    * Forensics
+        * Resolved the search dropdown issue for `O365 - Azure Active Directory -*` alerts on the `Overview` to `Forensics` dashboard.
+
+    * Office 365
+        * Resolved the duplicate event issue for O365 management activity related alerts and dashboard.
+
+* ### For Splunk Admins Only
+
+    * Updated splunklib to the latest version (v1.7.0)
+
+    * Added `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel.
+
+    * Added `cs_all_vuln` and `cs_all_assets` KV lookup.
+
+    * Added `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` to populate `cs_all_assets` and `cs_all_vuln` lookups from `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel respectively.
+
+    * Updated `Lansweeper` and `Network Reports` dashboard to use `cs_all_vuln` and `cs_all_assets` lookup
+
+## Upgrade Guide from 2.2.0 to 2.3.0
+
+* After App Upgrade, Run the `Asset Inventory - Vulnerability Lookup Gen` and `Asset Inventory - Lookup Gen` with the last 1-year or longer time range as necessary to populate the historical data in the `cs_all_assets` and `cs_all_vuln` lookups. Make sure to use `summariesonly=false` in the search to cover all the data.
+
+* Enable the `Cyences_Vulnerabilities` and `Cyences_Assets` datamodel acceleration to improve the search query performance. For datamodel acceleration steps refer: Doc Home page -> Configuration -> App Installation and Configuration -> Data Model Acceleration & Macros
+
+* The `Tenable` and `Qualys` dashboard will be replaced with a new `Vulnerability` dashboard.
+
+
+
 ## Version 2.2.0 (June 2022)
 
 * ### New Windows Dashboard 
@@ -34,7 +89,7 @@ parent: Release Notes
         * Added the time field for both the `Success Login by Host, Users` and `Failed Login by Host, Users` dashboard panels in the `Linux/Unix` dashboard
         * Removed the `Open Ports` dashboard panel as the `Listening Ports on Host` dashboard panel provides the same information with additional fields.
 
-    * Network Reports   
+    * Network Reports 
         * Added drilldown to the `Port Scanning Attempts` map.
 
     * Office 365
@@ -116,7 +171,7 @@ parent: Release Notes
     * Network traffic map visualizations have been added to enhance the functionality of the network traffic maps.
         * Users can now click on the network traffic arrow itself, which will result in a drilldown showing the details relevant to that traffic.
         * The `Network Reports` and `Asset Intelligence` dashboards are now utilising the newly added custom visualizations from the `Network Telemetry Map`.
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/network_telemetry_map.png?raw=true)
+        ![alt](/assets/network_telemetry_map.png)
 
     * Removed the `Top Network Traffic` dashboard panel from the `Network Reports` dashboard.
         * The network traffic display has been enhanced by adding the following new dashboard panels:
@@ -221,25 +276,25 @@ parent: Release Notes
     * Added the required field extractions. 
     * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky.png?raw=true)
+    ![alt](/assets/kaspersky.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_two.png?raw=true)
+    ![alt](/assets/kaspersky_part_two.png)
 
     * Added support for Kaspersky in the Device Inventory and Asset Intelligence dashboards.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/kaspersky_part_three.png?raw=true)
+    ![alt](/assets/kaspersky_part_three.png)
 
 * ### DNS dashboard 
     * Added DNS Tracker dashboard for the following use-cases: Top Categories, Record Types, DNS Log Volume over Time, Record Types over Time, Top queries, Top Non-success Code Queries, Top Requesters, and Top Non-success queries Code Requesters.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker.png?raw=true)
+    ![alt](/assets/dns_tracker.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/dns_tracker_continued.png?raw=true)
+    ![alt](/assets/dns_tracker_continued.png)
 
 * ### Microsoft Defender ATP Alert
     * Added a security alert for Office 365 Advanced Threat Protection.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/defender_atp_alert.png?raw=true)
+    ![alt](/assets/defender_atp_alert.png)
 
 * ### VPN Dashboard
     * Added support for Cisco VPN (logs from Cisco ISE and Estreamer are supported). 
@@ -258,7 +313,7 @@ parent: Release Notes
         * Added dashboard panels to remove the decommissioned hosts from the Windows hosts lookup, as well as the Linux hosts lookup.
             * This is required to avoid false positive alerts. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/decommission_host_from_lookups.png?raw=true)
+    ![alt](/assets/decommission_host_from_lookups.png)
 
 ## Upgrade Guide from Version 1.10.0 to 1.11.0
 
@@ -272,11 +327,11 @@ parent: Release Notes
 * ### Azure Active Directory: Office 365
     * Added Office 365 alerts and dashboard panels to the Office 365 dashboard. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/azure_ad_authorization_policy.png?raw=true)
+        ![alt](/assets/azure_ad_authorization_policy.png)
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/azure_ad_group_change.png?raw=true)
+        ![alt](/assets/azure_ad_group_change.png)
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/azure_ad_user_change.png?raw=true)
+        ![alt](/assets/azure_ad_user_change.png)
 
         * AuthorizationPolicy Change/Update 
         * Policy Change/Update 
@@ -291,23 +346,23 @@ parent: Release Notes
     *  Added multiple dashboard panels to identify issues within a Splunk environment, as well as when performing an audit. 
         * Splunk Admin - Checks - General 
 
-         ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_checks_general.png?raw=true)
+         ![alt](/assets/splunk_admin_checks_general.png)
 
         * Splunk Admin - Checks - Forwarders, Inputs, Deployment Server 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_checks_forwarders.png?raw=true)
+        ![alt](/assets/splunk_admin_checks_forwarders.png)
 
         * Splunk Admin - Checks - Parsing and Timestamp
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_checks_parsing.png?raw=true)
+        ![alt](/assets/splunk_admin_checks_parsing.png)
 
         * Splunk Admin - Checks - Indexer  
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_checks_indexer.png?raw=true)
+        ![alt](/assets/splunk_admin_checks_indexer.png)
 
         * Splunk Admin - Checks - Search Head 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_admin_checks_search_head.png?raw=true)
+        ![alt](/assets/splunk_admin_checks_search_head.png)
 
     *   From Cyences' navigation bar, go to **Settings > Splunk Admin Checks** to view all of the Splunk Admin Checks dashboards. 
 
@@ -359,7 +414,7 @@ parent: Release Notes
     * Tenable Dashboard  
         * Added a dashboard panel for **All Traffic on All Vulnerable Hosts**
     
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/all_traffic_on_all_vulnerable_hosts.png?raw=true)
+    ![alt](/assets/all_traffic_on_all_vulnerable_hosts.png)
 
     * Linux Sudo Access / Change in Sudo Access of Local Linux Account Alert
         * Released Cyences Add-on version 1.0.2. 
@@ -368,12 +423,12 @@ parent: Release Notes
     * Active Directory - User Changed Alert 
         *   Added a Message field to the alert results and dashboard panel to display what has changed. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/ad_user_changed.png?raw=true)
+    ![alt](/assets/ad_user_changed.png)
 
     * Windows Dashboard - Windows Users and Privileges (EventCode=4672) 
         * Added user privilege information and number of logins by user to dashboard panel 
     
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/windows_users_and_privileges.png?raw=true)
+    ![alt](/assets/windows_users_and_privileges.png)
 
 * ### Issues Fixed: 
 
@@ -381,11 +436,11 @@ parent: Release Notes
         * License usage is now displayed in GB. 
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_license_usage_old.png?raw=true)
+        ![alt](/assets/splunk_license_usage_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_license_usage_new.png?raw=true)
+        ![alt](/assets/splunk_license_usage_new.png)
 
     * Sysmon Deploy Audit Dashboard 
         * Previously displayed that no hosts with data are present even though there is Sysmon data available. 
@@ -395,11 +450,11 @@ parent: Release Notes
         * Fixed an error displayed at the top right-hand corner of the dashboard panel. 
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/notable_events_old.png?raw=true)
+        ![alt](/assets/notable_events_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/notable_events_new.png?raw=true)
+        ![alt](/assets/notable_events_new.png)
 
 ## Upgrade Guide from Version 1.8.0 to 1.9.0
 
@@ -416,7 +471,7 @@ parent: Release Notes
 * ### Tenable and Qualys: Correlation Between Vulnerabilities and Network Telemetry
     * Added a new dashboard panel named Traffic on Vulnerable Ports that displays traffic on vulnerable ports for both Qualys and Tenable. Users can view these details in the Tenable and Qualys dashboard.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/traffic_on_vulnerable_ports.png?raw=true)
+    ![alt](/assets/traffic_on_vulnerable_ports.png)
 
 * ### FortiGate VPN Support 
     * The VPN dashboard now supports FortiGate VPN logs.
@@ -426,44 +481,44 @@ parent: Release Notes
     * The Active Directory dashboard now uses dashboard panels from its original dashboard. 
     * The new Windows dashboard has access to privileged objects and services, as well as user privilege related information. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/windows_dashboard.png?raw=true)
+    ![alt](/assets/windows_dashboard.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/windows_dashboard_part2.png?raw=true)
+    ![alt](/assets/windows_dashboard_part2.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/windows_dashboard_part3.png?raw=true)
+    ![alt](/assets/windows_dashboard_part3.png)
 
 * ### Palo Alto dashboard: 
     * Added **System Events** and **Threat Events** dashboard panels.
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/system_alerts_and_threats.png?raw=true)
+    ![alt](/assets/system_alerts_and_threats.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/system_events.png?raw=true)
+    ![alt](/assets/system_events.png)
 
     * Added information about available sourcetypes for each Palo device in the **List of Firewall Devices** dashboard panel. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/list_of_firewall_devices.png?raw=true)
+    ![alt](/assets/list_of_firewall_devices.png)
 
 * ### Splunk Admin dashboard:
     * Added a **Splunk License Usage** dashboard panel. 
     * Added an alert for license violations. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/splunk_license_usage.png?raw=true)
+    ![alt](/assets/splunk_license_usage.png)
 
     * Added another dashboard panel named **Instance Disk Usage**. 
     * Added an alert for when disk usage exceeds 85% or when disk space is less than 6GB. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/instance_disk_usage.png?raw=true)
+    ![alt](/assets/instance_disk_usage.png)
 
 * ### Enhancements:
     * Ransomware - Spike in the File Writes Alert 
         * Added file locations (top 5) alongside the file writes count, so that users can identify whether the alert is a false positive or a legitimate ransomware attack right from the email notification itself.
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/spike_in_file_writes_old.png?raw=true)
+        ![alt](/assets/spike_in_file_writes_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/spike_in_file_writes_new.png?raw=true)
+        ![alt](/assets/spike_in_file_writes_new.png)
 
     * Asset Intelligence and Tenable dashboards  
         * Added CVE and a solution field for tenable related vulnerabilities. 
@@ -491,25 +546,25 @@ parent: Release Notes
 * ### Added **AWS** dashboard
     * From Cyences' navigation bar, go to **Control > Reports > AWS**. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/aws_dashboard_part1.png?raw=true)
+    ![alt](/assets/aws_dashboard_part1.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/aws_dashboard_part2.png?raw=true)
+    ![alt](/assets/aws_dashboard_part2.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/aws_dashboard_part3.png?raw=true)
+    ![alt](/assets/aws_dashboard_part3.png)
 
 * ### Added **G Suite** dashboard
     * From Cyences' navigation bar, go to **Control > Reports > G Suite**. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/g_suite_dashboard_part1.png?raw=true)
+    ![alt](/assets/g_suite_dashboard_part1.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/g_suite_dashboard_part2.png?raw=true)
+    ![alt](/assets/g_suite_dashboard_part2.png)
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/g_suite_dashboard_part3.png?raw=true)
+    ![alt](/assets/g_suite_dashboard_part3.png)
 
 * ### Added Microsoft **Azure Security Score** to the Office 365 dashboard
     * Displays the Azure security score on the Office 365 dashboard, which represents how secure your Azure configurations are within your environment. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/azure_security_score.png?raw=true)
+    ![alt](/assets/azure_security_score.png)
 
     * Go to **Data Onboarding > Microsoft Azure Security Score** section for more information on how to collect data for this dashboard panel. 
 
@@ -517,11 +572,11 @@ parent: Release Notes
     * From Cyences' navigation bar, go to **Antivirus > Microsoft 365 Defender ATP**. 
     * Displays alert information for Microsoft 365 Defender ATP alerts.  
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/microsoft365_defenderatp_dashboard.png?raw=true)
+    ![alt](/assets/microsoft365_defenderatp_dashboard.png)
 
     * To check the configuration status for Defender ATP on Windows machines, go to **Settings > Microsoft 365 Defender ATP Audit**. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/microsoft365_defenderatp_audit.png?raw=true)
+    ![alt](/assets/microsoft365_defenderatp_audit.png)
 
     * View the **Data Onboarding > Microsoft 365 Defender ATP** section to see how to collect data for Windows Defender ATP alerts and configuration statuses from Windows machines. 
 
@@ -557,11 +612,11 @@ parent: Release Notes
     * Fixed an issue where the Notable Events dashboard panel was incorrectly displaying information for the AD - User Locked Out alert in the Forensics dashboard. 
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/forensics_dashboard_old.png?raw=true)
+        ![alt](/assets/forensics_dashboard_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/forensics_dashboard_new.png?raw=true)
+        ![alt](/assets/forensics_dashboard_new.png)
 
 ## Upgrade Guide from Version 1.6.0 to 1.7.0 
 
@@ -590,11 +645,11 @@ parent: Release Notes
     * Automatically merges devices based on information provided (i.e., hostname, mac-address, IP-address) to accurately display the device count. 
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/device_master_table_old.png?raw=true)
+        ![alt](/assets/device_master_table_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/device_inventory_table_new.png?raw=true)
+        ![alt](/assets/device_inventory_table_new.png)
 
         * It is now capable of merging multiple entries which are used for the same device. 
     * Device Master Table has been renamed to Device Inventory Table. 
@@ -602,7 +657,7 @@ parent: Release Notes
 
 * ### Added a Linux/Unix dashboard that contains a variety of information such as: hosts, users, users with privilege access, services, open ports, etc. 
 
-    ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/linux_unix_dashboard.png?raw=true)
+    ![alt](/assets/linux_unix_dashboard.png)
 
     * Please visit the **Data Onboarding > Linux/Unix Data** section to understand the data collection process for this dashboard. 
 
@@ -612,7 +667,7 @@ parent: Release Notes
         * Supports comma separated values within search filters.  
         * This will allow users to search machines with multiple IP addresses, or if the user wants to search for multiple users simultaneously. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/asset_intelligence_ipaddress.png?raw=true)
+        ![alt](/assets/asset_intelligence_ipaddress.png)
 
     * Tenable lookups have been enhanced and linked to the device inventory lookup.  
     * Reduced false positives for Ransomware related alerts (Spike in File Writes and Common Ransomware File Extensions). 
@@ -624,7 +679,7 @@ parent: Release Notes
     * Office 365 dashboard enhancements:  
         * Added a Logon Error search filter to the Failed Logins dashboard panel. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/o365_dashboard_logon_error.png?raw=true)
+        ![alt](/assets/o365_dashboard_logon_error.png)
     
     * Forensics dashboard enhancements: 
         * Drilldown searches made from this dashboard will automatically use the appropriate data model command instead of **index=*** for the query. 
@@ -634,11 +689,11 @@ parent: Release Notes
     * Field values with a large amount of text will no longer result in a disproportionate column size when scrolling horizontally in a table. 
         * Old: 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/horizontal_scrolling_table_old.png?raw=true)
+        ![alt](/assets/horizontal_scrolling_table_old.png)
 
         * New:
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/horizontal_scrolling_table_new.png?raw=true)
+        ![alt](/assets/horizontal_scrolling_table_new.png)
 
     * Fixed a correlation issue with hosts on the Lansweeper dashboard. 
 
@@ -658,7 +713,7 @@ parent: Release Notes
 * ### Made improvements to the Authentication Report dashboard. 
     * Added a user filter and a user authentication list. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/user_authentication_activities.png?raw=true)
+        ![alt](/assets/user_authentication_activities.png)
     
     * Added drilldowns to dashboard panels. 
     * Fixed the Authentication CIM mapping for Office365/Azure successful logins data. 
@@ -667,28 +722,28 @@ parent: Release Notes
     * Added a user filter to the Successful and Failed Logins dashboard panels. 
     * Added an extended properties column to the Failed Logins dashboard panel (UserAgent, Location, etc.). 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/o365_successful_and_failed_logins.png?raw=true)
+        ![alt](/assets/o365_successful_and_failed_logins.png)
 
 * ### Made improvements to the Palo Alto Firewall Report dashboard 
     * Added the List of Firewall Devices dashboard panel with VPN (Global Protect) data availability for auditing purposes.  
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/list_firewall_devices_global_protect.png?raw=true)
+        ![alt](/assets/list_firewall_devices_global_protect.png)
     
 * ### Enhancements: 
     * Added a feature to the Asset Intelligence dashboard when highlighting text.  
     * Allows users to drilldown for better navigation throughout the Cyences app.  
     * Invoke the drilldown from anywhere in the app by selecting hostname, IP address, or username. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/highlighting_text_drilldown.png?raw=true)
+        ![alt](/assets/highlighting_text_drilldown.png)
     
     * Added a dashboard panel named Remove Decommissioned Forwarder to the Splunk Admin Report dashboard, which provides users a way to remove decommissioned UFs directly from the dashboard panel itself.  
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/remove_decommissioned_forwarder.png?raw=true)
+        ![alt](/assets/remove_decommissioned_forwarder.png)
 
     * We have filtered some commonly known false positives for several alerts to reduce the number of false positive alerts all around.  
     * Added a Current Defender Status column to the Windows Defender Health Report. 
 
-        ![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/current_windows_defender_status.png?raw=true)
+        ![alt](/assets/current_windows_defender_status.png)
     
 * ### Issues Fixed: 
     * Fixed the logic for the VPN Reports dashboard, as it was reporting incorrect values for both the success and failure count/percentage. 
@@ -854,7 +909,7 @@ parent: Release Notes
     * Active Directory & Windows 
     * Authentication 
     * Malicious IP List 
-    * Network Reports 
+    * Network Reports
     * Office 365 
     * Palo Alto 
     * Sophos 

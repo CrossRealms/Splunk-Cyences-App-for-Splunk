@@ -12,36 +12,15 @@ This section of the document is about how to utilize the Cyences App.
 ---
 
 ### Data Collection
-The following sources and their respective data need to be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App: 
-* Amazon Web Services
-* CrowdStrike EventStream Data (Antivirus)
-* Firewall Logs
-* Fortigate VPN Logs
-* G Suite
-* Lansweeper
-* Linux
-* Microsoft Graph Security Score (Azure)
-* Network Logs
-* Office 365 Defender ATP (Advanced Threat Protection)
-* Office 365 Management Events 
-* Palo Alto Logs
-* Qualys 
-* Sophos Central (Antivirus) 
-* Sysmon
-* Tenable
-* Unix
-* VPN
-* Windows Defender Logs (Antivirus)
-* WinEventLog
-
-View the **Data Onboarding [Admin]** section for more information.
+Data must be onboarded into your Splunk environment in order to get the most security benefits out of the Cyences App. Refer to the [Data Onboarding](/data_onboarding/) section for more information.
 
 ### Configuration 
 
-View the **App Installation & Configuration [Admin]** section for installation and configuration information regarding the following topics:
+View the [Installation/Configuration](/configuration) section for installation and configuration information regarding the following topics:
 * App installation
 * Dependency installation
 * Macro configurations
+* Cyences Email Settings for Alerts
 
 ### Enable Alerts and Reports
 
@@ -76,7 +55,7 @@ Email notifications are disabled by default for all alerts.
 3. Under **App**: select **Cyences App for Splunk (cyences_app_for_splunk)**. 
 4. Click **+ Add Actions** and in the dialog box select the **Send email** action.
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/edit_alert_send_email_action.png?raw=true)
+![alt](/assets/edit_alert_send_email_action.png)
 
 5. Complete the necessary field values (i.e., "To", "Subject", "Message", etc.)
 6. Click **Save**.

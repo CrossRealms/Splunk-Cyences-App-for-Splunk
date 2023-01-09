@@ -13,12 +13,10 @@ Cyences version 1.2.0 introduces a new drop-down option named Intelligence in th
 * Asset Intelligence
 * Device Inventory
 * Globally Detected Malicious IPs
-* Lansweeper
-* Vulnerability
 
 ## Globally Detected Malicious IPs
 
-The Globally Detected Malicious IPs list is generated from a combination of reports, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
+The Globally Detected Malicious IPs list is generated from a combination of dashboards, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
 
 * DDoS attacks on Palo Alto firewalls
 * Inbound traffic from blocked IPs
@@ -26,51 +24,17 @@ The Globally Detected Malicious IPs list is generated from a combination of repo
 
 If an IP address is involved in any of the above scenarios, then it will automatically be added to the list. The goal of Globally Detected Malicious IPs is to assist Splunk users to learn even more about their environment and to help identify suspicious activity in order to take the appropriate security measures to strengthen their network. Do not let your business become the next victim. For more information, please refer to the **Globally Detected Malicious IPs** dashboard. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/malicious_ip.png?raw=true)
+![alt](/assets/malicious_ip.png)
 
 Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now being generated on the Malicious IP list server, which is deployed by CrossRealms International. This list is based on bad IP address activity that's detected in Splunk environments across all installations where Cyences is configured. This list provides Splunk users with the latest globally detected malicious IP list and stores it back into the lookup within the Cyences app. This will result in a more robust list for Splunk users to rely on. For Splunk Admins, please refer to the **Configuration of Access Token for Malicious IP List** section to learn more about the API configuration process. 
 
 **Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user's environment.
 
-## Lansweeper
-
-The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences App mainly uses this data for IT discovery and inventory.  
-
-The Lansweeper dashboard in the Cyences app displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
-
-* Apple Macintosh 
-* ESXi servers
-* Hyper-V Guests
-* Location
-* Linux
-* Monitor
-* Network devices
-* Other devices
-* VMware Guests
-* VMware vCenter services
-* Web Servers
-* Windows
-
-The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System for improved security on those assets. 
-
-## Vulnerability
-
-Supported Vendor Products: Qualys, Tenable IO, Nessus, CrowdStrike Spotlight
-
-The above vendor security solutions are designed to detect vulnerabilities present in your environment.  
-
-The Cyences app utilizes the data provided by those vendor product to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
-
-The dashboard is designed to view Vulnerability count by severity, Host wise vulnerability summary, Vulnerability list. Splunk users can further use drilldown capability to view vulnerability list for a single host, list of hosts affected by a vulnerability.
-
-
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/vulnerability_dashboard.png?raw=true)
-
 ## Device Inventory
 
 The Device Inventory dashboard contains a list of every asset or device present in an environment. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/device_inventory.png?raw=true)
+![alt](/assets/device_inventory.png)
 
 It is populated from a lookup which is built by scheduled reports. The lookup is generated from the following data sources (the table can still function even if one or more categories of data are not present): 
 
@@ -103,7 +67,7 @@ Sometimes it is confusing for Cyences' algorithm to automatically merge two devi
 * Click **Merge** to combine the selected device entries.  
 * This change will be reflected after the **Device Inventory** dashboard is refreshed. 
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/merge_device_ids.png?raw=true)
+![alt](/assets/merge_device_ids.png)
 
 The **Product Device ID Conflicts Auto Merged** dashboard panel was designed for troubleshooting purposes by Splunk Administrators only. 
 
@@ -121,7 +85,7 @@ This dashboard displays the following information about devices:
 * Various authentication activities like RDP and Linux logins 
 * If an asset is involved in any kind of Splunk security alert
 
-![alt](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/blob/master/docs/assets/asset_intelligence_dashboard.png?raw=true)
+![alt](/assets/asset_intelligence_dashboard.png)
 
 (The screenshot above does not include the full dashboard)
 

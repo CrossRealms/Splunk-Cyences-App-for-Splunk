@@ -5,55 +5,86 @@ permalink: /
 nav_order: 1
 ---
 
-
 # Cyences Documentation
 
-## Download
-Download the Cyences App for Splunk from Splunkbase: [https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/)
+Splunkbase Download Add-on:
+[https://splunkbase.splunk.com/app/5659](https://splunkbase.splunk.com/app/5659)
+
+Splunkbase Download App:
+[https://splunkbase.splunk.com/app/5351/](https://splunkbase.splunk.com/app/5351/)
 
 ## Overview
-The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. Our vision is a single dashboard showcasing the entire security profile of any user's environment from the office to the cloud and everything else in between. The forensic interface based on the MITRE ATT&CK framework is well equipped to quickly identify areas of concern with first to market countermeasures. These measures that are commonly used in security incidents allow Splunk users to take swift action against hackers. Cyences was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators; continuous quarterly enhancements will occur to achieve that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI. 
+The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators. The forensic interface based on the MITRE ATT&CK framework to quickly identify areas of concern. continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
-By default, the Cyences app provides a multitude of alerts and reports in the following categories:
+By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
 
-* Active Directory 
-* Amazon Web Services
-* Authentication
-* Cisco IOS
-* Credential, Endpoint, & Network Compromise
-* CrowdStrike
-* Defender ATP
-* Email
-* G Suite
-* Lansweeper
-* Linux
-* Network Reports
-* Office 365 
-    * Microsoft Azure Graph Security Score
-* Office 365 Defender ATP
-* Palo Alto Firewall 
-* Ransomware
-* Sophos
-* Unix
-* VPN
+* Active Directory / Azure Active Directory 
+* Linux / Unix 
 * Windows
-* Windows Defender
+    * Windows Patch
+    * Sysmon
 
-Apart from alerts and reports, the Cyences App also integrates with some other well-known tools to create important dashboards that can be particularly helpful when confronting security vulnerabilities and issues:
+* Antivirus / Antimalware
+    * CrowdStrike  
+    * Kaspersky
+    * Office 365 Defender ATP
+    * Sophos Central
+    * Windows Defender 
+
+* Authentication 
+
+* Cloud Tenancies
+    * Amazon Web Services 
+    * G Suite
+    * Microsoft Office 365
+        * Microsoft Azure Graph Security Score
+
+* DNS Tracker
+
+* Email
+    * Microsoft Office 365
+
+* Lansweeper 
+
+* Network Devices 
+    * Cisco IOS
+    * Fortinet FortiGate 
+    * Palo Alto Networks
+
+* Ransomware
+
+* VPN
+    * Cisco Anyconnect 
+    * Fortinet FortiGate
+    * GlobalProtect (Palo Alto)
+
+* Vulnerability
+    * CrowdStrike Spotlight
+    * Qualys
+    * Tenable 
+
+
+Apart from alerts and dashboards, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
 
 * Asset Intelligence 
 * Device Inventory Table
 * Globally Detected Malicious IPs
-* Lansweeper
-* Vulnerability (Qualys, Tenable, CrowdStrike Spotlight)
+
 
 How does the Cyences app differentiate itself from Enterprise Security?
 
 For new Splunk users, Enterprise Security requires a lot of fine tuning in order to get the most optimal experience and they may have trouble doing so as there's so much to learn before even reaching that point. For example, users have to configure several correlation searches within Enterprise Security and understand how it ties into specific use cases as well. On the other hand, the Cyences app was created with having one goal in mind and that is to provide an out of the box end-to-end security solution. Meaning, Splunk users don't have to configure all that much in order to get things started right away. Additionally, the alerting feature found within the Cyences app allows users to receive alerts via Slack or by email all while keeping the false positives at a bare minimum.
 
-We're always looking to improve the Cyences app by incorporating new features when possible. The first build came equipped with the Globally Detected Malicious IPs dashboard, which is one of the more prominent features of the Cyences app. This dashboard helps monitor bad traffic and it contains other insightful information such as if an IP address is associated with a distributed denial-of-service (DDoS) attack. For more information, please refer to the **Globally Detected Malicious IPs** section. Version 1.2.0 of the Cyences app features a new component and that is the Device Inventory Table. It's a vital tool that helps with the security audit process and requires zero configuration. It lists all the different devices present in an environment by correlating data from CrowdStrike, Lansweeper, Qualys, Sophos, Tenable, and Windows Defender. For more information, please refer to the **Device Inventory** section.
+
+Cyences has other unique first in the market features on Splunk, like Alert Digest, Device Inventory, Network Telemetry, etc.
+
+* **Alert Digest and Critical Email Alert**: In Cyences 3.0.0, we introduce a better way to look at alerts from Splunk so user don't get spammed by so many alerts from Splunk and get the critical alerts immediately while keeping the inbox clean. In Cyences user can configure their email address at once and get all the critical events from all the alerts without configuring their email on all of them separately. In addition to that Cyences has an alert called Digest Alert which sends all the medium and high severity notable events from all the alerts as a digest email only once a day. Please refer to [Installation/Configuration](/configuration/#cyences-email-settings-for-alerts) section for configuration guide and more information.
+
+* **Device Inventory and Asset Intelligence**: Version 1.2.0 of the Cyences app features a new component and that is the Device Inventory Table. It is a vital tool that helps with the security audit process and requires zero configuration. The Device Inventory Table lists all of the different devices present in an environment by correlating data from CrowdStrike, Lansweeper, Kaspersky, Qualys, Sophos, Tenable, Windows Defender, etc. And there is one more dashboard called "Asset Intelligence" which is very helpful for investigating a security incident. For more information, please refer to the [Device Inventory and Asset Intelligence](/user_guide/intelligence_dashboard/) section for more details.
+
+* **Network Telemetry**: Cyences has a dashboard called "Network Telemetry" which shows a very important information for security team. It shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
 
 
-The Cyences App is a contribution-based project that anyone can provide suggestions for. Visit the Cyences website for more information and to offer general feedback: [https://cyences.com/welcome/](https://cyences.com/welcome/)
+The Cyences App is a contribution-based project that anyone can provide suggestions for. Refer to the following link to offer general feedback or to report an issue: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues)
 
-Visit GitHub repo to find more details: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk)
+Visit the Cyences repository on GitHub for more information: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk)
