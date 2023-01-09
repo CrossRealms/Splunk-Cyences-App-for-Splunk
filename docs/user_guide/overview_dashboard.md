@@ -9,7 +9,7 @@ parent: User Guide
 # Overview Dashboard
 The Overview dashboard displays the overall security status of the Splunk environment, in addition to highlighting present security issues as well. We specifically designed the Overview dashboard to be a single pane of glass for ease of use.
 
-![alt](/assets/overview_dashboard.png)
+![alt]({{ site.baseurl }}/assets/overview_dashboard.png)
 
 ## Overview Dashboard Features:
 
