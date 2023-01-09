@@ -26,9 +26,9 @@ Installation and Configuration Guide:
 
 ## Fortinet FortiGate Data
 
-If your organization uses FortiGate VPN, then the required data can be collected via Fortigate's logs. Refer to the [Data Onboarding > Network Devices > Fortinet FortiGate](/data_onboarding/network_devices/fortinet_fortigate) section for more information regarding the data collection process.
+If your organization uses FortiGate VPN, then the required data can be collected via Fortigate's logs. Refer to the [Data Onboarding > Network Devices > Fortinet FortiGate]({{ site.baseurl }}/data_onboarding/network_devices/fortinet_fortigate) section for more information regarding the data collection process.
 
 
 ## GlobalProtect (Palo Alto) VPN Data
 
-If your organization is using GlobalProtect VPN, then the required data can be collected via Palo Alto's logs. Refer to the [Data Onboarding > Network Devices > Palo Alto Firewall Logs](/data_onboarding/network_devices/palo_alto) section for more information regarding the data collection process.
+If your organization is using GlobalProtect VPN, then the required data can be collected via Palo Alto's logs. Refer to the [Data Onboarding > Network Devices > Palo Alto Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/palo_alto) section for more information regarding the data collection process.
