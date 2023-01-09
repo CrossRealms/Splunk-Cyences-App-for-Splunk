@@ -52,7 +52,7 @@ For optimal performance, it is recommended to enable the data model acceleration
 
 Once the data models are accelerated, update the macro definitions next, so that Splunk can take full advantage of the accelerated data models which will improve search performance overall.   
 
-![alt](/assets/data_models_acceleration.png)
+![alt]({{ site.baseurl }}/assets/data_models_acceleration.png)
 
 The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
 
@@ -60,7 +60,7 @@ The default definition for the data model macros is summariesonly=**false** and 
 
 Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
-![alt](/assets/data_source_macros.png)
+![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
 ## **Other Macros**
 
@@ -85,7 +85,7 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 | cs_ad_important_user (e.g. "val1","val2") | List of important users | ""
 | cs_ad_important_group (e.g. "val1","val2") | List of important groups | ""
 
-![alt](/assets/other_macros.png)
+![alt]({{ site.baseurl }}/assets/other_macros.png)
 
 ## **Filter Macros**
 
@@ -101,7 +101,7 @@ Certain macros are being used to whitelist (filter) a specific set of results. T
 Filter example:
 * In order to filter the events related to a service account, users can add `search NOT user="service-user"` to the filter macro.
 
-![alt](/assets/filter_macro.png)
+![alt]({{ site.baseurl }}/assets/filter_macro.png)
 
 **Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
@@ -155,16 +155,16 @@ Cyences 3.0.0 contains two new email settings to reduce noise:
     * Sends notifications about triggered notable events in the last twenty-four hours for each Cyences alert in a single email. 
     * By default, this will include both high and medium severity notable events, but users can adjust the severity level as needed.  
     * This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert. 
-    ![alt](/assets/digest_email_configuration.png)
+    ![alt]({{ site.baseurl }}/assets/digest_email_configuration.png)
     * The alert digest email will be sent once a day.
         * Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information. 
 2. Critical Alert Email
     * Sends an email immediately after an alert gets triggered if the notable event has been labeled with a critical severity level (default setting). Users can customize the severity level for this email setting as needed. 
     * Users will receive an immediate notification about important items within the email.
     * Users will no longer have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source. Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.  
-    ![alt](/assets/cyences_action_send_email_default_common_config.png)
+    ![alt]({{ site.baseurl }}/assets/cyences_action_send_email_default_common_config.png)
     * Users have an option to exclude themselves from specific alerts, to include their email addresses for specific alerts, or to disable an email altogether. This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
-    ![alt](/assets/cyences_email_configuration.png)
+    ![alt]({{ site.baseurl }}/assets/cyences_email_configuration.png)
     * To override the email setting for a particular alert, go to the individual alert and remove the email address from the **Exclude Recipients** section. 
     * Add an email address to the **Include Additional Recipients** section if you only want to receive emails for a specific alert.
 
@@ -203,7 +203,7 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
-![alt](/assets/honeydb_config.png)
+![alt]({{ site.baseurl }}/assets/honeydb_config.png)
 
 ## **Configuration of Malicious IP Collector Server**
 
@@ -215,7 +215,7 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
-![alt](/assets/malicious_ip_collector_config.png)
+![alt]({{ site.baseurl }}/assets/malicious_ip_collector_config.png)
 
 **Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
 
@@ -225,7 +225,7 @@ Run the search below and it should return events with no errors:
 
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
-![alt](/assets/malicious_ip_lookupgen_search.png)
+![alt]({{ site.baseurl }}/assets/malicious_ip_lookupgen_search.png)
 
 ## **Sophos Central API Endpoints Configuration**
 

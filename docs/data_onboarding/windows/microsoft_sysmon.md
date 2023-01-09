@@ -44,7 +44,7 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 ### Sysmon EventCodes:
 
-![alt](/assets/sysmon_event_codes.png)
+![alt]({{ site.baseurl }}/assets/sysmon_event_codes.png)
 
 * Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 

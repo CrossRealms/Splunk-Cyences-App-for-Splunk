@@ -331,4 +331,4 @@ Dashboard panels:
 * Vulnerabilities 
 * Vulnerability Count By Severity
 
-![alt](/assets/vulnerability_dashboard.png)
+![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)

@@ -11,7 +11,7 @@ has_children: false
 
 ## VPN dashboard is not loading even though cs_vpn_indexes has data.
 
-![alt](/assets/vpn_dashboard_not_loading.png)
+![alt]({{ site.baseurl }}/assets/vpn_dashboard_not_loading.png)
 
 * Verify that the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) is installed.
 
@@ -85,7 +85,7 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 6. Under the **Calculated** fields section, click **Edit** for the **action** field. 
 
-![alt](/assets/filesystem_calculated_fields_action_edit.png)
+![alt]({{ site.baseurl }}/assets/filesystem_calculated_fields_action_edit.png)
 
 7. Your current configuration should look similar to this: 
 
@@ -101,7 +101,7 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 11. Check the **Accelerate** box, then click **Save**.  
 
-![alt](/assets/endpoint_edit_acceleration.png)
+![alt]({{ site.baseurl }}/assets/endpoint_edit_acceleration.png)
 
 ## Reducing False Positives for the "Authentication - Bruteforce Attempt for a User" Alert 
 
@@ -125,8 +125,8 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 3. Click **auditd_authentication** (the default values should match with the following image). 
 
-![alt](/assets/auditd_authentication_before.png)
+![alt]({{ site.baseurl }}/assets/auditd_authentication_before.png)
 
 4. Update the search string with the following contents, then click **Save**. 
 
-![alt](/assets/auditd_authentication_after.png)
+![alt]({{ site.baseurl }}/assets/auditd_authentication_after.png)
