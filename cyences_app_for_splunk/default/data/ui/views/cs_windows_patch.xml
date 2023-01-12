@@ -15,7 +15,8 @@
     | eval temp_host=mvjoin(host, "\", \"") 
     | eval host_filter="(NOT host IN (\"".temp_host."\"))" 
     | eval extra_event=1]
-| sort extra_event</query>
+| sort extra_event
+| eval host_filter=if(isnull(host_filter),"",host_filter)</query>
     <earliest>$timerange.earliest$</earliest>
     <latest>$timerange.latest$</latest>
     <done>
