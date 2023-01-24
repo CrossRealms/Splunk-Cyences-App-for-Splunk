@@ -33,7 +33,7 @@
       </default>
     </input>
     <input type="dropdown" token="tkn_dest" searchWhenChanged="true">
-      <label>Dest</label>
+      <label>Host</label>
       <choice value="*">All</choice>
       <default>*</default>
       <fieldForLabel>dest</fieldForLabel>
