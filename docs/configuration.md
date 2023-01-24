@@ -91,7 +91,7 @@ Navigate to **Settings > Configuration** and in the **Other Macros** section is 
 
 Certain macros are being used to whitelist (filter) a specific set of results. This is useful for when an alert/report provides a result which is previously known in your environment. The benefit of this macro is that it filters the result set without having to make a copy of the alert/report/search, which will prevent any potential problems from arising when upgrading the Cyences App.  
 
-### How to Update Filter Value
+### How to Update Filter Value (Do not update the macro directly)
 1. Open the **Cyences App for Splunk**.
 2. Navigate to **Settings > Searches, reports, and alerts** and select **All** for the **Owner** filter.
 3. Find the alert for which you would like to update filter for and Click **Edit > Edit Alert**.

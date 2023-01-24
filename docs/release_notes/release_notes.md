@@ -38,7 +38,7 @@ has_children: true
     * Refer to the [Installation/Configuration]({{ site.baseurl }}/configuration/#cyences-email-settings-for-alerts) section for more information regarding the email configuration process for Cyences.
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
-    * Users are now able to configure Cyences’ filter macros (to filter out the false positives of an alert) right from Splunk’s navigation bar (Settings > Searches, Reports, and Alerts) instead of from Cyences’ configuration page. 
+    * Users are now able to configure Cyences’ filter macros (to filter out the false positives of an alert) right from Splunk’s navigation bar (Settings > Searches, Reports, and Alerts) instead of from Cyences’ configuration page. (**Note:** Do not update the macro directly)
     ![alt]({{ site.baseurl }}/assets/filter_macro.png)
     * This change was made to avoid confusion, as users had to figure out which macro is related to which alert. Users can now view the configuration right underneath the alert configuration section.  
     * Macro updates may not happen in real-time as App is performing the update every five minutes.
