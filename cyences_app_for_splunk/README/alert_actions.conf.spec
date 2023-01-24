@@ -1,3 +1,7 @@
+[cyences_notable_event_action]
+param.filter_macro_name = <str> Filter macro name
+param.filter_macro_value = <str> Filter macro value
+
 [cyences_send_digest_email_action]
 param.email_to = <str> Comma separated email addresses
 param.cyences_severities =  <str> Comma separated severities. ie. critical,high,medium,low,info
