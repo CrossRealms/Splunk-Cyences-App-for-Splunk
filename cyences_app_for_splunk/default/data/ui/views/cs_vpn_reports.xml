@@ -14,12 +14,12 @@
   <search id="bs1" base="bs0">
     <query>
       <![CDATA[
-        | search $User$
+        | search user IN $User$ dest=$tkn_dest$ src_ip=$tkn_public_ip$
         | iplocation src_ip
         $tkn_filter_home_country$
         | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
         | eval City = if(isnull(City) OR City="", "Unknown", City) 
-        | search $Country$ $City$
+        | search $Country$ 
         | `cs_vpn_dashboard_filter`
       ]]>
     </query>
@@ -31,6 +31,18 @@
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </default>
+    </input>
+    <input type="dropdown" token="tkn_dest" searchWhenChanged="true">
+      <label>Dest</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>dest</fieldForLabel>
+      <fieldForValue>dest</fieldForValue>
+      <search base="bs0">
+        <query>| stats count by dest</query>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
     </input>
     <input type="radio" token="tkn_home_country">
       <label>Filter Home Country</label>
@@ -65,19 +77,7 @@
         <query>| stats count by Country</query>
       </search>
     </input>
-    <input type="dropdown" token="City" searchWhenChanged="true">
-      <label>City</label>
-      <choice value="*">All</choice>
-      <default>*</default>
-      <fieldForLabel>City</fieldForLabel>
-      <fieldForValue>City</fieldForValue>
-      <search base="bs1">
-        <query>| stats count by City</query>
-      </search>
-      <prefix>City="</prefix>
-      <suffix>"</suffix>
-    </input>
-    <input type="dropdown" token="User" searchWhenChanged="true">
+    <input type="multiselect" token="User" searchWhenChanged="true">
       <label>User</label>
       <choice value="*">All</choice>
       <default>*</default>
@@ -86,7 +86,16 @@
       <search base="bs0">
         <query>| stats count by user</query>
       </search>
-      <prefix>user="</prefix>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+    </input>
+    <input type="text" token="tkn_public_ip" searchWhenChanged="true">
+      <label>Public IP Address</label>
+      <default>*</default>
+      <prefix>"</prefix>
       <suffix>"</suffix>
     </input>
   </fieldset>
@@ -94,7 +103,8 @@
     <panel>
       <html>
         <p>VPN Reports</p>
-        <p><b>Data Collection:</b> You can use Palo Alto Add-on if you are using Global Protect VPN. For any other VPN choose appropriate Splunk integration to collect the data.</p>
+        <p>
+          <b>Data Collection:</b> You can use Palo Alto Add-on if you are using Global Protect VPN. For any other VPN choose appropriate Splunk integration to collect the data.</p>
         <p>The data must be mapped with the Authentication data model from the Common Information Model. The Global Protect (Palo Alto) VPN can be paired with the Remote Work Insights Add-on to circumvent this. For all other VPN options, please choose the appropriate Splunk integration method to collect this data.</p>
         <p>The data displayed can be changed by updating the definition for the "VPN Data (indexes)" macro (Settings &gt; Configuration): cs_vpn_indexes.</p>
       </html>
@@ -124,7 +134,7 @@
         <option name="mapping.type">marker</option>
         <option name="mapping.fieldColors">{"success": #53a051, "failure": #dc4e41}</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_authentication%60%20values(Authentication.src)%20as%20src_ip%20from%20datamodel%3DAuthentication%20where%20Authentication.dest_category%3D%22vpn_auth%22%20AND%20%60cs_vpn_indexes%60%20by%20_time%20Authentication.action%20Authentication.user%20span%3D1s%20%0A%7C%20rename%20Authentication.*%20as%20*%20%0A%7C%20search%20$User$%20%0A%7C%20iplocation%20src_ip%0A%20%20%20%20$tkn_filter_home_country$%20%0A%7C%20eval%20Country%20%3D%20if(isnull(Country)%20OR%20Country%3D%22%22%2C%20%22Unknown%22%2C%20Country)%20%0A%7C%20eval%20City%20%3D%20if(isnull(City)%20OR%20City%3D%22%22%2C%20%22Unknown%22%2C%20City)%20%0A%7C%20search%20$Country$%20$City$%20%0A%7C%20%60cs_vpn_dashboard_filter%60%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_authentication%60%20values(Authentication.src)%20as%20src_ip%20from%20datamodel%3DAuthentication%20where%20Authentication.dest_category%3D%22vpn_auth%22%20AND%20%60cs_vpn_indexes%60%20by%20_time%20Authentication.action%20Authentication.user%20Authentication.dest%20span%3D1s%20%0A%7C%20rename%20Authentication.*%20as%20*%20%0A%7C%20search%20user%20IN%20$User$%20dest%3D$tkn_dest$%20src_ip%3D$tkn_public_ip$%0A%7C%20iplocation%20src_ip%0A%20%20%20%20$tkn_filter_home_country$%20%0A%7C%20eval%20Country%20%3D%20if(isnull(Country)%20OR%20Country%3D%22%22%2C%20%22Unknown%22%2C%20Country)%20%0A%7C%20eval%20City%20%3D%20if(isnull(City)%20OR%20City%3D%22%22%2C%20%22Unknown%22%2C%20City)%20%0A%7C%20search%20$Country$%20%0A%7C%20%60cs_vpn_dashboard_filter%60%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
         </drilldown>
       </map>
     </panel>
@@ -211,16 +221,24 @@
   </row>
   <row>
     <panel>
-      <title>Successful Session</title>
+      <input type="text" token="tkn_private_ip" searchWhenChanged="true">
+        <label>Private IP Address</label>
+        <default>*</default>
+        <prefix>"</prefix>
+        <suffix>"</suffix>
+      </input>
       <table>
+        <title>Successful Session</title>
         <search>
-          <query>`cs_vpn_indexes` dest_category="vpn_auth" action="success" $User$
+          <query>`cs_vpn_indexes` dest_category="vpn_auth" action="success" user IN $User$ dest=$tkn_dest$ src=$tkn_public_ip$ 
 | fields _time dest user action private_ip src City Country
 | eval private_ip = if(private_ip="0.0.0.0", null(), private_ip) 
+| fillnull value="Unknown" private_ip
+| search private_ip=$tkn_private_ip$
 | iplocation src 
 | eval Country = if(isnull(Country) OR Country="", "Unknown", Country) 
 | eval City = if(isnull(City) OR City="", "Unknown", City) 
-| search $Country$ $City$ 
+| search $Country$ 
 | `cs_vpn_dashboard_filter` 
 | table _time dest user action private_ip src City Country 
 | rename dest as Dest, user as User, action as Status, src as "SourceIP", private_ip as "PrivateIP" 
@@ -236,21 +254,18 @@
           <link target="_blank">search?q=%60cs_vpn_indexes%60%20TERM($row.User$)%20user=$row.User$%20TERM($row.SourceIP$)%20src_ip=$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
         </drilldown>
       </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Elapsed Time Per Session</title>
       <table>
+        <title>Elapsed Time Per Session</title>
         <search>
-          <query>`cs_vpn_indexes` eventtype="cs_*_vpn_logout" duration=* $User$ 
+          <query>`cs_vpn_indexes` eventtype="cs_*_vpn_logout" duration=* user IN $User$ dest=$tkn_dest$ (src=$tkn_public_ip$ OR public_ip=$tkn_public_ip$) 
 | eval SourceIP=coalesce(public_ip, src), PrivateIP=if(coalesce(private_ip, tunnelip)="0.0.0.0", null(), coalesce(private_ip, tunnelip)) 
-| fillnull value="Unknown" SourceIP 
+| fillnull value="Unknown" SourceIP PrivateIP
+| search PrivateIP=$tkn_private_ip$
 | dedup _time user SourceIP 
 | iplocation SourceIP 
 | eval Country = if(isnull(Country) OR Country="", "Unknown", Country) 
 | eval City = if(isnull(City) OR City="", "Unknown", City) 
-| search $Country$ $City$ 
+| search $Country$ 
 | `cs_vpn_dashboard_filter` 
 | eval duration = tostring(duration, "duration") 
 | table _time dest user description SourceIP PrivateIP duration City Country 
@@ -260,6 +275,7 @@
         </search>
         <option name="count">5</option>
         <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <drilldown>
           <link target="_blank">search?q=%60cs_vpn_indexes%60%20TERM($row.User$)%20user%3D$row.User$%20TERM($row.SourceIP$)%20src%3D$row.SourceIP$&amp;earliest=$time.earliest$&amp;latest=$time.latest$</link>
