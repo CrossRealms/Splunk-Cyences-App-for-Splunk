@@ -48,7 +48,7 @@ do
                 SUDOACCESS="No"
         fi
     else
-        SUDOACCESS="Unable to access /etc/sudoers file. Run Splunk as root user."
+        SUDOACCESS="Unable to access /etc/sudoers OR /etc/sudoers.d/* files."
     fi
     echo -e "time=$date USERNAME=\"$USERNAME1\" UID=\"$UID1\" GID=\"$GID1\" USER_INFO=\"$USER_INFO1\" HOME_DIR=\"$HOME_DIR1\" COMMAND_SHELL=\"$COMMAND_SHELL1\" SUDOACCESS=\"$SUDOACCESS\" \n";
 done
