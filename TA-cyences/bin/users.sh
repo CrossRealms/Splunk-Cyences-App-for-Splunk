@@ -8,7 +8,7 @@ if [ $status -eq 0 ]; then
     then
     groups=$(cat /etc/sudoers | grep "ALL\s*=\s*(ALL" | awk '{print $1}'  | grep % | grep -v '#')
     else
-    groups=$(cat /etc/sudoers /etc/sudoers.d/* | grep "ALL\s*=\s*(ALL" | awk '{print $1}'  | grep % | grep -v '#')
+    groups=$(cat /etc/sudoers /etc/sudoers.d/* 2>/dev/null| grep "ALL\s*=\s*(ALL" | awk '{print $1}'  | grep % | grep -v '#')
     fi
     for i in $groups
     do
@@ -21,7 +21,7 @@ if [ $status -eq 0 ]; then
     then
     users=$(cat /etc/sudoers | grep "ALL\s*=\s*(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
     else
-    users=$(cat /etc/sudoers /etc/sudoers.d/* | grep "ALL\s*=\s*(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
+    users=$(cat /etc/sudoers /etc/sudoers.d/* 2>/dev/null | grep "ALL\s*=\s*(ALL" | awk '{print $1}' | grep -v % | grep -v '#')
     fi
     arrVar=(${arrVar[@]} ${users[@]})
 else
@@ -38,15 +38,14 @@ do
     USER_INFO1=$(echo $user |  cut -d ":" -f 5);
     COMMAND_SHELL1=$(echo $user |  cut -d ":" -f 7);
     if [ "$sudoaccess" != "Yes" ]; then
-        for sudo in ${arrVar[@]};
+        SUDOACCESS="No"
+        for sudo in "${arrVar[@]}"
         do
-                if [ "$sudo" = "$USERNAME1" ]; then
+                if [[ "$sudo" == "$USERNAME1" ]]; then
                 SUDOACCESS="Yes"
+                break
                 fi
         done
-        if [ "$SUDOACCESS" != "Yes" ]; then
-                SUDOACCESS="No"
-        fi
     else
         SUDOACCESS="Unable to access /etc/sudoers OR /etc/sudoers.d/* files."
     fi
