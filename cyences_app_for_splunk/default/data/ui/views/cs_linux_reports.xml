@@ -186,8 +186,8 @@
 | stats latest(*) as * latest(_time) as _time by host group_name
 | search status IN ($tkn_actions$) host=$tkn_host|s$  group_name="*$tkn_group$*"
 | table _time host group_name users status</query>
-          <earliest>$field1.earliest$</earliest>
-          <latest>$field1.latest$</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
@@ -254,8 +254,8 @@
 | stats latest(*) as * latest(_time) as _time by host UID 
 | search status IN ($tkn_actions_users$)  host=$tkn_host|s$   USERNAME="*$tkn_user$*"  $tkn_user_list_sudo_access$
 | table _time host USERNAME UID GID HOME_DIR COMMAND_SHELL USER_INFO SUDOACCESS status</query>
-          <earliest>$field1.earliest$</earliest>
-          <latest>$field1.latest$</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <drilldown>
           <set token="user_show_panel">1</set>
