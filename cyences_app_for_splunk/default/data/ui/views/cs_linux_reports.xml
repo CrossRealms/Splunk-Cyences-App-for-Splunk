@@ -1,11 +1,5 @@
 <form theme="dark" version="1.1">
   <label>Linux/Unix</label>
-  <search id="user_list_basesearch">
-    <query>|inputlookup cs_linux_user_list.csv | convert ctime(sudo_last_modified) as sudo_last_modified | convert ctime(user_last_modified) as user_last_modified</query>
-    <earliest>-2h</earliest>
-    <latest>now</latest>
-    <sampleRatio>1</sampleRatio>
-  </search>
   <search id="base_search_host_details">
     <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
   | fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
@@ -170,29 +164,129 @@
   </row>
   <row>
     <panel>
-      <title>User List</title>
-      <input type="text" token="tkn_user_list_USERNAME">
-        <label>USERNAME</label>
+      <title>Linux Group Added/Updated/Removed</title>
+      <input type="text" token="tkn_group">
+        <label>Group</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_actions">
+        <label>Action</label>
+        <choice value="*">All</choice>
+        <choice value="*added*">Added</choice>
+        <choice value="*removed*">Removed</choice>
+        <choice value="*updated*">Updated</choice>
+        <delimiter>,</delimiter>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search>
+          <query>| inputlookup cs_linux_groups
+| stats latest(*) as * latest(_time) as _time by host group_name
+| search status IN ($tkn_actions$) host=$tkn_host|s$  group_name="*$tkn_group$*"
+| table _time host group_name users status | eval no_of_users=mvcount(split(users, ",")) | eval no_of_users=if(no_of_users=1 AND users="NOUSERS", 0, no_of_users) | table _time host group_name users no_of_users status</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <set token="group_show_panel">1</set>
+          <set token="group_host">$row.host$</set>
+          <set token="group_name">$row.group_name$</set>
+        </drilldown>
+      </table>
+      <html>
+        <p>
+          <b>Description:</b> Time shown in this panel is the time of script execution and not accurate timing. Scripts execute every hour. Created-time will show the time from when the first time the script is executed on the host.
+        </p>
+        <p>
+          <b>Note:</b> click on any row to show the full history of that group/user changes.
+        </p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$group_show_panel$">
+    <panel>
+      <title>Group History</title>
+      <table>
+        <title>HostName="$group_host$"  GroupName="$group_name$"</title>
+        <search>
+          <query>| inputlookup cs_linux_groups | search host="$group_host$" group_name="$group_name$" | sort 0 - _time | table _time host group_name users status | eval no_of_users=mvcount(split(users, ",")) | eval no_of_users=if(no_of_users=1 AND users="NOUSERS", 0, no_of_users) | table _time host group_name users no_of_users status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Linux User Added/Updated/Removed</title>
+      <input type="text" token="tkn_user">
+        <label>User</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_actions_users">
+        <label>Action</label>
+        <choice value="*">All</choice>
+        <choice value="*added*">Added</choice>
+        <choice value="*removed*">Removed</choice>
+        <choice value="*updated*">Updated</choice>
+        <delimiter>,</delimiter>
         <default>*</default>
         <initialValue>*</initialValue>
       </input>
       <input type="dropdown" token="tkn_user_list_sudo_access">
         <label>sudo_access</label>
         <choice value="*">All</choice>
-        <choice value="(sudo_access=&quot;Yes&quot;)">Yes</choice>
-        <choice value="NOT (sudo_access=&quot;Yes&quot;)">No</choice>
+        <choice value="(SUDOACCESS=&quot;Yes&quot;)">Yes</choice>
+        <choice value="(SUDOACCESS=&quot;No&quot;)">No</choice>
+        <choice value="NOT (SUDOACCESS=&quot;Yes&quot; OR SUDOACCESS=&quot;No&quot;)">Permission Issue</choice>
         <default>*</default>
         <initialValue>*</initialValue>
       </input>
       <table>
-        <search base="user_list_basesearch">
-          <query>| search host=$tkn_host|s$ USERNAME IN ($tkn_user_list_USERNAME$) $tkn_user_list_sudo_access$</query>
+        <search>
+          <query>| inputlookup cs_linux_users
+| stats latest(*) as * latest(_time) as _time by host UID 
+| search status IN ($tkn_actions_users$)  host=$tkn_host|s$   USERNAME="*$tkn_user$*"  $tkn_user_list_sudo_access$
+| table _time host USERNAME UID GID HOME_DIR COMMAND_SHELL USER_INFO SUDOACCESS status</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
-        <option name="count">10</option>
-        <option name="drilldown">none</option>
+        <option name="drilldown">row</option>
+        <drilldown>
+          <set token="user_show_panel">1</set>
+          <set token="user_host">$row.host$</set>
+          <set token="UID_name">$row.UID$</set>
+          <set token="user_name">$row.USERNAME$</set>
+        </drilldown>
         <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">true</option>
-        <option name="wrap">true</option>
+      </table>
+      <html>
+        <p>
+          <b>Description:</b> Time shown in this panel is the time of script execution and not accurate timing. Scripts execute every hour. Created-time will show the time from when the first time the script is executed on the host.
+        </p>
+        <p>
+          <b>Note:</b> click on any row to show the full history of that group/user changes.
+        </p>
+      </html>
+    </panel>
+  </row>
+  <row depends="$user_show_panel$">
+    <panel>
+      <title>User History</title>
+      <table>
+        <title>HostName="$user_host$" UserName="$user_name$"</title>
+        <search>
+          <query>| inputlookup cs_linux_users | search host="$user_host$" UID="$UID_name$" | sort 0 - _time | table _time host USERNAME UID GID HOME_DIR COMMAND_SHELL USER_INFO SUDOACCESS status</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
       </table>
     </panel>
   </row>
