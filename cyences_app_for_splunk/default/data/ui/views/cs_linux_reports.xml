@@ -185,11 +185,11 @@
           <query>| inputlookup cs_linux_groups
 | stats latest(*) as * latest(_time) as _time by host group_name
 | search status IN ($tkn_actions$) host=$tkn_host|s$  group_name="*$tkn_group$*"
-| table _time host group_name users status</query>
+| table _time host group_name users status | eval no_of_users=mvcount(split(users, ",")) | eval no_of_users=if(no_of_users=1 AND users="NOUSERS", 0, no_of_users) | table _time host group_name users no_of_users status</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
-        <option name="drilldown">cell</option>
+        <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
           <set token="group_show_panel">1</set>
@@ -213,7 +213,7 @@
       <table>
         <title>HostName="$group_host$"  GroupName="$group_name$"</title>
         <search>
-          <query>| inputlookup cs_linux_groups | search host="$group_host$" group_name="$group_name$" | sort 0 - _time | table _time host group_name users status </query>
+          <query>| inputlookup cs_linux_groups | search host="$group_host$" group_name="$group_name$" | sort 0 - _time | table _time host group_name users status | eval no_of_users=mvcount(split(users, ",")) | eval no_of_users=if(no_of_users=1 AND users="NOUSERS", 0, no_of_users) | table _time host group_name users no_of_users status</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
@@ -257,6 +257,7 @@
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
+        <option name="drilldown">row</option>
         <drilldown>
           <set token="user_show_panel">1</set>
           <set token="user_host">$row.host$</set>
