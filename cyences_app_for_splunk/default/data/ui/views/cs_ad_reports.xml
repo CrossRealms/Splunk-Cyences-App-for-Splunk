@@ -162,7 +162,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode IN (4768, 4769) src=* user=* 
+          <query>`cs_wineventlog_security` EventCode IN (4624, 4768, 4769) src=* [| search `cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) | dedup ComputerName Subject_Account_Name | table ComputerName Subject_Account_Name |  rename Subject_Account_Name as user] 
 | bin span=1m _time 
 | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) 
 | `cs_ad_password_change_outside_working_hour_definition` 
