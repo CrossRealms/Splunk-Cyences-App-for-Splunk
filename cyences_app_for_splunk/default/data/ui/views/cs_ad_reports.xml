@@ -162,12 +162,23 @@
       </input>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
-          | search $tkn_search_common|s$ $tkn_search_password_change_outside_working_hour|s$
-          | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) | `cs_ad_password_change_outside_working_hour_definition`
-          | table _time, Target_Account_Name, Subject_Account_Name, cyences_severity, EventCode, msad_action, status, action, ComputerName, Target_Account_Domain, Subject_Account_Domain Caller_Workstation
-          | rename Target_Account_Name as Target_User, Target_Account_Domain as Target_User_Domain, Subject_Account_Name as Actor, Subject_Account_Domain as Actor_User_Domain
-          | `cs_ad_password_change_outside_working_hour_filter`</query>
+          <query>`cs_wineventlog_security` EventCode IN (4624, 4768, 4769) src=* [| search `cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) | dedup ComputerName Subject_Account_Name | table ComputerName Subject_Account_Name |  rename Subject_Account_Name as user] 
+| bin span=1m _time 
+| eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) 
+| `cs_ad_password_change_outside_working_hour_definition` 
+| table _time ComputerName user src EventCode 
+| rename user as Subject_Account_Name 
+| append 
+    [| search `cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
+    | search $tkn_search_common|s$ $tkn_search_password_change_outside_working_hour|s$ 
+    | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) 
+    | `cs_ad_password_change_outside_working_hour_definition` ] 
+| eventstats values(eval(if(in(EventCode, 4768, 4769), _time."###".src, null()))) as input by ComputerName, Subject_Account_Name 
+| search EventCode IN (627, 628, 4723, 4724, 4794) 
+| timestampbasedcorrelation lookback=300 lookahead=300 
+| table _time, Target_Account_Name, Subject_Account_Name, output, EventCode, msad_action, status, action, ComputerName, Target_Account_Domain, Subject_Account_Domain Caller_Workstation 
+| rename Target_Account_Name as Target_User, Target_Account_Domain as Target_User_Domain, Subject_Account_Name as Actor, Subject_Account_Domain as Actor_User_Domain, output as "Probable Sources" 
+| `cs_ad_password_change_outside_working_hour_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
