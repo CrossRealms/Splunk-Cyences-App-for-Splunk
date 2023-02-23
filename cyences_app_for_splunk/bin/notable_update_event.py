@@ -22,7 +22,8 @@ class NotableEventUpdate(GeneratingCommand):
         try:
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
 
-            nehlh = NotableEventLookupHandler(logger, session_key)
+            user_making_change = self._metadata.searchinfo.username
+            nehlh = NotableEventLookupHandler(logger, session_key, user_making_change=user_making_change)
             nehlh.update_entry(self.notable_event_id,
                                 alert_time=self.alert_time,
                                 assignee=self.assignee,

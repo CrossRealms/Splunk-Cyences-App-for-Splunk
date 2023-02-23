@@ -15,9 +15,10 @@ DEFAULT_STATUS = 'Untriaged'
 
 
 class NotableEventLookupHandler:
-    def __init__(self, logger, session_key) -> None:
+    def __init__(self, logger, session_key, user_making_change) -> None:
         self.logger = logger
         self.session_key = session_key
+        self.user_making_change = user_making_change
 
 
     def make_rest_request(self, uri, data = None, output_mode = 'json'):
@@ -89,6 +90,7 @@ class NotableEventLookupHandler:
 
         if is_changed:
             incident['update_time'] = time.now()
+            incident['user_making_change'] = self.user_making_change
             entry = json.dumps(entry, sort_keys=True)
             uri = '{}'.format(KV_STORE_COLLECTION_ROOT_URL)
             self.make_rest_request(uri, entry)
