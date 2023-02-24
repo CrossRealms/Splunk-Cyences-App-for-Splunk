@@ -77,6 +77,7 @@
         <div class="box" id="gsuite_reports_link">G Suite</div>
         <div class="box" id="network_reports_link">Network Telemetry</div>
         <div class="box" id="paf_reports_link">Palo Alto Firewall</div>
+        <div class="box" id="sophos_firewall_link">Sophos Firewall</div>
         <div class="box" id="vpn_reports_link">VPN</div>
         <div class="box" id="sophos_reports_link">Sophos</div>
         <div class="box" id="windowsdef_reports_link">Windows Defender</div>

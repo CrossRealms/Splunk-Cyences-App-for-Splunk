@@ -13,6 +13,7 @@
     </collection>
     <view name="cs_network_reports" />
     <view name="cs_paloalto_firewall_reports" />
+    <view name="cs_sophos_firewall" />
     <view name="cs_vpn_reports" />
     <collection label="Antivirus">
       <view name="cs_sophos_reports" />

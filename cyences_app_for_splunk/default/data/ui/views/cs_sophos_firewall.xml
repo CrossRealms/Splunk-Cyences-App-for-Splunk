@@ -1,0 +1,100 @@
+<form version="1.1" theme="dark">
+  <label>Sophos Firewall</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Data Check</title>
+      <table>
+        <search>
+          <query>`cs_sophos_firewall` sourcetype="sophos:xg:firewall" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos_firewall` sourcetype=\"sophos:xg:firewall\""
+| append [search `cs_sophos_firewall` sourcetype="sophos:xg:heartbeat" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos_firewall` sourcetype=\"sophos:xg:heartbeat\""]
+| append [search `cs_sophos_firewall` sourcetype="sophos:xg:system_health" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos_firewall` sourcetype=\"sophos:xg:system_health\""]
+| append [search `cs_sophos_firewall` sourcetype="sophos:xg:atp" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos_firewall` sourcetype=\"sophos:xg:atp\""]
+| append [search `cs_sophos_firewall` sourcetype="sophos:xg:idp" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos_firewall` sourcetype=\"sophos:xg:idp\""]
+| table label, data</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>List of Firewall Devices</title>
+      <table>
+        <search>
+          <query>`cs_sophos_firewall` sourcetype IN ("sophos:xg:heartbeat", "sophos:xg:system_health") 
+| stats count as Event_Count by host, device_name, device_model, device_serial_id 
+| table host device_name device_model device_serial_id</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>ATP &amp; IPS Events</title>
+      <input type="dropdown" token="tkn_sourcetype">
+        <label>Type</label>
+        <choice value="sourcetype=&quot;sophos:xg:atp&quot; OR sourcetype=&quot;sophos:xg:idp&quot;">All</choice>
+        <choice value="sourcetype=&quot;sophos:xg:atp&quot;">Advanced Threat Protection</choice>
+        <choice value="sourcetype=&quot;sophos:xg:idp&quot;">Intrusion Prevention System</choice>
+        <default>sourcetype="sophos:xg:atp" OR sourcetype="sophos:xg:idp"</default>
+        <initialValue>sourcetype="sophos:xg:atp" OR sourcetype="sophos:xg:idp"</initialValue>
+      </input>
+      <table>
+        <search>
+          <progress>
+            <condition match="'job.resultCount' &gt; 0">
+              <set token="atp_ips_events_show">true</set>
+            </condition>
+            <condition>
+              <unset token="atp_ips_events_show"></unset>
+            </condition>
+          </progress>
+          <query>`cs_sophos_firewall` $tkn_sourcetype$ 
+| fillnull value="Unknown" user_name 
+| fillnull value="-" malware, message, classification 
+| stats count, latest(timestamp) as "last_seen", values(src_country) as src_country by src_ip, user_name, log_subtype, log_type, malware, classification, message 
+| rename log_subtype as action, log_type as type 
+| sort -count</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>System Events</title>
+      <table>
+        <search>
+          <query>`cs_sophos_firewall` sourcetype=sophos:xg:event log_component=GUI 
+| table _time src_ip user_name severity message status</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

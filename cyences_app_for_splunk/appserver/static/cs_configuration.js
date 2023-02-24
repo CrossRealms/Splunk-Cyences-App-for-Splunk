@@ -26,6 +26,7 @@ require([
         { macro_name: 'cs_sysmon', input_id: 'macro_data_sysmon', button_id: 'macro_data_sysmon_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_fortigate', input_id: 'macro_data_fortigate', button_id: 'macro_data_fortigate_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_palo', input_id: 'macro_data_palo', button_id: 'macro_data_palo_button', msg_id: 'macro_data_msg'},
+        { macro_name: 'cs_sophos_firewall', input_id: 'macro_data_sophos_firewall', button_id: 'macro_data_sophos_firewall_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_vpn_indexes', input_id: 'macro_data_vpn', button_id: 'macro_data_vpn_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_authentication_indexes', input_id: 'macro_data_authentication', button_id: 'macro_data_authentication_button', msg_id: 'macro_data_msg'},
         { macro_name: 'cs_lansweeper', input_id: 'macro_data_lansweeper', button_id: 'macro_data_lansweeper_button', msg_id: 'macro_data_msg'},
