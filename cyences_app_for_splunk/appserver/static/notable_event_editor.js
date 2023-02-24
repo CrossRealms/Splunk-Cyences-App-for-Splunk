@@ -28,7 +28,8 @@ require([
     Select
 ) {
 
-    let NOTABLE_EVENT_TABLE_SEARCH_ID = 'recent_alerts';
+    const NOTABLE_EVENT_TABLE_SEARCH_IDS = ['recent_alerts'];
+    const NOTABLE_EVENT_TABLE_IDS = 'notable_events_tbl';
     let AVAILABLE_USERS = [];   // TODO - need to fill this list
     let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
 
@@ -37,31 +38,37 @@ require([
 
 
     function fillAllNotableEventsVariable(){
-        let search_recent_alerts = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
-        let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
-        search_recent_alerts_results.on("data", function () {
-            // Add layer with bulk edit links
-            //console.log("search_recent_alerts", search_recent_alerts.data("results"),search_recent_alerts_results.data());
-            if (search_recent_alerts_results.data() !== undefined) {
-                all_notable_events = _.map(search_recent_alerts_results.data().rows, function (e) { return e[0]; });
-                /* TODO - temporarily commented
-                $("#bulk_edit_container").remove();
-                $("#panel2-fieldset").after($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
-                var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
-                $("#bulk_edit_container").html(links);
-                $("#bulk_edit_container").show();
-                */
-            } else {
-                console.log("no recent alerts found for:", search_recent_alerts.data("results").cid)
-            }
+        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
+            let search_recent_alerts = mvc.Components.get(searchId);
+            let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
+            search_recent_alerts_results.on("data", function () {
+                // Add layer with bulk edit links
+                //console.log("search_recent_alerts", search_recent_alerts.data("results"),search_recent_alerts_results.data());
+                if (search_recent_alerts_results.data() !== undefined) {
+                    all_notable_events = _.map(search_recent_alerts_results.data().rows, function (e) { return e[0]; });
+                    /* TODO - temporarily commented
+                    $("#bulk_edit_container").remove();
+                    $("#panel2-fieldset").after($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
+                    var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
+                    $("#bulk_edit_container").html(links);
+                    $("#bulk_edit_container").show();
+                    */
+                } else {
+                    console.log("no recent alerts found for:", search_recent_alerts.data("results").cid)
+                }
+            });
         });
     }
 
 
     function restartNotableEventSearch(){
-        mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID).startSearch();
-
-        // TODO - check fillAllNotableEventsVariable()
+        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
+            let searchManager = mvc.Components.get(searchId);
+            if(searchManager){
+                searchManager.startSearch();
+                fillAllNotableEventsVariable();
+            }
+        });
     }
 
 
@@ -208,7 +215,7 @@ require([
             $('#status').append($('<option></option>').attr("selected", "selected").val('(unchanged)').html('(unchanged)'));
         }
 
-        _.each(statues, function (val, text) {
+        _.each(statuses, function (val, text) {
             if (val['status'] == status) {
                 $('#status').append($('<option></option>').attr("selected", "selected").val(val['status']).html(val['status_description']))
             } else {
@@ -351,7 +358,7 @@ require([
 
 
 
-    let IconRenderer = TableView.BaseCellRenderer.extend({
+    let CyencesNotableEventIconRenderer = TableView.BaseCellRenderer.extend({
         canRender: function (cell) {
             // Only use the cell renderer for the specific field
             return (cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_assignee" || cell.field === "notable_event_quick_assign_to_me");
@@ -380,7 +387,7 @@ require([
                     $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
                 });
 
-            else {
+            } else {
                 // inline update related fields
                 if (cell.field == "notable_event_edit") {
                     var icon = 'list';
@@ -407,4 +414,19 @@ require([
             }
         }
     });
+
+
+    _.each(NOTABLE_EVENT_TABLE_IDS, function(){
+        let notableEventsTable = mvc.Components.get(tableId);
+        if(notableEventsTable){
+            notableEventsTable.getVisualization( function ( tableView ) {
+                // Add custom cell renderer
+                tableView.table.addCellRenderer(new CyencesNotableEventIconRenderer());
+                tableView.table.render();
+            });
+        }
+    });
+
+    console.log("Notable Event Editor handler script loaded.")
+
 });
