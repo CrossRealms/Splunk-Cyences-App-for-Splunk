@@ -1,0 +1,29 @@
+.notable_event_selector {
+    padding-top: 0px;
+    margin: 0px !important;
+}
+
+.table_inline_icon .btn-pill {
+    border-radius: 0;
+    padding: 0 4px;
+    font-size: 15px
+}
+
+.bulk_edit_container {
+    font-size: 12px;
+    /* background-color: #e2e6eb; */
+    display: none;
+    padding-left: 5px;
+    color: #3c444d
+}
+
+.bulk_edit_container:after {
+    clear: both;
+    display: table;
+    content: "";
+}
+
+.bulk_edit_incidents {
+    padding-top: 0px;
+    margin: 0px !important;
+}
