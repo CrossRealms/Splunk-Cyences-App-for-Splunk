@@ -125,27 +125,26 @@ require([
 
     function handlerNotableEventEdit(handlerObj, data){
         console.log("notable_event_edit handler.");
+        let bulk, nr_notable_events, notable_event_id, notable_event_ids_string, assignee, status, modal_id, modal_title;
         if (data.notable_event_ids != undefined) {
             console.log("Bulk edit call");
-            var bulk = true;
-            var nr_notable_events = data.notable_event_ids.length;
-            var notable_event_id = data.notable_event_ids.join(', <br />');
-            var notable_event_ids_string = data.notable_event_ids.join(':');
-            var assignee = '(unchanged)';
-            var status = '(unchanged)';
-            var group_id = 'unchanged';
-            var modal_title = "Notable Events";
-            var modal_id = "notable_event_ids";
+            bulk = true;
+            nr_notable_events = data.notable_event_ids.length;
+            notable_event_id = data.notable_event_ids.join(', <br />');
+            notable_event_ids_string = data.notable_event_ids.join(':');
+            assignee = '(unchanged)';
+            status = '(unchanged)';
+            modal_title = "Notable Events";
+            modal_id = "notable_event_ids";
         } else {
-            var bulk = false;
-            var nr_notable_events = 1;
-            var notable_event_id = $(this).parent().find("td.notable_event_id").get(0).textContent;
-            var notable_event_ids_string = notable_event_id;
-            var assignee = $(this).parent().find("td.assignee").get(0).textContent;
-            var status = $(this).parent().find("td.status").get(0).textContent;
-            var group_id = $(this).parent().find("td.group_id").get(0).textContent;
-            var modal_title = "Notable Event";
-            var modal_id = "notable_event_id";
+            bulk = false;
+            nr_notable_events = 1;
+            notable_event_id = $(this).parent().find("td.notable_event_id").get(0).textContent;
+            notable_event_ids_string = notable_event_id;
+            assignee = $(this).parent().find("td.assignee").get(0).textContent;
+            status = $(this).parent().find("td.status").get(0).textContent;
+            modal_title = "Notable Event";
+            modal_id = "notable_event_id";
         }
         var status_ready = false;
         var assignee_ready = false;
