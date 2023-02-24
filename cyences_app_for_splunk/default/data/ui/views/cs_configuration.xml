@@ -226,6 +226,15 @@
             </th>
           </tr>
           <tr>
+            <th style="text-align:left">Sophos Firewall Data</th>
+            <th style="text-align:left">
+              <input type="text" id="macro_data_sophos_firewall"/>
+            </th>
+            <th style="text-align:left">
+              <button id="macro_data_sophos_firewall_button">Update</button>
+            </th>
+          </tr>
+          <tr>
             <th style="text-align:left">VPN Data (indexes)</th>
             <th style="text-align:left">
               <input type="text" id="macro_data_vpn"/>
