@@ -1,11 +1,12 @@
 
 import json
 import time
+from datetime import datetime
 import urllib.parse
 import cs_utils
 import splunk.rest as rest
 
-KV_STORE_COLLECTION_NAME = 'notable_event_collection'
+KV_STORE_COLLECTION_NAME = 'cyences_notable_event_collection'
 KV_STORE_COLLECTION_ROOT_URL = '/servicesNS/nobody/{}/storage/collections/data/{}'.format(
     cs_utils.APP_NAME, KV_STORE_COLLECTION_NAME)
 
@@ -39,11 +40,15 @@ class NotableEventLookupHandler:
 
         self.logger.debug("serverResponse: {}".format(serverResponse))
         self.logger.debug("serverContent: {}".format(serverContent.decode('utf-8')))
+
+        if serverResponse.status not in [200, 201]:
+            return None
+
         try:
             returnData = json.loads(serverContent.decode('utf-8'))
         except:
-            self.logger.info("An error occurred or no data was returned from the server query.")
-            returnData = []
+            self.logger.exception("An error occurred or no data was returned from the server query.")
+            return None
 
         return returnData
 
@@ -67,10 +72,18 @@ class NotableEventLookupHandler:
         is_changed = False
         
         if not incident:
+            incident = dict()
             incident['notable_event_id'] = notable_event_id
 
             if not alert_time:
-                raise Exception("alert_time field should be present for new event.")
+                self.logger.error("alert_time field should be present for new event.")
+                return None
+
+            try:
+                alert_time = int(datetime.strptime(alert_time, "%Y-%m-%d %H:%M:%S %Z").timestamp())
+            except:
+                self.logger.exception("Unable to parse the alert_time={} - notable_event_id={}".format(alert_time, notable_event_id))
+                return None
 
             # Assign the default values if first time notable event is being processed for the lookup
             if not assignee:
@@ -89,10 +102,11 @@ class NotableEventLookupHandler:
             is_changed = True
 
         if is_changed:
-            incident['update_time'] = time.now()
+            incident['update_time'] = time.time()
             incident['user_making_change'] = self.user_making_change
-            entry = json.dumps(entry, sort_keys=True)
+            entry = json.dumps(incident, sort_keys=True)
             uri = '{}'.format(KV_STORE_COLLECTION_ROOT_URL)
-            self.make_rest_request(uri, entry)
+            return self.make_rest_request(uri, entry)
         else:
-            self.logger.debug("No change in the notable event. notable_event_id={}".format(notable_event_id))
+            self.logger.info("No change in the notable event. notable_event_id={}".format(notable_event_id))
+            return True

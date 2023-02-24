@@ -1,4 +1,3 @@
-import os
 import sys
 
 from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration, Option, validators
@@ -7,7 +6,7 @@ from notable_lookup_handler import NotableEventLookupHandler
 
 import logging
 import logger_manager
-logger = logger_manager.setup_logging('notable_event_update', logging.INFO)
+logger = logger_manager.setup_logging('notable_event_update', logging.DEBUG)
 
 
 @Configuration()
@@ -24,11 +23,14 @@ class NotableEventUpdate(GeneratingCommand):
 
             user_making_change = self._metadata.searchinfo.username
             nehlh = NotableEventLookupHandler(logger, session_key, user_making_change=user_making_change)
-            nehlh.update_entry(self.notable_event_id,
+            response = nehlh.update_entry(self.notable_event_id,
                                 alert_time=self.alert_time,
                                 assignee=self.assignee,
                                 status=self.status)
-            yield {"msg": "Notable event lookup entry updated. notable_event_id={}".format(self.notable_event_id)}
+            if response:
+                yield {"msg": "Notable event lookup entry updated. notable_event_id={}".format(self.notable_event_id)}
+            else:
+                yield {"error_msg": "Unable to create/update notable event lookup entry. notable_event_id={}".format(self.notable_event_id)}
         except Exception as e:
             logger.exception("Error in NotableEventUpdate command: {}".format(e))
             raise e
