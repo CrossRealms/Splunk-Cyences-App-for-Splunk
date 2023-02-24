@@ -54,7 +54,7 @@ require([
                     $("#bulk_edit_container").show();
                     */
                 } else {
-                    console.log("no recent alerts found for:", search_recent_alerts.data("results").cid)
+                    console.log("no recent alerts found for:", search_recent_alerts.data("results").cid);
                 }
             });
         });
@@ -78,7 +78,7 @@ require([
         let manager = new SearchManager({
             preview: false,
             autostart: false,
-            search: command,
+            search: searchQuery,
             earliest_time: '-1m',
             latest_time: 'now'
         });
@@ -91,35 +91,35 @@ require([
                 let resultData = searchManagerResults.data();
                 if (resultData && resultData.rows) {
                     // TODO - read through the output of the results and validate the custom command was successful.
-                    restartNotableEventSearch()
+                    restartNotableEventSearch();
                 }
                 else{
                     // TODO - no event responded by the custom command.
                 }
-            }
+            });
         });
 
         manager.on('search:fail', function (properties) {
-            alert("Unable to update the notable event.")
+            alert("Unable to update the notable event.");
             console.error("Unable to update the notable event.", properties);
         });
         manager.on('search:error', function (properties) {
-            alert("Unable to update the notable event.")
+            alert("Unable to update the notable event.");
             console.error("Unable to update the notable event.", properties);
         });
         manager.startSearch();
     }
 
 
-    function handlerNotableEventSelectionChange(handlerObj, ){
+    function handlerNotableEventSelectionChange(handlerObj){
         let notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
-            console.log("notable_event_id", $(handlerObj).parent().find("td.notable_event_selector").children("input").val());
-            if ($(handlerObj).parent().find("td.notable_event_selector").children("input").is(':checked')) {
-                selected_notable_events.push(notable_event_id);
-            } else {
-                selected_notable_events = _.without(selected_notable_events, notable_event_id);
-            }
-            console.log("selected_notable_events", selected_notable_events);
+        console.log("notable_event_id", $(handlerObj).parent().find("td.notable_event_selector").children("input").val());
+        if ($(handlerObj).parent().find("td.notable_event_selector").children("input").is(':checked')) {
+            selected_notable_events.push(notable_event_id);
+        } else {
+            selected_notable_events = _.without(selected_notable_events, notable_event_id);
+        }
+        console.log("selected_notable_events", selected_notable_events);
     }
 
 
@@ -199,10 +199,10 @@ require([
 
         _.each(users, function (user) {
             if (user == assignee) {
-                $('#assignee').append($('<option></option>').attr("selected", "selected").val(user).html(user))
+                $('#assignee').append($('<option></option>').attr("selected", "selected").val(user).html(user));
                 $('#assignee').select2('data', { id: user, text: user });
             } else {
-                $('#assignee').append($('<option></option>').val(user).html(user))
+                $('#assignee').append($('<option></option>').val(user).html(user));
             }
         });
         $("#assignee").prop("disabled", false);
@@ -217,9 +217,9 @@ require([
 
         _.each(statuses, function (val, text) {
             if (val['status'] == status) {
-                $('#status').append($('<option></option>').attr("selected", "selected").val(val['status']).html(val['status_description']))
+                $('#status').append($('<option></option>').attr("selected", "selected").val(val['status']).html(val['status_description']));
             } else {
-                $('#status').append($('<option></option>').val(val['status']).html(val['status_description']))
+                $('#status').append($('<option></option>').val(val['status']).html(val['status_description']));
             }
             $("#status").prop("disabled", false);
         });
@@ -247,10 +247,10 @@ require([
     function handlerNotableEventQuickAssignToMe(handlerObj){
         var notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
         var status = "assigned";
-        var comment = "Assigning for review"
+        var comment = "Assigning for review";
         var assignee = Splunk.util.getConfigValue("USERNAME");
 
-        console.log("Username: ", assignee)
+        console.log("Username: ", assignee);
         var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status, 'comment': comment };
         console.log("entry", update_entry);
 
@@ -351,7 +351,7 @@ require([
     $(document).on("click", "#bulk_edit_select_all", function (e) {
         e.preventDefault();
         $("input:checkbox[name=bulk_edit_notable_events]").prop('checked', true);
-        selected_notable_events = $("input:checkbox[name=bulk_edit_notable_events]:checked").map(function () { return $(this).val() }).get();
+        selected_notable_events = $("input:checkbox[name=bulk_edit_notable_events]:checked").map(function () { return $(this).val(); }).get();
     });
 
 
@@ -364,6 +364,7 @@ require([
             return (cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_assignee" || cell.field === "notable_event_quick_assign_to_me");
         },
         render: function ($td, cell) {
+            let icon, tooltip;
             if (cell.field == "notable_event_assignee") {
                 if (cell.value != "Unassigned") {
                     icon = 'user';
@@ -378,9 +379,9 @@ require([
             } else if (cell.field == "notable_event_selector") {
                 $td.addClass('notable_event_selector');
                 if (_.contains(selected_notable_events, cell.value)) {
-                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '" checked="checked"></input>')
+                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '" checked="checked"></input>');
                 } else {
-                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '"></input>')
+                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '"></input>');
                 }
                 $td.on("click", function (e) {
                     e.stopPropagation();
@@ -390,11 +391,11 @@ require([
             } else {
                 // inline update related fields
                 if (cell.field == "notable_event_edit") {
-                    var icon = 'list';
-                    var tooltip = "Edit Notable Events";
+                    icon = 'list';
+                    tooltip = "Edit Notable Events";
                 } else if (cell.field == "notable_event_quick_assign_to_me") {
-                    var icon = 'user';
-                    var tooltip = "Assign to me";
+                    icon = 'user';
+                    tooltip = "Assign to me";
                 }
 
                 var rendercontent = '<a class="btn-pill" data-toggle="tooltip" data-placement="top" title="<%-tooltip%>"><i class="icon-<%-icon%>"></i><span class="hide-text">Inspect</span></a>';
@@ -427,6 +428,6 @@ require([
         }
     });
 
-    console.log("Notable Event Editor handler script loaded.")
+    console.log("Notable Event Editor handler script loaded.");
 
 });
