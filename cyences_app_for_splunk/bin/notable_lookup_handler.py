@@ -97,16 +97,20 @@ class NotableEventLookupHandler:
         if assignee and incident['assignee'] != assignee:
             incident['assignee'] = assignee
             is_changed = True
-        if status:
+        if status and incident['status'] != status:
             incident['status'] = status
             is_changed = True
 
         if is_changed:
             incident['update_time'] = time.time()
             incident['user_making_change'] = self.user_making_change
+            if '_key' in incident:
+                del incident['_key']
             entry = json.dumps(incident, sort_keys=True)
             uri = '{}'.format(KV_STORE_COLLECTION_ROOT_URL)
-            return self.make_rest_request(uri, entry)
+            response = self.make_rest_request(uri, entry)
+            self.logger.info("Notable event lookup entry updated. notable_event_id={}".format(notable_event_id))
+            return response
         else:
             self.logger.info("No change in the notable event. notable_event_id={}".format(notable_event_id))
             return True
