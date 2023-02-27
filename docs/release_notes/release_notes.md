@@ -49,11 +49,8 @@ has_children: true
 ## Upgrade Guide from 3.0.0 to 3.1.0
 
 * ### Monitor Linux Groups & Users (Linux/Unix)
-    * Update TA-cyences Addon to latest version (v TODO) and enable the users.sh and groups.sh scripted inputs.
+    * Update TA-cyences Addon to latest version (v1.1.0) and enable the users.sh and groups.sh scripted inputs.
 
 
 * ### Sophos Firewall Integration
     * To onboard the Sophos Firewall data, Refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall/)
-
-
-TODO: Update TA and App version in the apps.conf files.
