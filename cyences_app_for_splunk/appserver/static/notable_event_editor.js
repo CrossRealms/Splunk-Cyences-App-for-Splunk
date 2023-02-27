@@ -33,6 +33,9 @@ require([
     let AVAILABLE_USERS = [];   // TODO - need to fill this list
     let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
 
+    const ASSIGNEE_COLUMN_NAME = 'Assignee';
+    const STATUS_COLUMN_NAME = 'Status';
+
     let selected_notable_events = [];
     let all_notable_events = [];
 
@@ -141,8 +144,8 @@ require([
             nr_notable_events = 1;
             notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
             notable_event_ids_string = notable_event_id;
-            assignee = $(handlerObj).parent().find("td.assignee").get(0).textContent;
-            status = $(handlerObj).parent().find("td.status").get(0).textContent;
+            assignee = $(handlerObj).parent().find(`td.${ASSIGNEE_COLUMN_NAME}`).get(0).textContent;
+            status = $(handlerObj).parent().find(`td.${STATUS_COLUMN_NAME}`).get(0).textContent;
             modal_title = "Notable Event";
             modal_id = "notable_event_id";
         }
@@ -361,16 +364,17 @@ require([
         canRender: function (cell) {
             // Only use the cell renderer for the specific field
             return (cell.field === "notable_event_id" || 
-                 cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_assignee" || cell.field === "notable_event_quick_assign_to_me");
+                cell.field === ASSIGNEE_COLUMN_NAME || cell.field === STATUS_COLUMN_NAME || 
+                cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_quick_assign_to_me");
         },
         render: function ($td, cell) {
             let icon, tooltip;
-            if(cell.field == "notable_event_id"){
-                // Add class to retrieve the value of notable_event_id
+            if(cell.field == "notable_event_id" || cell.field == STATUS_COLUMN_NAME){
+                // Add class to retrieve the value of it later by referencing parent <tr>
                 $td.addClass(cell.field).html(cell.value);
 
             // Cell Icon Updates
-            } else if (cell.field == "notable_event_assignee") {
+            } else if (cell.field == ASSIGNEE_COLUMN_NAME) {
                 if (cell.value != "Unassigned") {
                     icon = 'user';
                     $td.addClass(cell.field).addClass('icon-inline').html(_.template('<i class="icon-<%-icon%>" style="padding-right: 2px"></i><%- text %>', {
