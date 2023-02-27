@@ -42,6 +42,9 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.1.0 (March 2023)
+* Added users.sh and groups.sh scripted inputs.
+
 Version 1.0.2 (October 2021)
 * Updated shell script to cover other files under sudoers.d directory to check for sudo access.
 
