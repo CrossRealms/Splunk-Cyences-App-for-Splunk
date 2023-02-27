@@ -237,6 +237,10 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Outbound Traffic to Blocked IPs
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
+* Sophos Firewall Dashboard panels:
+    * ATP & IPS Events
+    * List of Firewall Devices
+    * System Events
 
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.

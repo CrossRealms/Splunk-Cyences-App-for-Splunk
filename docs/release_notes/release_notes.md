@@ -9,14 +9,18 @@ has_children: true
 # Release Notes
 
 
-## Version 3.0.0 (January 2023)
+## Version 3.1.0 (March 2023)
 
-## Monitor Linux Groups & Users (Linux/Unix)
-    * Added savedsearch and dashobard panels to track the group and user changes for the Linux environment.
-    TODO: Need to update TA-cyences Apps and enable new inputs.
-    TODO: Update Dashboards page with list of new panels.
+* ### Monitor Linux Groups & Users (Linux/Unix)
+    * Added savedsearch and dashboard panels to track the group and user changes for the Linux environment.
 
-## Inbound Vulnerable Traffic Alerts
+* ### Sophos Firewall Integration
+    * Mapped Sophos Firewall Traffic data with the Network_Traffic Model.
+    * Added new Sophos Firewall dashboard
+    * TODO: screenshot
+    * To onboard the Sophos Firewall data, Refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall/)
+
+* ### Inbound Vulnerable Traffic Alerts
     * Added new "Network Compromise - Inbound Vulnerable Traffic" to alerts the incoming traffic on the vulnerable port.
 
 * ### Enhancements
@@ -42,4 +46,14 @@ has_children: true
 
     * Fixed the Windows - Hosts Missing Update alert to handle hostname case sensitivity issue.
 
-## Upgrade Guide from 2.3.0 to 3.0.0
+## Upgrade Guide from 3.0.0 to 3.1.0
+
+* ### Monitor Linux Groups & Users (Linux/Unix)
+    * Update TA-cyences Addon to latest version (v TODO) and enable the users.sh and groups.sh scripted inputs.
+
+
+* ### Sophos Firewall Integration
+    * To onboard the Sophos Firewall data, Refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall/)
+
+
+TODO: Update TA and App version in the apps.conf files.
