@@ -1,4 +1,4 @@
-<form theme="dark" script="cs_forensics.js" version="1.1">
+<form theme="dark" script="cs_forensics.js,notable_event_editor.js" stylesheet="notable_event_editor.css" version="1.1">
   <label>Forensics</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
@@ -36,7 +36,7 @@
         <valueSuffix>"</valueSuffix>
         <delimiter>,</delimiter>
       </input>
-      <table>
+      <table id="forensics_notable_events_tbl">
         <search id="all_results">
           <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
@@ -46,8 +46,12 @@
 | foreach X_*_NEW [ eval &lt;&lt;MATCHSTR&gt;&gt;=&lt;&lt;FIELD&gt;&gt; ]
 | fields - X_*_NEW 
 | rename orig_* as * 
-| `cs_human_readable_time_format(_time, alert_time)` 
-| table alert_time, event_tim*, cyences_severity, *
+| `cs_human_readable_time_format(_time, alert_time)`
+| join notable_event_id type=left [| inputlookup cyences_notable_event | dedup notable_event_id sortby -update_time]
+| fillnull notable_event_assignee value="Unassigned"
+| fillnull notable_event_status value="Untriaged"
+| table notable_event_selector, notable_event_edit, notable_event_quick_assign_to_me, notable_event_id, notable_event_assignee, notable_event_status, alert_time, event_tim*, cyences_severity, *
+| rename notable_event_assignee as Assignee, notable_event_status as Status
 | fieldformat cyences_severity=case(cyences_severity==5, "critical", cyences_severity==4, "high", cyences_severity==3, "medium", cyences_severity==2, "low", cyences_severity==1, "info")
 | sort - cyences_severity</query>
           <earliest>$timeRange.earliest$</earliest>

@@ -28,8 +28,8 @@ require([
     Select
 ) {
 
-    const NOTABLE_EVENT_TABLE_SEARCH_IDS = ['recent_alerts'];
-    const NOTABLE_EVENT_TABLE_IDS = 'notable_events_tbl';
+    const NOTABLE_EVENT_TABLE_SEARCH_IDS = ['all_results'];
+    const NOTABLE_EVENT_TABLE_IDS = ['forensics_notable_events_tbl'];
     let AVAILABLE_USERS = [];   // TODO - need to fill this list
     let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
 
@@ -139,10 +139,10 @@ require([
         } else {
             bulk = false;
             nr_notable_events = 1;
-            notable_event_id = $(this).parent().find("td.notable_event_id").get(0).textContent;
+            notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
             notable_event_ids_string = notable_event_id;
-            assignee = $(this).parent().find("td.assignee").get(0).textContent;
-            status = $(this).parent().find("td.status").get(0).textContent;
+            assignee = $(handlerObj).parent().find("td.assignee").get(0).textContent;
+            status = $(handlerObj).parent().find("td.status").get(0).textContent;
             modal_title = "Notable Event";
             modal_id = "notable_event_id";
         }
@@ -270,7 +270,7 @@ require([
             handlerNotableEventSelectionChange(this);
 
         } else if (data.action == "notable_event_edit") {
-            handlerNotableEventEdit(this);
+            handlerNotableEventEdit(this, data);
         }
         else if(data.action == "notable_event_quick_assign_to_me"){
             handlerNotableEventQuickAssignToMe(this);
@@ -360,11 +360,17 @@ require([
     let CyencesNotableEventIconRenderer = TableView.BaseCellRenderer.extend({
         canRender: function (cell) {
             // Only use the cell renderer for the specific field
-            return (cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_assignee" || cell.field === "notable_event_quick_assign_to_me");
+            return (cell.field === "notable_event_id" || 
+                 cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_assignee" || cell.field === "notable_event_quick_assign_to_me");
         },
         render: function ($td, cell) {
             let icon, tooltip;
-            if (cell.field == "notable_event_assignee") {
+            if(cell.field == "notable_event_id"){
+                // Add class to retrieve the value of notable_event_id
+                $td.addClass(cell.field).html(cell.value);
+
+            // Cell Icon Updates
+            } else if (cell.field == "notable_event_assignee") {
                 if (cell.value != "Unassigned") {
                     icon = 'user';
                     $td.addClass(cell.field).addClass('icon-inline').html(_.template('<i class="icon-<%-icon%>" style="padding-right: 2px"></i><%- text %>', {
@@ -416,7 +422,7 @@ require([
     });
 
 
-    _.each(NOTABLE_EVENT_TABLE_IDS, function(){
+    _.each(NOTABLE_EVENT_TABLE_IDS, function(tableId){
         let notableEventsTable = mvc.Components.get(tableId);
         if(notableEventsTable){
             notableEventsTable.getVisualization( function ( tableView ) {
