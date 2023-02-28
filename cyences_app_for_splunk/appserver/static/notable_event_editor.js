@@ -50,18 +50,18 @@ require([
             let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
             search_recent_alerts_results.on("data", function () {
                 // Add layer with bulk edit links
-                //console.log("search_recent_alerts", search_recent_alerts.data("results"),search_recent_alerts_results.data());
                 if (search_recent_alerts_results.data() !== undefined) {
                     all_notable_events = _.map(search_recent_alerts_results.data().rows, function (e) { return e[0]; });
-                    /* TODO - temporarily commented
                     $("#bulk_edit_container").remove();
-                    $("#panel2-fieldset").after($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
-                    var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
-                    $("#bulk_edit_container").html(links);
+                    _.each(NOTABLE_EVENT_TABLE_IDS, function (tableId){
+                        // $("#panel2-fieldset").after($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
+                        $(`#${tableId}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
+                        var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
+                        $("#bulk_edit_container").html(links);
+                    });
                     $("#bulk_edit_container").show();
-                    */
                 } else {
-                    console.log("no recent alerts found for:", search_recent_alerts.data("results").cid);
+                    console.log("No recent alerts found for:", search_recent_alerts.data("results").cid);
                 }
             });
         });
@@ -73,10 +73,23 @@ require([
             let searchManager = mvc.Components.get(searchId);
             if(searchManager){
                 searchManager.startSearch();
-                fillAllNotableEventsVariable();
+                // fillAllNotableEventsVariable();   // No need as it's already registered with search on done action
             }
         });
     }
+
+    function updateOnNotableEventSearchCompleted(){
+        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
+            let searchManager = mvc.Components.get(searchId);
+            if(searchManager){
+                searchManager.on('search:done', function (properties) {
+                    console.log("Notable event main table search completed.", properties);
+                    fillAllNotableEventsVariable();
+                });
+            }
+        });
+    }
+    updateOnNotableEventSearchCompleted();  // attach the search on action with main notable event search
 
 
     function runNotableEventUpdaterSearch(){
@@ -319,7 +332,7 @@ require([
             mvc.Components.get("base_single_search").startSearch();
             $('#edit_panel').modal('hide');
             $('#edit_panel').remove();
-            $("input:checkbox[name=bulk_edit_notable_events]").prop('checked', false);
+            $("input:checkbox[name=notable_event_selector]").prop('checked', false);
             selected_notable_events = [];
         }, "text");
 
@@ -350,14 +363,14 @@ require([
 
     $(document).on("click", "#bulk_edit_clear", function (e) {
         e.preventDefault();
-        $("input:checkbox[name=bulk_edit_notable_events]").prop('checked', false);
+        $("input:checkbox[name=notable_event_selector]").prop('checked', false);
         selected_notable_events = [];
     });
 
     $(document).on("click", "#bulk_edit_select_all", function (e) {
         e.preventDefault();
-        $("input:checkbox[name=bulk_edit_notable_events]").prop('checked', true);
-        selected_notable_events = $("input:checkbox[name=bulk_edit_notable_events]:checked").map(function () { return $(this).val(); }).get();
+        $("input:checkbox[name=notable_event_selector]").prop('checked', true);
+        selected_notable_events = all_notable_events;
     });
 
 
@@ -445,7 +458,12 @@ require([
         },
         render: function ($td, cell) {
             // Add class to retrieve the value of it later by referencing parent <tr>
-            $td.addClass(cell.field).html(cell.value);
+            if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
+                $td.addClass(cell.field).html(cell.value);
+            }
+            else {
+                $td.addClass(cell.field).html("-");
+            }
         }
     });
 
