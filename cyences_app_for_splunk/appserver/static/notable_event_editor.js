@@ -365,26 +365,14 @@ require([
     let CyencesNotableEventIconRenderer = TableView.BaseCellRenderer.extend({
         canRender: function (cell) {
             // Only use the cell renderer for the specific field
-            return (cell.field === "notable_event_id" || 
-                cell.field === ASSIGNEE_COLUMN_NAME || cell.field === STATUS_COLUMN_NAME || 
+            return (cell.field === ASSIGNEE_COLUMN_NAME || 
                 cell.field === "notable_event_selector" || cell.field === "notable_event_edit" || cell.field === "notable_event_quick_assign_to_me");
         },
         render: function ($td, cell) {
             let icon, tooltip;
 
             // This is for handling upgrade scenario as after upgrade old notable events will not have notable_event_id, which is not editable. (value has NOTABLE_EVENT_EMPTY_VALUE set from Splunk query)
-
-            if(cell.field == "notable_event_id" || cell.field == STATUS_COLUMN_NAME){
-                if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
-                // Add class to retrieve the value of it later by referencing parent <tr>
-                    $td.addClass(cell.field).html(cell.value);
-                }
-                else {
-                    $td.addClass(cell.field).html("-");
-                }
-
-            // Cell Icon Updates
-            } else if (cell.field == ASSIGNEE_COLUMN_NAME) {
+            if (cell.field == ASSIGNEE_COLUMN_NAME) {
                 if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
                     if (cell.value != "Unassigned") {
                         icon = 'user';
@@ -450,6 +438,17 @@ require([
         }
     });
 
+    let CyencesNotableEventCSSClassRenderer = TableView.BaseCellRenderer.extend({
+        canRender: function (cell) {
+            // Only use the cell renderer for the specific field
+            return (cell.field === "notable_event_id" || cell.field === ASSIGNEE_COLUMN_NAME || cell.field === STATUS_COLUMN_NAME);
+        },
+        render: function ($td, cell) {
+            // Add class to retrieve the value of it later by referencing parent <tr>
+            $td.addClass(cell.field).html(cell.value);
+        }
+    });
+
 
     _.each(NOTABLE_EVENT_TABLE_IDS, function(tableId){
         let notableEventsTable = mvc.Components.get(tableId);
@@ -457,6 +456,7 @@ require([
             notableEventsTable.getVisualization( function ( tableView ) {
                 // Add custom cell renderer
                 tableView.table.addCellRenderer(new CyencesNotableEventIconRenderer());
+                tableView.table.addCellRenderer(new CyencesNotableEventCSSClassRenderer());
                 tableView.table.render();
             });
         }
