@@ -45,6 +45,8 @@ has_children: true
     * Fixed the search query for the Linux Successful login.
 
     * Fixed the Windows - Hosts Missing Update alert to handle hostname case sensitivity issue.
+    
+    * Fixed the "Email - Hourly Increase In Emails Over Baseline" alert to handle the data ingestion delay and fixed percentage calculation logic.
 
 ## Upgrade Guide from 3.0.0 to 3.1.0
 
