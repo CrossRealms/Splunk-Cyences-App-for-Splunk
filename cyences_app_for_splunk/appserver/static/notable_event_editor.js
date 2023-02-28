@@ -30,11 +30,15 @@ require([
 
     const NOTABLE_EVENT_TABLE_SEARCH_IDS = ['all_results'];
     const NOTABLE_EVENT_TABLE_IDS = ['forensics_notable_events_tbl'];
-    let AVAILABLE_USERS = [];   // TODO - need to fill this list
-    let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
 
     const ASSIGNEE_COLUMN_NAME = 'Assignee';
     const STATUS_COLUMN_NAME = 'Status';
+
+    const NOTABLE_EVENT_EMPTY_VALUE = 'BANANABANANA';
+
+    let AVAILABLE_USERS = [];   // TODO - need to fill this list
+    let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
+
 
     let selected_notable_events = [];
     let all_notable_events = [];
@@ -358,8 +362,6 @@ require([
 
 
 
-
-
     let CyencesNotableEventIconRenderer = TableView.BaseCellRenderer.extend({
         canRender: function (cell) {
             // Only use the cell renderer for the specific field
@@ -369,58 +371,81 @@ require([
         },
         render: function ($td, cell) {
             let icon, tooltip;
+
+            // This is for handling upgrade scenario as after upgrade old notable events will not have notable_event_id, which is not editable. (value has NOTABLE_EVENT_EMPTY_VALUE set from Splunk query)
+
             if(cell.field == "notable_event_id" || cell.field == STATUS_COLUMN_NAME){
+                if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
                 // Add class to retrieve the value of it later by referencing parent <tr>
-                $td.addClass(cell.field).html(cell.value);
+                    $td.addClass(cell.field).html(cell.value);
+                }
+                else {
+                    $td.addClass(cell.field).html("-");
+                }
 
             // Cell Icon Updates
             } else if (cell.field == ASSIGNEE_COLUMN_NAME) {
-                if (cell.value != "Unassigned") {
-                    icon = 'user';
-                    $td.addClass(cell.field).addClass('icon-inline').html(_.template('<i class="icon-<%-icon%>" style="padding-right: 2px"></i><%- text %>', {
-                        icon: icon,
-                        text: cell.value
-                    }));
-                } else {
-                    $td.addClass(cell.field).html(cell.value);
+                if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
+                    if (cell.value != "Unassigned") {
+                        icon = 'user';
+                        $td.addClass(cell.field).addClass('icon-inline').html(_.template('<i class="icon-<%-icon%>" style="padding-right: 2px"></i><%- text %>', {
+                            icon: icon,
+                            text: cell.value
+                        }));
+                    } else {
+                        $td.addClass(cell.field).html(cell.value);
+                    }
+                }
+                else {
+                    $td.addClass(cell.field).html("-");
                 }
 
             } else if (cell.field == "notable_event_selector") {
-                $td.addClass('notable_event_selector');
-                if (_.contains(selected_notable_events, cell.value)) {
-                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '" checked="checked"></input>');
-                } else {
-                    $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '"></input>');
+                if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
+                    $td.addClass('notable_event_selector');
+                    if (_.contains(selected_notable_events, cell.value)) {
+                        $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '" checked="checked"></input>');
+                    } else {
+                        $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '"></input>');
+                    }
+                    $td.on("click", function (e) {
+                        e.stopPropagation();
+                        $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
+                    });
                 }
-                $td.on("click", function (e) {
-                    e.stopPropagation();
-                    $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
-                });
+                else {
+                    $td.addClass(cell.field).html("");
+                }
 
             } else {
-                // inline update related fields
-                if (cell.field == "notable_event_edit") {
-                    icon = 'list';
-                    tooltip = "Edit Notable Events";
-                } else if (cell.field == "notable_event_quick_assign_to_me") {
-                    icon = 'user';
-                    tooltip = "Assign to me";
+                if (cell.value != NOTABLE_EVENT_EMPTY_VALUE) {
+                    // inline update related fields
+                    if (cell.field == "notable_event_edit") {
+                        icon = 'pencil';
+                        tooltip = "Edit Notable Events";
+                    } else if (cell.field == "notable_event_quick_assign_to_me") {
+                        icon = 'user';
+                        tooltip = "Assign to me";
+                    }
+
+                    var rendercontent = '<a class="btn-pill" data-toggle="tooltip" data-placement="top" title="<%-tooltip%>"><i class="icon-<%-icon%>"></i><span class="hide-text">Inspect</span></a>';
+
+                    $td.addClass('table_inline_icon').html(_.template(rendercontent, {
+                        icon: icon,
+                        tooltip: tooltip
+                    }));
+
+                    $td.children('[data-toggle="tooltip"]').tooltip();
+
+                    $td.on("click", function (e) {
+                        console.log("event handler fired");
+                        e.stopPropagation();
+                        $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
+                    });
                 }
-
-                var rendercontent = '<a class="btn-pill" data-toggle="tooltip" data-placement="top" title="<%-tooltip%>"><i class="icon-<%-icon%>"></i><span class="hide-text">Inspect</span></a>';
-
-                $td.addClass('table_inline_icon').html(_.template(rendercontent, {
-                    icon: icon,
-                    tooltip: tooltip
-                }));
-
-                $td.children('[data-toggle="tooltip"]').tooltip();
-
-                $td.on("click", function (e) {
-                    console.log("event handler fired");
-                    e.stopPropagation();
-                    $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
-                });
+                else {
+                    $td.addClass(cell.field).html("");
+                }
             }
         }
     });
