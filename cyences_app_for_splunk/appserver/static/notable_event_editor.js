@@ -54,7 +54,6 @@ require([
                     all_notable_events = _.map(search_recent_alerts_results.data().rows, function (e) { return e[0]; });
                     $("#bulk_edit_container").remove();
                     _.each(NOTABLE_EVENT_TABLE_IDS, function (tableId){
-                        // $("#panel2-fieldset").after($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
                         $(`#${tableId}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
                         var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
                         $("#bulk_edit_container").html(links);
@@ -89,7 +88,7 @@ require([
             }
         });
     }
-    updateOnNotableEventSearchCompleted();  // attach the search on action with main notable event search
+    updateOnNotableEventSearchCompleted();  // attach the search on:done action with main notable event search
 
 
     function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
@@ -290,6 +289,9 @@ require([
 
     function handlerNotableEventQuickAssignToMe(handlerObj){
         var notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
+        if (notable_event_id == NOTABLE_EVENT_EMPTY_VALUE || notable_event_id == "-"){
+            console.error("Selected notable event is not valid.");
+        }
         var status = "assigned";
         var comment = "Assigning for review";
         var assignee = Splunk.util.getConfigValue("USERNAME");
@@ -335,14 +337,16 @@ require([
 
         let entries_to_update = [];
         _.each(notable_event_ids, function(nei){
-            entry = {'notable_event_id': nei, 'comment': comment}
-            if (assignee != "(unchanged)") {
-                entry.assignee = assignee;
+            if (nei != NOTABLE_EVENT_EMPTY_VALUE && nei == "-"){
+                entry = {'notable_event_id': nei, 'comment': comment}
+                if (assignee != "(unchanged)") {
+                    entry.assignee = assignee;
+                }
+                if (status != "(unchanged)") {
+                    entry.status = status;
+                }
+                entries_to_update.append(entry);
             }
-            if (status != "(unchanged)") {
-                entry.status = status;
-            }
-            entries_to_update.append(entry);
         });
 
         runNotableEventUpdaterSearch(entries_to_update, function(){
