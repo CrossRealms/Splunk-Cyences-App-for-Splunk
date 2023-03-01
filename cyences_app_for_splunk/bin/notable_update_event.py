@@ -12,11 +12,6 @@ logger = logger_manager.setup_logging('notable_event_update', logging.DEBUG)
 @Configuration(local=True)
 class NotableEventUpdate(StreamingCommand):
 
-    notable_event_id = Option(name="notable_event_id", require=True)
-    alert_time = Option(name='alert_time', require=False, default=None)
-    assignee = Option(name='assignee', require=False, default=None)
-    status = Option(name="status", require=False, default=None)
-
     def stream(self, records):
         try:
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
@@ -25,14 +20,29 @@ class NotableEventUpdate(StreamingCommand):
             nehlh = NotableEventLookupHandler(logger, session_key, user_making_change=user_making_change)
 
             for entry in records:
-                response = nehlh.update_entry(entry.notable_event_id,
-                                    alert_time=entry.alert_time,
-                                    assignee=entry.assignee,
-                                    status=entry.status)
+                logger.debug("Updating notable event KVstore entry for: {}".format(entry))
+                if 'notable_event_id' not in entry:
+                    yield {"error_msg": "notable_event_id field must exist"}
+                    continue
+
+                if 'assignee' not in entry:
+                    logger.debug("assignee field does not exist, setting up the previous value. notable_event_id={}".format(entry.notable_event_id))
+                    entry['assignee'] = None
+                if 'status' not in entry:
+                    logger.debug("status field does not exist, setting up the previous value. notable_event_id={}".format(entry.notable_event_id))
+                    entry['status'] = None
+                if 'comment' not in entry:
+                    logger.debug("comment field does not exist, setting up with the default value. notable_event_id={}".format(entry.notable_event_id))
+                    entry['comment'] = '-'
+
+                response = nehlh.update_entry(entry['notable_event_id'], 
+                                              assignee=entry['assignee'], 
+                                              status=entry['status'], 
+                                              comment=entry['comment'])
                 if response:
-                    yield {"success_msg": "Notable event lookup entry updated.", "notable_event_id": entry.notable_event_id}
+                    yield {"success_msg": "Notable event lookup entry updated.", "notable_event_id": entry['notable_event_id']}
                 else:
-                    yield {"error_msg": "Unable to create/update notable event lookup entry.", "notable_event_id": entry.notable_event_id}
+                    yield {"error_msg": "Unable to create/update notable event lookup entry.", "notable_event_id": entry['notable_event_id']}
         except Exception as e:
             logger.exception("Error in NotableEventUpdate command: {}".format(e))
             raise e

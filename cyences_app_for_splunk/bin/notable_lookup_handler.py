@@ -66,7 +66,7 @@ class NotableEventLookupHandler:
             return incidents[len(incidents)-1]
 
 
-    def update_entry(self, notable_event_id, alert_time=None, assignee=None, status=None):
+    def update_entry(self, notable_event_id, assignee=None, status=None, comment="-"):
         incident = self.get_last_notable_event_entry(notable_event_id)
 
         is_changed = False
@@ -74,36 +74,26 @@ class NotableEventLookupHandler:
         if not incident:
             incident = dict()
             incident['notable_event_id'] = notable_event_id
-
-            if not alert_time:
-                self.logger.error("alert_time field should be present for new event.")
-                return None
-
-            try:
-                alert_time = int(datetime.strptime(alert_time, "%Y-%m-%d %H:%M:%S %Z").timestamp())
-            except:
-                self.logger.exception("Unable to parse the alert_time={} - notable_event_id={}".format(alert_time, notable_event_id))
-                return None
-
-            # Assign the default values if first time notable event is being processed for the lookup
-            if not assignee:
-                incident['assignee'] = 'Unassigned'
-            if not status:
-                incident['status'] = 'Untriaged'
-
-            incident['alert_time'] = alert_time
             is_changed = True
 
-        if assignee and incident['assignee'] != assignee:
+        if assignee:
             incident['assignee'] = assignee
             is_changed = True
-        if status and incident['status'] != status:
+
+        if status:
             incident['status'] = status
             is_changed = True
+
+        # Assign the default values if first time notable event is being processed for the lookup
+        if 'assignee' not in incident:
+            incident['assignee'] = 'Unassigned'
+        if not status:
+            incident['status'] = 'Untriaged'
 
         if is_changed:
             incident['update_time'] = time.time()
             incident['user_making_change'] = self.user_making_change
+            incident['comment'] = comment
             if '_key' in incident:
                 del incident['_key']
             entry = json.dumps(incident, sort_keys=True)

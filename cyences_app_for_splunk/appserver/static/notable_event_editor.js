@@ -92,8 +92,30 @@ require([
     updateOnNotableEventSearchCompleted();  // attach the search on action with main notable event search
 
 
-    function runNotableEventUpdaterSearch(){
+    function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
         let searchQuery = '';
+        for(let i=0; i<entries_to_update.length; i++){
+            let entry = entries_to_update[i];
+            if ( i!=0 ) {
+                searchQuery += `| append [`;
+            }
+            searchQuery += `| makeresults | eval notable_event_id="${entry.notable_event_id}"`;
+            if('assignee' in entry){
+                searchQuery += `, assignee="${entry.assignee}"`;
+            }
+            if('status' in entry){
+                searchQuery += `, status="${entry.status}"`;
+            }
+            if('comment' in entry){
+                searchQuery += `, comment="${entry.comment}"`;
+            }
+            if ( i!=0 ) {
+                searchQuery += ` ]`;
+            }
+            searchQuery += "\n";
+        }
+        searchQuery += "| cyencesnotableupdateevent";
+        console.log("Search Query for notable events update: ", searchQuery);
 
         let manager = new SearchManager({
             preview: false,
@@ -106,15 +128,18 @@ require([
         manager.on('search:done', function (properties) {
             console.log("Notable event updater search completed.", properties);
 
-            let searchManagerResults = searchManager.data("results", {count: 0});
+            let searchManagerResults = manager.data("results", {count: 0});
             searchManagerResults.on('data', function () {
                 let resultData = searchManagerResults.data();
-                if (resultData && resultData.rows) {
+                if (resultData && resultData.rows && resultData.rows.length > 0) {
                     // TODO - read through the output of the results and validate the custom command was successful.
                     restartNotableEventSearch();
+                    if (callBackFunction != undefined){
+                        callBackFunction();
+                    }
                 }
                 else{
-                    // TODO - no event responded by the custom command.
+                    // No event responded by the custom command, custom command was not successful.
                 }
             });
         });
@@ -273,11 +298,8 @@ require([
         var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status, 'comment': comment };
         console.log("entry", update_entry);
 
-        // TODO - update the data appropriately
-        runNotableEventUpdaterSearch();
+        runNotableEventUpdaterSearch([update_entry]);
     }
-
-
 
 
 
@@ -311,31 +333,23 @@ require([
             return false;
         }
 
-        var update_entry = { 'notable_event_ids': notable_event_ids, 'comment': comment };
-        // 'assignee': assignee, 'urgency': urgency, 'status': status, 'group_id': group_id, comment': comment
-        if (assignee != "(unchanged)") {
-            update_entry.assignee = assignee;
-        }
-        if (status != "(unchanged)") {
-            update_entry.status = status;
-        }
+        let entries_to_update = [];
+        _.each(notable_event_ids, function(nei){
+            entry = {'notable_event_id': nei, 'comment': comment}
+            if (assignee != "(unchanged)") {
+                entry.assignee = assignee;
+            }
+            if (status != "(unchanged)") {
+                entry.status = status;
+            }
+            entries_to_update.append(entry);
+        });
 
-        var update_incident_url = splunkUtil.make_url('/splunkd/__raw/services/alert_manager/helpers');
-        var data = JSON.stringify(update_entry);
-        var post_data = {
-            action: 'update_incident',
-            incident_data: data,
-        };
-
-        $.post(update_incident_url, post_data, function (data, status) {
-            runNotableEventUpdaterSearch();
-            mvc.Components.get("base_single_search").startSearch();
+        runNotableEventUpdaterSearch(entries_to_update, function(){
             $('#edit_panel').modal('hide');
             $('#edit_panel').remove();
             $("input:checkbox[name=notable_event_selector]").prop('checked', false);
-            selected_notable_events = [];
-        }, "text");
-
+        });
     });
 
 
