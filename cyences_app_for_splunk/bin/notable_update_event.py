@@ -25,24 +25,26 @@ class NotableEventUpdate(StreamingCommand):
                     yield {"error_msg": "notable_event_id field must exist"}
                     continue
 
+                notable_event_id = entry['notable_event_id']
+
                 if 'assignee' not in entry:
-                    logger.debug("assignee field does not exist, setting up the previous value. notable_event_id={}".format(entry.notable_event_id))
+                    logger.debug("assignee field does not exist, setting up the previous value. notable_event_id={}".format(notable_event_id))
                     entry['assignee'] = None
                 if 'status' not in entry:
-                    logger.debug("status field does not exist, setting up the previous value. notable_event_id={}".format(entry.notable_event_id))
+                    logger.debug("status field does not exist, setting up the previous value. notable_event_id={}".format(notable_event_id))
                     entry['status'] = None
                 if 'comment' not in entry:
-                    logger.debug("comment field does not exist, setting up with the default value. notable_event_id={}".format(entry.notable_event_id))
+                    logger.debug("comment field does not exist, setting up with the default value. notable_event_id={}".format(notable_event_id))
                     entry['comment'] = '-'
 
-                response = nehlh.update_entry(entry['notable_event_id'], 
+                response = nehlh.update_entry(notable_event_id, 
                                               assignee=entry['assignee'], 
                                               status=entry['status'], 
                                               comment=entry['comment'])
                 if response:
-                    yield {"success_msg": "Notable event lookup entry updated.", "notable_event_id": entry['notable_event_id']}
+                    yield {"success_msg": "Notable event lookup entry updated.", "notable_event_id": notable_event_id}
                 else:
-                    yield {"error_msg": "Unable to create/update notable event lookup entry.", "notable_event_id": entry['notable_event_id']}
+                    yield {"error_msg": "Unable to create/update notable event lookup entry.", "notable_event_id": notable_event_id}
         except Exception as e:
             logger.exception("Error in NotableEventUpdate command: {}".format(e))
             raise e

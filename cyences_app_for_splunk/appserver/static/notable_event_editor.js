@@ -367,8 +367,9 @@ require([
         }
 
         let entries_to_update = [];
-        _.each(notable_event_ids, function(nei){
-            if (nei != NOTABLE_EVENT_EMPTY_VALUE && nei == "-"){
+        for(let i=0; i<notable_event_ids.length; i++){
+            let nei = notable_event_ids[i];
+            if (nei != NOTABLE_EVENT_EMPTY_VALUE && nei != "-"){
                 entry = {'notable_event_id': nei, 'comment': comment}
                 if (assignee != "(unchanged)") {
                     entry.assignee = assignee;
@@ -378,12 +379,13 @@ require([
                 }
                 entries_to_update.push(entry);
             }
-        });
+        }
 
         runNotableEventUpdaterSearch(entries_to_update, function(){
             $('#edit_panel').modal('hide');
             $('#edit_panel').remove();
             $("input:checkbox[name=notable_event_selector]").prop('checked', false);
+            selected_notable_events = [];
         });
     });
 
