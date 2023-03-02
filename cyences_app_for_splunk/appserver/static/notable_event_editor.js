@@ -36,8 +36,12 @@ require([
 
     const NOTABLE_EVENT_EMPTY_VALUE = 'BANANABANANA';
 
-    let AVAILABLE_USERS = [];   // TODO - need to fill this list
-    let AVAILABLE_STATUSES = [];   // TODO - need to fill this list
+    let AVAILABLE_USERS = [];
+    let AVAILABLE_STATUSES = [
+        {status: 'new', status_description: 'New'},
+        {status: 'assigned', status_description: 'Assigned'},
+        {status: 'in_progress', status_description: 'In Progress'},
+        {status: 'completed', status_description: 'Completed'}];
 
 
     let selected_notable_events = [];
@@ -89,6 +93,44 @@ require([
         });
     }
     updateOnNotableEventSearchCompleted();  // attach the search on:done action with main notable event search
+
+
+    function fillAvailableUserList(){
+        let searchQuery = '| inputlookup cyences_splunk_user_list.csv | table username';
+        let manager = new SearchManager({
+            preview: false,
+            autostart: false,
+            search: searchQuery,
+            earliest_time: '-1m',
+            latest_time: 'now'
+        });
+
+        manager.on('search:done', function (properties) {
+            console.log("Available user list search completed.", properties);
+
+            let searchManagerResults = manager.data("results", {count: 0});
+            searchManagerResults.on('data', function () {
+                let resultData = searchManagerResults.data();
+                if (resultData && resultData.rows) {
+                    // console.log("users: ", resultData.rows);
+                    for(let i=0; i< resultData.rows.length; i++){
+                        AVAILABLE_USERS.push(resultData.rows[i][0]);
+                    }
+                }
+            });
+        });
+
+        manager.on('search:fail', function (properties) {
+            alert("Unable to get the available user list.");
+            console.error("Unable to get the available user list.", properties);
+        });
+        manager.on('search:error', function (properties) {
+            alert("Unable to get the available user list.");
+            console.error("Unable to get the available user list.", properties);
+        });
+        manager.startSearch();
+    }
+    fillAvailableUserList();
 
 
     function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
@@ -230,15 +272,12 @@ require([
 
         // Get list of users and prepare dropdown
         $("#assignee").select2();
-        let users = AVAILABLE_USERS;
+        let users = [];
         if (bulk) {
             users.push("(unchanged)");
         }
         users.push("unassigned");
-
-        _.each(data, function (el) {
-            users.push(el.name);
-        });
+        users.extend(AVAILABLE_USERS);
 
         _.each(users, function (user) {
             if (user == assignee) {
@@ -251,14 +290,10 @@ require([
         $("#assignee").prop("disabled", false);
         assignee_ready = true;
 
-        let statuses = AVAILABLE_STATUSES;
-        if (status == "auto_assigned") { status = "assigned"; }
-
         if (bulk) {
             $('#status').append($('<option></option>').attr("selected", "selected").val('(unchanged)').html('(unchanged)'));
         }
-
-        _.each(statuses, function (val, text) {
+        _.each(AVAILABLE_STATUSES, function (val) {
             if (val['status'] == status) {
                 $('#status').append($('<option></option>').attr("selected", "selected").val(val['status']).html(val['status_description']));
             } else {
@@ -267,11 +302,7 @@ require([
             $("#status").prop("disabled", false);
         });
 
-        // Wait for assignee and status to be ready (TODO)
-        /*$.when(status_xhr, owner_xhr, incident_groups_xhr).done(function () {
-            console.log("status and owner are ready");
-            $('#modal-save').prop('disabled', false);
-        });*/
+        $('#modal-save').prop('disabled', false);
 
         $('#assignee').on("change", function () {
             console.log("change event fired on #assignee");
@@ -330,7 +361,7 @@ require([
         var status = $("#status").val();
         var comment = $("#comment").val();
 
-        if (notable_event_ids == "" || assignee == "" || urgency == "" || status == "") {
+        if (notable_event_ids == "" || assignee == "" || status == "") {
             alert("Please choose a value for all required fields!");
             return false;
         }
@@ -345,7 +376,7 @@ require([
                 if (status != "(unchanged)") {
                     entry.status = status;
                 }
-                entries_to_update.append(entry);
+                entries_to_update.push(entry);
             }
         });
 
