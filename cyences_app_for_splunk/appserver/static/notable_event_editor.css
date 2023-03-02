@@ -28,17 +28,17 @@
 
 
 /* Hidden Columns */
-#forensics_notable_events_tbl .notable_event_id,
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_id'] {
+#notable_event_main_tbl .notable_event_id,
+#notable_event_main_tbl [data\-sort\-key='notable_event_id'] {
     display:none;
 }
 
 
 /* Hide Table Headers */
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_selector'],
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_edit'],
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_assignee'],
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_quick_assign_to_me']
+#notable_event_main_tbl [data\-sort\-key='notable_event_selector'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_edit'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_assignee'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me']
 {
     min-width: 20px !important;
     max-width: 20px !important;
@@ -47,10 +47,10 @@
     margin:0px;
 }
 
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_selector'] a,
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_edit'] a,
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_assignee'] a,
-#forensics_notable_events_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] a
+#notable_event_main_tbl [data\-sort\-key='notable_event_selector'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_edit'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_assignee'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] a
 {
     /* color:transparent !important; */
     display:none;

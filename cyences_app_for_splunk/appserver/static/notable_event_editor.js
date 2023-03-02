@@ -1,35 +1,23 @@
 require([
     "splunkjs/mvc",
-    "splunkjs/mvc/utils",
-    "splunkjs/mvc/tokenutils",
     "underscore",
     "jquery",
-    'splunkjs/mvc/sharedmodels',
-    "splunkjs/mvc/simplexml",
     'splunkjs/mvc/tableview',
-    'splunkjs/mvc/chartview',
     'splunkjs/mvc/searchmanager',
     'splunk.util',
-    'util/moment',
     'select2/select2'
 ], function (
     mvc,
-    utils,
-    TokenUtils,
     _,
     $,
-    sharedModels,
-    DashboardController,
     TableView,
-    ChartView,
     SearchManager,
     splunkUtil,
-    moment,
     Select
 ) {
 
-    const NOTABLE_EVENT_TABLE_SEARCH_IDS = ['all_results'];
-    const NOTABLE_EVENT_TABLE_IDS = ['forensics_notable_events_tbl'];
+    const NOTABLE_EVENT_TABLE_SEARCH_ID = 'notable_event_main_search';
+    const NOTABLE_EVENT_TABLE_ID = 'notable_event_main_tbl';   // NOTE - CSS contains this hard-coded value.
 
     const ASSIGNEE_COLUMN_NAME = 'Assignee';
     const STATUS_COLUMN_NAME = 'Status';
@@ -49,48 +37,41 @@ require([
 
 
     function fillAllNotableEventsVariable(){
-        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
-            let search_recent_alerts = mvc.Components.get(searchId);
-            let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
-            search_recent_alerts_results.on("data", function () {
-                // Add layer with bulk edit links
-                if (search_recent_alerts_results.data() !== undefined) {
-                    all_notable_events = _.map(search_recent_alerts_results.data().rows, function (e) { return e[0]; });
-                    $("#bulk_edit_container").remove();
-                    _.each(NOTABLE_EVENT_TABLE_IDS, function (tableId){
-                        $(`#${tableId}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
-                        var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
-                        $("#bulk_edit_container").html(links);
-                    });
-                    $("#bulk_edit_container").show();
-                } else {
-                    console.log("No recent alerts found for:", search_recent_alerts.data("results").cid);
-                }
-            });
+        let search_recent_alerts = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
+        let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
+        search_recent_alerts_results.on("data", function () {
+            // Add layer with bulk edit links
+            let data = search_recent_alerts_results.data();
+            if (data !== undefined) {
+                all_notable_events = _.map(data.rows, function (e) { return e[0]; });
+                $("#bulk_edit_container").remove();
+                $(`#${NOTABLE_EVENT_TABLE_ID}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
+                var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
+                $("#bulk_edit_container").html(links);
+                $("#bulk_edit_container").show();
+            } else {
+                console.log("No recent alerts found for:", search_recent_alerts.data("results").cid);
+            }
         });
     }
 
 
     function restartNotableEventSearch(){
-        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
-            let searchManager = mvc.Components.get(searchId);
-            if(searchManager){
-                searchManager.startSearch();
-                // fillAllNotableEventsVariable();   // No need as it's already registered with search on done action
-            }
-        });
+        let searchManager = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
+        if(searchManager){
+            searchManager.startSearch();
+            // fillAllNotableEventsVariable();   // No need as it's already registered with search on done action
+        }
     }
 
     function updateOnNotableEventSearchCompleted(){
-        _.each(NOTABLE_EVENT_TABLE_SEARCH_IDS, function(searchId){
-            let searchManager = mvc.Components.get(searchId);
-            if(searchManager){
-                searchManager.on('search:done', function (properties) {
-                    console.log("Notable event main table search completed.", properties);
-                    fillAllNotableEventsVariable();
-                });
-            }
-        });
+        let searchManager = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
+        if(searchManager){
+            searchManager.on('search:done', function (properties) {
+                console.log("Notable event main table search completed.", properties);
+                fillAllNotableEventsVariable();
+            });
+        }
     }
     updateOnNotableEventSearchCompleted();  // attach the search on:done action with main notable event search
 
@@ -519,17 +500,15 @@ require([
     });
 
 
-    _.each(NOTABLE_EVENT_TABLE_IDS, function(tableId){
-        let notableEventsTable = mvc.Components.get(tableId);
-        if(notableEventsTable){
-            notableEventsTable.getVisualization( function ( tableView ) {
-                // Add custom cell renderer
-                tableView.table.addCellRenderer(new CyencesNotableEventIconRenderer());
-                tableView.table.addCellRenderer(new CyencesNotableEventCSSClassRenderer());
-                tableView.table.render();
-            });
-        }
-    });
+    let notableEventsTable = mvc.Components.get(NOTABLE_EVENT_TABLE_ID);
+    if(notableEventsTable){
+        notableEventsTable.getVisualization( function ( tableView ) {
+            // Add custom cell renderer
+            tableView.table.addCellRenderer(new CyencesNotableEventIconRenderer());
+            tableView.table.addCellRenderer(new CyencesNotableEventCSSClassRenderer());
+            tableView.table.render();
+        });
+    }
 
     console.log("Notable Event Editor handler script loaded.");
 
