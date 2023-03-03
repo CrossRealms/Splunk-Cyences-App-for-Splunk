@@ -687,12 +687,12 @@
         <p id="macro_email_msg"/>
         <table style="width:80%">
           <tr>
-            <th style="text-align:left">cs_email_increase_over_baseline_limit_in_percentage</th>
+            <th style="text-align:left">cs_email_increase_over_baseline_limit</th>
             <th style="text-align:left">
-              <input type="text" id="macro_cs_email_increase_over_baseline_limit_in_percentage"/>
+              <input type="text" id="macro_cs_email_increase_over_baseline_limit"/>
             </th>
             <th style="text-align:left">
-              <button id="macro_cs_email_increase_over_baseline_limit_in_percentage_button">Update</button>
+              <button id="macro_cs_email_increase_over_baseline_limit_button">Update</button>
             </th>
           </tr>
         </table>  
