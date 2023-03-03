@@ -37,7 +37,8 @@ require([
 
     let notableEventSearchManager = new SplunkCommonUtilities.VSearchManagerUtility(
         function(data){
-            all_notable_events = _.map(data, function (e) { return e[0]; });
+            let notableEventIdFieldNo = data.fields.indexOf("notable_event_id");
+            all_notable_events = _.map(data.rows, function (e) { return e[notableEventIdFieldNo]; });
             $("#bulk_edit_container").remove();
             $(`#${NOTABLE_EVENT_TABLE_ID}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
             var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
@@ -58,8 +59,8 @@ require([
     // Fill Available User Utility
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(results){
-            for(let i=0; i< results.length; i++){
-                AVAILABLE_USERS.push(results[i][0]);
+            for(let i=0; i< results.rows.length; i++){
+                AVAILABLE_USERS.push(results.rows[i][0]);
             }
         },
         function(searchProperties){
@@ -104,7 +105,7 @@ require([
 
             new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
-                    if (results.length > 0) {
+                    if (results.rows.length > 0) {
                         // TODO - read through the output of the results and validate the custom command was successful.
                         searchesCompleted[i] = true;
                     }

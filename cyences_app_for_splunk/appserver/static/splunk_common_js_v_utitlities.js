@@ -36,7 +36,7 @@ define([
                     let resultData = searchManagerResults.data();
                     console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
                     if (_onResultCallBack != undefined){
-                        _onResultCallBack(resultData.rows);
+                        _onResultCallBack(resultData);
                     }
                 });
             });
