@@ -98,7 +98,21 @@ define([
         }
     }
 
+    class VWaitUntil {
+        constructor(checkCondition, callBackFunction, waitMilliseconds=100){
+            function checkFlag() {
+                if (checkCondition() === false) {
+                    window.setTimeout(checkFlag, waitMilliseconds);
+                } else {
+                    callBackFunction();
+                }
+            }
+            checkFlag();
+        }
+    }
+
     return {
-        'VSearchManagerUtility': VSearchManagerUtility
+        'VSearchManagerUtility': VSearchManagerUtility,
+        'VWaitUntil': VWaitUntil
     }
 });

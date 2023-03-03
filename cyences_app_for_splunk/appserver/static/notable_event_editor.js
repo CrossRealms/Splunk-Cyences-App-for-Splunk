@@ -70,44 +70,67 @@ require([
 
 
     function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
-        let searchQuery = '';
-        for(let i=0; i<entries_to_update.length; i++){
-            let entry = entries_to_update[i];
-            if ( i!=0 ) {
-                searchQuery += `| append [`;
-            }
-            searchQuery += `| makeresults | eval notable_event_id="${entry.notable_event_id}"`;
-            if('assignee' in entry){
-                searchQuery += `, assignee="${entry.assignee}"`;
-            }
-            if('status' in entry){
-                searchQuery += `, status="${entry.status}"`;
-            }
-            if('comment' in entry){
-                searchQuery += `, comment="${entry.comment}"`;
-            }
-            if ( i!=0 ) {
-                searchQuery += ` ]`;
-            }
-            searchQuery += "\n";
-        }
-        searchQuery += "| cyencesnotableupdateevent";
-        console.log("Search Query for notable events update: ", searchQuery);
+        // Splitting array into multiple queries in case bulk update contains many results, it may result into failure
+        const chunkSize = 500;
+        let searchesCompleted = {};
+        for (let i = 0; i < entries_to_update.length; i += chunkSize) {
+            const chunk = entries_to_update.slice(i, i + chunkSize);
 
-        new SplunkCommonUtilities.VSearchManagerUtility(
-            function(results){
-                if (results.length > 0) {
-                    // TODO - read through the output of the results and validate the custom command was successful.
-                    restartNotableEventSearch();
-                    if (callBackFunction != undefined){
-                        callBackFunction();
+            let searchQuery = '';
+            for(let i=0; i<chunk.length; i++){
+                let entry = chunk[i];
+                if ( i!=0 ) {
+                    searchQuery += `| append [`;
+                }
+                searchQuery += `| makeresults | eval notable_event_id="${entry.notable_event_id}"`;
+                if('assignee' in entry){
+                    searchQuery += `, assignee="${entry.assignee}"`;
+                }
+                if('status' in entry){
+                    searchQuery += `, status="${entry.status}"`;
+                }
+                if('comment' in entry){
+                    searchQuery += `, comment="${entry.comment}"`;
+                }
+                if ( i!=0 ) {
+                    searchQuery += ` ]`;
+                }
+                searchQuery += "\n";
+            }
+            searchQuery += "| cyencesnotableupdateevent";
+            console.log("Search Query for notable events update: ", searchQuery);
+
+            searchesCompleted[i] = false;
+
+            new SplunkCommonUtilities.VSearchManagerUtility(
+                function(results){
+                    if (results.length > 0) {
+                        // TODO - read through the output of the results and validate the custom command was successful.
+                        searchesCompleted[i] = true;
+                    }
+                },
+                function(errorProperties){
+                    alert("Unable to update the notable event.");
+                }
+            ).searchByQuery(searchQuery, '-1m', 'now');
+        }
+
+        new SplunkCommonUtilities.VWaitUntil(
+            function(){
+                for(let key in searchesCompleted){
+                    if (searchesCompleted[key] === false){
+                        return false;
                     }
                 }
+                return true;
             },
-            function(errorProperties){
-                alert("Unable to update the notable event.");
+            function(){
+                restartNotableEventSearch();
+                if(callBackFunction != undefined){
+                    callBackFunction();
+                }
             }
-        ).searchByQuery(searchQuery, '-1m', 'now');
+        )
     }
 
 
@@ -146,8 +169,6 @@ require([
             modal_title = "Notable Event";
             modal_id = "notable_event_id";
         }
-        var status_ready = false;
-        var assignee_ready = false;
 
         var edit_panel = '' +
             '<div class="modal fade modal-wide shared-alertcontrols-dialogs-editdialog in" id="edit_panel">' +
