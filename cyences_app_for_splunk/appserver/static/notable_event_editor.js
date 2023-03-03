@@ -3,17 +3,17 @@ require([
     "underscore",
     "jquery",
     'splunkjs/mvc/tableview',
-    'splunkjs/mvc/searchmanager',
     'splunk.util',
-    'select2/select2'
+    'select2/select2',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities'
 ], function (
     mvc,
     _,
     $,
     TableView,
-    SearchManager,
     splunkUtil,
-    Select
+    Select,
+    SplunkCommonUtilities
 ) {
 
     const NOTABLE_EVENT_TABLE_SEARCH_ID = 'notable_event_main_search';
@@ -31,87 +31,42 @@ require([
         {status: 'in_progress', status_description: 'In Progress'},
         {status: 'completed', status_description: 'Completed'}];
 
-
     let selected_notable_events = [];
     let all_notable_events = [];
 
 
-    function fillAllNotableEventsVariable(){
-        let search_recent_alerts = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
-        let search_recent_alerts_results = search_recent_alerts.data("results", { count: 0, output_mode: 'json_rows' });
-        search_recent_alerts_results.on("data", function () {
-            // Add layer with bulk edit links
-            let data = search_recent_alerts_results.data();
-            if (data !== undefined) {
-                all_notable_events = _.map(data.rows, function (e) { return e[0]; });
-                $("#bulk_edit_container").remove();
-                $(`#${NOTABLE_EVENT_TABLE_ID}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
-                var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
-                $("#bulk_edit_container").html(links);
-                $("#bulk_edit_container").show();
-            } else {
-                console.log("No recent alerts found for:", search_recent_alerts.data("results").cid);
-            }
-        });
-    }
-
+    let notableEventSearchManager = new SplunkCommonUtilities.VSearchManagerUtility(
+        function(data){
+            all_notable_events = _.map(data, function (e) { return e[0]; });
+            $("#bulk_edit_container").remove();
+            $(`#${NOTABLE_EVENT_TABLE_ID}`).parent().before($("<div />").attr('id', 'bulk_edit_container').addClass("bulk_edit_container").addClass('panel-element-row'));
+            var links = _.template('<a href="#" id="bulk_edit_select_all">Select All</a> | <a href="#" id="bulk_edit_selected">Edit Selected</a> | <a href="#" id="bulk_edit_all">Edit All <%-nr_notable_events%> Matching Notable Events</a> | <a href="#" id="bulk_edit_clear">Reset Selection</a>', { nr_notable_events: all_notable_events.length });
+            $("#bulk_edit_container").html(links);
+            $("#bulk_edit_container").show();
+        },
+        function(errorProperties){
+            console.log("Notable event main table search failed.");
+        }
+    );
+    notableEventSearchManager.searchById(NOTABLE_EVENT_TABLE_SEARCH_ID);
 
     function restartNotableEventSearch(){
-        let searchManager = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
-        if(searchManager){
-            searchManager.startSearch();
-            // fillAllNotableEventsVariable();   // No need as it's already registered with search on done action
-        }
+        notableEventSearchManager.startSearch();
     }
 
-    function updateOnNotableEventSearchCompleted(){
-        let searchManager = mvc.Components.get(NOTABLE_EVENT_TABLE_SEARCH_ID);
-        if(searchManager){
-            searchManager.on('search:done', function (properties) {
-                console.log("Notable event main table search completed.", properties);
-                fillAllNotableEventsVariable();
-            });
-        }
-    }
-    updateOnNotableEventSearchCompleted();  // attach the search on:done action with main notable event search
 
-
-    function fillAvailableUserList(){
-        let searchQuery = '| inputlookup cyences_splunk_user_list.csv | table username';
-        let manager = new SearchManager({
-            preview: false,
-            autostart: false,
-            search: searchQuery,
-            earliest_time: '-1m',
-            latest_time: 'now'
-        });
-
-        manager.on('search:done', function (properties) {
-            console.log("Available user list search completed.", properties);
-
-            let searchManagerResults = manager.data("results", {count: 0});
-            searchManagerResults.on('data', function () {
-                let resultData = searchManagerResults.data();
-                if (resultData && resultData.rows) {
-                    // console.log("users: ", resultData.rows);
-                    for(let i=0; i< resultData.rows.length; i++){
-                        AVAILABLE_USERS.push(resultData.rows[i][0]);
-                    }
-                }
-            });
-        });
-
-        manager.on('search:fail', function (properties) {
+    // Fill Available User Utility
+    new SplunkCommonUtilities.VSearchManagerUtility(
+        function(results){
+            for(let i=0; i< results.length; i++){
+                AVAILABLE_USERS.push(results[i][0]);
+            }
+        },
+        function(searchProperties){
             alert("Unable to get the available user list.");
-            console.error("Unable to get the available user list.", properties);
-        });
-        manager.on('search:error', function (properties) {
-            alert("Unable to get the available user list.");
-            console.error("Unable to get the available user list.", properties);
-        });
-        manager.startSearch();
-    }
-    fillAvailableUserList();
+        }).searchByQuery(
+            '| inputlookup cyences_splunk_user_list.csv | table username',
+            '-1m', 'now');
 
 
     function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
@@ -139,42 +94,20 @@ require([
         searchQuery += "| cyencesnotableupdateevent";
         console.log("Search Query for notable events update: ", searchQuery);
 
-        let manager = new SearchManager({
-            preview: false,
-            autostart: false,
-            search: searchQuery,
-            earliest_time: '-1m',
-            latest_time: 'now'
-        });
-
-        manager.on('search:done', function (properties) {
-            console.log("Notable event updater search completed.", properties);
-
-            let searchManagerResults = manager.data("results", {count: 0});
-            searchManagerResults.on('data', function () {
-                let resultData = searchManagerResults.data();
-                if (resultData && resultData.rows && resultData.rows.length > 0) {
+        new SplunkCommonUtilities.VSearchManagerUtility(
+            function(results){
+                if (results.length > 0) {
                     // TODO - read through the output of the results and validate the custom command was successful.
                     restartNotableEventSearch();
                     if (callBackFunction != undefined){
                         callBackFunction();
                     }
                 }
-                else{
-                    // No event responded by the custom command, custom command was not successful.
-                }
-            });
-        });
-
-        manager.on('search:fail', function (properties) {
-            alert("Unable to update the notable event.");
-            console.error("Unable to update the notable event.", properties);
-        });
-        manager.on('search:error', function (properties) {
-            alert("Unable to update the notable event.");
-            console.error("Unable to update the notable event.", properties);
-        });
-        manager.startSearch();
+            },
+            function(errorProperties){
+                alert("Unable to update the notable event.");
+            }
+        ).searchByQuery(searchQuery, '-1m', 'now');
     }
 
 
@@ -258,7 +191,7 @@ require([
             users.push("(unchanged)");
         }
         users.push("unassigned");
-        users.extend(AVAILABLE_USERS);
+        users.push(...AVAILABLE_USERS);
 
         _.each(users, function (user) {
             if (user == assignee) {
@@ -351,7 +284,7 @@ require([
         for(let i=0; i<notable_event_ids.length; i++){
             let nei = notable_event_ids[i];
             if (nei != NOTABLE_EVENT_EMPTY_VALUE && nei != "-"){
-                entry = {'notable_event_id': nei, 'comment': comment}
+                entry = {'notable_event_id': nei, 'comment': comment};
                 if (assignee != "(unchanged)") {
                     entry.assignee = assignee;
                 }
