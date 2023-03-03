@@ -71,7 +71,7 @@ require([
         { macro_name: 'cs_o365_failed_login_outside_country_filter', input_id: 'macro_cs_o365_failed_login_outside_country_filter', button_id: 'macro_cs_o365_failed_login_outside_country_filter_button', msg_id: 'macro_o365_msg'},
 
         /* Email */
-        { macro_name: 'cs_email_increase_over_baseline_limit_in_percentage', input_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage', button_id: 'macro_cs_email_increase_over_baseline_limit_in_percentage_button', msg_id: 'macro_email_msg'},
+        { macro_name: 'cs_email_increase_over_baseline_limit', input_id: 'macro_cs_email_increase_over_baseline_limit', button_id: 'macro_cs_email_increase_over_baseline_limit_button', msg_id: 'macro_email_msg'},
 
         /* Network */
         { macro_name: 'cs_network_traffic_map_filter', input_id: 'macro_cs_network_traffic_map_filter', button_id: 'macro_cs_network_traffic_map_filter_button', msg_id: 'macro_network_msg'},
