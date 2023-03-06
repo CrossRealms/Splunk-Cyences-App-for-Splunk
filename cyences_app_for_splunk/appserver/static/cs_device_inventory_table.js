@@ -1,11 +1,11 @@
 require([
     'jquery',
     'splunkjs/mvc/tableview',
-    'splunkjs/mvc/searchmanager',
     'splunkjs/mvc',
     'underscore',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'], 
-function($, TableView, SearchManager, mvc, _){
+function($, TableView, mvc, _, SplunkCommonUtilities){
 
     function generateInFormattedSearchString(uuidList){
         let search_uuids = "(";
@@ -55,26 +55,6 @@ function($, TableView, SearchManager, mvc, _){
     }
 
 
-    function defineAndExecuteSearch(searchQuery, executeOnSearchDone){
-        // Defining search and search manager
-        var searchManager = new SearchManager({
-            preview: true,
-            autostart: true,
-            search: searchQuery,
-            cache: false
-        });
-
-        // Processing results search manager.
-        var searchManagerResults = searchManager.data("results", {count: 0});
-        searchManagerResults.on('data', function () {
-            if (searchManagerResults.data()) {
-                executeOnSearchDone(searchManagerResults.data().rows);
-            }
-        });
-        // handle search error here
-    }
-
-
     $("button.modelclosebutton").click(function(){
         hideModel();
         selectedUUIDs = undefined;
@@ -90,19 +70,18 @@ function($, TableView, SearchManager, mvc, _){
         let restOfUUIDs = generateInFormattedSearchString(selectedUUIDs.slice(1));
 
         // Note - device_inventory_merge_logs.csv are just for logs
-        defineAndExecuteSearch(
-            `| inputlookup cs_device_inventory where uuid="${firstUUID}" | eval indextime=now() | outputlookup append=T cs_device_inventory_merge_logs.csv | fields - indextime
-            | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | outputlookup append=T device_inventory_merge_logs.csv | fields - indextime, uuid]
-            | stats max(time) as new_time, values(*) as * | rename new_time as time
-            | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
-            | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"
-            | append [| stats count | eval count="dummy results"]`,
-            function (resultRows){
+        new SplunkCommonUtilities.VSearchManagerUtility(
+            function(results){
                 // This will return no search results
                 enableModelCloseButton();
                 setModelMessage(`Devices successfully merged to device UUID:${firstUUID} - Changes reflect on the dashboard when you refresh the page.`);
                 // TODO - Re-run all searches on the dashboard (future)
-            });
+            }).searchByQuery(`| inputlookup cs_device_inventory where uuid="${firstUUID}" | eval indextime=now() | outputlookup append=T cs_device_inventory_merge_logs.csv | fields - indextime
+            | append [| inputlookup cs_device_inventory where uuid IN ${restOfUUIDs} | outputlookup append=T device_inventory_merge_logs.csv | fields - indextime, uuid]
+            | stats max(time) as new_time, values(*) as * | rename new_time as time
+            | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
+            | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"
+            | append [| stats count | eval count="dummy results"]`, '-1m', 'now');
     });
 
     /*
@@ -247,10 +226,9 @@ function($, TableView, SearchManager, mvc, _){
     var DeviceInventoryManagementExpansionRenderer = TableView.BaseRowExpansionRenderer.extend({
         initialize: function(args) {
             // initialize will run once, so we will set up a search and a chart to be reused.
-            this._searchManager = new SearchManager({
-                id: 'details-search-manager',
-                preview: false
-            });
+            this._searchManager = new SplunkCommonUtilities.VSearchManagerUtility();
+            this._searchManager.defineReusableSearch('details-search-manager');
+
             this._chartView = new TableView({
                 id: 'row_expanded_table',
                 managerid: 'details-search-manager',
@@ -276,7 +254,7 @@ function($, TableView, SearchManager, mvc, _){
             let search_uuids = generateInFormattedSearchString(uuids);
 
             //update the search with the HOST_ID that we are interested in
-            this._searchManager.set({ search: `| inputlookup cs_device_inventory where uuid IN ${search_uuids}
+            this._searchManager.executeReusableSearch(`| inputlookup cs_device_inventory where uuid IN ${search_uuids}
             | mvexpand lansweeper_id | mvexpand tenable_uuid | mvexpand qualys_id | mvexpand sophos_uuid | mvexpand windows_defender_host | mvexpand crowdstrike_userid | mvexpand kaspersky_host
             | join lansweeper_id type=left [| inputlookup cs_lansweeper_inventory | rename time as lansweeper_last_event | fields - ip, hostname, mac_address, tenable_uuid, qualys_id, sophos_uuid, crowdstrike_userid, windows_defender_host , kaspersky_host]
             | join tenable_uuid type=left [| inputlookup cs_tenable_inventory | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen | fields - ip, hostname, mac_address, qualys_id, lansweeper_id, sophos_uuid, crowdstrike_userid, windows_defender_host , kaspersky_host]
@@ -291,7 +269,7 @@ function($, TableView, SearchManager, mvc, _){
             | eval _time=strftime(time, "%F %T")
             | eval Select="CHECKBOX_THIS_".uuid
             | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_userid,kaspersky_collected_by,kaspersky_version,kaspersky_host, kaspersky_status windows_defender_host
-            | transpose 0 header_field=uuid column_name=field`});
+            | transpose 0 header_field=uuid column_name=field`);
             // $container is the jquery object where we can put out content.
             // In this case we will render our chart and add it to the $container
             $container.append(`<div><button id="device_inventory_manager_merge_button" style="

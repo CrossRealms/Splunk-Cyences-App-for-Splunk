@@ -1,9 +1,9 @@
 require([
     'jquery',
     'splunkjs/mvc',
-    'splunkjs/mvc/searchmanager',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc, SearchManager) {
+], function ($, mvc, SplunkCommonUtilities) {
 
     'use strict';
     let submittedTokens = mvc.Components.getInstance('submitted');
@@ -61,20 +61,9 @@ require([
         | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1"
         | rename action.cyences_notable_event_action.* as *
         | table title, contributing_events, system_compromised_search, system_compromised_drilldown, attacker_search, attacker_drilldown`;
-    var searchManager = new SearchManager({
-        preview: true,
-        autostart: true,
-        search: searchString,
-        cache: false
-    });
-
-
-    // Processing results search manager.
-    var searchManagerResults = searchManager.data("results", {count: 0});
-    searchManagerResults.on('data', function () {
-        if (searchManagerResults.data()) {
-            // set all the macro values in the input text field
-            $.each(searchManagerResults.data().rows, function (index, row) {
+    new SplunkCommonUtilities.VSearchManagerUtility(
+        function(results){
+            $.each(results.rows, function (index, row) {
                 let alert_name = row[0];
                 all_alerts[alert_name] = {};
 
@@ -95,9 +84,8 @@ require([
                 }
             });
             // load search queries after the alerts data is fetched
-            setSearchQueryTokens()
-        }
-    });
+            setSearchQueryTokens();
+        }).searchByQuery(searchString, '-1m', 'now');
 
 
     submittedTokens.on("change:tkn_savedsearch", setSearchQueryTokens);

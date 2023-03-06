@@ -1,9 +1,8 @@
 require([
     'jquery',
     'splunkjs/mvc',
-    'splunkjs/mvc/searchmanager',
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc, SearchManager) {
+], function ($, mvc) {
 
     // Defining model tokens
     'use strict';
@@ -120,22 +119,10 @@ require([
 
     ];
    
-    // Defining search and search manager
     var searchString = '| rest /servicesNS/-/cyences_app_for_splunk/configs/conf-macros splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | table title, definition';
-    var searchManager = new SearchManager({
-        preview: true,
-        autostart: true,
-        search: searchString,
-        cache: false
-    });
-
-
-    // Processing results search manager.
-    var searchManagerResults = searchManager.data("results", {count: 0});
-    searchManagerResults.on('data', function () {
-        if (searchManagerResults.data()) {
-            // set all the macro values in the input text field
-            $.each(searchManagerResults.data().rows, function (index, row) {
+    new SplunkCommonUtilities.VSearchManagerUtility(
+        function(results){
+            $.each(results.rows, function (index, row) {
                 let macro_name = row[0];
                 let macro_definition = row[1];
 
@@ -145,31 +132,22 @@ require([
                     }
                 });
             });
-        }
-    });
+        }).searchByQuery(searchString, '-1m', 'now');
 
 
     function updateMacroDefinition(macro_name, macro_definition, msg_location){
         let searchString = `| updatemacrodefinition macro_name="${macro_name}" macro_definition="${macro_definition}"`;
-        let sm = new SearchManager({
-            preview: true,
-            autostart: true,
-            search: searchString,
-            cache: false
-        });
-
-        // Post macro update
-        let searchManagerResults = sm.data("results");
-        searchManagerResults.on('data', function () {
-            $(msg_location).addClass('success_msg');
-            $(msg_location).removeClass('error_msg');
-            $(msg_location).text(`Macro definition for ${macro_name} has been updated.`);
-        });
-        searchManagerResults.on('error', function () {
-            $(msg_location).addClass('error_msg');
-            $(msg_location).removeClass('success_msg');
-            $(msg_location).text(`Error updating the macro definition for ${macro_name}.`);
-        });
+        new SplunkCommonUtilities.VSearchManagerUtility(
+            function(results){
+                $(msg_location).addClass('success_msg');
+                $(msg_location).removeClass('error_msg');
+                $(msg_location).text(`Macro definition for ${macro_name} has been updated.`);
+            },
+            function(errorProperties){
+                $(msg_location).addClass('error_msg');
+                $(msg_location).removeClass('success_msg');
+                $(msg_location).text(`Error updating the macro definition for ${macro_name}.`);
+            }).searchByQuery(searchString, '-1m', 'now');
     }
 
     $.each(all_macros, function(index, macro){
