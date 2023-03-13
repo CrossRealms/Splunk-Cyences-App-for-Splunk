@@ -171,21 +171,19 @@ define([
         }
     }
 
-    class VWaitUntil {
-        constructor(checkCondition, callBackFunction, waitMilliseconds=100){
-            function checkFlag() {
-                if (checkCondition() === false) {
-                    window.setTimeout(checkFlag, waitMilliseconds);
-                } else {
-                    callBackFunction();
-                }
+    function VWaitUntil(checkCondition, callBackFunction, waitMilliseconds=100) {
+        function checkFlag() {
+            if (checkCondition() === false) {
+                window.setTimeout(checkFlag, waitMilliseconds);
+            } else {
+                callBackFunction();
             }
-            checkFlag();
         }
+        checkFlag();
     }
 
 
-    function setupMultiSelectInputHandler(instance_id, allOptionValue="*") {
+    function VSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
 
         // Get multiselect
         var multi = mvc.Components.get(instance_id);
@@ -210,10 +208,10 @@ define([
         });
     }
 
-    function setupMultiSelectHandlerOnAll() {
+    function VSetupMultiSelectHandlerOnAll() {
         var all_multi_selects = document.getElementsByClassName("input-multiselect");
         for (j = 0; j < all_multi_selects.length; j++) {
-            setupMultiSelectInputHandler(all_multi_selects[j].id);
+            VSetupMultiSelectInputHandler(all_multi_selects[j].id);
         }
     }
 
