@@ -173,7 +173,7 @@ define([
         }
     }
 
-    function VWaitUntil(checkCondition, callBackFunction, waitMilliseconds=100) {
+    function vWaitUntil(checkCondition, callBackFunction, waitMilliseconds=100) {
         function checkFlag() {
             if (checkCondition() === false) {
                 window.setTimeout(checkFlag, waitMilliseconds);
@@ -185,7 +185,7 @@ define([
     }
 
 
-    function VSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
+    function vSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
 
         // Get multiselect
         var multi = mvc.Components.get(instance_id);
@@ -210,7 +210,7 @@ define([
         });
     }
 
-    function VSetupMultiSelectHandlerOnAll() {
+    function vSetupMultiSelectHandlerOnAll() {
         var all_multi_selects = document.getElementsByClassName("input-multiselect");
         for (j = 0; j < all_multi_selects.length; j++) {
             VSetupMultiSelectInputHandler(all_multi_selects[j].id);
@@ -238,8 +238,9 @@ define([
 
     return {
         'VSearchManagerUtility': VSearchManagerUtility,
-        'VWaitUntil': VWaitUntil,
-        'setupMultiSelectHandlerOnAll': setupMultiSelectHandlerOnAll,
+        'vWaitUntil': vWaitUntil,
+        'vSetupMultiSelectInputHandler': vSetupMultiSelectInputHandler,
+        'vSetupMultiSelectHandlerOnAll': vSetupMultiSelectHandlerOnAll,
         'VJSCookieManager': VJSCookieManager
     }
 });

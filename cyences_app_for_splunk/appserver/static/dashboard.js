@@ -78,5 +78,5 @@ require([
     }
 
     // Handles the multi-select option properly
-    SplunkCommonUtilities.setupMultiSelectHandlerOnAll();
+    SplunkCommonUtilities.vSetupMultiSelectHandlerOnAll();
 });
