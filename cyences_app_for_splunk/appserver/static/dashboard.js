@@ -1,7 +1,8 @@
 require([
     'jquery',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'
-], function ($) {
+], function ($, SplunkCommonUtilities) {
 
     if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_inventory_table") < 0) {
         // Do not load the context menu on the Asset Intelligence dashboard and Device Inventory Table.
@@ -75,4 +76,7 @@ require([
             }
         });
     }
+
+    // Handles the multi-select option properly
+    SplunkCommonUtilities.setupMultiSelectHandlerOnAll();
 });
