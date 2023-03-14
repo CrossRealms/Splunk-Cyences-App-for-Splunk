@@ -25,11 +25,7 @@ require([
     const NOTABLE_EVENT_EMPTY_VALUE = 'BANANABANANA';
 
     let AVAILABLE_USERS = [];
-    let AVAILABLE_STATUSES = [
-        {status: 'new', status_description: 'New'},
-        {status: 'assigned', status_description: 'Assigned'},
-        {status: 'in_progress', status_description: 'In Progress'},
-        {status: 'completed', status_description: 'Completed'}];
+    let AVAILABLE_STATUSES = ['Unassigned', 'Assigned', 'Under Investigation', 'Clean', 'Malicious'];
 
     let selected_notable_events = [];
     let all_notable_events = [];
@@ -212,7 +208,7 @@ require([
         if (bulk) {
             users.push("(unchanged)");
         }
-        users.push("unassigned");
+        users.push("Unassigned");
         users.push(...AVAILABLE_USERS);
 
         _.each(users, function (user) {
@@ -230,10 +226,10 @@ require([
             $('#status').append($('<option></option>').attr("selected", "selected").val('(unchanged)').html('(unchanged)'));
         }
         _.each(AVAILABLE_STATUSES, function (val) {
-            if (val['status'] == status) {
-                $('#status').append($('<option></option>').attr("selected", "selected").val(val['status']).html(val['status_description']));
+            if (val == status) {
+                $('#status').append($('<option></option>').attr("selected", "selected").val(val).html(val));
             } else {
-                $('#status').append($('<option></option>').val(val['status']).html(val['status_description']));
+                $('#status').append($('<option></option>').val(val).html(val));
             }
             $("#status").prop("disabled", false);
         });
@@ -242,10 +238,13 @@ require([
 
         $('#assignee').on("change", function () {
             console.log("change event fired on #assignee");
-            if ($(this).val() == "unassigned") {
-                $('#status').val('new');
-            } else {
-                $('#status').val('assigned');
+            if ($(this).val() == "Unassigned") {
+                $('#status').val('Unassigned');
+                $('#status option[value="Unassigned"]').prop('selected', true);
+            } 
+            else if ($('#status').val() == "Unassigned"){
+                $('#status').val('Assigned');
+                $('#status option[value="Assigned"]').prop('selected', true);
             }
         });
 
@@ -256,15 +255,19 @@ require([
 
     function handlerNotableEventQuickAssignToMe(handlerObj){
         var notable_event_id = $(handlerObj).parent().find("td.notable_event_id").get(0).textContent;
+        var status = $(handlerObj).parent().find(`td.${STATUS_COLUMN_NAME}`).get(0).textContent;
+
         if (notable_event_id == NOTABLE_EVENT_EMPTY_VALUE || notable_event_id == "-"){
             console.error("Selected notable event is not valid.");
         }
-        var status = "assigned";
-        var comment = "Assigning for review";
+        if (status == "Unassigned") {
+            status = "Assigned";
+        }
         var assignee = Splunk.util.getConfigValue("USERNAME");
 
         console.log("Username: ", assignee);
-        var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status, 'comment': comment };
+        var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status};
+
         console.log("entry", update_entry);
 
         runNotableEventUpdaterSearch([update_entry]);
