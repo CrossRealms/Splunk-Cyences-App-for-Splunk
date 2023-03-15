@@ -50,6 +50,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Cisco IOS
     * Fortinet FortiGate 
     * Palo Alto Networks
+    * Sophos Firewall
 
 * Ransomware
 
