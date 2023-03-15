@@ -264,9 +264,10 @@ require([
             status = "Assigned";
         }
         var assignee = Splunk.util.getConfigValue("USERNAME");
+        var comment = "Assigning for review";
 
         console.log("Username: ", assignee);
-        var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status};
+        var update_entry = { 'notable_event_id': notable_event_id, 'assignee': assignee, 'status': status, 'comment': comment};
 
         console.log("entry", update_entry);
 

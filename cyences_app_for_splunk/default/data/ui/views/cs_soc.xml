@@ -1,0 +1,171 @@
+<form theme="dark" script="notable_event_editor.js" stylesheet="notable_event_editor.css" version="1.1">
+  <label>SOC</label>
+  <search id="notable_event_main_search">
+    <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+| search cyences_severity IN $tkn_severity$
+| fields - _raw, search_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
+| rename * AS X_*_NEW 
+| foreach * [ eval newFieldName=replace("&lt;&lt;FIELD&gt;&gt;", "\s+", "_"), {newFieldName}='&lt;&lt;FIELD&gt;&gt;' ] | fields - "* *", newFieldName 
+| foreach X_*_NEW [ eval &lt;&lt;MATCHSTR&gt;&gt;=&lt;&lt;FIELD&gt;&gt; ]
+| fields - X_*_NEW 
+| rename orig_* as * 
+| `cs_human_readable_time_format(_time, alert_time)`
+| `cs_add_notable_event_editor_fields`
+| table alert_name, notable_event_id, notable_event_selector, notable_event_edit, notable_event_quick_assign_to_me, notable_event_assignee, notable_event_status, alert_time, event_tim*, cyences_severity
+| rename notable_event_assignee as Assignee, notable_event_status as Status, alert_name as Alert
+| fieldformat cyences_severity=case(cyences_severity==5, "critical", cyences_severity==4, "high", cyences_severity==3, "medium", cyences_severity==2, "low", cyences_severity==1, "info")
+| sort - cyences_severity</query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="tkn_savedsearch">
+      <label>Alert</label>
+      <fieldForLabel>title</fieldForLabel>
+      <fieldForValue>title</fieldForValue>
+      <search>
+        <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" | fields title</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <choice value="*">All</choice>
+      <default>*</default>
+    </input>
+    <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
+      <label>Severity</label>
+      <choice value="5">critical</choice>
+      <choice value="4">high</choice>
+      <choice value="3">medium</choice>
+      <choice value="2">low</choice>
+      <choice value="1">info</choice>
+      <default>5,4,3,2,1</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+    </input>
+    <input type="multiselect" token="tkn_assignee" searchWhenChanged="true">
+      <label>Assignee</label>
+      <choice value="*">All</choice>
+      <fieldForLabel>username</fieldForLabel>
+      <fieldForValue>username</fieldForValue>
+      <search>
+        <query>| inputlookup cyences_splunk_user_list.csv | table username</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+      <default>*</default>
+    </input>
+    <input type="multiselect" token="tkn_status" searchWhenChanged="true">
+      <label>Status</label>
+      <choice value="Unassigned">Unassigned</choice>
+      <choice value="Assigned">Assigned</choice>
+      <choice value="Under Investigation">Under Investigation</choice>
+      <choice value="Clean">Clean</choice>
+      <choice value="Malicious">Malicious</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+      <default>Unassigned,Assigned,Under Investigation</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Notable Events</title>
+      <table id="notable_event_main_tbl">
+        <search base="notable_event_main_search">
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)</query>
+        </search>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="cyences_severity">
+          <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
+        </format>
+        <drilldown>
+          <set token="tkn_notable_event_id">$row.notable_event_id$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Notable Event Changes - $tkn_notable_event_id$</title>
+      <table>
+        <search>
+          <query>| inputlookup cyences_notable_event where notable_event_id="$tkn_notable_event_id$"
+| sort -update_time
+| `cs_human_readable_time_format(update_time)`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Severity</title>
+        <search base="notable_event_main_search">
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+| stats count by cyences_severity</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Alert</title>
+        <search base="notable_event_main_search">
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+| stats count by Alert</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Assignee</title>
+        <search base="notable_event_main_search">
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+| stats count by Assignee</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Status</title>
+        <search base="notable_event_main_search">
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+| stats count by Status</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+</form>

@@ -3,10 +3,13 @@
   <init>
     <set token="tkn_not_triggered_alert_filter_1"> problems!=0</set>
     <set token="tkn_not_triggered_alert_filter_2"> | where Count &gt; 0</set>
+    <set token="tkn_status_drilldown">form.tkn_status=Unassigned&amp;form.tkn_status=Assigned&amp;form.tkn_status=Under Investigation</set>
   </init>
   <search id="basesearch">
     <query>`cs_cyences_index` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | search cyences_severity IN $tkn_severity$
+| `cs_add_notable_event_editor_fields`
+| search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
 | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity
@@ -33,36 +36,55 @@
         <latest>now</latest>
       </default>
     </input>
-      <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
-        <label>Severity</label>
-        <choice value="5">critical</choice>
-        <choice value="4">high</choice>
-        <choice value="3">medium</choice>
-        <choice value="2">low</choice>
-        <choice value="1">info</choice>
-        <default>5,4,3,2,1</default>
-        <prefix>(</prefix>
-        <suffix>)</suffix>
-        <valuePrefix>"</valuePrefix>
-        <valueSuffix>"</valueSuffix>
-        <delimiter>,</delimiter>
-      </input>
-      <input type="checkbox" token="tkn_not_triggered_alert_checkbox" searchWhenChanged="true">
-        <label></label>
-        <choice value="1">Hide Not Triggered Alerts</choice>
-        <delimiter> </delimiter>
-        <initialValue>1</initialValue>
-        <change>
-          <condition match="$tkn_not_triggered_alert_checkbox$==1">
-            <set token="tkn_not_triggered_alert_filter_1"> problems!=0</set>
-            <set token="tkn_not_triggered_alert_filter_2"> | where Count > 0</set>
-          </condition>
-          <condition>
-            <set token="tkn_not_triggered_alert_filter_1"></set>
-            <set token="tkn_not_triggered_alert_filter_2"></set>
-          </condition>
-        </change>
-      </input>
+    <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
+      <label>Severity</label>
+      <choice value="5">critical</choice>
+      <choice value="4">high</choice>
+      <choice value="3">medium</choice>
+      <choice value="2">low</choice>
+      <choice value="1">info</choice>
+      <default>5,4,3,2,1</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+    </input>
+    <input type="multiselect" token="tkn_status" searchWhenChanged="true">
+      <label>Status</label>
+      <choice value="Unassigned">Unassigned</choice>
+      <choice value="Assigned">Assigned</choice>
+      <choice value="Under Investigation">Under Investigation</choice>
+      <choice value="Clean">Clean</choice>
+      <choice value="Malicious">Malicious</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+      <default>Unassigned,Assigned,Under Investigation</default>
+      <change>
+        <condition>
+          <eval token="tkn_status_drilldown">"form.tkn_status=" . mvjoin(split(replace(trim(trim($tkn_status$, "("), ")"), "\"", ""), ","), "&amp;form.tkn_status=")</eval>
+        </condition>
+      </change>
+    </input>
+    <input type="checkbox" token="tkn_not_triggered_alert_checkbox" searchWhenChanged="true">
+      <label></label>
+      <choice value="1">Hide Not Triggered Alerts</choice>
+      <delimiter> </delimiter>
+      <initialValue>1</initialValue>
+      <change>
+        <condition match="$tkn_not_triggered_alert_checkbox$==1">
+          <set token="tkn_not_triggered_alert_filter_1">problems!=0</set>
+          <set token="tkn_not_triggered_alert_filter_2">| where Count &gt; 0</set>
+        </condition>
+        <condition>
+          <set token="tkn_not_triggered_alert_filter_1"></set>
+          <set token="tkn_not_triggered_alert_filter_2"></set>
+        </condition>
+      </change>
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -267,6 +289,8 @@
         <search>
           <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
+| `cs_add_notable_event_editor_fields`
+| search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
 | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
 | stats first(*) as * by savedsearch_name, cyences_severity
@@ -379,6 +403,8 @@
         <search>
           <query>`cs_cyences_index` alert_name IN `cs_monthly_alerts` | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1)
 | search cyences_severity IN $tkn_severity$
+| `cs_add_notable_event_editor_fields`
+| search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
 | append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity

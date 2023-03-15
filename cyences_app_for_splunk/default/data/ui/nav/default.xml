@@ -1,6 +1,7 @@
 <nav search_view="search">
   <view name="cs_overview" default="true" />
   <view name="cs_forensics" />
+  <view name="cs_soc" />
   <collection label="Dashboards">
     <view name="cs_ad_reports" />
     <view name="cs_windows_reports" />

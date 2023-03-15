@@ -73,7 +73,6 @@
       </input>
       <input type="multiselect" token="tkn_status" searchWhenChanged="true">
         <label>Status</label>
-        <choice value="*">All</choice>
         <choice value="Unassigned">Unassigned</choice>
         <choice value="Assigned">Assigned</choice>
         <choice value="Under Investigation">Under Investigation</choice>
@@ -84,11 +83,11 @@
         <valuePrefix>"</valuePrefix>
         <valueSuffix>"</valueSuffix>
         <delimiter>,</delimiter>
-        <default>*</default>
+        <default>Unassigned,Assigned,Under Investigation</default>
       </input>
       <table id="notable_event_main_tbl">
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ Status IN $tkn_status$</query>
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)</query>
         </search>
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
@@ -123,7 +122,7 @@
       <chart>
         <title>Assignee</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ Status IN $tkn_status$
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
 | stats count by Assignee</query>
         </search>
         <option name="charting.chart">pie</option>
@@ -135,7 +134,7 @@
       <chart>
         <title>Status</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ Status IN $tkn_status$
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
 | stats count by Status</query>
         </search>
         <option name="charting.chart">pie</option>
@@ -146,7 +145,7 @@
       <chart>
         <title>Severity</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ Status IN $tkn_status$
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
 | stats count by cyences_severity</query>
         </search>
         <option name="charting.chart">pie</option>
