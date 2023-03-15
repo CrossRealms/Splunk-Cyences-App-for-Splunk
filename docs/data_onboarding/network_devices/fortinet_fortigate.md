@@ -27,7 +27,7 @@ Installation Guide:
 
 3. Install the Add-on on the Search Head.
 
-**Note:** Make sure to update the **VPN data** macro in the **Cyences > Settings > Configuration** page from **index=pan_log** to **index=fortigate**.
+**Note:** Update the index value for **VPN data** macro definition in the **Data Source Macros** section in Cyences Configuration page.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
