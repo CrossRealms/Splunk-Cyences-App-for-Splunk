@@ -17,7 +17,7 @@ has_children: true
 * ### Sophos Firewall Integration
     * Mapped Sophos Firewall Traffic data with the Network_Traffic Model.
     * Added new Sophos Firewall dashboard
-    * TODO: screenshot
+    ![alt]({{ site.baseurl }}/assets/sophos_firewall.png)
     * To onboard the Sophos Firewall data, Refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall/)
 
 * ### Inbound Vulnerable Traffic Alerts
@@ -29,6 +29,7 @@ has_children: true
     
     * Bruteforce Alerts
         * Improved search query to show the count for src, user and dest fields.
+        * Reduced severity from critical to high for windows event if src field value is unknown.
 
     * AD Password Change Alerts and Dashboard
         * Improved search query to show the count for ComputerName, status and Actor fields.
@@ -47,6 +48,7 @@ has_children: true
     * Fixed the Windows - Hosts Missing Update alert to handle hostname case sensitivity issue.
     
     * Fixed the "Email - Hourly Increase In Emails Over Baseline" alert to handle the data ingestion delay and fixed percentage calculation logic.
+
 
 ## Upgrade Guide from 3.0.0 to 3.1.0
 
