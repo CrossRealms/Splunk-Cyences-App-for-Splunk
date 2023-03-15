@@ -103,22 +103,6 @@
   </row>
   <row>
     <panel>
-      <title>Notable Event Changes - $tkn_notable_event_id$</title>
-      <table>
-        <search>
-          <query>| inputlookup cyences_notable_event where notable_event_id="$tkn_notable_event_id$"
-| sort -update_time
-| `cs_human_readable_time_format(update_time)`</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <chart>
         <title>Assignee</title>
         <search base="notable_event_main_search">

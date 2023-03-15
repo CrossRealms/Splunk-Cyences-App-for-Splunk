@@ -61,9 +61,7 @@ require([
         },
         function(searchProperties){
             alert("Unable to get the available user list.");
-        }).searchByQuery(
-            '| inputlookup cyences_splunk_user_list.csv | table username',
-            '-1m', 'now');
+        }).searchByQuery('| inputlookup cyences_splunk_user_list.csv | table username');
 
 
     function runNotableEventUpdaterSearch(entries_to_update, callBackFunction){
@@ -109,7 +107,7 @@ require([
                 function(errorProperties){
                     alert("Unable to update the notable event.");
                 }
-            ).searchByQuery(searchQuery, '-1m', 'now');
+            ).searchByQuery(searchQuery);
         }
 
         new SplunkCommonUtilities.VWaitUntil(
@@ -459,12 +457,74 @@ require([
     });
 
 
+    let NotableEventRowExpansionRenderer = TableView.BaseRowExpansionRenderer.extend({
+        initialize: function(args) {
+            // initialize will run once, so we will set up a search and a chart to be reused.
+            this._searchManagerNotableEventHistory = new SplunkCommonUtilities.VSearchManagerUtility();
+            this._searchManagerNotableEventHistory.defineReusableSearch('notable-event-history-search-manager');
+    
+            this._searchManagerNotableEventResult = new SplunkCommonUtilities.VSearchManagerUtility();
+            this._searchManagerNotableEventResult.defineReusableSearch('notable-event-result-search-manager');
+    
+            this._tableViewNotableEventHistory = new TableView({
+                id: 'notable_event_history_table',
+                managerid: 'notable-event-history-search-manager',
+                'rowNumbers': true,
+                'drilldown': 'none',
+                'count': 100
+            });
+    
+            this._tableViewNotableEventResult = new TableView({
+                id: 'notable_event_result_table',
+                managerid: 'notable-event-result-search-manager',
+                'rowNumbers': false,
+                'drilldown': 'none',
+                'count': 100
+            });
+        },
+        canRender: function(rowData) {
+            return true;
+        },
+        render: function($container, rowData) {
+            var notable_event_id = _(rowData.cells).find(function (cell) {
+               return cell.field === 'notable_event_id';
+            }).value;
+    
+            this._searchManagerNotableEventResult.executeReusableSearch(`\`cs_cyences_index\` notable_event_id="${notable_event_id}" | fields - _raw, notable_event_id, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
+            | rename * AS X_*_NEW
+            | foreach * [ eval newFieldName=replace("<<FIELD>>", "\\s+", "_"), {newFieldName}='<<FIELD>>' ] | fields - "* *", newFieldName
+            | foreach X_*_NEW [ eval <<MATCHSTR>>=<<FIELD>> ]
+            | fields - X_*_NEW 
+            | rename orig_* as * 
+            | \`cs_human_readable_time_format(_time, alert_time)\`
+            | table alert_time, event_tim*, cyences_severity, *`,
+            SplunkCommonUtilities.VTokenManagerObj.getToken('timeRange.earliest'),
+            SplunkCommonUtilities.VTokenManagerObj.getToken('timeRange.latest'));
+
+            $container.append(`<div style="margin-top: 5px;"></div>`);
+    
+            $container.append(`<div style="color: white; margin-left: 100px; font-weight: bold;">Notable Event Result</div>`);
+            // $("#temp").click(onMergeButtonClick);
+            // this._tableView.addCellRenderer(expandedTableCheckBoxCellRenderer);
+            $container.append(this._tableViewNotableEventResult.render().el);
+    
+            this._searchManagerNotableEventHistory.executeReusableSearch(`| inputlookup cyences_notable_event where notable_event_id="${notable_event_id}" | sort -update_time | \`cs_human_readable_time_format(update_time)\` | table user_making_change, notable_event_id, update_time, status, assignee, comment | rename notable_event_id as ID`);
+    
+            $container.append(`<br/><div style="color: white; margin-left: 100px; font-weight: bold;">Notable Event Change History</div>`);
+            $container.append(this._tableViewNotableEventHistory.render().el);
+
+            $container.append(`<div style="margin-bottom: 5px;"></div>`);
+        }
+    });
+
+
     let notableEventsTable = mvc.Components.get(NOTABLE_EVENT_TABLE_ID);
     if(notableEventsTable){
         notableEventsTable.getVisualization( function ( tableView ) {
             // Add custom cell renderer
             tableView.table.addCellRenderer(new CyencesNotableEventIconRenderer());
             tableView.table.addCellRenderer(new CyencesNotableEventCSSClassRenderer());
+            tableView.addRowExpansionRenderer(new NotableEventRowExpansionRenderer());
             tableView.table.render();
         });
     }

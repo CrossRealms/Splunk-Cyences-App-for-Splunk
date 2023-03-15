@@ -56,24 +56,26 @@ define([
             });
         }
 
-        searchByQuery(searchQuery, earliestTime, latestTime, executeNow=true){
+        searchByQuery(searchQuery, earliestTime='-1m', latestTime='now', searchId=undefined, executeNow=true){
             /*
             searchQuery, earliestTime, latestTime - Parameters to define the search (only valid if searchId is not defined)
-
+            searchId - define Id of search
             executeNow - Whether to execute immediately or wait for user's manual call of startSearch()
             */
-            if (searchQuery == undefined || earliestTime == undefined || latestTime == undefined){
-                throw new Error("If searchId parameter is not defined, then searchQuery, earliestTime, latestTime parameters are compulsory.");
-            }
             this.consoleSearchInfo = `searchQuery=${searchQuery}`;
 
-            this.searchManager = new SearchManager({
+            let searchManagerProperties = {
                 preview: false,
                 autostart: false,
                 search: searchQuery,
                 earliest_time: earliestTime,
                 latest_time: latestTime
-            });
+            };
+            if(searchId != undefined){
+                searchManagerProperties['id'] = searchId;
+            }
+
+            this.searchManager = new SearchManager(searchManagerProperties);
 
             this._defineActions();
 
@@ -84,13 +86,39 @@ define([
 
         searchById(searchId){
             /*
-            searchId - Use already defined search (ignore searchQuery, earliestTime, latestTime parameters)
+            searchId - Use already defined search
             */
             this.consoleSearchInfo = `searchId=${searchId}`;
             this.searchManager = mvc.Components.get(searchId);
 
             this._defineActions();
         }
+
+        defineReusableSearch(searchId){
+            this.consoleSearchInfo = `searchId=${searchId}`;
+
+            this.searchManager = new SearchManager({
+                id: searchId,
+                preview: false,
+                autostart: false,
+            });
+
+            this._defineActions();
+        }
+
+        executeReusableSearch(searchQuery, earliestTime='-1m', latestTime='now', executeNow=true){
+            this.searchManager.set(
+                {
+                    search: searchQuery,
+                    earliest_time: earliestTime,
+                    latest_time: latestTime
+                }
+            );
+            if(executeNow){
+                this.startSearch();
+            }
+        }
+
 
         startSearch(){
             console.log("Executing the search query: ", this.consoleSearchInfo);
@@ -111,8 +139,57 @@ define([
         }
     }
 
+    class VTokenManager {
+        constructor(){
+            this.submittedTokens = mvc.Components.getInstance('submitted');
+            this.defaultTokens = mvc.Components.getInstance('default');
+        }
+
+        getDefaultToken(token_key) {
+            return this.defaultTokens.get(token_key);
+        }
+
+        getSubmittedToken(token_key) {
+            return this.submittedTokens.get(token_key);
+        }
+
+        getToken(token_key) {
+            return this.submittedTokens.get(token_key);
+        }
+
+        setDefaultToken(token_key, token_value) {
+            this.defaultTokens.set(token_key, token_value);
+        }
+
+        setSubmittedToken(token_key, token_value) {
+            this.submittedTokens.set(token_key, token_value);
+        }
+
+        setToken(token_key, token_value){
+            this.setDefaultToken(token_key, token_value);
+            this.setSubmittedToken(token_key, token_value);
+        }
+
+        unsetDefaultToken(token_key) {
+            this.defaultTokens.unset(token_key);
+        }
+
+        unsetSubmittedToken(token_key) {
+            this.submittedTokens.unset(token_key);
+        }
+
+        unsetToken(token_key){
+            this.unsetDefaultToken(token_key);
+            this.unsetSubmittedToken(token_key);
+        }
+    }
+
+    let VTokenManagerObj = new VTokenManager();
+
     return {
         'VSearchManagerUtility': VSearchManagerUtility,
-        'VWaitUntil': VWaitUntil
+        'VWaitUntil': VWaitUntil,
+        'VTokenManager': VTokenManager,
+        'VTokenManagerObj': VTokenManagerObj
     }
 });
