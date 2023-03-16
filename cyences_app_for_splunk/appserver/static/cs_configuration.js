@@ -1,8 +1,9 @@
 require([
     'jquery',
     'splunkjs/mvc',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc) {
+], function ($, mvc, SplunkCommonUtilities) {
 
     // Defining model tokens
     'use strict';

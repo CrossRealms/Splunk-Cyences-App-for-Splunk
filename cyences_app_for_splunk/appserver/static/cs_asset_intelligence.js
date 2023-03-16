@@ -254,6 +254,7 @@ function(mvc, SplunkCommonUtilities){
     submittedTokens.on('change:tkn_filter_condition', filterChanged);
 
     function onLoad(){
+        // TODO - submittedTokens.get('tkn_ip_tmp') - this gives undefined, and hence gives error
         if(submittedTokens.get('tkn_ip_tmp').trim() === '-' || submittedTokens.get('tkn_ip_tmp').trim() === 'null'){
             setToken('tkn_ip_tmp', '');
             setToken('form.tkn_ip_tmp', '');

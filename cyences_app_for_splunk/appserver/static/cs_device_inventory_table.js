@@ -81,24 +81,8 @@ function($, TableView, mvc, _, SplunkCommonUtilities){
             | stats max(time) as new_time, values(*) as * | rename new_time as time
             | append [| inputlookup cs_device_inventory where NOT uuid IN ${allSelectedUUIDs}]
             | outputlookup cs_device_inventory | where SEARCHNOTHING="SEARCHNOTHING"
-            | append [| stats count | eval count="dummy results"]`, '-1m', 'now');
+            | append [| stats count | eval count="dummy results"]`);
     });
-
-    /*
-    function utilCheckDifferentDevices(product, previous, current){
-        if (current !== null && current.trim() !== ""){
-            if (previous === undefined){
-                return current.trim();
-            }
-            else{
-                setModelMessage(`${product} say's its two different devices with ${product} ID ${previous} and ${current.trim()}. So you cannot merge this two devices.`);
-                enableModelCloseButton();
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 
     function onMergeButtonClick(){
         // Start model and processing spinner to show progress
@@ -116,72 +100,7 @@ function($, TableView, mvc, _, SplunkCommonUtilities){
             return;
         }
         let search_uuids = generateInFormattedSearchString(selected_uuids);
-        /*
-        // Note - Run the search query to get details about all the selected uuids and make sure that no product ids collide
-        defineAndExecuteSearch(
-            `| inputlookup cs_device_inventory where uuid IN ${search_uuids} | table time, uuid, ip, hostname, mac_address, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid`,
-            function (resultRows){
-                let update, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid;
-                let conflict = false;
-                $.each(resultRows, function(index, row){
-                    update = utilCheckDifferentDevices("Lansweeper", lansweeper_id, row[5]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        lansweeper_id = update;
-                    }
-                    update = utilCheckDifferentDevices("Qualys", qualys_id, row[6]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        qualys_id = update;
-                    }
-                    update = utilCheckDifferentDevices("Tenable", tenable_uuid, row[7]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        tenable_uuid = update;
-                    }
-                    update = utilCheckDifferentDevices("Sophos", sophos_uuid, row[8]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        sophos_uuid = update;
-                    }
-                    update = utilCheckDifferentDevices("Windows Defender", windows_defender_host, row[9]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        windows_defender_host = update;
-                    }
-                    update = utilCheckDifferentDevices("CrowdStrike", crowdstrike_userid, row[10]);
-                    if (update === true){
-                        conflict = true;
-                        return;
-                    }
-                    else if (update !== false){
-                        crowdstrike_userid = update;
-                    }
-                });
-                if (!conflict){
-                    setModelMessage(`Are you sure you wanna merge these devices? ${search_uuids}`);
-                    enableModelConfirmButton(selected_uuids);
-                    enableModelCloseButton();
-                }
-            });
-        // if product ids collide then show the Message="Device <uuid1> and <uuid2> are two different devices as they have two different unique IDs from Tenable/Lansweeper/etc."
-        // else merge them with the query and show success message.
-        */
+        // NOTE - Run the search query to get details about all the selected uuids and make sure that no product ids collide
         setModelMessage(`Are you sure you wanna merge these devices? ${search_uuids}`);
         enableModelConfirmButton(selected_uuids);
         enableModelCloseButton();

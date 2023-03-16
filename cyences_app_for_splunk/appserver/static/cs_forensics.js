@@ -85,7 +85,7 @@ require([
             });
             // load search queries after the alerts data is fetched
             setSearchQueryTokens();
-        }).searchByQuery(searchString, '-1m', 'now');
+        }).searchByQuery(searchString);
 
 
     submittedTokens.on("change:tkn_savedsearch", setSearchQueryTokens);
