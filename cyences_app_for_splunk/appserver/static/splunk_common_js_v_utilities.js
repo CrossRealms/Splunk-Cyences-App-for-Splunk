@@ -68,14 +68,18 @@ define([
             */
             this.consoleSearchInfo = `searchQuery=${searchQuery}`;
 
-            this.searchManager = new SearchManager({
-                id: searchId,
+            let searchManagerProperties = {
                 preview: false,
                 autostart: false,
                 search: searchQuery,
                 earliest_time: earliestTime,
                 latest_time: latestTime
-            });
+            };
+            if(searchId != undefined){
+                searchManagerProperties['id'] = searchId;
+            }
+
+            this.searchManager = new SearchManager(searchManagerProperties);
 
             this._defineActions();
 
@@ -93,13 +97,17 @@ define([
             */
             this.consoleSearchInfo = `searchQuery=${searchQuery}`;
 
-            this.searchManager = new SearchManager({
-                id: searchId,
+            let searchManagerProperties = {
                 managerid: baseManagerId,
                 preview: false,
                 autostart: false,
                 search: searchQuery
-            });
+            };
+            if(searchId != undefined){
+                searchManagerProperties['id'] = searchId;
+            }
+
+            this.searchManager = new SearchManager(searchManagerProperties);
 
             this._defineActions();
 
@@ -119,7 +127,7 @@ define([
         }
 
         defineReusableSearch(searchId){
-            this.consoleSearchInfo = "";
+            this.consoleSearchInfo = `searchId=${searchId}`;
 
             this.searchManager = new SearchManager({
                 id: searchId,
@@ -144,7 +152,7 @@ define([
         }
 
         defineReusablePostProcessSearch(managerId, searchId){
-            this.consoleSearchInfo = "";
+            this.consoleSearchInfo = `searchId=${searchId}`;
 
             this.searchManager = new PostProcessSearchManager({
                 managerid: managerId,
@@ -183,6 +191,54 @@ define([
         }
         checkFlag();
     }
+
+
+    class VTokenManager {
+        constructor(){
+            this.submittedTokens = mvc.Components.getInstance('submitted');
+            this.defaultTokens = mvc.Components.getInstance('default');
+        }
+
+        getDefaultToken(token_key) {
+            return this.defaultTokens.get(token_key);
+        }
+
+        getSubmittedToken(token_key) {
+            return this.submittedTokens.get(token_key);
+        }
+
+        getToken(token_key) {
+            return this.submittedTokens.get(token_key);
+        }
+
+        setDefaultToken(token_key, token_value) {
+            this.defaultTokens.set(token_key, token_value);
+        }
+
+        setSubmittedToken(token_key, token_value) {
+            this.submittedTokens.set(token_key, token_value);
+        }
+
+        setToken(token_key, token_value){
+            this.setDefaultToken(token_key, token_value);
+            this.setSubmittedToken(token_key, token_value);
+        }
+
+        unsetDefaultToken(token_key) {
+            this.defaultTokens.unset(token_key);
+        }
+
+        unsetSubmittedToken(token_key) {
+            this.submittedTokens.unset(token_key);
+        }
+
+        unsetToken(token_key){
+            this.unsetDefaultToken(token_key);
+            this.unsetSubmittedToken(token_key);
+        }
+    }
+
+    let VTokenManagerObj = new VTokenManager();
 
 
     function vSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
@@ -239,6 +295,8 @@ define([
     return {
         'VSearchManagerUtility': VSearchManagerUtility,
         'vWaitUntil': vWaitUntil,
+        'VTokenManager': VTokenManager,
+        'VTokenManagerObj': VTokenManagerObj,
         'vSetupMultiSelectInputHandler': vSetupMultiSelectInputHandler,
         'vSetupMultiSelectHandlerOnAll': vSetupMultiSelectHandlerOnAll,
         'VJSCookieManager': VJSCookieManager
