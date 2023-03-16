@@ -1,0 +1,28 @@
+# This is a basic workflow to generate build
+name: "Add Splunk App Related Utilities"
+
+on:
+  push:
+    branches:
+      - 'master'
+
+  workflow_dispatch:
+    inputs:
+      comment:
+        description: 'Add comment for manual workflow execution.'
+        required: false
+        default: 'Manual execution of Github workflow.'
+
+jobs:
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: CrossRealms/Splunk-App-Common-Utility-Action@v1
+        with:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          app_dir: "cyences_app_for_splunk"
+          utilities_to_add: "logger,common_splunk_js_utilities"
+          log_files_prefix: "cyences_"
+          logger_sourcetype: "cyences:logs"
