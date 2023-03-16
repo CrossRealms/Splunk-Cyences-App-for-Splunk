@@ -133,7 +133,7 @@ require([
                     }
                 });
             });
-        }).searchByQuery(searchString, '-1m', 'now');
+        }).searchByQuery(searchString);
 
 
     function updateMacroDefinition(macro_name, macro_definition, msg_location){
@@ -148,7 +148,7 @@ require([
                 $(msg_location).addClass('error_msg');
                 $(msg_location).removeClass('success_msg');
                 $(msg_location).text(`Error updating the macro definition for ${macro_name}.`);
-            }).searchByQuery(searchString, '-1m', 'now');
+            }).searchByQuery(searchString);
     }
 
     $.each(all_macros, function(index, macro){
