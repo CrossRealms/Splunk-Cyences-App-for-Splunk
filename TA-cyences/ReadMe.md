@@ -10,7 +10,6 @@ The Cyences Add-on for Splunk is a Splunk Add-on/App to provide some custom inpu
 
 
 * Author - CrossRealms International Inc.
-* Version - 1.1.1
 * Build - 1
 * Creates Index - False
 * Compatible with:
@@ -43,7 +42,7 @@ To uninstall the app, the users can follow the below steps:
 RELEASE NOTES
 -------------
 Version 1.1.1 (March 2023)
-* Shell script permission issue fixed.
+* Fixed shell script permission issue.
 
 Version 1.1.0 (March 2023)
 * Added users.sh and groups.sh scripted inputs.
