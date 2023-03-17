@@ -75,4 +75,14 @@ require([
             }
         });
     }
+
+    // Check with rest endpoint if we need to make user redirect to Cyences Setup page.
+    function checkIfAppSetupIsRequired(){
+        // TODO - Mahir
+        return false;
+    }
+
+    if (window.location.href.indexOf("cs_cyences_setup") < 0 && checkIfAppSetupIsRequired()){
+        window.location.replace("/en-US/app/cyences/cs_cyences_setup");   // TODO - app may need to removed. Need to validate maybe
+    }
 });
