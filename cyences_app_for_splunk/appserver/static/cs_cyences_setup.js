@@ -1,10 +1,34 @@
 require([
     'jquery',
+    'underscore',
     'splunkjs/mvc',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
+    'splunkjs/mvc/tableview',
     'splunkjs/mvc/simplexml/ready!'
-], function ($, mvc) {
+], function ($, _, mvc, SplunkCommonUtilities, TableView) {
 
-    var currentTab = 0; // Current tab is set to be the first tab (0)
+    let currentTab = 0; // Current tab is set to be the first tab (0)
+    /* Tabs
+        1. Product Selection
+    */
+
+
+    // TODO - Need to fetch these list from the rest endpoint
+    let productList = {
+        'Palo_Alto': {
+            'Any_Data': {
+                query: 'index=pan_log | stats count by host',
+                earliestTime: '-24m@h',
+                latestTime: 'now'
+            },
+            'Traffic_Logs': {
+                query: 'index=pan_log sourcetype="pan:traffic | stats count by host"',
+                earliestTime: '-1h@h',
+                latestTime: 'now'
+            }
+        }
+    };
+
 
     function fixStepIndicator(n) {
         // This function removes the "active" class of all steps...
@@ -79,6 +103,63 @@ require([
     }
 
 
+    function productSelectionChange(isChecked, key){
+        if (isChecked){
+            let allQueriesHtml = '';
+
+            _.each(productList[key], function(queryObj, queryTitle){
+                let id = key+"-"+queryTitle;
+
+                new SplunkCommonUtilities.VSearchManagerUtility().searchByQuery(
+                    queryObj.query, queryObj.earliestTime, queryObj.latestTime, id
+                );
+
+                let resultTableHtml = new TableView({
+                    managerid: id,
+                    'rowNumbers': false,
+                    'drilldown': 'none',
+                    'count': 100
+                }).render().el.innerHTML;
+                // TODO - This still does not load table fully
+
+                allQueriesHtml += `<div>
+                    <label for="${queryTitle}">${queryTitle}</label>
+                    <p>${queryObj.query}</p>
+                    <p>loading icon<p>
+                    ${resultTableHtml}
+                </div>`;
+            });
+
+            $(`#${key}_div`).html(allQueriesHtml);
+        }
+        else{
+            $(`#${key}_div`).html("");
+        }
+    }
+
+
+    function loadProductListTab(){
+        let fullHtml = '';
+
+        _.each(productList, function(element, key){
+
+            let htmlElement = `<div>
+                <input type="checkbox" class="productSelectionCheckpoint" id="${key}" name="${key}" value="${key}">
+                <label for="${key}">${key}</label><br>
+                <div id="${key}_div"></div>
+            </div>`;
+            fullHtml += htmlElement;
+        });
+
+        $("#productList").html(fullHtml);
+
+        // On product selection checkpoint change
+        $("input.productSelectionCheckpoint").change(function(el){
+            productSelectionChange(this.checked, this.id);
+        });
+    }
+
+
     // when user input change
     $("input").on('input', function(el){
         $(el).removeClass('invalid');
@@ -93,6 +174,7 @@ require([
         nextPrevTab(1);
     });
 
+    loadProductListTab();
     showTab(currentTab);   // Display the current tab
 
 });

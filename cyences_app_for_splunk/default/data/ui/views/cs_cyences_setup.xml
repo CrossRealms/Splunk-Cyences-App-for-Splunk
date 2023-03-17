@@ -5,16 +5,12 @@
     <panel>
       <html>
         <form id="regForm" action="">
-          <h1>Register:</h1>
+          <h1>Setup Cyences App</h1>
           <!-- One "tab" for each step in the form: -->
           <div class="tab">
-            Name:
-            <p>
-              <input placeholder="First name..."></input>
-            </p>
-            <p>
-              <input placeholder="Last name..."></input>
-            </p>
+            Select Products you user:
+            <div id="productList">
+            </div>
           </div>
           <div class="tab">
             Contact Info:
