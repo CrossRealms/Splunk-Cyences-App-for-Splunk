@@ -11,6 +11,7 @@ require([
     /* Tabs
         1. Product Selection
     */
+   let BORDER_COLOR = "#b6b6b8";
 
 
     // TODO - Need to fetch these list from the rest endpoint
@@ -106,22 +107,26 @@ require([
     function productSelectionChange(isChecked, key){
         if (isChecked){
             let allQueriesHtml = '';
+            let randomNumber = (Math.round(Math.random() * 1000)).toString();   // To fix issues with when user select, unselect and select the product again.
 
             _.each(productList[key], function(queryObj, queryTitle){
-                let id = key+"-"+queryTitle;
+                let id = key+"-"+queryTitle+"_"+randomNumber;
 
-                allQueriesHtml += `<div>
-                    <label for="${queryTitle}">${queryTitle}</label>
-                    <p>${queryObj.query}</p>
-                    <p id="${id}_query_result">loading icon<p>
-                    <div id="table_result_${id}"></div>
+                allQueriesHtml += `
+                    <div style="display: flex; margin-top: 5px;">
+                        <div style="width: 30%">
+                            <label for="${queryTitle}">${queryTitle}</label>
+                            <p>${queryObj.query}</p>
+                        </div>
+                        <div style="width: 70%"><div id="table_result_${id}"></div></div>
+                    </div>
                 </div>`;
             });
 
             $(`#${key}_div`).html(allQueriesHtml);
 
             _.each(productList[key], function(queryObj, queryTitle){
-                let id = key+"-"+queryTitle;
+                let id = key+"-"+queryTitle+"_"+randomNumber;
 
                 new SplunkCommonUtilities.VSearchManagerUtility().searchByQuery(
                     queryObj.query, queryObj.earliestTime, queryObj.latestTime, id
@@ -148,9 +153,11 @@ require([
 
         _.each(productList, function(element, key){
 
-            let htmlElement = `<div>
-                <input type="checkbox" class="productSelectionCheckpoint" id="${key}" name="${key}" value="${key}">
-                <label for="${key}">${key}</label><br>
+            let htmlElement = `<div class="productListContainerClass" style="border: 0.5px solid ${BORDER_COLOR}; margin-top: 10px; margin-bottom: 5px;">
+                <div style="display: flex; margin-top: 10px 0px 5px 10px;">
+                    <div style="width: 10%; padding-right: 10px; text-align: right;"><input type="checkbox" class="productSelectionCheckpoint" id="${key}" name="${key}" value="${key}"></div>
+                    <div style="width: 90%;"><label style="font-size: 20px; font-weight: bold;" for="${key}">${key}</label></div>
+                </div>
                 <div id="${key}_div"></div>
             </div>`;
             fullHtml += htmlElement;
