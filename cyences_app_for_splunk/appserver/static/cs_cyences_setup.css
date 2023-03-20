@@ -67,3 +67,12 @@ button:hover {
 .step.finish {
     background-color: #04AA6D;
 }
+
+
+.success_msg {
+    color: green;
+}
+
+.error_msg {
+    color: red;
+}

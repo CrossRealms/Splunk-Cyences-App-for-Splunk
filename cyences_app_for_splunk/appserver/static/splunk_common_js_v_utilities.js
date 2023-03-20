@@ -34,13 +34,18 @@ define([
                 console.log(`Search query completed. ${_consoleSearchInfo} - searchProperties=${properties}`);
 
                 let searchManagerResults = _manager.data("results", {count: 0});
-                searchManagerResults.on('data', function () {
-                    let resultData = searchManagerResults.data();
-                    console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
-                    if (_onResultCallBack != undefined){
-                        _onResultCallBack(resultData);
-                    }
-                });
+                if(('_isFetching' in searchManagerResults && searchManagerResults['_isFetching'] === true) || '_data' in searchManagerResults ){
+                    searchManagerResults.on('data', function () {
+                        let resultData = searchManagerResults.data();
+                        console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
+                        if (_onResultCallBack != undefined){
+                            _onResultCallBack(resultData);
+                        }
+                    });
+                }
+                else{
+                    _onResultCallBack(null);
+                }
             });
 
             function onFailures(properties){

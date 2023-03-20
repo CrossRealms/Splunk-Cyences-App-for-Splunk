@@ -22,7 +22,7 @@ require([
                 latestTime: 'now'
             },
             'Traffic_Logs': {
-                query: 'index=pan_log sourcetype="pan:traffic | stats count by host"',
+                query: 'index=pan_log sourcetype="pan:traffic" | stats count by host',
                 earliestTime: '-1h@h',
                 latestTime: 'now'
             }
@@ -110,27 +110,32 @@ require([
             _.each(productList[key], function(queryObj, queryTitle){
                 let id = key+"-"+queryTitle;
 
-                new SplunkCommonUtilities.VSearchManagerUtility().searchByQuery(
-                    queryObj.query, queryObj.earliestTime, queryObj.latestTime, id
-                );
-
-                let resultTableHtml = new TableView({
-                    managerid: id,
-                    'rowNumbers': false,
-                    'drilldown': 'none',
-                    'count': 100
-                }).render().el.innerHTML;
-                // TODO - This still does not load table fully
-
                 allQueriesHtml += `<div>
                     <label for="${queryTitle}">${queryTitle}</label>
                     <p>${queryObj.query}</p>
-                    <p>loading icon<p>
-                    ${resultTableHtml}
+                    <p id="${id}_query_result">loading icon<p>
+                    <div id="table_result_${id}"></div>
                 </div>`;
             });
 
             $(`#${key}_div`).html(allQueriesHtml);
+
+            _.each(productList[key], function(queryObj, queryTitle){
+                let id = key+"-"+queryTitle;
+
+                new SplunkCommonUtilities.VSearchManagerUtility().searchByQuery(
+                    queryObj.query, queryObj.earliestTime, queryObj.latestTime, id
+                );
+
+                new TableView({
+                    id: id+"_table",
+                    managerid: id,
+                    rowNumbers: false,
+                    drilldown: 'none',
+                    pageSize: 5,
+                    el: $(`#table_result_${id}`)
+                }).render();
+            });
         }
         else{
             $(`#${key}_div`).html("");
@@ -178,3 +183,6 @@ require([
     showTab(currentTab);   // Display the current tab
 
 });
+
+// Reference - /opt/splunk/etc/apps/splunk_app_windows_infrastructure/appserver/static/js/common/CustomPages/AppSetupPages
+// - Trot, Ativo, Ravinia
