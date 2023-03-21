@@ -1,7 +1,8 @@
 require([
     'splunkjs/mvc',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'], 
-function(mvc){
+function(mvc, SplunkCommonUtilities){
 
     var submittedTokens = mvc.Components.getInstance('submitted');
     var defaultTokens = mvc.Components.getInstance('default');
@@ -36,12 +37,9 @@ function(mvc){
         }
     }
 
-    var searchManager = mvc.Components.getInstance("show_hide_search");
-    var searchManagerResults = searchManager.data("results", {count: 0});
-    searchManagerResults.on('data', function () {
-        if (searchManagerResults.data()) {
-            // fields: (6) ["lansweeper", "qualys", "tenable", "sophos", "defender", "crowdstrike","kaspersky"]
-            let results = searchManagerResults.data().rows[0];   // only one row of data is important for us
+    new SplunkCommonUtilities.VSearchManagerUtility(
+        function(data){
+            let results = data.rows[0];   // only one row of data is important for us
             let lansweeper = results[0];
             let qualys = results[1];
             let tenable = results[2];
@@ -112,9 +110,9 @@ function(mvc){
                 setToken("tkn_tablefields_kaspersky", "");
                 unsetToken("tkn_show_hide_kaspersky");
             }
-
         }
-    });
+    ).searchById("show_hide_search");
+
 
     function isEmptyValue(val){
         return (val === "" || val === "-");
@@ -256,6 +254,7 @@ function(mvc){
     submittedTokens.on('change:tkn_filter_condition', filterChanged);
 
     function onLoad(){
+        // TODO - submittedTokens.get('tkn_ip_tmp') - this gives undefined, and hence gives error
         if(submittedTokens.get('tkn_ip_tmp').trim() === '-' || submittedTokens.get('tkn_ip_tmp').trim() === 'null'){
             setToken('tkn_ip_tmp', '');
             setToken('form.tkn_ip_tmp', '');

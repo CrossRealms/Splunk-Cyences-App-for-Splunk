@@ -1,7 +1,7 @@
 require([
   'splunkjs/mvc/tableview',
   'splunkjs/mvc/chartview',
-  'splunkjs/mvc/searchmanager',
+  '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
   'splunkjs/mvc',
   'underscore',
   "splunkjs/mvc/utils",
@@ -10,7 +10,7 @@ require([
 ], function(
   TableView,
   ChartView,
-  SearchManager,
+  SplunkCommonUtilities,
   mvc,
   _,
   splunkUtil
@@ -39,11 +39,9 @@ require([
 
   var EventSearchBasedRowExpansionRenderer = TableView.BaseRowExpansionRenderer.extend({
       initialize: function(args) {
-          // initialize will run once, so we will set up a search and a table to be reused.
-          this._searchManager = new SearchManager({
-              id: 'details-search-manager',
-              preview: false
-          });
+            // initialize will run once, so we will set up a search and a table to be reused.
+            this._searchManager = new SplunkCommonUtilities.VSearchManagerUtility();
+            this._searchManager.defineReusableSearch('details-search-manager');
       },
 
       canRender: function(rowData) {
@@ -58,9 +56,7 @@ require([
           $("<h3/>").text('Instance Details').appendTo($container);
           $container.append($('<div />').css('float', 'top').text('Instance UUID=').append($('<span />').text(id.value)));
           //update the search with the sourcetype that we are interested in
-          this._searchManager.set({
-              search: '| sophosinstancedetails uuid=' + id.value +"| spath input=health | eval service_status=mvzip('services.serviceDetails{}.name','services.serviceDetails{}.status') | fields - health , 'services.serviceDetails{}.name','services.serviceDetails{}.status'| spath input=os path=platform output=os_platform | spath input=os path=name output=os_name | spath input=os path=majorVersion output=os_majorVersion | spath input=os path=minorVersion output=os_minorVersion | spath input=os path=build output=os_build | spath input=associatedPerson path=name output=associatedPerson_name | spath input=associatedPerson path=viaLogin output=associatedPerson_viaLogin | fields - associatedPerson,os,tenant | table overall,service_status,os*,associatedPerson*,tamperProtectionEnabled,'threat.status',lastSeenAt"
-          });
+          this._searchManager.executeReusableSearch('| sophosinstancedetails uuid=' + id.value +"| spath input=health | eval service_status=mvzip('services.serviceDetails{}.name','services.serviceDetails{}.status') | fields - health , 'services.serviceDetails{}.name','services.serviceDetails{}.status'| spath input=os path=platform output=os_platform | spath input=os path=name output=os_name | spath input=os path=majorVersion output=os_majorVersion | spath input=os path=minorVersion output=os_minorVersion | spath input=os path=build output=os_build | spath input=associatedPerson path=name output=associatedPerson_name | spath input=associatedPerson path=viaLogin output=associatedPerson_viaLogin | fields - associatedPerson,os,tenant | table overall,service_status,os*,associatedPerson*,tamperProtectionEnabled,'threat.status',lastSeenAt");
           this._tableView = new TableView({
               managerid: 'details-search-manager',
               drilldown: "none"
@@ -161,11 +157,19 @@ require([
       if($('#isolate_comment').val()!=""){
 
           var fullarray = selected_values_array.join();
-          var isolate_instance = new SearchManager({
-              id: 'isolate_instance',
-              preview: false,
-              search : '| countermeasuresophos uuid_tanent=' + fullarray +' comment='+ $('#isolate_comment').val()
-          });
+
+          let status = '-';
+          let isolate_instance = new SplunkCommonUtilities.VSearchManagerUtility(
+                function(results){
+                    status="Some Error Occured. Please check whether SOPHOS configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central"
+                    for (i=0;i<results.rows.length;i++){
+                        status = rows[i][0]
+                        break;
+                    }
+                }).searchByQuery(
+                    '| countermeasuresophos uuid_tanent=' + fullarray +' comment='+ $('#isolate_comment').val(), 
+                    '-1m', 'now',
+                    'isolate_instance');
           
           $('#edit_panel').modal('hide');
 
@@ -180,16 +184,6 @@ require([
           '</div>';
           $('body').prepend(isolating);
           $('#isolating').modal('show');
-          
-          var isolate_results = isolate_instance.data("results", {count:0});
-          isolate_results.on( "data", function() {
-              var rows = myResults.data().rows;
-              status="Some Error Occured. Please check whether SOPHOS configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central"
-              for (i=0;i<rows.length;i++){
-                  status = rows[i][0]
-                  break;
-              }
-          });
 
           $('#isolating').modal('hide');
           var isolated_status = '' +

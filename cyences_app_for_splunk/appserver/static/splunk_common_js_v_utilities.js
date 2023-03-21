@@ -3,12 +3,14 @@ define([
     "underscore",
     "jquery",
     'splunkjs/mvc/searchmanager',
+    "splunkjs/mvc/postprocessmanager",
     'splunk.util'
 ], function (
     mvc,
     _,
     $,
     SearchManager,
+    PostProcessSearchManager,
     splunkUtil
 ) {
 
@@ -32,13 +34,18 @@ define([
                 console.log(`Search query completed. ${_consoleSearchInfo} - searchProperties=${properties}`);
 
                 let searchManagerResults = _manager.data("results", {count: 0});
-                searchManagerResults.on('data', function () {
-                    let resultData = searchManagerResults.data();
-                    console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
-                    if (_onResultCallBack != undefined){
-                        _onResultCallBack(resultData);
-                    }
-                });
+                if(('_isFetching' in searchManagerResults && searchManagerResults['_isFetching'] === true) || '_data' in searchManagerResults ){
+                    searchManagerResults.on('data', function () {
+                        let resultData = searchManagerResults.data();
+                        console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
+                        if (_onResultCallBack != undefined){
+                            _onResultCallBack(resultData);
+                        }
+                    });
+                }
+                else{
+                    _onResultCallBack(null);
+                }
             });
 
             function onFailures(properties){
@@ -70,6 +77,34 @@ define([
                 search: searchQuery,
                 earliest_time: earliestTime,
                 latest_time: latestTime
+            };
+            if(searchId != undefined){
+                searchManagerProperties['id'] = searchId;
+            }
+
+            this.searchManager = new SearchManager(searchManagerProperties);
+
+            this._defineActions();
+
+            if(executeNow){
+                this.startSearch();
+            }
+        }
+
+        postProcessSearchByQuery(baseManagerId, searchQuery, searchId=undefined, executeNow=true){
+            /*
+            searchQuery - Parameters to define the search (post process search of base search) (only valid if searchId is not defined)
+            baseManagerId - id of base search
+            searchId - define Id of search
+            executeNow - Whether to execute immediately or wait for user's manual call of startSearch()
+            */
+            this.consoleSearchInfo = `searchQuery=${searchQuery}`;
+
+            let searchManagerProperties = {
+                managerid: baseManagerId,
+                preview: false,
+                autostart: false,
+                search: searchQuery
             };
             if(searchId != undefined){
                 searchManagerProperties['id'] = searchId;
@@ -119,6 +154,29 @@ define([
             }
         }
 
+        defineReusablePostProcessSearch(managerId, searchId){
+            this.consoleSearchInfo = `searchId=${searchId}`;
+
+            this.searchManager = new PostProcessSearchManager({
+                managerid: managerId,
+                id: searchId,
+                preview: false,
+                autostart: false,
+            });
+
+            this._defineActions();
+        }
+
+        executeReusablePostProcessSearch(searchQuery, executeNow=true){
+            this.searchManager.set(
+                {
+                    search: searchQuery
+                }
+            );
+            if(executeNow){
+                this.startSearch();
+            }
+        }
 
         startSearch(){
             console.log("Executing the search query: ", this.consoleSearchInfo);
@@ -126,18 +184,17 @@ define([
         }
     }
 
-    class VWaitUntil {
-        constructor(checkCondition, callBackFunction, waitMilliseconds=100){
-            function checkFlag() {
-                if (checkCondition() === false) {
-                    window.setTimeout(checkFlag, waitMilliseconds);
-                } else {
-                    callBackFunction();
-                }
+    function vWaitUntil(checkCondition, callBackFunction, waitMilliseconds=100) {
+        function checkFlag() {
+            if (checkCondition() === false) {
+                window.setTimeout(checkFlag, waitMilliseconds);
+            } else {
+                callBackFunction();
             }
-            checkFlag();
         }
+        checkFlag();
     }
+
 
     class VTokenManager {
         constructor(){
@@ -186,10 +243,46 @@ define([
 
     let VTokenManagerObj = new VTokenManager();
 
+
+    function vSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
+
+        // Get multiselect
+        var multi = mvc.Components.get(instance_id);
+  
+        // On change, check selection
+        multi.on("change", (selectedValues) => {
+  
+            if (selectedValues.length > 1 && selectedValues.includes(allOptionValue)) {
+                var indexOfAll = selectedValues.indexOf(allOptionValue);
+  
+                // If "ALL" was selected before current (more specific) selection, remove it from list
+                if (indexOfAll == 0) {
+                    selectedValues.splice(indexOfAll, 1);
+                    multi.val(selectedValues);
+                    multi.render();
+                } else {
+                    // "ALL" was selected last, clear input and leave only "ALL" in it
+                    multi.val(allOptionValue);
+                    multi.render();
+                }
+            }
+        });
+    }
+
+    function vSetupMultiSelectHandlerOnAll() {
+        var all_multi_selects = document.getElementsByClassName("input-multiselect");
+        for (j = 0; j < all_multi_selects.length; j++) {
+            vSetupMultiSelectInputHandler(all_multi_selects[j].id);
+        }
+    }
+
+
     return {
         'VSearchManagerUtility': VSearchManagerUtility,
-        'VWaitUntil': VWaitUntil,
+        'vWaitUntil': vWaitUntil,
         'VTokenManager': VTokenManager,
-        'VTokenManagerObj': VTokenManagerObj
+        'VTokenManagerObj': VTokenManagerObj,
+        'vSetupMultiSelectInputHandler': vSetupMultiSelectInputHandler,
+        'vSetupMultiSelectHandlerOnAll': vSetupMultiSelectHandlerOnAll
     }
 });

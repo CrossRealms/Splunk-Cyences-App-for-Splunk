@@ -1,7 +1,8 @@
 require([
     'jquery',
+    '../app/cyences_app_for_splunk/splunk_common_js_v_utilities',
     'splunkjs/mvc/simplexml/ready!'
-], function ($) {
+], function ($, SplunkCommonUtilities) {
 
     if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_inventory_table") < 0) {
         // Do not load the context menu on the Asset Intelligence dashboard and Device Inventory Table.
@@ -75,4 +76,9 @@ require([
             }
         });
     }
+
+    // Handles the multi-select option properly
+    SplunkCommonUtilities.vSetupMultiSelectHandlerOnAll();
+    // TODO - Add this to release notes as this is major useful feature for user.
+    // When user selects any item, it will automatically unselect "All" option. And when user selects "All" option then it will automatically unselect all other.
 });
