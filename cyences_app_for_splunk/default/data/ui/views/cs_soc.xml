@@ -92,31 +92,12 @@
         <search base="notable_event_main_search">
           <query>| search *</query>
         </search>
-        <option name="drilldown">row</option>
+        <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="cyences_severity">
           <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
         </format>
-        <drilldown>
-          <set token="tkn_notable_event_id">$row.notable_event_id$</set>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Notable Event Changes - $tkn_notable_event_id$</title>
-      <table>
-        <search>
-          <query>| inputlookup cyences_notable_event where notable_event_id="$tkn_notable_event_id$"
-| sort -update_time
-| `cs_human_readable_time_format(update_time)`</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
@@ -147,7 +128,7 @@
       <chart>
         <title>Assignee</title>
         <search base="notable_event_main_search">
-          <query>| stats count by Assignee</query>
+          <query>| search Assignee!="BANANABANANA"| stats count by Assignee</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -158,7 +139,7 @@
       <chart>
         <title>Status</title>
         <search base="notable_event_main_search">
-          <query>| stats count by Status</query>
+          <query>| search Status!="BANANABANANA"| stats count by Status</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>

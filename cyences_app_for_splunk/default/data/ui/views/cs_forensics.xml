@@ -89,15 +89,12 @@
         <search base="notable_event_main_search">
           <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)</query>
         </search>
-        <option name="drilldown">row</option>
+        <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="cyences_severity">
           <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
         </format>
-        <drilldown>
-          <set token="tkn_notable_event_id">$row.notable_event_id$</set>
-        </drilldown>
       </table>
     </panel>
   </row>
@@ -106,7 +103,7 @@
       <chart>
         <title>Assignee</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$) Assignee!="BANANABANANA"
 | stats count by Assignee</query>
         </search>
         <option name="charting.chart">pie</option>
@@ -118,7 +115,7 @@
       <chart>
         <title>Status</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+          <query>| search (Assignee="BANANABANANA" OR Assignee IN $tkn_assignee$) Status IN $tkn_status$ Status!="BANANABANANA"
 | stats count by Status</query>
         </search>
         <option name="charting.chart">pie</option>
@@ -129,7 +126,7 @@
       <chart>
         <title>Severity</title>
         <search base="notable_event_main_search">
-          <query>| search Assignee IN $tkn_assignee$ (Status="BANANABANANA" OR Status IN $tkn_status$)
+          <query>| search (Assignee="BANANABANANA" OR Assignee IN $tkn_assignee$) (Status="BANANABANANA" OR Status IN $tkn_status$)
 | stats count by cyences_severity</query>
         </search>
         <option name="charting.chart">pie</option>
