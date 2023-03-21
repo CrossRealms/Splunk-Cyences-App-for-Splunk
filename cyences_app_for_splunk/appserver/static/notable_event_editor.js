@@ -118,7 +118,7 @@ require([
             ).searchByQuery(searchQuery);
         }
 
-        new SplunkCommonUtilities.VWaitUntil(
+        SplunkCommonUtilities.vWaitUntil(
             function(){
                 for(let key in searchesCompleted){
                     if (searchesCompleted[key] === false){
