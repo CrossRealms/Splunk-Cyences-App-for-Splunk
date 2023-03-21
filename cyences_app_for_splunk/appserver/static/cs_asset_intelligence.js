@@ -40,7 +40,20 @@ function(mvc, SplunkCommonUtilities){
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(data){
             if(data == null){
-                return;
+                setToken("tkn_tablefields_lansweeper", "");
+                unsetToken("tkn_show_hide_lansweeper");
+                setToken("tkn_tablefields_qualys", "");
+                unsetToken("tkn_show_hide_qualys");
+                setToken("tkn_tablefields_tenable", "");
+                unsetToken("tkn_show_hide_tenable");
+                setToken("tkn_tablefields_sophos", "");
+                unsetToken("tkn_show_hide_sophos");
+                setToken("tkn_tablefields_defender", "");
+                unsetToken("tkn_show_hide_defender");
+                setToken("tkn_tablefields_crowdstrike", "");
+                unsetToken("tkn_show_hide_crowdstrike");
+                setToken("tkn_tablefields_kaspersky", "");
+                unsetToken("tkn_show_hide_kaspersky");
             }
             let results = data.rows[0];   // only one row of data is important for us
             let lansweeper = results[0];
