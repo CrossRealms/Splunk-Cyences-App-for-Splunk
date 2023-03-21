@@ -123,6 +123,9 @@ require([
     var searchString = '| rest /servicesNS/-/cyences_app_for_splunk/configs/conf-macros splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" | table title, definition';
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(results){
+            if(results == null){
+                return;
+            }
             $.each(results.rows, function (index, row) {
                 let macro_name = row[0];
                 let macro_definition = row[1];

@@ -39,6 +39,9 @@ function(mvc, SplunkCommonUtilities){
 
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(data){
+            if(data == null){
+                return;
+            }
             let results = data.rows[0];   // only one row of data is important for us
             let lansweeper = results[0];
             let qualys = results[1];

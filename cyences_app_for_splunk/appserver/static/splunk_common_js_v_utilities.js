@@ -44,7 +44,9 @@ define([
                     });
                 }
                 else{
-                    _onResultCallBack(null);
+                    if (_onResultCallBack != undefined){
+                        _onResultCallBack(null);
+                    }
                 }
             });
 
