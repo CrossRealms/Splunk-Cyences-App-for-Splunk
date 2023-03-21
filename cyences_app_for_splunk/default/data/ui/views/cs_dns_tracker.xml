@@ -5,9 +5,9 @@
 | append [| inputlookup cs_device_inventory | mvexpand hostname | mvexpand ip | fields ip, hostname]
 | stats sum(count) as count, values(ip) as ip by hostname | where count&gt;0
 | mvexpand ip | dedup ip | fields ip 
-| stats values(ip) as ip | eval dns_server_filter_original=mvjoin(ip, "\", \"")
-| eval dns_server_filter="NOT DNS.src IN (\"".dns_server_filter_original."\")"
-| eval dns_to_dns_requests="DNS.src IN (\"".dns_server_filter_original."\")"</query>
+| stats values(ip) as ip count| eval dns_server_filter_original=mvjoin(ip, "\", \"")
+| eval dns_server_filter=if(count&gt;0,"NOT DNS.src IN (\"".dns_server_filter_original."\")","")
+| eval dns_to_dns_requests=if(count&gt;0,"DNS.src IN (\"".dns_server_filter_original."\")","")</query>
     <earliest>$tkn_timerange.earliest$</earliest>
     <latest>$tkn_timerange.latest$</latest>
     <done>

@@ -1,0 +1,57 @@
+/* Table element format */
+.notable_event_selector {
+    padding-top: 0px;
+    margin: 0px !important;
+}
+
+.table_inline_icon .btn-pill {
+    border-radius: 0;
+    padding: 0 4px;
+    font-size: 15px
+}
+
+
+/* Bulk edit options formatter (above table) */
+.bulk_edit_container {
+    font-size: 15px;
+    display: none;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    color: white
+}
+
+.bulk_edit_container:after {
+    clear: both;
+    display: table;
+    content: "";
+}
+
+
+/* Hidden Columns */
+#notable_event_main_tbl .notable_event_id,
+#notable_event_main_tbl [data\-sort\-key='notable_event_id'] {
+    display:none;
+}
+
+
+/* Hide Table Headers */
+#notable_event_main_tbl [data\-sort\-key='notable_event_selector'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_edit'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_assignee'],
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me']
+{
+    min-width: 20px !important;
+    max-width: 20px !important;
+    width: 20px !important;
+    padding:0px;
+    margin:0px;
+}
+
+#notable_event_main_tbl [data\-sort\-key='notable_event_selector'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_edit'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_assignee'] a,
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] a
+{
+    /* color:transparent !important; */
+    display:none;
+}
