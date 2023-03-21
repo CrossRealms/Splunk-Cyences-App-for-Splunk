@@ -159,13 +159,18 @@ require([
           var fullarray = selected_values_array.join();
 
           let status = '-';
-          let isolate_instance = new SplunkCommonUtilities.VSearchManagerUtility(
+          let COMMON_ERROR_MSG = "Some Error Occured. Please check whether SOPHOS configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central";
+          new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
-                    status="Some Error Occured. Please check whether SOPHOS configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central"
-                    for (i=0;i<results.rows.length;i++){
-                        status = rows[i][0]
-                        break;
+                    if (results == null){
+                        status = COMMON_ERROR_MSG;
                     }
+                    else{
+                        status = rows[i][0]
+                    }
+                },
+                function(searchProperties){
+                    status = COMMON_ERROR_MSG;
                 }).searchByQuery(
                     '| countermeasuresophos uuid_tanent=' + fullarray +' comment='+ $('#isolate_comment').val(), 
                     '-1m', 'now',

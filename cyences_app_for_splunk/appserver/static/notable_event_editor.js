@@ -33,6 +33,11 @@ require([
 
     let notableEventSearchManager = new SplunkCommonUtilities.VSearchManagerUtility(
         function(data){
+            if (data == null){
+                all_notable_events = [];
+                $("#bulk_edit_container").remove();
+                return;
+            }
             let notableEventIdFieldNo = data.fields.indexOf("notable_event_id");
             all_notable_events = _.map(data.rows, function (e) { return e[notableEventIdFieldNo]; });
             $("#bulk_edit_container").remove();
@@ -55,6 +60,9 @@ require([
     // Fill Available User Utility
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(results){
+            if (results == null){
+                return;
+            }
             for(let i=0; i< results.rows.length; i++){
                 AVAILABLE_USERS.push(results.rows[i][0]);
             }
@@ -99,7 +107,7 @@ require([
 
             new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
-                    if (results.rows.length > 0) {
+                    if (results != null) {
                         // TODO - read through the output of the results and validate the custom command was successful.
                         searchesCompleted[i] = true;
                     }
@@ -110,7 +118,7 @@ require([
             ).searchByQuery(searchQuery);
         }
 
-        new SplunkCommonUtilities.VWaitUntil(
+        SplunkCommonUtilities.vWaitUntil(
             function(){
                 for(let key in searchesCompleted){
                     if (searchesCompleted[key] === false){

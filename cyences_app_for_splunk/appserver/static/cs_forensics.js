@@ -63,6 +63,9 @@ require([
         | table title, contributing_events, system_compromised_search, system_compromised_drilldown, attacker_search, attacker_drilldown`;
     new SplunkCommonUtilities.VSearchManagerUtility(
         function(results){
+            if(results == null){
+                return;
+            }
             $.each(results.rows, function (index, row) {
                 let alert_name = row[0];
                 all_alerts[alert_name] = {};
