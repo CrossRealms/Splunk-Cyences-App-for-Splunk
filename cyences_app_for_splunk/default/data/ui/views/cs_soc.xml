@@ -27,7 +27,7 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="dropdown" token="tkn_savedsearch">
+    <input type="multiselect" token="tkn_savedsearch" searchWhenChanged="true">
       <label>Alert</label>
       <fieldForLabel>title</fieldForLabel>
       <fieldForValue>title</fieldForValue>
