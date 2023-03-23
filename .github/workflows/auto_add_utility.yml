@@ -25,5 +25,5 @@ jobs:
           app_dir: "cyences_app_for_splunk"
           main_branch_name: "master"
           utilities_to_add: "logger,common_splunk_js_utilities"
-          log_files_prefix: "cyences_"
+          log_files_prefix: "cyences"
           logger_sourcetype: "cyences:logs"
