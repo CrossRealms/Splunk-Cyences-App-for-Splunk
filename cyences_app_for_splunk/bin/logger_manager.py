@@ -6,6 +6,8 @@ import os
 # Splunk imports
 from splunk.clilib.bundle_paths import make_splunkhome_path
 
+log_file_prefix = 'cyences_'
+
 
 def setup_logging(log_name, log_level=logging.INFO):
     """ Setup logger.
@@ -14,7 +16,7 @@ def setup_logging(log_name, log_level=logging.INFO):
     :param log_level: log level, a string
     :return: a logger object
     """
-    log_name = 'cyences_{}'.format(log_name)
+    log_name = '{}_{}'.format(log_file_prefix, log_name)
     # Make path till log file (current dir (app/<app-name>/bin))
     # log_dir = os.path.dirname(os.path.abspath(__file__))
     # log_file = os.path.join(log_dir, "%s.log" % log_name)
@@ -41,7 +43,7 @@ def setup_logging(log_name, log_level=logging.INFO):
             log_file, mode="a", maxBytes=10485760, backupCount=10)
         # Format logs
         fmt_str = "%(asctime)s %(levelname)s %(thread)d - %(message)s"
-        formatter = logging.Formatter(fmt_str)
+        formatter = logging.Formatter(fmt_str, datefmt="%Y-%m-%d %H:%M:%S %z")
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
