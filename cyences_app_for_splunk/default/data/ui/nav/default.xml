@@ -34,6 +34,7 @@
     <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="Settings">
+    <view name="cs_product_setup" />
     <view name="cs_configuration" />
     <view name="cs_decommision_host" />
     <view name="cs_sysmon_deploy_audit" />

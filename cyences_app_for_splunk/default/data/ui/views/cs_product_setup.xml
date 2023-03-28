@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<view template="cyences_app_for_splunk:/templates/cs_product_setup.html" type="html" isDashboard="False">
+	<label>Product Setup</label>
+</view>
