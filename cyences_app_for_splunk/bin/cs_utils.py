@@ -10,22 +10,33 @@ CYENCES_CONF_FILE = 'cs_configurations'
 
 PRODUCTS = [
 {
-    'name': 'Sophos',
+    'name': 'Authentication',
     'macro_configurations': [
         {
-            'macro_name': 'cs_sophos',
-            'search': '`cs_sophos` | stats count by host',
+            'macro_name': 'cs_authentication_indexes',
+            'search': '`cs_authentication_indexes` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         }
     ]
 },
 {
-    'name': 'Windows Defender',
+    'name': 'AWS',
     'macro_configurations': [
         {
-            'macro_name': 'cs_windows_defender',
-            'search': '`cs_windows_defender` | stats count by host',
+            'macro_name': 'cs_aws',
+            'search': '`cs_aws` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Cisco IOS',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_cisco_ios',
+            'search': '`cs_cisco_ios` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         }
@@ -54,209 +65,11 @@ PRODUCTS = [
     ]
 },
 {
-    'name': 'Kaspersky',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_kaspersky',
-            'search': '`cs_kaspersky` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Office 365',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_o365',
-            'search': '`cs_o365` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Azure Security Score Logs',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_azure_securityscore',
-            'search': '`cs_azure_securityscore` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'WinEventLog Security',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_wineventlog_security',
-            'search': '`cs_wineventlog_security` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'WinEventLog System',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_wineventlog_system',
-            'search': '`cs_wineventlog_system` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Active Directory Logs',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_ad_active_directory',
-            'search': '`cs_ad_active_directory` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'MSAD Health Logs',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_ad_health_logs',
-            'search': '`cs_ad_health_logs` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Sysmon',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_sysmon',
-            'search': '`cs_sysmon` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
     'name': 'FortiGate',
     'macro_configurations': [
         {
             'macro_name': 'cs_fortigate',
             'search': '`cs_fortigate` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Palo Alto',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_palo',
-            'search': '`cs_palo` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Sophos Firewall',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_sophos_firewall',
-            'search': '`cs_sophos_firewall` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'VPN (indexes)',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_vpn_indexes',
-            'search': '`cs_vpn_indexes` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Authentication (indexes)',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_authentication_indexes',
-            'search': '`cs_authentication_indexes` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Lansweeper',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_lansweeper',
-            'search': '`cs_lansweeper` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Qualys',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_qualys',
-            'search': '`cs_qualys` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Tenable',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_tenable',
-            'search': '`cs_tenable` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Linux',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_linux',
-            'search': '`cs_linux` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'Microsoft Defender ATP',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_o365_defender_atp',
-            'search': '`cs_o365_defender_atp` | stats count by host',
-            'earliest_time': '-60m@m',
-            'latest_time': 'now',
-        }
-    ]
-},
-{
-    'name': 'AWS',
-    'macro_configurations': [
-        {
-            'macro_name': 'cs_aws',
-            'search': '`cs_aws` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         }
@@ -274,11 +87,168 @@ PRODUCTS = [
     ]
 },
 {
-    'name': 'Cisco IOS',
+    'name': 'Kaspersky',
     'macro_configurations': [
         {
-            'macro_name': 'cs_cisco_ios',
-            'search': '`cs_cisco_ios` | stats count by host',
+            'macro_name': 'cs_kaspersky',
+            'search': '`cs_kaspersky` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Lansweeper',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_lansweeper',
+            'search': '`cs_lansweeper` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Linux',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_linux',
+            'search': '`cs_linux` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Office 365',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_o365',
+            'search': '`cs_o365` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_o365_defender_atp',
+            'search': '`cs_o365_defender_atp` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_azure_securityscore',
+            'search': '`cs_azure_securityscore` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Palo Alto',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_palo',
+            'search': '`cs_palo` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Qualys',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_qualys',
+            'search': '`cs_qualys` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Sophos',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_sophos',
+            'search': '`cs_sophos` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Sophos Firewall',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_sophos_firewall',
+            'search': '`cs_sophos_firewall` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Sysmon',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_sysmon',
+            'search': '`cs_sysmon` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Tenable',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_tenable',
+            'search': '`cs_tenable` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'VPN',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_vpn_indexes',
+            'search': '`cs_vpn_indexes` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Windows',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_wineventlog_security',
+            'search': '`cs_wineventlog_security` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_wineventlog_system',
+            'search': '`cs_wineventlog_system` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_windows_defender',
+            'search': '`cs_windows_defender` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_ad_active_directory',
+            'search': '`cs_ad_active_directory` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_ad_health_logs',
+            'search': '`cs_ad_health_logs` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         }
@@ -286,7 +256,7 @@ PRODUCTS = [
 },
 ]
 
-PRODUCTS = PRODUCTS.sort(key=lambda x: x["name"])
+PRODUCTS.sort(key=lambda x: x["name"].lower())
 
 
 class CredentialManager(object):
