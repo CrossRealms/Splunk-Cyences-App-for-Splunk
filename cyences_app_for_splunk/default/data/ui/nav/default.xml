@@ -3,30 +3,30 @@
   <view name="cs_forensics" />
   <view name="cs_soc" />
   <collection label="Dashboards">
-    <view name="cs_ad_reports" />
-    <view name="cs_windows_reports" />
-    <view name="cs_windows_patch" />
-    <view name="cs_linux_reports" />
+    <view name="cs_ad_reports" /><!--Windows-->
+    <view name="cs_windows_reports" /><!--Windows-->
+    <view name="cs_windows_patch" /><!--Windows-->
+    <view name="cs_linux_reports" /><!--Linux-->
     <collection label="Cloud Tenancies">
-      <view name="cs_o365_reports" />
-      <view name="cs_aws_user_activity" />
-      <view name="cs_gsuite_reports" />
+      <view name="cs_o365_reports" /><!--Office 365-->
+      <view name="cs_aws_user_activity" /><!--AWS-->
+      <view name="cs_gsuite_reports" /><!--G Suite-->
     </collection>
     <view name="cs_network_reports" />
-    <view name="cs_paloalto_firewall_reports" />
-    <view name="cs_sophos_firewall" />
-    <view name="cs_vpn_reports" />
+    <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
+    <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
+    <view name="cs_vpn_reports" /><!--VPN-->
     <collection label="Antivirus">
-      <view name="cs_sophos_reports" />
-      <view name="cs_windows_defender_reports" />
-      <view name="cs_o365_defender_atp" />
-      <view name="cs_crowdstrike_reports" />
-      <view name="cs_kaspersky_reports" />
+      <view name="cs_sophos_reports" /><!--Sophos-->
+      <view name="cs_windows_defender_reports" /><!--Windows-->
+      <view name="cs_o365_defender_atp" /><!--Office 365-->
+      <view name="cs_crowdstrike_reports" /><!--CrowdStrike EventStream-->
+      <view name="cs_kaspersky_reports" /><!--Kaspersky-->
     </collection>
-    <view name="cs_dns_tracker" />
+    <view name="cs_dns_tracker" /><!--Windows-->
     <view name="cs_vulnerability" />
-    <view name="cs_authentication_reports" />
-    <view name="cs_lansweeper" />
+    <view name="cs_authentication_reports" /><!--Authentication-->
+    <view name="cs_lansweeper" /><!--Lansweeper-->
   </collection>
   <collection label="Intelligence">
     <view name="cs_device_inventory_table" />
@@ -37,8 +37,8 @@
     <view name="cs_product_setup" />
     <view name="cs_configuration" />
     <view name="cs_decommision_host" />
-    <view name="cs_sysmon_deploy_audit" />
-    <view name="cs_o365_defender_atp_audit" />
+    <view name="cs_sysmon_deploy_audit" /><!--Sysmon-->
+    <view name="cs_o365_defender_atp_audit" /><!--Office 365-->
     <view name="cs_all_alerts" />
     <a href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
   </collection>
