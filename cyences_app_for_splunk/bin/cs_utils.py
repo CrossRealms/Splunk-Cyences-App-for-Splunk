@@ -8,6 +8,49 @@ CYENCES_NETWORK_CALL_TIMEOUT = 240   # max timeout for all network calls are 240
 CYENCES_CONF_FILE = 'cs_configurations'
 
 
+PRODUCTS = [
+  {
+    'name': 'Palo Alto Firewall',
+    'macro_configurations': [
+      {
+        'macro_name': 'cs_palo',
+        'search': '`cs_palo` | stats count by host',
+        'earliest_time': '-60m@m',
+        'latest_time': 'now',
+      },
+      {
+        'macro_name': 'cs_vpn_indexes',
+        'search': '`cs_vpn_indexes` | stats count by host',
+        'earliest_time': '-60m@m',
+        'latest_time': 'now',
+      }
+    ]
+  },
+  {
+    'name': 'Sophos Firewall',
+    'macro_configurations': [
+      {
+        'macro_name': 'cs_sophos',
+        'search': '`cs_sophos` | stats count by host',
+        'earliest_time': '-60m@m',
+        'latest_time': 'now',
+      }
+    ]
+  },
+  {
+    'name': 'Linux',
+    'macro_configurations': [
+      {
+        'macro_name': 'cs_linux',
+        'search': '`cs_linux` | stats count by host',
+        'earliest_time': '-60m@m',
+        'latest_time': 'now',
+      }
+    ]
+  }
+]
+
+
 class CredentialManager(object):
     '''
     Credential manager to store and retrieve password
@@ -149,3 +192,87 @@ class ConfigHandler:
         self.logger.debug("Alert specific config for alert action ({}): {}".format(alert_action_name, savedsearches_config_object))
 
         return alert_action_config_for_alert
+
+
+    def get_macros(self):
+        self.logger.info("Getting macros")
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/-/{}/admin/macros?output_mode=json&count=0".format(
+                APP_NAME
+            ),
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+        )
+        data = json.loads(serverContent)["entry"]
+        return data
+
+
+    def get_macros_definitions(self):
+        data = self.get_macros()
+        results = {}
+        for item in data:
+            results[item["name"]] = item["content"]["definition"]
+        return results
+
+
+    def update_macro(self, macro_name, data):
+        self.logger.info("Updating macro {} with data {}".format(macro_name, data))
+        rest.simpleRequest(
+            "/servicesNS/nobody/{}/admin/macros/{}?output_mode=json&count=0".format(
+                APP_NAME, macro_name
+            ),
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+            method="POST",
+            postargs=data,
+        )
+
+
+    def get_saved_searches(self):
+        self.logger.info("Getting savedsearches")
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/-/{}/saved/searches?output_mode=json&count=0".format(
+                APP_NAME
+            ),
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+        )
+        data = json.loads(serverContent)["entry"]
+        return data
+
+
+    def update_savedsearch(self, savedsearch_name, data):
+        self.logger.info(
+            "Updating savedsearch {} with data {}".format(savedsearch_name, data)
+        )
+        rest.simpleRequest(
+            "/servicesNS/nobody/{}/saved/searches/{}?output_mode=json&count=0".format(
+                APP_NAME, savedsearch_name
+            ),
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+            method="POST",
+            postargs=data,
+        )
+
+
+    def get_conf_stanza(self, conf_file, stanza):
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(APP_NAME, conf_file, stanza), 
+            sessionKey=self.session_key
+        )
+        data = json.loads(serverContent)['entry']
+        return data
+
+
+    def update_conf_stanza(self, conf_file, stanza, data):
+        self.logger.info(
+            "Updating conf {} stanza {} with data {}".format(conf_file, stanza, data)
+        )
+        rest.simpleRequest(
+            "/servicesNS/nobody/{}/configs/conf-{}/{}?output_mode=json".format(APP_NAME, conf_file, stanza),
+            postargs=data,
+            method='POST',
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+        )

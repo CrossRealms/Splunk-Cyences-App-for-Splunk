@@ -28,72 +28,21 @@ class SyncFilterMacros(GeneratingCommand):
     )
 
     def get_saved_searches(self):
-        logger.info("Getting savedsearches")
-        _, serverContent = rest.simpleRequest(
-            "/servicesNS/-/{}/saved/searches?output_mode=json&count=0".format(
-                cs_utils.APP_NAME
-            ),
-            sessionKey=self.session_key,
-            raiseAllErrors=True,
-        )
-        data = json.loads(serverContent)["entry"]
+        data = self.conf_manger.get_saved_searches()
 
         results = {}
         for item in data:
             if item["content"].get("action.cyences_notable_event_action") == "1":
                 results[item["name"]] = item["content"]
-        logger.debug("savedsearches={}".format(results))
         return results
-
-    def get_macros(self):
-        logger.info("Getting macros")
-        _, serverContent = rest.simpleRequest(
-            "/servicesNS/-/{}/admin/macros?output_mode=json&count=0".format(
-                cs_utils.APP_NAME
-            ),
-            sessionKey=self.session_key,
-            raiseAllErrors=True,
-        )
-        data = json.loads(serverContent)["entry"]
-
-        results = {}
-        for item in data:
-            results[item["name"]] = item["content"]["definition"]
-        logger.debug("macros={}".format(results))
-        return results
-
-    def update_macro(self, macro_name, data):
-        logger.info("Updating macro {} with data {}".format(macro_name, data))
-        _, serverContent = rest.simpleRequest(
-            "/servicesNS/nobody/{}/admin/macros/{}?output_mode=json&count=0".format(
-                cs_utils.APP_NAME, macro_name
-            ),
-            sessionKey=self.session_key,
-            raiseAllErrors=True,
-            method="POST",
-            postargs=data,
-        )
-
-    def update_savedsearch(self, savedsearch_name, data):
-        logger.info(
-            "Updating savedsearch {} with data {}".format(savedsearch_name, data)
-        )
-        rest.simpleRequest(
-            "/servicesNS/nobody/{}/saved/searches/{}?output_mode=json&count=0".format(
-                cs_utils.APP_NAME, savedsearch_name
-            ),
-            sessionKey=self.session_key,
-            raiseAllErrors=True,
-            method="POST",
-            postargs=data,
-        )
 
     def generate(self):
         try:
             self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
+            self.conf_manger = cs_utils.ConfigHandler(logger, self.session_key)
 
             savedsearches = self.get_saved_searches()
-            macros = self.get_macros()
+            macros = self.conf_manger.get_macros_definitions()
 
             run_upgrade_steps = cs_utils.is_true(
                 macros["cy_run_filter_macro_upgrade_steps"]
@@ -129,18 +78,18 @@ class SyncFilterMacros(GeneratingCommand):
 
                 if self.reverse or run_upgrade_steps:
                     # Update the savedsearch param with macro value
-                    self.update_savedsearch(
+                    self.conf_manger.update_savedsearch(
                         name, {FILTER_MACRO_VALUE_KEY: current_macro_value}
                     )
 
                 else:
                     # Update the macro with savedsearch param value
-                    self.update_macro(param_name, {"definition": param_value})
+                    self.conf_manger.update_macro(param_name, {"definition": param_value})
 
             # Update upgrade macro value to 0 as one time upgrade is done
             # FYI: The upgrade steps will be executed once on the fresh install as well. But i think that is okay as schedule search runs every 5 minute.
             if run_upgrade_steps:
-                self.update_macro(
+                self.conf_manger.update_macro(
                     "cy_run_filter_macro_upgrade_steps", {"definition": "0"}
                 )
                 logger.info("Upgrade steps are performed and upgrade macro is updated.")
