@@ -135,6 +135,12 @@ PRODUCTS = [
             'latest_time': 'now',
         },
         {
+            'macro_name': 'cs_o365_defender_atp_audit',
+            'search': '`cs_o365_defender_atp_audit` | stats count by host',
+            'earliest_time': '-60m@m',
+            'latest_time': 'now',
+        },
+        {
             'macro_name': 'cs_azure_securityscore',
             'search': '`cs_azure_securityscore` | stats count by host',
             'earliest_time': '-60m@m',
