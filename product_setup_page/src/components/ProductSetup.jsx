@@ -20,12 +20,12 @@ export default function ProductSetup(props) {
     }
     saveProductConfig(payload)
       .then((resp) => {
-        generateToast(`Successfully updated "${payload.product}".`, "success")
+        generateToast(`Successfully ${!enabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
         setEnabled(!enabled);
       })
       .catch((error) => {
         console.log(error);
-        generateToast(`Failed updated "${payload.product}". check console for more detail.`, "error")
+        generateToast(`Failed to update "${payload.product}". check console for more detail.`, "error")
       })
   }
 
@@ -50,7 +50,7 @@ export default function ProductSetup(props) {
       })
       .catch((error) => {
         console.log(error);
-        generateToast(`Failed updated "${payload.product}" macros. check console for more detail.`, "error")
+        generateToast(`Failed to update "${payload.product}" macros. check console for more detail.`, "error")
       })
   }
 
@@ -66,6 +66,7 @@ export default function ProductSetup(props) {
         <MacroConfiguration
           key={item.macro_name}
           macroName={item.macro_name}
+          macroLabel={item.label}
           macroDefinition={item.macro_definition}
           defaultSearch={item.search}
           earliestTime={item.earliest_time}

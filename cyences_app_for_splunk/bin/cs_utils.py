@@ -14,6 +14,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_authentication_indexes',
+            'label': 'Authentication Data (indexes)',
             'search': '`cs_authentication_indexes` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -25,6 +26,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_aws',
+            'label': 'AWS Data',
             'search': '`cs_aws` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -36,6 +38,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_cisco_ios',
+            'label': 'Cisco IOS Data',
             'search': '`cs_cisco_ios` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -47,6 +50,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_crowdstrike_eventstream',
+            'label': 'CrowdStrike EventStream Data',
             'search': '`cs_crowdstrike_eventstream` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -58,6 +62,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_crowdstrike_vuln',
+            'label': 'CrowdStrike Spotlight Data',
             'search': '`cs_crowdstrike_vuln` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -69,6 +74,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_fortigate',
+            'label': 'FortiGate Data',
             'search': '`cs_fortigate` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -80,6 +86,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_gsuite',
+            'label': 'G Suite Data',
             'search': '`cs_gsuite` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -91,6 +98,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_kaspersky',
+            'label': 'Kaspersky Data',
             'search': '`cs_kaspersky` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -102,6 +110,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_lansweeper',
+            'label': 'Lansweeper Data',
             'search': '`cs_lansweeper` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -113,6 +122,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_linux',
+            'label': 'Linux Data',
             'search': '`cs_linux` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -124,24 +134,28 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_o365',
+            'label': 'Office 365 Data',
             'search': '`cs_o365` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_o365_defender_atp',
+            'label': 'Microsoft 365 Defender ATP Data',
             'search': '`cs_o365_defender_atp` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_o365_defender_atp_audit',
+            'label': 'Microsoft 365 Defender ATP Audit Data',
             'search': '`cs_o365_defender_atp_audit` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_azure_securityscore',
+            'label': 'Azure Security Score Data',
             'search': '`cs_azure_securityscore` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -153,6 +167,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_palo',
+            'label': 'Palo Alto Data',
             'search': '`cs_palo` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -164,6 +179,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_qualys',
+            'label': 'Qualys Data',
             'search': '`cs_qualys` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -175,6 +191,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_sophos',
+            'label': 'Sophos Central Data',
             'search': '`cs_sophos` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -186,6 +203,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_sophos_firewall',
+            'label': 'Sophos Firewall Data',
             'search': '`cs_sophos_firewall` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -197,6 +215,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_sysmon',
+            'label': 'Sysmon Data',
             'search': '`cs_sysmon` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -208,6 +227,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_tenable',
+            'label': 'Tenable Data',
             'search': '`cs_tenable` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -219,6 +239,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_vpn_indexes',
+            'label': 'VPN Data (indexes)',
             'search': '`cs_vpn_indexes` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
@@ -230,30 +251,35 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_wineventlog_security',
+            'label': 'WinEventLog Security Data',
             'search': '`cs_wineventlog_security` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_wineventlog_system',
+            'label': 'WinEventLog System Data',
             'search': '`cs_wineventlog_system` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_windows_defender',
+            'label': 'Windows Defender Data',
             'search': '`cs_windows_defender` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_ad_active_directory',
+            'label': 'Active Directory Logs',
             'search': '`cs_ad_active_directory` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',
         },
         {
             'macro_name': 'cs_ad_health_logs',
+            'label': 'MSAD Health Data',
             'search': '`cs_ad_health_logs` | stats count by host',
             'earliest_time': '-60m@m',
             'latest_time': 'now',

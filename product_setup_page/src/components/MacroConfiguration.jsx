@@ -5,7 +5,7 @@ import SearchTable from './SearchTable';
 
 
 export default function MacroConfiguration(props) {
-    const { macroName, macroDefinition, defaultSearch, earliestTime, latestTime, updateMacroDefinition } = props;
+    const { macroName, macroLabel, macroDefinition, defaultSearch, earliestTime, latestTime, updateMacroDefinition } = props;
 
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -24,7 +24,11 @@ export default function MacroConfiguration(props) {
 
     return (
         <div style={{ marginBottom: '30px' }}>
-            <div>{macroName} <Text inline value={macroDefinition} onChange={handleChange} /> <Button label="Run Search" appearance="primary" onClick={updateSearchQuery} /></div>
+            <div>
+                <label>{macroLabel} </label>
+                <Text inline value={macroDefinition} onChange={handleChange} />
+                <Button label="Run Search" appearance="primary" onClick={updateSearchQuery} />
+            </div>
             <div style={{ marginTop: "10px" }}>
                 {searchQuery !== '' && <SearchTable searchQuery={searchQuery} earliestTime={earliestTime} latestTime={latestTime} />}
             </div>
