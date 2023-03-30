@@ -5,46 +5,79 @@ require([
     'splunkjs/mvc/tableview',
     'splunkjs/mvc/simplexml/ready!'
 ], function ($, _, mvc, TableView) {
-
     'use strict';
+
     let baseURL = window.location.href.split('cs_overview')[0];
 
     let report_links = [
-        {id: 'cs_ad_reports', title: 'Active Directory'},
-        {id: 'cs_windows_reports', title: 'Windows'},
-        {id: 'cs_windows_patch', title: 'Windows Patch'},
-        {id: 'cs_linux_reports', title: 'Linux'},
-        {id: 'cs_o365_reports', title: 'Office 365'},
-        {id: 'cs_aws_user_activity', title: 'AWS'},
-        {id: 'cs_gsuite_reports', title: 'G Suite'},
-        {id: 'cs_network_reports', title: 'Network Telemetry'},
-        {id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall'},
-        {id: 'cs_sophos_firewall', title: 'Sophos Firewall'},
-        {id: 'cs_vpn_reports', title: 'VPN'},
-        {id: 'cs_sophos_reports', title: 'Sophos'},
-        {id: 'cs_windows_defender_reports', title: 'Windows Defender'},
-        {id: 'cs_o365_defender_atp', title: 'Defender ATP'},
-        {id: 'cs_crowdstrike_reports', title: 'CrowdStrike'},
-        {id: 'cs_kaspersky_reports', title: 'Kaspersky'},
-        {id: 'cs_dns_tracker', title: 'DNS Tracker'},
-        {id: 'cs_vulnerability', title: 'Vulnerability'},
-        {id: 'cs_authentication_reports', title: 'Authentication'},
-        {id: 'cs_lansweeper', title: 'Lansweeper'},
-        {id: 'cs_device_inventory_table', title: 'Device Inventory'},
-        {id: 'cs_malicious_ip_list', title: 'Malicious IP List'},
+        { id: 'cs_ad_reports', title: 'Active Directory' },
+        { id: 'cs_windows_reports', title: 'Windows' },
+        { id: 'cs_windows_patch', title: 'Windows Patch' },
+        { id: 'cs_linux_reports', title: 'Linux' },
+        { id: 'cs_o365_reports', title: 'Office 365' },
+        { id: 'cs_aws_user_activity', title: 'AWS' },
+        { id: 'cs_gsuite_reports', title: 'G Suite' },
+        { id: 'cs_network_reports', title: 'Network Telemetry' },
+        { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
+        { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
+        { id: 'cs_vpn_reports', title: 'VPN' },
+        { id: 'cs_sophos_reports', title: 'Sophos' },
+        { id: 'cs_windows_defender_reports', title: 'Windows Defender' },
+        { id: 'cs_o365_defender_atp', title: 'Defender ATP' },
+        { id: 'cs_crowdstrike_reports', title: 'CrowdStrike' },
+        { id: 'cs_kaspersky_reports', title: 'Kaspersky' },
+        { id: 'cs_dns_tracker', title: 'DNS Tracker' },
+        { id: 'cs_vulnerability', title: 'Vulnerability' },
+        { id: 'cs_authentication_reports', title: 'Authentication' },
+        { id: 'cs_lansweeper', title: 'Lansweeper' },
+        { id: 'cs_device_inventory_table', title: 'Device Inventory' },
+        { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
     ]
 
-    $.each(report_links, function(index, report){
-        $('#cyences_links').append(`<div class="box" id="${report.id}">${report.title}</div>`);
-    });
+    function parseEnabledDashboards(nav_bar_content) {
+        const re = /<view\s+name\s*=\s*"([^"]+)"/;
+        const enabledDashboards = new Set([]);
+        for (const item of nav_bar_content.split('\n')) {
+            const m = item.match(re);
+            if (m) {
+                enabledDashboards.add(m[1]);
+            }
+        }
+        return enabledDashboards;
+    }
 
-    // Iterate through the link and add the onClick method
-    $('#cyences_links').children().each(function (index, element) {
-        $(this).on("click", function(){
-            window.open(baseURL.concat(element.id), "_blank");
+    function addLinks(enabledDashboards) {
+        $.each(report_links, function (index, report) {
+            if (enabledDashboards.has(report.id)) {
+                $('#cyences_links').append(`<div class="box" id="${report.id}">${report.title}</div>`);
+            }
         });
-    });
 
+        // Iterate through the link and add the onClick method
+        $('#cyences_links').children().each(function (index, element) {
+            $(this).on("click", function () {
+                window.open(baseURL.concat(element.id), "_blank");
+            });
+        });
+    }
+
+    function updateNavBar() {
+        let service = mvc.createService();
+        service.get("data/ui/nav/default", {}, function (error, response) {
+            if (response) {
+                const enabledDashboards = parseEnabledDashboards(response.data.entry[0].content['eai:data']);
+                addLinks(enabledDashboards);
+            }
+            else if (error) {
+                console.log(`Error while getting nav bar content: ${error['error']}`);
+            }
+            else {
+                console.log("Unknown error while getting nav var content.");
+            }
+        });
+    }
+
+    updateNavBar();
 
     // Adding cell render to colorize the notable events based on severity
     var CustomSeverityColorRenderer = TableView.BaseCellRenderer.extend({

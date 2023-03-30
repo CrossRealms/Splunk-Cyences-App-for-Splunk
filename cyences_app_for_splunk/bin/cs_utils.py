@@ -487,7 +487,7 @@ class ConfigHandler:
         )
         rest.simpleRequest(
             "/servicesNS/nobody/{}/saved/searches/{}?output_mode=json&count=0".format(
-                APP_NAME, savedsearch_name
+                APP_NAME, quote(savedsearch_name, safe='')
             ),
             sessionKey=self.session_key,
             raiseAllErrors=True,
