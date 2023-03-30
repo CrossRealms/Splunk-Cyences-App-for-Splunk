@@ -1,7 +1,7 @@
 <form theme="dark" script="notable_event_editor.js" stylesheet="notable_event_editor.css" version="1.1">
   <label>SOC</label>
   <search id="notable_event_main_search">
-    <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+    <query>`cs_cyences_index` alert_name IN $tkn_savedsearch$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
 | fields - _raw, search_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
 | rename * AS X_*_NEW 
@@ -27,7 +27,7 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="multiselect" token="tkn_savedsearch" searchWhenChanged="true">
+    <input type="multiselect" token="tkn_savedsearch">
       <label>Alert</label>
       <fieldForLabel>title</fieldForLabel>
       <fieldForValue>title</fieldForValue>
@@ -38,6 +38,11 @@
       </search>
       <choice value="*">All</choice>
       <default>*</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
     </input>
     <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
       <label>Severity</label>
