@@ -90,28 +90,30 @@
     <panel>
       <title>Dashboards</title>
       <html>
-        <div class="box" id="ad_reports_link">Active Directory</div>
-        <div class="box" id="windows_reports_link">Windows</div>
-        <div class="box" id="windows_patch_link">Windows Patch</div>
-        <div class="box" id="linux_reports_link">Linux</div>
-        <div class="box" id="o365_reports_link">Office 365</div>
-        <div class="box" id="aws_reports_link">AWS</div>
-        <div class="box" id="gsuite_reports_link">G Suite</div>
-        <div class="box" id="network_reports_link">Network Telemetry</div>
-        <div class="box" id="paf_reports_link">Palo Alto Firewall</div>
-        <div class="box" id="sophos_firewall_link">Sophos Firewall</div>
-        <div class="box" id="vpn_reports_link">VPN</div>
-        <div class="box" id="sophos_reports_link">Sophos</div>
-        <div class="box" id="windowsdef_reports_link">Windows Defender</div>
-        <div class="box" id="o365_defender_atp_link">Defender ATP</div>
-        <div class="box" id="crowdstrike_reports_link">CrowdStrike</div>
-        <div class="box" id="kaspersky_reports_link">Kaspersky</div>
-        <div class="box" id="dns_tracker_link">DNS Tracker</div>
-        <div class="box" id="vulnerability_link">Vulnerability</div>
-        <div class="box" id="auth_reports_link">Authentication</div>
-        <div class="box" id="lansweeper_link">Lansweeper</div>
-        <div class="box" id="device_inventory_table_link">Device Inventory</div>
-        <div class="box" id="malicious_reports_link">Malicious IP List</div>
+        <div id="cyences_links">
+          <div class="box" id="cs_ad_reports">Active Directory</div>
+          <div class="box" id="cs_windows_reports">Windows</div>
+          <div class="box" id="cs_windows_patch">Windows Patch</div>
+          <div class="box" id="cs_linux_reports">Linux</div>
+          <div class="box" id="cs_o365_reports">Office 365</div>
+          <div class="box" id="cs_aws_user_activity">AWS</div>
+          <div class="box" id="cs_gsuite_reports">G Suite</div>
+          <div class="box" id="cs_network_reports">Network Telemetry</div>
+          <div class="box" id="cs_paloalto_firewall_reports">Palo Alto Firewall</div>
+          <div class="box" id="cs_sophos_firewall">Sophos Firewall</div>
+          <div class="box" id="cs_vpn_reports">VPN</div>
+          <div class="box" id="cs_sophos_reports">Sophos</div>
+          <div class="box" id="cs_windows_defender_reports">Windows Defender</div>
+          <div class="box" id="cs_o365_defender_atp">Defender ATP</div>
+          <div class="box" id="cs_crowdstrike_reports">CrowdStrike</div>
+          <div class="box" id="cs_kaspersky_reports">Kaspersky</div>
+          <div class="box" id="cs_dns_tracker">DNS Tracker</div>
+          <div class="box" id="cs_vulnerability">Vulnerability</div>
+          <div class="box" id="cs_authentication_reports">Authentication</div>
+          <div class="box" id="cs_lansweeper">Lansweeper</div>
+          <div class="box" id="cs_device_inventory_table">Device Inventory</div>
+          <div class="box" id="cs_malicious_ip_list">Malicious IP List</div>
+        </div>
       </html>
     </panel>
   </row>
