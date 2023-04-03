@@ -6,6 +6,7 @@ import socket
 import re
 import copy
 
+from six.moves.urllib.parse import quote
 from splunk import rest
 from splunk.util import normalizeBoolean
 import splunk.ssl_context as ssl_context
@@ -138,7 +139,7 @@ class CyencesEmailUtility:
 
     def savedsearch_level_overridden_email_configs(self, alert_name):
         _, serverContent = rest.simpleRequest(
-            "/servicesNS/-/{}/saved/searches/{}?output_mode=json".format(cs_utils.APP_NAME, alert_name),
+            "/servicesNS/-/{}/saved/searches/{}?output_mode=json".format(cs_utils.APP_NAME, quote(alert_name, safe='')),
             method='GET', sessionKey=self.session_key, raiseAllErrors=True)
 
         alert_all_configs = json.loads(serverContent)
