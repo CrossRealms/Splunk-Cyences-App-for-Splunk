@@ -42,7 +42,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='cisco:ios'
                         ),
-            'earliest_time': '-1d@d',
+            'earliest_time': '-4h@h',
             'latest_time': 'now',
         }
     ]
