@@ -10,7 +10,7 @@ export default function MacroConfiguration(props) {
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        setSearchQuery(defaultSearch.replace(`\`${macroName}\``, macroDefinition));
+        setSearchQuery(defaultSearch.replaceAll(`\`${macroName}\``, macroDefinition));
     }, []);
 
 
@@ -19,7 +19,7 @@ export default function MacroConfiguration(props) {
     };
 
     function updateSearchQuery() {
-        setSearchQuery(defaultSearch.replace(`\`${macroName}\``, macroDefinition));
+        setSearchQuery(defaultSearch.replaceAll(`\`${macroName}\``, macroDefinition));
     }
 
     return (

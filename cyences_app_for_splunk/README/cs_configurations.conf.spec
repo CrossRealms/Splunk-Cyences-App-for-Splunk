@@ -15,4 +15,5 @@ client_id = <string> Client ID
 client_secret = <string> Client Secret
 
 [product_config]
-products = <string> comma separated list of products
+enabled_products = <string> comma separated list of enabled products
+disabled_products = <string> comma separated list of disabled products

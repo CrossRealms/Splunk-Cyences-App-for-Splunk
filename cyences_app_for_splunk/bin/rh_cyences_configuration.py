@@ -16,7 +16,9 @@ CONF_FILE = 'cs_configurations'
 HONEYDB_STANZA = 'honeydb'
 
 APP_CONFIG_STANZA = 'product_config'
-PRODUCTS_KEY = "products"
+PRODUCTS_KEY = 'products'
+ENABLED_PRODUCTS_KEY = 'enabled_products'
+DISABLED_PRODUCTS_KEY = 'disabled_products'
 
 
 def parse_nav_item(content):
@@ -29,21 +31,30 @@ def parse_nav_item(content):
     m = re.search(r'<view\s+name\s*=\s*"([^"]+)"\s*/>\s*<!--\s*([\w,\s]+)\s*-->', content)
     if m:
         dashboard_name = m.group(1)
-        products = {i.strip().lower() for i in m.group(2).split(',') if i.strip()}
+        products = cs_utils.convert_to_set(m.group(2))
         return (dashboard_name, products)
     else:
         return (None, None)
 
 
-def build_new_nav_bar(user_products):
+def build_new_nav_bar(enabled_products, disabled_products):
     with open(make_splunkhome_path(["etc", "apps", cs_utils.APP_NAME, "default", "data", "ui" ,"nav", "default.xml"])) as fp:
         new_nav_items = []
         for line in fp:
             dashboard_name, products = parse_nav_item(line)
-            if dashboard_name is not None and len(products&user_products)==0:
-                new_nav_items.append("\n")
-            else:
+            # Other tags like collection, </collection>, etc..
+            if dashboard_name is None:
+                # Always add
                 new_nav_items.append(line)
+            elif len(products&disabled_products)>0:
+                # Not adding in nav bar
+                new_nav_items.append("\n")
+            elif len(products&enabled_products)>0:
+                new_nav_items.append(line)
+            else:
+                # keep enabled for status=unknown
+                new_nav_items.append(line)
+
         return ''.join(new_nav_items)
 
 
@@ -64,25 +75,27 @@ class CyencesConfigurationHandler(admin.MConfigHandler):
         return results
 
 
-    def configure_saved_searches(self, user_products):
+    def configure_saved_searches(self, enabled_products, disabled_products):
         savedsearches = self.get_saved_searches()
 
         for name, content in savedsearches.items():
-            products = {i.strip().lower() for i in content["action.cyences_notable_event_action.products"].split(',') if i.strip()}
+            products = cs_utils.convert_to_set(content["action.cyences_notable_event_action.products"])
             current_disabled = cs_utils.is_true(content["disabled"])
-            if len(products&user_products)>0:
+
+            if len(products&disabled_products)>0:
+                new_disabled = True
+            elif len(products&enabled_products)>0:
                 new_disabled = False
             else:
-                new_disabled = True
+                new_disabled = current_disabled
             
             if current_disabled != new_disabled:
                 self.conf_manager.update_savedsearch(name, {"disabled": new_disabled})
 
 
-    def configure_nav_bar(self, user_products):
-        self.conf_manager.update_conf_stanza(CONF_FILE, APP_CONFIG_STANZA, data={PRODUCTS_KEY: ', '.join(user_products)})
+    def configure_nav_bar(self, enabled_products, disabled_products):
 
-        nav_bar_xml = build_new_nav_bar(set(user_products))
+        nav_bar_xml = build_new_nav_bar(enabled_products, disabled_products)
 
         rest.simpleRequest(
             "/servicesNS/nobody/{}/data/ui/nav/default?output_mode=json".format(cs_utils.APP_NAME),
@@ -92,32 +105,45 @@ class CyencesConfigurationHandler(admin.MConfigHandler):
             raiseAllErrors=True,
         )
 
+        self.conf_manager.update_conf_stanza(
+            CONF_FILE,
+            APP_CONFIG_STANZA,
+            data={
+                ENABLED_PRODUCTS_KEY: ', '.join(enabled_products),
+                DISABLED_PRODUCTS_KEY: ', '.join(disabled_products)
+            }
+        )
+
 
     def get_product_configuration(self):
-            data = self.conf_manager.get_conf_stanza(CONF_FILE, APP_CONFIG_STANZA)
+        data = self.conf_manager.get_conf_stanza(CONF_FILE, APP_CONFIG_STANZA)
 
-            product_config = {}
-            for i in data:
-                if i['name'] == APP_CONFIG_STANZA:
-                    product_config= i['content']
-                    break
-            return [item.lower().strip() for item in product_config[PRODUCTS_KEY].split(',') if item.strip()]
+        product_config = {}
+        for i in data:
+            if i['name'] == APP_CONFIG_STANZA:
+                product_config= i['content']
+                break
+        enabled_products = cs_utils.convert_to_set(product_config[ENABLED_PRODUCTS_KEY])
+        disabled_products = cs_utils.convert_to_set(product_config[DISABLED_PRODUCTS_KEY])
+        return enabled_products, disabled_products
 
 
     def handleList(self, conf_info):
         self.conf_manager = cs_utils.ConfigHandler(logger, self.getSessionKey())
 
         try:
-            configured_products = self.get_product_configuration()
+            enabled_products, disabled_products = self.get_product_configuration()
             macros = self.conf_manager.get_macros_definitions()
 
             all_products = copy.deepcopy(cs_utils.PRODUCTS)
 
             for product in all_products:
-                if product["name"].lower() in configured_products:
+                if product["name"].lower() in enabled_products:
                     product["enabled"] = True
-                else:
+                elif product["name"].lower() in disabled_products:
                     product["enabled"] = False
+                else:
+                    product["enabled"] = "Unknown"
                 
                 for macro_item in product["macro_configurations"]:
                     macro_item["macro_definition"] = macros[macro_item["macro_name"]]
@@ -151,19 +177,19 @@ class CyencesConfigurationHandler(admin.MConfigHandler):
             if product_enabled is not None:
                 product = product.lower()
                 product_enabled = cs_utils.is_true(product_enabled)
-                configured_products = self.get_product_configuration()
+                enabled_products, disabled_products = self.get_product_configuration()
 
-
-                user_products = {i.lower() for i in configured_products}
                 if product_enabled:
-                    user_products.add(product.lower())
-                if not product_enabled and product in configured_products:
-                    user_products.remove(product.lower())
+                    enabled_products.add(product)
+                    disabled_products.discard(product)
+                if not product_enabled:
+                    disabled_products.add(product)
+                    enabled_products.discard(product)
                 
-                logger.info("final products to enable={}".format(user_products))
+                logger.info("final enabled_product={} and disabled_products={}".format(enabled_products, disabled_products))
 
-                self.configure_nav_bar(user_products)
-                self.configure_saved_searches(user_products)
+                self.configure_nav_bar(enabled_products, disabled_products)
+                self.configure_saved_searches(enabled_products, disabled_products)
 
                 conf_info["result"]['message'] = "Updated Cyences app configuration successfully"
 

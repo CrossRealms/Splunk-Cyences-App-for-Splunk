@@ -5,6 +5,13 @@ import MacroConfiguration from './MacroConfiguration';
 import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
 
+function effectiveEnabled(enabled) {
+  if (enabled.toString().toLowerCase() === "unknown") {
+    return [false, "Unknown"];
+  } else {
+    return [enabled, enabled ? "Enabled" : "Disabled"];
+  }
+}
 
 export default function ProductSetup(props) {
   const { productInfo } = props;
@@ -13,15 +20,16 @@ export default function ProductSetup(props) {
 
 
   function changeEnabled() {
+    const [finalEnabled, enabledLabel] = effectiveEnabled(enabled);
 
     const payload = {
       product: productInfo.name,
-      enabled: !enabled,
+      enabled: !finalEnabled,
     }
     saveProductConfig(payload)
       .then((resp) => {
-        generateToast(`Successfully ${!enabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
-        setEnabled(!enabled);
+        generateToast(`Successfully ${!finalEnabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
+        setEnabled(!finalEnabled);
       })
       .catch((error) => {
         console.log(error);
@@ -54,12 +62,13 @@ export default function ProductSetup(props) {
       })
   }
 
+  const [finalEnabled, enabledLabel] = effectiveEnabled(enabled);
 
   return (
     <div style={{ 'marginLeft': '25px' }} >
       <h1>{productInfo.name}
-        <Switch key={productInfo.name} value={productInfo.name} selected={enabled} appearance="toggle" onClick={changeEnabled}>
-          {enabled ? "Enabled" : "Disabled"}
+        <Switch key={productInfo.name} value={productInfo.name} selected={finalEnabled} appearance="toggle" onClick={changeEnabled}>
+          {enabledLabel}
         </Switch>
       </h1>
       {macros?.map((item) => (
