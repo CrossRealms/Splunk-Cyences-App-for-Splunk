@@ -131,7 +131,7 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Note: Query will remove the Host from the all_windows_hosts.csv Lookup and will keep Host in the cs_windows_decommissioned_hosts.csv lookup for 31 days.</p>
+        <p>Note: Query will remove the Host from the all_windows_hosts.csv Lookup and will keep Host in the cs_windows_decommissioned_hosts.csv lookup for 15 days.</p>
       </html>
     </panel>
   </row>
