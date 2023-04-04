@@ -110,6 +110,17 @@
       </input>
       <table>
         <search>
+          <query>| makeresults | eval host=$tkn_win_remove_forwarder|s$ | append [| inputlookup cs_windows_decommissioned_hosts.csv] | where _time > now() - 86400*31 | outputlookup cs_windows_decommissioned_hosts.csv | where host="DO-NOT-RETURN-ANYRESULTS"
+| append [| stats count | rename count as result | eval result="Host ".$tkn_win_remove_forwarder|s$." has been added to decommissioned Lookup."]</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <table>
+        <search>
           <query>| inputlookup all_windows_hosts.csv  | search NOT host=$tkn_win_remove_forwarder|s$ | outputlookup all_windows_hosts.csv | where host="DO-NOT-RETURN-ANYRESULTS"
 | append [| stats count | rename count as result | eval result="Host ".$tkn_win_remove_forwarder|s$." has been removed from the Lookup."]</query>
           <earliest>$earliest$</earliest>
@@ -120,7 +131,7 @@
         <option name="rowNumbers">true</option>
       </table>
       <html>
-        <p>Note: Query will remove the Host from the all_windows_hosts.csv Lookup.</p>
+        <p>Note: Query will remove the Host from the all_windows_hosts.csv Lookup and will keep Host in the cs_windows_decommissioned_hosts.csv lookup for 31 days.</p>
       </html>
     </panel>
   </row>
