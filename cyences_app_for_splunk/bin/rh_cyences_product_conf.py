@@ -78,6 +78,7 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
     def configure_saved_searches(self, enabled_products, disabled_products):
         savedsearches = self.get_saved_searches()
 
+        changed_savedsearches = []
         for name, content in savedsearches.items():
             products = cs_utils.convert_to_set(content["action.cyences_notable_event_action.products"])
             current_disabled = cs_utils.is_true(content["disabled"])
@@ -91,6 +92,9 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
             
             if current_disabled != new_disabled:
                 self.conf_manager.update_savedsearch(name, {"disabled": new_disabled})
+                changed_savedsearches.append(name + " => " + ("Disabled" if new_disabled else "Enabled"))
+
+        return '\n'.join(changed_savedsearches)
 
 
     def configure_nav_bar(self, enabled_products, disabled_products):
@@ -189,9 +193,9 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
                 logger.info("final enabled_product={} and disabled_products={}".format(enabled_products, disabled_products))
 
                 self.configure_nav_bar(enabled_products, disabled_products)
-                self.configure_saved_searches(enabled_products, disabled_products)
+                output = self.configure_saved_searches(enabled_products, disabled_products)
 
-                conf_info["result"]['message'] = "Updated Cyences app configuration successfully"
+                conf_info["result"]['message'] = output
 
         except Exception as e:
             logger.exception("Unable to update Cyences app configuration.")

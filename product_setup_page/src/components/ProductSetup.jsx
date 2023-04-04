@@ -17,6 +17,7 @@ export default function ProductSetup(props) {
   const { productInfo } = props;
   const [enabled, setEnabled] = useState(productInfo.enabled)
   const [macros, setMacros] = useState(productInfo.macro_configurations)
+  const [response, setResponse] = useState('');
 
 
   function changeEnabled() {
@@ -30,6 +31,7 @@ export default function ProductSetup(props) {
       .then((resp) => {
         generateToast(`Successfully ${!finalEnabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
         setEnabled(!finalEnabled);
+        setResponse(resp.data.entry[0].content.message)
       })
       .catch((error) => {
         console.log(error);
@@ -66,11 +68,11 @@ export default function ProductSetup(props) {
 
   return (
     <div style={{ 'marginLeft': '25px' }} >
-      <h1>{productInfo.name}
-        <Switch key={productInfo.name} value={productInfo.name} selected={finalEnabled} appearance="toggle" onClick={changeEnabled}>
-          {enabledLabel}
-        </Switch>
-      </h1>
+      <h1 style={{marginBottom:'0px'}}>{productInfo.name}</h1>
+      <Switch inline key={productInfo.name} value={productInfo.name} selected={finalEnabled} appearance="toggle" onClick={changeEnabled}>
+        {enabledLabel}
+      </Switch>
+
       {macros?.map((item) => (
         <MacroConfiguration
           key={item.macro_name}
@@ -84,6 +86,7 @@ export default function ProductSetup(props) {
         />
       ))}
       <Button label="Save" appearance="primary" onClick={saveMacros} updateMacroDefinition={updateMacroDefinition} />
+      {response && <pre>{response}</pre>}
     </div>
   );
 }

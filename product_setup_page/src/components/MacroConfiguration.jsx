@@ -32,7 +32,7 @@ export default function MacroConfiguration(props) {
     }
 
     return (
-        <div style={{ marginBottom: '30px' }}>
+        <div style={{ marginBottom: '30px', marginTop: '10px' }}>
             <div style={{ marginBottom: '10px' }}>
                 <label>{macroLabel} </label>
             </div>
