@@ -1,6 +1,6 @@
 import { axiosCallWrapper } from './axiosCallWrapper';
 
-const PRODUCT_CONFIG_ENDPOINT = 'CyencesConfiguration/product_config';
+const PRODUCT_CONFIG_ENDPOINT = 'CyencesProductConfiguration/product_config';
 
 async function fetchProducts() {
     return await axiosCallWrapper({

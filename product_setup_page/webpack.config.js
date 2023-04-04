@@ -6,7 +6,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = merge(baseConfig, {
     entry: {
-        cs_product_setup: path.join(__dirname, 'src/cs_product_setup'),
+        cs_configuration: path.join(__dirname, 'src/cs_configuration'),
     },
     output: {
         path: path.join(__dirname, '../cyences_app_for_splunk/appserver/static/js/build'),

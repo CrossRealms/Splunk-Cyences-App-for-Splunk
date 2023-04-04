@@ -58,7 +58,7 @@ def build_new_nav_bar(enabled_products, disabled_products):
         return ''.join(new_nav_items)
 
 
-class CyencesConfigurationHandler(admin.MConfigHandler):
+class CyencesProductConfigurationHandler(admin.MConfigHandler):
 
     def setup(self):
         for arg in ['data']:
@@ -221,4 +221,4 @@ class CyencesConfigurationHandler(admin.MConfigHandler):
 
 
 if __name__ == "__main__":
-    admin.init(CyencesConfigurationHandler, admin.CONTEXT_APP_AND_USER)
+    admin.init(CyencesProductConfigurationHandler, admin.CONTEXT_APP_AND_USER)
