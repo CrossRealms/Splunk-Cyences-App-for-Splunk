@@ -1,44 +1,49 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import NavBar from './components/NavBar';
-import ProductSetup from './components/ProductSetup';
-import { fetchProducts } from './utils/api';
 
+import ProductSetupApp from './ProductSetupApp';
+import MacroSetupApp from './MacroSetupApp';
+import HoneyDBSetup from './HoneyDBSetup';
+import MaliciousIPCollectorSetup from './MaliciousIPCollectorSetup';
+import SophosEndpointAPISetup from './SophosEndpointAPISetup';
+
+const TABS = [
+    'Product Setup',
+    'Macro Setup',
+    'HoneyDB Configuration',
+    'MaliciousIP Collector Configuration',
+    'Sophos Endpoint API Configuration',
+]
 
 export default function App() {
-    const [products, setProducts] = useState(null);
-    const [activeTabId, setActiveTabId] = useState('');
+
+    const [activeTabId, setActiveTabId] = useState('Product Setup');
 
     const handleChange = useCallback((e, { selectedTabId }) => {
         setActiveTabId(selectedTabId);
     }, []);
 
 
-    useEffect(() => {
-        fetchProducts()
-            .then((resp) => {
-                const data = JSON.parse(resp.data.entry[0].content.products);
-                setProducts(data);
-                setActiveTabId(data[0].name)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [])
-
-    if (!products) {
-        return <div>Loading...</div>
-    }
-
     return (
-        <div style={{ display: 'flex' }}>
-            <NavBar activeTabId={activeTabId} handleChange={handleChange} items={products?.map((productInfo) => productInfo.name)} />
-            {
-                products?.map((productInfo) => (
-                    <div key={productInfo.name} style={{ display: activeTabId === productInfo.name ? 'block' : 'none' }}>
-                        <ProductSetup key={productInfo.name} productInfo={productInfo} />
-                    </div>
-                ))
-            }
-        </div>
+        <>
+            <NavBar key='mainMenu' activeTabId={activeTabId} layout='horizontal' handleChange={handleChange} items={TABS} />
+            <div style={{ marginBottom: '50px' }}></div>
+            <div key={TABS[0]} style={{ display: activeTabId === TABS[0] ? 'block' : 'none' }}>
+                <ProductSetupApp />
+            </div>
+            <div key={TABS[1]} style={{ display: activeTabId === TABS[1] ? 'block' : 'none' }}>
+                <MacroSetupApp />
+            </div>
+            <div key={TABS[2]} style={{ display: activeTabId === TABS[2] ? 'block' : 'none' }}>
+                <HoneyDBSetup />
+            </div>
+            <div key={TABS[3]} style={{ display: activeTabId === TABS[3] ? 'block' : 'none' }}>
+                <MaliciousIPCollectorSetup />
+            </div>
+            <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
+                <SophosEndpointAPISetup />
+            </div>
+
+        </>
     );
 }
