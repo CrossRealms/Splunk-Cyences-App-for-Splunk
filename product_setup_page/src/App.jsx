@@ -6,6 +6,7 @@ import MacroSetupApp from './MacroSetupApp';
 import HoneyDBSetup from './HoneyDBSetup';
 import MaliciousIPCollectorSetup from './MaliciousIPCollectorSetup';
 import SophosEndpointAPISetup from './SophosEndpointAPISetup';
+import SendEmailSetup from './SendEmailSetup';
 
 const TABS = [
     'Product Setup',
@@ -13,6 +14,7 @@ const TABS = [
     'HoneyDB Configuration',
     'MaliciousIP Collector Configuration',
     'Sophos Endpoint API Configuration',
+    'Cyences Action - Send Email - Default/Common Configuration',
 ]
 
 export default function App() {
@@ -42,6 +44,9 @@ export default function App() {
             </div>
             <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
                 <SophosEndpointAPISetup />
+            </div>
+            <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
+                <SendEmailSetup />
             </div>
         </div>
     );

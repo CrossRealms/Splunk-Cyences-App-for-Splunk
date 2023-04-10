@@ -5,7 +5,7 @@ import Text from '@splunk/react-ui/Text';
 
 
 function SimpleForm(props) {
-    const { username = 'Loading...', password = '', usernameLabel, usernameHelp = '', passwordLabel, passwordHelp = '', onSave } = props;
+    const { username = 'Loading...', password = '', usernameLabel, usernameHelp = '', passwordLabel, passwordHelp = '', passwordType = 'password', onSave } = props;
     const [user, setUser] = useState(username);
     const [pass, setPass] = useState(password);
 
@@ -29,7 +29,7 @@ function SimpleForm(props) {
                     <Text inline name='username' value={user} onChange={(e, { value }) => setUser(value)} />
                 </ControlGroup>
                 <ControlGroup required={true} label={passwordLabel} help={passwordHelp} >
-                    <Text inline name='password' type="password" value={pass} onChange={(e, { value }) => setPass(value)} />
+                    <Text inline name='password' type={passwordType} value={pass} onChange={(e, { value }) => setPass(value)} />
                 </ControlGroup>
                 <ControlGroup label=''>
                     <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
