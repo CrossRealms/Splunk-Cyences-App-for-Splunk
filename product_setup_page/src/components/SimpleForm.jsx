@@ -26,13 +26,13 @@ function SimpleForm(props) {
         <div style={{ marginTop: '15px' }} onSubmit={handleSubmit} >
             <form >
                 <ControlGroup required={true} label={usernameLabel} help={usernameHelp} >
-                    <Text inline name='username' style={{ width: '80px' }} value={user} onChange={(e, { value }) => setUser(value)} />
+                    <Text inline name='username' value={user} onChange={(e, { value }) => setUser(value)} />
                 </ControlGroup>
                 <ControlGroup required={true} label={passwordLabel} help={passwordHelp} >
-                    <Text inline name='password' style={{ width: '80px' }} type="password" value={pass} onChange={(e, { value }) => setPass(value)} />
+                    <Text inline name='password' type="password" value={pass} onChange={(e, { value }) => setPass(value)} />
                 </ControlGroup>
                 <ControlGroup label=''>
-                    <Button type='submit' label="Save" appearance="primary" />
+                    <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
                 </ControlGroup>
             </form>
         </div>

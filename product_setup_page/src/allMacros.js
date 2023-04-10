@@ -1,56 +1,5 @@
 let allMacros = [
     {
-        section: 'Data Macros',
-        macros: [
-            'cs_sophos',
-            'cs_windows_defender',
-            'cs_crowdstrike_eventstream',
-            'cs_crowdstrike_vuln',
-            'cs_kaspersky',
-            'cs_o365',
-            'cs_azure_securityscore',
-            'cs_wineventlog_security',
-            'cs_wineventlog_system',
-            'cs_ad_active_directory',
-            'cs_ad_health_logs',
-            'cs_sysmon',
-            'cs_fortigate',
-            'cs_palo',
-            'cs_sophos_firewall',
-            'cs_vpn_indexes',
-            'cs_authentication_indexes',
-            'cs_lansweeper',
-            'cs_qualys',
-            'cs_tenable',
-            'cs_linux',
-            'cs_o365_defender_atp',
-            'cs_aws',
-            'cs_gsuite',
-            'cs_cisco_ios',
-        ]
-    },
-    {
-        section: 'Other Macros',
-        macros: [
-            'cs_ad_password_change_outside_working_hour_definition',
-            'cs_home_country',
-            'cs_network_home_location_lat',
-            'cs_network_home_location_lon',
-            'cs_palo_search_blocked_ip_lookup_name',
-            'cs_palo_malicious_ip_list_filter_old_results',
-            'cs_lansweeper_timerange',
-            'cs_wineventlog_security_timerange',
-            'cs_wineventlog_system_timerange',
-            'cs_sysmon_timerange',
-            'cs_qualys_timerange',
-            'cs_qualys_linux_os',
-            'cs_ad_important_role',
-            'cs_ad_important_policy',
-            'cs_ad_important_user',
-            'cs_ad_important_group',
-        ]
-    },
-    {
         section: 'Data-model',
         macros: [
             'cs_summariesonly_endpoint',
@@ -62,9 +11,35 @@ let allMacros = [
         ]
     },
     {
+        section: 'Network',
+        macros: [
+            'cs_network_traffic_map_filter',
+            'cs_network_scanning_map_filter',
+            'cs_home_country',
+            'cs_network_home_location_lat',
+            'cs_network_home_location_lon',
+        ]
+    },
+    {
+        section: 'Other Macros',
+        macros: [
+            'cs_lansweeper_timerange',
+            'cs_wineventlog_security_timerange',
+            'cs_wineventlog_system_timerange',
+            'cs_sysmon_timerange',
+            'cs_qualys_timerange',
+            'cs_qualys_linux_os',
+        ]
+    },
+    {
         section: 'Windows & AD',
         macros: [
             'cs_ad_bulk_user_creation_deletion_count_limit',
+            'cs_ad_password_change_outside_working_hour_definition',
+            'cs_ad_important_role',
+            'cs_ad_important_policy',
+            'cs_ad_important_user',
+            'cs_ad_important_group',
         ]
     },
     {
@@ -79,13 +54,6 @@ let allMacros = [
         ]
     },
     {
-        section: 'Network',
-        macros: [
-            'cs_network_traffic_map_filter',
-            'cs_network_scanning_map_filter',
-        ]
-    },
-    {
         section: 'Palo Alto',
         macros: [
             'cs_palo_ddos_prevented_filter',
@@ -93,6 +61,8 @@ let allMacros = [
             'cs_palo_blocked_ip_inbound_filter',
             'cs_palo_blocked_ip_outbound_filter',
             'cs_palo_malicious_ip_list_filter',
+            'cs_palo_search_blocked_ip_lookup_name',
+            'cs_palo_malicious_ip_list_filter_old_results',
         ]
     },
     {

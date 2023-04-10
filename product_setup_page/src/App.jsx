@@ -17,7 +17,7 @@ const TABS = [
 
 export default function App() {
 
-    const [activeTabId, setActiveTabId] = useState('Product Setup');
+    const [activeTabId, setActiveTabId] = useState(TABS[0]);
 
     const handleChange = useCallback((e, { selectedTabId }) => {
         setActiveTabId(selectedTabId);
@@ -25,8 +25,8 @@ export default function App() {
 
 
     return (
-        <>
-            <NavBar key='mainMenu' activeTabId={activeTabId} layout='horizontal' handleChange={handleChange} items={TABS} />
+        <div style={{ display: 'flex' }}>
+            <NavBar key='mainMenu' activeTabId={activeTabId} layout='vertical' handleChange={handleChange} items={TABS} />
             <div style={{ marginBottom: '50px' }}></div>
             <div key={TABS[0]} style={{ display: activeTabId === TABS[0] ? 'block' : 'none' }}>
                 <ProductSetupApp />
@@ -43,7 +43,6 @@ export default function App() {
             <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
                 <SophosEndpointAPISetup />
             </div>
-
-        </>
+        </div>
     );
 }

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Button from '@splunk/react-ui/Button';
 import Text from '@splunk/react-ui/Text';
 import ControlGroup from '@splunk/react-ui/ControlGroup';
-import Accordion from '@splunk/react-ui/Accordion';
+import NavBar from './components/NavBar';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
 import allMacros from "./allMacros";
@@ -47,27 +47,35 @@ function MacroSetup(props) {
 
     return (
         <div>
-            <ControlGroup label={macroName}>
-                <Text inline value={macro} onChange={handleChange} /> <Button label="Update" appearance="primary" onClick={updateMacro} />
+            <ControlGroup style={{ maxWidth: '600px' }} label={macroName} >
+                <Text inline style={{ width: '400px' }} value={macro} onChange={handleChange} />
+                <Button style={{ maxWidth: '80px' }} label="Update" appearance="primary" onClick={updateMacro} />
             </ControlGroup>
         </div>
     );
 }
 
 export default function MacroSetupApp() {
+    const [activeTabId, setActiveTabId] = useState(allMacros[0].section);
+
+    const handleChange = useCallback((e, { selectedTabId }) => {
+        setActiveTabId(selectedTabId);
+    }, []);
+
     return (
-        <div>
-            <Accordion defaultOpenPanelId={1}>
-                {allMacros.map(({ section, macros }) => {
-                    return (
-                        <Accordion.Panel key={section} panelId={section} title={section}>
-                            <div key={section} style={{ marginLeft: '300px' }}>
-                                {macros?.map((macroName) => <MacroSetup key={macroName} macroName={macroName} />)}
-                            </div>
-                        </Accordion.Panel>
-                    )
-                })}
-            </Accordion>
+
+        <div style={{ display: 'flex' }}>
+            <NavBar key='macroMenu' activeTabId={activeTabId} handleChange={handleChange} items={allMacros?.map((item) => item.section)} />
+            <div style={{ 'marginLeft': '320px', marginTop: '20px' }}>
+                {
+                    allMacros?.map((item) => (
+                        <div key={item.section} style={{ display: activeTabId === item.section ? 'block' : 'none' }}>
+                            {item.macros.map((macroName) => <MacroSetup key={macroName} macroName={macroName} />)}
+                        </div>
+                    ))
+                }
+            </div>
         </div>
+
     );
 }
