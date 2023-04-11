@@ -9,12 +9,12 @@ import SophosEndpointAPISetup from './SophosEndpointAPISetup';
 import SendEmailSetup from './SendEmailSetup';
 
 const TABS = [
-    'Product Setup',
+    'Products Setup',
     'Macro Setup',
     'HoneyDB Configuration',
     'MaliciousIP Collector Configuration',
     'Sophos Endpoint API Configuration',
-    'Cyences Action - Send Email - Default/Common Configuration',
+    'Cyences Email Action Configuration',
 ]
 
 export default function App() {

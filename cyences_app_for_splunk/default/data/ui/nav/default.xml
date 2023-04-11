@@ -33,13 +33,11 @@
     <view name="cs_asset_intelligence" />
     <view name="cs_malicious_ip_list" />
   </collection>
-  <collection label="Settings">
-    <view name="cs_setup" />
+  <collection label="Cyences Settings">
     <view name="cs_configuration" />
     <view name="cs_decommision_host" />
     <view name="cs_sysmon_deploy_audit" /><!--Sysmon-->
     <view name="cs_o365_defender_atp_audit" /><!--Office 365-->
-    <view name="cs_all_alerts" />
     <a href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
   </collection>
   <view name="search" />
