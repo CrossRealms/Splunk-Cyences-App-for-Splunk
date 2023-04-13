@@ -110,7 +110,7 @@
       </input>
       <table>
         <search>
-          <query>| makeresults | eval host=$tkn_win_remove_forwarder|s$ | append [| inputlookup cs_windows_decommissioned_hosts.csv] | where _time > now() - 86400*15 | outputlookup cs_windows_decommissioned_hosts.csv | where host="DO-NOT-RETURN-ANYRESULTS"
+          <query>| makeresults | eval host=$tkn_win_remove_forwarder|s$ | append [| inputlookup cs_windows_decommissioned_hosts.csv] | where _time &gt; now() - 86400*15 | outputlookup cs_windows_decommissioned_hosts.csv | where host="DO-NOT-RETURN-ANYRESULTS"
 | append [| stats count | rename count as result | eval result="Host ".$tkn_win_remove_forwarder|s$." has been added to decommissioned Lookup."]</query>
           <earliest>$earliest$</earliest>
           <latest>$latest$</latest>
