@@ -68,7 +68,7 @@ export default function ProductSetup(props) {
 
   return (
     <div style={{ 'marginLeft': '25px' }} >
-      <h1 style={{marginBottom:'0px'}}>{productInfo.name}</h1>
+      <h1 style={{marginBottom:'0px'}}>{productInfo.label ? productInfo.label : productInfo.name}</h1>
       <Switch inline key={productInfo.name} value={productInfo.name} selected={finalEnabled} appearance="toggle" onClick={changeEnabled}>
         {enabledLabel}
       </Switch>

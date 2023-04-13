@@ -31,10 +31,10 @@ export default function ProductSetupApp() {
 
     return (
         <div style={{ display: 'flex' }}>
-            <NavBar key='productMenu' activeTabId={activeTabId} handleChange={handleChange} items={products?.map((productInfo) => productInfo.name)} />
+            <NavBar key='productMenu' activeTabId={activeTabId} handleChange={handleChange} items={products?.map((productInfo) => productInfo.label ? productInfo.label : productInfo.name)} />
             {
                 products?.map((productInfo) => (
-                    <div key={productInfo.name} style={{ display: activeTabId === productInfo.name ? 'block' : 'none' }}>
+                    <div key={productInfo.name} style={{ display: activeTabId === (productInfo.label ? productInfo.label : productInfo.name) ? 'block' : 'none' }}>
                         <ProductSetup key={productInfo.name} productInfo={productInfo} />
                     </div>
                 ))

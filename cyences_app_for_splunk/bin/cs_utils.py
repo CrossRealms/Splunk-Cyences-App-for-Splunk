@@ -58,7 +58,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='CrowdStrike:Event:Streams:JSON'
                         ),
-            'earliest_time': '-1d@d',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -74,7 +74,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='crowdstrike:spotlight:vulnerability'
                         ),
-            'earliest_time': '-1d@d',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -90,7 +90,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='fortigate_event,fortigate_traffic,fortigate_utm'
                         ),
-            'earliest_time': '-2h@h',
+            'earliest_time': '-4h@h',
             'latest_time': 'now',
         }
     ]
@@ -106,7 +106,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='gapps:report:admin,gapps:report:login'
                         ),
-            'earliest_time': '-1d@d',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -145,6 +145,7 @@ PRODUCTS = [
 },
 {
     'name': 'Linux',
+    'label': 'Linux/Unix',
     'macro_configurations': [
         {
             'macro_name': 'cs_linux',
@@ -155,7 +156,7 @@ PRODUCTS = [
                         values='usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit,syslog',
                         more='sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit,syslog)'
                         ),
-            'earliest_time': '-7d@d',
+            'earliest_time': '-2d@d',
             'latest_time': 'now',
         }
     ]
@@ -175,6 +176,23 @@ PRODUCTS = [
             'latest_time': 'now',
         },
         {
+            'macro_name': 'cs_azure_securityscore',
+            'label': 'Azure Security Score Data',
+            'search': QUERY(
+                        macro='cs_azure_securityscore',
+                        by='sourcetype',
+                        values='GraphSecurity:Score',
+                        more='sourcetype="GraphSecurity:Score"'
+                        ),
+            'earliest_time': '-2d@d',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
+    'name': 'Office 365 Defender ATP',
+    'macro_configurations': [
+        {
             'macro_name': 'cs_o365_defender_atp',
             'label': 'Microsoft 365 Defender ATP Data',
             'search': QUERY(
@@ -182,7 +200,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='ms:defender:atp:alerts'
                         ),
-            'earliest_time': '-60m@m',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         },
         {
@@ -193,19 +211,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='DefenderATPStatusLog'
                         ),
-            'earliest_time': '-4h@h',
-            'latest_time': 'now',
-        },
-        {
-            'macro_name': 'cs_azure_securityscore',
-            'label': 'Azure Security Score Data',
-            'search': QUERY(
-                        macro='cs_azure_securityscore',
-                        by='sourcetype',
-                        values='GraphSecurity:Score',
-                        more='sourcetype="GraphSecurity:Score"'
-                        ),
-            'earliest_time': '-2d@d',
+            'earliest_time': '-1d@d',
             'latest_time': 'now',
         }
     ]
@@ -237,7 +243,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='qualys:hostDetection'
                         ),
-            'earliest_time': '-2d@d',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -253,7 +259,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='sophos:central:events'
                         ),
-            'earliest_time': '-4h@h',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -285,7 +291,7 @@ PRODUCTS = [
                         by='source',
                         values='XmlWinEventLog:Microsoft-Windows-Sysmon/Operational'
                         ),
-            'earliest_time': '-60m@m',
+            'earliest_time': '-4h@h',
             'latest_time': 'now',
         }
     ]
@@ -301,7 +307,7 @@ PRODUCTS = [
                         by='sourcetype',
                         values='tenable:io:assets,tenable:io:plugin,tenable:io:vuln'
                         ),
-            'earliest_time': '-2d@d',
+            'earliest_time': '-7d@d',
             'latest_time': 'now',
         }
     ]
@@ -313,7 +319,7 @@ PRODUCTS = [
             'macro_name': 'cs_vpn_indexes',
             'label': 'VPN Data (indexes)',
             'search': '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by index, sourcetype',
-            'earliest_time': '-60m@m',
+            'earliest_time': '-1d@d',
             'latest_time': 'now',
         }
     ]
@@ -330,9 +336,14 @@ PRODUCTS = [
 | append [| search `cs_windows_idx` sourcetype="ActiveDirectory" | stats count | eval label="Windows AD", search="sourcetype=\"ActiveDirectory\""] 
 | append [| search `cs_windows_idx` source=powershell sourcetype="MSAD:*:Health" | stats count | eval label="Windows AD Health", search="source=powershell sourcetype=\"MSAD:*:Health\""] 
 | table label search count''',
-            'earliest_time': '-60m@m',
+            'earliest_time': '-1d@d',
             'latest_time': 'now',
-        },
+        }
+    ]
+},
+{
+    'name': 'Windows Defender',
+    'macro_configurations': [
         {
             'macro_name': 'cs_windows_defender',
             'label': 'Windows Defender Data',
@@ -341,7 +352,7 @@ PRODUCTS = [
                         by='source',
                         values='XmlWinEventLog:Defender'
                         ),
-            'earliest_time': '-60m@m',
+            'earliest_time': '-1d@d',
             'latest_time': 'now',
         }
     ]

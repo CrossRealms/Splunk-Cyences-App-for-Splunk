@@ -21,7 +21,7 @@ let allMacros = [
         ]
     },
     {
-        section: 'Other Macros',
+        section: 'Lansweeper Dashboard',
         macros: [
             'cs_lansweeper_timerange',
             'cs_wineventlog_security_timerange',
