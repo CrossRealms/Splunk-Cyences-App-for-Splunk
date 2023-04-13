@@ -3,7 +3,7 @@ import Button from '@splunk/react-ui/Button';
 import Text from '@splunk/react-ui/Text';
 import SearchTable from './SearchTable';
 
-export default function MacroConfiguration(props) {
+export default function DataMacroConfiguration(props) {
     const { macroName, macroLabel, macroDefinition, defaultSearch, earliestTime, latestTime, updateMacroDefinition } = props;
 
     const [searchQuery, setSearchQuery] = useState('');

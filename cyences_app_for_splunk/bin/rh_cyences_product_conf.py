@@ -4,6 +4,7 @@ import json
 import splunk.admin as admin
 from splunk import rest
 import cs_utils
+from cs_product_list import PRODUCTS
 from splunk.clilib.bundle_paths import make_splunkhome_path
 
 
@@ -139,7 +140,7 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
             enabled_products, disabled_products = self.get_product_configuration()
             macros = self.conf_manager.get_macros_definitions()
 
-            all_products = copy.deepcopy(cs_utils.PRODUCTS)
+            all_products = copy.deepcopy(PRODUCTS)
 
             for product in all_products:
                 if product["name"].lower() in enabled_products:

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@splunk/react-ui/Button';
 import Switch from '@splunk/react-ui/Switch'
-import MacroConfiguration from './MacroConfiguration';
+import DataMacroConfiguration from './DataMacroConfiguration';
 import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
 
@@ -74,7 +74,7 @@ export default function ProductSetup(props) {
       </Switch>
 
       {macros?.map((item) => (
-        <MacroConfiguration
+        <DataMacroConfiguration
           key={item.macro_name}
           macroName={item.macro_name}
           macroLabel={item.label}
