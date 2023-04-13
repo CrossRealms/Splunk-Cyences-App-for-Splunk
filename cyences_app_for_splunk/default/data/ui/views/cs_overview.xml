@@ -238,7 +238,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently not Operational O365 Services"
-    | eval cyences_severity=5
+    | eval cyences_severity=3
     | search cyences_severity IN $tkn_severity$
     | eval Count = cyences_severity."|".Count
     | rename Count as "Notable Events"]
@@ -292,7 +292,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Disabled/Stopped Sophos Services"
-    | eval cyences_severity = 5
+    | eval cyences_severity = 4
     | search cyences_severity IN $tkn_severity$] 
 | append
     [| search `cs_sophos` type="Event::Endpoint::Sav*" host="*" dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
@@ -303,7 +303,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"
-    | eval cyences_severity = 5
+    | eval cyences_severity = 4
     | search cyences_severity IN $tkn_severity$]
 | append
     [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=stopped) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
@@ -313,7 +313,7 @@
       $tkn_not_triggered_alert_filter_2$
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
       | eval Name="Currently Disabled/Stopped Windows Defender Services"
-    | eval cyences_severity = 5
+    | eval cyences_severity = 4
     | search cyences_severity IN $tkn_severity$]
 | append
     [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
@@ -324,7 +324,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
-    | eval cyences_severity = 5
+    | eval cyences_severity = 4
     | search cyences_severity IN $tkn_severity$]
 | eval cyences_severity=if(Count==0, 0, cyences_severity)
 | sort - cyences_severity
