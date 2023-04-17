@@ -13,3 +13,7 @@ cust_id = <string> UUID generated automatically while Configuration
 # Sophos Configuration, 
 client_id = <string> Client ID
 client_secret = <string> Client Secret
+
+[product_config]
+enabled_products = <string> comma separated list of enabled products
+disabled_products = <string> comma separated list of disabled products
