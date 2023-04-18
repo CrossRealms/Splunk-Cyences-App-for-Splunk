@@ -54,17 +54,17 @@ Once the data models are accelerated, update the macro definitions next, so that
 
 ![alt]({{ site.baseurl }}/assets/data_models_acceleration.png)
 
-The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Settings > Configuration**).
+The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Cyences Settings > Cyences App Configuration > Macro Setup > Data-model**).
 
-## **Data Source Macros**
+## **Products Setup (Data Source Macros)**
 
-Navigate to **Settings > Configuration** and underneath the **Data Source Macros** section is where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
+Navigate to **Cyences Settings > Cyences App Configuration > Products Setup** where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
-## **Other Macros**
+## **Macro Setup**
 
-Navigate to **Settings > Configuration** and in the **Other Macros** section is where you can view and update several macro definitions. These macros are used in various alerts, dashboards, searches, and reports. Verify that the macro definitions match the data source (index) used in your environment. 
+Navigate to **Cyences Settings > Cyences App Configuration > Macro Setup** where you can view and update several macro definitions. These macros are used in various alerts, dashboards, searches, and reports. 
 
 | Macro Name | Description | Default Value |            
 |--------|--------|-------------|
@@ -161,7 +161,7 @@ Cyences 3.0.0 contains two new email settings to reduce noise:
 2. Critical Alert Email
     * Sends an email immediately after an alert gets triggered if the notable event has been labeled with a critical severity level (default setting). Users can customize the severity level for this email setting as needed. 
     * Users will receive an immediate notification about important items within the email.
-    * Users will no longer have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source. Navigate to **Cyences App > Settings > Configuration** and add email addresses to the **Cyences Action - Send Email - Default/Common Configuration** section.  
+    * Users will no longer have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source. Navigate to **Cyences Settings > Cyences App Configuration > Cyences Email Action Configuration**.  
     ![alt]({{ site.baseurl }}/assets/cyences_action_send_email_default_common_config.png)
     * Users have an option to exclude themselves from specific alerts, to include their email addresses for specific alerts, or to disable an email altogether. This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
     ![alt]({{ site.baseurl }}/assets/cyences_email_configuration.png)
@@ -197,11 +197,9 @@ This list also adds IP addresses which are trying to make DDoS attacks on the Pa
 
 The Splunk user has to add the API ID and API key to make HoneyDB API calls to retrieve the blocked IP list. Follow these steps to update the API ID and API key for the Cyences App:
 
-1. Navigate to the Cyences app and from the navigation bar go to **Settings > Configuration**.
+1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration > HoneyDB Configuration**.
 
-2. At the top of the dashboard there is a section for **HoneyDB Configuration**. 
-
-3. Update the **API ID** and **API Key** for the HoneyDB API. 
+2. Update the **API ID** and **API Key** for the HoneyDB API. 
 
 ![alt]({{ site.baseurl }}/assets/honeydb_config.png)
 
@@ -209,11 +207,9 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 The Splunk user has to add the API URL and Auth token to make API calls to Cyences Malicious IP List server to create malicious IP list and retrieve the latest malicious IP list from the server. Follow these steps to update the same for the Cyences App: 
 
-1. Navigate to the Cyences app and from the navigation bar go to **Settings > Configuration**.  
+1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration > MaliciousIP Collector Configuration**.  
 
-2. At the top of the dashboard there is a section for **Malicious IP Server Configuration**. 
-
-3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
+2. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
 ![alt]({{ site.baseurl }}/assets/malicious_ip_collector_config.png)
 
@@ -229,7 +225,7 @@ Run the search below and it should return events with no errors:
 
 ## **Sophos Central API Endpoints Configuration**
 
-Refer to the **Data Onboarding > Sophos Central Metadata through API** section for more information. 
+Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_central/#sophos-central-metadata-through-api) section for more information. 
 
 ## **Device Inventory**
 
@@ -239,7 +235,7 @@ The Device Inventory Table is generated based on live data coming into Splunk. V
 
 To backfill all of the lookups related to device inventory, follow the directions below to execute the necessary search query. 
 
-Navigate to **Cyences App for Splunk > Settings > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
+Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
 
 Use an appropriate time range to backfill all of the lookups, since that determines the search range for all devices (the default time range is set to Last 30 days). 
 
@@ -256,6 +252,6 @@ List of Device Inventory related searches that users can execute individually to
 
 To clean up the lookups related to Device Inventory, follow the directions below to execute the necessary search query. 
 
-Navigate to **Cyences App for Splunk > Settings > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
+Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
 
 **Caution:** We highly recommend that users run the search in the Last 60 days or another time range that is better suited for their environment, since the time range of the search will define which devices will be kept and the rest will be automatically removed.
