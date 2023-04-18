@@ -168,7 +168,10 @@ class ConfigHandler:
         data = self.get_macros()
         results = {}
         for item in data:
-            results[item["name"]] = item["content"]["definition"]
+            try:
+                results[item["name"]] = item["content"]["definition"]
+            except Exception as err:
+                self.logger.warning("Unable to get definition for {}, content={}".format(item["name"], item["content"]))
         return results
 
 
