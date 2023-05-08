@@ -163,6 +163,17 @@ class ConfigHandler:
         data = json.loads(serverContent)["entry"]
         return data
 
+    def get_macro(self, macro_name):
+        self.logger.info("Getting macro {}".format(macro_name))
+        _, serverContent = rest.simpleRequest(
+            "/servicesNS/-/{}/admin/macros/{}?output_mode=json&count=0".format(
+                APP_NAME, macro_name
+            ),
+            sessionKey=self.session_key,
+            raiseAllErrors=True,
+        )
+        data = json.loads(serverContent)["entry"]
+        return data[0]["content"]["definition"]
 
     def get_macros_definitions(self):
         data = self.get_macros()
