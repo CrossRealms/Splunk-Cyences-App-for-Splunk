@@ -45,7 +45,7 @@ For optimal performance, it is recommended to enable the data model acceleration
 |--------|--------|-------------|
 | Endpoint | cs_summariesonly_endpoint | 7 days (Minimum) |
 | Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum) |
-| Authentication | cs_summariesonly_authentication | 7 day (Minimum) |
+| Authentication | cs_summariesonly_authentication | 30 day (Minimum) |
 | Network Resolution (DNS) | cs_summariesonly_network_resolution_dns | 7 day (Minimum) |
 | Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities | 1 month (Minimum) |
 | Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
@@ -54,7 +54,7 @@ Once the data models are accelerated, update the macro definitions next, so that
 
 ![alt]({{ site.baseurl }}/assets/data_models_acceleration.png)
 
-The default definition for the data model macros is summariesonly=**false** and it needs to be changed to summariesonly=**true** (**Cyences Settings > Cyences App Configuration > Macro Setup > Data-model**).
+The default definition for the data model macros is summariesonly=**false**. User can change to summariesonly=**true** if don't want to search non-accelarated data (**Cyences Settings > Cyences App Configuration > Macro Setup > Data-model**).
 
 ## **Products Setup (Data Source Macros)**
 
