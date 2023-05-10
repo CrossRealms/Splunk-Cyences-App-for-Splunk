@@ -45,7 +45,7 @@ For optimal performance, it is recommended to enable the data model acceleration
 |--------|--------|-------------|
 | Endpoint | cs_summariesonly_endpoint | 7 days (Minimum) |
 | Network Traffic | cs_summariesonly_network_traffic | 7 day (Minimum) |
-| Authentication | cs_summariesonly_authentication | 30 day (Minimum) |
+| Authentication | cs_summariesonly_authentication | 1 month (Minimum) |
 | Network Resolution (DNS) | cs_summariesonly_network_resolution_dns | 7 day (Minimum) |
 | Cyences_Vulnerabilities | cs_summariesonly_cyences_vulnerabilities | 1 month (Minimum) |
 | Cyences_Assets | cs_summariesonly_cyences_assets |  1 month (Minimum) |
