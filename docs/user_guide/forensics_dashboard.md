@@ -21,8 +21,8 @@ The dashboard also helps with completing a forensics dashboard regarding a secur
 * It contains valuable information that provides more insight about the matter such as: destination, file extensions, file names, file paths, IP addresses, sourcetypes, and much more.
 
 ### Notable Event Assignment and Status
-* User can assign the notable events to user for the investigation.
-* User can update the status of Notable event based the investigation phase.
+* User can assign notable events to the user on Splunk for further investigation of the incident.
+* User can also update the status of the notable event based on the investigation phase.
 
 ![alt]({{ site.baseurl }}/assets/notable_event_assignment.png)
 

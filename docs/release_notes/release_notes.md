@@ -12,15 +12,16 @@ has_children: true
 ## Version 4.0.0 (May 2023)
 
 * ### Notable Event Assignment
-    * User can assign a notable event to user and update the notable event status based the investigation from the Forensic dashboard.
-    * Added SOC Dashboard to get overview of notable events by the alert, assignee, status and severity.
+    * User can assign notable events to the user on Splunk for further investigation of the incident. User can also update the status of the notable event based on the investigation phase.
+    * Added the new SOC Dashboard to get overview of notable events by the alert, assignee, status and severity.
     * Updated Overview dashboard to filter the result based on the Status value.
 
 ![alt]({{ site.baseurl }}/assets/notable_event_assignment.png)
 
 * ### New Cyences Settings Page
-    * User can easily enable/disable the products as per their Splunk environment from the Product Setup page to enable/disable savedsearch and dashboards accordingly.
-    * All the old configurations are migrated to the new Cyences App Configuration Page. 
+    * Users can use Cyences' new App Configuration page to customize the dashboards they want to see/hide and the alerts they want to enable/disable.
+    * The new Cyences App Configuration page also allows you to see if the data-source configuration (index macro) is accurate and if your Splunk environment has data for it or not and modify the configuration if required.
+    * All the old configurations (Cyences default email configuration, Macro Setup, Sophos endpoint data collection creds, etc) are migrated to the new Cyences App Configuration Page.
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
@@ -29,17 +30,18 @@ has_children: true
     * Enhanced MultiSelect functionality
         * MultiSelect input will automatically select/unselect All option based on the user selection in all the dashboards.
     
-    * Support for email messagetrace event using O365 addon 
-        * Updated Email related alerts to support email messagetrace event collected using the O365 addon.
+    * Support for email messagetrace event using Splunk Add-on for Office 365. 
+        * Updated Email related alerts to support email messagetrace event collected using Splunk Add-on for Office 365..
 
     * Reduced severity level for the already blocked events for Palo High Threat alert.
 
     * Windows - Windows Process Tampering Detected alert
         * Added internal filter macro to reduce the false positives.
 
-    * New alerts for Successful Login from new location
-        * O365 - Login Failure From New Location Due To Multi Factor Authentication
-        * O365 - Successful Login From New Location
+    * New alerts for Successful Login From New Country
+        * O365 - Login Failure From New Country Due To Multi Factor Authentication
+        * O365 - Successful Login From New Country
+        * Authentication - Successful VPN Login From New Country
 
     * Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
 
