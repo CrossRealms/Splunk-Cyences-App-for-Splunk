@@ -57,8 +57,11 @@ Once the data models are accelerated, update the macro definitions next, so that
 The default definition for the data model macros is summariesonly=**false**. User can change to summariesonly=**true** if don't want to search non-accelarated data (**Cyences Settings > Cyences App Configuration > Macro Setup > Data-model**).
 
 ## **Products Setup (Data Source Macros)**
+Users can use Products Setup page to customize the dashboards they want to see/hide and the alerts they want to enable/disable.
 
-Navigate to **Cyences Settings > Cyences App Configuration > Products Setup** where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
+The Products Setup page allows you to see if the data-source configuration (index macro) is accurate and if your Splunk environment has data for it or not and modify the configuration if required
+
+Navigate to **Cyences Settings > Cyences App Configuration** and **Products Setup** section where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
@@ -177,39 +180,28 @@ We are using an IP block list from HoneyDB to detect malicious IP addresses comi
 
 A scheduled saved search is used to update the blocklist every two hours. Internally, the search query uses custom commands to make API calls to HoneyDB's API to update the blocked list lookup. 
 
-Saved search: **Dynamically Update Blocked IPs with HoneyDB**
-
-Custom command: **honeydblookupgen**
-
-Lookup to store the blocked IP/host: **ip_blocked_list (ip_blocked_list.csv)**
-
-The two accelerated reports below are used to identify problematic firewall traffic, which are either coming from a blocked-listed IP address or going out to a blocked-listed IP address.
-
-## Globally Detected Malicious IPs
-
-The problematic firewall traffic data is used to create our own malicious IP address list. If a blocked IP address is connecting with three or more firewall devices, then we categorize and add it to the list of Globally Detected Malicious IPs. 
-
-This list also adds IP addresses which are trying to make DDoS attacks on the Palo Alto firewall. The name of the saved search that generates the Globally Detected Malicious IPs is **PaloAlto Firewall - Malicious IP List Gen**.
-
-**Note:** Another source can be substituted for HoneyDB to get the blocked IP address list. If you have enough knowledge on Splunk commands, lookups, and searches then you can switch to your own trusted source.
-
 ## **Configuration of API and Secret Key for HoneyDB**
 
 The Splunk user has to add the API ID and API key to make HoneyDB API calls to retrieve the blocked IP list. Follow these steps to update the API ID and API key for the Cyences App:
 
-1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration > HoneyDB Configuration**.
+1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
 
-2. Update the **API ID** and **API Key** for the HoneyDB API. 
+2. At the top of the dashboard there is a section for **HoneyDB Configuration**
+
+3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
 ![alt]({{ site.baseurl }}/assets/honeydb_config.png)
+
 
 ## **Configuration of Malicious IP Collector Server**
 
 The Splunk user has to add the API URL and Auth token to make API calls to Cyences Malicious IP List server to create malicious IP list and retrieve the latest malicious IP list from the server. Follow these steps to update the same for the Cyences App: 
 
-1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration > MaliciousIP Collector Configuration**.  
+1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
 
-2. Update the **API URL** and **Auth Token** for the Cyences Server API. 
+2. At the top of the dashboard there is a section for **MaliciousIP Collector Configuration**.
+
+3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 
 ![alt]({{ site.baseurl }}/assets/malicious_ip_collector_config.png)
 
@@ -222,6 +214,7 @@ Run the search below and it should return events with no errors:
         | maliciousiplookupgen update_lookup=False generate_events=True 
 
 ![alt]({{ site.baseurl }}/assets/malicious_ip_lookupgen_search.png)
+
 
 ## **Sophos Central API Endpoints Configuration**
 

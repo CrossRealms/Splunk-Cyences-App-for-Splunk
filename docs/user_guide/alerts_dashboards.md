@@ -2,7 +2,7 @@
 layout: default
 title: Alerts and Dashboards
 permalink: /user_guide/alerts_dashboards/
-nav_order: 4
+nav_order: 5
 parent: User Guide
 ---
 

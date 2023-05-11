@@ -43,8 +43,3 @@ The dashboard also helps with completing a forensics dashboard regarding a secur
 * Describes what the purpose of the alert is, the severity of the alert, and scheduling details. 
 * This dashboard panel is useful if you are new to the Cyences App and want more information about the security use case or alert.
 * Users can drilldown from this dashboard panel to manually execute the search query of the alert.
-
-
-# SOC
-
-![alt]({{ site.baseurl }}/assets/soc_dashboard.png)

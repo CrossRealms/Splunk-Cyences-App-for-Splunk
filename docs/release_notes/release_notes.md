@@ -25,6 +25,12 @@ has_children: true
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
+* ### Alerts for Logins from New Country
+    * O365 - Login Failure From New Country Due To Multi Factor Authentication
+    * O365 - Successful Login From New Country
+    * Authentication - Successful VPN Login From New Country (This alert is vastly improved to make it login from a new Country instead of a static country name. This also reduces false positives drastically. The same applies to the other two newly added alerts as well.)
+
+* ### Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
 
 * ### Enhancements
     * Enhanced MultiSelect functionality
@@ -38,12 +44,7 @@ has_children: true
     * Windows - Windows Process Tampering Detected alert
         * Added internal filter macro to reduce the false positives.
 
-    * New alerts for Successful Login From New Country
-        * O365 - Login Failure From New Country Due To Multi Factor Authentication
-        * O365 - Successful Login From New Country
-        * Authentication - Successful VPN Login From New Country
 
-    * Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
 
     * Excluded TriggerBrowserCapabilitiesInterrupt error events from "O365 - Daily Login Failure" alert to reduce false positives.
         * More information for the error: https://login.microsoftonline.com/error?code=501314
