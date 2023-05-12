@@ -52,7 +52,7 @@ The Splunk user has to add the API ID and API key to make HoneyDB API calls to r
 
 1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
 
-2. At the top of the dashboard there is a section for **HoneyDB Configuration**
+2. On the left panel of the dashboard there is a section for **HoneyDB Configuration**
 
 3. Update the **API ID** and **API Key** for the HoneyDB API. 
 
@@ -65,7 +65,7 @@ The Splunk user has to add the API URL and Auth token to make API calls to Cyenc
 
 1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
 
-2. At the top of the dashboard there is a section for **MaliciousIP Collector Configuration**.
+2. On the left panel of the dashboard there is a section for **MaliciousIP Collector Configuration**.
 
 3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
 

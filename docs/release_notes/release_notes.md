@@ -28,7 +28,7 @@ has_children: true
 * ### Alerts for Logins from New Country
     * O365 - Login Failure From New Country Due To Multi Factor Authentication
     * O365 - Successful Login From New Country
-    * Authentication - Successful VPN Login From New Country (This alert is vastly improved to make it login from a new Country instead of a static country name. This also reduces false positives drastically. The same applies to the other two newly added alerts as well.)
+    * Authentication - Successful VPN Login From New Country (Enhanced)
 
 * ### Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
 
