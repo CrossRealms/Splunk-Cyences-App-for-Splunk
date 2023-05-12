@@ -85,7 +85,7 @@ parent: Release Notes
             ![alt]({{ site.baseurl }}/assets/cyences_email_configuration.png)
         3. Users can continue to use the default email notification method that Splunk provides if they want to for any specific alert.  
 
-    * Refer to the [Installation/Configuration]({{ site.baseurl }}/configuration/#cyences-email-settings-for-alerts) section for more information regarding the email configuration process for Cyences.
+    * Refer to the [Cyences Email Settings for Alerts]({{ site.baseurl }}/install_configure/configuration/#cyences-email-settings-for-alerts) section for more information regarding the email configuration process for Cyences.
 
 * ### Alert Filter Configuration from Searches, Reports and Alerts Page 
     * Users are now able to configure Cyences’ filter macros (to filter out the false positives of an alert) right from Splunk’s navigation bar (Settings > Searches, Reports, and Alerts) instead of from Cyences’ configuration page. (**Note:** Do not update the macro directly)
@@ -141,7 +141,7 @@ parent: Release Notes
     * Users can still view every alert by unchecking the **Hide Not Triggered Alerts** filter. 
 
 * Custom Alert Digest Email
-    * Users must configure their email address in order to use this feature. Refer to the [Installation/Configuration]({{ site.baseurl }}/configuration/#cyences-email-settings-for-alerts) section for more information. 
+    * Users must configure their email address in order to use this feature. Refer to the [Cyences Email Settings for Alerts]({{ site.baseurl }}/install_configure/configuration/#cyences-email-settings-for-alerts) section for more information. 
 
 * "Network Reports" dashboard is now renamed as "Network Telemetry".
 

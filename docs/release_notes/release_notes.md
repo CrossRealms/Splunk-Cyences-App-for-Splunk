@@ -66,4 +66,4 @@ has_children: true
 ## Upgrade Guide from 3.1.0 to 4.0.0
 
 * ### Cyences Settings
-    * Go through the [Cyences App Configuration]({{ site.baseurl }}/configuration/#products-setup-data-source-macros) and make required changes
+    * Go through the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#products-setup-data-source-macros) and make required changes
