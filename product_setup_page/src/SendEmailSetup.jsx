@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Link from '@splunk/react-ui/Link';
+import Heading from '@splunk/react-ui/Heading';
 import SimpleForm from './components/SimpleForm';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
 
@@ -55,7 +58,13 @@ export default function SendEmailSetup() {
 
     return (
         <>
+            <Heading style={{ marginLeft: '20px' }}>Digest Email Configuration</Heading>
+            <Link style={{ marginLeft: '40px', marginTop: '15px' }} to="/en-GB/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&count=100&offset=0&itemType=&owner=nobody&search=cyences digest" openInNewContext>Open Digest Alert</Link>
+
+            <Heading style={{ marginLeft: '20px' }}>Critical Email Configuration</Heading>
             <SimpleForm key='sendemailconfiguration' {...EmailConfigurationFields} onSave={onSave} username={data.email_to_default} password={data.cyences_severities} />
+
+            <CyencesDocFooter location="install_configure/configuration/#cyences-email-settings-for-alerts"></CyencesDocFooter>
         </>
     );
 }

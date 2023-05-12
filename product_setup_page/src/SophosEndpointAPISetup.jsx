@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import SimpleForm from './components/SimpleForm';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
@@ -54,6 +55,7 @@ export default function SophosEndpointAPISetup() {
     return (
         <>
             <SimpleForm key='sophosendpoint' {...SophosEndpointAPIFields} onSave={onSave} username={data.client_id} password={data.client_secret} />
+            <CyencesDocFooter location="install_configure/configuration/#sophos-central-api-endpoints-configuration"></CyencesDocFooter>
         </>
     );
 }

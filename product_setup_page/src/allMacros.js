@@ -1,117 +1,106 @@
 let allMacros = [
     {
-        section: 'Data-model',
-        macros: [
-            'cs_summariesonly_endpoint',
-            'cs_summariesonly_network_traffic',
-            'cs_summariesonly_authentication',
-            'cs_summariesonly_network_resolution_dns',
-            'cs_summariesonly_cyences_vulnerabilities',
-            'cs_summariesonly_cyences_assets',
-        ]
-    },
-    {
         section: 'Network',
         macros: [
-            'cs_network_traffic_map_filter',
-            'cs_network_scanning_map_filter',
-            'cs_home_country',
-            'cs_network_home_location_lat',
-            'cs_network_home_location_lon',
+            {name: 'cs_network_traffic_map_filter' },
+            {name: 'cs_network_scanning_map_filter' },
+            {name: 'cs_home_country', description: 'Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of home country. The country name should be compatible with the iplocation command (add quotes around the value in the macro definition)' },
+            {name: 'cs_network_home_location_lat', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map" },
+            {name: 'cs_network_home_location_lon', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map" },
         ]
     },
     {
         section: 'Lansweeper Dashboard',
         macros: [
-            'cs_lansweeper_timerange',
-            'cs_wineventlog_security_timerange',
-            'cs_wineventlog_system_timerange',
-            'cs_sysmon_timerange',
-            'cs_qualys_timerange',
-            'cs_qualys_linux_os',
+            { name: 'cs_lansweeper_timerange', description: 'The Lansweeper dashboard searches Lansweeper data in the specified timerange' },
+            { name: 'cs_wineventlog_security_timerange', description: 'The Lansweeper dashboard searches the WinEventLog:Security data in the specified timerange to see if the asset collects WinEventLog:Security data' },
+            { name: 'cs_wineventlog_system_timerange', description: 'The Lansweeper dashboard searches the WinEventLog:System data in the specified timerange to see if the asset collects WinEventLog:System data' },
+            { name: 'cs_sysmon_timerange', description: 'The Lansweeper dashboard searches the WinEventLog:Microsoft-Windows-Sysmon/Operational data in the specified timerange to see if the asset collects WinEventLog:Microsoft-Windows-Sysmon/Operational data' },
+            { name: 'cs_qualys_timerange', description: 'The Cyences App searches Qualys data in the specified timerange for vulnerability information regarding the assets' },
+            { name: 'cs_qualys_linux_os', description: 'Qualys data contains different Linux versions in the logs to identify them as Linux OS, so this condition is being used in the Lansweeper dashboard' },
         ]
     },
     {
         section: 'Windows & AD',
         macros: [
-            'cs_ad_bulk_user_creation_deletion_count_limit',
-            'cs_ad_password_change_outside_working_hour_definition',
-            'cs_ad_important_role',
-            'cs_ad_important_policy',
-            'cs_ad_important_user',
-            'cs_ad_important_group',
+            { name: 'cs_ad_bulk_user_creation_deletion_count_limit' },
+            { name: 'cs_ad_password_change_outside_working_hour_definition', description: 'Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm)' },
+            { name: 'cs_ad_important_role', description: 'List of important roles. (e.g. "val1","val2")' },
+            { name: 'cs_ad_important_policy', description: 'List of important policies. (e.g. "val1","val2")' },
+            { name: 'cs_ad_important_user', description: 'List of important users. (e.g. "val1","val2")' },
+            { name: 'cs_ad_important_group', description: 'List of important groups. (e.g. "val1","val2")' },
         ]
     },
     {
         section: 'O365',
         macros: [
-            'cs_o365_failed_login_outside_country_filter',
+            { name: 'cs_o365_failed_login_outside_country_filter' },
         ]
     },
     {
         section: 'Email', macros: [
-            'cs_email_increase_over_baseline_limit',
+            { name: 'cs_email_increase_over_baseline_limit' },
         ]
     },
     {
         section: 'Palo Alto',
         macros: [
-            'cs_palo_ddos_prevented_filter',
-            'cs_palo_firewall_login_failure_filter',
-            'cs_palo_blocked_ip_inbound_filter',
-            'cs_palo_blocked_ip_outbound_filter',
-            'cs_palo_malicious_ip_list_filter',
-            'cs_palo_search_blocked_ip_lookup_name',
-            'cs_palo_malicious_ip_list_filter_old_results',
+            { name: 'cs_palo_ddos_prevented_filter' },
+            { name: 'cs_palo_firewall_login_failure_filter' },
+            { name: 'cs_palo_blocked_ip_inbound_filter' },
+            { name: 'cs_palo_blocked_ip_outbound_filter' },
+            { name: 'cs_palo_malicious_ip_list_filter' },
+            { name: 'cs_palo_search_blocked_ip_lookup_name', description: 'Lookup for blocked IP list (default is ip_blocked_list, which stores the blocked IP list from HoneyDB)' },
+            { name: 'cs_palo_malicious_ip_list_filter_old_results', description: 'Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address)' },
         ]
     },
     {
         section: 'Sophos',
         macros: [
-            'cs_sophos_update_errors_filter',
-            'cs_sophos_endpoint_outofdate_filter',
-            'cs_sophos_core_restore_failed_filter',
-            'cs_sophos_expiration_messages_filter',
-            'cs_sophos_exploit_prevented',
-            'cs_sophos_malware_detected',
+            { name: 'cs_sophos_update_errors_filter' },
+            { name: 'cs_sophos_endpoint_outofdate_filter' },
+            { name: 'cs_sophos_core_restore_failed_filter' },
+            { name: 'cs_sophos_expiration_messages_filter' },
+            { name: 'cs_sophos_exploit_prevented' },
+            { name: 'cs_sophos_malware_detected' },
         ]
     },
     {
         section: 'Windows Defender',
         macros: [
-            'cs_windows_defender_update_errors_filter',
-            'cs_windows_defender_antivirus_expired_filter',
-            'cs_windows_defender_antivirus_dropped_support_for_os_filter',
-            'cs_windows_defender_antivirus_will_expired_filter',
-            'cs_windows_defender_antivirus_will_dropped_support_for_os_filter',
-            'cs_windows_defender_antivirus_scan_failed_filter',
-            'cs_windows_defender_unable_to_download_offline_scan_filter',
-            'cs_windows_defender_malware_detected_filter',
+            { name: 'cs_windows_defender_update_errors_filter' },
+            { name: 'cs_windows_defender_antivirus_expired_filter' },
+            { name: 'cs_windows_defender_antivirus_dropped_support_for_os_filter' },
+            { name: 'cs_windows_defender_antivirus_will_expired_filter' },
+            { name: 'cs_windows_defender_antivirus_will_dropped_support_for_os_filter' },
+            { name: 'cs_windows_defender_antivirus_scan_failed_filter' },
+            { name: 'cs_windows_defender_unable_to_download_offline_scan_filter' },
+            { name: 'cs_windows_defender_malware_detected_filter' },
         ]
     },
     {
         section: 'CrowdStrike',
         macros: [
-            'cs_crowdstrike_malware_detected_report_filter',
-            'cs_crowdstrike_malware_prevented_filter',
+            { name: 'cs_crowdstrike_malware_detected_report_filter' },
+            { name: 'cs_crowdstrike_malware_prevented_filter' },
         ]
     },
     {
         section: 'VPN',
         macros: [
-            'cs_vpn_dashboard_filter',
+            { name: 'cs_vpn_dashboard_filter' },
         ]
     },
     {
         section: 'Authentication',
         macros: [
-            'cs_authentication_app_filter',
-            'cs_bruteforce_from_user_additional_filter',
-            'cs_bruteforce_from_source_additional_filter',
-            'cs_authentication_bruteforce_attempt_limit',
-            'cs_authentication_excessive_vpn_login_failure_limit',
-            'cs_authentication_new_location_login_pct_limit',
-            'cs_authentication_vpn_session_duration_limit',
+            { name: 'cs_authentication_app_filter' },
+            { name: 'cs_bruteforce_from_user_additional_filter' },
+            { name: 'cs_bruteforce_from_source_additional_filter' },
+            { name: 'cs_authentication_bruteforce_attempt_limit' },
+            { name: 'cs_authentication_excessive_vpn_login_failure_limit' },
+            { name: 'cs_authentication_new_location_login_pct_limit' },
+            { name: 'cs_authentication_vpn_session_duration_limit' },
         ]
     },
 ];

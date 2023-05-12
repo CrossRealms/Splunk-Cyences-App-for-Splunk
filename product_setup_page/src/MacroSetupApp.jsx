@@ -3,13 +3,14 @@ import Button from '@splunk/react-ui/Button';
 import Text from '@splunk/react-ui/Text';
 import ControlGroup from '@splunk/react-ui/ControlGroup';
 import NavBar from './components/NavBar';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
 import allMacros from "./allMacros";
 
 
 function MacroSetup(props) {
-    const { macroName } = props;
+    const { macroName, description = '' } = props;
     const [macro, setMacro] = useState('Loading...');
 
     useEffect(() => {
@@ -47,7 +48,7 @@ function MacroSetup(props) {
 
     return (
         <div>
-            <ControlGroup style={{ maxWidth: '600px' }} label={macroName} >
+            <ControlGroup style={{ maxWidth: '600px' }} label={macroName} help={description}>
                 <Text inline style={{ width: '400px' }} value={macro} onChange={handleChange} />
                 <Button style={{ maxWidth: '80px' }} label="Update" appearance="primary" onClick={updateMacro} />
             </ControlGroup>
@@ -70,10 +71,11 @@ export default function MacroSetupApp() {
                 {
                     allMacros?.map((item) => (
                         <div key={item.section} style={{ display: activeTabId === item.section ? 'block' : 'none' }}>
-                            {item.macros.map((macroName) => <MacroSetup key={macroName} macroName={macroName} />)}
+                            {item.macros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description}/>)}
                         </div>
                     ))
                 }
+                <CyencesDocFooter location="install_configure/configuration/#macro-setup"></CyencesDocFooter>
             </div>
         </div>
 
