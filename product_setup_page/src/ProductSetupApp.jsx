@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import NavBar from './components/NavBar';
 import ProductSetup from './components/ProductSetup';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import { fetchProducts } from './utils/api';
 
 
@@ -32,6 +33,7 @@ export default function ProductSetupApp() {
     return (
         <div style={{ display: 'flex' }}>
             <NavBar key='productMenu' activeTabId={activeTabId} handleChange={handleChange} items={products?.map((productInfo) => productInfo.label ? productInfo.label : productInfo.name)} />
+            <div>
             {
                 products?.map((productInfo) => (
                     <div key={productInfo.name} style={{ display: activeTabId === (productInfo.label ? productInfo.label : productInfo.name) ? 'block' : 'none' }}>
@@ -39,6 +41,8 @@ export default function ProductSetupApp() {
                     </div>
                 ))
             }
+            <CyencesDocFooter location="install_configure/configuration/#products-setup-data-source-macros"></CyencesDocFooter>
+            </div>
         </div>
     );
 }

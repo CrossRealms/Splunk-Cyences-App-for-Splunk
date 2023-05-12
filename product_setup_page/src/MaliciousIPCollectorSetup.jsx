@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SimpleForm from './components/SimpleForm';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
 
@@ -54,6 +55,7 @@ export default function MaliciousIPCollectorSetup() {
     return (
         <>
             <SimpleForm key='maliciousip' {...MaliciousIPCollectorFields} onSave={onSave} username={data.api_url} password={data.auth_token} />
+            <CyencesDocFooter location="install_configure/configuration/#configuration-of-malicious-ip-collector-server"></CyencesDocFooter>
         </>
     );
 }

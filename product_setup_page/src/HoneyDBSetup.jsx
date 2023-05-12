@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SimpleForm from './components/SimpleForm';
+import CyencesDocFooter from './components/CyencesDocFooter';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
 
@@ -54,6 +55,7 @@ export default function HoneyDBSetup() {
     return (
         <>
             <SimpleForm key="honeydb" {...HoneyDBFields} onSave={onSave} username={data.api_id} password={data.api_key} />
+            <CyencesDocFooter location="install_configure/configuration/#honey-db-configuration"></CyencesDocFooter>
         </>
     );
 }
