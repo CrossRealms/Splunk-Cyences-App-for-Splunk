@@ -14,7 +14,7 @@
       <html>
         <p>Defender ATP / Microsoft 365 Defender ATP - This dashboard shows Defender ATP alerts.</p>
         <p>
-          <b>Data Collection:</b> It uses <a href="https://splunkbase.splunk.com/app/4959" target="_blank">Microsoft 365 Defender Add-on for Splunk</a> for Microsoft Defender ATP data collection.
+          <b>Data Collection:</b> It uses <a href="https://splunkbase.splunk.com/app/6207" target="_blank">Splunk Add-on for Microsoft Security</a> for Microsoft Defender ATP data collection.
         </p>
       </html>
       <table>
