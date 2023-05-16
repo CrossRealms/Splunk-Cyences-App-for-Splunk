@@ -33,6 +33,9 @@ def upgrade_4_0_0(session_key, logger):
     response = service.jobs.oneshot(SEARCH_QUERY, output_mode="json", earliest_time='-4w@w', latest_time='@w')
     handle_results(response, logger)
 
+# Note:
+# When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
+# If product is enabled then, we need to manually enable the alert in the upgrade steps.
 
 version_upgrade = (
     ('3.1.0', None),
