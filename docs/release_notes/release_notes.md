@@ -25,10 +25,10 @@ has_children: true
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
-* ### Alerts for Logins from New Country
-    * O365 - Login Failure From New Country Due To Multi Factor Authentication
-    * O365 - Successful Login From New Country
-    * Authentication - Successful VPN Login From New Country (Enhanced)
+* ### Alerts for Logins from Unusual Country
+    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * O365 - Successful Login From Unusual Country
+    * Authentication - Successful VPN Login From Unusual Country (Enhanced)
 
 * ### Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
 
