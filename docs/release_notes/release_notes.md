@@ -9,7 +9,7 @@ has_children: true
 # Release Notes
 
 
-## Version 4.0.0 (May 2023)
+## Version 4.0.0 (June 2023)
 
 * ### Notable Event Assignment
     * User can assign notable events to the user on Splunk for further investigation of the incident. User can also update the status of the notable event based on the investigation phase.
