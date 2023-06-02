@@ -44,7 +44,11 @@ has_children: true
     * Windows - Windows Process Tampering Detected alert
         * Added internal filter macro to reduce the false positives.
 
+    * Added ApplicationId field in the all O365 Login related alerts.
 
+    * Improved "O365 - Login From Unknown User" alert to consider both Unknown and "Not Available" user values.
+
+    * Improved "O365 Daily Login Failure" alert readability.
 
     * Excluded TriggerBrowserCapabilitiesInterrupt error events from "O365 - Daily Login Failure" alert to reduce false positives.
         * More information for the error: https://login.microsoftonline.com/error?code=501314
@@ -67,3 +71,5 @@ has_children: true
 
 * ### Cyences Settings
     * Go through the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#products-setup-data-source-macros) and make required changes
+
+    * The "Microsoft 365 Defender Add-on for Splunk" is deprecated. Use "Splunk Add-on for Microsoft Security" addon for O365 Defender ATP data collection. 
