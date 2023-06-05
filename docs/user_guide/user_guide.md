@@ -16,7 +16,7 @@ Data must be onboarded into your Splunk environment in order to get the most sec
 
 ### Configuration 
 
-View the [Installation/Configuration]({{ site.baseurl }}/configuration) section for installation and configuration information regarding the following topics:
+View the [Installation/Configuration]({{ site.baseurl }}/install_configure) section for installation and configuration information regarding the following topics:
 * App installation
 * Dependency installation
 * Macro configurations
