@@ -44,7 +44,7 @@ A few of the included alerts and reports are dependent on other reports being en
     * Windows - Hosts Missing Update
         * Windows - Hosts Lookup Gen (this report is enabled by default)
     * Device Inventory Gen 
-        * View the **App Installation and Configuration > Device Inventory** section for more details.
+        * View the [Installation/Configuration > Device Inventory]({{ site.baseurl }}/install_configure/configuration/#device-inventory) section for more details.
 
 ### Enable Email Notifications with Alerts
 Email notifications are disabled by default for all alerts. 

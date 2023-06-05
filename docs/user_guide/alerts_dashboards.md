@@ -2,7 +2,7 @@
 layout: default
 title: Alerts and Dashboards
 permalink: /user_guide/alerts_dashboards/
-nav_order: 4
+nav_order: 5
 parent: User Guide
 ---
 
@@ -94,7 +94,7 @@ There are several security related alerts to choose from and they are all locate
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login From Unusual Country
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
 * Dashboard panels:
@@ -139,10 +139,12 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Daily Login Failure
     * O365 - External User Added to Microsoft Teams
     * O365 - Login Failure Due To Multi Factor Authentication
+    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
     * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
     * O365 - Login From Unknown User
     * O365 - O365 Service is not Operational 
     * O365 - Security Compliance Alert
+    * O365 - Successful Login From Unusual Country
     * O365 - Successful Login Outside Home Country
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Change/Update
@@ -271,7 +273,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login From Unusual Country
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
 * Cisco Anyconnect Dashboard panels: 
@@ -289,7 +291,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login From Unusual Country
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
 * Fortinet FortiGate Dashboard panels:
@@ -307,7 +309,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From New Location
+    * Authentication - Successful VPN Login From Unusual Country
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
 * GlobalProtect (Palo Alto) Dashboard panels:
