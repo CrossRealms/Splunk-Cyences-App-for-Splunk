@@ -90,7 +90,7 @@ class SophosEndpointDetails(GeneratingCommand):
             elif(response_json.get("idType")=="organization"):
                 self.get_tenant_from_organization(barier_token,response_json.get("id"))
         else:
-            raise Exception("Error while fetching Tenant Details: {}".format(response.json()))
+            raise Exception("Error while fetching Tenant Details, status_code: {}, response: {}".format(response.status_code, response.json()))
 
     def get_request_header(self,tenant,barier_token):
         requestHeaders = {
@@ -180,24 +180,34 @@ class SophosEndpointDetails(GeneratingCommand):
 
             if(all_endpoints):
                 for tenant in SOPHOS_TENANT_DICT:
+                    requestHeaders = self.get_request_header(tenant, barier_token)
 
                     current_page=1
                     total_page = 1
+                    next_page_key = None
                     while(current_page<=total_page):
-                        requestHeaders = self.get_request_header(tenant,barier_token)
                         if(current_page==1):
-                            requestUrl = SOPHOS_TENANT_DICT.get(tenant)+"/endpoint/v1/endpoints?pageTotal=true"
+                            params = {"pageTotal": "true"}
                         else:
-                            requestUrl =  SOPHOS_TENANT_DICT.get(tenant)+"/endpoint/v1/endpoints?page="+str(current_page)
-                        request = requests.get(requestUrl, headers=requestHeaders)
-                        if(request.status_code!=200):
+                            params = {"pageFromKey": next_page_key}
+
+                        response = requests.get(
+                            SOPHOS_TENANT_DICT.get(tenant)+"/endpoint/v1/endpoints",
+                            params=params,
+                            headers=requestHeaders)
+
+                        if(response.status_code!=200):
                             raise Exception("Error while fetching all the endpoints")
-                        request_json = request.json()
+                        response_json = response.json()
 
                         if(current_page==1):
-                            total_page = request_json.get("pages").get("total")
+                            total_page = response_json.get("pages").get("total")
+                            logger.debug("Total Page: {}".format(total_page))
 
-                        for item in request_json.get("items"):
+                        logger.debug("Current Page: {}".format(current_page))
+                        next_page_key = response_json.get("pages", {}).get("nextKey")
+
+                        for item in response_json.get("items"):
                             yield {"_raw": item}
 
                         current_page = current_page + 1
