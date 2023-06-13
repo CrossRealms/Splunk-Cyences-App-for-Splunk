@@ -45,3 +45,7 @@ export = system
 [viewstates]
 access = read : [ * ], write : [ * ]
 export = system
+
+
+[collections/cyences_notable_event_collection]
+access = read : [ * ], write : [ * ]
