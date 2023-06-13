@@ -5,6 +5,8 @@ TA-cyences/local/**
 demo/dist/**
 demo/RansomwareDemo/**
 demo/RansomwareDemo.zip
+demo/device_list.pickle
+device_list.pickle
 
 _site/**
 docs/_site/**
