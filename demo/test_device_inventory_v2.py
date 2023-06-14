@@ -3,7 +3,7 @@ parent_dir = os.path.dirname
 APP_BIN_PATH = os.path.join(parent_dir(parent_dir(__file__)), 'cyences_app_for_splunk', 'bin')
 sys.path.insert(0, APP_BIN_PATH)
 
-from device_inventory_util import DeviceField, DeviceEntry, DeviceManager
+from device_inventory_v2_util import DeviceField, DeviceEntry, DeviceManager
 
 
 
