@@ -1,4 +1,6 @@
 import os, sys
+import hashlib
+
 parent_dir = os.path.dirname
 APP_BIN_PATH = os.path.join(parent_dir(parent_dir(__file__)), 'cyences_app_for_splunk', 'bin')
 sys.path.insert(0, APP_BIN_PATH)
@@ -16,8 +18,6 @@ def assert_no_of_devices(expected_no_of_devices, actual_device_list):
 
 
 def assert_device_details(expected_device_list, actual_device_list):
-    actual_device_list = [str(ele) for ele in actual_device_list]
-
     failure_msg = "Expected device details = [\n"
     for ed in expected_device_list:
         failure_msg += "{},\n".format(ed)
@@ -30,7 +30,17 @@ def assert_device_details(expected_device_list, actual_device_list):
 
     # print(failure_msg)
 
-    assert set(expected_device_list) == set(actual_device_list), failure_msg
+    actual_device_list_updated = []
+    for ele in actual_device_list:
+        assert ele != None, failure_msg
+        del ele['uuid']
+        actual_device_list_updated.append(hashlib.sha256(str(ele).encode('utf-8')).hexdigest())
+
+    expected_device_list_updated = []
+    for ele in expected_device_list:
+        expected_device_list_updated.append(hashlib.sha256(ele.encode('utf-8')).hexdigest())
+
+    assert expected_device_list_updated == actual_device_list_updated, failure_msg
 
 
 
@@ -105,7 +115,7 @@ def test_device_match_func_1():
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def test_device_match_func_2():
@@ -121,7 +131,7 @@ def test_device_match_func_3():
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames=None)
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def test_device_match_func_4():
@@ -129,7 +139,7 @@ def test_device_match_func_4():
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable')
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def test_device_match_func_5():
@@ -137,7 +147,7 @@ def test_device_match_func_5():
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def test_device_match_func_6():
@@ -145,7 +155,7 @@ def test_device_match_func_6():
     new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="2.3.4.5", mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable")
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def test_device_match_func_7():
@@ -169,7 +179,7 @@ def test_device_match_func_9():
     new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
     with DeviceManager(HOSTNAME_POSTFIX) as dm:
         _device = dm.get_matching_device(new_entry)
-        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 def _test_final_device_list_still_unchanged():

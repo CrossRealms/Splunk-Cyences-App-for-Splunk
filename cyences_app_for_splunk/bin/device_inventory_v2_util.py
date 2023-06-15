@@ -104,7 +104,7 @@ class Device:
         return False
 
 
-    def add_device_entry(self, new_entry, hostname_postfix=None):   # TODO for future - , replace_previous_entry=True
+    def add_device_entry(self, new_entry):   # TODO for future - , replace_previous_entry=True
         # TODO - We need to combine product_name and product_uuid, somehow, product_uuid alone does not represent the right data
         # remove existing entry, if any
         existing_entry = False
@@ -177,6 +177,7 @@ class Device:
 
     def get_as_dict(self):
         return {
+            'uuid': self.uuid,
             'product_names': list(self.product_names.keys()),
             'product_uuids': list(self.product_uuids.keys()),
             'ips': list(self.ips.keys()),
@@ -257,7 +258,7 @@ class DeviceManager:
         # return matching device
         for de in self.devices:
             if de.is_match(device_entry, hostname_postfix=self.hostname_postfix):
-                return de
+                return de.get_as_dict()
 
 
     def manually_link_devices(self, device_uuid1, device_uuid2):
