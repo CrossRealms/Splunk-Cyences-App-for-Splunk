@@ -1,5 +1,14 @@
 
 # Device Inventory V2
+'''
+Additional features in V2.
+* It now supports hostname matching even when hostname has postfix, ex. It now understand that abc and abc.crossrealms.com are same device.
+    * One limitation now is postfix has to be configured explicitly with a macro and it should be a single value.
+
+Dev Details
+* It now stores everything inside a Python pickle file instead of a lookup
+* Most of the processing now happens inside the Python script.
+'''
 
 import pickle
 import uuid
@@ -7,7 +16,7 @@ import copy
 
 
 class DeviceEntry:
-    def __init__(self, product_name: str, time: int, product_uuid: str, ips, mac_addresses, hostnames, custom_fields: dict) -> None:
+    def __init__(self, product_name: str, time: int, product_uuid: str, ips, mac_addresses, hostnames, custom_fields: dict = {}) -> None:
         self.product_name = product_name
         self.time = time
         self.product_uuid = product_uuid
@@ -50,38 +59,52 @@ class Device:
         self.hostnames = dict()
 
 
-    def two_value_combination_match(self, values1, current_list1, values2, current_list2):
-        for val1 in values1:
-            for existing_val1 in current_list1:
+    def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfix=None):
+        if is_list1_hostname and hostname_postfix:
+            values1_updated = [element.rstrip(hostname_postfix) for element in current_list1]
+            current_list1_updated = [element.rstrip(hostname_postfix) for element in current_list1]
+        else:
+            values1_updated = values1
+            current_list1_updated = current_list1
+        
+        if is_list2_hostname and hostname_postfix:
+            values2_updated = [element.rstrip(hostname_postfix) for element in values2]
+            current_list2_updated = [element.rstrip(hostname_postfix) for element in current_list2]
+        else:
+            values2_updated = values2
+            current_list2_updated = current_list2
+
+        for val1 in values1_updated:
+            for existing_val1 in current_list1_updated:
                 if val1 == existing_val1:
-                    for val2 in values2:
-                        if val2 in current_list2:
+                    for val2 in values2_updated:
+                        if val2 in current_list2_updated:
                             return True
         return False
 
 
-    def is_match(self, device_entry):
+    def is_match(self, device_entry, hostname_postfix=None):
         # entry from same product with same uuid already exist
         if device_entry.product_name in self.product_names and device_entry.product_uuid in self.product_uuids:
             # return self.products[device_entry.product_name][device_entry.product_uuid]
             return True
 
         # search for combination of ip and mac_address
-        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.mac_addresses, self.mac_addresses):
+        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.mac_addresses, self.mac_addresses, hostname_postfix=hostname_postfix):
             return True
 
         # search for combination of ip and hostname
-        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.hostnames, self.hostnames):
+        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.hostnames, self.hostnames, is_list2_hostname=True, hostname_postfix=hostname_postfix):
             return True
 
         # search for combination of hostname and mac_address
-        if self.two_value_combination_match(device_entry.hostnames, self.hostnames, device_entry.mac_addresses, self.mac_addresses):
+        if self.two_value_combination_match(device_entry.hostnames, self.hostnames, device_entry.mac_addresses, self.mac_addresses, is_list1_hostname=True, hostname_postfix=hostname_postfix):
             return True
 
         return False
 
 
-    def add_device_entry(self, new_entry):   # TODO for future - , replace_previous_entry=True
+    def add_device_entry(self, new_entry, hostname_postfix=None):   # TODO for future - , replace_previous_entry=True
         # TODO - We need to combine product_name and product_uuid, somehow, product_uuid alone does not represent the right data
         # remove existing entry, if any
         existing_entry = False
@@ -161,6 +184,12 @@ class Device:
             'hostnames': list(self.hostnames.keys())
         }
 
+    def __str__(self) -> str:
+        return str(self.get_as_dict())
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 
 
@@ -175,7 +204,8 @@ class DeviceManager:
             device_uuid = dm.add_device_entry(new_device_entry)
     '''
 
-    def __init__(self):
+    def __init__(self, hostname_postfix=None):
+        self.hostname_postfix = hostname_postfix
         self.devices = self.load_data()
 
 
@@ -202,7 +232,7 @@ class DeviceManager:
 
     def find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
-            res = de.is_match(device_entry)
+            res = de.is_match(device_entry, hostname_postfix=self.hostname_postfix)
             if res:
                 return de
         return False
@@ -221,6 +251,13 @@ class DeviceManager:
             new_device = Device(new_uuid)
             new_device.add_device_entry(new_entry)
             self.devices.append(new_device)
+    
+
+    def get_matching_device(self, device_entry: DeviceEntry):
+        # return matching device
+        for de in self.devices:
+            if de.is_match(device_entry, hostname_postfix=self.hostname_postfix):
+                return de
 
 
     def manually_link_devices(self, device_uuid1, device_uuid2):

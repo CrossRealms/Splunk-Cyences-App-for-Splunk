@@ -6,6 +6,8 @@ sys.path.insert(0, APP_BIN_PATH)
 from device_inventory_v2_util import DeviceField, DeviceEntry, DeviceManager
 
 
+HOSTNAME_POSTFIX = ".crossrealms.com"
+
 
 def assert_no_of_devices(expected_no_of_devices, actual_device_list):
     failure_msg = "Expected No. of devices = {}, Actual No. of devices = {}".format(expected_no_of_devices, len(actual_device_list))
@@ -86,16 +88,96 @@ def test_add_another_device_entry():
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2], _devices)
 
 
-DEVICE_DETAILS_3 = "{'product_names': ['Tenable'], 'product_uuids': ['my_1'], 'ips': [], 'mac_addresses': ['sf:yy:yy:us:43'], 'hostnames': ['wonderful-tenable']}"
+DEVICE_DETAILS_3 = "{'product_names': ['Tenable'], 'product_uuids': ['my_1'], 'ips': ['1.1.1.1'], 'mac_addresses': ['sf:yy:yy:us:43'], 'hostnames': ['wonderful-tenable']}"
 
 def test_add_new_product_entry():
-    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips=[], mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable", custom_fields={'abc': 1, 'xyz': "my_xyz"})
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable", custom_fields={'abc': 1, 'xyz': "my_xyz"})
     with DeviceManager() as dm:
         dm.add_device_entry(new_entry)
 
         _devices = dm.get_device_details()
         assert_no_of_devices(3, _devices)
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3], _devices)
+
+
+def test_device_match_func_1():
+    # same product, same uuid
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def test_device_match_func_2():
+    # same product, same different uuid
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert _device == None
+
+
+def test_device_match_func_3():
+    # same product, different uuid, same ip and mac_address
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames=None)
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def test_device_match_func_4():
+    # same product, different uuid, same ip and hostname
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable')
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def test_device_match_func_5():
+    # same product, different uuid, same ip and hostname, but hostname given in new entry has postfix
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def test_device_match_func_6():
+    # different product, different uuid, same hostname and mac_address
+    new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="2.3.4.5", mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable")
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def test_device_match_func_7():
+    # same product, different uuid, same ip and different mac_address, different hostname
+    new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:pp:us:43"], hostnames=None)
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert _device == None
+
+
+def test_device_match_func_8():
+    # different product, same uuid
+    new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="my_1", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert _device == None
+
+
+def test_device_match_func_9():
+    # different product, different uuid, same ip and hostname, but hostname given in new entry has postfix
+    new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [str(_device)])
+
+
+def _test_final_device_list_still_unchanged():
+    with DeviceManager() as dm:
+        _devices = dm.get_device_details()
+        assert_no_of_devices(3, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3], _devices)
+
 
 
 
@@ -108,3 +190,14 @@ if __name__ == "__main__":
     test_add_entry_with_same_product_id()
     test_add_another_device_entry()
     test_add_new_product_entry()
+
+    test_device_match_func_1()
+    test_device_match_func_2()
+    test_device_match_func_3()
+    test_device_match_func_4()
+    test_device_match_func_5()
+    test_device_match_func_6()
+    test_device_match_func_7()
+    test_device_match_func_8()
+    test_device_match_func_9()
+    _test_final_device_list_still_unchanged()
