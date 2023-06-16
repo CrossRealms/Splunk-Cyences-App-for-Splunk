@@ -180,8 +180,14 @@ class Device:
 
 
     def get_as_dict(self):
+        all_times = []
+        for product_name, product_items in self.products.items():
+            for _, element_details in product_items.items():
+                all_times.append(element_details['time'])
+
         return {
             'uuid': self.uuid,
+            'latest_time': max(all_times),
             'product_names': list(self.product_names.keys()),
             'product_uuids': list(self.product_uuids.keys()),
             'ips': list(self.ips.keys()),

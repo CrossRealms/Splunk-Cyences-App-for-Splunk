@@ -56,7 +56,7 @@ def test_get_devices():
             assert_no_of_devices(0, _devices)
 
 
-DEVICE_DETAILS_1_1 = "{'product_names': ['Qualys'], 'product_uuids': ['id_1'], 'ips': ['10.0.0.1'], 'mac_addresses': ['as:as:as:fd:w2'], 'hostnames': ['abc', 'abc.crossrealms.com']}"
+DEVICE_DETAILS_1_1 = "{'latest_time': 1234567, 'product_names': ['Qualys'], 'product_uuids': ['id_1'], 'ips': ['10.0.0.1'], 'mac_addresses': ['as:as:as:fd:w2'], 'hostnames': ['abc', 'abc.crossrealms.com']}"
 
 def test_add_device_entry():
     new_entry = DeviceEntry(product_name="Qualys", time=1234567, product_uuid="id_1", ips="10.0.0.1", mac_addresses="as:as:as:fd:w2", hostnames=["abc", "abc.crossrealms.com"], custom_fields={'available_vulnerabilities': 10, 'active_vulnerabilities': 5})
@@ -74,7 +74,7 @@ def test_reading_pickle_file_still_has_device_details():
         assert_no_of_devices(1, _devices)
 
 
-DEVICE_DETAILS_1_2 = "{'product_names': ['Qualys'], 'product_uuids': ['id_1'], 'ips': ['10.0.2.2'], 'mac_addresses': ['as:as:as:fd:22'], 'hostnames': ['xyz', 'xyz.crossrealms.com']}"
+DEVICE_DETAILS_1_2 = "{'latest_time': 2345678, 'product_names': ['Qualys'], 'product_uuids': ['id_1'], 'ips': ['10.0.2.2'], 'mac_addresses': ['as:as:as:fd:22'], 'hostnames': ['xyz', 'xyz.crossrealms.com']}"
 
 def test_add_entry_with_same_product_id():
     new_entry = DeviceEntry(product_name="Qualys", time=2345678, product_uuid="id_1", ips="10.0.2.2", mac_addresses="as:as:as:fd:22", hostnames=["xyz", "xyz.crossrealms.com"], custom_fields={'available_vulnerabilities': 10, 'active_vulnerabilities': 5})
@@ -86,7 +86,7 @@ def test_add_entry_with_same_product_id():
         assert_device_details([DEVICE_DETAILS_1_2], _devices)
 
 
-DEVICE_DETAILS_2 = "{'product_names': ['Qualys'], 'product_uuids': ['id_2'], 'ips': ['192.168.1.1', '192.168.2.2'], 'mac_addresses': ['xx:xx:xx:xx:11'], 'hostnames': []}"
+DEVICE_DETAILS_2 = "{'latest_time': 3456789, 'product_names': ['Qualys'], 'product_uuids': ['id_2'], 'ips': ['192.168.1.1', '192.168.2.2'], 'mac_addresses': ['xx:xx:xx:xx:11'], 'hostnames': []}"
 
 def test_add_another_device_entry():
     new_entry = DeviceEntry(product_name="Qualys", time=3456789, product_uuid="id_2", ips=["192.168.1.1", "192.168.2.2"], mac_addresses="xx:xx:xx:xx:11", hostnames=None, custom_fields={'available_vulnerabilities': 1, 'active_vulnerabilities': 1})
@@ -98,7 +98,7 @@ def test_add_another_device_entry():
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2], _devices)
 
 
-DEVICE_DETAILS_3 = "{'product_names': ['Tenable'], 'product_uuids': ['my_1'], 'ips': ['1.1.1.1'], 'mac_addresses': ['sf:yy:yy:us:43'], 'hostnames': ['wonderful-tenable']}"
+DEVICE_DETAILS_3 = "{'latest_time': 3456789, 'product_names': ['Tenable'], 'product_uuids': ['my_1'], 'ips': ['1.1.1.1'], 'mac_addresses': ['sf:yy:yy:us:43'], 'hostnames': ['wonderful-tenable']}"
 
 def test_add_new_product_entry():
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable", custom_fields={'abc': 1, 'xyz': "my_xyz"})
@@ -189,10 +189,10 @@ def test_final_device_list_still_unchanged():
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3], _devices)
 
 
-DEVICE_DETAILS_4_1 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1'], 'ips': ['1.1.2.2'], 'mac_addresses': ['aa:bb:cc:dd:ee'], 'hostnames': ['abcd']}"
-DEVICE_DETAILS_5 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_2'], 'ips': ['1.1.3.3'], 'mac_addresses': ['pp:bb:cc:dd:zz'], 'hostnames': ['pqst']}"
-DEVICE_DETAILS_4_2 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz']}"
-DEVICE_DETAILS_4_3 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3', 'lan_2'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz', 'pqst']}"
+DEVICE_DETAILS_4_1 = "{'latest_time': 3456781, 'product_names': ['Lansweeper'], 'product_uuids': ['lan_1'], 'ips': ['1.1.2.2'], 'mac_addresses': ['aa:bb:cc:dd:ee'], 'hostnames': ['abcd']}"
+DEVICE_DETAILS_5 = "{'latest_time': 3456782, 'product_names': ['Lansweeper'], 'product_uuids': ['lan_2'], 'ips': ['1.1.3.3'], 'mac_addresses': ['pp:bb:cc:dd:zz'], 'hostnames': ['pqst']}"
+DEVICE_DETAILS_4_2 = "{'latest_time': 3456783, 'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz']}"
+DEVICE_DETAILS_4_3 = "{'latest_time': 3456783, 'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3', 'lan_2'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz', 'pqst']}"
 
 
 def test_merging_devices():
