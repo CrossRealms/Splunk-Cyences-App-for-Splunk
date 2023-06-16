@@ -15,6 +15,16 @@ import uuid
 import copy
 
 
+MAX_TIME_EPOCH = 2147483647   # Tue Jan 19 2038 03:14:07
+
+
+def remove_word_from_end(sentence, word):
+    if sentence.endswith(word):
+        return sentence[:-len(word)]
+    else:
+        return sentence
+
+
 class DeviceEntry:
     def __init__(self, product_name: str, time: int, product_uuid: str, ips, mac_addresses, hostnames, custom_fields: dict = {}) -> None:
         self.product_name = product_name
@@ -61,15 +71,15 @@ class Device:
 
     def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfix=None):
         if is_list1_hostname and hostname_postfix:
-            values1_updated = [element.rstrip(hostname_postfix) for element in current_list1]
-            current_list1_updated = [element.rstrip(hostname_postfix) for element in current_list1]
+            values1_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list1]
+            current_list1_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list1]
         else:
             values1_updated = values1
             current_list1_updated = current_list1
         
         if is_list2_hostname and hostname_postfix:
-            values2_updated = [element.rstrip(hostname_postfix) for element in values2]
-            current_list2_updated = [element.rstrip(hostname_postfix) for element in current_list2]
+            values2_updated = [remove_word_from_end(element, hostname_postfix) for element in values2]
+            current_list2_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list2]
         else:
             values2_updated = values2
             current_list2_updated = current_list2
@@ -104,79 +114,97 @@ class Device:
         return False
 
 
-    def add_device_entry(self, new_entry):   # TODO for future - , replace_previous_entry=True
-        # TODO - We need to combine product_name and product_uuid, somehow, product_uuid alone does not represent the right data
-        # remove existing entry, if any
-        existing_entry = False
-        if new_entry.product_name in self.product_names and new_entry.product_uuid in self.product_uuids:
-            existing_entry = self.products[new_entry.product_name][new_entry.product_uuid]
-
-        if existing_entry:
-            if self.product_names[new_entry.product_name] == 1:
-                del self.product_names[new_entry.product_name]
-            else:
-                self.product_names[new_entry.product_name] -= 1
-
-            if self.product_uuids[new_entry.product_uuid] == 1:
-                del self.product_uuids[new_entry.product_uuid]
-            else:
-                self.product_uuids[new_entry.product_uuid] -= 1
-
-            for ip in existing_entry['ips']:
-                if self.ips[ip] == 1:
-                    del self.ips[ip]
-                else:
-                    self.ips[ip] -= 1
-
-            for mac_address in existing_entry['mac_addresses']:
-                if self.mac_addresses[mac_address] == 1:
-                    del self.mac_addresses[mac_address]
-                else:
-                    self.mac_addresses[mac_address] -= 1
-
-            for hostname in existing_entry['hostnames']:
-                if self.hostnames[hostname] == 1:
-                    del self.hostnames[hostname]
-                else:
-                    self.hostnames[hostname] -= 1
-
-        if new_entry.product_name not in self.product_names:
-            self.product_names[new_entry.product_name] = 1
-            self.products[new_entry.product_name] = {}
+    def _remove_entry_content(self, product_name, product_uuid, entry_content):
+        if self.product_uuids[product_uuid] == 1:
+            del self.product_uuids[product_uuid]
+            del self.products[product_name][product_uuid]   # remove the entry content as well
         else:
-            self.product_names[new_entry.product_name] += 1
+            self.product_uuids[product_uuid] -= 1
 
-        entry_to_update = copy.deepcopy(vars(new_entry))
-        del entry_to_update['product_name']
-        del entry_to_update['product_uuid']
-        self.products[new_entry.product_name][new_entry.product_uuid] = entry_to_update
-
-        if new_entry.product_uuid in self.product_uuids:
-            self.product_uuids[new_entry.product_uuid] += 1
+        if self.product_names[product_name] == 1:
+            del self.product_names[product_name]
+            del self.products[product_name]   # remove the product key from the products dict
         else:
-            self.product_uuids[new_entry.product_uuid] = 1
+            self.product_names[product_name] -= 1
 
-        for ip in entry_to_update['ips']:
+        for ip in entry_content['ips']:
+            if self.ips[ip] == 1:
+                del self.ips[ip]
+            else:
+                self.ips[ip] -= 1
+
+        for mac_address in entry_content['mac_addresses']:
+            if self.mac_addresses[mac_address] == 1:
+                del self.mac_addresses[mac_address]
+            else:
+                self.mac_addresses[mac_address] -= 1
+
+        for hostname in entry_content['hostnames']:
+            if self.hostnames[hostname] == 1:
+                del self.hostnames[hostname]
+            else:
+                self.hostnames[hostname] -= 1
+
+
+    def _add_entry_content(self, product_name, product_uuid, entry_content):
+        if product_name in self.product_names:
+            self.product_names[product_name] += 1
+        else:
+            self.product_names[product_name] = 1
+            self.products[product_name] = {}   # initiate with empty dict for product key
+
+        if product_uuid in self.product_uuids:
+            self.product_uuids[product_uuid] += 1
+        else:
+            self.product_uuids[product_uuid] = 1
+            self.products[product_name][product_uuid] = entry_content # added entry details to products obj
+
+        for ip in entry_content['ips']:
             if ip in self.ips:
                 self.ips[ip] += 1
             else:
                 self.ips[ip] = 1
 
-        for mac_address in entry_to_update['mac_addresses']:
+        for mac_address in entry_content['mac_addresses']:
             if mac_address in self.mac_addresses:
                 self.mac_addresses[mac_address] += 1
             else:
                 self.mac_addresses[mac_address] = 1
 
-        for hostname in entry_to_update['hostnames']:
+        for hostname in entry_content['hostnames']:
             if hostname in self.hostnames:
                 self.hostnames[hostname] += 1
             else:
                 self.hostnames[hostname] = 1
 
 
-    def cleanup(self):
-        pass
+    def add_device_entry(self, new_entry: DeviceEntry):
+        # TODO - We need to combine product_name and product_uuid, somehow, product_uuid alone does not represent the right data
+
+        new_entry_content = copy.deepcopy(vars(new_entry))
+        del new_entry_content['product_name']
+        del new_entry_content['product_uuid']
+
+        if new_entry.product_name in self.product_names and new_entry.product_uuid in self.product_uuids:
+            existing_entry = self.products[new_entry.product_name][new_entry.product_uuid]
+            # existing entry present, removing it first and adding the new entry
+            self._remove_entry_content(new_entry.product_name, new_entry.product_uuid, existing_entry)
+            self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
+        else:
+            self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
+
+
+    def cleanup(self, min_time, max_time=MAX_TIME_EPOCH):
+        products_copy = copy.deepcopy(self.products)
+        for product_name, product_items in products_copy.items():
+            for product_uuid, entry_details in product_items.items():
+                if entry_details['time'] < min_time or entry_details['time'] > max_time:
+                    self._remove_entry_content(product_name, product_uuid, entry_details)
+
+        # if no entry exist for any device return false, otherwise return True, to indicate, the device itself needs to be removed.
+        if len(self.product_names) == 0:
+            return False
+        return True
 
 
     def get_as_dict(self):
@@ -312,6 +340,20 @@ class DeviceManager:
                 # What's the logic for above two 3 lines:
                     # break the parent look as well when match found as the device has already been merged to another device
         
+        return messages
+
+
+    def cleanup_devices(self, min_time, max_time=MAX_TIME_EPOCH):
+        messages = []
+        idx = 0
+        while idx < len(self.devices):
+            is_device_still_valid = self.devices[idx].cleanup(min_time, max_time)
+            if not is_device_still_valid:
+                messages.append("Device(uuid={}) has been deleted completely.".format(self.devices[idx].uuid))
+                self.devices.pop(idx)   # remove the device itself if there is no more entries present
+            else:
+                idx += 1
+
         return messages
 
 
