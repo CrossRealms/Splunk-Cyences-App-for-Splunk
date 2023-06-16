@@ -182,11 +182,49 @@ def test_device_match_func_9():
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
-def _test_final_device_list_still_unchanged():
+def test_final_device_list_still_unchanged():
     with DeviceManager() as dm:
         _devices = dm.get_device_details()
         assert_no_of_devices(3, _devices)
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3], _devices)
+
+
+DEVICE_DETAILS_4_1 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1'], 'ips': ['1.1.2.2'], 'mac_addresses': ['aa:bb:cc:dd:ee'], 'hostnames': ['abcd']}"
+DEVICE_DETAILS_5 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_2'], 'ips': ['1.1.3.3'], 'mac_addresses': ['pp:bb:cc:dd:zz'], 'hostnames': ['pqst']}"
+DEVICE_DETAILS_4_2 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz']}"
+DEVICE_DETAILS_4_3 = "{'product_names': ['Lansweeper'], 'product_uuids': ['lan_1', 'lan_3', 'lan_2'], 'ips': ['1.1.2.2', '1.1.3.3'], 'mac_addresses': ['aa:bb:cc:dd:ee', 'pp:bb:cc:dd:zz'], 'hostnames': ['abcd', 'wxyz', 'pqst']}"
+
+
+def test_merging_devices():
+    # scenario where two devices previously added created a new entry, when added a 3rd entry which is similar to first one but also with second one, linking them into one device
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        new_entry_1 = DeviceEntry(product_name="Lansweeper", time=3456781, product_uuid="lan_1", ips="1.1.2.2", mac_addresses=["aa:bb:cc:dd:ee"], hostnames="abcd")
+        device_1_uuid = dm.add_device_entry(new_entry_1)   # 4 entries
+
+        new_entry_2 = DeviceEntry(product_name="Lansweeper", time=3456782, product_uuid="lan_2", ips="1.1.3.3", mac_addresses=["pp:bb:cc:dd:zz"], hostnames="pqst")
+        device_2_uuid = dm.add_device_entry(new_entry_2)   # 5 entries
+
+        _devices = dm.get_device_details()
+        assert_no_of_devices(5, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_1, DEVICE_DETAILS_5], _devices)
+
+        new_entry_3 = DeviceEntry(product_name="Lansweeper", time=3456783, product_uuid="lan_3", ips="1.1.3.3", mac_addresses=["pp:bb:cc:dd:zz", "aa:bb:cc:dd:ee"], hostnames=["wxyz", "abcd"])
+        device_3_uuid = dm.add_device_entry(new_entry_3)   # 5 entries (1st and 3rd entry here has common Mac Address and Hostname)
+
+        _devices = dm.get_device_details()
+        assert_no_of_devices(5, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_2, DEVICE_DETAILS_5], _devices)
+
+        merge_messages = dm.reorganize_device_list()   # write it in such a way that cleanup don't execute
+
+        assert len(merge_messages) == 1, "There should be one device merged into another 1 device."
+        assert merge_messages[0] == "Device(uuid={}) will going to be merged with Device(uuid={}).".format(device_2_uuid, device_1_uuid), \
+                "Device(uuid={}) should be merged to Device(uuid={}), but it isn't.".format(device_2_uuid, device_1_uuid)
+
+        # not it should have just 4 entries in total as all of the above should be combined into one.
+        _devices = dm.get_device_details()
+        assert_no_of_devices(4, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3], _devices)
 
 
 
@@ -210,4 +248,6 @@ if __name__ == "__main__":
     test_device_match_func_7()
     test_device_match_func_8()
     test_device_match_func_9()
-    _test_final_device_list_still_unchanged()
+    test_final_device_list_still_unchanged()
+
+    test_merging_devices()

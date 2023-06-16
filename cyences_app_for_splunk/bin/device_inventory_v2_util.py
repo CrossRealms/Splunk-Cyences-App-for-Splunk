@@ -38,7 +38,7 @@ class DeviceEntry:
             # TODO - break
 
 
-
+# this is not been in use
 class DeviceField:
     def __init__(self, value, time, expiry=None) -> None:
         self.value = value
@@ -175,6 +175,10 @@ class Device:
                 self.hostnames[hostname] = 1
 
 
+    def cleanup(self):
+        pass
+
+
     def get_as_dict(self):
         return {
             'uuid': self.uuid,
@@ -231,6 +235,21 @@ class DeviceManager:
         self.save_data()
 
 
+    def get_device_details(self):
+        # Return a list of unique devices
+        _devices = []
+        for de in self.devices:
+            _devices.append(de.get_as_dict())
+        return _devices
+
+
+    def get_matching_device(self, device_entry: DeviceEntry):
+        # return matching device
+        for de in self.devices:
+            if de.is_match(device_entry, hostname_postfix=self.hostname_postfix):
+                return de.get_as_dict()
+
+
     def find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
             res = de.is_match(device_entry, hostname_postfix=self.hostname_postfix)
@@ -245,6 +264,7 @@ class DeviceManager:
 
         if matching_device:
             matching_device.add_device_entry(new_entry)
+            return matching_device.uuid
 
         else:
             # create uuid and create a new device and append to the list
@@ -252,13 +272,41 @@ class DeviceManager:
             new_device = Device(new_uuid)
             new_device.add_device_entry(new_entry)
             self.devices.append(new_device)
-    
+            return new_uuid
 
-    def get_matching_device(self, device_entry: DeviceEntry):
-        # return matching device
-        for de in self.devices:
-            if de.is_match(device_entry, hostname_postfix=self.hostname_postfix):
-                return de.get_as_dict()
+
+    def reorganize_device_list(self):
+        # merging and cleaning
+        '''
+        Why we need device merging:
+            # scenario where two devices previously added created a new entry, when added a 3rd entry which is similar to first one but also with second one, linking them into one device
+
+        Why we are not creating the whole list again:
+            # we want to keep the original device uuid intact as much as possible
+        '''
+        messages = []
+
+        # iterate over devices from the back
+        for i in range(len(self.devices)-1, 0, -1):
+            _device_entries = self.convert_device_to_deviceentry_obj(self.devices[i])
+
+            for j in range(i-1, -1, -1):
+                # look for entries in all the previous entries, if similar entry found, merge all the entries with that and remove this device
+                for de_entry in _device_entries:
+                    res = self.devices[j].is_match(de_entry, hostname_postfix=self.hostname_postfix)
+                    if res:
+                        messages.append("Device(uuid={}) will going to be merged with Device(uuid={}).".format(self.devices[i].uuid, self.devices[j].uuid))
+                        for _entry in _device_entries:
+                            self.devices[j].add_device_entry(_entry)
+                        self.devices.pop(i)
+                        break   # all the entries added to the device, duplicate device obj removed, break two loops
+                else:
+                    continue
+                break
+                # What's the logic for above two 3 lines:
+                    # break the parent look as well when match found as the device has already been merged to another device
+        
+        return messages
 
 
     def manually_link_devices(self, device_uuid1, device_uuid2):
@@ -266,12 +314,22 @@ class DeviceManager:
         pass
 
 
-    def get_device_details(self):
-        # Return a list of unique devices
-        _devices = []
-        for de in self.devices:
-            _devices.append(de.get_as_dict())
-        return _devices
+    def convert_device_to_deviceentry_obj(self, device_obj):
+        device_entries = []
+        for product_name, product_items in device_obj.products.items():
+            for product_uuid, element_details in product_items.items():
+                device_entries.append(
+                    DeviceEntry(
+                        product_name=product_name,
+                        time=element_details['time'],
+                        product_uuid=product_uuid,
+                        ips=element_details['ips'],
+                        mac_addresses=element_details['mac_addresses'],
+                        hostnames=element_details['hostnames'],
+                        custom_fields=element_details['custom_fields']))
+        return device_entries
+
+
 
 
 # TODO - At certain interval we need to run auto merging code
