@@ -259,6 +259,33 @@ def test_cleanup_devices():
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2], _devices)
 
 
+DEVICE_DETAILS_8_1 = "{'latest_time': 1234567, 'product_names': ['Kaspersky'], 'product_uuids': ['k1'], 'ips': ['2.2.2.2'], 'mac_addresses': ['aa:33:cc:33:ee'], 'hostnames': ['sh01']}"
+DEVICE_DETAILS_8_2 = "{'latest_time': 2345678, 'product_names': ['Kaspersky'], 'product_uuids': ['k2'], 'ips': ['2.2.3.3'], 'mac_addresses': ['pp:33:cc:33:zz'], 'hostnames': ['sh02']}"
+DEVICE_DETAILS_8_3 = "{'latest_time': 3456789, 'product_names': ['Kaspersky'], 'product_uuids': ['k3'], 'ips': ['3.3.3.3'], 'mac_addresses': ['pp:33:cc:33:zz'], 'hostnames': ['idx01']}"
+DEVICE_DETAILS_8_4 = "{'latest_time': 3456789, 'product_names': ['Kaspersky'], 'product_uuids': ['k1', 'k2', 'k3'], 'ips': ['2.2.2.2', '2.2.3.3', '3.3.3.3'], 'mac_addresses': ['aa:33:cc:33:ee', 'pp:33:cc:33:zz'], 'hostnames': ['sh01', 'sh02', 'idx01']}"
+
+def test_device_manual_merge():
+    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+        new_entry_1 = DeviceEntry(product_name="Kaspersky", time=1234567, product_uuid="k1", ips="2.2.2.2", mac_addresses=["aa:33:cc:33:ee"], hostnames="sh01")
+        device_1_uuid = dm.add_device_entry(new_entry_1)
+
+        new_entry_2 = DeviceEntry(product_name="Kaspersky", time=2345678, product_uuid="k2", ips="2.2.3.3", mac_addresses=["pp:33:cc:33:zz"], hostnames="sh02")
+        device_2_uuid = dm.add_device_entry(new_entry_2)
+
+        new_entry_3 = DeviceEntry(product_name="Kaspersky", time=3456789, product_uuid="k3", ips="3.3.3.3", mac_addresses=["pp:33:cc:33:zz"], hostnames="idx01")
+        device_3_uuid = dm.add_device_entry(new_entry_3)
+
+        _devices = dm.get_device_details()
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2, DEVICE_DETAILS_8_1, DEVICE_DETAILS_8_2, DEVICE_DETAILS_8_3], _devices)
+        assert_no_of_devices(8, _devices)
+
+        dm.manually_merge_devices(device_1_uuid, device_2_uuid, device_3_uuid)
+
+        _devices = dm.get_device_details()
+        assert_no_of_devices(6, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2, DEVICE_DETAILS_8_4], _devices)
+
+
 
 if __name__ == "__main__":
     os.remove('device_list.pickle')   # start from zero
@@ -283,3 +310,4 @@ if __name__ == "__main__":
 
     test_merging_devices()
     test_cleanup_devices()
+    test_device_manual_merge()

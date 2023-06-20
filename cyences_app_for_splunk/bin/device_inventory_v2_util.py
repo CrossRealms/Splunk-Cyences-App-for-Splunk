@@ -10,6 +10,7 @@ Dev Details
 * Most of the processing now happens inside the Python script.
 '''
 
+import os
 import pickle
 import uuid
 import copy
@@ -43,9 +44,7 @@ class DeviceEntry:
         elif type(field) == list:
             return field
         else:
-            print("Exception: unexpected field format. Allowed only str and list of string")
-            return []
-            # TODO - break
+            raise Exception("Unexpected field format. Allowed only str and list of string.")
 
 
 # this is not been in use
@@ -71,7 +70,7 @@ class Device:
 
     def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfix=None):
         if is_list1_hostname and hostname_postfix:
-            values1_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list1]
+            values1_updated = [remove_word_from_end(element, hostname_postfix) for element in values1]
             current_list1_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list1]
         else:
             values1_updated = values1
@@ -187,9 +186,12 @@ class Device:
 
         if new_entry.product_name in self.product_names and new_entry.product_uuid in self.product_uuids:
             existing_entry = self.products[new_entry.product_name][new_entry.product_uuid]
-            # existing entry present, removing it first and adding the new entry
-            self._remove_entry_content(new_entry.product_name, new_entry.product_uuid, existing_entry)
-            self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
+            # existing entry present, and its older than new entry then only replace with the new entry
+            if existing_entry['time'] <= new_entry_content['time']:
+                self._remove_entry_content(new_entry.product_name, new_entry.product_uuid, existing_entry)
+                self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
+            else:
+                print("No need to add the entry as there is already an entry exist with newer timestamp.")   # TODO - Maybe need to use logger instead of print
         else:
             self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
 
@@ -245,28 +247,26 @@ class DeviceManager:
 
     def __init__(self, hostname_postfix=None):
         self.hostname_postfix = hostname_postfix
-        self.devices = self.load_data()
+        self.devices = self._load_data()
 
 
-    def save_data(self):
+    def _save_data(self):
         with open(DEVICE_LIST_PICKLE_FILENAME, 'wb') as f:
             pickle.dump(self.devices, f)
 
-    def load_data(self):
-        try:
+    def _load_data(self):
+        if os.path.isfile(DEVICE_LIST_PICKLE_FILENAME):
             with open(DEVICE_LIST_PICKLE_FILENAME, 'rb') as f:
                 return pickle.load(f)
-        except Exception as e:
-            # TODO - write proper condition here
-            print("Exception reading the device list: {}".format(e))
-        return []
+        else:
+            print("File does not exist")   # TODO - Add WARN logger instead
 
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.save_data()
+        self._save_data()
 
 
     def get_device_details(self):
@@ -284,17 +284,23 @@ class DeviceManager:
                 return de.get_as_dict()
 
 
-    def find_device(self, device_entry: DeviceEntry):
+    def _find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
             res = de.is_match(device_entry, hostname_postfix=self.hostname_postfix)
             if res:
                 return de
         return False
 
+    def _find_device_by_id(self, device_id: str):
+        for de in self.devices:
+            if de.uuid == device_id:
+                return de
+        return False
+
 
     def add_device_entry(self, new_entry: DeviceEntry):
         # Assign a unique device_uuid to the device
-        matching_device = self.find_device(new_entry)
+        matching_device = self._find_device(new_entry)
 
         if matching_device:
             matching_device.add_device_entry(new_entry)
@@ -309,6 +315,8 @@ class DeviceManager:
             return new_uuid
 
 
+    # TODO - At certain interval we need to run auto merging code -> reorganize_device_list
+    # Why: Because lets with the same product_uuid if hostname and mac_address changed, which is not matching with the some other device
     def reorganize_device_list(self):
         # merging and cleaning
         '''
@@ -322,7 +330,7 @@ class DeviceManager:
 
         # iterate over devices from the back
         for i in range(len(self.devices)-1, 0, -1):
-            _device_entries = self.convert_device_to_deviceentry_obj(self.devices[i])
+            _device_entries = self._convert_device_to_deviceentry_obj(self.devices[i])
 
             for j in range(i-1, -1, -1):
                 # look for entries in all the previous entries, if similar entry found, merge all the entries with that and remove this device
@@ -357,12 +365,29 @@ class DeviceManager:
         return messages
 
 
-    def manually_link_devices(self, device_uuid1, device_uuid2):
-        # Implement logic to manually specify that two devices are the same
-        pass
+    def manually_merge_devices(self, device1_id, *device_ids_to_merge):
+        # Implement logic to manually specify that two or more devices are the same by their IDs
+        _device1_obj = self._find_device_by_id(device1_id)
+        if not _device1_obj:
+            raise Exception("Device(uuid={}) not found.".format(device1_id))
+
+        other_device_objects = []
+        for _other_dev_id in device_ids_to_merge:
+            _other_dev_obj = self._find_device_by_id(_other_dev_id)
+            if not _other_dev_obj:
+                raise Exception("Device(uuid={}) not found.".format(_other_dev_id))
+            other_device_objects.append(_other_dev_obj)
+
+        for _other_dev_obj in other_device_objects:
+            _device_entries = self._convert_device_to_deviceentry_obj(_other_dev_obj)
+
+            for de_entry in _device_entries:
+                _device1_obj.add_device_entry(de_entry)   # add the entries
+
+            self.devices.remove(_other_dev_obj)   # remove the device after all entries merged to first device
 
 
-    def convert_device_to_deviceentry_obj(self, device_obj):
+    def _convert_device_to_deviceentry_obj(self, device_obj):
         device_entries = []
         for product_name, product_items in device_obj.products.items():
             for product_uuid, element_details in product_items.items():
@@ -376,15 +401,3 @@ class DeviceManager:
                         hostnames=element_details['hostnames'],
                         custom_fields=element_details['custom_fields']))
         return device_entries
-
-
-
-
-# TODO - At certain interval we need to run auto merging code
-# Why: Because lets with the same product_uuid if hostname and mac_address changed, which is not matching with the some other device
-# Implementation Idea: Start from empty device list, iterate over existing device list and start creating the new list by adding one by one entry
-#               Not sure about below two ideas, which one to choose
-#                   : 1. Also consider each entry inside a device as separate entry
-#                   : 2. Consider already merged entries as same entries when considering
-#           Also, try to keep the existing device_uuid same as far as its possible. This should not be hard to do.
-
