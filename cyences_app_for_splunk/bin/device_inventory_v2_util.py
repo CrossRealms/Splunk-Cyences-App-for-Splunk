@@ -4,6 +4,11 @@
 Additional features in V2.
 * It now supports hostname matching even when hostname has postfix, ex. It now understand that abc and abc.crossrealms.com are same device.
     * One limitation now is postfix has to be configured explicitly with a macro and it should be a single value.
+* It now executes device possible merging on regular basis to ensure devices merges if possible.
+* When adding a new device entry, if override the existing entry if it came from the same product with the same product id.
+    * When it combines two device entries, it checks before adding the entry, adding older entry over the newer entry do not replace.
+* Device Manager has capability to cleanup devices for entries that are older than X time/days.
+
 
 Dev Details
 * It now stores everything inside a Python pickle file instead of a lookup
