@@ -222,6 +222,11 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Windows Devices 
 
 ## Network Devices
+* General alerts for all Network Data:
+    * Network Compromise - Basic Scanning
+    * Network Compromise - Inbound Vulnerable Traffic
+    * Network Compromise - DDoS Behavior Detected
+
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
