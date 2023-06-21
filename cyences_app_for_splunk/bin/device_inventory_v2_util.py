@@ -202,9 +202,16 @@ class Device:
             self._add_entry_content(new_entry.product_name, new_entry.product_uuid, new_entry_content)
 
 
-    def cleanup(self, min_time, max_time=MAX_TIME_EPOCH):
+    def cleanup(self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup=None):
+        '''
+        products_to_cleanup is None meaning cleanup all products
+        '''
         products_copy = copy.deepcopy(self.products)
         for product_name, product_items in products_copy.items():
+
+            if products_to_cleanup and product_name not in products_to_cleanup:
+                continue   # if product is not in the cleanup list, do not make any change
+
             for product_uuid, entry_details in product_items.items():
                 if entry_details['time'] < min_time or entry_details['time'] > max_time:
                     self._remove_entry_content(product_name, product_uuid, entry_details)
@@ -253,7 +260,7 @@ class DeviceManager:
 
     def __init__(self, hostname_postfixes=""):
         self.hostname_postfixes = hostname_postfixes.lower().split(",")
-        self.hostname_postfixes = [element.strip() for element in self.hostname_postfixes]
+        self.hostname_postfixes = [element.strip() for element in self.hostname_postfixes if element.strip()]
         self.devices = self._load_data()
 
 
@@ -359,11 +366,23 @@ class DeviceManager:
         return messages
 
 
-    def cleanup_devices(self, min_time, max_time=MAX_TIME_EPOCH):
+    def cleanup_devices(self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup="*"):
+        '''
+        products_to_cleanup "*" meaning cleanup all products
+        '''
+        if products_to_cleanup == "*":
+            products_to_cleanup = None
+        elif type(products_to_cleanup) == str:
+            products_to_cleanup = [element.strip() for element in products_to_cleanup.split(",") if element.strip()]
+        elif type(products_to_cleanup) == list:
+            pass
+        else:
+            raise Exception("products_to_cleanup value is not as expected.")
+
         messages = []
         idx = 0
         while idx < len(self.devices):
-            is_device_still_valid = self.devices[idx].cleanup(min_time, max_time)
+            is_device_still_valid = self.devices[idx].cleanup(min_time, max_time, products_to_cleanup)
             if not is_device_still_valid:
                 messages.append("Device(uuid={}) has been deleted completely.".format(self.devices[idx].uuid))
                 self.devices.pop(idx)   # remove the device itself if there is no more entries present

@@ -293,6 +293,40 @@ def test_hostname_postfix_in_list_form():
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
+DEVICE_DETAILS_9 = "{'latest_time': 123, 'product_names': ['Sophos-4'], 'product_uuids': ['sophos-41'], 'ips': ['4.4.2.2'], 'mac_addresses': ['aa:44:cc:22:ee'], 'hostnames': ['abcde4']}"
+DEVICE_DETAILS_10_1 = "{'latest_time': 2345, 'product_names': ['Sophos-4', 'Windows Defender-4'], 'product_uuids': ['sophos-42', 'windef-41'], 'ips': ['4.4.3.3'], 'mac_addresses': ['pp:44:cc:22:zz'], 'hostnames': ['pqstu4', 'pqstu4.ad.crossrealms.com']}"
+DEVICE_DETAILS_10_2 = "{'latest_time': 234, 'product_names': ['Sophos-4'], 'product_uuids': ['sophos-42'], 'ips': ['4.4.3.3'], 'mac_addresses': ['pp:44:cc:22:zz'], 'hostnames': ['pqstu4']}"
+DEVICE_DETAILS_11 = "{'latest_time': 3456, 'product_names': ['Windows Defender-4'], 'product_uuids': ['windef-42'], 'ips': ['4.4.4.4'], 'mac_addresses': ['pp:44:cc:44:zz'], 'hostnames': []}"
+
+def test_cleanup_specific_product():
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
+        new_entry_1 = DeviceEntry(product_name="Sophos-4", time=123, product_uuid="sophos-41", ips="4.4.2.2", mac_addresses=["aa:44:cc:22:ee"], hostnames="abcde4")
+        device_1_uuid = dm.add_device_entry(new_entry_1)
+
+        new_entry_2 = DeviceEntry(product_name="Sophos-4", time=234, product_uuid="sophos-42", ips="4.4.3.3", mac_addresses=["pp:44:cc:22:zz"], hostnames="pqstu4")
+        device_2_uuid = dm.add_device_entry(new_entry_2)
+
+        new_entry_3 = DeviceEntry(product_name="Windows Defender-4", time=2345, product_uuid="windef-41", ips="4.4.3.3", mac_addresses=["pp:44:cc:22:zz"], hostnames="pqstu4.ad.crossrealms.com")
+        device_3_uuid = dm.add_device_entry(new_entry_3)
+
+        new_entry_4 = DeviceEntry(product_name="Windows Defender-4", time=3456, product_uuid="windef-42", ips="4.4.4.4", mac_addresses=["pp:44:cc:44:zz"], hostnames=None)
+        device_4_uuid = dm.add_device_entry(new_entry_4)
+
+        _devices = dm.get_device_details()
+        assert_no_of_devices(9, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2, DEVICE_DETAILS_8_4, DEVICE_DETAILS_9, DEVICE_DETAILS_10_1, DEVICE_DETAILS_11], _devices)
+
+        cleanup_messages = dm.cleanup_devices(min_time=5555, products_to_cleanup=["Windows Defender-4"])
+
+        assert len(cleanup_messages) == 1, "Exactly 1 device should be deleted."
+        assert cleanup_messages[0] == "Device(uuid={}) has been deleted completely.".format(device_4_uuid), \
+                "Device(uuid={}) should be deleted but its not. cleanup_messages={}".format(device_4_uuid, cleanup_messages)
+
+        _devices = dm.get_device_details()
+        assert_no_of_devices(8, _devices)
+        assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2, DEVICE_DETAILS_8_4, DEVICE_DETAILS_9, DEVICE_DETAILS_10_2], _devices)
+
+
 
 if __name__ == "__main__":
     try:
@@ -323,5 +357,6 @@ if __name__ == "__main__":
     test_device_manual_merge()
 
     test_hostname_postfix_in_list_form()
+    test_cleanup_specific_product()
 
     print("Passes all the tests.")

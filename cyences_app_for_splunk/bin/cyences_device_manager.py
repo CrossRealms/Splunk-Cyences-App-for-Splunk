@@ -2,7 +2,7 @@
 
 import sys
 import time
-from collections import namedtuple
+import copy
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
 from device_inventory_v2_util import DeviceManager, DeviceEntry
@@ -30,6 +30,7 @@ class CyencesDeviceManagerCommand(EventingCommand):
     # Always put large string early if shorter string is subset of large string.
     # for example, ".ad.crossrealms.com" should be before ".crossrealms.com"
 
+    products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
     cleanup_mintime = Option(name="mintime", require=False, default=None, validate=validators.Float())   # default past 1 years
     cleanup_maxtime = Option(name="maxtime", require=False, default=None, validate=validators.Float())   # default forseeable future
     # cleanup_ip_mintime = Option(name="ipmintime", require=False, default=None, validate=validators.Float())   # default past 30 days
@@ -71,14 +72,21 @@ class CyencesDeviceManagerCommand(EventingCommand):
         if self.operation == "addentries":
             with DeviceManager(self.hostname_postfixes) as dm:
                 for record in records:
-                    entry = DeviceEntry(record['product_name'], record['time'], record['product_uuid'], record['ips'], record['mac_addresses'], record['hostnames'])
+                    other_fields = copy.deepcopy(record)
+                    del other_fields['time']
+                    del other_fields['product_name']
+                    del other_fields['product_uuid']
+                    del other_fields['ips']
+                    del other_fields['mac_addresses']
+                    del other_fields['hostnames']
+                    entry = DeviceEntry(record['product_name'], record['time'], record['product_uuid'], record['ips'], record['mac_addresses'], record['hostnames'], other_fields)
                     device_id = dm.add_device_entry(entry)
                     record["device_id"] = device_id
                     yield record
 
         if self.operation == "cleanup":
             with DeviceManager(self.hostname_postfixes) as dm:
-                messages = dm.cleanup_devices(self.cleanup_mintime, self.cleanup_ip_maxtime)
+                messages = dm.cleanup_devices(self.cleanup_mintime, self.cleanup_ip_maxtime, self.products_to_cleanup)
                 for m in messages:
                     yield {"message": m}
 
