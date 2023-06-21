@@ -45,9 +45,9 @@ class DeviceEntry:
         if field == None:
             return []
         elif type(field) == str:
-            return [field]
+            return [field.lower()]
         elif type(field) == list:
-            return field
+            return [element.lower() for element in field]
         else:
             raise Exception("Unexpected field format. Allowed only str and list of string.")
 
@@ -74,19 +74,20 @@ class Device:
 
 
     def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfix=None):
+        # this does comparison in lower case characters always to ensure case-sensitivity does not affect the comparison
         if is_list1_hostname and hostname_postfix:
-            values1_updated = [remove_word_from_end(element, hostname_postfix) for element in values1]
-            current_list1_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list1]
+            values1_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in values1]
+            current_list1_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in current_list1]
         else:
-            values1_updated = values1
-            current_list1_updated = current_list1
+            values1_updated = [element.lower() for element in values1]
+            current_list1_updated = [element.lower() for element in current_list1]
         
         if is_list2_hostname and hostname_postfix:
-            values2_updated = [remove_word_from_end(element, hostname_postfix) for element in values2]
-            current_list2_updated = [remove_word_from_end(element, hostname_postfix) for element in current_list2]
+            values2_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in values2]
+            current_list2_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in current_list2]
         else:
-            values2_updated = values2
-            current_list2_updated = current_list2
+            values2_updated = [element.lower() for element in values2]
+            current_list2_updated = [element.lower() for element in current_list2]
 
         for val1 in values1_updated:
             for existing_val1 in current_list1_updated:
@@ -97,7 +98,7 @@ class Device:
         return False
 
 
-    def is_match(self, device_entry, hostname_postfix=None):
+    def is_match(self, device_entry, hostname_postfix=""):
         # entry from same product with same uuid already exist
         if device_entry.product_name in self.product_names and device_entry.product_uuid in self.product_uuids:
             # return self.products[device_entry.product_name][device_entry.product_uuid]
@@ -250,8 +251,8 @@ class DeviceManager:
             device_uuid = dm.add_device_entry(new_device_entry)
     '''
 
-    def __init__(self, hostname_postfix=None):
-        self.hostname_postfix = hostname_postfix
+    def __init__(self, hostname_postfix=""):
+        self.hostname_postfix = hostname_postfix.lower()
         self.devices = self._load_data()
 
 
@@ -264,7 +265,8 @@ class DeviceManager:
             with open(DEVICE_LIST_PICKLE_FILENAME, 'rb') as f:
                 return pickle.load(f)
         else:
-            print("File does not exist")   # TODO - Add WARN logger instead
+            print("DEBUG: File does not exist")   # TODO - Add WARN logger instead
+            return []
 
 
     def __enter__(self):

@@ -288,7 +288,10 @@ def test_device_manual_merge():
 
 
 if __name__ == "__main__":
-    os.remove('device_list.pickle')   # start from zero
+    try:
+        os.remove('device_list.pickle')   # start from zero
+    except:
+        pass
     test_define_device_manager()
     test_get_devices()
     test_add_device_entry()
@@ -311,3 +314,5 @@ if __name__ == "__main__":
     test_merging_devices()
     test_cleanup_devices()
     test_device_manual_merge()
+
+    print("Passes all the tests.")
