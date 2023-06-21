@@ -24,11 +24,11 @@ import copy
 MAX_TIME_EPOCH = 2147483647   # Tue Jan 19 2038 03:14:07
 
 
-def remove_word_from_end(sentence, word):
-    if sentence.endswith(word):
-        return sentence[:-len(word)]
-    else:
-        return sentence
+def remove_words_from_end(sentence, words):
+    for word in words:
+        if sentence.endswith(word):
+            sentence = sentence[:-len(word)]
+    return sentence
 
 
 class DeviceEntry:
@@ -73,18 +73,18 @@ class Device:
         self.hostnames = dict()
 
 
-    def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfix=None):
+    def two_value_combination_match(self, values1, current_list1, values2, current_list2, is_list1_hostname=False, is_list2_hostname=False, hostname_postfixes=[]):
         # this does comparison in lower case characters always to ensure case-sensitivity does not affect the comparison
-        if is_list1_hostname and hostname_postfix:
-            values1_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in values1]
-            current_list1_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in current_list1]
+        if is_list1_hostname and hostname_postfixes:
+            values1_updated = [remove_words_from_end(element.lower(), hostname_postfixes) for element in values1]
+            current_list1_updated = [remove_words_from_end(element.lower(), hostname_postfixes) for element in current_list1]
         else:
             values1_updated = [element.lower() for element in values1]
             current_list1_updated = [element.lower() for element in current_list1]
         
-        if is_list2_hostname and hostname_postfix:
-            values2_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in values2]
-            current_list2_updated = [remove_word_from_end(element.lower(), hostname_postfix) for element in current_list2]
+        if is_list2_hostname and hostname_postfixes:
+            values2_updated = [remove_words_from_end(element.lower(), hostname_postfixes) for element in values2]
+            current_list2_updated = [remove_words_from_end(element.lower(), hostname_postfixes) for element in current_list2]
         else:
             values2_updated = [element.lower() for element in values2]
             current_list2_updated = [element.lower() for element in current_list2]
@@ -98,22 +98,22 @@ class Device:
         return False
 
 
-    def is_match(self, device_entry, hostname_postfix=""):
+    def is_match(self, device_entry, hostname_postfixes=[]):
         # entry from same product with same uuid already exist
         if device_entry.product_name in self.product_names and device_entry.product_uuid in self.product_uuids:
             # return self.products[device_entry.product_name][device_entry.product_uuid]
             return True
 
         # search for combination of ip and mac_address
-        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.mac_addresses, self.mac_addresses, hostname_postfix=hostname_postfix):
+        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.mac_addresses, self.mac_addresses, hostname_postfixes=hostname_postfixes):
             return True
 
         # search for combination of ip and hostname
-        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.hostnames, self.hostnames, is_list2_hostname=True, hostname_postfix=hostname_postfix):
+        if self.two_value_combination_match(device_entry.ips, self.ips, device_entry.hostnames, self.hostnames, is_list2_hostname=True, hostname_postfixes=hostname_postfixes):
             return True
 
         # search for combination of hostname and mac_address
-        if self.two_value_combination_match(device_entry.hostnames, self.hostnames, device_entry.mac_addresses, self.mac_addresses, is_list1_hostname=True, hostname_postfix=hostname_postfix):
+        if self.two_value_combination_match(device_entry.hostnames, self.hostnames, device_entry.mac_addresses, self.mac_addresses, is_list1_hostname=True, hostname_postfixes=hostname_postfixes):
             return True
 
         return False
@@ -251,8 +251,9 @@ class DeviceManager:
             device_uuid = dm.add_device_entry(new_device_entry)
     '''
 
-    def __init__(self, hostname_postfix=""):
-        self.hostname_postfix = hostname_postfix.lower()
+    def __init__(self, hostname_postfixes=""):
+        self.hostname_postfixes = hostname_postfixes.lower().split(",")
+        self.hostname_postfixes = [element.strip() for element in self.hostname_postfixes]
         self.devices = self._load_data()
 
 
@@ -287,13 +288,13 @@ class DeviceManager:
     def get_matching_device(self, device_entry: DeviceEntry):
         # return matching device
         for de in self.devices:
-            if de.is_match(device_entry, hostname_postfix=self.hostname_postfix):
+            if de.is_match(device_entry, hostname_postfixes=self.hostname_postfixes):
                 return de.get_as_dict()
 
 
     def _find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
-            res = de.is_match(device_entry, hostname_postfix=self.hostname_postfix)
+            res = de.is_match(device_entry, hostname_postfixes=self.hostname_postfixes)
             if res:
                 return de
         return False
@@ -342,7 +343,7 @@ class DeviceManager:
             for j in range(i-1, -1, -1):
                 # look for entries in all the previous entries, if similar entry found, merge all the entries with that and remove this device
                 for de_entry in _device_entries:
-                    res = self.devices[j].is_match(de_entry, hostname_postfix=self.hostname_postfix)
+                    res = self.devices[j].is_match(de_entry, hostname_postfixes=self.hostname_postfixes)
                     if res:
                         messages.append("Device(uuid={}) will going to be merged with Device(uuid={}).".format(self.devices[i].uuid, self.devices[j].uuid))
                         for _entry in _device_entries:

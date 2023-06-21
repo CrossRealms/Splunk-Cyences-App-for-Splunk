@@ -8,7 +8,7 @@ sys.path.insert(0, APP_BIN_PATH)
 from device_inventory_v2_util import DeviceEntry, DeviceManager
 
 
-HOSTNAME_POSTFIX = ".crossrealms.com"
+HOSTNAME_POSTFIXES = ".ad.crossrealms.com, .crossrealms.com"
 
 
 def assert_no_of_devices(expected_no_of_devices, actual_device_list):
@@ -115,7 +115,7 @@ def test_add_new_product_entry():
 def test_device_match_func_1():
     # same product, same uuid
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="my_1", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -123,7 +123,7 @@ def test_device_match_func_1():
 def test_device_match_func_2():
     # same product, same different uuid
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert _device == None
 
@@ -131,7 +131,7 @@ def test_device_match_func_2():
 def test_device_match_func_3():
     # same product, different uuid, same ip and mac_address
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames=None)
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -139,7 +139,7 @@ def test_device_match_func_3():
 def test_device_match_func_4():
     # same product, different uuid, same ip and hostname
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable')
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -147,7 +147,7 @@ def test_device_match_func_4():
 def test_device_match_func_5():
     # same product, different uuid, same ip and hostname, but hostname given in new entry has postfix
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -155,7 +155,7 @@ def test_device_match_func_5():
 def test_device_match_func_6():
     # different product, different uuid, same hostname and mac_address
     new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="2.3.4.5", mac_addresses=["sf:yy:yy:us:43"], hostnames="wonderful-tenable")
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -163,7 +163,7 @@ def test_device_match_func_6():
 def test_device_match_func_7():
     # same product, different uuid, same ip and different mac_address, different hostname
     new_entry = DeviceEntry(product_name="Tenable", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:pp:us:43"], hostnames=None)
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert _device == None
 
@@ -171,7 +171,7 @@ def test_device_match_func_7():
 def test_device_match_func_8():
     # different product, same uuid
     new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="my_1", ips="2.3.4.5", mac_addresses=["sf:22:y2:us:43"], hostnames="w-tenable")
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert _device == None
 
@@ -179,7 +179,7 @@ def test_device_match_func_8():
 def test_device_match_func_9():
     # different product, different uuid, same ip and hostname, but hostname given in new entry has postfix
     new_entry = DeviceEntry(product_name="Anything", time=3456789, product_uuid="anything", ips="1.1.1.1", mac_addresses=["sf:yy:yy:us:43"], hostnames='wonderful-tenable.crossrealms.com')
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         _device = dm.get_matching_device(new_entry)
         assert_device_details([DEVICE_DETAILS_3], [_device])
 
@@ -199,7 +199,7 @@ DEVICE_DETAILS_4_3 = "{'latest_time': 3456783, 'product_names': ['Lansweeper'], 
 
 def test_merging_devices():
     # scenario where two devices previously added created a new entry, when added a 3rd entry which is similar to first one but also with second one, linking them into one device
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         new_entry_1 = DeviceEntry(product_name="Lansweeper", time=3456781, product_uuid="lan_1", ips="1.1.2.2", mac_addresses=["aa:bb:cc:dd:ee"], hostnames="abcd")
         device_1_uuid = dm.add_device_entry(new_entry_1)   # 4 entries
 
@@ -234,7 +234,7 @@ DEVICE_DETAILS_7_1 = "{'latest_time': 2345, 'product_names': ['Sophos', 'Windows
 DEVICE_DETAILS_7_2 = "{'latest_time': 2345, 'product_names': ['Windows Defender'], 'product_uuids': ['windef_1'], 'ips': ['1.1.3.3'], 'mac_addresses': ['pp:11:cc:22:zz'], 'hostnames': []}"
 
 def test_cleanup_devices():
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         new_entry_1 = DeviceEntry(product_name="Sophos", time=123, product_uuid="sophos_1", ips="1.1.2.2", mac_addresses=["aa:11:cc:22:ee"], hostnames="abcde")
         device_1_uuid = dm.add_device_entry(new_entry_1)
 
@@ -265,7 +265,7 @@ DEVICE_DETAILS_8_3 = "{'latest_time': 3456789, 'product_names': ['Kaspersky'], '
 DEVICE_DETAILS_8_4 = "{'latest_time': 3456789, 'product_names': ['Kaspersky'], 'product_uuids': ['k1', 'k2', 'k3'], 'ips': ['2.2.2.2', '2.2.3.3', '3.3.3.3'], 'mac_addresses': ['aa:33:cc:33:ee', 'pp:33:cc:33:zz'], 'hostnames': ['sh01', 'sh02', 'idx01']}"
 
 def test_device_manual_merge():
-    with DeviceManager(HOSTNAME_POSTFIX) as dm:
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
         new_entry_1 = DeviceEntry(product_name="Kaspersky", time=1234567, product_uuid="k1", ips="2.2.2.2", mac_addresses=["aa:33:cc:33:ee"], hostnames="sh01")
         device_1_uuid = dm.add_device_entry(new_entry_1)
 
@@ -284,6 +284,13 @@ def test_device_manual_merge():
         _devices = dm.get_device_details()
         assert_no_of_devices(6, _devices)
         assert_device_details([DEVICE_DETAILS_1_2, DEVICE_DETAILS_2, DEVICE_DETAILS_3, DEVICE_DETAILS_4_3, DEVICE_DETAILS_7_2, DEVICE_DETAILS_8_4], _devices)
+
+
+def test_hostname_postfix_in_list_form():
+    new_entry = DeviceEntry(product_name="Tenable", time=4446789, product_uuid="anything", ips=None, mac_addresses="sf:yy:yy:us:43", hostnames='wonderful-tenable.ad.crossrealms.com')
+    with DeviceManager(HOSTNAME_POSTFIXES) as dm:
+        _device = dm.get_matching_device(new_entry)
+        assert_device_details([DEVICE_DETAILS_3], [_device])
 
 
 
@@ -314,5 +321,7 @@ if __name__ == "__main__":
     test_merging_devices()
     test_cleanup_devices()
     test_device_manual_merge()
+
+    test_hostname_postfix_in_list_form()
 
     print("Passes all the tests.")

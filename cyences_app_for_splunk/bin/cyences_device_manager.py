@@ -25,7 +25,11 @@ MAX_TIME_EPOCH = 2147483647   # Tue Jan 19 2038 03:14:07
 class CyencesDeviceManagerCommand(EventingCommand):
 
     operation = Option(name="operation", require=False, default="getdevices")
-    hostname_postfix = Option(name="hostname_postfix", require=True)
+
+    hostname_postfixes = Option(name="hostname_postfixes", require=True)   # You can put comma separated values like, ".ad.crossrealms.com, .crossrealms.com"
+    # Always put large string early if shorter string is subset of large string.
+    # for example, ".ad.crossrealms.com" should be before ".crossrealms.com"
+
     cleanup_mintime = Option(name="mintime", require=False, default=None, validate=validators.Float())   # default past 1 years
     cleanup_maxtime = Option(name="maxtime", require=False, default=None, validate=validators.Float())   # default forseeable future
     # cleanup_ip_mintime = Option(name="ipmintime", require=False, default=None, validate=validators.Float())   # default past 30 days
@@ -59,13 +63,13 @@ class CyencesDeviceManagerCommand(EventingCommand):
         self.validate_inputs()
 
         if self.operation == "getdevices":
-            with DeviceManager(self.hostname_postfix) as dm:
+            with DeviceManager(self.hostname_postfixes) as dm:
                 _devices = dm.get_device_details()
                 for device in _devices:
                     yield device
 
         if self.operation == "addentries":
-            with DeviceManager(self.hostname_postfix) as dm:
+            with DeviceManager(self.hostname_postfixes) as dm:
                 for record in records:
                     entry = DeviceEntry(record['product_name'], record['time'], record['product_uuid'], record['ips'], record['mac_addresses'], record['hostnames'])
                     device_id = dm.add_device_entry(entry)
@@ -73,13 +77,13 @@ class CyencesDeviceManagerCommand(EventingCommand):
                     yield record
 
         if self.operation == "cleanup":
-            with DeviceManager(self.hostname_postfix) as dm:
+            with DeviceManager(self.hostname_postfixes) as dm:
                 messages = dm.cleanup_devices(self.cleanup_mintime, self.cleanup_ip_maxtime)
                 for m in messages:
                     yield {"message": m}
 
         if self.operation == "merge":
-            with DeviceManager(self.hostname_postfix) as dm:
+            with DeviceManager(self.hostname_postfixes) as dm:
                 messages = dm.reorganize_device_list()
                 for m in messages:
                     yield {"message": m}
