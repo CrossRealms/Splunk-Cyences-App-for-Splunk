@@ -131,15 +131,3 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 ![alt]({{ site.baseurl }}/assets/auditd_authentication_after.png)
 
-
-## Warning -> 'list' command: Limit of '100' for values reached
-
-If you see below warning:
-    ```
-    'list' command: Limit of '100' for values reached. Additional values may have been truncated or ignored.
-    ```
-
-From any of the below alerts, then kindly `ignore` it, as that is expected behavior.
-    * Ransomware - Spike in File Writes
-    * Ransomware - Common Ransomware File Extensions
-    * Network Compromise - DDoS Behavior Detected
