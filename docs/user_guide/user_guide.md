@@ -41,8 +41,6 @@ A few of the included alerts and reports are dependent on other reports being en
         * Dynamically Update Blocked IPs with HoneyDB
     * Ransomware - Spike in File Writes
         * Ransomware - Calculate UpperBound for Spike in File Writes
-    * Network Compromise - DDoS Behavior Detected
-        * Network Compromise - Calculate UpperBound for Spike in Network Traffic
     * Windows - Hosts Missing Update
         * Windows - Hosts Lookup Gen (this report is enabled by default)
     * Device Inventory Gen 
