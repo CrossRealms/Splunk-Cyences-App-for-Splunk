@@ -130,3 +130,4 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 4. Update the search string with the following contents, then click **Save**. 
 
 ![alt]({{ site.baseurl }}/assets/auditd_authentication_after.png)
+

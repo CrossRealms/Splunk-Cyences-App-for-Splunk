@@ -39,7 +39,7 @@ A few of the included alerts and reports are dependent on other reports being en
     * Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs
     * Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs
         * Dynamically Update Blocked IPs with HoneyDB
-    * Ransomware - Spike in File Writes 
+    * Ransomware - Spike in File Writes
         * Ransomware - Calculate UpperBound for Spike in File Writes
     * Windows - Hosts Missing Update
         * Windows - Hosts Lookup Gen (this report is enabled by default)
