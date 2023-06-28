@@ -88,8 +88,14 @@ Splunkbase Download:
 
 Insert the input stanza below for the Cyences Add-on for Splunk. The stanza should be placed in the inputs.conf file (create a local directory if necessary): 
 
-    [script://./bin/sudousers.sh] 
-    disabled = 0 
+    [script://./bin/users.sh]
+    disabled = 0
+    index = linux   
+
+    [script://./bin/groups.sh]
+    disabled = 0
+    index = linux   
+
 
 **Note:** Use index=**linux** or index=**os**, for data collection or update the macro definition for Linux Data (**Settings > Configuration**).
 
