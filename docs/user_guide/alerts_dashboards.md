@@ -222,7 +222,9 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Windows Devices 
 
 ## Network Devices
+
 * General alerts for all Network Data:
+
     * Network Compromise - Basic Scanning
     * Network Compromise - Inbound Vulnerable Traffic
 
