@@ -154,50 +154,32 @@
   </row>
   <row>
     <panel>
-      <title>Windows Firewall Status</title>
-      <input type="time" token="time_Range">
-        <label>Time Range</label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-        <change>
-          <set token="form.fw_host">*</set>
-        </change>
-      </input>
-      <input type="dropdown" token="fw_host" searchWhenChanged="true">
-        <label>Host</label>
-        <choice value="*">All</choice>
-        <default>*</default>
-        <initialValue>*</initialValue>
-        <fieldForLabel>host</fieldForLabel>
-        <fieldForValue>host</fieldForValue>
-        <search>
-          <query>| tstats count where index=* AND sourcetype=WindowsFirewallStatus by host 
-| table host</query>
-          <earliest>$time_Range.earliest$</earliest>
-          <latest>$time_Range.latest$</latest>
-        </search>
-      </input>
+      <title>Windows Firewall Status</title>    
       <table>
         <search>
-          <query>index=* sourcetype=WindowsFirewallStatus host="$fw_host$" 
-| stats latest(Domain_Profile_Status) as "domain profile status" latest(Private_Profile_Status) as "private profile status" latest(Public_Profile_Status) as "public profile status" by host</query>
-          <earliest>$time_Range.earliest$</earliest>
-          <latest>$time_Range.latest$</latest>
+          <query>`cs_windoows_firewall_status_logs` host=$tkn_host|s$ 
+| stats latest(_time) as "Time" latest(Domain_Profile_Status) as "Domain Profile Status" latest(Private_Profile_Status) as "Private Profile Status" latest(Public_Profile_Status) as "Public Profile Status" by host 
+| eval "Last Updated Time" = strftime(Time, "%+") 
+| rename host as Host 
+| table Host "Last Updated Time" "Domain Profile Status" "Private Profile Status" "Public Profile Status"</query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
-        <format type="color" field="domain profile status">
+        <format type="color" field="Domain Profile Status">
           <colorPalette type="map">{"ON": #03991a, "OFF": #a3030b}</colorPalette>
         </format>
-        <format type="color" field="public profile status">
+        <format type="color" field="Public Profile Status">
           <colorPalette type="map">{"ON": #03991a, "OFF": #a3030b}</colorPalette>
         </format>
-        <format type="color" field="private profile status">
+        <format type="color" field="Private Profile Status">
           <colorPalette type="map">{"ON": #03991a, "OFF": #a3030b}</colorPalette>
         </format>
       </table>
+      <html>
+        <p>This panel displays the latest Windows firewall status from the past 24 hours.</p>
+      </html>
     </panel>
   </row>
 </form>
