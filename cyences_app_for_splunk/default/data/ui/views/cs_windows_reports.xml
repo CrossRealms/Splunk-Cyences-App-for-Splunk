@@ -157,7 +157,7 @@
       <title>Windows Firewall Status</title>    
       <table>
         <search>
-          <query>`cs_windoows_firewall_status_logs` host=$tkn_host|s$ 
+          <query>`cs_windows_firewall_status_logs` host=$tkn_host|s$ 
 | stats latest(_time) as "Time" latest(Domain_Profile_Status) as "Domain Profile Status" latest(Private_Profile_Status) as "Private Profile Status" latest(Public_Profile_Status) as "Public Profile Status" by host 
 | eval "Last Updated Time" = strftime(Time, "%+") 
 | rename host as Host 
@@ -178,7 +178,7 @@
         </format>
       </table>
       <html>
-        <p>This panel displays the latest Windows firewall status from the past 24 hours.</p>
+        <p>This panel looks for the latest status of the firewall on each Windows host. Regardless of dashboard timerange, this panel search the data within 24 hours time-range.</p>
       </html>
     </panel>
   </row>
