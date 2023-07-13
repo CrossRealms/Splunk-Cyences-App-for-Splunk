@@ -292,7 +292,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest_category="vpn_auth" AND $tkn_filter_authentication$ AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
+          <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Cyences_Authentication where Authentication.dest_category="vpn_auth" AND $tkn_filter_authentication$ AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
         | iplocation src_ip
         | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
         | eval City = if(isnull(City) OR City="", "Unknown", City) | fields _time user action src_ip City Country
@@ -320,7 +320,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Authentication where `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
           <earliest>$tkn_timeRange_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_authentication.latest$</latest>
         </search>
