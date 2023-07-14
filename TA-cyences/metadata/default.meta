@@ -45,9 +45,3 @@ export = system
 [viewstates]
 access = read : [ * ], write : [ * ]
 export = system
-
-
-### Permission updated so all users can update the notable event status and assignee on Splunk.
-
-[collections/cyences_notable_event_collection]
-access = read : [ * ], write : [ * ]
