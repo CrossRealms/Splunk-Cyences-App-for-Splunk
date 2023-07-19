@@ -13,6 +13,9 @@ has_children: true
 
 * ### Added "Network Compromise - DDoS Behavior Detected" new alert.
 
+* ### Using Office 365 Login data from new Input to Improve Results
+    * Improved all the O365 Login-related alerts and dashboards to show more information using the O365 Audit Sign-in Logs from Splunk Add-on for Office 365.
+
 * ### Enhancements  
     * Improved all the O365 Login related alerts and dashboards to show more information using the O365 Audit Signin Logs.
 
@@ -38,4 +41,5 @@ has_children: true
 
 
 ## Upgrade Guide from 4.0.0 to 4.1.0
-    * New Cyences_Authentication Data model is added. User should accelerate Cyences_Authentication with minimum 1 month period to improve search performance.
+
+  * New Cyences_Authentication Data model is added. User should accelerate Cyences_Authentication with minimum 1 month period to improve search performance.
