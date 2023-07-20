@@ -11,15 +11,15 @@ has_children: true
 
 ## Version 4.1.0 (July 2023)
 
-* ### Added "Network Compromise - DDoS Behavior Detected" new alert.
+* ### Added "Network Compromise - DDoS Behavior Detected" alert.
 
-* ### Using Office 365 Login data from new Input to Improve Results
-    * Improved all the O365 Login-related alerts and dashboards to show more information using the O365 Audit Sign-in Logs from Splunk Add-on for Office 365.
+* ### Using a New Input for Office 365 Login Data to Improve Results
+    * Improved all of the O365 login related alerts and dashboards to display more information using the O365 audit sign-in logs from the Splunk Add-on for Office 365.
 
 * ### Enhancements  
-    * Improved all the O365 Login related alerts and dashboards to show more information using the O365 Audit Signin Logs.
 
-    * Enhanced "Windows - Windows Process Tampering Detected" alert to show the source process details that tempered the process.
+    * Enhanced the "Windows - Windows Process Tampering Detected" alert to display the source process details that tampered with the Windows process.
+
 
     * Updated field order in the Digest Email to show notable_event_id field as last column.
 
@@ -27,19 +27,20 @@ has_children: true
 
     * Added raw filter macro for "Network Compromise - Basic Scanning" alert.
 
-    * Enhanced "Email - Hourly Increase In Emails Over Baseline" alert to show domain wise recipient information.
+    * Enhanced "Email - Hourly Increase In Emails Over Baseline" alert to display the domain information of the recipient.
 
-    * Improved "Linux - User Added/Updated/Deleted" and "Linux - Group Added/Updated/Deleted" alerts to show exact changes detail.
+    * Improved "Linux - User Added/Updated/Deleted" and "Linux - Group Added/Updated/Deleted" alerts to display the exact changes in detail.
         * Deprecated "Linux - Change in Sudo Access of Local Linux Account" alert.
 
     * Updated threshold value for the "Network Compromise - Basic Scanning" alert.
 
 * ### Bug Fixes
-    * Fixed fetching first 50 records multiple times issue for sophos endpoint custom command.
 
-    * Fixed the permission issue to allow normal user to use notable event assignment functionality.
+    * Fixed a fetching issue for the first fifty records for the Sophos endpoint custom command.
+
+    * Fixed a permissions issue that wouldn't allow users to make use of the notable event assignment functionality.
 
 
 ## Upgrade Guide from 4.0.0 to 4.1.0
 
-  * New Cyences_Authentication Data model is added. User should accelerate Cyences_Authentication with minimum 1 month period to improve search performance.
+    * Cyences Authentication data model has been added. Users should accelerate the summary range of the Cyences Authentication data model to at least a 1 month period to improve search performance overall.
