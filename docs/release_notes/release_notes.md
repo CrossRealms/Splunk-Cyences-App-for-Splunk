@@ -43,4 +43,4 @@ has_children: true
 
 ## Upgrade Guide from 4.0.0 to 4.1.0
 
-    * Cyences Authentication data model has been added. Users should accelerate the summary range of the Cyences Authentication data model to at least a 1 month period to improve search performance overall.
+  * Cyences Authentication data model has been added. Users should accelerate the summary range of the Cyences Authentication data model to at least a 1 month period to improve search performance overall.
