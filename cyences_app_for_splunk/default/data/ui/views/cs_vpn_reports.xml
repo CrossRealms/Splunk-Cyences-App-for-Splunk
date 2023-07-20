@@ -5,7 +5,7 @@
   </init>
   <search id="bs0">
     <query>
-      | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Authentication where Authentication.dest_category="vpn_auth" AND `cs_vpn_indexes` by _time Authentication.action Authentication.user Authentication.dest span=1s
+      | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Cyences_Authentication where Authentication.dest_category="vpn_auth" AND `cs_vpn_indexes` by _time Authentication.action Authentication.user Authentication.dest span=1s
       | rename Authentication.* as *
     </query>
     <earliest>$time.earliest$</earliest>
