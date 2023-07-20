@@ -1,26 +1,33 @@
 <form theme="dark" version="1.1">
   <label>Active Directory Certificate Service Events</label>
   <search id="base_local_certs">
-    <query>`cs_windows_cert_store_idx` sourcetype="windows:certstore:local" | dedup host SerialNumber
-  | eval NotAfter_epoch= coalesce(strptime(NotAfter, "%d-%m-%Y %H:%M:%S"), strptime(NotAfter, "%m/%d/%Y %l:%M:%S %p")) 
-  | eval interval_start=relative_time(now(),"-1m") 
-  | eval interval_end=relative_time(now(),"+$expiry_day$d") 
-  | where interval_start&lt;NotAfter_epoch AND NotAfter_epoch&lt;interval_end
-  | rename host as Host
-  | table Host Subject DnsNameList Issuer NotBefore NotAfter FriendlyName SerialNumber PSPath PSParentPath PSParentPath_FriendlyName      
-  | fillnull value="-" PSParentPath_FriendlyName</query>
+    <query> `cs_windows_cert_store_idx` sourcetype="windows:certstore:local" 
+| dedup host SerialNumber 
+| eval NotAfter = `cs_windows_cert_time_format(NotAfter)`
+| eval NotBefore = `cs_windows_cert_time_format(NotBefore)`
+| eval interval_start=relative_time(now(),"-1m") 
+| eval interval_end=relative_time(now(),"+$expiry_day$d") 
+| where interval_start&lt;NotAfter AND NotAfter&lt;interval_end 
+| rename host as Host 
+| fieldformat NotAfter=strftime(NotAfter, "%+") 
+| fieldformat NotBefore=strftime(NotBefore, "%+") 
+| table Host Subject DnsNameList Issuer NotBefore NotAfter FriendlyName SerialNumber PSPath PSParentPath PSParentPath_FriendlyName 
+| fillnull value="-" PSParentPath_FriendlyName</query>
     <earliest>$time_range.earliest$</earliest>
     <latest>$time_range.latest$</latest>
   </search>
   <search id="base_ca_certs">
     <query>`cs_windows_cert_store_idx` sourcetype="windows:certstore:ca:issued" 
 | dedup Issued_Request_ID 
-| eval Certificate_Expiration_Date_epoch= coalesce(strptime(Certificate_Expiration_Date, "%m/%d/%Y %l:%M:%S %p"), strptime(Certificate_Expiration_Date, "%d-%m-%Y %H:%M:%S"))
+| eval Certificate_Expiration_Date = `cs_windows_cert_time_format(Certificate_Expiration_Date)`
+| eval Certificate_Effective_Date = `cs_windows_cert_time_format(Certificate_Effective_Date)`
 | eval interval_start=relative_time(now(),"-1m") 
 | eval interval_end=relative_time(now(),"+$issued_expiry$d") 
-| where interval_start&lt;Certificate_Expiration_Date_epoch AND Certificate_Expiration_Date_epoch&lt;interval_end 
+| where interval_start&lt;Certificate_Expiration_Date AND Certificate_Expiration_Date&lt;interval_end 
 | join Certificate_Template type=left [`cs_windows_cert_name_mapping`]
 | eval Certificate_Template=if(isnull(Certificate_Name),Certificate_Template,Certificate_Name."(".Certificate_Template.")") 
+| fieldformat Certificate_Effective_Date=strftime(Certificate_Effective_Date, "%+") 
+| fieldformat Certificate_Expiration_Date=strftime(Certificate_Expiration_Date, "%+") 
 | table Issued_Common_Name Issued_Request_ID Certificate_Effective_Date Certificate_Expiration_Date Certificate_Template Requester_Name Request_Disposition_Message Serial_Number</query>
     <earliest>$time_range.earliest$</earliest>
     <latest>$time_range.latest$</latest>
