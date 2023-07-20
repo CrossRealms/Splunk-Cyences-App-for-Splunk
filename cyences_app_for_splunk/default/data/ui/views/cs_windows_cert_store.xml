@@ -13,7 +13,7 @@
     <latest>$time_range.latest$</latest>
   </search>
   <search id="base_ca_certs">
-    <query>`cs_windows_cert_store_idx` sourcetype="windows:certstore:ca" 
+    <query>`cs_windows_cert_store_idx` sourcetype="windows:certstore:ca:issued" 
 | dedup Issued_Request_ID 
 | eval Certificate_Expiration_Date_epoch= coalesce(strptime(Certificate_Expiration_Date, "%m/%d/%Y %l:%M:%S %p"), strptime(Certificate_Expiration_Date, "%d-%m-%Y %H:%M:%S"))
 | eval interval_start=relative_time(now(),"-1m") 
@@ -34,6 +34,29 @@
       </default>
     </input>
   </fieldset>
+  <row>
+    <panel>
+      <title>Approved Certificate Request</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4887 
+| rename _time as Timestamp host as Host name as Name
+| eval Timestamp = strftime(Timestamp, "%+") 
+| table Timestamp Host EventCode Name Requester Subject</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">100</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
   <row>
     <panel>
       <title>Issued Certificates on CA</title>
