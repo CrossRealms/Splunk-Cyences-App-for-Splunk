@@ -25,7 +25,7 @@ has_children: true
 
     * Improved cyences_severity logic for "Ransomware - Calculate UpperBound for Spike in File Writes" alert.
 
-    * Added raw filter macro for "Network Compromise - Basic Scanning" alert.
+    * Added raw filter macro and Improved cyences_severity logic for "Network Compromise - Basic Scanning" alert.
 
     * Enhanced "Email - Hourly Increase In Emails Over Baseline" alert to display the domain information of the recipient.
 
