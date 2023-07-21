@@ -7,6 +7,75 @@ parent: Release Notes
 ---
 
 
+
+
+## Version 4.0.0 (June 2023)
+
+* ### Notable Event Assignment
+    * Notable events can now be assigned to Splunk users to better facilitate investigations for an incident. Users can also update the status for a notable event based on where it is in the investigation phase.
+    * Added a SOC Dashboard which provides a summary of notable events pertaining to specific alerts, as well as who is assigned to a notable event, the status of the notable event and the severity level of the notable event.
+    * Updated the Overview dashboard to filter results based on the values selected for the status filter.
+
+![alt]({{ site.baseurl }}/assets/notable_event_assignment.png)
+
+* ### Added Cyences Settings Page
+    * Users can utilize the Cyences App Configuration page to customize which dashboards and alerts are enabled/disabled to their liking.
+    * The Cyences App Configuration page also allows users to see if the data source configuration (index macro) is applied accurately for each security product and if their Splunk environment has data present for it or not. Users can edit the product's configuration from this page as well.
+    * All of the previous configurations (Cyences Default Email Configuration, Macro Setup, etc.) have been migrated to the new Cyences App Configuration page.
+
+![alt]({{ site.baseurl }}/assets/data_source_macros.png)
+
+* ### Added Alerts for Logins from an Unusual Country
+    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * O365 - Successful Login From Unusual Country
+    * Authentication - Successful VPN Login From Unusual Country (Enhanced)
+
+* ### Added "Vulnerability - Detected Vulnerabilities" alert and a Vulnerability dashboard panel in the Overview dashboard.
+
+* ### Enhancements
+    * Enhanced the MultiSelect functionality overall.
+        * MultiSelect input will automatically select/unselect the "All" option based on the user's selection across all of the dashboards.
+    
+    * Support for email messagetrace event has been added using the Splunk Add-on for Office 365. 
+        * Updated email related alerts to support email messagetrace events using the Splunk Add-on for Office 365.
+
+    * Reduced the severity level of notable events that are already blocked by the Palo High Threats alert.
+
+    * Windows - Windows Process Tampering Detected alert
+        * Added internal filter macro to reduce the number of false positives.
+
+    * Added ApplicationId field to all of the O365 login related alerts.
+
+    * Improved "O365 - Login From Unknown User" alert to consider both "Unknown" and "Not Available" user values.
+
+    * Improved the readability for the "O365 - Daily Login Failure" alert.
+
+    * Excluded TriggerBrowserCapabilitiesInterrupt error events from "O365 - Daily Login Failure" alert to reduce the number of false positives.
+        * For more information related to the error: https://login.microsoftonline.com/error?code=501314
+    
+    * Improved the severity logic for "Email - Hourly Increase In Emails Over Baseline" alert to reduce the number of false positives.
+
+* ### Bug Fixes
+    * Fixed a minor issue in the DNS Tracker dashboard where events wouldn't populate as expected.
+
+    * Fixed an issue for when a Windows decommissioned host would reappear after removing it.
+
+    * Fixed the search query for the "Windows Defender RealTime Protection Disabled or Failed" alert.
+
+    * Fixed an inconsistency between the severity level of alerts and the Overview dashboard for antivirus service stop alerts.
+
+    * Fixed Cyences logo issue.
+
+
+## Upgrade Guide from 3.1.0 to 4.0.0
+
+* ### Cyences Settings
+    * Visit the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#products-setup-data-source-macros) page to make changes.
+
+    * The "Microsoft 365 Defender Add-on for Splunk" has been deprecated. Use the "Splunk Add-on for Microsoft Security" instead for O365 Defender ATP data collection.
+
+
+
 ## Version 3.1.0 (March 2023)
 
 * ### Monitor Linux Groups & Users (Linux/Unix)
