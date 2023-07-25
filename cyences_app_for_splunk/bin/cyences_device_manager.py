@@ -29,6 +29,7 @@ class CyencesDeviceManagerCommand(EventingCommand):
     hostname_postfixes = Option(name="hostname_postfixes", require=True)   # You can put comma separated values like, ".ad.crossrealms.com, .crossrealms.com"
     # Always put large string early if shorter string is subset of large string.
     # for example, ".ad.crossrealms.com" should be before ".crossrealms.com"
+    # I prefer to also put ".local" at the end as well to ensure proper hostname matching
 
     products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
     cleanup_mintime = Option(name="mintime", require=False, default=None, validate=validators.Float())   # default past 1 years
