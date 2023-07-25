@@ -131,3 +131,13 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 ![alt]({{ site.baseurl }}/assets/auditd_authentication_after.png)
 
+
+## Getting "The lookup table 'cs_windows_cert_name_mapping.csv' requires a .csv or KV store lookup definition." error on dashboards
+
+* Add the csv file with Certificate_Template and Certificate_Name mapping details at location $SPLUNK_HOME/etc/apps/TA-windows-certificate-store/lookups/cs_windows_cert_name_mapping.csv
+
+* An example of file content:
+```
+Certificate_Template, Certificate_Name
+x.x.x.xx....., my_cert
+```
