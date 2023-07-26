@@ -134,10 +134,11 @@ Refer to the **App Installation and Configuration > Device Inventory > Backfill 
 
 ## Getting "The lookup table 'cs_windows_cert_name_mapping.csv' requires a .csv or KV store lookup definition." error on dashboards
 
-* Add the csv file with Certificate_Template and Certificate_Name mapping details at location $SPLUNK_HOME/etc/apps/TA-windows-certificate-store/lookups/cs_windows_cert_name_mapping.csv
+* This error needs to occur in Cyences app since the cs_windows_cert_name_mapping.csv lookup is used in the query instead of props.conf.
+* Add the CSV file with Certificate_Template and Certificate_Name mapping details at location $SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_windows_cert_name_mapping.csv
 
 * An example of file content:
 ```
-Certificate_Template, Certificate_Name
-x.x.x.xx....., my_cert
+Certificate_Template,Certificate_Name
+x.x.x.xx.....,my_cert
 ```
