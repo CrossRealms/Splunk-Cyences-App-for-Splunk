@@ -6,6 +6,7 @@
     <view name="cs_ad_reports" /><!--Windows-->
     <view name="cs_windows_reports" /><!--Windows-->
     <view name="cs_windows_patch" /><!--Windows-->
+    <view name="cs_windows_cert_store" /><!--Windows-->
     <view name="cs_linux_reports" /><!--Linux-->
     <collection label="Cloud Tenancies">
       <view name="cs_o365_reports" /><!--Office 365-->

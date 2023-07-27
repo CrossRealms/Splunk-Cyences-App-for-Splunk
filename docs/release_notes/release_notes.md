@@ -9,67 +9,38 @@ has_children: true
 # Release Notes
 
 
-## Version 4.0.0 (June 2023)
+## Version 4.1.0 (July 2023)
 
-* ### Notable Event Assignment
-    * User can assign notable events to the user on Splunk for further investigation of the incident. User can also update the status of the notable event based on the investigation phase.
-    * Added the new SOC Dashboard to get overview of notable events by the alert, assignee, status and severity.
-    * Updated Overview dashboard to filter the result based on the Status value.
+* ### Added "Network Compromise - DDoS Behavior Detected" alert.
 
-![alt]({{ site.baseurl }}/assets/notable_event_assignment.png)
+* ### Using a New Input for Office 365 Login Data to Improve Results
+    * Improved all of the O365 login related alerts and dashboards to display more information using the O365 audit sign-in logs from the Splunk Add-on for Office 365.
 
-* ### New Cyences Settings Page
-    * Users can use Cyences' new App Configuration page to customize the dashboards they want to see/hide and the alerts they want to enable/disable.
-    * The new Cyences App Configuration page also allows you to see if the data-source configuration (index macro) is accurate and if your Splunk environment has data for it or not and modify the configuration if required.
-    * All the old configurations (Cyences default email configuration, Macro Setup, Sophos endpoint data collection creds, etc) are migrated to the new Cyences App Configuration Page.
+* ### Enhancements  
 
-![alt]({{ site.baseurl }}/assets/data_source_macros.png)
+    * Enhanced the "Windows - Windows Process Tampering Detected" alert to display the source process details that tampered with the Windows process.
 
-* ### Alerts for Logins from Unusual Country
-    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
-    * O365 - Successful Login From Unusual Country
-    * Authentication - Successful VPN Login From Unusual Country (Enhanced)
 
-* ### Added "Vulnerability - Detected Vulnerabilities" alert and updated overview dashboard to show Vulnerability related notable event count. 
+    * Updated field order in the Digest Email to show notable_event_id field as last column.
 
-* ### Enhancements
-    * Enhanced MultiSelect functionality
-        * MultiSelect input will automatically select/unselect All option based on the user selection in all the dashboards.
-    
-    * Support for email messagetrace event using Splunk Add-on for Office 365. 
-        * Updated Email related alerts to support email messagetrace event collected using Splunk Add-on for Office 365..
+    * Improved cyences_severity logic for "Ransomware - Calculate UpperBound for Spike in File Writes" alert.
 
-    * Reduced severity level for the already blocked events for Palo High Threat alert.
+    * Added raw filter macro and Improved cyences_severity logic for "Network Compromise - Basic Scanning" alert.
 
-    * Windows - Windows Process Tampering Detected alert
-        * Added internal filter macro to reduce the false positives.
+    * Enhanced "Email - Hourly Increase In Emails Over Baseline" alert to display the domain information of the recipient.
 
-    * Added ApplicationId field in the all O365 Login related alerts.
+    * Improved "Linux - User Added/Updated/Deleted" and "Linux - Group Added/Updated/Deleted" alerts to display the exact changes in detail.
+        * Deprecated "Linux - Change in Sudo Access of Local Linux Account" alert.
 
-    * Improved "O365 - Login From Unknown User" alert to consider both Unknown and "Not Available" user values.
-
-    * Improved "O365 Daily Login Failure" alert readability.
-
-    * Excluded TriggerBrowserCapabilitiesInterrupt error events from "O365 - Daily Login Failure" alert to reduce false positives.
-        * More information for the error: https://login.microsoftonline.com/error?code=501314
-    
-    * Improved severity logic for "Email - Hourly Increase In Emails Over Baseline" alert to reduce false positives.
+    * Updated threshold value for the "Network Compromise - Basic Scanning" alert.
 
 * ### Bug Fixes
-    * Fixed minor issue in the DNS Tracker dashboard for zero event.
 
-    * Fixed windows decommissioned host reappearing issue.
+    * Fixed a fetching issue for the first fifty records for the Sophos endpoint custom command.
 
-    * Fixed "Windows Defender RealTime Protection Disabled or Failed" alert search query.
-
-    * Fixed severity inconsistency between alert and overview dashboard for antivirus service stop alerts.
-
-    * Fixed Cyences logo issue.
+    * Fixed a permissions issue that wouldn't allow users to make use of the notable event assignment functionality.
 
 
-## Upgrade Guide from 3.1.0 to 4.0.0
+## Upgrade Guide from 4.0.0 to 4.1.0
 
-* ### Cyences Settings
-    * Go through the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#products-setup-data-source-macros) and make required changes
-
-    * The "Microsoft 365 Defender Add-on for Splunk" is deprecated. Use "Splunk Add-on for Microsoft Security" addon for O365 Defender ATP data collection. 
+  * Cyences Authentication data model has been added. Users should accelerate the summary range of the Cyences Authentication data model to at least a 1 month period to improve search performance overall.

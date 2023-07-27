@@ -1,0 +1,270 @@
+<form theme="dark" version="1.1">
+  <label>Active Directory Certificate Service Events</label>
+  <search id="base_local_certs">
+    <query> `cs_windows_cert_store_idx` sourcetype="windows:certstore:local" 
+| dedup host SerialNumber 
+| `cs_windows_cert_time_format(NotAfter)`
+| `cs_windows_cert_time_format(NotBefore)`
+| eval interval_start=relative_time(now(),"-1m") 
+| eval interval_end=relative_time(now(),"+$expiry_day$d") 
+| where interval_start&lt;NotAfter AND NotAfter&lt;interval_end 
+| rename host as Host 
+| `cs_human_readable_time_format(NotAfter)` 
+| `cs_human_readable_time_format(NotBefore)` 
+| table Host Subject DnsNameList Issuer NotBefore NotAfter FriendlyName SerialNumber PSPath PSParentPath PSParentPath_FriendlyName 
+| fillnull value="-" PSParentPath_FriendlyName</query>
+    <earliest>$time_range.earliest$</earliest>
+    <latest>$time_range.latest$</latest>
+  </search>
+  <search id="base_ca_certs">
+    <query>`cs_windows_cert_store_idx` sourcetype="windows:certstore:ca:issued" 
+| dedup Issued_Request_ID 
+| `cs_windows_cert_time_format(Certificate_Expiration_Date)`
+| `cs_windows_cert_time_format(Certificate_Effective_Date)`
+| eval interval_start=relative_time(now(),"-1m") 
+| eval interval_end=relative_time(now(),"+$issued_expiry$d") 
+| where interval_start&lt;Certificate_Expiration_Date AND Certificate_Expiration_Date&lt;interval_end 
+| join type=left Certificate_Template [| inputlookup cs_windows_cert_name_mapping.csv ]
+| eval Certificate_Template=if(isnull(Certificate_Name),Certificate_Template,Certificate_Name."(".Certificate_Template.")") 
+| `cs_human_readable_time_format(Certificate_Expiration_Date)`
+| `cs_human_readable_time_format(Certificate_Effective_Date)`
+| table Issued_Common_Name Issued_Request_ID Certificate_Effective_Date Certificate_Expiration_Date Certificate_Template Requester_Name Request_Disposition_Message Serial_Number</query>
+    <earliest>$time_range.earliest$</earliest>
+    <latest>$time_range.latest$</latest>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="time_range" searchWhenChanged="true">
+      <label>Time Rnage</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Approved Certificate Request</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4887 
+| rename host as Host name as Name
+| `cs_human_readable_time_format(_time, Timestamp)`
+| table Timestamp Host EventCode Name Requester Subject</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Issued Certificates on CA</title>
+      <input type="text" token="issued_expiry" searchWhenChanged="true">
+        <label>Enter the Number of Days(For Expiration)</label>
+        <default>365</default>
+        <initialValue>365</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_certificate_template" searchWhenChanged="true">
+        <label>Certificate Template</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <fieldForLabel>Certificate_Template</fieldForLabel>
+        <fieldForValue>Certificate_Template</fieldForValue>
+        <search base="base_ca_certs">
+          <query>| dedup Certificate_Template</query>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_requester_name" searchWhenChanged="true">
+        <label>Requester Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <fieldForLabel>Requester_Name</fieldForLabel>
+        <fieldForValue>Requester_Name1</fieldForValue>
+        <search base="base_ca_certs">
+          <query>| dedup Requester_Name | eval Requester_Name1=replace(Requester_Name,"(.*)\\\(.*)","\1\\\\\\\\\2")</query>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_common_name">
+        <label>Issued Common Name</label>
+        <choice value="like(Issued_Common_Name, &quot;%&quot;)">All</choice>
+        <default>"like(Issued_Common_Name, ""%"")"</default>
+        <delimiter> OR </delimiter>
+        <fieldForLabel>Issued_Common_Name</fieldForLabel>
+        <fieldForValue>Issued_Common_Name_value</fieldForValue>
+        <search base="base_ca_certs">
+          <query>| dedup Issued_Common_Name | eval Issued_Common_Name_value="Issued_Common_Name=\"".Issued_Common_Name."\""</query>
+        </search>
+        <initialValue>like(Issued_Common_Name, "%")</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_request_id" searchWhenChanged="true">
+        <label>Issued_Request_ID Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+        <initialValue>*</initialValue>
+        <fieldForLabel>Issued_Request_ID</fieldForLabel>
+        <fieldForValue>Issued_Request_ID</fieldForValue>
+        <search base="base_ca_certs">
+          <query>| dedup Issued_Request_ID </query>
+        </search>
+      </input>
+      <input type="multiselect" token="tkn_serial_number_ca" searchWhenChanged="true">
+        <label>Serial Number</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+        <fieldForLabel>Serial_Number</fieldForLabel>
+        <fieldForValue>Serial_Number</fieldForValue>
+        <search base="base_ca_certs">
+          <query>| dedup Serial_Number</query>
+        </search>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="tkn_ca_search" searchWhenChanged="true">
+        <label>Search Anything</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search base="base_ca_certs">
+          <query>| foreach * 
+    [ eval temp=if(isnull(temp),&lt;&lt;FIELD&gt;&gt;,temp." ".&lt;&lt;FIELD&gt;&gt;)] 
+| search Certificate_Template IN ($tkn_certificate_template$) Requester_Name IN ($tkn_requester_name$) Issued_Request_ID IN ($tkn_request_id$) Serial_Number IN ($tkn_serial_number_ca$) temp="*$tkn_ca_search$*" 
+| where $tkn_common_name$ 
+| fields - temp</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p>NOTE: The user will see "The lookup table 'cs_windows_cert_name_mapping.csv' requires a .csv or KV store lookup definition." error for this panel if they don't configure the lookup having Certificate_Template and Certificate_Name mapping details. You can configure it by adding a CSV file under $SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_windows_cert_name_mapping.csv. The CSV file should have two headings Certificate_Template,Certificate_Name.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Local Certificates On Servers</title>
+      <input type="text" token="expiry_day" searchWhenChanged="true">
+        <label>Enter the Number of Days(For Expiration)</label>
+        <default>365</default>
+        <initialValue>365</initialValue>
+      </input>
+      <input type="multiselect" token="tkn_friendly_name" searchWhenChanged="true">
+        <label>Friendly Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <search base="base_local_certs">
+          <query> | dedup FriendlyName</query>
+        </search>
+        <fieldForLabel>FriendlyName</fieldForLabel>
+        <fieldForValue>FriendlyName</fieldForValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_PSParentPath_FriendlyName" searchWhenChanged="true">
+        <label>PSParentPath_FriendlyName</label>
+        <choice value="*">All</choice>
+        <default>Personal</default>
+        <initialValue>Personal</initialValue>
+        <fieldForLabel>PSParentPath_FriendlyName</fieldForLabel>
+        <fieldForValue>PSParentPath_FriendlyName</fieldForValue>
+        <search base="base_local_certs">
+          <query>| dedup PSParentPath_FriendlyName </query>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>,</delimiter>
+      </input>
+      <input type="multiselect" token="tkn_host" searchWhenChanged="true">
+        <label>Host</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <search base="base_local_certs">
+          <query> |dedup Host</query>
+        </search>
+        <fieldForLabel>Host</fieldForLabel>
+        <fieldForValue>Host</fieldForValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_issuer" searchWhenChanged="true">
+        <label>Issuer</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <search base="base_local_certs">
+          <query> | dedup Issuer</query>
+        </search>
+        <fieldForLabel>Issuer</fieldForLabel>
+        <fieldForValue>Issuer</fieldForValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_subject_local" searchWhenChanged="true">
+        <label>Subject</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <search base="base_local_certs">
+          <query> | dedup Subject</query>
+        </search>
+        <fieldForLabel>Subject</fieldForLabel>
+        <fieldForValue>Subject</fieldForValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="multiselect" token="tkn_SerialNumber" searchWhenChanged="true">
+        <label>SerialNumber</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter>,</delimiter>
+        <search base="base_local_certs">
+          <query> | dedup SerialNumber</query>
+        </search>
+        <fieldForLabel>SerialNumber</fieldForLabel>
+        <fieldForValue>SerialNumber</fieldForValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="text" token="tkn_local_search" searchWhenChanged="true">
+        <label>Search Anything</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search base="base_local_certs">
+          <query>| foreach * 
+    [ eval temp=if(isnull(temp),&lt;&lt;FIELD&gt;&gt;,temp." ".&lt;&lt;FIELD&gt;&gt;)] 
+| search FriendlyName IN ($tkn_friendly_name$) Host IN ($tkn_host$) Issuer IN ($tkn_issuer$) PSParentPath_FriendlyName IN ($tkn_PSParentPath_FriendlyName$) SerialNumber IN ($tkn_SerialNumber$) Subject IN ($tkn_subject_local$) temp="*$tkn_local_search$*"
+| fields - PSParentPath,PSPath,temp</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
