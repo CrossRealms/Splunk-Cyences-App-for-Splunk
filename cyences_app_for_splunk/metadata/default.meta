@@ -42,6 +42,14 @@ export = system
 export = system
 
 
+### ALERT ACTIONS
+
+[alert_actions]
+export = system
+
+[alerts]
+export = system
+
 
 ### Permission updated so all users can update the notable event status and assignee on Splunk.
 
