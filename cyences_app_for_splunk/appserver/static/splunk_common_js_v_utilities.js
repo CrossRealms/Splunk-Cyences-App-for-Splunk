@@ -20,11 +20,11 @@ define([
             onResultCallBack(resultDataRows)
             onErrorCallBack(searchProperties)
             */
-            this.onResultCallBack = onResultCallBack;
-            this.onErrorCallBack = onErrorCallBack;
+           this.onResultCallBack = onResultCallBack;
+           this.onErrorCallBack = onErrorCallBack;
         }
 
-        _defineActions() {
+        _defineActions(){
             let _consoleSearchInfo = this.consoleSearchInfo;
             let _manager = this.searchManager;
             let _onResultCallBack = this.onResultCallBack;
@@ -33,26 +33,26 @@ define([
             this.searchManager.on('search:done', function (properties) {
                 console.log(`Search query completed. ${_consoleSearchInfo} - searchProperties=${properties}`);
 
-                let searchManagerResults = _manager.data("results", { count: 0 });
-                if (('_isFetching' in searchManagerResults && searchManagerResults['_isFetching'] === true) || '_data' in searchManagerResults) {
+                let searchManagerResults = _manager.data("results", {count: 0});
+                if(('_isFetching' in searchManagerResults && searchManagerResults['_isFetching'] === true) || '_data' in searchManagerResults ){
                     searchManagerResults.on('data', function () {
                         let resultData = searchManagerResults.data();
                         console.log(`Search query (${_consoleSearchInfo}) completed with ${resultData.rows.length} number of results.`);
-                        if (_onResultCallBack != undefined) {
+                        if (_onResultCallBack != undefined){
                             _onResultCallBack(resultData);
                         }
                     });
                 }
-                else {
-                    if (_onResultCallBack != undefined) {
+                else{
+                    if (_onResultCallBack != undefined){
                         _onResultCallBack(null);
                     }
                 }
             });
 
-            function onFailures(properties) {
+            function onFailures(properties){
                 console.error(`Unable to execute the search query. ${_consoleSearchInfo} - searchProperties=${properties}`);
-                if (_onErrorCallBack != undefined) {
+                if (_onErrorCallBack != undefined){
                     _onErrorCallBack(properties);
                 }
             }
@@ -65,7 +65,7 @@ define([
             });
         }
 
-        searchByQuery(searchQuery, earliestTime = '-1m', latestTime = 'now', searchId = undefined, executeNow = true) {
+        searchByQuery(searchQuery, earliestTime='-1m', latestTime='now', searchId=undefined, executeNow=true){
             /*
             searchQuery, earliestTime, latestTime - Parameters to define the search (only valid if searchId is not defined)
             searchId - define Id of search
@@ -80,7 +80,7 @@ define([
                 earliest_time: earliestTime,
                 latest_time: latestTime
             };
-            if (searchId != undefined) {
+            if(searchId != undefined){
                 searchManagerProperties['id'] = searchId;
             }
 
@@ -88,12 +88,12 @@ define([
 
             this._defineActions();
 
-            if (executeNow) {
+            if(executeNow){
                 this.startSearch();
             }
         }
 
-        postProcessSearchByQuery(baseManagerId, searchQuery, searchId = undefined, executeNow = true) {
+        postProcessSearchByQuery(baseManagerId, searchQuery, searchId=undefined, executeNow=true){
             /*
             searchQuery - Parameters to define the search (post process search of base search) (only valid if searchId is not defined)
             baseManagerId - id of base search
@@ -108,7 +108,7 @@ define([
                 autostart: false,
                 search: searchQuery
             };
-            if (searchId != undefined) {
+            if(searchId != undefined){
                 searchManagerProperties['id'] = searchId;
             }
 
@@ -116,12 +116,12 @@ define([
 
             this._defineActions();
 
-            if (executeNow) {
+            if(executeNow){
                 this.startSearch();
             }
         }
 
-        searchById(searchId) {
+        searchById(searchId){
             /*
             searchId - Use already defined search
             */
@@ -131,7 +131,7 @@ define([
             this._defineActions();
         }
 
-        defineReusableSearch(searchId) {
+        defineReusableSearch(searchId){
             this.consoleSearchInfo = `searchId=${searchId}`;
 
             this.searchManager = new SearchManager({
@@ -143,7 +143,7 @@ define([
             this._defineActions();
         }
 
-        executeReusableSearch(searchQuery, earliestTime = '-1m', latestTime = 'now', executeNow = true) {
+        executeReusableSearch(searchQuery, earliestTime='-1m', latestTime='now', executeNow=true){
             this.searchManager.set(
                 {
                     search: searchQuery,
@@ -151,12 +151,12 @@ define([
                     latest_time: latestTime
                 }
             );
-            if (executeNow) {
+            if(executeNow){
                 this.startSearch();
             }
         }
 
-        defineReusablePostProcessSearch(managerId, searchId) {
+        defineReusablePostProcessSearch(managerId, searchId){
             this.consoleSearchInfo = `searchId=${searchId}`;
 
             this.searchManager = new PostProcessSearchManager({
@@ -169,24 +169,24 @@ define([
             this._defineActions();
         }
 
-        executeReusablePostProcessSearch(searchQuery, executeNow = true) {
+        executeReusablePostProcessSearch(searchQuery, executeNow=true){
             this.searchManager.set(
                 {
                     search: searchQuery
                 }
             );
-            if (executeNow) {
+            if(executeNow){
                 this.startSearch();
             }
         }
 
-        startSearch() {
+        startSearch(){
             console.log("Executing the search query: ", this.consoleSearchInfo);
             this.searchManager.startSearch();
         }
     }
 
-    function vWaitUntil(checkCondition, callBackFunction, waitMilliseconds = 100) {
+    function vWaitUntil(checkCondition, callBackFunction, waitMilliseconds=100) {
         function checkFlag() {
             if (checkCondition() === false) {
                 window.setTimeout(checkFlag, waitMilliseconds);
@@ -199,7 +199,7 @@ define([
 
 
     class VTokenManager {
-        constructor() {
+        constructor(){
             this.submittedTokens = mvc.Components.getInstance('submitted');
             this.defaultTokens = mvc.Components.getInstance('default');
         }
@@ -224,7 +224,7 @@ define([
             this.submittedTokens.set(token_key, token_value);
         }
 
-        setToken(token_key, token_value) {
+        setToken(token_key, token_value){
             this.setDefaultToken(token_key, token_value);
             this.setSubmittedToken(token_key, token_value);
         }
@@ -237,7 +237,7 @@ define([
             this.submittedTokens.unset(token_key);
         }
 
-        unsetToken(token_key) {
+        unsetToken(token_key){
             this.unsetDefaultToken(token_key);
             this.unsetSubmittedToken(token_key);
         }
@@ -246,24 +246,17 @@ define([
     let VTokenManagerObj = new VTokenManager();
 
 
-    function vSetupMultiSelectInputHandler(instance_id, allOptions = ["*", 'like(Issued_Common_Name, "%")']) {
+    function vSetupMultiSelectInputHandler(instance_id, allOptionValue="*") {
 
         // Get multiselect
         var multi = mvc.Components.get(instance_id);
-
+  
         // On change, check selection
         multi.on("change", (selectedValues) => {
-
-            for (let i = 0; i < allOptions.length; i++) {
-                if (selectedValues.includes(allOptions[i])) {
-                    var allOptionValue = allOptions[i]
-                    break;
-                }
-            }
-
+  
             if (selectedValues.length > 1 && selectedValues.includes(allOptionValue)) {
                 var indexOfAll = selectedValues.indexOf(allOptionValue);
-
+  
                 // If "ALL" was selected before current (more specific) selection, remove it from list
                 if (indexOfAll == 0) {
                     selectedValues.splice(indexOfAll, 1);
