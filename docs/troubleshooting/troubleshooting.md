@@ -143,3 +143,15 @@ From any of the below alerts, then kindly `ignore` it, as that is expected behav
     * Ransomware - Spike in File Writes
     * Ransomware - Common Ransomware File Extensions
     * Network Compromise - DDoS Behavior Detected
+
+
+## Getting "The lookup table 'cs_windows_cert_name_mapping.csv' requires a .csv or KV store lookup definition." error on dashboards
+
+* This error needs to occur in Cyences app since the cs_windows_cert_name_mapping.csv lookup is used in the query instead of props.conf.
+* Add the CSV file with Certificate_Template and Certificate_Name mapping details at location $SPLUNK_HOME/etc/apps/cyences_app_for_splunk/lookups/cs_windows_cert_name_mapping.csv
+
+* An example of file content:
+```
+Certificate_Template,Certificate_Name
+x.x.x.xx.....,my_cert
+```
