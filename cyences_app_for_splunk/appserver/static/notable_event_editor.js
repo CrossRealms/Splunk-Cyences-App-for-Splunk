@@ -4,7 +4,7 @@ require([
     "jquery",
     'splunkjs/mvc/tableview',
     'splunk.util',
-    'select2/select2',
+    '../app/cyences_app_for_splunk/select2',
     '../app/cyences_app_for_splunk/splunk_common_js_v_utilities'
 ], function (
     mvc,
