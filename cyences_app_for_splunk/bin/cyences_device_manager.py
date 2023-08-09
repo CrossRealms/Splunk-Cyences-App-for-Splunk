@@ -65,17 +65,17 @@ class CyencesDeviceManagerCommand(EventingCommand):
         self.validate_inputs()
 
         session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
-        conf_manger = cs_utils.ConfigHandler(logger, session_key)
-        hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO).strip('\"').split(",")
 
         if self.operation == "getdevices":
-            with DeviceManager(session_key, logger, self.operation, hostname_postfixes) as dm:
+            with DeviceManager(session_key, logger) as dm:
                 _devices = dm.get_device_details()
                 for device in _devices:
                     yield device
 
         elif self.operation == "addentries":
-            with DeviceManager(session_key, logger, self.operation, hostname_postfixes) as dm:
+            conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO).strip('\"').split(",")
+            with DeviceManager(session_key, logger, hostname_postfixes) as dm:
                 for record in records:
                     other_fields = copy.deepcopy(record)
                     del other_fields['time']
@@ -90,13 +90,15 @@ class CyencesDeviceManagerCommand(EventingCommand):
                     yield record
 
         elif self.operation == "cleanup":
-            with DeviceManager(session_key, logger, self.operation, hostname_postfixes) as dm:
+            with DeviceManager(session_key, logger) as dm:
                 messages = dm.cleanup_devices(self.cleanup_mintime, self.cleanup_maxtime, self.products_to_cleanup)
                 for m in messages:
                     yield {"message": m}
 
         elif self.operation == "merge":
-            with DeviceManager(session_key, logger, self.operation, hostname_postfixes) as dm:
+            conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO).strip('\"').split(",")
+            with DeviceManager(session_key, logger, hostname_postfixes) as dm:
                 messages = dm.reorganize_device_list()
                 for m in messages:
                     yield {"message": m}
