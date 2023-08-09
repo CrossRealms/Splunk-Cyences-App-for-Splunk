@@ -1,4 +1,4 @@
-<form theme="dark" script="notable_event_editor.js" stylesheet="notable_event_editor.css" version="1.1">
+<form theme="dark" script="notable_event_editor.js" stylesheet="notable_event_editor.css,select2.css" version="1.1">
   <label>SOC</label>
   <search id="notable_event_main_search">
     <query>`cs_cyences_index` alert_name IN $tkn_savedsearch$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
