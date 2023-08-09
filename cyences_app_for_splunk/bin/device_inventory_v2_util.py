@@ -205,7 +205,6 @@ class DeviceManager:
             self.logger.info("No entries to update in the KVStore lookup.")
 
     def delete_kvstore_entries(self, collection_name, key):
-        # for dvc in self.modify_devices:
         _ = rest.simpleRequest(
             "/servicesNS/nobody/{}/storage/collections/data/{}/{}".format(
                 cs_utils.APP_NAME, collection_name, key
