@@ -23,8 +23,6 @@ from splunk import rest
 
 
 MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
-
-CY_HOSTNAME_POSTFIXES_MACRO = "cs_device_inventory_hostname_postfixes"
 DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_test"
 
 
