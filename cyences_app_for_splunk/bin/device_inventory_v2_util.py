@@ -135,6 +135,7 @@ class DeviceManager:
         self.deleted_devices = []
         self.devices = self.read_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION)
 
+
     def _convert_str_to_dict(self, lookup_data):
         lookup_data = lookup_data if lookup_data else []
         for dvc in lookup_data:
@@ -146,10 +147,10 @@ class DeviceManager:
             dvc["hostnames"] = json.loads(dvc["hostnames"])
         return lookup_data
 
-    def read_kvstore_lookup(self, collection_name):
+    def read_kvstore_lookup(self):
         _, serverContent = rest.simpleRequest(
             "/servicesNS/nobody/{}/storage/collections/data/{}?output_mode=json".format(
-                cs_utils.APP_NAME, collection_name
+                cs_utils.APP_NAME, DEVICE_INVENTORY_LOOKUP_COLLECTION
             ),
             method="GET",
             sessionKey=self.session_key,
@@ -157,24 +158,26 @@ class DeviceManager:
         )
         return self._convert_str_to_dict(json.loads(serverContent))
 
-    def _convert_dict_to_str(self):
-        for dvc in self.devices:
+
+    def _convert_dict_to_str(self, devices_to_update):
+        for dvc in devices_to_update:
             dvc["product_info"] = json.dumps(dvc["product_info"])
             dvc["product_names"] = json.dumps(dvc["product_names"])
             dvc["product_uuids"] = json.dumps(dvc["product_uuids"])
             dvc["ips"] = json.dumps(dvc["ips"])
             dvc["mac_addresses"] = json.dumps(dvc["mac_addresses"])
             dvc["hostnames"] = json.dumps(dvc["hostnames"])
+        return devices_to_update
 
-    def update_kvstore_lookup(self, collection_name):
-        if self.devices:
-            self._convert_dict_to_str()
+    def update_kvstore_lookup(self, devices_to_update=[]):
+        if devices_to_update:
+            devices_to_update = self._convert_dict_to_str(devices_to_update)
             # splunk.BadRequest: [HTTP 400] Bad Request; [{'type': 'ERROR', 'code': None, 'text': 'Request exceeds API limits - see limits.conf for details. (Too many documents for a single batch save, max_documents_per_batch_save=1000)'}]
-            if len(self.devices) < 1000:
-                jsonargs = json.dumps(self.devices)
+            if len(devices_to_update) < 1000:
+                jsonargs = json.dumps(devices_to_update)
                 _ = rest.simpleRequest(
                     "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(
-                        cs_utils.APP_NAME, collection_name
+                        cs_utils.APP_NAME, DEVICE_INVENTORY_LOOKUP_COLLECTION
                     ),
                     method="POST",
                     jsonargs=jsonargs,
@@ -183,13 +186,13 @@ class DeviceManager:
                 )
             else:
                 updated_data_full = [
-                    self.devices[i : i + 800] for i in range(0, len(self.devices), 800)
+                    devices_to_update[i : i + 800] for i in range(0, len(devices_to_update), 800)
                 ]  # send max 800 in each chunk
                 for chunk in updated_data_full:
                     jsonargs = json.dumps(chunk)
                     _ = rest.simpleRequest(
                         "/servicesNS/nobody/{}/storage/collections/data/{}/batch_save?output_mode=json".format(
-                            cs_utils.APP_NAME, collection_name
+                            cs_utils.APP_NAME, DEVICE_INVENTORY_LOOKUP_COLLECTION
                         ),
                         method="POST",
                         jsonargs=jsonargs,
@@ -197,43 +200,41 @@ class DeviceManager:
                         raiseAllErrors=True,
                     )
             self.logger.info(
-                "Updated {} entries in the lookup.".format(len(self.devices))
+                "Updated {} entries in the lookup.".format(len(devices_to_update))
             )
-        else:
-            self.logger.info("No entries to update in the KVStore lookup.")
 
-    def delete_kvstore_entries(self, collection_name, key):
+        else:
+            self.logger.info("No devices to update in the KVStore lookup.")
+
+
+    def delete_kvstore_entry(self, key):
         _ = rest.simpleRequest(
             "/servicesNS/nobody/{}/storage/collections/data/{}/{}".format(
-                cs_utils.APP_NAME, collection_name, key
+                cs_utils.APP_NAME, DEVICE_INVENTORY_LOOKUP_COLLECTION, key
             ),
             method="DELETE",
             sessionKey=self.session_key,
             raiseAllErrors=True,
         )
 
+
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.deleted_devices = list(set(self.deleted_devices))
-        self.updated_devices = list(
-            set(self.updated_devices) - set(self.deleted_devices)
-        )
-        idx = 0
-        while idx < len(self.devices):
-            _uuid = self.devices[idx].get("uuid")
-            if _uuid in self.deleted_devices:
-                self.delete_kvstore_entries(
-                    DEVICE_INVENTORY_LOOKUP_COLLECTION, self.devices[idx].get("_key")
-                )
-                self.devices.pop(idx)
-            elif _uuid in self.updated_devices:
-                idx += 1
-            else:
-                self.devices.pop(idx)
+        devices_to_update = []
 
-        self.update_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION)
+        for _device_obj in self.devices:
+            _uuid = _device_obj.get("uuid")
+
+            if _uuid in self.deleted_devices:
+                self.delete_kvstore_entry(_device_obj.get("_key"))
+
+            elif _uuid in self.updated_devices:
+                devices_to_update.append(_device_obj)
+
+        self.update_kvstore_lookup(devices_to_update)
+
 
     @staticmethod
     def is_match(ex_device, new_device: DeviceEntry, hostname_postfixes=[]):
@@ -278,9 +279,11 @@ class DeviceManager:
 
         return False
 
+
     def get_device_details(self):
         # Return a list of unique devices
         return self.devices
+
 
     def _find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
@@ -296,6 +299,7 @@ class DeviceManager:
             if de.get("uuid") == device_id:
                 return de
         return False
+
 
     def _remove_entry_content(
         self, product_name, product_uuid, entry_content, ex_device
@@ -334,6 +338,7 @@ class DeviceManager:
             else:
                 ex_device.get("hostnames")[hostname] -= 1
 
+
     def _add_entry_content(self, product_name, product_uuid, entry_content, ex_device):
         if product_name in ex_device.get("product_names"):
             ex_device.get("product_names")[product_name] += 1
@@ -369,7 +374,16 @@ class DeviceManager:
             else:
                 ex_device.get("hostnames")[hostname] = 1
 
-    def update_device_entry(self, new_entry: DeviceEntry, existing_device):
+
+    def delete_device(self, device_obj, idx_in_device_list=None):
+        if not idx_in_device_list:
+            idx_in_device_list = self.devices.index(device_obj)
+        
+        self.devices.pop(idx_in_device_list)
+        self.deleted_devices.append(device_obj.get("uuid"))
+
+
+    def update_device_entry(self, existing_device, new_entry: DeviceEntry):
         # TODO - We need to combine product_name and product_uuid, somehow, product_uuid alone does not represent the right data
 
         new_entry_content = copy.deepcopy(vars(new_entry))
@@ -410,6 +424,9 @@ class DeviceManager:
                 existing_device,
             )
 
+        self.updated_devices.append(existing_device.get("uuid"))
+
+
     def _create_new_device(self):
         device_uuid = str(uuid.uuid4())
         return {
@@ -423,22 +440,22 @@ class DeviceManager:
             "hostnames": dict(),
         }
 
+
     def add_device_entry(self, new_entry: DeviceEntry):
         # Assign a unique device_uuid to the device
         matching_device = self._find_device(new_entry)
 
         if matching_device:
-            self.update_device_entry(new_entry, matching_device)
-            self.updated_devices.append(matching_device.get("uuid"))
+            self.update_device_entry(matching_device, new_entry)
             return matching_device.get("uuid")
 
         else:
             # create uuid and create a new device and append to the list
             new_device = self._create_new_device()
             self.devices.append(new_device)
-            self.update_device_entry(new_entry, new_device)
-            self.updated_devices.append(new_device.get("uuid"))
+            self.update_device_entry(new_device, new_entry)
             return new_device.get("uuid")
+
 
     def cleanup(
         self, device, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
@@ -464,6 +481,7 @@ class DeviceManager:
         if len(device.get("product_names")) == 0:
             return False
         return True
+
 
     # TODO - At certain interval we need to run auto merging code -> reorganize_device_list
     # Why: Because lets with the same product_uuid if hostname and mac_address changed, which is not matching with the some other device
@@ -497,9 +515,8 @@ class DeviceManager:
                             )
                         )
                         for _entry in _device_entries:
-                            self.update_device_entry(_entry, self.devices[j])
-                        self.updated_devices.append(self.devices[j].get("uuid"))
-                        self.deleted_devices.append(self.devices[i].get("uuid"))
+                            self.update_device_entry(self.devices[j], _entry)
+                        self.delete_device(self.devices[i], i)
                         break  # all the entries added to the device, duplicate device obj removed, break two loops
                 else:
                     continue
@@ -508,6 +525,7 @@ class DeviceManager:
                 # break the parent look as well when match found as the device has already been merged to another device
 
         return messages
+
 
     def cleanup_devices(
         self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup="*"
@@ -541,12 +559,12 @@ class DeviceManager:
                         self.devices[idx].get("uuid")
                     )
                 )
-                self.deleted_devices.append(self.devices[idx].get("uuid"))
-                idx += 1
+                self.delete_device(self.devices[idx], idx)
             else:
-                self.devices.pop(idx)
+                idx += 1
 
         return messages
+
 
     def manually_merge_devices(self, device1_id, *device_ids_to_merge):
         # Implement logic to manually specify that two or more devices are the same by their IDs
@@ -562,12 +580,11 @@ class DeviceManager:
             _device_entries = self._convert_device_to_deviceentry_obj(_other_dev_obj)
 
             for de_entry in _device_entries:
-                self.update_device_entry(de_entry, _device1_obj)  # add the entries
-                self.updated_devices.append(_device1_obj.get("uuid"))
+                self.update_device_entry(_device1_obj, de_entry)  # add the entries
 
-            self.deleted_devices.append(
-                _other_dev_obj.get("uuid")
-            )  # remove the device after all entries merged to first device
+            self.delete_device(_other_dev_obj)
+            # remove the device after all entries merged to first device
+
 
     def _convert_device_to_deviceentry_obj(self, device_obj):
         device_entries = []
