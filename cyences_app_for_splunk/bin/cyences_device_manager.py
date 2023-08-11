@@ -73,7 +73,7 @@ class CyencesDeviceManagerCommand(EventingCommand):
 
         elif self.operation == "addentries":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
-            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO).strip('"').split(",")
+            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
             with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
                 for record in records:
                     other_fields = copy.deepcopy(record)
@@ -96,7 +96,7 @@ class CyencesDeviceManagerCommand(EventingCommand):
 
         elif self.operation == "merge":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
-            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO).strip('"').split(",")
+            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
             with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
                 messages = dm.reorganize_device_list()
                 for m in messages:
