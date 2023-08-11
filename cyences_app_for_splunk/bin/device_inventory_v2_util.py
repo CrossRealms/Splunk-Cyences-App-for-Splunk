@@ -23,7 +23,6 @@ from splunk import rest
 
 
 MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
-DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_test"
 
 
 def remove_words_from_end(sentence, words):
@@ -125,15 +124,16 @@ class DeviceManager:
             device_uuid = dm.add_device_entry(new_device_entry)
     """
 
-    def __init__(self, session_key, logger, hostname_postfixes=[]):
+    def __init__(self, session_key, logger, collection_name, hostname_postfixes=[]):
         self.session_key = session_key
         self.logger = logger
+        self.collection_name = collection_name
         self.hostname_postfixes = [
             element.strip() for element in hostname_postfixes if element.strip()
         ]
         self.updated_devices = []
         self.deleted_devices = []
-        self.devices = self.read_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION)
+        self.devices = self.read_kvstore_lookup(self.collection_name)
 
     def _convert_str_to_dict(self, lookup_data):
         lookup_data = lookup_data if lookup_data else []
@@ -224,7 +224,7 @@ class DeviceManager:
         self.updated_devices = list(set(self.updated_devices))
 
         for _key_to_delete in self.deleted_devices:
-            self.delete_kvstore_entry(DEVICE_INVENTORY_LOOKUP_COLLECTION, _key_to_delete)
+            self.delete_kvstore_entry(self.collection_name, _key_to_delete)
 
         for _device_obj in self.devices:
             _uuid = _device_obj.get("uuid")
@@ -232,7 +232,7 @@ class DeviceManager:
             if _uuid in self.updated_devices:
                 devices_to_update.append(_device_obj)
 
-        self.update_kvstore_lookup(DEVICE_INVENTORY_LOOKUP_COLLECTION, devices_to_update)
+        self.update_kvstore_lookup(self.collection_name, devices_to_update)
 
     @staticmethod
     def is_match(ex_device, new_device: DeviceEntry, hostname_postfixes=[]):
