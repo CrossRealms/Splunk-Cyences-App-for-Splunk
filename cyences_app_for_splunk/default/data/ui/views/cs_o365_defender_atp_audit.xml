@@ -13,18 +13,18 @@
       <table>
         <search>
           <query>`cs_o365_defender_atp_audit` host=$tkn_host|s$ | dedup host 
-| rex "^The defender ATP (?&lt;status&gt;[\w\s]+) installed\. OnboardingState=(?&lt;OnboardingState&gt;.+), LastConnected=(?&lt;LastConnected&gt;.+)$" 
-| eval status= if(status="is" AND OnboardingState=1, "Installed", "Not Installed") | eval LastConnectedEpoch = strptime(LastConnected, "%m/%d/%Y %H:%M:%S %Z") | fillnull OnboardingState value="-" 
-| table host, status, OnboardingState, LastConnected, _time
-| sort - status, + OnboardingState</query>
-          <earliest>-4h@m</earliest>
+| fillnull OnboardingState LastConnected value="-" 
+| rename host as Host status as Status
+| `cs_human_readable_time_format(_time, Timestamp)`
+| table Host, Status, OnboardingState, LastConnected, Timestamp
+| sort 0 - Status, + OnboardingState</query>
+          <earliest>-6h@m</earliest>
           <latest>now</latest>
         </search>
         <option name="count">10</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
         <option name="wrap">true</option>
         <format type="color" field="status">
           <colorPalette type="map">{"Installed":#00700b, "Not Installed":#bd0d00}</colorPalette>
@@ -35,7 +35,7 @@
       </table>
       <html>
         <p>Data Collection: Use <a target="_blank" href="https://splunkbase.splunk.com/app/5691">Defender ATP Status Check Add-on</a>.</p>
-        <p>This search checks the last 4 hours to see Defender ATP configuration on Windows machines.</p>
+        <p>This search checks the last 6 hours to see Defender ATP configuration on Windows machines.</p>
       </html>
     </panel>
   </row>
