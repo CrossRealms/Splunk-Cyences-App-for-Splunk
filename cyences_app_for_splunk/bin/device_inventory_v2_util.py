@@ -124,12 +124,12 @@ class DeviceManager:
             device_uuid = dm.add_device_entry(new_device_entry)
     """
 
-    def __init__(self, session_key, logger, collection_name, hostname_postfixes=[]):
+    def __init__(self, session_key, logger, collection_name, hostname_postfixes=""):
         self.session_key = session_key
         self.logger = logger
         self.collection_name = collection_name
         self.hostname_postfixes = [
-            element.strip() for element in hostname_postfixes if element.strip()
+            element.strip() for element in hostname_postfixes.strip('"').split(",") if element.strip()
         ]
         self.updated_devices = []
         self.deleted_devices = []
@@ -205,14 +205,33 @@ class DeviceManager:
             self.logger.info("No devices to update in the KVStore lookup.")
 
     def delete_kvstore_entry(self, collection_name, key):
-        _ = rest.simpleRequest(
-            "/servicesNS/nobody/{}/storage/collections/data/{}/{}".format(
-                cs_utils.APP_NAME, collection_name, key
-            ),
-            method="DELETE",
-            sessionKey=self.session_key,
-            raiseAllErrors=True,
-        )
+        try:
+            _ = rest.simpleRequest(
+                "/servicesNS/nobody/{}/storage/collections/data/{}/{}".format(
+                    cs_utils.APP_NAME, collection_name, key
+                ),
+                method="DELETE",
+                sessionKey=self.session_key,
+                raiseAllErrors=True,
+            )
+        except Exception as e:
+            self.logger.info("Unable to delete the device. error={}".format(str(e)))
+
+    def get_as_dict(self, device):
+        all_times = []
+        for product_name, product_items in device.get("product_info").items():
+            for _, element_details in product_items.items():
+                all_times.append(element_details['time'])
+
+        return {
+            'uuid': device.get("uuid"),
+            'latest_time': max(all_times),
+            'product_names': list(device.get("product_names").keys()),
+            'product_uuids': list(device.get("product_uuids").keys()),
+            'ips': list(device.get("ips").keys()),
+            'mac_addresses': list(device.get("mac_addresses").keys()),
+            'hostnames': list(device.get("hostnames").keys())
+        }
 
     def __enter__(self):
         return self
@@ -276,10 +295,19 @@ class DeviceManager:
             return True
 
         return False
+    
+    def get_matching_device(self, device_entry: DeviceEntry):
+        # return matching device
+        for de in self.devices:
+            if self.is_match(de, device_entry, hostname_postfixes=self.hostname_postfixes):
+                return self.get_as_dict(de)
 
     def get_device_details(self):
         # Return a list of unique devices
-        return self.devices
+        _devices = []
+        for de in self.devices:
+            _devices.append(self.get_as_dict(de))
+        return _devices
 
     def _find_device(self, device_entry: DeviceEntry):
         for de in self.devices:
@@ -382,14 +410,14 @@ class DeviceManager:
         del new_entry_content["product_name"]
         del new_entry_content["product_uuid"]
 
-        if new_entry.product_name in existing_device.get(
-            "product_names"
-        ) and new_entry.product_uuid in existing_device.get("product_uuids"):
-            existing_entry = (
-                existing_device.get("product_info", {})
-                .get(new_entry.product_name, {})
-                .get(new_entry.product_uuid, {})
-            )
+        # gives the device details of existing_entry only if it contains the same product_name and product_uuid.
+        existing_entry = (
+            existing_device.get("product_info", {})
+            .get(new_entry.product_name, {})
+            .get(new_entry.product_uuid, {})
+        )
+
+        if existing_entry:
             # existing entry present, and its older than new entry then only replace with the new entry
             if existing_entry["time"] <= new_entry_content["time"]:
                 self._remove_entry_content(
