@@ -1,3 +1,6 @@
+# Use the splunk's python in order to run this file. Run the following command:
+# $SPLUNK_HOME/bin/splunk cmd python3 test_device_inventory_v2.py
+
 import os, sys
 import hashlib
 
