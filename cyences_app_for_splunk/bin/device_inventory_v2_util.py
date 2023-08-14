@@ -410,14 +410,14 @@ class DeviceManager:
         del new_entry_content["product_name"]
         del new_entry_content["product_uuid"]
 
-        if new_entry.product_name in existing_device.get(
-            "product_names"
-        ) and new_entry.product_uuid in existing_device.get("product_uuids"):
-            existing_entry = (
-                existing_device.get("product_info", {})
-                .get(new_entry.product_name, {})
-                .get(new_entry.product_uuid, {})
-            )
+        # gives the device details of existing_entry only if it contains the same product_name and product_uuid.
+        existing_entry = (
+            existing_device.get("product_info", {})
+            .get(new_entry.product_name, {})
+            .get(new_entry.product_uuid, {})
+        )
+
+        if existing_entry:
             # existing entry present, and its older than new entry then only replace with the new entry
             if existing_entry["time"] <= new_entry_content["time"]:
                 self._remove_entry_content(
