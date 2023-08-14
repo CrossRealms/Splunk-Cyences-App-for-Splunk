@@ -17,6 +17,7 @@ from splunk import rest
 # Following things needs to be configured as per the splunk environment
 SPLUNK_USERNAME = "admin"
 SPLUNK_PASSWORD = "admin123"
+
 HOSTNAME_POSTFIXES = ".ad.crossrealms.com, .crossrealms.com"
 APP_NAME = "cyences_app_for_splunk"
 DEVICE_INVENTORY_LOOKUP_COLLECTION = "test_collection"
