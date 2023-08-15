@@ -15,7 +15,7 @@ logger = logger_manager.setup_logging("device_manager_v2", logging.INFO)
 
 IS_DEBUGGING_MODE = False
 CY_HOSTNAME_POSTFIXES_MACRO = "cs_device_inventory_hostname_postfixes"
-DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_test"
+DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_v2"
 
 MONTH_IN_SECOND = 60 * 60 * 24 * 30.5
 YEAR_IN_SECOND = MONTH_IN_SECOND * 12
