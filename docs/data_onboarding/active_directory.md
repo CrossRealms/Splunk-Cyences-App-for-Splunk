@@ -10,34 +10,14 @@ parent: Data Onboarding
 
 ## **Windows Active Directory Data** 
 
-Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).  
+Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).
 
 This data is required for Active Directory related alerts/dashboards (Group Changes, Group Policy Changes, and User Changes) and it is only compatible with plain text formatted events. 
 
-Enable the input stanzas below for the Splunk Add-on for Windows. Both stanzas are located in the inputs.conf file (create a local directory if necessary): 
-
-    ## Health and Topology Information NT6 
-    [script://.\bin\runpowershell.cmd nt6-health.ps1] 
-    disabled=0 
-    renderXml=false 
-    index=msad 
-
-    ## Health and Topology Information 2012r2 and 2016 
-    [powershell://AD-Health] 
-    disabled = 0 
-    renderXml=false 
-    index=msad 
-
-    ## Active Directory (Admon Logs) 
-    [admon://<name of stanza>] 
-    disabled = 0 
-    renderXml = false 
-    index = msad 
-    targetDc = <The unique name of the domain controller you want to use for AD monitoring.> 
+Refer to `TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Windows-Input-Apps) for inputs.conf reference.
 
 Reference for admon input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
 
-**Note:** Use **renderXml=false** as field extraction may not work with XML format.
 
 ## Estimated Data Size
 Data size with updated stanzas: 
