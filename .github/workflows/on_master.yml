@@ -27,11 +27,9 @@ jobs:
 
       - uses: VatsalJagani/splunk-app-action@v2
         env:
-          SPLUNK_APP_ACTION_1: "cd TA-cyences/bin"
-          SPLUNK_APP_ACTION_2: "ls -l"
-          SPLUNK_APP_ACTION_3: "chmod +x *.sh"
-          SPLUNK_APP_ACTION_4: "ls -l"
-          SPLUNK_APP_ACTION_5: "cd ../.."
+          SPLUNK_APP_ACTION_1: "ls -l TA-cyences/bin"
+          SPLUNK_APP_ACTION_2: "chmod +x TA-cyences/bin/*.sh"
+          SPLUNK_APP_ACTION_3: "ls -l TA-cyences/bin"
         with:
           app_dir: "TA-cyences"
           splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
