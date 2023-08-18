@@ -24,6 +24,7 @@ jobs:
       - uses: VatsalJagani/splunk-app-action@v2
         with:
           app_dir: "cyences_app_for_splunk"
+          is_app_inspect_check: false
           splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
           splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
 
@@ -34,5 +35,6 @@ jobs:
           SPLUNK_APP_ACTION_3: "ls -l TA-cyences/bin"
         with:
           app_dir: "TA-cyences"
+          is_app_inspect_check: true
           splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
           splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
