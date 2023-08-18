@@ -31,8 +31,6 @@ jobs:
       - uses: VatsalJagani/splunk-app-action@v2
         env:
           SPLUNK_APP_ACTION_1: "ls -l TA-cyences/bin"
-          SPLUNK_APP_ACTION_2: "chmod +x TA-cyences/bin/*.sh"
-          SPLUNK_APP_ACTION_3: "ls -l TA-cyences/bin"
         with:
           app_dir: "TA-cyences"
           is_app_inspect_check: true
