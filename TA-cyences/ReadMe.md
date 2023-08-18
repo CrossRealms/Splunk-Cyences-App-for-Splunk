@@ -8,13 +8,17 @@ OVERVIEW
 --------
 The Cyences Add-on for Splunk is a Splunk Add-on/App to provide some custom input that is being used in Cyences App for Splunk (https://splunkbase.splunk.com/app/5351/). It contains required inputs and data parsing. It does not contain alerts/reports and dashboards.
 
-
 * Author - CrossRealms International Inc.
 * Build - 1
 * Creates Index - False
 * Compatible with:
    * Splunk Enterprise version: 9.0, 8.2, 8.1, 8.0, 7.3, 7.2
    * OS: Platform Independent
+
+
+## What's inside the Add-on
+
+* No of Custom Inputs: **2**
 
 
 
@@ -74,8 +78,3 @@ SUPPORT
   * US: +1-312-278-4445
 * License Agreement - https://d38o4gzaohghws.cloudfront.net/static/misc/eula.html
 * Copyright - Copyright CrossRealms Internationals, 2023
-# What's inside the App
-
-* No of Custom Inputs: **2**
-
-
