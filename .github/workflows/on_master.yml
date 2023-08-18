@@ -1,0 +1,33 @@
+# This is a basic workflow to generate build
+name: "Run on Master - Add Utilities & App Inspect"
+
+on:
+  push:
+    branches:
+      - 'master'
+
+  workflow_dispatch:
+
+jobs:
+  pre-release:
+    name: "Run on Master - Add Utilities & App Inspect"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: VatsalJagani/splunk-app-action@v2
+        with:
+          app_dir: "cyences_app_for_splunk"
+          splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
+          splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
+          app_utilities: "whats_in_the_app, logger, splunk_python_sdk, common_js_utilities"
+          my_github_token: ${{ secrets.MY_GITHUB_TOKEN }}
+          logger_log_files_prefix: "cyences"
+          logger_sourcetype: "cyences:logs"
+
+      - uses: VatsalJagani/splunk-app-action@v2
+        with:
+          app_dir: "TA-cyences"
+          splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
+          splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
+          app_utilities: "whats_in_the_app"
+          my_github_token: ${{ secrets.MY_GITHUB_TOKEN }}

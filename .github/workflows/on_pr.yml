@@ -1,0 +1,34 @@
+# This is a basic workflow to generate build
+name: "On PR - Build and App-Inspect"
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+on:
+  push:
+    branches:
+      - 'master'
+
+  pull_request:
+    branches:
+      - '*'
+      - '*/*'
+      - '**'
+
+  workflow_dispatch:
+
+jobs:
+  pre-release:
+    name: "On PR - Build and App-Inspect"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: VatsalJagani/splunk-app-action@v2
+        with:
+          app_dir: "cyences_app_for_splunk"
+          splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
+          splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
+
+      - uses: VatsalJagani/splunk-app-action@v2
+        with:
+          app_dir: "TA-cyences"
+          splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
+          splunkbase_password: ${{ secrets.SPLUNKBASE_PASSWORD }}
