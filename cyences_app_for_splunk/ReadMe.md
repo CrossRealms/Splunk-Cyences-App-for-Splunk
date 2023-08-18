@@ -15,6 +15,19 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
    * Browser: Google Chrome, Mozilla Firefox, Safari
 
 
+## What's inside the App
+
+* No of XML Dashboards: **32**
+* Approx Total Viz(Charts/Tables/Map) in XML dashboards: **254**
+* No of Reports and Alerts: **121**
+* No of Custom Commands: **14**
+* No of Custom Visualization: **1**
+* No of Custom Alert Actions: **3**
+* No of Data Models: **3**
+* No of Lookups - KVStore Collections: **20**
+* No of Static CSV Lookup Files: **13**
+
+
 
 TOPOLOGY AND SETTING UP SPLUNK ENVIRONMENT
 ------------------------------------------
