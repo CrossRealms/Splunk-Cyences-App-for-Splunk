@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 groups=$(getent group)
 for i in $groups;
 do
