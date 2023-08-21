@@ -543,24 +543,11 @@ class DeviceManager:
         return messages
 
     def cleanup_devices(
-        self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup="*"
+        self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
     ):
         """
-        products_to_cleanup "*" meaning cleanup all products
+        products_to_cleanup is None meaning cleanup all products
         """
-        if products_to_cleanup == "*":
-            products_to_cleanup = None
-        elif type(products_to_cleanup) == str:
-            products_to_cleanup = [
-                element.strip()
-                for element in products_to_cleanup.split(",")
-                if element.strip()
-            ]
-        elif type(products_to_cleanup) == list:
-            pass
-        else:
-            raise Exception("products_to_cleanup value is not as expected.")
-
         messages = []
 
         idx = 0
@@ -582,6 +569,7 @@ class DeviceManager:
 
     def manually_merge_devices(self, device1_id, *device_ids_to_merge):
         # Implement logic to manually specify that two or more devices are the same by their IDs
+        messages = []
         _device1_obj = self._find_device_by_id(device1_id)
         if not _device1_obj:
             raise Exception("Device(uuid={}) not found.".format(device1_id))
@@ -590,7 +578,12 @@ class DeviceManager:
             _other_dev_obj = self._find_device_by_id(_other_dev_id)
             if not _other_dev_obj:
                 raise Exception("Device(uuid={}) not found.".format(_other_dev_id))
-
+            
+            messages.append(
+                "Device(uuid={}) will going to be merged with Device(uuid={}).".format(
+                    _other_dev_id, device1_id
+                )
+            )
             _device_entries = self._convert_device_to_deviceentry_obj(_other_dev_obj)
 
             for de_entry in _device_entries:
@@ -598,6 +591,7 @@ class DeviceManager:
 
             self.delete_device(_other_dev_obj)
             # remove the device after all entries merged to first device
+        return messages
 
     def _convert_device_to_deviceentry_obj(self, device_obj):
         device_entries = []

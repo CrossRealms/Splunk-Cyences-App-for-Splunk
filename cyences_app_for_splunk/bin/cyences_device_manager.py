@@ -34,23 +34,49 @@ class CyencesDeviceManagerCommand(EventingCommand):
     products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
     cleanup_mintime = Option(name="mintime", require=False, default=None, validate=validators.Float())  # default past 1 years
     cleanup_maxtime = Option(name="maxtime", require=False, default=None, validate=validators.Float())  # default forseeable future
+    target_device = Option(name="target_device", require=False, default="")
+    devices_to_merge = Option(name="devices_to_merge", require=False, default=None)
     # cleanup_ip_mintime = Option(name="ipmintime", require=False, default=None, validate=validators.Float())   # default past 30 days
     # cleanup_ip_maxtime = Option(name="ipmaxtime", require=False, default=None, validate=validators.Float())   # default forseeable future
 
+    @staticmethod
+    def validate_param_value_and_type(command_options):
+        if command_options == "*":
+            command_options = None
+        elif command_options is None:
+            command_options = []
+        elif type(command_options) == str:
+            command_options = [
+                element.strip().strip('\'"')
+                for element in command_options.strip('\'"()').split(",")
+                if element.strip()
+            ]
+        elif type(command_options) == list:
+            for element in command_options:
+                element.strip().strip('\'"')
+        else:
+            raise Exception("{} value is not as expected.".format(command_options))
+        return command_options
+ 
     def validate_inputs(self):
-        if self.operation not in ["getdevices", "addentries", "cleanup", "merge"]:
-            raise Exception("operation - allowed values: getdevices, addentries, cleanup")
+        if self.operation not in ["getdevices", "addentries", "cleanup", "merge", "manualmerge"]:
+            raise Exception("operation - allowed values: getdevices, addentries, cleanup, merge, manualmerge")
 
         if self.operation == "cleanup":
             timenow = time.time()
 
-            if self.cleanup_mintime == None:
+            if self.cleanup_mintime is None:
                 self.cleanup_mintime = timenow - YEAR_IN_SECOND
-            if self.cleanup_maxtime == None:
+            if self.cleanup_maxtime is None:
                 self.cleanup_maxtime = MAX_TIME_EPOCH
 
             if self.cleanup_mintime >= self.cleanup_maxtime:
                 raise Exception("mintime should be less than maxtime.")
+            
+            self.products_to_cleanup = self.validate_param_value_and_type(self.products_to_cleanup)
+    
+        elif self.operation == "manualmerge":
+            self.devices_to_merge = self.validate_param_value_and_type(self.devices_to_merge)
 
             # if self.cleanup_ip_mintime == None:
             #     self.cleanup_ip_mintime = timenow - MONTH_IN_SECOND
@@ -99,6 +125,14 @@ class CyencesDeviceManagerCommand(EventingCommand):
             hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
             with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
                 messages = dm.reorganize_device_list()
+                for m in messages:
+                    yield {"message": m}
+
+        elif self.operation == "manualmerge":
+            conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
+            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
+                messages = dm.manually_merge_devices(self.target_device, *self.devices_to_merge)
                 for m in messages:
                     yield {"message": m}
 
