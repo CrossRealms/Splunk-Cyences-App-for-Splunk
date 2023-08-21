@@ -487,8 +487,8 @@ class DeviceManager:
 
             for product_uuid, entry_details in product_items.items():
                 if (
-                    int(entry_details["time"]) < min_time
-                    or int(entry_details["time"]) > max_time
+                    int(float(entry_details["time"])) < min_time
+                    or int(float(entry_details["time"])) > max_time
                 ):
                     self._remove_entry_content(
                         product_name, product_uuid, entry_details, device
