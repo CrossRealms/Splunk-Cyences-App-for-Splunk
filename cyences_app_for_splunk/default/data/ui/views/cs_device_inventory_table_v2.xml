@@ -52,7 +52,7 @@
         </format>
       </table>
       <html>
-        <p>If you are looking at the Device Inventory for the first time and you don't see all the available devices in the table below then you can manually execute <a target="_blank" href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=*&amp;search=Device%20Inventory%20Backfill">Device Inventory Backfill</a> report to fill all the lookups. (By default it runs over last 30 days of time to collect the device inventory.)</p>
+        <p>If you are looking at the Device Inventory for the first time and you don't see all the available devices in the table below then you can manually execute <a target="_blank" href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=*&amp;search=Device%20Inventory%20Backfill%20%2D%20V2">Device Inventory Backfill - V2</a> report to fill all the lookups. (By default it runs over last 30 days of time to collect the device inventory.)</p>
       </html>
     </panel>
   </row>
@@ -358,36 +358,6 @@
           </div>
         </div>
       </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Product Device ID Conflicts Auto Merged</title>
-      <input type="time" token="tkn_timerange_conflicted_merged">
-        <label></label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <table>
-        <title>ADMIN</title>
-        <search>
-          <query>index=_internal sourcetype="cyences:logs" CASE(INFO) "is already present, while adding record"
-| rex "\'uuid\':\s'(?&lt;uuid&gt;[^\']+)\'" | rex " - data_pointer\[(?&lt;product&gt;[^\]]+)\]=(?&lt;product_id_1&gt;.*)\sis already present" 
-| rex "\(\'lansweeper_id\', \'(?&lt;product_id_2_lansweeper&gt;[^\']+)\'\)" | rex "\(\'tenable_uuid\', \'(?&lt;product_id_2_tenable&gt;[^\']+)\'\)" | rex "\(\'qualys_id\', \'(?&lt;product_id_2_qualys&gt;[^\']+)\'\)" | rex "\(\'sophos_uuid\', \'(?&lt;product_id_2_sophos&gt;[^\']+)\'\)" | rex "\(\'windows_defender_host\', \'(?&lt;product_id_2_windows_defender&gt;[^\']+)\'\)" | rex "\(\'crowdstrike_userid\', \'(?&lt;product_id_2_crowdstrike&gt;[^\']+)\'\)" | rex "\(\'kaspersky_host\', \'(?&lt;product_id_2_kaspersky&gt;[^\']+)\'\)"
-| eval product_id_2=case(product=="lansweeper_id", product_id_2_lansweeper, product=="tenable_uuid", product_id_2_tenable, product=="qualys_id", product_id_2_qualys, product=="sophos_uuid", product_id_2_sophos, product=="windows_defender_host", product_id_2_windows_defender, product=="crowstrike_userid", product_id_2_crowdsrike,product=="kaspersky_host", product_id_2_kaspersky)
-| rex "\(\'hostname\', \[(?&lt;hostname1&gt;[^\]]+)\]\)" | rex "\(\'ip\', \[(?&lt;ip1&gt;[^\]]+)\]\)" | rex "\(\'mac_address\', \[(?&lt;mac_address1&gt;[^\]]+)\]\)"
-| rex "\'hostname\': \[(?&lt;hostname2&gt;[^\]]+)\]" | rex "\'ip\': \[(?&lt;ip2&gt;[^\]]+)\]" | rex "\'mac_address\': \[(?&lt;mac_address2&gt;[^\]]+)\]"
-| rex "entry:{(?&lt;lookup_entry&gt;[^}]+)}"
-| table uuid, product, product_id_1, product_id_2, hostname1, hostname2, ip1, ip2, mac_address1, mac_address2, lookup_entry</query>
-          <earliest>$tkn_timerange_conflicted_merged.earliest$</earliest>
-          <latest>$tkn_timerange_conflicted_merged.latest$</latest>
-        </search>
-        <option name="count">5</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
     </panel>
   </row>
 </form>
