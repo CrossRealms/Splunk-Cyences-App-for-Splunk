@@ -16,17 +16,13 @@ Sysmon, a component of Microsoft's Sysinternals suite of Windows utilities, is a
 
 This is a fantastic way to collect detailed information about your Windows endpoints in Splunk. Sysmon is free of charge, installs painlessly on many variants of Windows, and integrates well with Splunk deployments. In fact, Mark Russinovich (Sysmon's author) has spoken about Sysmon at the past two RSA conferences and showcases Splunk as an excellent mechanism for the collection and analysis of Sysmon data. 
 
-### Prerequisites 
-* This method will require a Splunk Heavy Forwarder or Universal Forwarder to be installed and running on the Windows server. 
-* Data Forwarding is configured from the Forwarder to the Splunk Indexer(s). 
 
-### How to Install and Configure Microsoft Sysmon with Deployment Server 
 
-Instead of having to manually install Microsoft Sysmon on each and every Windows server in your environment, it would be optimal to install Sysmon on Windows machines via the Deployment Server (to learn more about the deployment server, click here). You can still manually install Sysmon, but that would be an exhaustive and time-consuming task if your environment contains tons of Windows servers. 
+### Install and Maintain Sysmon on Windows Machines from Deployment Server
 
-[The Sysmon Deploy Add-on for Cyences App](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file. 
+Instead of having to manually install Microsoft Sysmon on each and every Windows server in your environment, it would be optimal to install Sysmon on Windows machines via the Deployment Server (to learn more about the deployment server, click here). You can still manually install Sysmon, but that would be an exhaustive and time-consuming task if your environment contains tons of Windows servers.
 
-### Install and Maintain Sysmon on Windows Machines from Deployment Server 
+[The Sysmon Deploy Add-on for Cyences App](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App) installs and updates Sysmon on Windows machines. Also, it updates the Sysmon config file if there are any changes made to the Sysmon file.
 
 1. Use **Sysmon Deploy Add-on for Cyences App** to install Microsoft Sysmon on Windows machines. 
 
@@ -38,30 +34,21 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 5. From Cyences' navigation bar, go to **Settings > Sysmon Deploy Audit** for Sysmon deployment, auditing, and reporting. 
 
-6. This will start forwarding the Sysmon events to the indexer(s). Lastly, create an index named **epintel** in the indexer(s) in order to receive data. 
+6. This will start forwarding the Sysmon events to the indexer(s). Lastly, create an index named `epintel` in the indexer(s) in order to receive data. 
 
-**Note:** The Sysmon Deploy Add-on for Cyences App generates auditing logs in index=**windows** and actual Sysmon data in index=**epintel**. Sysmon collects several types of EventCodes from the Windows hosts. For the Cyences app, we will need to incorporate the following EventCodes: 1, 2, 5, 10, 11, and 25. 
-
-### Sysmon EventCodes:
+**Note:** The Sysmon Deploy Add-on for Cyences App generates auditing logs in index=`_internal` and actual Sysmon data in index=`epintel`. Sysmon collects several types of EventCodes from the Windows hosts. For the Cyences app, we will need to incorporate the following EventCodes: 1, 2, 5, 10, 11, and 25.
 
 ![alt]({{ site.baseurl }}/assets/sysmon_event_codes.png)
 
-* Enable EventCode 10 to detect credential dumping on Windows with LSASS access. Please be aware that Event Code 10 may consume a large portion of your daily license usage. 
 
-* EventCode 25 has been added to Sysmon since version 13.0 (released in January 2021). If an earlier version of Sysmon is being used you will not be able to take advantage of the **Window Process Tampering Detected** alert. 
+### Install Splunk Add-on for Sysmon for Parsing and Extraction
+* Install the [Splunk Add-on for Sysmon](https://splunkbase.splunk.com/app/5709) for parsing on the first full Splunk instance (it could be heavy forwarder or indexers in your case) and field extraction on the search heads.
 
-* Sysmon logs are only tested in XML format (see renderXml = 1 in inputs.conf stanza). 
 
-### Verify Data Collection 
 
-Run the search query below to verify that the data is being ingested:
-
-    index=epintel source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
-
-Currently, the idea is to use Sysmon data on Windows to get different file operations performed on the Windows hosts [https://splunkbase.splunk.com/app/1914/](https://splunkbase.splunk.com/app/1914/). 
-
-References: 
+### References
 *[https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 
 *[https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/](https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/) 
+
 
 **Note:** Sysmon data action field conflict detected, please look at **Troubleshooting > Sysmon data action field issue** section in the document to make sure your environment does not have the same issue.
