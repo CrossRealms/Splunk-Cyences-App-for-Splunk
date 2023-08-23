@@ -716,6 +716,28 @@
                     "comment": "",
                     "calculationType": "Eval",
                     "expression": "if(isnull(user) OR user=\"\",\"unknown\",user)"
+                },
+                {
+                    "outputFields": [
+                        {
+                            "fieldName": "error_code",
+                            "owner": "Authentication",
+                            "type": "string",
+                            "fieldSearch": "",
+                            "required": false,
+                            "multivalue": false,
+                            "hidden": false,
+                            "editable": true,
+                            "displayName": "error_code",
+                            "comment": ""
+                        }
+                    ],
+                    "calculationID": "wgr7z59dkj",
+                    "owner": "Authentication",
+                    "editable": true,
+                    "comment": "",
+                    "calculationType": "Eval",
+                    "expression": "coalesce(error_code,Error_Code, \"unknown\")"
                 }
             ],
             "constraints": [
