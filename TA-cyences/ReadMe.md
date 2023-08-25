@@ -45,6 +45,9 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.1.2 (August 2023)
+* Fixed groups.sh shell script permission issue.
+
 Version 1.1.1 (March 2023)
 * Fixed shell script permission issue.
 
