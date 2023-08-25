@@ -1,7 +1,7 @@
 <form theme="dark" script="cs_forensics.js,notable_event_editor.js" stylesheet="notable_event_editor.css,select2.css" version="1.1">
   <label>Forensics</label>
   <search id="notable_event_main_search">
-    <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+    <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ $tkn_filter$| eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
 | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
 | rename * AS X_*_NEW 
@@ -35,6 +35,11 @@
         <earliest>-24h@h</earliest>
         <latest>now</latest>
       </search>
+    </input>
+    <input type="text" token="tkn_filter" searchWhenChanged="true">
+      <label>Filter</label>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
     </input>
   </fieldset>
   <row>
