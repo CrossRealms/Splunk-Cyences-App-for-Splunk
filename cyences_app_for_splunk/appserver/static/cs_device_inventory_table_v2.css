@@ -1,6 +1,11 @@
-device_inventory_table table {
+#device_inventory_table table {
     table-layout: auto !important;
     width: auto !important;
+}
+
+#row_expanded_table table tbody tr td {
+    border: 1px solid;
+    border-color: black;
 }
 
 /* Device Inventory Manager Row Expansion */
