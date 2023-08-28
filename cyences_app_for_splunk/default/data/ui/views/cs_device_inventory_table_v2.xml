@@ -41,7 +41,7 @@
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper - v2", "Device Inventory - Tenable - v2", "Device Inventory - Tenable Vuln - v2", "Device Inventory - Qualys - v2", "Device Inventory - Sophos - v2", "Device Inventory - Windows Defender - v2", "Device Inventory - CrowdStrike - v2", "Device Inventory - Kaspersky - v2", "Device Inventory Backfill - V2", "Device Inventory Lookup CleanUp - V2", "Device Inventory Merge Similar Devices - V2") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper - v2", "Device Inventory - Tenable - v2", "Device Inventory - Tenable Vuln - v2", "Device Inventory - Qualys - v2", "Device Inventory - Sophos - v2", "Device Inventory - Windows Defender - v2", "Device Inventory - CrowdStrike - v2", "Device Inventory - Kaspersky - v2", "Device Inventory - Splunk Internal - V2", "Device Inventory Backfill - V2", "Device Inventory Lookup CleanUp - V2", "Device Inventory Merge Similar Devices - V2") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
