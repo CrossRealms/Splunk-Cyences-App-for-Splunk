@@ -14,12 +14,12 @@ has_children: true
 * ### Windows Certificates
     * Added "Active Directory Certificate Service Events" dashboard.
     * Added "Windows - Certificate is Expiring Soon" alert.
-    * Install the [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) in order to collect the required data.
+    * To onboard the Windows Certificate Store data, Refer [Windows Certificate Store Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/certificate)
 
 * ### Windows Firewall Status
     * Added "Windows Firewall Status" dashboard panel in the Windows dashboard. 
     * Added "Windows - Windows Firewall is Disabled" alert.
-    * Install the [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) in order to collect the required data.
+    * To onboard the Windows Firewall Status data, Refer [Windows Firewall Status Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/firewall_status)
 
 
 * ### Enhancements  
@@ -49,6 +49,6 @@ has_children: true
 
 ## Upgrade Guide from 4.1.0 to 4.2.0
 
-  * Install the [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) to collect Windows certificate related data.
-  * Install the [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) to collect Windows firewall status data.
+  * To onboard the Windows Certificate Store data, Refer [Windows Certificate Store Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/certificate)
+  * To onboard the Windows Firewall Status data, Refer [Windows Firewall Status Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/firewall_status)
   * Update the [Cyences Add-on for Splunk](https://splunkbase.splunk.com/app/5659) to latest version.
