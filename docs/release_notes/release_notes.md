@@ -9,7 +9,7 @@ has_children: true
 # Release Notes
 
 
-## Version 4.2.0 (August 2023)
+## Version 4.2.0/4.2.1 (August 2023)
 
 * ### Windows Certificates
     * Added "Active Directory Certificate Service Events" dashboard.
@@ -47,7 +47,7 @@ has_children: true
     * Fixed a Forensics and SOC dashboard compatibility issue with Splunk 9.1.X.
 
 
-## Upgrade Guide from 4.1.0 to 4.2.0
+## Upgrade Guide from 4.1.0 to 4.2.0/4.2.1
 
   * To onboard the Windows Certificate Store data, Refer [Windows Certificate Store Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/certificate)
   * To onboard the Windows Firewall Status data, Refer [Windows Firewall Status Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/firewall_status)

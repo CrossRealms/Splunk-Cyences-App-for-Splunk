@@ -1,5 +1,8 @@
 <form theme="dark" script="cs_forensics.js,notable_event_editor.js" stylesheet="notable_event_editor.css,select2.css" version="1.1">
   <label>Forensics</label>
+  <init>
+    <set token="tkn_filter"></set>
+  </init>
   <search id="notable_event_main_search">
     <query>`cs_cyences_index` alert_name=$tkn_savedsearch|s$ $tkn_filter$| eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
