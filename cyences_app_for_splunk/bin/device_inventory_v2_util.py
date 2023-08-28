@@ -493,6 +493,7 @@ class DeviceManager:
                     self._remove_entry_content(
                         product_name, product_uuid, entry_details, device
                     )
+                    self.updated_devices.append(device.get("uuid"))
 
         # if no entry exist for any device return false, otherwise return True, to indicate, the device itself needs to be removed.
         if len(device.get("product_names")) == 0:
