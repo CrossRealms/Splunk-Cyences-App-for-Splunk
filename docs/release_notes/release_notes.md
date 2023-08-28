@@ -12,41 +12,43 @@ has_children: true
 ## Version 4.2.0 (August 2023)
 
 * ### Windows Certificates
-    * Added "Active Directory Certificate Service Events" dashboard. 
-    * Added "Windows - Certificate is Expiring Soon" alert
-    * Install [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) to collect the required data.
+    * Added "Active Directory Certificate Service Events" dashboard.
+    * Added "Windows - Certificate is Expiring Soon" alert.
+    * Install the [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) in order to collect the required data.
 
 * ### Windows Firewall Status
     * Added "Windows Firewall Status" dashboard panel in the Windows dashboard. 
     * Added "Windows - Windows Firewall is Disabled" alert.
-    * Install [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) to collect the required data.
+    * Install the [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) in order to collect the required data.
 
 
 * ### Enhancements  
 
-    * Improved severity logic for below alerts
+    * Improved the severity logic for the following alerts:
         * Email - Hourly Increase In Emails Over Baseline
         * Network Compromise - Basic Scanning
         * Authentication - Bruteforce Attempt from a Source
         * Sophos - Failed to clean up threat by Sophos
         * Sophos - Sophos RealTime Protection Disabled
 
-    * Updated "Microsoft 365 Defender ATP Audit" dashboard as per latest Defender addon change.
+    * Updated the "Microsoft 365 Defender ATP Audit" dashboard to reflect the latest change to the Defender add-on.
 
-    * Updated splunklib to latest version (v1.7.4)
+    * Updated splunklib to the latest version (v1.7.4).
 
-    * Added filter in the Forensics and SOC dashboard.
+    * Added a generic search filter in the Forensics and SOC dashboards.
 
-    * Excluded Windows password expired events from the Bruteforce alerts.
+    * Excluded Windows password expired events from the alerts related to brute force.
+
 
 * ### Bug Fixes
 
-    * Fixed the cyences alert action permission issue.
+    * Fixed a permissions issue that wouldn't allow users to make use of the notable event assignment functionality.
 
-    * Fixed Forensics and SOC dashboard issue on Splunk 9.1.X 
+    * Fixed a Forensics and SOC dashboard compatibility issue with Splunk 9.1.X.
 
 
 ## Upgrade Guide from 4.1.0 to 4.2.0
 
-  * Install [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) to collect the windows certificate related data.
-  * Install [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) to collect the windows firewall status data.
+  * Install the [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013) to collect Windows certificate related data.
+  * Install the [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012) to collect Windows firewall status data.
+  * Update the [Cyences Add-on for Splunk](https://splunkbase.splunk.com/app/5659) to latest version.
