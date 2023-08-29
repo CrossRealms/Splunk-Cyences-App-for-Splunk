@@ -32,8 +32,8 @@ class CyencesDeviceManagerCommand(EventingCommand):
     # I prefer to also put ".local" at the end as well to ensure proper hostname matching
 
     products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
-    cleanup_mintime = Option(name="mintime", require=False, default=None, validate=validators.Float())  # default past 1 years
-    cleanup_maxtime = Option(name="maxtime", require=False, default=None, validate=validators.Float())  # default forseeable future
+    cleanup_minindextime = Option(name="minindextime", require=False, default=None, validate=validators.Float())  # default past 1 years
+    cleanup_maxindextime = Option(name="maxindextime", require=False, default=None, validate=validators.Float())  # default forseeable future
     target_device = Option(name="target_device", require=False, default="")
     devices_to_merge = Option(name="devices_to_merge", require=False, default=None)
     # cleanup_ip_mintime = Option(name="ipmintime", require=False, default=None, validate=validators.Float())   # default past 30 days
@@ -57,7 +57,7 @@ class CyencesDeviceManagerCommand(EventingCommand):
         else:
             raise Exception("{} value is not as expected.".format(command_options))
         return command_options
- 
+
     def validate_inputs(self):
         if self.operation not in ["getdevices", "addentries", "cleanup", "merge", "manualmerge"]:
             raise Exception("operation - allowed values: getdevices, addentries, cleanup, merge, manualmerge")
@@ -65,16 +65,16 @@ class CyencesDeviceManagerCommand(EventingCommand):
         if self.operation == "cleanup":
             timenow = time.time()
 
-            if self.cleanup_mintime is None:
-                self.cleanup_mintime = timenow - YEAR_IN_SECOND
-            if self.cleanup_maxtime is None:
-                self.cleanup_maxtime = MAX_TIME_EPOCH
+            if self.cleanup_minindextime is None:
+                self.cleanup_minindextime = timenow - YEAR_IN_SECOND
+            if self.cleanup_maxindextime is None:
+                self.cleanup_maxindextime = MAX_TIME_EPOCH
 
-            if self.cleanup_mintime >= self.cleanup_maxtime:
-                raise Exception("mintime should be less than maxtime.")
-            
+            if self.cleanup_minindextime >= self.cleanup_maxindextime:
+                raise Exception("minindextime should be less than maxindextime.")
+
             self.products_to_cleanup = self.validate_param_value_and_type(self.products_to_cleanup)
-    
+
         elif self.operation == "manualmerge":
             self.devices_to_merge = self.validate_param_value_and_type(self.devices_to_merge)
 
@@ -103,20 +103,21 @@ class CyencesDeviceManagerCommand(EventingCommand):
             with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
                 for record in records:
                     other_fields = copy.deepcopy(record)
+                    del other_fields["indextime"]
                     del other_fields["time"]
                     del other_fields["product_name"]
                     del other_fields["product_uuid"]
                     del other_fields["ip"]
                     del other_fields["mac_address"]
                     del other_fields["hostname"]
-                    entry = DeviceEntry(record["product_name"], record["time"], record["product_uuid"], record["ip"], record["mac_address"], record["hostname"], other_fields)
+                    entry = DeviceEntry(record["product_name"], record["time"], record["indextime"], record["product_uuid"], record["ip"], record["mac_address"], record["hostname"], other_fields)
                     device_id = dm.add_device_entry(entry)
                     record["device_id"] = device_id
                     yield record
 
         elif self.operation == "cleanup":
             with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION) as dm:
-                messages = dm.cleanup_devices(self.cleanup_mintime, self.cleanup_maxtime, self.products_to_cleanup)
+                messages = dm.cleanup_devices(self.cleanup_minindextime, self.cleanup_maxindextime, self.products_to_cleanup)
                 for m in messages:
                     yield {"message": m}
 
