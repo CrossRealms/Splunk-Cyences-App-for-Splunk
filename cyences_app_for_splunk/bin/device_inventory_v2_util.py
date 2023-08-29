@@ -89,6 +89,7 @@ class DeviceEntry:
         self,
         product_name: str,
         time: int,
+        index_time: int,
         product_uuid: str,
         ips,
         mac_addresses,
@@ -97,6 +98,7 @@ class DeviceEntry:
     ) -> None:
         self.product_name = product_name
         self.time = time
+        self.index_time = index_time
         self.product_uuid = product_uuid
         self.ips = self._internal_check_list_field_format(ips)
         self.mac_addresses = self._internal_check_list_field_format(mac_addresses)
@@ -475,7 +477,7 @@ class DeviceManager:
             return new_device.get("uuid")
 
     def cleanup(
-        self, device, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
+        self, device, min_time, min_indextime, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
     ):
         """
         products_to_cleanup is None meaning cleanup all products
@@ -488,6 +490,7 @@ class DeviceManager:
             for product_uuid, entry_details in product_items.items():
                 if (
                     int(float(entry_details["time"])) < min_time
+                    or int(float(entry_details["index_time"])) < min_indextime
                     or int(float(entry_details["time"])) > max_time
                 ):
                     self._remove_entry_content(
@@ -544,7 +547,7 @@ class DeviceManager:
         return messages
 
     def cleanup_devices(
-        self, min_time, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
+        self, min_time, min_indextime, max_time=MAX_TIME_EPOCH, products_to_cleanup=None
     ):
         """
         products_to_cleanup is None meaning cleanup all products
@@ -554,7 +557,7 @@ class DeviceManager:
         idx = 0
         while idx < len(self.devices):
             is_device_still_valid = self.cleanup(
-                self.devices[idx], min_time, max_time, products_to_cleanup
+                self.devices[idx], min_time, min_indextime, max_time, products_to_cleanup
             )
             if not is_device_still_valid:
                 messages.append(
@@ -602,6 +605,7 @@ class DeviceManager:
                     DeviceEntry(
                         product_name=product_name,
                         time=element_details["time"],
+                        index_time=element_details["index_time"],
                         product_uuid=product_uuid,
                         ips=element_details["ips"],
                         mac_addresses=element_details["mac_addresses"],
