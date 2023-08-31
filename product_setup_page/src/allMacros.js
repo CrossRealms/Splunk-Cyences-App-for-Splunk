@@ -1,5 +1,11 @@
 let allMacros = [
     {
+        section: 'Device Inventory V2',
+        macros: [
+            {name: 'cs_device_inventory_hostname_postfixes' },
+        ]
+    },
+    {
         section: 'Network',
         macros: [
             {name: 'cs_network_traffic_map_filter' },
