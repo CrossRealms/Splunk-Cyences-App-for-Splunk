@@ -110,7 +110,8 @@ class CyencesDeviceManagerCommand(EventingCommand):
                     del other_fields["ip"]
                     del other_fields["mac_address"]
                     del other_fields["hostname"]
-                    entry = DeviceEntry(record["product_name"], record["time"], record["indextime"], record["product_uuid"], record["ip"], record["mac_address"], record["hostname"], other_fields)
+                    del other_fields["user"]
+                    entry = DeviceEntry(record["product_name"], record["time"], record["indextime"], record["product_uuid"], record["ip"], record["mac_address"], record["hostname"], record["user"], other_fields)
                     device_id = dm.add_device_entry(entry)
                     record["device_id"] = device_id
                     yield record

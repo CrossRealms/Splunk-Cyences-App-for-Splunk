@@ -94,6 +94,7 @@ class DeviceEntry:
         ips,
         mac_addresses,
         hostnames,
+        users,
         custom_fields: dict = {},
     ) -> None:
         self.product_name = product_name
@@ -103,6 +104,7 @@ class DeviceEntry:
         self.ips = self._internal_check_list_field_format(ips)
         self.mac_addresses = self._internal_check_list_field_format(mac_addresses)
         self.hostnames = self._internal_check_list_field_format(hostnames)
+        self.users = self._internal_check_list_field_format(users)
         self.custom_fields = custom_fields
 
     def _internal_check_list_field_format(self, field):
@@ -146,6 +148,7 @@ class DeviceManager:
             dvc["ips"] = json.loads(dvc["ips"])
             dvc["mac_addresses"] = json.loads(dvc["mac_addresses"])
             dvc["hostnames"] = json.loads(dvc["hostnames"])
+            dvc["users"] = json.loads(dvc["users"])
         return lookup_data
 
     def read_kvstore_lookup(self, collection_name):
@@ -167,6 +170,7 @@ class DeviceManager:
             dvc["ips"] = json.dumps(dvc["ips"])
             dvc["mac_addresses"] = json.dumps(dvc["mac_addresses"])
             dvc["hostnames"] = json.dumps(dvc["hostnames"])
+            dvc["users"] = json.dumps(dvc["users"])
         return devices_to_update
 
     def update_kvstore_lookup(self, collection_name, devices_to_update=[]):
@@ -232,7 +236,8 @@ class DeviceManager:
             'product_uuids': list(device.get("product_uuids").keys()),
             'ips': list(device.get("ips").keys()),
             'mac_addresses': list(device.get("mac_addresses").keys()),
-            'hostnames': list(device.get("hostnames").keys())
+            'hostnames': list(device.get("hostnames").keys()),
+            'users': list(device.get("users").keys())
         }
 
     def __enter__(self):
@@ -363,6 +368,12 @@ class DeviceManager:
             else:
                 ex_device.get("hostnames")[hostname] -= 1
 
+        for user in entry_content["users"]:
+            if ex_device.get("users")[user] == 1:
+                del ex_device.get("users")[user]
+            else:
+                ex_device.get("users")[user] -= 1
+
     def _add_entry_content(self, product_name, product_uuid, entry_content, ex_device):
         if product_name in ex_device.get("product_names"):
             ex_device.get("product_names")[product_name] += 1
@@ -397,6 +408,12 @@ class DeviceManager:
                 ex_device.get("hostnames")[hostname] += 1
             else:
                 ex_device.get("hostnames")[hostname] = 1
+
+        for user in entry_content["users"]:
+            if user in ex_device.get("users"):
+                ex_device.get("users")[user] += 1
+            else:
+                ex_device.get("users")[user] = 1
 
     def delete_device(self, device_obj, idx_in_device_list=None):
         if not idx_in_device_list:
@@ -459,6 +476,7 @@ class DeviceManager:
             "ips": dict(),
             "mac_addresses": dict(),
             "hostnames": dict(),
+            "users": dict(),
         }
 
     def add_device_entry(self, new_entry: DeviceEntry):
@@ -609,6 +627,7 @@ class DeviceManager:
                         ips=element_details["ips"],
                         mac_addresses=element_details["mac_addresses"],
                         hostnames=element_details["hostnames"],
+                        users=element_details["users"],
                         custom_fields=element_details["custom_fields"],
                     )
                 )
