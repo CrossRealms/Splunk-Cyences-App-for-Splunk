@@ -10,7 +10,7 @@ Additional features in V2.
 
 
 Dev Details
-* It now stores everything inside a Python pickle file instead of a lookup
+* It now stores everything inside a lookup.
 * Most of the processing now happens inside the Python script.
 """
 
@@ -27,7 +27,7 @@ MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 
 def remove_words_from_end(sentence, words):
     for word in words:
-        if sentence.endswith(word):
+        if sentence.endswith(word.lower()):
             sentence = sentence[: -len(word)]
     return sentence
 
