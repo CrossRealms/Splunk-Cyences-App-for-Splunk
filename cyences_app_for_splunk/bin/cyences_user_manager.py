@@ -24,19 +24,11 @@ MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 @Configuration()
 class CyencesUserManagerCommand(EventingCommand):
     operation = Option(name="operation", require=False, default="getusers")
-
-    # user_postfixes = Option(name="user_postfixes", require=True)   # You can put comma separated values like, ".ad.crossrealms.com, .crossrealms.com"
-    # Always put large string early if shorter string is subset of large string.
-    # for example, ".ad.crossrealms.com" should be before ".crossrealms.com"
-    # I prefer to also put ".local" at the end as well to ensure proper user matching
-
     products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
     cleanup_minindextime = Option(name="minindextime", require=False, default=None, validate=validators.Float())  # default past 1 years
     cleanup_maxindextime = Option(name="maxindextime", require=False, default=None, validate=validators.Float())  # default forseeable future
     target_user = Option(name="target_user", require=False, default="")
     users_to_merge = Option(name="users_to_merge", require=False, default=None)
-    # cleanup_ip_mintime = Option(name="ipmintime", require=False, default=None, validate=validators.Float())   # default past 30 days
-    # cleanup_ip_maxtime = Option(name="ipmaxtime", require=False, default=None, validate=validators.Float())   # default forseeable future
 
     @staticmethod
     def validate_param_value_and_type(command_options):
