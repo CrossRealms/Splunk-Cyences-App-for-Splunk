@@ -69,24 +69,27 @@
         <p>Note - Click on any of the surrounding bar charts to view more information about specific users in the User Inventory. Click on the number above to reset the filter.</p>
       </html>
     </panel>
+  </row>
+  <row>
     <panel>
       <chart>
         <title>Number of Users That Are Connected To A Specific Product</title>
         <search base="base_summary">
           <query>| mvexpand product_names 
 | eval Product = case(match(product_names,"Microsoft Office 365*"), "Microsoft Office 365", match(product_names,"Google*"), "Google", 1==1, product_names) 
-| stats count as Users by Product 
-| addcoltotals labelfield=Product label=Total 
-| transpose 0 header_field=Product include_empty=false 
-| fields - column 
-| table Total *</query>
+| stats count as Users by Product</query>
         </search>
-        <option name="charting.chart">bar</option>
+        <option name="charting.chart">column</option>
         <option name="charting.chart.showDataLabels">all</option>
         <option name="charting.drilldown">all</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <set token="tkn_sp_filter">(product_names="$click.name2$*")</set>
+          <condition match="isnotnull($click.value$)">
+            <set token="tkn_sp_filter">(product_names="$click.value$*")</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
         </drilldown>
       </chart>
       <html>
