@@ -3,11 +3,6 @@
     width: auto !important;
 }
 
-#row_expanded_table table tbody tr td {
-    border: 1px solid;
-    border-color: black;
-}
-
 /* Device Inventory Manager Row Expansion */
 #row_expanded_table table thead tr th:not(:last-child) {
     width: 50px;
@@ -17,4 +12,6 @@
 #row_expanded_table table thead tr th,
 #row_expanded_table table tbody tr td {
     text-align: left !important;
+    border: 1px solid;
+    border-color: black;
 }

@@ -1,0 +1,153 @@
+<form theme="dark" version="1.1">
+  <init>
+    <set token="tkn_user_filter">()</set>
+    <set token="tkn_user_type_filter">()</set>
+    <set token="tkn_product_filter">()</set>
+    <set token="tkn_sp_filter">()</set>
+  </init>
+  <label>User Inventory</label>
+  <search id="base_summary">
+    <query>| cyencesusermanager operation="getusers" | search $tkn_user_filter$ $tkn_user_type_filter$ $tkn_product_filter$</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+  </search>
+  <fieldset submitButton="false">
+    <input type="text" token="tkn_user_filter" searchWhenChanged="true">
+      <label>User</label>
+      <prefix>(users="*</prefix>
+      <suffix>*")</suffix>
+    </input>
+    <input type="text" token="tkn_user_type_filter" searchWhenChanged="true">
+      <label>User Type</label>
+      <prefix>(user_types="*</prefix>
+      <suffix>*")</suffix>
+    </input>
+    <input type="text" token="tkn_product_filter" searchWhenChanged="true">
+      <label>Product</label>
+      <prefix>(product_names="*</prefix>
+      <suffix>*")</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>User Inventory generator report needs to be enabled.</p>
+      </html>
+      <table>
+        <search>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("User Inventory - Lookup Gen", "User Inventory - Lookup CleanUp", "User Inventory - Merge Similar Users", "User Inventory - Lookup Backfill") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+      <html>
+        <p>If you are looking at the User Inventory for the first time and you don't see all the available users in the table below then you can manually execute <a target="_blank" href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=*&amp;search=User Inventory%20-%20Lookup%20Backfill">User Inventory - Lookup Backfill</a> report to fill the lookup. (By default it runs over last 15 days of time to collect the user inventory.)</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Total Number of Users</title>
+        <search base="base_summary">
+          <query> | stats count</query>
+        </search>
+        <option name="drilldown">all</option>
+        <drilldown>
+          <set token="tkn_sp_filter">()</set>
+        </drilldown>
+      </single>
+      <html>
+        <p>
+          <b>Description</b>: The total number of users available.</p>
+        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
+        <p>Note - Click on any of the surrounding bar charts to view more information about specific users in the User Inventory. Click on the number above to reset the filter.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Number of Users That Are Connected To A Specific Product</title>
+        <search base="base_summary">
+          <query>| mvexpand product_names 
+| eval Product = case(match(product_names,"Microsoft Office 365*"), "Microsoft Office 365", match(product_names,"Google*"), "Google", 1==1, product_names) 
+| stats count as Users by Product</query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="isnotnull($click.value$)">
+            <set token="tkn_sp_filter">(product_names="$click.value$*")</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
+        </drilldown>
+      </chart>
+      <html>
+        <p>
+          <b>Description</b>: The total number of users that are connected to a particular product.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Number of Users by Its Type</title>
+        <search base="base_summary">
+          <query> | mvexpand user_types 
+| stats count as Users by user_types 
+| rename user_types as "User Type"
+          </query>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">all</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <condition match="isnotnull($click.value$)">
+            <set token="tkn_sp_filter">(user_types="$click.value$")</set>
+          </condition>
+          <condition>
+            <set token="tkn_sp_filter">()</set>
+          </condition>
+        </drilldown>
+      </chart>
+      <html>
+        <p>
+          <b>Description</b>: Each column represents the total number of users by its type or role or category.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User Inventory Table</title>
+      <table>
+        <search base="base_summary">
+          <query> | search $tkn_sp_filter$
+| rename users as User, user_types as "User Types", product_names as Products
+| eval "View Related Logs" = "Click Here"
+          </query>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <fields>["User","User Types","Products","View Related Logs"]</fields>
+        <drilldown>
+          <condition match="$click.name2$ == &quot;View Related Logs&quot;">
+            <link target="_blank">search?q=index%20IN%20($row.indexes$)%20sourcetype%20IN%20($row.sourcetypes$)%20%7C%20eval%20user%3Dcoalesce(src_user%2C%20user%2C%20user_name%2C%20username%2CUsername%2C%20User%2C%20UserName%2C%20userName)%2C%20user_type%20%3D%20coalesce(user_type%2C%20user_role%2C%20user_category%2C%20%22n%2Fa%22)%20%7C%20search%20user%20IN%20($row.User$)%20user_type%20IN%20($row.User Types$)&amp;earliest=-24h&amp;latest=now</link>
+          </condition>
+          <condition></condition>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>

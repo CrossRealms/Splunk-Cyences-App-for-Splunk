@@ -10,7 +10,7 @@ Additional features in V2.
 
 
 Dev Details
-* It now stores everything inside a Python pickle file instead of a lookup
+* It now stores everything inside a kvstore collection.
 * Most of the processing now happens inside the Python script.
 """
 
@@ -27,7 +27,7 @@ MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 
 def remove_words_from_end(sentence, words):
     for word in words:
-        if sentence.endswith(word):
+        if sentence.endswith(word.lower()):
             sentence = sentence[: -len(word)]
     return sentence
 
@@ -266,7 +266,6 @@ class DeviceManager:
         if new_device.product_name in ex_device.get(
             "product_names"
         ) and new_device.product_uuid in ex_device.get("product_uuids"):
-            # return self.products[device_entry.product_name][device_entry.product_uuid]
             return True
 
         # search for combination of ip and mac_address
@@ -379,13 +378,11 @@ class DeviceManager:
             ex_device.get("product_names")[product_name] += 1
         else:
             ex_device.get("product_names")[product_name] = 1
-            # ex_device.get("product_info")[product_name] = {}   # initiate with empty dict for product key
 
         if product_uuid in ex_device.get("product_uuids"):
             ex_device.get("product_uuids")[product_uuid] += 1
         else:
             ex_device.get("product_uuids")[product_uuid] = 1
-            # ex_device.get("product_info")[product_name][product_uuid] = entry_content # added entry details to products obj
 
         ex_device.get("product_info").setdefault(product_name, {}).setdefault(
             product_uuid, entry_content

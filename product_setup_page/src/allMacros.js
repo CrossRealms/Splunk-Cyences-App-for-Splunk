@@ -3,6 +3,8 @@ let allMacros = [
         section: 'Device Inventory V2',
         macros: [
             {name: 'cs_device_inventory_hostname_postfixes' },
+            {name: 'cs_user_inventory_user_postfixes' },
+            {name: 'cs_user_inventory_exclude_users', description: 'To exclude the specific users, add it inside the brackets by comma separated. (e.g. NOT user IN ("user1", "user2"))' },
         ]
     },
     {
