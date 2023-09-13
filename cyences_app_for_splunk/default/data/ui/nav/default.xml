@@ -25,13 +25,17 @@
       <view name="cs_kaspersky_reports" /><!--Kaspersky-->
     </collection>
     <view name="cs_dns_tracker" /><!--Windows-->
+    <view name="cs_dns_tracker_v2" /><!--Windows-->
     <view name="cs_vulnerability" />
     <view name="cs_authentication_reports" />
     <view name="cs_lansweeper" /><!--Lansweeper-->
   </collection>
   <collection label="Intelligence">
     <view name="cs_device_inventory_table" />
+    <view name="cs_device_inventory_table_v2" />
+    <view name="cs_user_inventory_table" />
     <view name="cs_asset_intelligence" />
+    <view name="cs_asset_intelligence_v2" />
     <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="Cyences Settings">

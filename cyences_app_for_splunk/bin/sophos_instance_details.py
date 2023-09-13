@@ -46,8 +46,8 @@ class SophosEndpointDetails(GeneratingCommand):
         response = requests.post(SOPHOS_AUTH_URL, headers=header,data = data)
 
         response_json = response.json()
-        if(response_json.get('errorCode')=='success'):
-            return response_json.get('access_token')
+        if ("errorCode" in response_json and response_json['errorCode'] == 'success'):
+            return response_json['access_token'] if "access_token" in response_json else None
         else:
             raise Exception("Error from sophos: {}".format(response_json))
 

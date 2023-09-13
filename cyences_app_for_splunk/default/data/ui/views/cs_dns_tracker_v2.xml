@@ -1,0 +1,240 @@
+<form theme="dark" version="1.1">
+  <label>DNS Tracker V2</label>
+  <search id="get_ips_of_dns_servers">
+    <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS by host | eval hostnames=lower(host) | fields - host
+| append [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand hostnames | mvexpand ips | fields ips, hostnames]
+| stats sum(count) as count, values(ips) as ips by hostnames | where count&gt;0
+| mvexpand ips | dedup ips | fields ips 
+| stats values(ips) as ips count| eval dns_server_filter_original=mvjoin(ips, "\", \"")
+| eval dns_server_filter=if(count&gt;0,"NOT DNS.src IN (\"".dns_server_filter_original."\")","")
+| eval dns_to_dns_requests=if(count&gt;0,"DNS.src IN (\"".dns_server_filter_original."\")","")</query>
+    <earliest>$tkn_timerange.earliest$</earliest>
+    <latest>$tkn_timerange.latest$</latest>
+    <done>
+      <set token="tkn_dns_server_ip_filter">$result.dns_server_filter$</set>
+      <set token="tkn_dont_show_dns_logs">$result.dns_server_filter$</set>
+      <set token="tkn_only_dns_to_dns_filter">$result.dns_to_dns_requests$</set>
+    </done>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="tkn_timerange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_src" searchWhenChanged="true">
+      <label>IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_query" searchWhenChanged="true">
+      <label>Query</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>DNS Rquesters</title>
+      <input type="dropdown" token="tkn_dont_show_dns_logs_tmp">
+        <label></label>
+        <choice value="1">Don't show DNS Servers</choice>
+        <choice value="0">Show All</choice>
+        <default>1</default>
+        <change>
+          <condition match="value==&quot;1&quot;">
+            <set token="tkn_dont_show_dns_logs">$tkn_dns_server_ip_filter$</set>
+          </condition>
+          <condition>
+            <set token="tkn_dont_show_dns_logs"></set>
+          </condition>
+        </change>
+      </input>
+      <html>Filtering for DNS Servers itself making requests to other DNS servers - $tkn_dont_show_dns_logs$</html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Categories</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.dest_category | rename DNS.* as * | stats sum(count) as count by dest_category</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Record Types</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.record_type | rename DNS.* as *</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.00001</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DNS Log Volume over Time</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by _time span=1s | timechart sum(count) as count span=1h</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Record Types over Time</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by _time span=1h DNS.record_type | rename DNS.* as *  | xyseries _time, record_type, count</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Queries</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.query | rename DNS.* as * |sort - count | head 100</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top Non-success Code Queries</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.query DNS.reply_code | rename DNS.* as * | sort - count | head 100</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Requesters</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.src | rename DNS.* as * 
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
+| eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
+| sort - count | head 100 | rename src as Requester</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top Non-success Code Requesters</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.src DNS.reply_code | rename DNS.* as * 
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
+| eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
+| sort - count | head 100 | rename src as Requester</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DNS Server</title>
+      <html>If you are filtering with IP address requester, below panels (except "DNS Server No. of Queries Received") will not load.</html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DNS Server No. of Queries Received</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type="QUERY" DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dns_server_ip_filter$ by _time, host | timechart sum(count) as count by host limit=10</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>DNS Server No. of Queries Send to External DNS Server</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type="Query to external server" DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dns_server_ip_filter$ by _time, host | rename DNS.* as *  | timechart sum(count) as count by host</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top External DNS Servers being Queried</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("Query to external server", "Response from external server") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dns_server_ip_filter$ by DNS.src | rename DNS.* as * | sort - count | head 10</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Internal DNS Server to DNS Server Requests</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("Query to external server", "Response from external server") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_only_dns_to_dns_filter$ by DNS.src host | rename DNS.* as * 
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
+| eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
+| rename host as Requester, src as Responder
+| table Requester, Responder, count
+| sort 0 - count</query>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
