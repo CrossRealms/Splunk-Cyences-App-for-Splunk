@@ -30,7 +30,7 @@
 /* Hidden Columns */
 #notable_event_main_tbl .notable_event_id,
 #notable_event_main_tbl [data\-sort\-key='notable_event_id'] {
-    display:none;
+    display: none;
 }
 
 
@@ -38,20 +38,29 @@
 #notable_event_main_tbl [data\-sort\-key='notable_event_selector'],
 #notable_event_main_tbl [data\-sort\-key='notable_event_edit'],
 #notable_event_main_tbl [data\-sort\-key='notable_event_assignee'],
-#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me']
-{
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] {
     min-width: 20px !important;
     max-width: 20px !important;
     width: 20px !important;
-    padding:0px;
-    margin:0px;
+    padding: 0px;
+    margin: 0px;
 }
 
 #notable_event_main_tbl [data\-sort\-key='notable_event_selector'] a,
 #notable_event_main_tbl [data\-sort\-key='notable_event_edit'] a,
 #notable_event_main_tbl [data\-sort\-key='notable_event_assignee'] a,
-#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] a
-{
+#notable_event_main_tbl [data\-sort\-key='notable_event_quick_assign_to_me'] a {
     /* color:transparent !important; */
-    display:none;
+    display: none;
+}
+
+/* raw expansion table borders */
+#notable_event_history_table table tbody tr td {
+    border: 1px solid;
+    border-color: black;
+}
+
+#notable_event_result_table table tbody tr td {
+    border: 1px solid;
+    border-color: black;
 }

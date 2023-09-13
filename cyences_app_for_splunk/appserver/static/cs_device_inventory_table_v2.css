@@ -1,0 +1,17 @@
+#device_inventory_table table {
+    table-layout: auto !important;
+    width: auto !important;
+}
+
+/* Device Inventory Manager Row Expansion */
+#row_expanded_table table thead tr th:not(:last-child) {
+    width: 50px;
+    /* Fake width to move all columns on the left */
+}
+
+#row_expanded_table table thead tr th,
+#row_expanded_table table tbody tr td {
+    text-align: left !important;
+    border: 1px solid;
+    border-color: black;
+}

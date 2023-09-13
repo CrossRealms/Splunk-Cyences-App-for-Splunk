@@ -5,16 +5,16 @@ import time
 import copy
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
-from device_inventory_v2_util import DeviceManager, DeviceEntry
+from user_inventory_v2_util import UserManager, UserEntry
 
 import cs_utils
 import logging
 import logger_manager
 
-logger = logger_manager.setup_logging("device_inventory_v2", logging.INFO)
+logger = logger_manager.setup_logging("user_inventory", logging.INFO)
 
-CY_HOSTNAME_POSTFIXES_MACRO = "cs_device_inventory_hostname_postfixes"
-DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_v2"
+CY_USER_POSTFIXES_MACRO = "cs_user_inventory_user_postfixes"
+USER_INVENTORY_LOOKUP_COLLECTION = "cs_user_inventory_collection"
 
 MONTH_IN_SECOND = 60 * 60 * 24 * 30.5
 YEAR_IN_SECOND = MONTH_IN_SECOND * 12
@@ -22,13 +22,13 @@ MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 
 
 @Configuration()
-class CyencesDeviceManagerCommand(EventingCommand):
-    operation = Option(name="operation", require=False, default="getdevices")
+class CyencesUserManagerCommand(EventingCommand):
+    operation = Option(name="operation", require=False, default="getusers")
     products_to_cleanup = Option(name="products_to_cleanup", require=False, default="*")
     cleanup_minindextime = Option(name="minindextime", require=False, default=None, validate=validators.Float())  # default past 1 years
     cleanup_maxindextime = Option(name="maxindextime", require=False, default=None, validate=validators.Float())  # default forseeable future
-    target_device = Option(name="target_device", require=False, default="")
-    devices_to_merge = Option(name="devices_to_merge", require=False, default=None)
+    target_user = Option(name="target_user", require=False, default="")
+    users_to_merge = Option(name="users_to_merge", require=False, default=None)
 
     @staticmethod
     def validate_param_value_and_type(command_options):
@@ -50,8 +50,8 @@ class CyencesDeviceManagerCommand(EventingCommand):
         return command_options
 
     def validate_inputs(self):
-        if self.operation not in ["getdevices", "addentries", "cleanup", "merge", "manualmerge"]:
-            raise Exception("operation - allowed values: getdevices, addentries, cleanup, merge, manualmerge")
+        if self.operation not in ["getusers", "addentries", "cleanup", "merge", "manualmerge"]:
+            raise Exception("operation - allowed values: getusers, addentries, cleanup, merge, manualmerge")
 
         if self.operation == "cleanup":
             timenow = time.time()
@@ -67,59 +67,57 @@ class CyencesDeviceManagerCommand(EventingCommand):
             self.products_to_cleanup = self.validate_param_value_and_type(self.products_to_cleanup)
 
         elif self.operation == "manualmerge":
-            self.devices_to_merge = self.validate_param_value_and_type(self.devices_to_merge)
+            self.users_to_merge = self.validate_param_value_and_type(self.users_to_merge)
 
     def transform(self, records):
         self.validate_inputs()
 
         session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
 
-        if self.operation == "getdevices":
-            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION) as dm:
-                _devices = dm.get_device_details()
-                for device in _devices:
-                    yield device
+        if self.operation == "getusers":
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION) as dm:
+                _users = dm.get_user_details()
+                for user in _users:
+                    yield user
 
         elif self.operation == "addentries":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
-            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
-            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
+            user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
                 for record in records:
                     other_fields = copy.deepcopy(record)
                     del other_fields["indextime"]
-                    del other_fields["time"]
-                    del other_fields["product_name"]
-                    del other_fields["product_uuid"]
-                    del other_fields["ip"]
-                    del other_fields["mac_address"]
-                    del other_fields["hostname"]
+                    del other_fields["vendor_product"]
+                    del other_fields["user_type"]
+                    del other_fields["index"]
+                    del other_fields["sourcetype"]
                     del other_fields["user"]
-                    entry = DeviceEntry(record["product_name"], record["time"], record["indextime"], record["product_uuid"], record["ip"], record["mac_address"], record["hostname"], record["user"], other_fields)
-                    device_id = dm.add_device_entry(entry)
-                    record["device_id"] = device_id
+                    entry = UserEntry(record["vendor_product"], record["indextime"], record["user"], record["index"], record["sourcetype"], record["user_type"], other_fields)
+                    user_id = dm.add_user_entry(entry)
+                    record["user_id"] = user_id
                     yield record
 
         elif self.operation == "cleanup":
-            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION) as dm:
-                messages = dm.cleanup_devices(self.cleanup_minindextime, self.cleanup_maxindextime, self.products_to_cleanup)
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION) as dm:
+                messages = dm.cleanup_users(self.cleanup_minindextime, self.cleanup_maxindextime, self.products_to_cleanup)
                 for m in messages:
                     yield {"message": m}
 
         elif self.operation == "merge":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
-            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
-            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
-                messages = dm.reorganize_device_list()
+            user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
+                messages = dm.reorganize_user_list()
                 for m in messages:
                     yield {"message": m}
 
         elif self.operation == "manualmerge":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
-            hostname_postfixes = conf_manger.get_macro(CY_HOSTNAME_POSTFIXES_MACRO)
-            with DeviceManager(session_key, logger, DEVICE_INVENTORY_LOOKUP_COLLECTION, hostname_postfixes) as dm:
-                messages = dm.manually_merge_devices(self.target_device, *self.devices_to_merge)
+            user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
+                messages = dm.manually_merge_users(self.target_user, *self.users_to_merge)
                 for m in messages:
                     yield {"message": m}
 
 
-dispatch(CyencesDeviceManagerCommand, sys.argv, sys.stdin, sys.stdout, __name__)
+dispatch(CyencesUserManagerCommand, sys.argv, sys.stdin, sys.stdout, __name__)
