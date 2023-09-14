@@ -468,7 +468,6 @@ class UserManager:
 
         idx = 0
         while idx < len(self.users):
-            self.logger.info("user info -==== {} &&& {}".format(type(self.users[idx]), self.users[idx]))
             is_user_still_valid = self.cleanup(
                 self.users[idx], min_indextime, max_indextime, products_to_cleanup
             )

@@ -63,10 +63,9 @@
         </drilldown>
       </single>
       <html>
-        <p>
-          <b>Description</b>: The total number of users available.</p>
-        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
-        <p>Note - Click on any of the surrounding bar charts to view more information about specific users in the User Inventory. Click on the number above to reset the filter.</p>
+        <p><b>Description</b>: The total number of users available.</p>
+          <hr></hr>
+        <p><b>Note</b>: Click on any of the surrounding bar charts to view more information about specific users in the User Inventory. Click on the number above to reset the filter.</p>
       </html>
     </panel>
   </row>

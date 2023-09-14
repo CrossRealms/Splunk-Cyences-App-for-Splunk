@@ -69,10 +69,9 @@
         </drilldown>
       </single>
       <html>
-        <p>
-          <b>Description</b>: The total amount of devices detected.</p>
-        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
-        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
+        <p><b>Description</b>: The total amount of devices detected.</p>
+          <hr></hr>
+        <p><b>Note</b>: Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
       </html>
     </panel>
     <panel>
@@ -227,7 +226,7 @@
         <default></default>
         <change>
           <condition match="'tkn_mac_tmp'=&quot;&quot;">
-            <set token="tkn_user">()</set>
+            <set token="tkn_mac">()</set>
           </condition>
           <condition>
             <set token="tkn_mac">(mac_address="*$tkn_mac_tmp$*")</set>
