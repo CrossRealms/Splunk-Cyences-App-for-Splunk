@@ -134,6 +134,7 @@
           <query> | search $tkn_sp_filter$
 | rename users as User, user_types as "User Types", product_names as Products
 | eval "View Related Logs" = "Click Here"
+| nomv User
           </query>
         </search>
         <option name="drilldown">cell</option>
@@ -142,7 +143,8 @@
         <fields>["User","User Types","Products","View Related Logs"]</fields>
         <drilldown>
           <condition match="$click.name2$ == &quot;View Related Logs&quot;">
-            <link target="_blank">search?q=index%20IN%20($row.indexes$)%20sourcetype%20IN%20($row.sourcetypes$)%20%7C%20eval%20user%3Dcoalesce(src_user%2C%20user%2C%20user_name%2C%20username%2CUsername%2C%20User%2C%20UserName%2C%20userName)%2C%20user_type%20%3D%20coalesce(user_type%2C%20user_role%2C%20user_category%2C%20%22n%2Fa%22)%20%7C%20search%20user%20IN%20($row.User$)%20user_type%20IN%20($row.User Types$)&amp;earliest=-24h&amp;latest=now</link>
+            <eval token="user_drilldown">" ( \"".replace($row.User$,"\n","\" OR \"")."\" ) "</eval>
+            <link target="_blank">search?q=index%20IN%20($row.indexes$)%20sourcetype%20IN%20($row.sourcetypes$)%20$user_drilldown$%20%7C%20eval%20user_type%20%3D%20coalesce(user_type%2C%20user_role%2C%20user_category%2C%20%22n%2Fa%22)%20%7C%20search%20user_type%20IN%20($row.User Types$)&amp;earliest=-24h&amp;latest=now</link>
           </condition>
           <condition></condition>
         </drilldown>
