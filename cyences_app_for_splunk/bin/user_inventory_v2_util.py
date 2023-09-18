@@ -36,6 +36,18 @@ def user_match(
     return False
 
 
+def is_user_ends_with(user, user_ends_with=[], user_postfixes=[]):
+    user = user.lower()
+    for postfix in user_postfixes:
+        if user.endswith(postfix.lower()):
+            user = user[: -len(postfix)]
+            break
+    for usr_postfix in user_ends_with:
+        if user.endswith(usr_postfix.lower()):
+            return True
+    return False
+
+
 class UserEntry:
     def __init__(
         self,
@@ -376,6 +388,9 @@ class UserManager:
 
     def add_user_entry(self, new_entry: UserEntry):
         # Assign a unique user_uuid to the user
+        if is_user_ends_with(new_entry.user, user_ends_with=["$"], user_postfixes=self.user_postfixes):
+            return "n/a"
+
         matching_user = self._find_user(new_entry)
 
         if matching_user:
