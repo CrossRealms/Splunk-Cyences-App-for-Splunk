@@ -4,7 +4,7 @@ let allMacros = [
         macros: [
             {name: 'cs_device_inventory_hostname_postfixes' },
             {name: 'cs_user_inventory_user_postfixes' },
-            {name: 'cs_user_inventory_exclude_data', description: 'To exclude the users based on some fields. (e.g. NOT (field1=value1 field2=value2))' },
+            {name: 'cs_user_inventory_data_filter', description: 'Used to filter the user inventory data.' },
         ]
     },
     {
