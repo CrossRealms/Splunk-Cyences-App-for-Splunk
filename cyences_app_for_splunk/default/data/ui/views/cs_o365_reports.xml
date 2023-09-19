@@ -612,7 +612,7 @@
       </input>
       <event depends="$tkn_raw_events_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$
+          <query>`cs_o365_managementactivity_change("Group")` (Operation!="Add member to group." AND Operation!="Remove member from group.") $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$
 | `cs_o365_managementactivity_change_out` 
 | `cs_o365_group_change_internal_filter` 
 | `cs_o365_group_change_filter`</query>
@@ -624,7 +624,7 @@
       </event>
       <table depends="$tkn_show_table_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("Group")` $tkn_host$ command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
+          <query>`cs_o365_managementactivity_change("Group")` (Operation!="Add member to group." AND Operation!="Remove member from group.") $tkn_host$ command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
 | `cs_o365_managementactivity_change_out` 
 | `cs_o365_group_change_internal_filter` 
 | `cs_o365_group_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
@@ -675,7 +675,7 @@
       </input>
       <event depends="$tkn_raw_events_group_membership$">
         <search>
-          <query>`cs_o365_managementactivity_change("GroupMembership")` $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
+          <query>((`cs_o365_managementactivity_change("Group")` (Operation="Add member to group." OR Operation="Remove member from group.")) OR (`cs_o365_managementactivity_change("GroupMembership")`)) $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
 | `cs_o365_managementactivity_change_out` 
 | `cs_o365_group_membership_change_internal_filter` 
 | `cs_o365_group_membership_change_filter`</query>
@@ -687,7 +687,7 @@
       </event>
       <table depends="$tkn_show_table_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("GroupMembership")` $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
+          <query>((`cs_o365_managementactivity_change("Group")` (Operation="Add member to group." OR Operation="Remove member from group.")) OR (`cs_o365_managementactivity_change("GroupMembership")`)) $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
 | `cs_o365_managementactivity_change_out` 
 | `cs_o365_group_membership_change_internal_filter` 
 | `cs_o365_group_membership_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
