@@ -11,26 +11,32 @@ from splunk import rest
 MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 
 
-def remove_words_from_end(sentence, words):
-    for word in words:
+def remove_words_from_both_end(sentence, user_prefixes, user_postfixes):
+    for word in user_postfixes:
         if sentence.endswith(word.lower()):
             sentence = sentence[: -len(word)]
+            break
+    for word in user_prefixes:
+        if sentence.startswith(word.lower()):
+            sentence = sentence[len(word):]
+            break
     return sentence
 
 
 def user_match(
     new_users,
     ex_user_list,
+    user_prefixes=[],
     user_postfixes=[],
 ):
     updated_new_user = [
-        remove_words_from_end(new_user.lower(), user_postfixes)
+        remove_words_from_both_end(new_user.lower(), user_prefixes, user_postfixes)
         for new_user in new_users
         if new_user
     ]
 
     updated_ex_user_list = [
-        remove_words_from_end(element.lower(), user_postfixes)
+        remove_words_from_both_end(element.lower(), user_prefixes, user_postfixes)
         for element in ex_user_list
         if element
     ]
@@ -90,15 +96,18 @@ class UserEntry:
 class UserManager:
     """
     Use Example:
-        with UserManager(session_key, logger, user_postfixes) as dm:
+        with UserManager(session_key, logger, user_prefixes, user_postfixes) as dm:
             new_user_entry = UserEntry(...)
             user_uuid = dm.add_user_entry(new_user_entry)
     """
 
-    def __init__(self, session_key, logger, collection_name, user_postfixes=""):
+    def __init__(self, session_key, logger, collection_name, user_prefixes="", user_postfixes=""):
         self.session_key = session_key
         self.logger = logger
         self.collection_name = collection_name
+        self.user_prefixes = [
+            element.strip() for element in user_prefixes.strip('"').split(",") if element.strip()
+        ]
         self.user_postfixes = [
             element.strip() for element in user_postfixes.strip('"').split(",") if element.strip()
         ]
@@ -225,10 +234,11 @@ class UserManager:
         self.update_kvstore_lookup(self.collection_name, users_to_update)
 
     @staticmethod
-    def is_match(ex_user, new_user: UserEntry, user_postfixes=[]):
+    def is_match(ex_user, new_user: UserEntry, user_prefixes=[], user_postfixes=[]):
         if user_match(
             new_user.user,
             ex_user.get("users"),
+            user_prefixes=user_prefixes,
             user_postfixes=user_postfixes,
         ):
             return True
@@ -237,7 +247,7 @@ class UserManager:
     def get_matching_user(self, user_entry: UserEntry):
         # return matching user
         for usr in self.users:
-            if self.is_match(usr, user_entry, user_postfixes=self.user_postfixes):
+            if self.is_match(usr, user_entry, user_prefixes=self.user_prefixes, user_postfixes=self.user_postfixes):
                 return self.get_as_dict(usr)
 
     def get_user_details(self):
@@ -250,7 +260,7 @@ class UserManager:
     def _find_user(self, user_entry: UserEntry):
         for usr in self.users:
             res = self.is_match(
-                usr, user_entry, user_postfixes=self.user_postfixes
+                usr, user_entry, user_prefixes=self.user_prefixes, user_postfixes=self.user_postfixes
             )
             if res:
                 return usr
@@ -468,6 +478,7 @@ class UserManager:
                     res = self.is_match(
                         self.users[j],
                         de_entry,
+                        user_prefixes=self.user_prefixes,
                         user_postfixes=self.user_postfixes,
                     )
                     if res:

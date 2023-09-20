@@ -14,6 +14,7 @@ import logger_manager
 logger = logger_manager.setup_logging("user_inventory", logging.INFO)
 
 CY_USER_POSTFIXES_MACRO = "cs_user_inventory_user_postfixes"
+CY_USER_PREFIXES_MACRO = "cs_user_inventory_user_prefixes"
 USER_INVENTORY_LOOKUP_COLLECTION = "cs_user_inventory_collection"
 
 MONTH_IN_SECOND = 60 * 60 * 24 * 30.5
@@ -82,8 +83,9 @@ class CyencesUserManagerCommand(EventingCommand):
 
         elif self.operation == "addentries":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            user_prefixes = conf_manger.get_macro(CY_USER_PREFIXES_MACRO)
             user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
-            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_prefixes, user_postfixes) as dm:
                 for record in records:
                     other_fields = copy.deepcopy(record)
                     del other_fields["indextime"]
@@ -105,16 +107,18 @@ class CyencesUserManagerCommand(EventingCommand):
 
         elif self.operation == "merge":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            user_prefixes = conf_manger.get_macro(CY_USER_PREFIXES_MACRO)
             user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
-            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_prefixes, user_postfixes) as dm:
                 messages = dm.reorganize_user_list()
                 for m in messages:
                     yield {"message": m}
 
         elif self.operation == "manualmerge":
             conf_manger = cs_utils.ConfigHandler(logger, session_key)
+            user_prefixes = conf_manger.get_macro(CY_USER_PREFIXES_MACRO)
             user_postfixes = conf_manger.get_macro(CY_USER_POSTFIXES_MACRO)
-            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_postfixes) as dm:
+            with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION, user_prefixes, user_postfixes) as dm:
                 messages = dm.manually_merge_users(self.target_user, *self.users_to_merge)
                 for m in messages:
                     yield {"message": m}
