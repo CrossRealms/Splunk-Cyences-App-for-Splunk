@@ -19,32 +19,39 @@ def remove_words_from_end(sentence, words):
 
 
 def user_match(
-    new_user,
+    new_users,
     ex_user_list,
     user_postfixes=[],
 ):
-    updated_new_user = remove_words_from_end(new_user.lower(), user_postfixes)
+    updated_new_user = [
+        remove_words_from_end(new_user.lower(), user_postfixes)
+        for new_user in new_users
+        if new_user
+    ]
+
     updated_ex_user_list = [
         remove_words_from_end(element.lower(), user_postfixes)
         for element in ex_user_list
         if element
     ]
 
-    if updated_new_user in updated_ex_user_list:
-        return True
+    for usr in updated_new_user:
+        if usr in updated_ex_user_list:
+            return True
 
     return False
 
 
-def is_user_ends_with(user, user_ends_with=[], user_postfixes=[]):
-    user = user.lower()
-    for postfix in user_postfixes:
-        if user.endswith(postfix.lower()):
-            user = user[: -len(postfix)]
-            break
-    for usr_postfix in user_ends_with:
-        if user.endswith(usr_postfix.lower()):
-            return True
+def is_user_ends_with(users, user_ends_with=[], user_postfixes=[]):
+    for user in users:
+        user = user.lower()
+        for postfix in user_postfixes:
+            if user.endswith(postfix.lower()):
+                user = user[: -len(postfix)]
+                break
+        for usr_postfix in user_ends_with:
+            if user.endswith(usr_postfix.lower()):
+                return True
     return False
 
 
@@ -61,7 +68,7 @@ class UserEntry:
     ) -> None:
         self.product_name = product_name
         self.indextime = indextime
-        self.user = user
+        self.user = self._internal_check_list_field_format(user)
         self.indexes = self._internal_check_list_field_format(indexes)
         self.sourcetypes = self._internal_check_list_field_format(sourcetypes)
         self.user_types = self._internal_check_list_field_format(user_types)
@@ -256,74 +263,78 @@ class UserManager:
         return False
 
     def _remove_entry_content(
-        self, product_name, user, entry_content, ex_user
+        self, product_name, users, entry_content, ex_user
     ):
-        if ex_user.get("users")[user] == 1:
-            del ex_user.get("users")[user]
-            del ex_user.get("user_info")[product_name][
-                user
-            ]  # remove the entry content as well
-        else:
-            ex_user.get("users")[user] -= 1
-
-        if ex_user.get("product_names")[product_name] == 1:
-            del ex_user.get("product_names")[product_name]
-            del ex_user.get("user_info")[
-                product_name
-            ]  # remove the product key from the products dict
-        else:
-            ex_user.get("product_names")[product_name] -= 1
-
-        for index in entry_content["indexes"]:
-            if ex_user.get("indexes")[index] == 1:
-                del ex_user.get("indexes")[index]
+        for user in users:
+            if user not in ex_user.get("users"):
+                continue
+            if ex_user.get("users")[user] == 1:
+                del ex_user.get("users")[user]
+                del ex_user.get("user_info")[product_name][
+                    user
+                ]  # remove the entry content as well
             else:
-                ex_user.get("indexes")[index] -= 1
+                ex_user.get("users")[user] -= 1
 
-        for sourcetype in entry_content["sourcetypes"]:
-            if ex_user.get("sourcetypes")[sourcetype] == 1:
-                del ex_user.get("sourcetypes")[sourcetype]
+            if ex_user.get("product_names")[product_name] == 1:
+                del ex_user.get("product_names")[product_name]
+                del ex_user.get("user_info")[
+                    product_name
+                ]  # remove the product key from the products dict
             else:
-                ex_user.get("sourcetypes")[sourcetype] -= 1
+                ex_user.get("product_names")[product_name] -= 1
 
-        for user_type in entry_content["user_types"]:
-            if ex_user.get("user_types")[user_type] == 1:
-                del ex_user.get("user_types")[user_type]
+            for index in entry_content["indexes"]:
+                if ex_user.get("indexes")[index] == 1:
+                    del ex_user.get("indexes")[index]
+                else:
+                    ex_user.get("indexes")[index] -= 1
+
+            for sourcetype in entry_content["sourcetypes"]:
+                if ex_user.get("sourcetypes")[sourcetype] == 1:
+                    del ex_user.get("sourcetypes")[sourcetype]
+                else:
+                    ex_user.get("sourcetypes")[sourcetype] -= 1
+
+            for user_type in entry_content["user_types"]:
+                if ex_user.get("user_types")[user_type] == 1:
+                    del ex_user.get("user_types")[user_type]
+                else:
+                    ex_user.get("user_types")[user_type] -= 1
+
+    def _add_entry_content(self, product_name, users, entry_content, ex_user):
+        for user in users:
+            if product_name in ex_user.get("product_names"):
+                ex_user.get("product_names")[product_name] += 1
             else:
-                ex_user.get("user_types")[user_type] -= 1
+                ex_user.get("product_names")[product_name] = 1
 
-    def _add_entry_content(self, product_name, user, entry_content, ex_user):
-        if product_name in ex_user.get("product_names"):
-            ex_user.get("product_names")[product_name] += 1
-        else:
-            ex_user.get("product_names")[product_name] = 1
-
-        if user in ex_user.get("users"):
-            ex_user.get("users")[user] += 1
-        else:
-            ex_user.get("users")[user] = 1
-
-        ex_user.get("user_info").setdefault(product_name, {}).setdefault(
-            user, entry_content
-        )
-
-        for index in entry_content["indexes"]:
-            if index in ex_user.get("indexes"):
-                ex_user.get("indexes")[index] += 1
+            if user in ex_user.get("users"):
+                ex_user.get("users")[user] += 1
             else:
-                ex_user.get("indexes")[index] = 1
+                ex_user.get("users")[user] = 1
 
-        for sourcetype in entry_content["sourcetypes"]:
-            if sourcetype in ex_user.get("sourcetypes"):
-                ex_user.get("sourcetypes")[sourcetype] += 1
-            else:
-                ex_user.get("sourcetypes")[sourcetype] = 1
+            ex_user.get("user_info").setdefault(product_name, {}).setdefault(
+                user, entry_content
+            )
 
-        for user_type in entry_content["user_types"]:
-            if user_type in ex_user.get("user_types"):
-                ex_user.get("user_types")[user_type] += 1
-            else:
-                ex_user.get("user_types")[user_type] = 1
+            for index in entry_content["indexes"]:
+                if index in ex_user.get("indexes"):
+                    ex_user.get("indexes")[index] += 1
+                else:
+                    ex_user.get("indexes")[index] = 1
+
+            for sourcetype in entry_content["sourcetypes"]:
+                if sourcetype in ex_user.get("sourcetypes"):
+                    ex_user.get("sourcetypes")[sourcetype] += 1
+                else:
+                    ex_user.get("sourcetypes")[sourcetype] = 1
+
+            for user_type in entry_content["user_types"]:
+                if user_type in ex_user.get("user_types"):
+                    ex_user.get("user_types")[user_type] += 1
+                else:
+                    ex_user.get("user_types")[user_type] = 1
 
     def delete_user(self, user_obj, idx_in_user_list=None):
         if not idx_in_user_list:
@@ -338,11 +349,15 @@ class UserManager:
         del new_entry_content["user"]
 
         # gives the user details of existing_entry only if it contains the same product_name and user.
-        existing_entry = (
-            existing_user.get("user_info", {})
-            .get(new_entry.product_name, {})
-            .get(new_entry.user, {})
-        )
+        existing_entry = False
+        for usr in new_entry.user:
+            existing_entry = (
+                existing_user.get("user_info", {})
+                .get(new_entry.product_name, {})
+                .get(usr, {})
+            )
+            if existing_entry:
+                break
 
         if existing_entry:
             # existing entry present, and its older than new entry then only replace with the new entry
@@ -421,7 +436,7 @@ class UserManager:
                     or int(float(entry_details["indextime"])) > max_indextime
                 ):
                     self._remove_entry_content(
-                        product_name, _user, entry_details, user
+                        product_name, [_user], entry_details, user
                     )
                     self.updated_users.append(user.get("uuid"))
 
