@@ -44,6 +44,8 @@ It is populated from a lookup which is built by scheduled reports. The lookup is
 * Sophos
 * Tenable
 * Windows Defender
+* Kaspersky
+* Splunk Internal Logs
 
 The Device Inventory dashboard was built based on the above categories, but it will still be able to recognize the majority of assets or devices present in any environment. This dashboard can be a great tool to rely on during a security audit or while gathering information about assets. It can even identify if a device is not sending a particular type of data (i.e., Windows Defender). This will be incredibly useful for when security engineers are trying to gain a better understanding of something like an attack vector. Users can see the status of the device from the antivirus perspective as well.  
 
@@ -69,7 +71,24 @@ Sometimes it is confusing for Cyences' algorithm to automatically merge two devi
 
 ![alt]({{ site.baseurl }}/assets/merge_device_ids.png)
 
-The **Product Device ID Conflicts Auto Merged** dashboard panel was designed for troubleshooting purposes by Splunk Administrators only. 
+
+## User Inventory
+
+The User Inventory dashboard contains a list of users present in an environment.
+
+![alt]({{ site.baseurl }}/assets/user_inventory.png)
+
+It is populated from a lookup which is built by scheduled report. The lookup is generated from all the data sources.
+
+The User Inventory dashboard was built by scanning the user data from all the sources available in the splunk environment. This dashboard is very useful to check the user related metadata information such as number of users by its type, users associated to each products. It will showcase the list of users with their associated roles/types and products. 
+
+The User Inventory dashboard has several drilldown options, which allows Splunk users to see the user related statistics and related logs.
+
+**Note**: Click on a "View Related Logs" column to see the user related logs in last 24 hours. 
+
+* It automatically merges the users based on its name. Also, It compares the user by removing the prefixes and postfixes configured in macros. 
+* It assigns unique UUID to each user.
+
 
 ## Asset Intelligence Dashboard
 

@@ -124,6 +124,8 @@ The Device Inventory Table is generated based on live data coming into Splunk. V
 
 To backfill all of the lookups related to device inventory, follow the directions below to execute the necessary search query. 
 
+Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Backfill** and click on **Run** to execute the search. 
+
 Use an appropriate time range to backfill all of the lookups, since that determines the search range for all devices (the default time range is set to Last 30 days). 
 
 List of Device Inventory related searches that users can execute individually to backfill specific lookups: 
@@ -132,8 +134,10 @@ List of Device Inventory related searches that users can execute individually to
 * Device Inventory - Qualys 
 * Device Inventory - Sophos 
 * Device Inventory - Tenable 
-* Device Inventory - Tenable Vun 
+* Device Inventory - Tenable Vuln
 * Device Inventory - Windows Defender 
+* Device Inventory - Kaspersky
+* Device Inventory - Splunk Internal 
 
 ### CleanUp Device Inventory Related Lookups 
 
@@ -142,3 +146,25 @@ To clean up the lookups related to Device Inventory, follow the directions below
 Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **Device Inventory Lookup CleanUp** and click on **Run** to execute the search. 
 
 **Caution:** We highly recommend that users run the search in the Last 60 days or another time range that is better suited for their environment, since the time range of the search will define which devices will be kept and the rest will be automatically removed.
+
+
+## User Inventory
+
+The User Inventory Table is generated based on user related data coming into Splunk. View the User Inventory section for more information. 
+
+### Backfill User Inventory 
+
+To backfill the user inventory lookup, follow the directions below to execute the search query. 
+
+Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **User Inventory - Lookup Backfill** and click on **Run** to execute the search.
+
+Use an appropriate time range to backfill the lookup, since that determines the search range for all users (the default time range is set to Last 7 days). 
+
+
+### CleanUp User Inventory Lookups 
+
+To clean up the User Inventory lookup, follow the directions below to execute the necessary search query. 
+
+Navigate to **Cyences App for Splunk > Settings > Searches, reports and alerts**. Use the search filter to find a savedsearch named **User Inventory - Lookup CleanUp** and click on **Run** to execute the search. 
+
+**Caution:** We highly recommend that users run the search in the Last 60 days or another time range that is better suited for their environment, since the time range of the search will define which users will be kept and the rest will be automatically removed.
