@@ -33,11 +33,29 @@ def upgrade_4_0_0(session_key, logger):
     response = service.jobs.oneshot(SEARCH_QUERY, output_mode="json", earliest_time='-4w@w', latest_time='@w')
     handle_results(response, logger)
 
+
+def upgrade_4_3_0(session_key, logger):
+    DEVICE_INVENTORY_SEARCH_QUERY = '| savedsearch "Device Inventory Backfill - V2"'
+
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+
+    logger.info("Running Device Inventory Backfill search for last 7 day timerange")
+    response = service.jobs.oneshot(DEVICE_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-7d@m', latest_time='now')
+    handle_results(response, logger)
+    time.sleep(60)
+
+    USER_INVENTORY_SEARCH_QUERY = '| savedsearch "User Inventory - Lookup Backfill"'
+    logger.info("Running User Inventory Backfill search for last 1 day timerange")
+    response = service.jobs.oneshot(USER_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-1d@m', latest_time='now')
+    handle_results(response, logger)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
 
+
 version_upgrade = (
     ('3.1.0', None),
     ('4.0.0', upgrade_4_0_0),
+    ('4.3.0', upgrade_4_3_0),
 )
