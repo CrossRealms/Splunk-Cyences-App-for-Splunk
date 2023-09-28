@@ -1,5 +1,5 @@
 # Use the splunk's python in order to run this file. Run the following command:
-# $SPLUNK_HOME/bin/splunk cmd python3 test_device_inventory_v2.py
+# $SPLUNK_HOME/bin/splunk cmd python3 test_device_inventory.py
 
 import os, sys
 import hashlib
@@ -8,7 +8,7 @@ parent_dir = os.path.dirname
 APP_BIN_PATH = os.path.join(parent_dir(parent_dir(__file__)), "cyences_app_for_splunk", "bin")
 sys.path.insert(0, APP_BIN_PATH)
 
-from device_inventory_v2_util import DeviceEntry, DeviceManager
+from device_inventory_util import DeviceEntry, DeviceManager
 from cyences_device_manager import logger
 import splunk.auth as auth
 from splunk import rest

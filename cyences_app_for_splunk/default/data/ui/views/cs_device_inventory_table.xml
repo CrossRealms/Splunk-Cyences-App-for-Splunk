@@ -26,8 +26,9 @@
     </done>
   </search>
   <search id="base_summary">
-    <query>| inputlookup cs_device_inventory
-| stats count as Total, sum(eval(if(isnotnull(lansweeper_id) and lansweeper_id!="", 1, 0))) as Lansweeper, sum(eval(if(isnotnull(qualys_id) and qualys_id!="", 1, 0))) as Qualys, sum(eval(if(isnotnull(tenable_uuid) and tenable_uuid!="", 1, 0))) as Tenable, sum(eval(if(isnotnull(windows_defender_host) and windows_defender_host!="", 1, 0))) as Defender, sum(eval(if((isnotnull(sophos_uuid) and sophos_uuid!=""), 1, 0))) as Sophos, sum(eval(if(isnotnull(crowdstrike_userid) and crowdstrike_userid!="", 1, 0))) as CrowdStrike, sum(eval(if(isnotnull(kaspersky_host) and kaspersky_host!="", 1, 0))) as Kaspersky, sum(eval(if(((isnotnull(lansweeper_id) and lansweeper_id!="") AND ((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")) AND ((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!="") OR (isnotnull(kaspersky_host) and kaspersky_host!=""))), 1, 0))) as All, sum(eval(if(((isnotnull(qualys_id) and qualys_id!="") OR (isnotnull(tenable_uuid) and tenable_uuid!="")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((isnotnull(windows_defender_host) and windows_defender_host!="") OR (isnotnull(sophos_uuid) and sophos_uuid!="") OR (isnotnull(crowdstrike_userid) and crowdstrike_userid!="")OR (isnotnull(kaspersky_host) and kaspersky_host!="")), 1, 0))) as Antivirus
+    <query>| cyencesdevicemanager operation="getdevices" 
+| table product_names 
+| stats count as Total, sum(eval(if(product_names="Lansweeper", 1, 0))) as Lansweeper, sum(eval(if(product_names="Qualys", 1, 0))) as Qualys, sum(eval(if(product_names="Tenable", 1, 0))) as Tenable, sum(eval(if(product_names="Windows Defender", 1, 0))) as Defender, sum(eval(if((product_names="Sophos"), 1, 0))) as Sophos, sum(eval(if(product_names="CrowdStrike", 1, 0))) as CrowdStrike, sum(eval(if(product_names="Kaspersky", 1, 0))) as Kaspersky, sum(eval(if(((product_names="Lansweeper") AND ((product_names="Qualys") OR (product_names="Tenable")) AND ((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike") OR (product_names="Kaspersky"))), 1, 0))) as All, sum(eval(if(((product_names="Qualys") OR (product_names="Tenable")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike")OR (product_names="Kaspersky")), 1, 0))) as Antivirus 
 | eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Kaspersky=Total-Kaspersky, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner</query>
     <earliest>0</earliest>
     <latest>now</latest>
@@ -40,7 +41,7 @@
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory - Kaspersky", "Device Inventory Gen", "Device Inventory Temp Lookup CleanUp", "Device Inventory Lookup CleanUp") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory - Kaspersky", "Device Inventory - Splunk Internal", "Device Inventory Backfill", "Device Inventory Lookup CleanUp", "Device Inventory Merge Similar Devices") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -68,10 +69,9 @@
         </drilldown>
       </single>
       <html>
-        <p>
-          <b>Description</b>: The total amount of devices detected.</p>
-        <p>---------------------------------------------------------------------------------------------------------------------------------</p>
-        <p>Note - Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
+        <p><b>Description</b>: The total amount of devices detected.</p>
+          <hr></hr>
+        <p><b>Note</b>: Click on any of the surrounding bar charts to view more information about specific devices in the Device Inventory. Click on the number above to reset the filter.</p>
       </html>
     </panel>
     <panel>
@@ -226,7 +226,7 @@
         <default></default>
         <change>
           <condition match="'tkn_mac_tmp'=&quot;&quot;">
-            <set token="tkn_user">()</set>
+            <set token="tkn_mac">()</set>
           </condition>
           <condition>
             <set token="tkn_mac">(mac_address="*$tkn_mac_tmp$*")</set>
@@ -305,26 +305,32 @@
         <title>ADMIN</title>
         <search>
           <!-- When second_bit_in_mac_binary (from first part of mac_address) is 1 that is locally administratored mac_address, we'll filter those mac_address from showing. -->
-          <query>| inputlookup cs_device_inventory
-| eval ip_all=ip, mac_address_all=mac_address
-| eval ip_all=mvjoin(ip, ","), mac_address_all=mvjoin(mac_address, ",")
-| multireport [
-| stats values(*) as * by mac_address
-| where isnotnull(mac_address) AND mac_address!="" AND mac_address!=" " 
-| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
-| eval first_part_of_mac=tonumber(substr(mac_address, 0, 2))
-| eval power=mvrange(0,8) | mvexpand power | eval base2=pow(2, power) 
-| eval mydiv=floor(first_part_of_mac/base2) 
-| eval mybin=mydiv % 2 
-| stats list(mybin) as binary, values(*) as * by mac_address
-| eval second_bit_in_mac_binary=mvindex(binary,1) | where second_bit_in_mac_binary=0
-| eval Type="Mac Address Matches", ip="" | table Type, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid, kaspersky_host]
-[
-| stats values(*) as * by ip
-| where isnotnull(ip) AND ip!="" AND ip!=" " 
-| eval no_uuids=mvcount(uuid) | where no_uuids&gt;1 
-| eval Type="IP Matches", mac_address="" | table Type, ip, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid, kaspersky_host]
-| table Type, ip, mac_address, uuid, no_uuids, hostname, ip_all, mac_address_all, lansweeper_id, qualys_id, tenable_uuid, sophos_uuid, windows_defender_host, crowdstrike_userid, kaspersky_host
+          <query>| cyencesdevicemanager operation="getdevices" 
+| table * 
+| eval ip_all=mvjoin(ips, ","), mac_address_all=mvjoin(mac_addresses, ",") 
+| multireport 
+    [| stats values(*) as * by mac_addresses 
+    | where isnotnull(mac_addresses) AND mac_addresses!="" AND mac_addresses!=" " 
+    | eval no_uuids=mvcount(uuid) 
+    | where no_uuids&gt;1 
+    | eval first_part_of_mac=tonumber(substr(mac_addresses, 0, 2)) 
+    | eval power=mvrange(0,8) 
+    | mvexpand power 
+    | eval base2=pow(2, power) 
+    | eval mydiv=floor(first_part_of_mac/base2) 
+    | eval mybin=mydiv % 2 
+    | stats list(mybin) as binary, values(*) as * by mac_addresses 
+    | eval second_bit_in_mac_binary=mvindex(binary,1) 
+    | where second_bit_in_mac_binary=0 
+    | eval Type="Mac Address Matches", ips="" 
+    | table Type, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
+    [| stats values(*) as * by ips 
+    | where isnotnull(ips) AND ips!="" AND ips!=" " 
+    | eval no_uuids=mvcount(uuid) 
+    | where no_uuids&gt;1 
+    | eval Type="IP Matches", mac_addresses="" 
+    | table Type, ips, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
+| table Type, ips, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids
 | sort - no_uuids</query>
           <earliest>0</earliest>
           <latest></latest>
@@ -351,36 +357,6 @@
           </div>
         </div>
       </html>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Product Device ID Conflicts Auto Merged</title>
-      <input type="time" token="tkn_timerange_conflicted_merged">
-        <label></label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <table>
-        <title>ADMIN</title>
-        <search>
-          <query>index=_internal sourcetype="cyences:logs" CASE(INFO) "is already present, while adding record"
-| rex "\'uuid\':\s'(?&lt;uuid&gt;[^\']+)\'" | rex " - data_pointer\[(?&lt;product&gt;[^\]]+)\]=(?&lt;product_id_1&gt;.*)\sis already present" 
-| rex "\(\'lansweeper_id\', \'(?&lt;product_id_2_lansweeper&gt;[^\']+)\'\)" | rex "\(\'tenable_uuid\', \'(?&lt;product_id_2_tenable&gt;[^\']+)\'\)" | rex "\(\'qualys_id\', \'(?&lt;product_id_2_qualys&gt;[^\']+)\'\)" | rex "\(\'sophos_uuid\', \'(?&lt;product_id_2_sophos&gt;[^\']+)\'\)" | rex "\(\'windows_defender_host\', \'(?&lt;product_id_2_windows_defender&gt;[^\']+)\'\)" | rex "\(\'crowdstrike_userid\', \'(?&lt;product_id_2_crowdstrike&gt;[^\']+)\'\)" | rex "\(\'kaspersky_host\', \'(?&lt;product_id_2_kaspersky&gt;[^\']+)\'\)"
-| eval product_id_2=case(product=="lansweeper_id", product_id_2_lansweeper, product=="tenable_uuid", product_id_2_tenable, product=="qualys_id", product_id_2_qualys, product=="sophos_uuid", product_id_2_sophos, product=="windows_defender_host", product_id_2_windows_defender, product=="crowstrike_userid", product_id_2_crowdsrike,product=="kaspersky_host", product_id_2_kaspersky)
-| rex "\(\'hostname\', \[(?&lt;hostname1&gt;[^\]]+)\]\)" | rex "\(\'ip\', \[(?&lt;ip1&gt;[^\]]+)\]\)" | rex "\(\'mac_address\', \[(?&lt;mac_address1&gt;[^\]]+)\]\)"
-| rex "\'hostname\': \[(?&lt;hostname2&gt;[^\]]+)\]" | rex "\'ip\': \[(?&lt;ip2&gt;[^\]]+)\]" | rex "\'mac_address\': \[(?&lt;mac_address2&gt;[^\]]+)\]"
-| rex "entry:{(?&lt;lookup_entry&gt;[^}]+)}"
-| table uuid, product, product_id_1, product_id_2, hostname1, hostname2, ip1, ip2, mac_address1, mac_address2, lookup_entry</query>
-          <earliest>$tkn_timerange_conflicted_merged.earliest$</earliest>
-          <latest>$tkn_timerange_conflicted_merged.latest$</latest>
-        </search>
-        <option name="count">5</option>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
     </panel>
   </row>
 </form>

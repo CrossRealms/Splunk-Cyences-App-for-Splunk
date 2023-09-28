@@ -5,16 +5,16 @@ import time
 import copy
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
-from device_inventory_v2_util import DeviceManager, DeviceEntry
+from device_inventory_util import DeviceManager, DeviceEntry
 
 import cs_utils
 import logging
 import logger_manager
 
-logger = logger_manager.setup_logging("device_inventory_v2", logging.INFO)
+logger = logger_manager.setup_logging("device_inventory", logging.INFO)
 
 CY_HOSTNAME_POSTFIXES_MACRO = "cs_device_inventory_hostname_postfixes"
-DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection_v2"
+DEVICE_INVENTORY_LOOKUP_COLLECTION = "cs_device_inventory_collection"
 
 MONTH_IN_SECOND = 60 * 60 * 24 * 30.5
 YEAR_IN_SECOND = MONTH_IN_SECOND * 12

@@ -335,11 +335,11 @@ class DeviceManager:
     ):
         if ex_device.get("product_uuids")[product_uuid] == 1:
             del ex_device.get("product_uuids")[product_uuid]
-            del ex_device.get("product_info")[product_name][
-                product_uuid
-            ]  # remove the entry content as well
         else:
             ex_device.get("product_uuids")[product_uuid] -= 1
+        del ex_device.get("product_info")[product_name][
+            product_uuid
+        ]  # remove the product_uuid entry content as well
 
         if ex_device.get("product_names")[product_name] == 1:
             del ex_device.get("product_names")[product_name]

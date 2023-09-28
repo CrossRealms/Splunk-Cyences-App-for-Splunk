@@ -5,7 +5,7 @@ import time
 import copy
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
-from user_inventory_v2_util import UserManager, UserEntry
+from user_inventory_util import UserManager, UserEntry
 
 import cs_utils
 import logging
