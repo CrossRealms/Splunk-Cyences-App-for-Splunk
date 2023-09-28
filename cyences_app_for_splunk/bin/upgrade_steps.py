@@ -35,10 +35,15 @@ def upgrade_4_0_0(session_key, logger):
 
 
 def upgrade_4_3_0(session_key, logger):
-    DEVICE_INVENTORY_SEARCH_QUERY = '| savedsearch "Device Inventory Backfill - V2"'
-
     service = client.connect(token=session_key, app=cs_utils.APP_NAME)
 
+    CLEANUP_DEVICE_INVENTORY_SEARCH_QUERY = '| outputlookup cs_device_inventory'
+    logger.info("Cleaning the Device Inventory lookup")
+    response = service.jobs.oneshot(CLEANUP_DEVICE_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-7d@m', latest_time='now')
+    handle_results(response, logger)
+    time.sleep(60)
+
+    DEVICE_INVENTORY_SEARCH_QUERY = '| savedsearch "Device Inventory Backfill"'
     logger.info("Running Device Inventory Backfill search for last 7 day timerange")
     response = service.jobs.oneshot(DEVICE_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-7d@m', latest_time='now')
     handle_results(response, logger)
