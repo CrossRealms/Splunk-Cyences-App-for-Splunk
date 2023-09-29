@@ -38,8 +38,8 @@ def upgrade_4_3_0(session_key, logger):
     service = client.connect(token=session_key, app=cs_utils.APP_NAME)
 
     DEVICE_INVENTORY_SEARCH_QUERY = '| savedsearch "Device Inventory Backfill"'
-    logger.info("Running Device Inventory Backfill search for last 7 day timerange")
-    response = service.jobs.oneshot(DEVICE_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-7d@m', latest_time='now')
+    logger.info("Running Device Inventory Backfill search for last 30 day timerange")
+    response = service.jobs.oneshot(DEVICE_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-30d@m', latest_time='now')
     handle_results(response, logger)
     time.sleep(60)
 
