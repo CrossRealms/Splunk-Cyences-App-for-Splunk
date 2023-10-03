@@ -47,11 +47,13 @@ has_children: true
         * Added the "Device Inventory - Splunk Internal" saved search to collect the forwarder information available in splunk.
         * Added the "Device Inventory Merge Similar Devices" saved search to auto merge the similar devices.
 
-    * Improved the raw expansion table design by removing empty raws and adding borders to the table.
+    * Improved the row expansion table design by removing empty rows and adding borders to the table.
 
     * Reduced the severity of the "Authentication - Excessive Failed VPN Logins for a User" alert for unknown user.
 
     * The "O365 - Azure Active Directory - Group Change/Update" and "O365 - Azure Active Directory - GroupMembership Change/Update" alerts have been updated to capture the appropriate events.
+
+    * Updated the severity of "O365 - Login Failure From Unusual Country Due To Multi Factor Authentication" and "O365 - Login Failure Due To Multi Factor Authentication" alerts.
 
 
 * ### Bug Fixes
