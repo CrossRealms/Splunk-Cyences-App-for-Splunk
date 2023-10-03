@@ -1,11 +1,11 @@
 <form theme="dark" version="1.1">
   <label>DNS Tracker</label>
   <search id="get_ips_of_dns_servers">
-    <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS by host | eval hostname=lower(host) | fields - host
-| append [| inputlookup cs_device_inventory | mvexpand hostname | mvexpand ip | fields ip, hostname]
-| stats sum(count) as count, values(ip) as ip by hostname | where count&gt;0
-| mvexpand ip | dedup ip | fields ip 
-| stats values(ip) as ip count| eval dns_server_filter_original=mvjoin(ip, "\", \"")
+    <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS by host | eval hostnames=lower(host) | fields - host
+| append [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand hostnames | mvexpand ips | fields ips, hostnames]
+| stats sum(count) as count, values(ips) as ips by hostnames | where count&gt;0
+| mvexpand ips | dedup ips | fields ips 
+| stats values(ips) as ips count| eval dns_server_filter_original=mvjoin(ips, "\", \"")
 | eval dns_server_filter=if(count&gt;0,"NOT DNS.src IN (\"".dns_server_filter_original."\")","")
 | eval dns_to_dns_requests=if(count&gt;0,"DNS.src IN (\"".dns_server_filter_original."\")","")</query>
     <earliest>$tkn_timerange.earliest$</earliest>
@@ -144,7 +144,7 @@
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.src | rename DNS.* as * 
-| join type=left src [| inputlookup cs_device_inventory | mvexpand ip | fields ip, hostname | rename ip as src | eval hostname=mvjoin(hostname,"|")]
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
 | eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
 | sort - count | head 100 | rename src as Requester</query>
           <earliest>$tkn_timerange.earliest$</earliest>
@@ -159,7 +159,7 @@
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("QUERY", "RESPONSE") DNS.reply_code!="No Error"  DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_dont_show_dns_logs$ by DNS.src DNS.reply_code | rename DNS.* as * 
-| join type=left src [| inputlookup cs_device_inventory | mvexpand ip | fields ip, hostname | rename ip as src | eval hostname=mvjoin(hostname,"|")]
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
 | eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
 | sort - count | head 100 | rename src as Requester</query>
           <earliest>$tkn_timerange.earliest$</earliest>
@@ -224,7 +224,7 @@
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_resolution_dns` count from datamodel=Network_Resolution.DNS where DNS.message_type IN ("Query to external server", "Response from external server") DNS.query IN ($tkn_query$) DNS.src IN ($tkn_src$) $tkn_only_dns_to_dns_filter$ by DNS.src host | rename DNS.* as * 
-| join type=left src [| inputlookup cs_device_inventory | mvexpand ip | fields ip, hostname | rename ip as src | eval hostname=mvjoin(hostname,"|")]
+| join type=left src [| cyencesdevicemanager operation="getdevices" | table hostnames, ips | mvexpand ips | fields ips, hostnames | rename ips as src, hostnames as hostname | eval hostname=mvjoin(hostname,"|")]
 | eval src=if(isnotnull(hostname), src." (".hostname.")", src) | fields - hostname
 | rename host as Requester, src as Responder
 | table Requester, Responder, count

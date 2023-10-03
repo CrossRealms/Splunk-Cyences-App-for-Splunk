@@ -1,139 +1,17 @@
-#device_inventory_table table{
-    table-layout: fixed;
-    width : 120%;
+#device_inventory_table table {
+    table-layout: auto !important;
+    width: auto !important;
 }
-            
-#device_inventory_table th:nth-child(1) {
-    width:  3%!important;
-}
-
-#device_inventory_table th:nth-child(2) {
-    width:12% !important;
-}
-
-#device_inventory_table th:nth-child(3) {
-    width: 14% !important;
-}
-
-#device_inventory_table th:nth-child(4) {
-    width: 6% !important;
-}
-
-#device_inventory_table th:nth-child(5) {
-    width: 9% !important;
-}
-
-#device_inventory_table th:nth-child(6) {
-width:  14%!important;
-}
-#device_inventory_table th:nth-child(7) {
-    width:  5%!important;
-}
-
-#device_inventory_table th:nth-child(8) {
-    width:  4%!important;
-}
-
-#device_inventory_table th:nth-child(9) {
-    width:  4%!important;
-}
-
-#device_inventory_table th:nth-child(10) {
-    width:  4%!important;
-}
-
-#device_inventory_table th:nth-child(11) {
-    width:  4%!important;
-}
-
-#device_inventory_table th:nth-child(12) {
-    width:  5%!important;
-}
-
-#device_inventory_table th:nth-child(13) {
-    width:  5%!important;
-}
-
-#device_inventory_table th:nth-child(14) {
-    width:  5%!important;
-}
-
-#device_inventory_table th:nth-child(15) {
-    width: 6%!important;
-}
-
-#device_inventory_table th:nth-child(16) {
-    width: 5%!important;
-}
-
-#device_inventory_table td:nth-child(1) {
-    width:  3%!important;
-}
-
-#device_inventory_table td:nth-child(2) {
-    width:12% !important;
-}
-
-#device_inventory_table td:nth-child(3) {
-    width: 14% !important;
-}
-
-#device_inventory_table td:nth-child(4) {
-    width: 6% !important;
-}
-
-#device_inventory_table td:nth-child(5) {
-    width: 9% !important;
-}
-
-#device_inventory_table td:nth-child(6) {
-width:  14%!important;
-}
-#device_inventory_table td:nth-child(7) {
-    width:  5%!important;
-}
-
-#device_inventory_table td:nth-child(8) {
-    width:  4%!important;
-}
-
-#device_inventory_table td:nth-child(9) {
-    width:  4%!important;
-}
-
-#device_inventory_table td:nth-child(10) {
-    width:  4%!important;
-}
-
-#device_inventory_table td:nth-child(11) {
-    width:  4%!important;
-}
-
-#device_inventory_table td:nth-child(12) {
-    width:  5%!important;
-}
-
-#device_inventory_table td:nth-child(13) {
-    width:  5%!important;
-}
-
-#device_inventory_table td:nth-child(14) {
-    width:  5%!important;
-}
-
-#device_inventory_table td:nth-child(15) {
-    width: 6%!important;
-}
-#device_inventory_table td:nth-child(16) {
-    width: 5%!important;
-}
-
 
 /* Device Inventory Manager Row Expansion */
 #row_expanded_table table thead tr th:not(:last-child) {
-    width: 50px;  /* Fake width to move all columns on the left */
+    width: 50px;
+    /* Fake width to move all columns on the left */
 }
 
-#row_expanded_table table thead tr th, #row_expanded_table table tbody tr td {
+#row_expanded_table table thead tr th,
+#row_expanded_table table tbody tr td {
     text-align: left !important;
+    border: 1px solid;
+    border-color: black;
 }

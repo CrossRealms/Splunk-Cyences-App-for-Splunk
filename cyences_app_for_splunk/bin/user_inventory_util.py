@@ -280,11 +280,11 @@ class UserManager:
                 continue
             if ex_user.get("users")[user] == 1:
                 del ex_user.get("users")[user]
-                del ex_user.get("user_info")[product_name][
-                    user
-                ]  # remove the entry content as well
             else:
                 ex_user.get("users")[user] -= 1
+            del ex_user.get("user_info")[product_name][
+                user
+            ]  # remove the user entry content as well
 
             if ex_user.get("product_names")[product_name] == 1:
                 del ex_user.get("product_names")[product_name]

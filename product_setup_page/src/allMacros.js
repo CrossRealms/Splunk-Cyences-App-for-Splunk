@@ -1,6 +1,6 @@
 let allMacros = [
     {
-        section: 'Device and User Inventory V2',
+        section: 'Device and User Inventory',
         macros: [
             {name: 'cs_device_inventory_hostname_postfixes' },
             {name: 'cs_user_inventory_user_prefixes' },
