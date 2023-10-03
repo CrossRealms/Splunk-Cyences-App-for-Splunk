@@ -113,4 +113,4 @@ This dashboard displays the following information about devices:
 
 (The screenshot above does not include the full dashboard)
 
-The "Search Users and Devices" dashboard has been added to the Cyences app in version 1.4.0.
+The "Search Users and Devices" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Search Users and Devices" in version 4.3.0.
