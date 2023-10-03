@@ -67,8 +67,9 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
 
 Apart from alerts and dashboards, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
 
-* Asset Intelligence 
 * Device Inventory Table
+* User Inventory Table
+* Search Users and Devices
 * Globally Detected Malicious IPs
 
 
@@ -81,7 +82,7 @@ Cyences has other unique first in the market features on Splunk, like Alert Dige
 
 * **Alert Digest and Critical Email Alert**: In Cyences 3.0.0, we introduce a better way to look at alerts from Splunk so user don't get spammed by so many alerts from Splunk and get the critical alerts immediately while keeping the inbox clean. In Cyences user can configure their email address at once and get all the critical events from all the alerts without configuring their email on all of them separately. In addition to that Cyences has an alert called Digest Alert which sends all the medium and high severity notable events from all the alerts as a digest email only once a day. Please refer to [Cyences Email Settings for Alerts]({{ site.baseurl }}/install_configure/configuration/#cyences-email-settings-for-alerts) section for configuration guide and more information.
 
-* **Device Inventory and Asset Intelligence**: Version 1.2.0 of the Cyences app features a new component and that is the Device Inventory Table. It is a vital tool that helps with the security audit process and requires zero configuration. The Device Inventory Table lists all of the different devices present in an environment by correlating data from CrowdStrike, Lansweeper, Kaspersky, Qualys, Sophos, Tenable, Windows Defender, etc. And there is one more dashboard called "Asset Intelligence" which is very helpful for investigating a security incident. For more information, please refer to the [Device Inventory and Asset Intelligence]({{ site.baseurl }}/user_guide/intelligence_dashboard/) section for more details.
+* **Device Inventory and Search Users and Devices**: Version 1.2.0 of the Cyences app features a new component and that is the Device Inventory Table. It is a vital tool that helps with the security audit process and requires zero configuration. The Device Inventory Table lists all of the different devices present in an environment by correlating data from CrowdStrike, Lansweeper, Kaspersky, Qualys, Sophos, Tenable, Windows Defender, etc. And there is one more dashboard called "Search Users and Devices" which is very helpful for investigating a security incident. For more information, please refer to the [Device Inventory and Search Users and Devices]({{ site.baseurl }}/user_guide/intelligence_dashboard/) section for more details.
 
 * **Network Telemetry**: Cyences has a dashboard called "Network Telemetry" which shows a very important information for security team. It shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
 

@@ -31,8 +31,8 @@ has_children: true
             * Updating the functionality to manual merge devices.
         * Updated the following dashboards by updating its searches:
             * Device Inventory
-            * Asset Intelligence
             * DNS Tracker
+        * The "Asset Intelligence" dashboard has been renamed to "Search Users and Devices".
         * Improved the searches for the following saved searches:
             * Device Inventory - Lansweeper
             * Device Inventory - Tenable

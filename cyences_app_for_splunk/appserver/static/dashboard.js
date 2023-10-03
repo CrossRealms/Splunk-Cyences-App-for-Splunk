@@ -5,7 +5,7 @@ require([
 ], function ($, SplunkCommonUtilities) {
 
     if (window.location.href.indexOf("cs_asset_intelligence") < 0 && window.location.href.indexOf("cs_device_inventory_table") < 0 && window.location.href.indexOf("cs_configuration") < 0 && window.location.href.indexOf("cs_overview") < 0) {
-        // Do not load the context menu on the Asset Intelligence dashboard and Device Inventory Table.
+        // Do not load the context menu on the Search Users and Devices dashboard and Device Inventory Table.
 
         let MAX_TEXT_SELECTION = 45;
 
@@ -15,10 +15,10 @@ require([
         function showContextMenu(type, text, mouseX, mouseY){
             let link;
             if (type === 'IP'){
-                link = `<a href="/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=${text}&form.tkn_host_tmp=&form.tkn_user_tmp=" target="_blank">See IP(${text}) in Asset Intelligence</a>`;
+                link = `<a href="/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=${text}&form.tkn_host_tmp=&form.tkn_user_tmp=" target="_blank">See IP(${text}) in Search Users and Devices</a>`;
             }
             else{
-                link = `<a href="/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=&form.tkn_host_tmp=${text}&form.tkn_user_tmp=${text}" target="_blank">See Host/User(${text}) in Asset Intelligence</a>`;
+                link = `<a href="/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=&form.tkn_host_tmp=${text}&form.tkn_user_tmp=${text}" target="_blank">See Host/User(${text}) in Search Users and Devices</a>`;
             }
             $(contextMenu).append(link);
             $(contextMenu).css('left', (mouseX - 10)+"px");
