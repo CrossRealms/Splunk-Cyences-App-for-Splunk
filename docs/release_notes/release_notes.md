@@ -30,17 +30,6 @@ has_children: true
             * Adding the functionality to auto merge devices.
             * Updating the functionality to manual merge devices.
         * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
-        * Improved the searches for the following saved searches:
-            * Device Inventory - Lansweeper
-            * Device Inventory - Tenable
-            * Device Inventory - Tenable Vuln
-            * Device Inventory - Qualys
-            * Device Inventory - Sophos
-            * Device Inventory - Windows Defender
-            * Device Inventory - CrowdStrike
-            * Device Inventory - Kaspersky
-            * Device Inventory Backfill
-            * Device Inventory Lookup CleanUp
         * Added the "Device Inventory - Splunk Internal" saved search to collect the forwarder information available in splunk.
         * Added the "Device Inventory Merge Similar Devices" saved search to auto merge the similar devices.
 
