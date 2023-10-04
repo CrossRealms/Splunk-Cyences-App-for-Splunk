@@ -31,6 +31,7 @@ require([
         { id: 'cs_authentication_reports', title: 'Authentication' },
         { id: 'cs_lansweeper', title: 'Lansweeper' },
         { id: 'cs_device_inventory_table', title: 'Device Inventory' },
+        { id: 'cs_user_inventory_table', title: 'User Inventory' },
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
     ]
 
