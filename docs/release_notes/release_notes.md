@@ -9,7 +9,7 @@ has_children: true
 # Release Notes
 
 
-## Version 4.3.0 (September 2023)
+## Version 4.3.0 (October 2023)
 
 * ### User Inventory
     * Added the "User Inventory" dashboard.
@@ -29,9 +29,6 @@ has_children: true
             * Modifying its data structure.
             * Adding the functionality to auto merge devices.
             * Updating the functionality to manual merge devices.
-        * Updated the following dashboards by updating its searches:
-            * Device Inventory
-            * DNS Tracker
         * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
         * Improved the searches for the following saved searches:
             * Device Inventory - Lansweeper
