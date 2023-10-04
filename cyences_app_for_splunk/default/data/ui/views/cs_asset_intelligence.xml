@@ -1,5 +1,5 @@
 <form theme="dark" script="cs_asset_intelligence.js" version="1.1">
-  <label>Search Users and Devices</label>
+  <label>Intelligence</label>
   <init>
     <!-- For Dev Only
       <set token="for_dev_only">1</set>

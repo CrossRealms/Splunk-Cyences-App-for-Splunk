@@ -32,7 +32,7 @@ has_children: true
         * Updated the following dashboards by updating its searches:
             * Device Inventory
             * DNS Tracker
-        * The "Asset Intelligence" dashboard has been renamed to "Search Users and Devices".
+        * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
         * Improved the searches for the following saved searches:
             * Device Inventory - Lansweeper
             * Device Inventory - Tenable

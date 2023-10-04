@@ -16,7 +16,7 @@ parent: User Guide
 
 * The following changes have been made to Cyences version 4.3.0:
 
-    * The "Asset Intelligence" dashboard has been renamed to "Search Users and Devices".
+    * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
     * Added a "User Inventory", in order to track the user's metadata.
 
 ## Globally Detected Malicious IPs
@@ -54,7 +54,7 @@ It is populated from a lookup which is built by scheduled reports. The lookup is
 
 The Device Inventory dashboard was built based on the above categories, but it will still be able to recognize the majority of assets or devices present in any environment. This dashboard can be a great tool to rely on during a security audit or while gathering information about assets. It can even identify if a device is not sending a particular type of data (i.e., Windows Defender). This will be incredibly useful for when security engineers are trying to gain a better understanding of something like an attack vector. Users can see the status of the device from the antivirus perspective as well.  
 
-The Device Inventory dashboard has several drilldown options, which allows Splunk users to see the whole picture regarding any device from the "Search Users and Devices" dashboard  
+The Device Inventory dashboard has several drilldown options, which allows Splunk users to see the whole picture regarding any device from the "Intelligence" dashboard  
 
 **Note**: Click on a device to perform a drilldown. 
 
@@ -95,9 +95,9 @@ The User Inventory dashboard has several drilldown options, which allows Splunk 
 * It assigns unique UUID to each user.
 
 
-## Search Users and Devices Dashboard
+## Intelligence Dashboard
 
-This dashboard shows detailed information about a specific asset or device. The "Search Users and Devices" dashboard is an extension of the Device Inventory dashboard. Splunk users can drilldown from the Device Inventory to see the complete picture about a particular device. 
+This dashboard shows detailed information about a specific asset or device. The "Intelligence" dashboard is an extension of the Device Inventory dashboard. Splunk users can drilldown from the Device Inventory to see the complete picture about a particular device. 
 
 This dashboard displays the following information about devices: 
 
@@ -113,4 +113,4 @@ This dashboard displays the following information about devices:
 
 (The screenshot above does not include the full dashboard)
 
-The "Search Users and Devices" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Search Users and Devices" in version 4.3.0.
+The "Intelligence" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Intelligence" in version 4.3.0.
