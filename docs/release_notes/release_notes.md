@@ -9,46 +9,57 @@ has_children: true
 # Release Notes
 
 
-## Version 4.2.0/4.2.1 (August 2023)
+## Version 4.3.0 (October 2023)
 
-* ### Windows Certificates
-    * Added "Active Directory Certificate Service Events" dashboard.
-    * Added "Windows - Certificate is Expiring Soon" alert.
-    * To onboard the Windows Certificate Store data, Refer [Windows Certificate Store Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/certificate)
-
-* ### Windows Firewall Status
-    * Added "Windows Firewall Status" dashboard panel in the Windows dashboard. 
-    * Added "Windows - Windows Firewall is Disabled" alert.
-    * To onboard the Windows Firewall Status data, Refer [Windows Firewall Status Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/firewall_status)
+* ### User Inventory
+    * Added the "User Inventory" dashboard.
+    * Added the following saved seraches to maintain `cs_user_inventory` KV lookup:
+        * User Inventory - Lookup Gen
+        * User Inventory - Lookup CleanUp
+        * User Inventory - Merge Similar Users
+        * User Inventory - Lookup Backfill
+    * Added macros for filtering and matching user data without prefixes and postfixes.
 
 
 * ### Enhancements  
 
-    * Improved the severity logic for the following alerts:
-        * Email - Hourly Increase In Emails Over Baseline
-        * Network Compromise - Basic Scanning
-        * Authentication - Bruteforce Attempt from a Source
-        * Sophos - Failed to clean up threat by Sophos
-        * Sophos - Sophos RealTime Protection Disabled
+    * #### Device Inventory
+        * Enhanced the device inventory logic by: 
+            * Updating the device matching and hostname matching logic.
+            * Modifying its data structure.
+            * Adding the functionality to auto merge devices.
+            * Updating the functionality to manual merge devices.
+        * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
+        * Improved the searches for the following saved searches:
+            * Device Inventory - Lansweeper
+            * Device Inventory - Tenable
+            * Device Inventory - Tenable Vuln
+            * Device Inventory - Qualys
+            * Device Inventory - Sophos
+            * Device Inventory - Windows Defender
+            * Device Inventory - CrowdStrike
+            * Device Inventory - Kaspersky
+            * Device Inventory Backfill
+            * Device Inventory Lookup CleanUp
+        * Added the "Device Inventory - Splunk Internal" saved search to collect the forwarder information available in splunk.
+        * Added the "Device Inventory Merge Similar Devices" saved search to auto merge the similar devices.
 
-    * Updated the "Microsoft 365 Defender ATP Audit" dashboard to reflect the latest change to the Defender add-on.
+    * Improved the row expansion table design by removing empty rows and adding borders to the table.
 
-    * Updated splunklib to the latest version (v1.7.4).
+    * Reduced the severity of the "Authentication - Excessive Failed VPN Logins for a User" alert for unknown user.
 
-    * Added a generic search filter in the Forensics and SOC dashboards.
+    * The "O365 - Azure Active Directory - Group Change/Update" and "O365 - Azure Active Directory - GroupMembership Change/Update" alerts have been updated to capture the appropriate events.
 
-    * Excluded Windows password expired events from the alerts related to brute force.
+    * Updated the severity of "O365 - Login Failure From Unusual Country Due To Multi Factor Authentication" and "O365 - Login Failure Due To Multi Factor Authentication" alerts.
 
 
 * ### Bug Fixes
 
-    * Fixed a permissions issue that wouldn't allow users to make use of the notable event assignment functionality.
+    * The lansweeper duplicate assets issue has been fixed since similar devices come from different sources.
 
-    * Fixed a Forensics and SOC dashboard compatibility issue with Splunk 9.1.X.
+    * Fixed the order of the filter macro. 
 
 
-## Upgrade Guide from 4.1.0 to 4.2.0/4.2.1
+## Upgrade Guide from 4.2.0/4.2.1 to 4.3.0
 
-  * To onboard the Windows Certificate Store data, Refer [Windows Certificate Store Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/certificate)
-  * To onboard the Windows Firewall Status data, Refer [Windows Firewall Status Data Onboarding]({{ site.baseurl }}/data_onboarding/windows/firewall_status)
-  * Update the [Cyences Add-on for Splunk](https://splunkbase.splunk.com/app/5659) to latest version.
+  * Visit the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#macro-setup) page to make changes in Device/User inventory related macros.

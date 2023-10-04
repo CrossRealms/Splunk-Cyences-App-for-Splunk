@@ -8,11 +8,14 @@ parent: User Guide
 
 # Intelligence 
 
-Cyences version 1.2.0 introduces a new drop-down option named Intelligence in the app's navigation bar and it contains the following items:
+* Cyences introduces a new drop-down option named Intelligence in the app's navigation bar and it contains the following items:
 
-* Asset Intelligence
-* Device Inventory
-* Globally Detected Malicious IPs
+    * Intelligence
+    * Device Inventory
+    * User Inventory
+    * Globally Detected Malicious IPs
+
+* The "Intelligence" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Intelligence" in version 4.3.0.
 
 ## Globally Detected Malicious IPs
 
@@ -44,10 +47,12 @@ It is populated from a lookup which is built by scheduled reports. The lookup is
 * Sophos
 * Tenable
 * Windows Defender
+* Kaspersky
+* Splunk Internal Logs
 
 The Device Inventory dashboard was built based on the above categories, but it will still be able to recognize the majority of assets or devices present in any environment. This dashboard can be a great tool to rely on during a security audit or while gathering information about assets. It can even identify if a device is not sending a particular type of data (i.e., Windows Defender). This will be incredibly useful for when security engineers are trying to gain a better understanding of something like an attack vector. Users can see the status of the device from the antivirus perspective as well.  
 
-The Device Inventory dashboard has several drilldown options, which allows Splunk users to see the whole picture regarding any device from the Asset Intelligence dashboard  
+The Device Inventory dashboard has several drilldown options, which allows Splunk users to see the whole picture regarding any device from the "Intelligence" dashboard  
 
 **Note**: Click on a device to perform a drilldown. 
 
@@ -69,11 +74,28 @@ Sometimes it is confusing for Cyences' algorithm to automatically merge two devi
 
 ![alt]({{ site.baseurl }}/assets/merge_device_ids.png)
 
-The **Product Device ID Conflicts Auto Merged** dashboard panel was designed for troubleshooting purposes by Splunk Administrators only. 
 
-## Asset Intelligence Dashboard
+## User Inventory
 
-This dashboard shows detailed information about a specific asset or device. The Asset Intelligence dashboard is an extension of the Device Inventory dashboard. Splunk users can drilldown from the Device Inventory to see the complete picture about a particular device. 
+The User Inventory dashboard contains a list of users present in an environment.
+
+![alt]({{ site.baseurl }}/assets/user_inventory.png)
+
+It is populated from a lookup which is built by scheduled report. The lookup is generated from all the data sources.
+
+The User Inventory dashboard was built by scanning the user data from all the sources available in the splunk environment. This dashboard is very useful to check the user related metadata information such as number of users by its type, users associated to each products. It will showcase the list of users with their associated roles/types and products. 
+
+The User Inventory dashboard has several drilldown options, which allows Splunk users to see the user related statistics and related logs.
+
+**Note**: Click on a "View Related Logs" column to see the user related logs in last 24 hours. 
+
+* It automatically merges the users based on its name. Also, It compares the user by removing the prefixes and postfixes configured in macros. 
+* It assigns unique UUID to each user.
+
+
+## Intelligence Dashboard
+
+This dashboard shows detailed information about a specific asset or device. The "Intelligence" dashboard is an extension of the Device Inventory dashboard. Splunk users can drilldown from the Device Inventory to see the complete picture about a particular device. 
 
 This dashboard displays the following information about devices: 
 
@@ -89,4 +111,4 @@ This dashboard displays the following information about devices:
 
 (The screenshot above does not include the full dashboard)
 
-The Asset Intelligence dashboard has been added to the Cyences app in version 1.4.0.
+The "Intelligence" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Intelligence" in version 4.3.0.

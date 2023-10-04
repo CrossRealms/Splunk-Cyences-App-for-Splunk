@@ -73,6 +73,7 @@ CONTRIBUTORS
 * Ahad Ghani
 * Bhavik Bhalodia
 * Mahir Chavda
+* Hardik Dholariya
 
 
 SUPPORT
