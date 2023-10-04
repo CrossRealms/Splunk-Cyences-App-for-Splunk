@@ -8,16 +8,14 @@ parent: User Guide
 
 # Intelligence 
 
-* Cyences version 1.2.0 introduces a new drop-down option named Intelligence in the app's navigation bar and it contains the following items:
+* Cyences introduces a new drop-down option named Intelligence in the app's navigation bar and it contains the following items:
 
-    * Asset Intelligence
+    * Intelligence
     * Device Inventory
+    * User Inventory
     * Globally Detected Malicious IPs
 
-* The following changes have been made to Cyences version 4.3.0:
-
-    * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
-    * Added a "User Inventory", in order to track the user's metadata.
+* The "Intelligence" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Intelligence" in version 4.3.0.
 
 ## Globally Detected Malicious IPs
 
