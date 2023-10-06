@@ -87,15 +87,15 @@ PRODUCTS = [
     ]
 },
 {
-    'name': 'G Suite',
+    'name': 'Google Workspace',
     'macro_configurations': [
         {
             'macro_name': 'cs_gsuite',
-            'label': 'G Suite Data',
+            'label': 'Google Workspace Data',
             'search': build_search_query(
                         macro='cs_gsuite',
                         by='sourcetype',
-                        values='gapps:report:admin,gapps:report:login'
+                        values='gws:reports:admin,gws:reports:login'
                         ),
             'earliest_time': '-7d@d',
             'latest_time': 'now',
