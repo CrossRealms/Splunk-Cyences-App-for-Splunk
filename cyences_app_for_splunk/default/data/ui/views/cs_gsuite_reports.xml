@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>G Suite</label>
+  <label>Google Workspace</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -18,13 +18,13 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> User can collect G Suite data with <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>.</p>
-        <p>Recommendation: Do not keep any of the G Suite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
+        <p><b>Data Collection:</b> User can collect Google Workspace data with <a href="https://splunkbase.splunk.com/app/5556" target="_blank">Splunk Add-on for Google Workspace</a>.</p>
+        <p>Recommendation: Do not keep any of the G Suite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>, <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
       </html>
       <table>
         <search>
           <query>`cs_gsuite_login_events` | head 1 | stats count
-| eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_gsuite` sourcetype=gapps:report:login" 
+| eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_gsuite` sourcetype=gws:reports:login" 
 | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -53,13 +53,14 @@
       </chart>
     </panel>
   </row>
+<!-- TO DO: check below panel's event_name=login_challenge and login_challenge_status field is not present in new TA props-->
   <row>
     <panel>
       <title>Login Challenged</title>
       <table>
         <title>User was asked for extra login question due to suspicious login activity</title>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_challenge" | sort challenge_status | table _time, user, ipAddress, login_type, login_challenge_method, challenge_status</query>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ event_name="login_challenge" | sort login_challenge_status | table _time, user, ipAddress, login_type, login_challenge_method, login_challenge_status</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -110,6 +111,7 @@
       </table>
     </panel>
   </row>
+<!-- TO DO: check below panel's event_name ==> login_challenge and login_verification are not present in new TA props-->
   <row>
     <panel>
       <title>Other Login Related Events</title>
@@ -129,8 +131,8 @@
       <title>User Created</title>
       <table>
         <search>
-          <query>`cs_gsuite` sourcetype="gapps:report:admin" eventtype=gapps_aa_create_user 
-| rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin
+          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name"="CREATE_USER" 
+| rename "actor.email" as admin
 | table _time, admin, user</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -143,8 +145,8 @@
       <title>User Deleted</title>
       <table>
         <search>
-          <query>`cs_gsuite` sourcetype="gapps:report:admin" eventtype=gapps_aa_delete_user 
-| rename "events{}.parameters{}.USER_EMAIL" as user, "actor.email" as admin
+          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name"="DELETE_USER" 
+| rename "actor.email" as admin
 | table _time, admin, user</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
