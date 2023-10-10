@@ -28,8 +28,8 @@
   <search id="base_summary">
     <query>| cyencesdevicemanager operation="getdevices" 
 | table product_names 
-| stats count as Total, sum(eval(if(product_names="Lansweeper", 1, 0))) as Lansweeper, sum(eval(if(product_names="Splunk Internal", 1, 0))) as Splunk_Internal, sum(eval(if(product_names="Qualys", 1, 0))) as Qualys, sum(eval(if(product_names="Tenable", 1, 0))) as Tenable, sum(eval(if(product_names="Windows Defender", 1, 0))) as Defender, sum(eval(if((product_names="Sophos"), 1, 0))) as Sophos, sum(eval(if(product_names="CrowdStrike", 1, 0))) as CrowdStrike, sum(eval(if(product_names="Kaspersky", 1, 0))) as Kaspersky, sum(eval(if(((product_names="Lansweeper") AND (product_names="Splunk Internal") AND ((product_names="Qualys") OR (product_names="Tenable")) AND ((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike") OR (product_names="Kaspersky"))), 1, 0))) as All, sum(eval(if(((product_names="Qualys") OR (product_names="Tenable")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike")OR (product_names="Kaspersky")), 1, 0))) as Antivirus 
-| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Kaspersky=Total-Kaspersky, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner, No_Splunk_Internal=Total-Splunk_Internal</query>
+| stats count as Total, sum(eval(if(product_names="Lansweeper", 1, 0))) as Lansweeper, sum(eval(if(product_names="Splunk Internal", 1, 0))) as Splunk, sum(eval(if(product_names="Qualys", 1, 0))) as Qualys, sum(eval(if(product_names="Tenable", 1, 0))) as Tenable, sum(eval(if(product_names="Windows Defender", 1, 0))) as Defender, sum(eval(if((product_names="Sophos"), 1, 0))) as Sophos, sum(eval(if(product_names="CrowdStrike", 1, 0))) as CrowdStrike, sum(eval(if(product_names="Kaspersky", 1, 0))) as Kaspersky, sum(eval(if(((product_names="Lansweeper") AND (product_names="Splunk Internal") AND ((product_names="Qualys") OR (product_names="Tenable")) AND ((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike") OR (product_names="Kaspersky"))), 1, 0))) as All, sum(eval(if(((product_names="Qualys") OR (product_names="Tenable")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((product_names="Windows Defender") OR (product_names="Sophos") OR (product_names="CrowdStrike")OR (product_names="Kaspersky")), 1, 0))) as Antivirus 
+| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Kaspersky=Total-Kaspersky, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner, No_Splunk=Total-Splunk</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -78,7 +78,7 @@
       <chart>
         <title>Number of Devices That Are Connected To A Specific Security Component</title>
         <search base="base_summary">
-          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, CrowdStrike, Kaspersky, Splunk_Internal</query>
+          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, CrowdStrike, Kaspersky, Splunk</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
@@ -106,7 +106,7 @@
           <condition match="$click.name2$ == &quot;Kaspersky&quot;">
             <set token="tkn_sp_filter">kaspersky_last_event=*</set>
           </condition>
-          <condition match="$click.name2$ == &quot;Splunk_Internal&quot;">
+          <condition match="$click.name2$ == &quot;Splunk&quot;">
             <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
           </condition>
           <condition>
@@ -125,7 +125,7 @@
       <chart>
         <title>Number of Devices That Contain A Specific Security Component</title>
         <search base="base_summary">
-          <query>| table Total, All, Lansweeper, Vulnerability_Scanner, Antivirus, Splunk_Internal</query>
+          <query>| table Total, All, Lansweeper, Vulnerability_Scanner, Antivirus, Splunk</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
@@ -144,7 +144,7 @@
           <condition match="$click.name2$ == &quot;Antivirus&quot;">
             <set token="tkn_sp_filter">(sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
-          <condition match="$click.name2$ == &quot;Splunk_Internal&quot;">
+          <condition match="$click.name2$ == &quot;Splunk&quot;">
             <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
           </condition>
           <condition>
@@ -161,7 +161,7 @@
       <chart>
         <title>Number of Devices That Lack A Specific Security Component</title>
         <search base="base_summary">
-          <query>| table Total, No_Lansweeper, No_Vulnerability_Scanner, No_Antivirus, No_Splunk_Internal</query>
+          <query>| table Total, No_Lansweeper, No_Vulnerability_Scanner, No_Antivirus, No_Splunk</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
@@ -177,7 +177,7 @@
           <condition match="$click.name2$ == &quot;No_Antivirus&quot;">
             <set token="tkn_sp_filter">NOT (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
-          <condition match="$click.name2$ == &quot;No_Splunk_Internal&quot;">
+          <condition match="$click.name2$ == &quot;No_Splunk&quot;">
             <set token="tkn_sp_filter">NOT (product_names="Splunk Internal")</set>
           </condition>
           <condition>
