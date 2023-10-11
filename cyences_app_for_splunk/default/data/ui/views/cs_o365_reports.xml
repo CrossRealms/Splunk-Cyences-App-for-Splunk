@@ -685,7 +685,7 @@
         <option name="list.drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </event>
-      <table depends="$tkn_show_table_group$">
+      <table depends="$tkn_show_table_group_membership$">
         <search>
           <query>((`cs_o365_managementactivity_change("Group")` (Operation="Add member to group." OR Operation="Remove member from group.")) OR (`cs_o365_managementactivity_change("GroupMembership")`)) $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
 | `cs_o365_managementactivity_change_out` 
