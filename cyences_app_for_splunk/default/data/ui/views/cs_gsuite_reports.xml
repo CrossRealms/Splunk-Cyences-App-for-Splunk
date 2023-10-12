@@ -18,7 +18,7 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> User can collect Google Workspace data with <a href="https://splunkbase.splunk.com/app/5556" target="_blank">Splunk Add-on for Google Workspace</a>.</p>
+        <p><b>Data Collection:</b> User can collect Google Workspace data with <a href="https://splunkbase.splunk.com/app/5556" target="_blank">Splunk Add-on for Google Workspace</a> (This app should be installed on the Search Head where Cyences is installed.)</p>
         <p>Recommendation: Do not keep any of the G Suite related App and Add-on (<a href="https://splunkbase.splunk.com/app/3791/" target="_blank">G Suite For Splunk</a>, <a href="https://splunkbase.splunk.com/app/3792/" target="_blank">TA for G Suite App</a>, <a href="https://splunkbase.splunk.com/app/3793/" target="_blank">Input Add On for G Suite App</a>) on the Search Head where Cyences or Enterprise Security installed as they have authentication tagging issues.</p>
       </html>
       <table>
@@ -84,7 +84,7 @@
       <table>
         <title>User was asked for extra login question due to suspicious login activity</title>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_challenge" | sort login_type | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, action as Action, login_challenge_method as LoginChallengeMethod, login_type as LoginType | table Time, User, IPAddress, Action, LoginChallengeMethod, LoginType</query>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_challenge" | sort login_challenge_status | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, action as Action, login_challenge_method as LoginChallengeMethod, login_challenge_status as LoginChallengeStatus | table Time, User, IPAddress, Action, LoginChallengeMethod, LoginType</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
