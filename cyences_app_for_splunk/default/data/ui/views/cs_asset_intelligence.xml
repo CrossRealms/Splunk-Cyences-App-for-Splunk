@@ -390,10 +390,11 @@
       <table>
         <title>Endpoint Service Not Running</title>
         <search>
-          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+          <query>index=main sourcetype="sophos*"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") host="*" location IN ("*") source IN ("*")
+| stats count, latest(_time) as _time, values(source_info.ip) as source_info.ip, values(source) as source latest(type) as type by host, location
 | where type=="Event::Endpoint::ServiceNotRunning"
 | `cs_human_readable_time_format(_time, "Service Disabled Since")`
-| table host, src_ip, user, "Service Disabled Since"</query>
+| table host, location, source_info.ip, source, "Service Disabled Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
         </search>
@@ -429,10 +430,11 @@
       <table>
         <title>Endpoints Suspended from Central Management</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Management::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
-| where type=="Event::Endpoint::Management::Suspended"
-| `cs_human_readable_time_format(_time, "Suspended from Management Since")`
-| table host, src_ip, user, "Suspended from Management Since"</query>
+          <query>index=main sourcetype="sophos*" type IN ("Event::Endpoint::Management::*") host="*" location IN ("*") source IN ("*") |stats count, latest(_time) as _time, values(source_info.ip) as source_info.ip, values(source) as source by host, location, type
+| eval EndpointManagementResumed = if(type="Event::Endpoint::Management::Resumed", _time, 0), EndpointManagementSuspended = if(type="Event::Endpoint::Management::Suspended", _time, 0)
+| where EndpointManagementSuspended>EndpointManagementResumed
+| `cs_human_readable_time_format(EndpointManagementSuspended, "Suspended from Management Since")`
+| table host, location, source_info.ip, source, "Suspended from Management Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
         </search>
