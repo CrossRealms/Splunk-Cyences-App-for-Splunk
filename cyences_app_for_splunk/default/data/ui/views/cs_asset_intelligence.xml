@@ -46,6 +46,7 @@
       <title>For Dev Only</title>
       <html>
         <br/>Device Inventory -&gt; $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>User Inventory -&gt; $tkn_filter_user_only$ - $tkn_filter_user_only_label$
         <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
         <br/>Qualys -&gt; $tkn_show_hide_qualys$ - $tkn_filter_ip_only$ - $tkn_filter_ip_only_label$
         <br/>Tenable -&gt; $tkn_show_hide_tenable$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
@@ -99,6 +100,24 @@
         <p>If a hyphen(-) appears in the table that means data isn't present for that specific category.</p>
         <p>The Device Inventory will automatically hide columns for devices that lack a certain type of data.</p>
       </html>
+    </panel>
+  </row>
+  <row depends="$tkn_filter_user_only$">
+    <panel>
+      <title>User Inventory $tkn_filter_user_only_label$</title>
+      <table>
+        <search base="base_inventory_table">
+          <query>| cyencesusermanager operation="getusers" 
+| table users, user_types, product_names, indexes, sourcetypes 
+| search users IN $tkn_filter_user_only$
+| rename users as User, user_types as UserType, product_names as Products, indexes as Indexes, sourcetypes as Sourcetypes
+          </query>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
     </panel>
   </row>
   <row depends="$tkn_show_hide_lansweeper$">

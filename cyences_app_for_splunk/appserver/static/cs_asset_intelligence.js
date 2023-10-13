@@ -17,6 +17,9 @@ function(mvc, SplunkCommonUtilities){
         if(name == 'tkn_filter_host_only'){
             defaultTokens.set(name + '_label', `(host IN ${value})`);
         }
+        if(name == 'tkn_filter_user_only'){
+            defaultTokens.set(name + '_label', `(user IN ${value})`);
+        }
     }
 
     function unsetToken(name){
@@ -28,6 +31,9 @@ function(mvc, SplunkCommonUtilities){
         }
         if(name == 'tkn_filter_host_only'){
             defaultTokens.set(name + '_label', '(HOST FILTER NOT SET)');
+        }
+        if(name == 'tkn_filter_user_only'){
+            defaultTokens.set(name + '_label', '(USER FILTER NOT SET)');
         }
         if(name == 'tkn_filter_ip_host'){
             defaultTokens.set(name + '_label', '(IP/HOST FILTER NOT SET)');
@@ -172,6 +178,7 @@ function(mvc, SplunkCommonUtilities){
             unsetToken('tkn_filter_authentication');
             unsetToken('tkn_filter_ip_only');
             unsetToken('tkn_filter_host_only');
+            unsetToken('tkn_filter_user_only');
             unsetToken('tkn_filter_ip_host');
             return;
         }
@@ -182,7 +189,7 @@ function(mvc, SplunkCommonUtilities){
         let filter_values_only = '(';
         let filter_authentication = '(';
         let filter_ip_host = '(';
-
+        
         if(! isEmptyValue(submittedTokens.get('tkn_ip_tmp'))){
             let ips = getMultiValues(submittedTokens.get('tkn_ip_tmp'));
             let ip_valueonly = getInListFormattedValues(ips);
@@ -224,6 +231,7 @@ function(mvc, SplunkCommonUtilities){
         if(! isEmptyValue(submittedTokens.get('tkn_user_tmp'))){
             let users = getMultiValues(submittedTokens.get('tkn_user_tmp'));
             let user_valueonly = getInListFormattedValues(users);
+            setToken('tkn_filter_user_only', user_valueonly);
 
             if(filter_main !== '('){
                 filter_main += ` ${filterCondition} `;
@@ -239,6 +247,9 @@ function(mvc, SplunkCommonUtilities){
                 filter_authentication += ` ${filterCondition} `;
             }
             filter_authentication += `Authentication.user IN ${user_valueonly}`;
+        }
+        else{
+            unsetToken('tkn_filter_user_only');
         }
 
         filter_main += ')';
