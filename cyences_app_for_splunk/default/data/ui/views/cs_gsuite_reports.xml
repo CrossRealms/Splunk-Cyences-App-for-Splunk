@@ -254,7 +254,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") user=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -329,7 +329,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") user=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -400,7 +400,8 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") user_email=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") | fillnull value="-" user_email
+| search user_email=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
