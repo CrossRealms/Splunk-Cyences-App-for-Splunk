@@ -409,7 +409,8 @@
       <table>
         <title>Endpoint Service Not Running</title>
         <search>
-          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+          `cs_sophos` sourcetype="sophos_events"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored")| rename location as host | eval ip=source_info.ip | search $tkn_filter_main$
+| stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user latest(type) as type by host
 | where type=="Event::Endpoint::ServiceNotRunning"
 | `cs_human_readable_time_format(_time, "Service Disabled Since")`
 | table host, src_ip, user, "Service Disabled Since"</query>
@@ -448,7 +449,8 @@
       <table>
         <title>Endpoints Suspended from Central Management</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Management::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+         <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" | rename location as host | eval ip=source_info.ip | search $tkn_filter_main$ 
+|stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user, latest(type) as type by host
 | where type=="Event::Endpoint::Management::Suspended"
 | `cs_human_readable_time_format(_time, "Suspended from Management Since")`
 | table host, src_ip, user, "Suspended from Management Since"</query>

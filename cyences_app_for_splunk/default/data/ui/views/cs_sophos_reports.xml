@@ -26,15 +26,15 @@
       <label>Hosts</label>
       <choice value="*">All</choice>
       <default>*</default>
-      <prefix>dhost IN (</prefix>
+      <prefix>location IN (</prefix>
       <suffix>)</suffix>
       <valuePrefix>"</valuePrefix>
       <valueSuffix>"</valueSuffix>
       <delimiter>, </delimiter>
-      <fieldForLabel>dhost</fieldForLabel>
-      <fieldForValue>dhost</fieldForValue>
+      <fieldForLabel>location</fieldForLabel>
+      <fieldForValue>location</fieldForValue>
       <search>
-        <query>`cs_sophos` | dedup dhost | table dhost</query>
+        <query>`cs_sophos` | dedup location | table location</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -81,11 +81,11 @@
       <title>Endpoint Service Not Running</title>
       <table>
         <search>
-          <query>`cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$ 
-| stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user latest(type) as type by host, dhost 
+          <query>`cs_sophos` sourcetype="sophos_events"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$
+| stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user latest(type) as type by host, location
 | where type=="Event::Endpoint::ServiceNotRunning"
-| `cs_human_readable_time_format(_time, "Service Disabled Since")` 
-| table host, dhost, src_ip, user, "Service Disabled Since"</query>
+| `cs_human_readable_time_format(_time, "Service Disabled Since")`
+| table host, location, src_ip, user, "Service Disabled Since"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -134,11 +134,11 @@
       <title>Endpoints Suspended from Central Management</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user by host, dhost, type
-| eval EndpointManagementResumed = if(type="Event::Endpoint::Management::Resumed", _time, 0), EndpointManagementSuspended = if(type="Event::Endpoint::Management::Suspended", _time, 0)
-| where EndpointManagementSuspended&gt;EndpointManagementResumed
-| `cs_human_readable_time_format(EndpointManagementSuspended, "Suspended from Management Since")`
-| table host, dhost, src_ip, user, "Suspended from Management Since"</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$
+|stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user, latest(type) as type by host, location
+| where type=="Event::Endpoint::Management::Suspended"
+| `cs_human_readable_time_format(_time, "Suspended from Management Since")`
+| table host, location, src_ip, user, "Suspended from Management Since"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -208,7 +208,10 @@
       <title>Exploit Prevented</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::HmpaExploitPrevented" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_exploit_prevented`</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::HmpaExploitPrevented" $tkn_host$ $tkn_dhost$ $tkn_user$
+| stats count, latest(_time) as latest_event, values(name) as description, values(source_info.ip) as src_ip, values(user) as user by host, location
+| `cs_human_readable_time_format(latest_event)` 
+| sort -count | `cs_sophos_exploit_prevented`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -224,7 +227,9 @@
       <title>Malware Detected</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_malware_detected`</query>
+          <query>cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$
+| stats count, latest(_time) as latest_event, values(name) as description, values(source_info.ip) as src_ip, values(user) as user by host, location
+| `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_malware_detected`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
