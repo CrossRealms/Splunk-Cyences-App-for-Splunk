@@ -135,7 +135,7 @@
       <table>
         <search>
           <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$
-|stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user by host, location
+|stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user, latest(type) as type by host, location
 | where type=="Event::Endpoint::Management::Suspended"
 | `cs_human_readable_time_format(_time, "Suspended from Management Since")`
 | table host, location, src_ip, user, "Suspended from Management Since"</query>
