@@ -81,7 +81,7 @@
       <title>Endpoint Service Not Running</title>
       <table>
         <search>
-           <query>`cs_sophos` sourcetype="sophos_events"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$
+          <query>`cs_sophos` sourcetype="sophos_events"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") $tkn_host$ $tkn_dhost$ $tkn_user$
 | stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user latest(type) as type by host, location
 | where type=="Event::Endpoint::ServiceNotRunning"
 | `cs_human_readable_time_format(_time, "Service Disabled Since")`
@@ -134,7 +134,7 @@
       <title>Endpoints Suspended from Central Management</title>
       <table>
         <search>
-          <query><query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" $tkn_host$ $tkn_dhost$ $tkn_user$
 |stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user by host, location
 | where type=="Event::Endpoint::Management::Suspended"
 | `cs_human_readable_time_format(_time, "Suspended from Management Since")`

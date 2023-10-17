@@ -430,11 +430,11 @@
       <table>
         <title>Endpoints Suspended from Central Management</title>
         <search>
-         <query><query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" | rename location as host | eval ip=source_info.ip | search $tkn_filter_main$ 
+         <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Management::*" | rename location as host | eval ip=source_info.ip | search $tkn_filter_main$ 
 |stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user by host
 | where type=="Event::Endpoint::Management::Suspended"
-| `cs_human_readable_time_format(_time, "Suspended from Management Since"
-| table host, src_ip, user, "Suspended from Management Since")`</query>
+| `cs_human_readable_time_format(_time, "Suspended from Management Since")`
+| table host, src_ip, user, "Suspended from Management Since"</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
         </search>
