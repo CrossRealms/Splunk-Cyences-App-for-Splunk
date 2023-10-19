@@ -49,6 +49,7 @@ let allMacros = [
     {
         section: 'Email', macros: [
             { name: 'cs_email_increase_over_baseline_limit' },
+            { name: 'cs_email_user_domain' },
         ]
     },
     {
