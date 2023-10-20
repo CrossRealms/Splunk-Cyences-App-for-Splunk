@@ -1,0 +1,14 @@
+title,status
+*dhl*,True
+*ups*,True
+*delivery*,True
+*parcel*,True
+*label*,True
+*invoice*,True
+*postal*,True
+*fedex*,True
+*usps*,True
+*express*,True
+*shipment*,True
+*Banking/Tax*,True
+*new order*,True

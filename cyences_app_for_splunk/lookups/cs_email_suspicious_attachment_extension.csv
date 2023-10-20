@@ -1,0 +1,17 @@
+extension,status
+pl,True
+py,True
+rb,True
+sh,True
+bat,True
+exe,True
+dll,True
+cpl,True
+com,True
+js,True
+vbs,True
+ps1,True
+reg,True
+swf,True
+cmd,True
+go,True
