@@ -227,7 +227,7 @@
       <title>Malware Detected</title>
       <table>
         <search>
-          <query>cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$
+          <query> cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::CoreDetection" $tkn_host$ $tkn_dhost$ $tkn_user$
 | stats count, latest(_time) as latest_event, values(name) as description, values(source_info.ip) as src_ip, values(user) as user by host, location
 | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_malware_detected`</query>
           <earliest>$timeRange.earliest$</earliest>
