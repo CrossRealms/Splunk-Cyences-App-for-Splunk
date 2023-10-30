@@ -1,5 +1,14 @@
 <form theme="dark" version="1.1">
   <label>Google Workspace</label>
+  <search>
+    <query>| makeresults | eval country=`cs_home_country`</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+    <done>
+      <set token="tkn_country">$result.country$</set>
+    </done>
+  </search>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -96,29 +105,82 @@
   <row>
     <panel>
       <title>Login Failures</title>
+      <input type="dropdown" token="tkn_drop_country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_failure" | stats latest(_time) as LastLoginTime, count as Count, values(ipAddress) as IPAddress, values(action) as Action, values(login_challenge_method) as LoginChallengeMethod by user | `cs_human_readable_time_format(LastLoginTime)` | rename user as User | sort - Count</query>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_failure"
+| stats latest(_time) as LastLoginTime, count, values(action) as Action, values(login_challenge_method) as LoginChallengeMethod by user, ipAddress
+| iplocation ipAddress
+| eval Country = if(isnotnull(org_country), org_country, Country) 
+| eval Region = if(isnotnull(org_country), org_region, Region) 
+| eval City = if(isnotnull(org_country), org_city, City) 
+| search $tkn_drop_country$ 
+| stats sum(count) as Count, values(ipAddress) as IPAddress, values(*) as *, latest(LastLoginTime) as LastLoginTime by user
+| table user, IPAddress, Count, Country, Region, City, LastLoginTime, Action, LoginChallengeMethod
+| `cs_human_readable_time_format(LastLoginTime)` 
+| rename user as User 
+| sort - Count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+      </html>
     </panel>
   </row>
   <row>
     <panel>
       <title>Successful Logins</title>
+      <input type="dropdown" token="tkn_drop__country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_success" | stats latest(_time) as LastLoginTime, count as Count, values(ipAddress) as IPAddress, values(action) as Action, values(login_challenge_method) as LoginChallengeMethod by user | `cs_human_readable_time_format(LastLoginTime)` | rename user as User | sort - Count</query>
+          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_success"
+| stats latest(_time) as LastLoginTime, count, values(action) as Action, values(login_challenge_method) as login_challenge_method by user, ipAddress 
+| iplocation ipAddress
+| eval Country = if(isnotnull(org_country), org_country, Country) 
+| eval Region = if(isnotnull(org_country), org_region, Region) 
+| eval City = if(isnotnull(org_country), org_city, City) 
+| search $tkn_drop__country$
+| `cs_gws_successful_login_from_unusual_country_filter`
+| stats sum(count) as Count, values(*) as *, latest(LastLoginTime) as LastLoginTime by user
+| rename user as User, ipAddress as IPAddress, login_challenge_method as LoginChallengeMethod
+| `cs_human_readable_time_format(LastLoginTime)` 
+| table User, IPAddress, Count, Country, Region, City, LastLoginTime, Action, LoginChallengeMethod
+| sort - Count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+      <html>
+        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+      </html>
     </panel>
   </row>
   <row>
