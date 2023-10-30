@@ -1,302 +1,987 @@
 <form theme="dark" version="1.1">
-    <label>AWS</label>
-    <fieldset submitButton="false">
-        <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
-            <label>Account ID</label>
-            <choice value="*">All</choice>
-            <fieldForValue>account_id</fieldForValue>
-            <fieldForLabel>title</fieldForLabel>
-            <search id="accountIdSearch">
-              <query>
-                <![CDATA[
-                 | inputlookup cs_all_aws_account_ids.csv | mvcombine delim=", " name | nomv name | eval title=account_id." (".name.")"
-                 ]]>
-              </query>
-            </search>
-            <prefix> (</prefix>
-            <suffix>) </suffix>
-            <valuePrefix>aws_account_id="</valuePrefix>
-            <valueSuffix>"</valueSuffix>
-            <delimiter> OR </delimiter>
-            <default>*</default>
-            <initialValue>*</initialValue>
-        </input>
-        <input type="multiselect" token="region" id="ip2" searchWhenChanged="true">
-            <label>Regions</label>
-            <choice value="*">All</choice>
-            <search>
-                <query>
-                    <![CDATA[ |inputlookup cs_aws_regions.csv ]]>
-                </query>
-            </search>
-            <prefix> (</prefix>
-            <suffix>) </suffix>
-            <valuePrefix>region="</valuePrefix>
-            <valueSuffix>"</valueSuffix>
-            <delimiter> OR </delimiter>
-            <fieldForValue>region</fieldForValue>
-            <fieldForLabel>label</fieldForLabel>
-            <default>*</default>
-            <initialValue>*</initialValue>
-        </input>
-        <input type="dropdown" token="username" searchWhenChanged="true">
-            <label>Username</label>
-            <choice value="*">All</choice>
-            <default>*</default>
-            <fieldForValue>userName</fieldForValue>
-            <fieldForLabel>userName</fieldForLabel>
-            <search  base="baseCloudTrailSearch">
-                <query>
-                        | stats count by userName
-                </query>
-            </search>
-            <prefix>userName="</prefix>
-            <suffix>"</suffix>
-        </input>
-        <input type="text" token="eventname" searchWhenChanged="true">
-            <label>Event Name</label>
-            <prefix>eventName=</prefix>
-            <default></default>
-        </input>
-        <input type="dropdown" token="notable" searchWhenChanged="true">
-            <label>Notable</label>
-            <default>1</default>
-            <choice value="0">False</choice>
-            <choice value="1">True</choice>
-        </input>
-        <input type="time" searchWhenChanged="true">
-            <label>Time Range</label>
-            <default>Last 7 days</default>
-        </input>
-    </fieldset>
-
-    <search id="baseCloudTrailSearch_base">
+  <label>AWS</label>
+  <search>
+    <query>| makeresults | eval country=`cs_home_country`</query>
+    <earliest>0</earliest>
+    <latest>now</latest>
+    <sampleRatio>1</sampleRatio>
+    <done>
+      <set token="tkn_country">$result.country$</set>
+    </done>
+  </search>
+  <search id="baseCloudTrailSearch_base">
+    <query>`cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
+| lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
+| stats count count(eval(errorCode!="success")) as errors count(Unauthorized) as Unauthorized by eventName region aws_account_id user
+    </query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
+  <search id="baseCloudTrailSearch" base="baseCloudTrailSearch_base">
+    <query>| search $accountId$ $region$ $eventname$ $username$
+| `cs_cloudtrail_service("*", $notable$)`
+    </query>
+  </search>
+  <search base="baseCloudTrailSearch" id="baseCloudTrailActivity">
+    <query> stats sum(count) as count sum(errors) as errors
+| eval errors=if(isnull(errors),0,errors)
+| eval count=if(isnull(count),0,count)
+| eval _total_name="events", _total_field=count
+    </query>
+  </search>
+  <!--Passing eventName and time field values to the drilldown. time can be multivalued hence the need for mvindex/mvcount to extract earliest and latest, +/- 1seconds-->
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d</earliest>
+        <latest>now</latest>
+      </default>
+      <change>
+        <unset token="time"></unset>
+      </change>
+    </input>
+    <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
+      <label>Account ID</label>
+      <choice value="*">All</choice>
+      <fieldForValue>account_id</fieldForValue>
+      <fieldForLabel>title</fieldForLabel>
+      <search id="accountIdSearch">
         <query>
-            `cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
-            | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
-            | stats count count(eval(errorCode!="success")) as errors count(Unauthorized) as Unauthorized by eventName region aws_account_id userName
+          <![CDATA[
+            | inputlookup cs_all_aws_account_ids.csv | mvcombine delim=", " name | nomv name | eval title=account_id." (".name.")"
+            ]]>
         </query>
-        <earliest>$earliest$</earliest>
-        <latest>$latest$</latest>
-    </search>
-
-    <search id="baseCloudTrailSearch" base="baseCloudTrailSearch_base">
+      </search>
+      <prefix> (</prefix>
+      <suffix>) </suffix>
+      <valuePrefix>aws_account_id="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <change>
+        <unset token="time"></unset>
+      </change>
+    </input>
+    <input type="multiselect" token="region" id="ip2" searchWhenChanged="true">
+      <label>Regions</label>
+      <choice value="*">All</choice>
+      <search>
         <query>
-            | search $accountId$ $region$ $eventname$ $username$
-            | `cs_cloudtrail_service("*", $notable$)`
+                <![CDATA[ |inputlookup cs_aws_regions.csv ]]>
+            </query>
+      </search>
+      <prefix> (</prefix>
+      <suffix>) </suffix>
+      <valuePrefix>region="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <fieldForValue>region</fieldForValue>
+      <fieldForLabel>label</fieldForLabel>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <change>
+        <unset token="time"></unset>
+      </change>
+    </input>
+    <input type="text" token="username" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+      <prefix>(user="*</prefix>
+      <suffix>*")</suffix>
+      <change>
+        <unset token="time"></unset>
+      </change>
+    </input>
+    <input type="text" token="eventname" searchWhenChanged="true">
+      <label>Event Name</label>
+      <prefix>(eventName="*</prefix>
+      <suffix>*")</suffix>
+      <default>*</default>
+      <change>
+        <unset token="time"></unset>
+      </change>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>AWS Reports</p>
+        <p>
+          <b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/1876/" target="_blank">Splunk Add-on for Amazon Web Services</a> for collecting AWS baseCloudTrail data.</p>
+        <p>This Dashboard is depends on "AWS - AWS Account Lookup Gen" Report. </p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled") | table label data]</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b,"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Login Types</title>
+      <chart>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("ConsoleLogin") $accountId$ $region$ $username$ $eventname$ 
+| stats count by action 
+| rename action as Action, count as Count 
+| sort 0 - Count 
+| head 10</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Login by Location</title>
+      <map>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("ConsoleLogin") $accountId$ $region$ $username$ $eventname$
+| iplocation src 
+| geostats count(user) by action</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="mapping.fieldColors">{"success": #008000, "failure": #ff0000}</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%60cs_aws_cloudtrail_logs%60%20eventName%20IN%20(%22ConsoleLogin%22)%20$accountId$%20$region$%20$username$%20$eventname$%20%0A%7C%20iplocation%20src%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%20%0A%7C%20%60cs_human_readable_time_format(_time%2C%20Time)%60%20%0A%7C%20rename%20action%20as%20%22Login%20Status%22%2C%20user%20as%20User%2C%20src%20as%20%22IP%20Address%22%20%0A%7C%20table%20Time%20%22Login%20Status%22%20User%20%22IP%20Address%22%20City%20Region%20Country&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Successful Logins</title>
+      <input type="dropdown" token="tkn_drop__country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("ConsoleLogin") errorCode="success" $accountId$ $region$ $username$ $eventname$
+| stats latest(_time) as LastLoginTime, count, values(action) as Action, values(authentication_method) as authentication_method, values(awsRegion) as awsRegion by user, src 
+| iplocation src
+| eval Country = if(isnotnull(org_country), org_country, Country) 
+| eval Region = if(isnotnull(org_country), org_region, Region) 
+| eval City = if(isnotnull(org_country), org_city, City) 
+| search $tkn_drop__country$
+| stats sum(count) as Count, values(*) as *, latest(LastLoginTime) as LastLoginTime by user
+| `cs_human_readable_time_format(LastLoginTime)`
+| `cs_aws_successful_login_from_unusual_country_filter`
+| rename user as User, src as SourceIP, authentication_method as AuthenticationMethod, awsRegion as AWSRegion
+| table User, SourceIP, Count, Country, Region, City, LastLoginTime, Action, AuthenticationMethod, AWSRegion
+| sort - Count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Failed Logins</title>
+      <input type="dropdown" token="tkn_drop_country" searchWhenChanged="true">
+        <label>Country</label>
+        <selectFirstChoice>true</selectFirstChoice>
+        <fieldForLabel>label</fieldForLabel>
+        <fieldForValue>value</fieldForValue>
+        <search>
+          <query>| makeresults count=3 
+  | streamstats count 
+  | eval label = case(count==2,"All",count==3,"From $tkn_country$",count==1,"Outside of $tkn_country$") 
+  | eval value = case(count==2,"*",count==3,"Country=\"$tkn_country$\"",count==1,"Country!=\"$tkn_country$\"")</query>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("ConsoleLogin") errorCode="failure" $accountId$ $region$ $username$ $eventname$
+| stats latest(_time) as LastLoginTime, count, values(action) as Action, values(authentication_method) as AuthenticationMethod, values(errorMessage) as ErrorMessage, values(awsRegion) as AWSRegion by user, src 
+| iplocation src
+| eval Country = if(isnotnull(org_country), org_country, Country) 
+| eval Region = if(isnotnull(org_country), org_region, Region) 
+| eval City = if(isnotnull(org_country), org_city, City) 
+| search $tkn_drop_country$ 
+| stats sum(count) as Count, values(*) as *, latest(LastLoginTime) as LastLoginTime by user
+| `cs_human_readable_time_format(LastLoginTime)` 
+| rename user as User, src as SourceIP
+| table User, SourceIP, Count, Country, Region, City, LastLoginTime, Action, AuthenticationMethod, ErrorMessage, AWSRegion
+| sort - Count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - Policy Creation/Deletion</title>
+      <input type="multiselect" token="tkn_policy_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreatePolicy","DeletePolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_policy">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_policy">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_policy$==&quot;&quot;">
+            <unset token="tkn_show_table_policy"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_policy"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_policy$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreatePolicy","DeletePolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_policy_event$) $tkn_raw_events_policy$ $tkn_text_search_policy$
+| eval policyArn =if(eventName="CreatePolicy", 'responseElements.policy.arn', 'requestParameters.policyArn')
+| `cs_aws_iam_policy_creation_or_deletion_filter`
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_policy$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreatePolicy","DeletePolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_policy_event$) $tkn_show_table_policy$ $tkn_text_search_policy$
+| eval policyArn =if(eventName="CreatePolicy", 'responseElements.policy.arn', 'requestParameters.policyArn')
+| `cs_aws_iam_policy_creation_or_deletion_filter`
+| rename userName as Actor, eventName as EventName, policyArn as PolicyArn, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, PolicyArn, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - Role Creation/Deletion</title>
+      <input type="multiselect" token="tkn_role_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateRole", "DeleteRole") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_role">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_role">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_role$==&quot;&quot;">
+            <unset token="tkn_show_table_role"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_role"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_role$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateRole", "DeleteRole") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_role_event$) $tkn_raw_events_role$ $tkn_text_search_role$
+| rename requestParameters.roleName as roleName, requestParameters.assumeRolePolicyDocument as assumeRolePolicyDocument
+| `cs_aws_iam_role_creation_or_deletion_filter`
+| dedup userName, eventName, roleName, assumeRolePolicyDocument, awsRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_role$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateRole", "DeleteRole") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_role_event$) $tkn_show_table_role$ $tkn_text_search_role$
+| rename requestParameters.roleName as roleName, requestParameters.assumeRolePolicyDocument as assumeRolePolicyDocument
+| `cs_aws_iam_role_creation_or_deletion_filter`
+| dedup userName, eventName, roleName, assumeRolePolicyDocument, awsRegion
+| rename userName as Actor, eventName as EventName, assumeRolePolicyDocument as AssumeRolePolicyDocument, roleName as RoleName, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| fillnull value="-" AssumeRolePolicyDocument
+| table Time, Actor, EventName, RoleName, AssumeRolePolicyDocument, AWSRegion
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - AccessKey Creation/Deletion</title>
+      <input type="multiselect" token="tkn_accesskey_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateAccessKey","DeleteAccessKey") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_accesskey">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_accesskey">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_accesskey$==&quot;&quot;">
+            <unset token="tkn_show_table_accesskey"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_accesskey"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_accesskey$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateAccessKey","DeleteAccessKey") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_accesskey_event$) $tkn_raw_events_accesskey$ $tkn_text_search_accesskey$
+| rename requestParameters.userName as username_for_new_accessKeyId
+| eval accessKeyId=if(eventName="CreateAccessKey", 'responseElements.accessKey.accessKeyId', 'requestParameters.accessKeyId'), accessKeyStatus=coalesce('responseElements.accessKey.status', "-")
+| `cs_aws_iam_accesskey_creation_or_deletion_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_accesskey$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateAccessKey","DeleteAccessKey") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_accesskey_event$) $tkn_show_table_accesskey$ $tkn_text_search_accesskey$
+| eval accessKeyId=if(eventName="CreateAccessKey", 'responseElements.accessKey.accessKeyId', 'requestParameters.accessKeyId'), accessKeyStatus=coalesce('responseElements.accessKey.status', "-")
+| rename requestParameters.userName as username_for_new_accessKeyId
+| `cs_aws_iam_accesskey_creation_or_deletion_filter`
+| rename userName as Actor, eventName as EventName, username_for_new_accessKeyId as UsernameForAccessKeyId, accessKeyId as AccessKeyId, accessKeyStatus as AccessKeyStatus, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, UsernameForAccessKeyId, AccessKeyId, AccessKeyStatus, AWSRegion
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - Login Profile Change/Update</title>
+      <input type="multiselect" token="tkn_login_profile_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateLoginProfile","UpdateLoginProfile","DeleteLoginProfile") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_login_profile">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_login_profile">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_login_profile$==&quot;&quot;">
+            <unset token="tkn_show_table_login_profile"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_login_profile"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_login_profile$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateLoginProfile","UpdateLoginProfile","DeleteLoginProfile") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_login_profile_event$) $tkn_raw_events_login_profile$ $tkn_text_search_login_profile$
+| rename requestParameters.userName as consoleUserName
+| `cs_aws_iam_login_profile_change_or_update_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_login_profile$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateLoginProfile","UpdateLoginProfile","DeleteLoginProfile") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_login_profile_event$) $tkn_show_table_login_profile$ $tkn_text_search_login_profile$
+| rename requestParameters.userName as consoleUserName
+| `cs_aws_iam_login_profile_change_or_update_filter`
+| rename userName as Actor, eventName as EventName, consoleUserName as ConsoleUserName, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, ConsoleUserName, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - Group Change/Update</title>
+      <input type="multiselect" token="tkn_group_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateGroup","DeleteGroup", "AttachGroupPolicy", "DetachGroupPolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_group">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_group">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_group$==&quot;&quot;">
+            <unset token="tkn_show_table_group"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_group"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_group$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateGroup","DeleteGroup", "AttachGroupPolicy", "DetachGroupPolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_group_event$) $tkn_raw_events_group$ $tkn_text_search_group$
+| rename requestParameters.groupName as groupName, requestParameters.policyArn as policyArn
+| `cs_aws_iam_group_change_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_group$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateGroup","DeleteGroup", "AttachGroupPolicy", "DetachGroupPolicy") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_group_event$) $tkn_show_table_group$ $tkn_text_search_group$
+| rename requestParameters.groupName as groupName, requestParameters.policyArn as policyArn
+| `cs_aws_iam_group_change_filter`
+| rename userName as Actor, eventName as EventName, groupName as GroupName, policyArn as PolicyArn, awsRegion as AWSRegion
+| fillnull value="-" PolicyArn
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, GroupName, PolicyArn, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - GroupMembership Change/Update</title>
+      <input type="multiselect" token="tkn_group_membership_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("AddUserToGroup","RemoveUserFromGroup") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_group_membership">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_group_membership">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_group_membership$==&quot;&quot;">
+            <unset token="tkn_show_table_group_membership"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_group_membership"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_group_membership$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("AddUserToGroup","RemoveUserFromGroup") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_group_membership_event$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
+| rename requestParameters.userName as target_user, requestParameters.groupName as groupName
+| `cs_aws_iam_group_membership_change_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_group_membership$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("AddUserToGroup","RemoveUserFromGroup") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_group_membership_event$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$
+| rename requestParameters.userName as target_user, requestParameters.groupName as groupName
+| `cs_aws_iam_group_membership_change_filter`
+| rename userName as Actor, eventName as EventName, target_user as MemberName, groupName as GroupName, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, GroupName, MemberName, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - IAM - User Creation/Deletion</title>
+      <input type="multiselect" token="tkn_user_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateUser","DeleteUser") errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_user">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_user">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_user$==&quot;&quot;">
+            <unset token="tkn_show_table_user"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_user"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_user$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateUser","DeleteUser") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_user_event$) $tkn_raw_events_user$ $tkn_text_search_user$
+| rename requestParameters.userName as target_user 
+| `cs_aws_iam_user_creation_or_deletion_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_user$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventSource="iam.amazonaws.com" eventName IN ("CreateUser","DeleteUser") errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_user_event$) $tkn_show_table_user$ $tkn_text_search_user$
+| rename requestParameters.userName as target_user 
+| `cs_aws_iam_user_creation_or_deletion_filter`
+| rename userName as Actor, eventName as EventName, target_user as User, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, User, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AWS - Network Access Control List Creation/Deletion</title>
+      <input type="multiselect" token="tkn_network_acl_event">
+        <label>Event Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>eventName</fieldForLabel>
+        <fieldForValue>eventName</fieldForValue>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("CreateNetworkAclEntry","DeleteNetworkAclEntry") requestParameters.egress="false" errorCode="success" $accountId$ $region$ $username$ $eventname$ | dedup eventName | table eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_text_search_network_acl">
+        <label>Text Search</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>"*</prefix>
+        <suffix>*"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_raw_events_network_acl">
+        <label></label>
+        <choice value="">Show Raw Events</choice>
+        <change>
+          <condition match="$tkn_raw_events_network_acl$==&quot;&quot;">
+            <unset token="tkn_show_table_network_acl"></unset>
+          </condition>
+          <condition>
+            <set token="tkn_show_table_network_acl"></set>
+          </condition>
+        </change>
+      </input>
+      <event depends="$tkn_raw_events_network_acl$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("CreateNetworkAclEntry","DeleteNetworkAclEntry") requestParameters.egress="false" errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_network_acl_event$) $tkn_raw_events_network_acl$ $tkn_text_search_network_acl$
+| `cs_aws_network_acl_creation_or_deletion_filter`
+| dedup userName, eventName, requestParameters.networkAclId, src, awsRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="list.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </event>
+      <table depends="$tkn_show_table_network_acl$">
+        <search>
+          <query>`cs_aws_cloudtrail_logs` eventName IN ("CreateNetworkAclEntry","DeleteNetworkAclEntry") requestParameters.egress="false" errorCode="success" $accountId$ $region$ $username$ $eventname$ eventName IN ($tkn_network_acl_event$) $tkn_show_table_network_acl$ $tkn_text_search_network_acl$
+| `cs_aws_network_acl_creation_or_deletion_filter`
+| dedup userName, eventName, requestParameters.networkAclId, src, awsRegion
+| rename userName as Actor, eventName as EventName, requestParameters.networkAclId as NetworkAclId, src as SourceIP, awsRegion as AWSRegion
+| `cs_human_readable_time_format(_time, Time)`
+| table Time, Actor, EventName, NetworkAclId, SourceIP, AWSRegion</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Most Recent User Activity Grouped by Event Name</title>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
+| head 100
+| lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized
+| rename "userIdentity.arn" as arn
+| eval user = coalesce(user,"root")
+| stats count count(Unauthorized) as Unauthorized by eventName _time eventID arn user region aws_account_id
+| eval eventNumber=tonumber(substr(md5(eventName), -6), 16)
+| sort _time
+| delta eventNumber as d1
+| fillnull value=0 d1
+| eval time=_time
+| autoregress d1 as d2
+| fillnull value="special" d2
+| eval t=if(d1=0 AND d2!="special", 1, if(NOT d1=d2, 2, 0))
+| transam eventName endswith="t=2" keepevicted=1 mvlist=time
+| eval time = if(mvcount(time)==1, mvindex(time, 0), mvindex(time,0)."|".mvindex(time,-1))
+| makemv delim="|" time
+| rename eventcount as count
+| fields eventName time count arn user* Unauthorized function region aws_account_id
+| fields - _raw _time | eval time=strftime(time, "%F %T %z")
+| lookup cs_aws_all_eventName.csv eventName OUTPUT function
+| lookup cs_aws_regions.csv region OUTPUT label as region
+| rename eventName as "Event Name", time as Time, count as Count, arn as ARN, user as User, function as Function, region as Region, aws_account_id as "Account ID"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="wrap">true</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="cell.eventName">Event Name</option>
+        <option name="cell.cellRange">true</option>
+        <drilldown>
+          <set token="time">$row.Time$</set>
+          <set token="form.time">$row.Time$</set>
+          <set token="eventName">$row.Event Name$</set>
+          <set token="form.eventName">$row.Event Name$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <event depends="$time$, $eventName$, $accountId$, $region$">
+        <title>Event Details</title>
+        <search>
+          <query>
+          `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest]
         </query>
-    </search>
-    <search base="baseCloudTrailSearch" id="baseCloudTrailActivity">
-        <query>
-            stats sum(count) as count sum(errors) as errors
-            | eval errors=if(isnull(errors),0,errors)
-            | eval count=if(isnull(count),0,count)
-            | eval _total_name="events", _total_field=count
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <fields>_raw</fields>
+        <option name="count">3</option>
+      </event>
+    </panel>
+    <panel>
+      <map depends="$time$, $accountId$, $region$">
+        <title>Geographic Source of Event(s)</title>
+        <search>
+          <query>
+          `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest] | iplocation sourceIPAddress | geostats latfield=lat longfield=lon count
         </query>
-    </search>
-    <row>
-        <panel>
-        <html>
-            <p>AWS Reports</p>
-            <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/1876/" target="_blank">Splunk Add-on for Amazon Web Services</a> for collecting AWS baseCloudTrail data.</p>
-            <p>This Dashboard is depends on "AWS - AWS Account Lookup Gen" Report. </p>
-        </html>
-        <table>
-            <search>
-            <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled") | table label data]</query>
-            <earliest>$earliest$</earliest>
-            <latest>$latest$</latest>
-            </search>
-            <option name="drilldown">none</option>
-            <option name="refresh.display">progressbar</option>
-            <format type="color" field="data">
-            <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b,"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
-            </format>
-        </table>
-        </panel>
-    </row>
-    <row>
-        <single>
-            <title>Active Users</title>
-            <search base="baseCloudTrailSearch">
-                <query>
-                    stats count by userName aws_account_id
-                    | stats count
-                </query>
-            </search>
-            <drilldown>
-                <link target="_blank">
-                    <![CDATA[
-                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ | `cs_cloudtrail_service("*", $notable$)`
-                        | stats count count(eval(match(_raw, "errorCode"))) as errors count(Unauthorized) as Unauthorized by userName aws_account_id&earliest=$earliest$&latest=$latest$
-                    ]]>
-                </link>
-            </drilldown>
-            <option name="field">count</option>
-        </single>
-        <single id="tracking_total">
-            <title>Total Activities</title>
-            <search base="baseCloudTrailActivity">
-                <query>
-                    fields count
-                </query>
-            </search>
-            <option name="field">count</option>
-        </single>
-
-        <single id="tracking_err">
-            <title>Error Activities</title>
-            <search base="baseCloudTrailActivity">
-                <query>
-                    fields errors
-                </query>
-            </search>
-            <drilldown>
-                <link target="_blank">
-                    <![CDATA[
-                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)`&$earliest$&latest=$latest$
-                    ]]>
-                </link>
-            </drilldown>
-            <option name="field">errors</option>
-        </single>
-        <single id="tracking_auth">
-            <title>Unauthorized Activities</title>
-            <search base="baseCloudTrailSearch">
-                <query>
-                    stats sum(count) as count sum(Unauthorized) as Unauthorized
-                    | eval errors=if(isnull(errors),0,errors)
-                    | eval count=if(isnull(count),0,count)
-                    | eval _total_name="events", _total_field=count
-                </query>
-            </search>
-            <drilldown>
-                <link target="_blank">
-                    <![CDATA[
-                        search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)` | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized | search Unauthorized="*"&$earliest$&latest=$latest$
-                    ]]>
-                </link>
-            </drilldown>
-            <option name="field">Unauthorized</option>
-        </single>
-    </row>
-    <row>
-        <chart>
-            <title>User Activity by Event Name Over Time</title>
-            <search>
-                <query>
-                    `cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
-                    | eval day=strftime(_time, "%Y-%m-%d %z") 
-                    | stats count by eventName region aws_account_id day errorCode 
-                    | eval _time=strptime(day, "%Y-%m-%d %z") 
-                    | eval response=if(errorCode=="success","success", "error") 
-                    | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
-                    | eval response=if(Unauthorized=="true", "unauthorized", response) 
-                    | fields - day errorCode Unauthorized
-                    | search $accountId$ $region$ $eventname$
-                    | `cs_cloudtrail_service("*", $notable$)`
-                    | timechart sum(count) by eventName
-                </query>
-                <earliest>$earliest$</earliest>
-                <latest>$latest$</latest>
-            </search>
-            <option name="charting.chart">column</option>
-            <option name="charting.legend.placement">right</option>
-            <option name="charting.legend.masterLegend">null</option>
-            <option name="charting.chart.stackMode">stacked</option>
-            <option name="charting.axisTitleX.text">Time</option>
-            <option name="charting.axisTitleY.text">Events</option>
-        </chart>
-    </row>
-
-    <row>
-        <chart>
-            <title>User Activity by User Name Over Time</title>
-            <search>
-                <query>
-                    `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
-                    | `cs_cloudtrail_service("*", $notable$)`
-                    | timechart count by userName
-                </query>
-                <earliest>$earliest$</earliest>
-                <latest>$latest$</latest>
-            </search>
-            <option name="charting.chart">column</option>
-            <option name="charting.legend.placement">right</option>
-            <option name="charting.legend.masterLegend">null</option>
-            <option name="charting.chart.stackMode">stacked</option>
-            <option name="charting.axisTitleX.text">Time</option>
-            <option name="charting.axisTitleY.text">Events</option>
-        </chart>
-    </row>
-
-    <row>
-        <table>
-            <title>Most Recent User Activity Grouped by Event Name</title>
-            <search>
-                <query>
-                    `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
-                    | head 100
-                    | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized
-                    | rename "userIdentity.arn" as arn
-                    | eval userName = coalesce(userName,"root")
-                    | stats count count(Unauthorized) as Unauthorized by eventName _time eventID arn userName region aws_account_id
-                    | eval eventNumber=tonumber(substr(md5(eventName), -6), 16)
-                    | sort _time
-                    | delta eventNumber as d1
-                    | fillnull value=0 d1
-                    | eval time=_time
-                    | autoregress d1 as d2
-                    | fillnull value="special" d2
-                    | eval t=if(d1=0 AND d2!="special", 1, if(NOT d1=d2, 2, 0))
-                    | transam eventName endswith="t=2" keepevicted=1 mvlist=time
-                    | eval time = if(mvcount(time)==1, mvindex(time, 0), mvindex(time,0)."|".mvindex(time,-1))
-                    | makemv delim="|" time
-                    | rename eventcount as count
-                    | fields eventName time count arn user* Unauthorized function region aws_account_id
-                    | fields - _raw _time | eval time=strftime(time, "%F %T %z")
-                    | lookup cs_aws_all_eventName.csv eventName OUTPUT function
-                    | lookup cs_aws_regions.csv region OUTPUT label as region
-                    | rename eventName as "Event Name", time as Time, count as Count, arn as ARN, userName as Username, function as Function, region as Region, aws_account_id as "Account ID"
-                </query>
-            </search>
-            <option name="count">10</option>
-            <option name="wrap">true</option>
-            <option name="dataOverlayMode">none</option>
-            <option name="drilldown">row</option>
-            <option name="cell.eventName">Event Name</option>
-            <option name="cell.cellRange">true</option>
-            <drilldown>
-                <set token="time">$row.Time$</set>
-                <set token="form.time">$row.Time$</set>
-                <set token="eventName">$row.Event Name$</set>
-                <set token="form.eventName">$row.Event Name$</set>
-            </drilldown>
-        </table>
-    </row>
-    <!--Passing eventName and time field values to the drilldown. time can be multivalued hence the need for mvindex/mvcount to extract earliest and latest, +/- 1seconds-->
-    <row>
-        <event depends="$time$, $eventName$, $accountId$, $region$">
-            <title>Event Details</title>
-            <search>
-                <query>
-                    `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest]
-                </query>
-                <earliest>$earliest$</earliest>
-                <latest>$latest$</latest>
-            </search>
-            <fields>_raw</fields>
-            <option name="count">3</option>
-        </event>
-        <map depends="$time$, $accountId$, $region$">
-            <title>Geographic Source of Event(s)</title>
-            <search>
-                <query>
-                    `cs_aws_cloudtrail_logs` $accountId$ $region$  $username$ $eventName$ [| localop |stats count | rename count as earliest | eval time="$time$" | makemv delim="," time | eval time=strptime(time, "%F %T %z") | eval latest=tonumber(mvindex(time, 0))+1 | eval earliest=if(mvcount(time)==1, tonumber(mvindex(time, 0))-1, mvindex(time, -1)) | return earliest latest] | iplocation sourceIPAddress | geostats latfield=lat longfield=lon count
-                </query>
-            </search>
-            <option name="mapping.map.center">(42.879094,-97.381205)</option>
-            <option name="mapping.map.zoom">3</option>
-        </map>
-    </row>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="mapping.map.center">(42.879094,-97.381205)</option>
+        <option name="mapping.map.zoom">3</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="dropdown" token="notable" searchWhenChanged="true">
+        <label>Notable</label>
+        <default>1</default>
+        <choice value="0">False</choice>
+        <choice value="1">True</choice>
+      </input>
+      <html>
+        <p><b>NOTE: </b>The following panels are affected by this filter.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Active Users</title>
+        <search base="baseCloudTrailSearch">
+          <query>
+          stats count by user aws_account_id | stats count
+        </query>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ | `cs_cloudtrail_service("*", $notable$)`
+              | stats count count(eval(match(_raw, "errorCode"))) as errors count(Unauthorized) as Unauthorized by user aws_account_id&earliest=$earliest$&latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="field">count</option>
+      </single>
+    </panel>
+    <panel>
+      <single id="tracking_total">
+        <title>Total Activities</title>
+        <search base="baseCloudTrailActivity">
+          <query>
+          fields count
+        </query>
+        </search>
+        <option name="field">count</option>
+      </single>
+    </panel>
+    <panel>
+      <single id="tracking_err">
+        <title>Error Activities</title>
+        <search base="baseCloudTrailActivity">
+          <query>
+          fields errors
+        </query>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)`&$earliest$&latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="field">errors</option>
+      </single>
+    </panel>
+    <panel>
+      <single id="tracking_auth">
+        <title>Unauthorized Activities</title>
+        <search base="baseCloudTrailSearch">
+          <query> stats sum(count) as count sum(Unauthorized) as Unauthorized
+| eval errors=if(isnull(errors),0,errors)
+| eval count=if(isnull(count),0,count)
+| eval _total_name="events", _total_field=count
+        </query>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)` | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized | search Unauthorized="*"&$earliest$&latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="field">Unauthorized</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>User Activity by Event Name Over Time</title>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` aws_account_id="*" region="**" 
+| eval day=strftime(_time, "%Y-%m-%d %z") 
+| stats count by eventName region aws_account_id day errorCode 
+| eval _time=strptime(day, "%Y-%m-%d %z") 
+| eval response=if(errorCode=="success","success", "error") 
+| lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized 
+| eval response=if(Unauthorized=="true", "unauthorized", response) 
+| fields - day errorCode Unauthorized
+| search $accountId$ $region$ $eventname$
+| `cs_cloudtrail_service("*", $notable$)`
+| timechart sum(count) by eventName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.masterLegend">null</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Events</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>User Activity by User Name Over Time</title>
+        <search>
+          <query>`cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$
+| `cs_cloudtrail_service("*", $notable$)`
+| timechart count by user</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.masterLegend">null</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Events</option>
+      </chart>
+    </panel>
+  </row>
 </form>
