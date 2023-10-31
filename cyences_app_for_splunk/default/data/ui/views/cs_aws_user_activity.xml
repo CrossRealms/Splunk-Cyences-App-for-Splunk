@@ -29,7 +29,6 @@
 | eval _total_name="events", _total_field=count
     </query>
   </search>
-  <!--Passing eventName and time field values to the drilldown. time can be multivalued hence the need for mvindex/mvcount to extract earliest and latest, +/- 1seconds-->
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -44,14 +43,14 @@
     <input type="multiselect" token="accountId" id="ip1" searchWhenChanged="true">
       <label>Account ID</label>
       <choice value="*">All</choice>
-      <fieldForValue>account_id</fieldForValue>
-      <fieldForLabel>title</fieldForLabel>
-      <search id="accountIdSearch">
+      <fieldForValue>aws_account_id</fieldForValue>
+      <fieldForLabel>aws_account_id</fieldForLabel>
+      <search>
         <query>
-          <![CDATA[
-            | inputlookup cs_all_aws_account_ids.csv | mvcombine delim=", " name | nomv name | eval title=account_id." (".name.")"
-            ]]>
+         `cs_aws_cloudtrail_logs` | dedup aws_account_id | table aws_account_id
         </query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
       </search>
       <prefix> (</prefix>
       <suffix>) </suffix>
@@ -110,11 +109,10 @@
         <p>AWS Reports</p>
         <p>
           <b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/1876/" target="_blank">Splunk Add-on for Amazon Web Services</a> for collecting AWS baseCloudTrail data.</p>
-        <p>This Dashboard is depends on "AWS - AWS Account Lookup Gen" Report. </p>
       </html>
       <table>
         <search>
-          <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data | append[| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("AWS - AWS Account Lookup Gen") | table title, disabled | rename title as label | eval data=if(disabled=1, "Report is disabled", "Report is enabled") | table label data]</query>
+          <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -127,6 +125,25 @@
     </panel>
   </row>
   <row>
+    <panel>
+      <single>
+        <title>Active Users</title>
+        <search base="baseCloudTrailSearch_base">
+          <query>
+           search $accountId$ $region$ $eventname$ $username$ | stats count by user aws_account_id | stats count
+        </query>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[
+              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ | lookup cs_aws_unauthorized_errorCode.csv errorCode OUTPUT Unauthorized
+              | stats count count(eval(errorCode!="success")) as errors count(Unauthorized) as Unauthorized by user aws_account_id&earliest=$earliest$&latest=$latest$
+          ]]>
+          </link>
+        </drilldown>
+        <option name="field">count</option>
+      </single>
+    </panel>
     <panel>
       <title>Login Types</title>
       <chart>
@@ -812,8 +829,6 @@
         <option name="wrap">true</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">row</option>
-        <option name="cell.eventName">Event Name</option>
-        <option name="cell.cellRange">true</option>
         <drilldown>
           <set token="time">$row.Time$</set>
           <set token="form.time">$row.Time$</set>
@@ -823,6 +838,7 @@
       </table>
     </panel>
   </row>
+  <!--Passing eventName and time field values to the drilldown. time can be multivalued hence the need for mvindex/mvcount to extract earliest and latest, +/- 1seconds-->
   <row>
     <panel>
       <event depends="$time$, $eventName$, $accountId$, $region$">
@@ -868,25 +884,6 @@
   </row>
   <row>
     <panel>
-      <single>
-        <title>Active Users</title>
-        <search base="baseCloudTrailSearch">
-          <query>
-          stats count by user aws_account_id | stats count
-        </query>
-        </search>
-        <drilldown>
-          <link target="_blank">
-            <![CDATA[
-              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ | `cs_cloudtrail_service("*", $notable$)`
-              | stats count count(eval(match(_raw, "errorCode"))) as errors count(Unauthorized) as Unauthorized by user aws_account_id&earliest=$earliest$&latest=$latest$
-          ]]>
-          </link>
-        </drilldown>
-        <option name="field">count</option>
-      </single>
-    </panel>
-    <panel>
       <single id="tracking_total">
         <title>Total Activities</title>
         <search base="baseCloudTrailActivity">
@@ -908,7 +905,7 @@
         <drilldown>
           <link target="_blank">
             <![CDATA[
-              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode | `cs_cloudtrail_service("*", $notable$)`&$earliest$&latest=$latest$
+              search?q=search `cs_aws_cloudtrail_logs` $accountId$ $region$ $username$ $eventname$ errorCode!="success" | `cs_cloudtrail_service("*", $notable$)`&$earliest$&latest=$latest$
           ]]>
           </link>
         </drilldown>
