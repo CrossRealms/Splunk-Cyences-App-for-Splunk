@@ -32,11 +32,11 @@
       </html>
       <table>
         <search>
-          <query>| tstats count where `cs_gsuite` sourcetype="gws:reports:login" 
-| eval label="`cs_gsuite` sourcetype=gws:reports:login" 
-| append [| tstats count where `cs_gsuite` sourcetype="gws:reports:admin" | eval label="`cs_gsuite` sourcetype=gws:reports:admin"] 
-| append [| tstats count where `cs_gsuite` sourcetype="gws:reports:groups_enterprise" | eval label="`cs_gsuite` sourcetype=gws:reports:groups_enterprise"] 
-| append [| tstats count where `cs_gsuite` sourcetype="gws:alerts" | eval label="`cs_gsuite` sourcetype=gws:alerts"] 
+          <query>| tstats count where `cs_gws` sourcetype="gws:reports:login" 
+| eval label="`cs_gws` sourcetype=gws:reports:login" 
+| append [| tstats count where `cs_gws` sourcetype="gws:reports:admin" | eval label="`cs_gws` sourcetype=gws:reports:admin"] 
+| append [| tstats count where `cs_gws` sourcetype="gws:reports:groups_enterprise" | eval label="`cs_gws` sourcetype=gws:reports:groups_enterprise"] 
+| append [| tstats count where `cs_gws` sourcetype="gws:alerts" | eval label="`cs_gws` sourcetype=gws:alerts"] 
 | eval data=if(count&gt;0, "Data Present", "Data Not Present") 
 | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -55,7 +55,7 @@
       <title>Login Types</title>
       <chart>
         <search>
-          <query>`cs_gsuite_login_events` | search user=$tkn_user|s$ | stats count by action | rename action as Action, count as Count | sort 0 - Count | head 10</query>
+          <query>`cs_gws_login_events` | search user=$tkn_user|s$ | stats count by action | rename action as Action, count as Count | sort 0 - Count | head 10</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -71,7 +71,7 @@
       <title>Login by Location</title>
       <map>
         <search>
-          <query>`cs_gsuite_login_events` "event.name" IN("login_success", "login_failure") user=$tkn_user|s$
+          <query>`cs_gws_login_events` "event.name" IN("login_success", "login_failure") user=$tkn_user|s$
 | iplocation ipAddress 
 | geostats count(user) by action</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -82,7 +82,7 @@
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%60cs_gsuite_login_events%60%20%22event.name%22%20IN(%22login_success%22%2C%20%22login_failure%22)%20user%3D$tkn_user|s$%0A%7C%20iplocation%20ipAddress%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%20%0A%7C%20%60cs_human_readable_time_format(_time%2C%20Time)%60%0A%7C%20rename%20action%20as%20%22Login%20Status%22%2C%20user%20as%20User%2C%20ipAddress%20as%20%22IP%20Address%22%0A%7C%20table%20Time%20%22Login%20Status%22%20User%20%22IP%20Address%22%20City%20Region%20Country&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%60cs_gws_login_events%60%20%22event.name%22%20IN(%22login_success%22%2C%20%22login_failure%22)%20user%3D$tkn_user|s$%0A%7C%20iplocation%20ipAddress%20%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$%20%0A%7C%20%60cs_human_readable_time_format(_time%2C%20Time)%60%0A%7C%20rename%20action%20as%20%22Login%20Status%22%2C%20user%20as%20User%2C%20ipAddress%20as%20%22IP%20Address%22%0A%7C%20table%20Time%20%22Login%20Status%22%20User%20%22IP%20Address%22%20City%20Region%20Country&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
     </panel>
@@ -93,7 +93,7 @@
       <table>
         <title>User was asked for extra login question due to suspicious login activity</title>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_challenge" | sort login_challenge_status | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, action as Action, login_challenge_method as LoginChallengeMethod, login_challenge_status as LoginChallengeStatus | table Time, User, IPAddress, Action, LoginChallengeMethod, LoginType</query>
+          <query>`cs_gws_login_events` user=$tkn_user|s$ "event.name"="login_challenge" | sort login_challenge_status | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, action as Action, login_challenge_method as LoginChallengeMethod, login_challenge_status as LoginChallengeStatus | table Time, User, IPAddress, Action, LoginChallengeMethod, LoginType</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -119,7 +119,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_failure"
+          <query>`cs_gws_login_events` user=$tkn_user|s$ "event.name"="login_failure"
 | stats latest(_time) as LastLoginTime, count, values(action) as Action, values(login_challenge_method) as LoginChallengeMethod by user, ipAddress
 | iplocation ipAddress
 | eval Country = if(isnotnull(org_country), org_country, Country) 
@@ -159,7 +159,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="login_success"
+          <query>`cs_gws_login_events` user=$tkn_user|s$ "event.name"="login_success"
 | stats latest(_time) as LastLoginTime, count, values(action) as Action, values(login_challenge_method) as login_challenge_method by user, ipAddress 
 | iplocation ipAddress
 | eval Country = if(isnotnull(org_country), org_country, Country) 
@@ -188,7 +188,7 @@
       <title>Password Updated</title>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ "event.name"="password_edit" | stats latest(_time) as _time, Count, values(ipAddress) as IPAddress by user | `cs_human_readable_time_format(_time, Time)` | rename user as User | sort - Count</query>
+          <query>`cs_gws_login_events` user=$tkn_user|s$ "event.name"="password_edit" | stats latest(_time) as _time, Count, values(ipAddress) as IPAddress by user | `cs_human_readable_time_format(_time, Time)` | rename user as User | sort - Count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -202,7 +202,7 @@
       <title>Other Login Related Events</title>
       <table>
         <search>
-          <query>`cs_gsuite_login_events` user=$tkn_user|s$ NOT "event.name" IN ("login_challenge", "login_success", "login_failure", "logout", "login_verification", "password_edit") | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, event.name as EventName | table Time, User, IPAddress, EventName</query>
+          <query>`cs_gws_login_events` user=$tkn_user|s$ NOT "event.name" IN ("login_challenge", "login_success", "login_failure", "logout", "login_verification", "password_edit") | `cs_human_readable_time_format(_time, Time)` | rename user as User, ipAddress as IPAddress, event.name as EventName | table Time, User, IPAddress, EventName</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -216,7 +216,7 @@
       <title>Google Workspace - Alerts Center Details</title>
       <table>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:alerts"
+          <query>`cs_gws` sourcetype="gws:alerts"
 | dedup alertId
 | fillnull value="-" user
 | search user=$tkn_user|s$
@@ -234,7 +234,7 @@
           <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
         </format>
         <drilldown>
-          <link target="_blank">search?q=%60cs_gsuite%60%20sourcetype%3D%22gws%3Aalerts%22%20%0D%0A%7C%20dedup%20alertId%20%0D%0A%7C%20search%20alertId%3D%22$row.alertId$%22&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%60cs_gws%60%20sourcetype%3D%22gws%3Aalerts%22%20%0D%0A%7C%20dedup%20alertId%20%0D%0A%7C%20search%20alertId%3D%22$row.alertId$%22&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
@@ -250,7 +250,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -279,7 +279,7 @@
       </input>
       <event depends="$tkn_raw_events_role$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ "event.name" IN ($tkn_role_event$) $tkn_raw_events_role$ $tkn_text_search_role$
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ "event.name" IN ($tkn_role_event$) $tkn_raw_events_role$ $tkn_text_search_role$
 | dedup _time, actor.email, event.name, role_name, user
 | `cs_gws_role_change_filter`
 </query>
@@ -291,7 +291,7 @@
       </event>
       <table depends="$tkn_show_table_role$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ "event.name" IN ($tkn_role_event$) $tkn_show_table_role$ $tkn_text_search_role$
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*ROLE*") user=$tkn_user|s$ "event.name" IN ($tkn_role_event$) $tkn_show_table_role$ $tkn_text_search_role$
 | dedup _time, actor.email, event.name, role_name, user
 | `cs_human_readable_time_format(_time, Time)`
 | `cs_gws_role_change_filter`
@@ -316,7 +316,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -345,7 +345,7 @@
       </input>
       <event depends="$tkn_raw_events_group$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") "event.name" IN ($tkn_group_event$) $tkn_raw_events_group$ $tkn_text_search_group$
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") "event.name" IN ($tkn_group_event$) $tkn_raw_events_group$ $tkn_text_search_group$
 | fillnull value="-" user
 | search user=$tkn_user|s$
 | rex field=_raw "\"name\": \"info_setting\", \"value\": \"(?&lt;info_setting&gt;[^\"]*)\""
@@ -361,7 +361,7 @@
       </event>
       <table depends="$tkn_show_table_group$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") "event.name" IN ($tkn_group_event$) $tkn_show_table_group$ $tkn_text_search_group$
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" NOT "event.name" IN ("*member*", "*user*", "*join*") "event.name" IN ($tkn_group_event$) $tkn_show_table_group$ $tkn_text_search_group$
 | fillnull value="-" user
 | search user=$tkn_user|s$
 | rex field=_raw "\"name\": \"info_setting\", \"value\": \"(?&lt;info_setting&gt;[^\"]*)\""
@@ -391,7 +391,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") | fillnull value="-" user | search user=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -420,7 +420,7 @@
       </input>
       <event depends="$tkn_raw_events_group_membership$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") "event.name" IN ($tkn_group_membership_event$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") "event.name" IN ($tkn_group_membership_event$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
 | fillnull value="-" user
 | search user=$tkn_user|s$
 | rex field=_raw "\"name\": \"member_role\", \"multiValue\": \[(?&lt;MemberRole&gt;[^]]*)\]"
@@ -434,7 +434,7 @@
       </event>
       <table depends="$tkn_show_table_group_membership$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") "event.name" IN ($tkn_group_membership_event$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$
+          <query>`cs_gws` sourcetype="gws:reports:groups_enterprise" "event.name" IN ("*member*") "event.name" IN ($tkn_group_membership_event$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$
 | fillnull value="-" user
 | search user=$tkn_user|s$
 | rex field=_raw "\"name\": \"member_role\", \"multiValue\": \[(?&lt;MemberRole&gt;[^]]*)\]"
@@ -462,7 +462,7 @@
         <fieldForLabel>event.name</fieldForLabel>
         <fieldForValue>event.name</fieldForValue>
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") | fillnull value="-" user_email
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") | fillnull value="-" user_email
 | search user_email=$tkn_user|s$ | dedup event.name | table event.name</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -492,7 +492,7 @@
       </input>
       <event depends="$tkn_raw_events_user$">
         <search>
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") "event.name" IN ($tkn_user_event$) $tkn_raw_events_user$ $tkn_text_search_user$
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") "event.name" IN ($tkn_user_event$) $tkn_raw_events_user$ $tkn_text_search_user$
 | fillnull value="-" user_email
 | search user_email=$tkn_user|s$
 | `cs_gws_user_change_filter`</query>
@@ -508,7 +508,7 @@
           <!-- try to add the old_value and new_value field if its extraction works
 | rex field=_raw "\"name\": \"OLD_VALUE\", \"value\": \"\\\"(?<old_value>[^\\\"]*)\\\""
 | rex field=_raw "\"name\": \"OLD_VALUE\", \"value\": \"(?<old_value_1>[^\"]*)\"" -->
-          <query>`cs_gsuite` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") "event.name" IN ($tkn_user_event$) $tkn_show_table_user$ $tkn_text_search_user$
+          <query>`cs_gws` sourcetype="gws:reports:admin" "event.name" IN ("*USER*") NOT "event.name" IN ("CHANGE_CHROME_OS_USER_SETTING", "DOWNLOAD_USERLIST_CSV") "event.name" IN ($tkn_user_event$) $tkn_show_table_user$ $tkn_text_search_user$
 | fillnull value="-" user_email
 | search user_email=$tkn_user|s$
 | `cs_human_readable_time_format(_time, Time)`
