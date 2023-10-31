@@ -90,10 +90,10 @@ PRODUCTS = [
     'name': 'Google Workspace',
     'macro_configurations': [
         {
-            'macro_name': 'cs_gsuite',
+            'macro_name': 'cs_gws',
             'label': 'Google Workspace Data',
             'search': build_search_query(
-                        macro='cs_gsuite',
+                        macro='cs_gws',
                         by='sourcetype',
                         values='gws:reports:admin,gws:reports:login'
                         ),
