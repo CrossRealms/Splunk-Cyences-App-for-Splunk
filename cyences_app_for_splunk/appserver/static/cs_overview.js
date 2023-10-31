@@ -98,7 +98,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_o365", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability" ];
+    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
