@@ -245,8 +245,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>
-          <b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
+        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -320,8 +319,7 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p>
-          <b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Settings &gt; Configuration): cs_home_country.</p>
+        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
