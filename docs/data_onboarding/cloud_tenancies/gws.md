@@ -75,11 +75,11 @@ Perform the following steps to set up Google Workspace Credentials on your Googl
  
     ![alt]({{ site.baseurl }}/assets/gws_configuration_6.png)
 
-3.	Search for the BigQuery API. Select and enable it.
+3. Search for the BigQuery API. Select and enable it.
  
     ![alt]({{ site.baseurl }}/assets/gws_configuration_7.png)
 
-4.	Search for the Google Workspace Alert Center API. Select and enable it.
+4. Search for the Google Workspace Alert Center API. Select and enable it.
 
     ![alt]({{ site.baseurl }}/assets/gws_configuration_8.png)
 
@@ -112,12 +112,12 @@ Perform the following steps to set up Google Workspace Credentials on your Googl
  
     ![alt]({{ site.baseurl }}/assets/gws_configuration_13.png)
 
-10.	In Manage Domain Wide Delegation, click Add new to add a new client ID.
-11.	In the Client ID field, paste the Unique ID that you copied from the Service account details page.
-12.	In the OAuth scopes (comma-delimited) field, add the [https://www.googleapis.com/auth/admin.reports.audit.readonly](https://www.googleapis.com/auth/admin.reports.audit.readonly) This gives read-only access when retrieving an activity report.
+10. In Manage Domain Wide Delegation, click Add new to add a new client ID.
+11. In the Client ID field, paste the Unique ID that you copied from the Service account details page.
+12. In the OAuth scopes (comma-delimited) field, add the [https://www.googleapis.com/auth/admin.reports.audit.readonly](https://www.googleapis.com/auth/admin.reports.audit.readonly) This gives read-only access when retrieving an activity report.
 [https://www.googleapis.com/auth/admin.directory.user.readonly](https://www.googleapis.com/auth/admin.directory.user.readonly) This gives read-only access when retrieving the user identity
 [https://www.googleapis.com/auth/apps.alerts](https://www.googleapis.com/auth/apps.alerts) This gives read-only access when retrieving an activity report.
-13.	Click Authorize.
+13. Click Authorize.
 
     ![alt]({{ site.baseurl }}/assets/gws_configuration_14.png)
  
@@ -144,13 +144,13 @@ You can collect gmail logs only if you have one of these subscriptions (Enterpri
 7. Click Setup > Click Email Logs in BigQuery > Click Enable
 8. In Select the BigQuery project to use find a Google Cloud project where service account was created
 9. You can optionally specify a different name of the dataset under Specify the name for a new dataset to be created within your project. Later you can configure this dataset name during the input configuration steps > Save
-10.	Navigate to [https://console.cloud.google.com/](https://console.cloud.google.com/)
-11.	Search for BigQuery in the search bar and click BigQuery.
-12.	On the left side of the screen, you should see the Google Cloud project, click on it.
-13.	Click on View actions > Open (three dots) near gmail_logs_dataset. By default, you may see something else depending on the name you chose in the previous step.
-14.	Click on Sharing > Permissions.
-15.	Click on Add principal.
-16.	Paste service account email into new principals’ field > Select a role > Type BigQuery Data Viewer > Click on BigQuery Data Viewer > Click save.
+10. Navigate to [https://console.cloud.google.com/](https://console.cloud.google.com/)
+11. Search for BigQuery in the search bar and click BigQuery.
+12. On the left side of the screen, you should see the Google Cloud project, click on it.
+13. Click on View actions > Open (three dots) near gmail_logs_dataset. By default, you may see something else depending on the name you chose in the previous step.
+14. Click on Sharing > Permissions.
+15. Click on Add principal.
+16. Paste service account email into new principals’ field > Select a role > Type BigQuery Data Viewer > Click on BigQuery Data Viewer > Click save.
 
 
 #### For the User Identity
