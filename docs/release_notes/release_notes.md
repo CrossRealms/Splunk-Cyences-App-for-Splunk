@@ -54,11 +54,20 @@ has_children: true
 
 * ### Enhancements  
 
-    * The "Gsuite" dashboard has been renamed to "Google Worspace".
+    * #### GSuite has been replaced with Google Workspace
+        * GSuite Add-on is no longer supported, kindly remove related Add-ons.
+        * Install the **Splunk Add-on for Google Workspace** and configure it for data collection. For more details, refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
+        * Removed the below alerts and replaced them with related alerts.
+            * **Gsuite - Bulk User Creation or Deletion** is replaced with **Google Workspace - Bulk User Creation or Deletion**
+            * **Gsuite - Multiple Password Changes in Short Time Period** is replaced with **Google Workspace - Multiple Password Changes in Short Time Period**
+        * Removed the **GSuite** dashboard and replaced it with the **Google Workspace** dashboard.
 
+    * #### Sophos Central Add-on for data collection has been changed
+        * Use the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/) and remove [Sophos Central SIEM Integration Add-on](https://splunkbase.splunk.com/app/4647/)
+        * All alerts and dashboard should work seamlessly with the new data.
+        * The alerts and dashboard for Sophos Endpoint protection do not guarantee to support old Add-on anymore.
+    
     * Added new panels to the Google Workspace and AWS dashboards.
-
-    * Updated the sophos related field extractions, alerts and dashboard based on the data collected from [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/).
 
     * Added "User Inventory" panel to the "Intelligence" dashboard.
 

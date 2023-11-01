@@ -25,7 +25,7 @@ Splunkbase Download:
 
 3. Install the Add-on on the Search Head.
 
-The following items should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
+The following Apps/Add-ons should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
 * G Suite For Splunk - 
 [https://splunkbase.splunk.com/app/3791/](https://splunkbase.splunk.com/app/3791/) 
 * TA for G Suite App - 

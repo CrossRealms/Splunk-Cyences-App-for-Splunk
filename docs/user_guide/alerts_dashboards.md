@@ -232,7 +232,7 @@ There are several security related alerts to choose from and they are all locate
     * Top Requesters 
 
 ## Email
-* Microsoft Office 365/Google Workspace Alerts:
+* Alerts:
     * Email - Daily Spam Email 
     * Email - Hourly Increase in Emails Over Baseline
     * Email - Suspicious Subject or Attachment
