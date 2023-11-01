@@ -35,7 +35,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
 
 * Cloud Tenancies
     * Amazon Web Services 
-    * G Suite
+    * Google Workspace
     * Microsoft Office 365
         * Microsoft Azure Graph Security Score
 
