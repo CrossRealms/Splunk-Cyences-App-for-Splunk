@@ -61,6 +61,7 @@ has_children: true
             * **Gsuite - Bulk User Creation or Deletion** is replaced with **Google Workspace - Bulk User Creation or Deletion**
             * **Gsuite - Multiple Password Changes in Short Time Period** is replaced with **Google Workspace - Multiple Password Changes in Short Time Period**
         * Removed the **GSuite** dashboard and replaced it with the **Google Workspace** dashboard.
+        * Replaced the **cs_gsuite** macro with **cs_gws** so add the data collection index into the **cs_gws** macro. (Default index is **google**)
 
     * #### Sophos Central Add-on for data collection has been changed
         * Use the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/) and remove [Sophos Central SIEM Integration Add-on](https://splunkbase.splunk.com/app/4647/)
