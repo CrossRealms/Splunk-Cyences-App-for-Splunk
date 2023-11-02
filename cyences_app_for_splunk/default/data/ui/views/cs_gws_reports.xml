@@ -136,6 +136,9 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <format type="color" field="Action">
+          <colorPalette type="map">{"success": #03991a, "failure": #a3030b}</colorPalette>
+        </format>
       </table>
       <html>
         <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
@@ -177,6 +180,9 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <format type="color" field="Action">
+          <colorPalette type="map">{"success": #03991a, "failure": #a3030b}</colorPalette>
+        </format>
       </table>
       <html>
         <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>

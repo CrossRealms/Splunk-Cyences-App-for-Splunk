@@ -16,7 +16,7 @@ require([
         { id: 'cs_linux_reports', title: 'Linux' },
         { id: 'cs_o365_reports', title: 'Office 365' },
         { id: 'cs_aws_user_activity', title: 'AWS' },
-        { id: 'cs_gsuite_reports', title: 'Google Workspace' },
+        { id: 'cs_gws_reports', title: 'Google Workspace' },
         { id: 'cs_network_reports', title: 'Network Telemetry' },
         { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
         { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
