@@ -11,7 +11,7 @@
     <collection label="Cloud Tenancies">
       <view name="cs_o365_reports" /><!--Office 365-->
       <view name="cs_aws_user_activity" /><!--AWS-->
-      <view name="cs_gsuite_reports" /><!--Google Workspace-->
+      <view name="cs_gws_reports" /><!--Google Workspace-->
     </collection>
     <view name="cs_network_reports" />
     <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
