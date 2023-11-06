@@ -9,46 +9,73 @@ has_children: true
 # Release Notes
 
 
-## Version 4.3.0 (October 2023)
+## Version 4.4.0 (November 2023)
 
-* ### User Inventory
-    * Added the "User Inventory" dashboard.
-    * Added the following saved seraches to maintain `cs_user_inventory` KV lookup:
-        * User Inventory - Lookup Gen
-        * User Inventory - Lookup CleanUp
-        * User Inventory - Merge Similar Users
-        * User Inventory - Lookup Backfill
-    * Added macros for filtering and matching user data without prefixes and postfixes.
+
+* ### Added New Alerts
+    * Amazon Web Services
+        * AWS - IAM AccessKey Creation or Deletion
+        * AWS - IAM Login Profile Change/Update
+        * AWS - IAM User Creation or Deletion
+        * AWS - IAM Policy Creation or Deletion
+        * AWS - IAM Group Change/Update
+        * AWS - IAM Group Membership Change/Update
+        * AWS - IAM Role Creation or Deletion
+        * AWS - Network Access Control List Creation or Deletion
+        * AWS - Concurrent Sessions From Different IPs
+        * AWS - Multiple Failed MFA Requests For User
+        * AWS - Created a Policy Version that allows All Resources to be Accessed
+        * AWS - Someone Tries to Retrieve the Encrypted Administrator Password
+        * AWS - RDS Master User Password has been Reset
+        * AWS - Bucket Versioning is Disabled
+        * AWS - Multi Factor Authentication is Disabled for IAM User
+        * AWS - Successful Login From Unusual Country
+        * AWS - Daily Login Failure
+        * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * Google Workspace
+        * Google Workspace - User Change/Update
+        * Google Workspace - Enterprise Group Change/Update
+        * Google Workspace - Enterprise Group Membership Change/Update
+        * Google Workspace - Role Change/Update
+        * Google Workspace - Successful Login From Unusual Country
+        * Google Workspace - Suspicious Login Activity by User
+        * Google Workspace - Daily Login Failure
+        * Google Workspace - Alerts Center Alert
+        * Google Workspace - Google Drive objects shared Outside or with External User
+        * Google Workspace - Suspicious File Shared by External User on Google Drive
+    * Email:
+        * Email - Suspicious Subject or Attachment
+        * Email - With Known Abuse Web Service Link
+    * Sophos:
+        * Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos
+    * Ransomware
+        * Ransomware - Endpoint Compromise - Malicious Package Found
 
 
 * ### Enhancements  
 
-    * #### Device Inventory
-        * Enhanced the device inventory logic by: 
-            * Updating the device matching and hostname matching logic.
-            * Modifying its data structure.
-            * Adding the functionality to auto merge devices.
-            * Updating the functionality to manual merge devices.
-        * The "Asset Intelligence" dashboard has been renamed to "Intelligence".
-        * Added the "Device Inventory - Splunk Internal" saved search to collect the forwarder information available in splunk.
-        * Added the "Device Inventory Merge Similar Devices" saved search to auto merge the similar devices.
+    * #### GSuite has been replaced with Google Workspace
+        * GSuite Add-on is no longer supported, kindly remove related Add-ons.
+        * Install the **Splunk Add-on for Google Workspace** and configure it for data collection. For more details, refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
+        * Removed the below alerts and replaced them with related alerts.
+            * **Gsuite - Bulk User Creation or Deletion** is replaced with **Google Workspace - Bulk User Creation or Deletion**
+            * **Gsuite - Multiple Password Changes in Short Time Period** is replaced with **Google Workspace - Multiple Password Changes in Short Time Period**
+        * Removed the **GSuite** dashboard and replaced it with the **Google Workspace** dashboard.
+        * Replaced the **cs_gsuite** macro with **cs_gws** so add the data collection index into the **cs_gws** macro. (Default index is **google**)
 
-    * Improved the row expansion table design by removing empty rows and adding borders to the table.
+    * #### Sophos Central Add-on for data collection has been changed
+        * Use the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/) and remove [Sophos Central SIEM Integration Add-on](https://splunkbase.splunk.com/app/4647/)
+        * All alerts and dashboard should work seamlessly with the new data.
+        * The alerts and dashboard for Sophos Endpoint protection do not guarantee to support old Add-on anymore.
+    
+    * Added new panels to the Google Workspace and AWS dashboards.
 
-    * Reduced the severity of the "Authentication - Excessive Failed VPN Logins for a User" alert for unknown user.
+    * Added "User Inventory" panel to the "Intelligence" dashboard.
 
-    * The "O365 - Azure Active Directory - Group Change/Update" and "O365 - Azure Active Directory - GroupMembership Change/Update" alerts have been updated to capture the appropriate events.
-
-    * Updated the severity of "O365 - Login Failure From Unusual Country Due To Multi Factor Authentication" and "O365 - Login Failure Due To Multi Factor Authentication" alerts.
-
-
-* ### Bug Fixes
-
-    * The lansweeper duplicate assets issue has been fixed since similar devices come from different sources.
-
-    * Fixed the order of the filter macro. 
+    * Added "Google Workspace" and "AWS" panels to the "Overview" dashboard.
 
 
-## Upgrade Guide from 4.2.0/4.2.1 to 4.3.0
+## Upgrade Guide from 4.3.0 to 4.4.0
 
-  * Visit the [Cyences App Configuration]({{ site.baseurl }}/install_configure/configuration/#macro-setup) page to make changes in Device/User inventory related macros.
+  * To onboard the Google Workspace data, Refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
+  * To use the Sophos dashboard and alerts, Install the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/)
