@@ -15,6 +15,7 @@
     </collection>
     <view name="cs_network_reports" />
     <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
+    <view name="cs_fortigate_firewall" /><!--Fortigate Firewall-->
     <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
     <view name="cs_vpn_reports" /><!--VPN-->
     <collection label="Antivirus">
