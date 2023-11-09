@@ -16,6 +16,7 @@ require([
     const USER_INVENTORY_TABLE_ID = 'user_inventory_main_tbl';   // NOTE - CSS contains this hard-coded value.
     const DEFAULT_USER_ROLE = '(unchanged)';
     
+    // TODO - decide the list of user roles for the administrative task.
     let AVAILABLE_USER_ROLES = [DEFAULT_USER_ROLE, 'Administrator', 'admin', 'Dcadmin', 'Root'];
     let selected_user_row_events = [];
     let all_users = [];
@@ -247,8 +248,6 @@ require([
 
             if (cell.field == "user_row_selector") {
                 $td.addClass('user_row_selector');
-
-                // TODO - change this conodition as it is wrong and always go in else. so if you select box change page and again come to same page then checkbox automatically deselect
                 if (_.contains(selected_user_row_events, cell.value)) {
                     $td.html('<input type="checkbox" class="user_row_selector" id="user_row_selector" name="user_row_selector" value="' + cell.value + '" checked="checked"></input>');
                 } else {

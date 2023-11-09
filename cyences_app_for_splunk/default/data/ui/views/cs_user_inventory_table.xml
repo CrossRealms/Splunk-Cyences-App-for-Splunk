@@ -7,7 +7,7 @@
   </init>
   <label>User Inventory</label>
   <search id="base_summary">
-    <query>| cyencesusermanager operation="getusers" | table * | search $tkn_user_filter$ $tkn_user_type_filter$ $tkn_product_filter$ | eval user_row_selector="-"</query>
+    <query>| cyencesusermanager operation="getusers" | table * | search $tkn_user_filter$ $tkn_user_type_filter$ $tkn_product_filter$ | eval user_row_selector=uuid</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
