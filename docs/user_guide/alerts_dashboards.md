@@ -377,11 +377,11 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Successful vs Failed Logins
     * Unique Users by Country
 
-## Vulnerability 
+## Vulnerability
 
 Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys & Tenable IO
 
-These vendor security solutions are designed to detect vulnerabilities present in your environment.  
+These vendor security solutions are designed to detect vulnerabilities present in your environment.
 
 The Cyences app utilizes the data provided by the aforementioned vendor products to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
 
@@ -389,7 +389,7 @@ The Vulnerability dashboard is designed to view the vulnerability count by sever
 
 Dashboard panels:
 * New Vulnerability Found Over Time
-* Vulnerabilities 
+* Vulnerabilities
 * Vulnerability Count By Severity
 
 ![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)

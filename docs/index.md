@@ -55,14 +55,14 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
 * Ransomware
 
 * VPN
-    * Cisco Anyconnect 
+    * Cisco Anyconnect
     * Fortinet FortiGate
     * GlobalProtect (Palo Alto)
 
-* Vulnerability
+* Vulnerability Scanners
     * CrowdStrike Spotlight
     * Qualys
-    * Tenable 
+    * Tenable
 
 
 Apart from alerts and dashboards, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
