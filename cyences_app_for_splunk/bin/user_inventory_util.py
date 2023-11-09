@@ -210,7 +210,8 @@ class UserManager:
             'user_types': list(user.get("user_types").keys()),
             'indexes': list(user.get("indexes").keys()),
             'sourcetypes': list(user.get("sourcetypes").keys()),
-            'users': list(user.get("users").keys())
+            'users': list(user.get("users").keys()),
+            'privilege_user_role': str(user.get("privilege_user_role", "-"))
         }
 
     def __enter__(self):

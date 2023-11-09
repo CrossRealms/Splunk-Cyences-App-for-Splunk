@@ -1,4 +1,4 @@
-<form theme="dark" version="1.1">
+<form theme="dark" script="privilege_user_role_editor.js" stylesheet="privilege_user_role_editor.css" version="1.1">
   <init>
     <set token="tkn_user_filter">()</set>
     <set token="tkn_user_type_filter">()</set>
@@ -7,7 +7,7 @@
   </init>
   <label>User Inventory</label>
   <search id="base_summary">
-    <query>| cyencesusermanager operation="getusers" | search $tkn_user_filter$ $tkn_user_type_filter$ $tkn_product_filter$</query>
+    <query>| cyencesusermanager operation="getusers" | table * | search $tkn_user_filter$ $tkn_user_type_filter$ $tkn_product_filter$ | eval user_row_selector="-"</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -129,10 +129,11 @@
   <row>
     <panel>
       <title>User Inventory Table</title>
-      <table>
+      <table id="user_inventory_main_tbl">
         <search base="base_summary">
           <query> | search $tkn_sp_filter$
 | rename users as User, user_types as "User Types", product_names as Products
+| table user_row_selector, User, "User Types",Products, uuid
 | eval "View Related Logs" = "Click Here"
 | nomv User
           </query>
@@ -140,7 +141,6 @@
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <fields>["User","User Types","Products","View Related Logs"]</fields>
         <drilldown>
           <condition match="$click.name2$ == &quot;View Related Logs&quot;">
             <eval token="user_drilldown">" ( \"".replace($row.User$,"\n","\" OR \"")."\" ) "</eval>
