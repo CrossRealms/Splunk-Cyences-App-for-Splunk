@@ -406,10 +406,10 @@ require([
                     } else {
                         $td.html('<input type="checkbox" class="notable_event_selector" id="notable_event_selector" name="notable_event_selector" value="' + cell.value + '"></input>');
                     }
-                    $td.on("click", function (e) {
-                        e.stopPropagation();
-                        $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
-                    });
+                    $td.children("input").on("click", function (e) {
+                      e.stopPropagation();
+                      $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
+                  });
                 }
                 else {
                     $td.addClass(cell.field).html("");
@@ -435,7 +435,7 @@ require([
 
                     $td.children('[data-toggle="tooltip"]').tooltip();
 
-                    $td.on("click", function (e) {
+                    $td.children("a").on("click", function (e) {
                         console.log("event handler fired");
                         e.stopPropagation();
                         $td.trigger("cyences_notable_event_handlers", { "action": cell.field });
