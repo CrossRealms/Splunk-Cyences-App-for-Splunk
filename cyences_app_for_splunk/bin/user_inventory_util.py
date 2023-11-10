@@ -211,7 +211,7 @@ class UserManager:
             'indexes': list(user.get("indexes").keys()),
             'sourcetypes': list(user.get("sourcetypes").keys()),
             'users': list(user.get("users").keys()),
-            'privilege_user_role': str(user.get("privilege_user_role", "-"))
+            'is_privileged_user': str(user.get("is_privileged_user", "No"))
         }
 
     def __enter__(self):
@@ -257,6 +257,17 @@ class UserManager:
         for usr in self.users:
             _users.append(self.get_as_dict(usr))
         return _users
+
+    def privilege_the_users(self, user_role, *uuids):
+        messages = []
+        for usr in self.users:
+            _uuid = usr.get("uuid")
+            if _uuid in uuids:
+                usr["is_privileged_user"] = user_role
+                self.updated_users.append(_uuid)
+                messages.append("is_privileged_user({}) has been updated for User(uuid={})".format(user_role, _uuid))
+
+        return messages
 
     def _find_user(self, user_entry: UserEntry):
         for usr in self.users:
