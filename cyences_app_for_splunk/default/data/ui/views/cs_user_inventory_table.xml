@@ -132,8 +132,8 @@
       <table id="user_inventory_main_tbl">
         <search base="base_summary">
           <query> | search $tkn_sp_filter$
-| rename users as User, user_types as "User Types", product_names as Products
-| table user_row_selector, User, "User Types",Products, uuid
+| rename users as User, user_types as "User Types", product_names as Products, is_privileged_user as IsPrivilegedUser
+| table user_row_selector, IsPrivilegedUser, User, "User Types",Products, uuid
 | eval "View Related Logs" = "Click Here"
 | nomv User
           </query>

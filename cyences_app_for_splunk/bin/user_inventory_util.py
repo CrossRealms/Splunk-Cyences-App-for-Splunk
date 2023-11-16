@@ -258,14 +258,14 @@ class UserManager:
             _users.append(self.get_as_dict(usr))
         return _users
 
-    def privilege_the_users(self, user_role, *uuids):
+    def privilege_the_users(self, is_privileged_user, *uuids):
         messages = []
         for usr in self.users:
             _uuid = usr.get("uuid")
             if _uuid in uuids:
-                usr["is_privileged_user"] = user_role
+                usr["is_privileged_user"] = is_privileged_user
                 self.updated_users.append(_uuid)
-                messages.append("is_privileged_user({}) has been updated for User(uuid={})".format(user_role, _uuid))
+                messages.append("is_privileged_user({}) has been updated for User(uuid={})".format(is_privileged_user, _uuid))
 
         return messages
 

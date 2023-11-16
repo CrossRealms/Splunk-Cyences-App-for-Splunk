@@ -31,7 +31,7 @@ class CyencesUserManagerCommand(EventingCommand):
     target_user = Option(name="target_user", require=False, default="")
     users_to_merge = Option(name="users_to_merge", require=False, default=None)
     user_uuids = Option(name="user_uuids", require=False, default=None)
-    user_role = Option(name="user_role", require=False, default="")
+    is_privileged_user = Option(name="is_privileged_user", require=False, default="")
 
     @staticmethod
     def validate_param_value_and_type(command_options):
@@ -53,8 +53,8 @@ class CyencesUserManagerCommand(EventingCommand):
         return command_options
 
     def validate_inputs(self):
-        if self.operation not in ["getusers", "addentries", "cleanup", "merge", "manualmerge", "previlegeuser"]:
-            raise Exception("operation - allowed values: getusers, addentries, cleanup, merge, manualmerge, previlegeuser")
+        if self.operation not in ["getusers", "addentries", "cleanup", "merge", "manualmerge", "privilegeuser"]:
+            raise Exception("operation - allowed values: getusers, addentries, cleanup, merge, manualmerge, privilegeuser")
 
         if self.operation == "cleanup":
             timenow = time.time()
@@ -72,7 +72,7 @@ class CyencesUserManagerCommand(EventingCommand):
         elif self.operation == "manualmerge":
             self.users_to_merge = self.validate_param_value_and_type(self.users_to_merge)
 
-        elif self.operation == "previlegeuser":
+        elif self.operation == "privilegeuser":
             self.user_uuids = self.validate_param_value_and_type(self.user_uuids)
 
     def transform(self, records):
@@ -128,9 +128,9 @@ class CyencesUserManagerCommand(EventingCommand):
                 for m in messages:
                     yield {"message": m}
 
-        elif self.operation == "previlegeuser":
+        elif self.operation == "privilegeuser":
             with UserManager(session_key, logger, USER_INVENTORY_LOOKUP_COLLECTION) as dm:
-                messages = dm.privilege_the_users(self.user_role, *self.user_uuids)
+                messages = dm.privilege_the_users(self.is_privileged_user, *self.user_uuids)
                 for m in messages:
                     yield {"message": m}
 
