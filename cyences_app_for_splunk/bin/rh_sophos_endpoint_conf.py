@@ -42,7 +42,7 @@ class SophosConfRestcall(admin.MConfigHandler):
     
 
     def handleEdit(self, conf_info):
-        # Update the Sophos configuration
+        # Update the Sophos Endpoint Protection configuration
         try:
             data = json.loads(self.callerArgs['data'][0])
             client_id = str(data['client_id'])
