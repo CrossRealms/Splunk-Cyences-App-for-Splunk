@@ -316,6 +316,18 @@ PRODUCTS = [
     ]
 },
 {
+    'name': 'RSA Radius Authentication',
+    'macro_configurations': [
+        {
+            'macro_name': 'cs_rsa_radius_authentication_indexes',
+            'label': 'RSA Radius Authentication Data (indexes)',
+            'search': '`cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" | stats count by index, sourcetype',
+            'earliest_time': '-7d@d',
+            'latest_time': 'now',
+        }
+    ]
+},
+{
     'name': 'Windows',
     'macro_configurations': [
         {
