@@ -21,6 +21,7 @@ require([
         { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
         { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
         { id: 'cs_vpn_reports', title: 'VPN' },
+        { id: 'cs_rsa_radius_authentication', title: 'RSA Radius Authentication' },
         { id: 'cs_sophos_reports', title: 'Sophos' },
         { id: 'cs_windows_defender_reports', title: 'Windows Defender' },
         { id: 'cs_o365_defender_atp', title: 'Defender ATP' },
