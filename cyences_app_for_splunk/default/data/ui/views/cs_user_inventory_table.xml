@@ -141,7 +141,7 @@
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
-        <fields>[user_row_selector, IsPrivilegedUser, User, "User Types", Products, uuid, "View Related Logs"]</fields>
+        <fields>user_row_selector, IsPrivilegedUser, User, "User Types",Products, uuid, "View Related Logs"</fields>
         <drilldown>
           <condition match="$click.name2$ == &quot;View Related Logs&quot;">
             <eval token="user_drilldown">" ( \"".replace($row.User$,"\n","\" OR \"")."\" ) "</eval>
