@@ -133,7 +133,7 @@
         <search base="base_summary">
           <query> | search $tkn_sp_filter$
 | rename users as User, user_types as "User Types", product_names as Products, is_privileged_user as IsPrivilegedUser
-| table user_row_selector, IsPrivilegedUser, User, "User Types",Products, uuid
+| table user_row_selector, IsPrivilegedUser, User, "User Types",Products, uuid, indexes, sourcetypes
 | eval "View Related Logs" = "Click Here"
 | nomv User
           </query>
@@ -141,6 +141,7 @@
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
+        <fields>[user_row_selector, IsPrivilegedUser, User, "User Types", Products, uuid, "View Related Logs"]</fields>
         <drilldown>
           <condition match="$click.name2$ == &quot;View Related Logs&quot;">
             <eval token="user_drilldown">" ( \"".replace($row.User$,"\n","\" OR \"")."\" ) "</eval>
