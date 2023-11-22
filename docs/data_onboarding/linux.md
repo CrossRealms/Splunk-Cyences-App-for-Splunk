@@ -2,7 +2,7 @@
 layout: default
 title: Linux/Unix
 permalink: /data_onboarding/linux/
-nav_order: 25
+nav_order: 11
 parent: Data Onboarding
 ---
 

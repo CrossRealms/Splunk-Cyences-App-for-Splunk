@@ -2,7 +2,7 @@
 layout: default
 title: Authentication
 permalink: /data_onboarding/authentication/
-nav_order: 22
+nav_order: 8
 parent: Data Onboarding
 ---
 

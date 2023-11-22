@@ -322,7 +322,11 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Ransomware - Endpoint Compromise - Malicious Package Found
 
 ## VPN
-* Cisco Anyconnect Alerts:
+* Supported Systems:
+    * Cisco Anyconnect
+    * Fortinet FortiGate
+    * GlobalProtect (Palo Alto)
+* Alerts:
     * Authentication - Bruteforce Attempt for a User
     * Authentication - Bruteforce Attempt from a Source
     * Authentication - Excessive Failed VPN Logins for a User
@@ -331,7 +335,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Authentication - Successful VPN Login From Unusual Country
     * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
-* Cisco Anyconnect Dashboard panels: 
+* Dashboard panels: 
     * Connected Workforce by Location
     * Elapsed Time Per Session
     * Login Details
@@ -340,42 +344,18 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Successful Session
     * Successful vs Failed Logins
     * Unique Users by Country
-* Fortinet FortiGate Alerts:
-    * Authentication - Bruteforce Attempt for a User
-    * Authentication - Bruteforce Attempt from a Source
-    * Authentication - Excessive Failed VPN Logins for a User
-    * Authentication - Excessive Failed VPN Logins from a Source
-    * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
-    * Authentication - VPN Login Attempts Outside Working Hours
-* Fortinet FortiGate Dashboard panels:
-    * Connected Workforce by Location
-    * Elapsed Time Per Session
-    * Login Details
-    * Logins by Country
-    * Logins by Success/Failure 
-    * Successful Session
-    * Successful vs Failed Logins
-    * Unique Users by Country
-* GlobalProtect (Palo Alto) Alerts:
-    * Authentication - Bruteforce Attempt for a User
-    * Authentication - Bruteforce Attempt from a Source
-    * Authentication - Excessive Failed VPN Logins for a User
-    * Authentication - Excessive Failed VPN Logins from a Source
-    * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
-    * Authentication - VPN Login Attempts Outside Working Hours
-* GlobalProtect (Palo Alto) Dashboard panels:
-    * Connected Workforce by Location
-    * Elapsed Time Per Session
-    * Login Details
-    * Logins by Country
-    * Logins by Success/Failure 
-    * Successful Session
-    * Successful vs Failed Logins
-    * Unique Users by Country
+
+
+## RSA Radius Authentication
+* Supported Systems
+    * Palo Alto system logs
+* Alerts:
+    * RSA Radius Authentication - Excessive Failed Logins for a User
+* Dashboard panels:
+    * RSA Radius Authentications
+    * RSA Radius Authentication Success Rate
+    * RSA Radius Authentication Activities
+
 
 ## Vulnerability
 

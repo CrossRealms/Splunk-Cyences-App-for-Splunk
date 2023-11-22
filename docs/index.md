@@ -59,6 +59,9 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Fortinet FortiGate
     * GlobalProtect (Palo Alto)
 
+* RSA Radius Authentication
+    * From Palo Alto system logs
+
 * Vulnerability Scanners
     * CrowdStrike Spotlight
     * Qualys

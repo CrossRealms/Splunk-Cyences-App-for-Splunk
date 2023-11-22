@@ -2,7 +2,7 @@
 layout: default
 title: VPN
 permalink: /data_onboarding/vpn/
-nav_order: 26
+nav_order: 12
 parent: Data Onboarding
 ---
 
