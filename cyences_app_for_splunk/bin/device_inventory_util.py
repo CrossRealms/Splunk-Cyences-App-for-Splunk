@@ -23,6 +23,8 @@ from splunk import rest
 
 
 MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
+# List of mac_addresses which are common across different devices
+COMMON_MAC_ADDRESSES = ["02:50:41:00:00:01", "00:50:56:c0:00:01", "00:50:56:c0:00:08", "02:00:4c:4f:4f:50"]
 
 
 def remove_words_from_end(sentence, words):
@@ -39,6 +41,8 @@ def two_value_combination_match(
     current_list2,
     is_list1_hostname=False,
     is_list2_hostname=False,
+    is_list1_mac_address=False,
+    is_list2_mac_address=False,
     hostname_postfixes=[],
 ):
     # this does comparison in lower case characters always to ensure case-sensitivity does not affect the comparison
@@ -54,7 +58,10 @@ def two_value_combination_match(
             if element
         ]
     else:
-        values1_updated = [element.lower() for element in values1 if element]
+        if is_list1_mac_address:
+            values1_updated = [element.lower() for element in values1 if element not in COMMON_MAC_ADDRESSES]
+        else:
+            values1_updated = [element.lower() for element in values1 if element]
         current_list1_updated = [
             element.lower() for element in current_list1 if element
         ]
@@ -71,7 +78,10 @@ def two_value_combination_match(
             if element
         ]
     else:
-        values2_updated = [element.lower() for element in values2 if element]
+        if is_list2_mac_address:
+            values2_updated = [element.lower() for element in values2 if element not in COMMON_MAC_ADDRESSES]
+        else:
+            values2_updated = [element.lower() for element in values2 if element]
         current_list2_updated = [
             element.lower() for element in current_list2 if element
         ]
@@ -274,7 +284,7 @@ class DeviceManager:
             ex_device.get("ips"),
             new_device.mac_addresses,
             ex_device.get("mac_addresses"),
-            hostname_postfixes=hostname_postfixes,
+            is_list2_mac_address=True,
         ):
             return True
 
@@ -296,12 +306,13 @@ class DeviceManager:
             new_device.mac_addresses,
             ex_device.get("mac_addresses"),
             is_list1_hostname=True,
+            is_list2_mac_address=True,
             hostname_postfixes=hostname_postfixes,
         ):
             return True
 
         return False
-    
+
     def get_matching_device(self, device_entry: DeviceEntry):
         # return matching device
         for de in self.devices:
