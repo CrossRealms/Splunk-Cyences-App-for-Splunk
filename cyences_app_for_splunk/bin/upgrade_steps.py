@@ -48,6 +48,21 @@ def upgrade_4_3_0(session_key, logger):
     response = service.jobs.oneshot(USER_INVENTORY_SEARCH_QUERY, output_mode="json", earliest_time='-1d@m', latest_time='now')
     handle_results(response, logger)
 
+
+def upgrade_4_5_0(session_key, logger):
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+
+    SOPHOS_DEVICES_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesdevicemanager operation="cleanup" products_to_cleanup="Sophos" minindextime=$time$"'
+    logger.info("Cleaning up the Sophos devices from the Device Inventory table")
+    response = service.jobs.oneshot(SOPHOS_DEVICES_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+    time.sleep(60)
+
+    SOPHOS_DEVICE_INVENTORY_SEARCH = '| savedsearch "Device Inventory - Sophos"'
+    logger.info("Running Device Inventory - Sophos search to add sophos devices to Device Inventory table")
+    response = service.jobs.oneshot(SOPHOS_DEVICE_INVENTORY_SEARCH, output_mode="json", earliest_time='-1d@m', latest_time='now')
+    handle_results(response, logger)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -57,4 +72,5 @@ version_upgrade = (
     ('3.1.0', None),
     ('4.0.0', upgrade_4_0_0),
     ('4.3.0', upgrade_4_3_0),
+    ('4.5.0', upgrade_4_5_0),
 )
