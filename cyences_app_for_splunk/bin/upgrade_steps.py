@@ -53,7 +53,7 @@ def upgrade_4_5_0(session_key, logger):
     service = client.connect(token=session_key, app=cs_utils.APP_NAME)
 
     SOPHOS_DEVICES_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesdevicemanager operation="cleanup" products_to_cleanup="Sophos" minindextime=$time$"'
-    logger.info("Cleaning up the Sophos devices from the Device Inventory table")
+    logger.info("Cleaning up the Sophos devices from Device Inventory, as they were merged wrongly due to similar Mac addresses assigned to the devices")
     response = service.jobs.oneshot(SOPHOS_DEVICES_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
     handle_results(response, logger)
     time.sleep(60)
