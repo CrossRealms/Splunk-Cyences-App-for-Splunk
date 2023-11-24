@@ -72,5 +72,6 @@ version_upgrade = (
     ('3.1.0', None),
     ('4.0.0', upgrade_4_0_0),
     ('4.3.0', upgrade_4_3_0),
+    ('4.4.0', None),
     ('4.5.0', upgrade_4_5_0),
 )
