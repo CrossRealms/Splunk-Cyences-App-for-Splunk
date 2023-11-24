@@ -24,6 +24,9 @@ from splunk import rest
 
 MAX_TIME_EPOCH = 2147483647  # Tue Jan 19 2038 03:14:07
 # List of mac_addresses which are common across different devices
+# 02:50:41:00:00:01 => The default MAC address of the Palo Alto Networks Global Protect
+# 02:00:4c:4f:4f:50 => npcap creates same mac address (loopback device) on every computer (https://github.com/nmap/nmap/issues/1679)
+# 00:50:56:c0:00:01 && 00:50:56:c0:00:08 => VMware provides the same mac address for two networks "host-only" and "NAT". (https://communities.vmware.com/t5/Virtualization-Technology/Multiple-VMWare-hosts-duplicate-virtual-MAC-addresses-vmnet8/td-p/117348)
 COMMON_MAC_ADDRESSES = ["02:50:41:00:00:01", "00:50:56:c0:00:01", "00:50:56:c0:00:08", "02:00:4c:4f:4f:50"]
 
 
