@@ -349,7 +349,7 @@
 | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
-| eval Name=case(Name=="Sophos Service is not Running","Sophos Service Stopped/Disabled Events",Name=="Sophos RealTime Protection Disabled","Sophos RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
+| eval Name=case(Name=="Sophos Endpoint Protection Service is not Running","Sophos Endpoint Protection Service Stopped/Disabled Events",Name=="Sophos Endpoint Protection RealTime Protection Disabled","Sophos Endpoint Protection RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields _time host dhost type 
@@ -415,10 +415,10 @@
           <condition match="'row.Name'==&quot;Windows Defender - Windows Defender RealTime Protection Disabled or Failed&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_windows_defender_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
-          <condition match="'row.Name'==&quot;Currently Disabled/Stopped Sophos Services&quot;">
+          <condition match="'row.Name'==&quot;Currently Disabled/Stopped Sophos Endpoint Protection Services&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
-          <condition match="'row.Name'==&quot;Currently Stopped/Disabled Sophos RealTime Protection&quot;">
+          <condition match="'row.Name'==&quot;Currently Stopped/Disabled Sophos Endpoint Protection RealTime Protection&quot;">
             <link target="_blank">/app/cyences_app_for_splunk/cs_sophos_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
           </condition>
           <condition match="'row.Name'==&quot;Currently Disabled/Stopped Windows Defender Services&quot;">

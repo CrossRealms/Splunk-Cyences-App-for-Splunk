@@ -44,7 +44,7 @@ It is populated from a lookup which is built by scheduled reports. The lookup is
 * CrowdStrike
 * Lansweeper
 * Qualys
-* Sophos
+* Sophos Endpoint Protection
 * Tenable
 * Windows Defender
 * Kaspersky
@@ -102,7 +102,7 @@ This dashboard displays the following information about devices:
 * Lansweeper information 
 * Host Vulnerability Summary
 * Host Vulnerabilities
-* Sophos + Windows Defender (Antivirus) status and related events 
+* Sophos Endpoint Protection + Windows Defender (Antivirus) status and related events 
 * VPN activities from the device or by the selected user
 * Various authentication activities like RDP and Linux logins 
 * If an asset is involved in any kind of Splunk security alert

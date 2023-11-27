@@ -159,7 +159,7 @@ require([
           var fullarray = selected_values_array.join();
 
           let status = '-';
-          let COMMON_ERROR_MSG = "Some Error Occured. Please check whether Sophos Endpoint Protection configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Endpoint Protection Central";
+          let COMMON_ERROR_MSG = "Some Error Occured. Please check whether Sophos Endpoint Protection configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central";
           new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
                     if (results == null){

@@ -244,7 +244,7 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_sophos',
-            'label': 'Sophos Endpoint Protection Central Data',
+            'label': 'Sophos Central Data',
             'search': build_search_query(
                         macro='cs_sophos',
                         by='sourcetype',

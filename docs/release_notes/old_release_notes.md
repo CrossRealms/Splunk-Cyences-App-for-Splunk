@@ -73,8 +73,8 @@ parent: Release Notes
         * Email - Hourly Increase In Emails Over Baseline
         * Network Compromise - Basic Scanning
         * Authentication - Bruteforce Attempt from a Source
-        * Sophos - Failed to clean up threat by Sophos
-        * Sophos - Sophos RealTime Protection Disabled
+        * Sophos Endpoint Protection - Failed to clean up threat by Sophos
+        * Sophos Endpoint Protection - Sophos RealTime Protection Disabled
 
     * Updated the "Microsoft 365 Defender ATP Audit" dashboard to reflect the latest change to the Defender add-on.
 
@@ -126,7 +126,7 @@ parent: Release Notes
 
 * ### Bug Fixes
 
-    * Fixed a fetching issue for the first fifty records for the Sophos endpoint custom command.
+    * Fixed a fetching issue for the first fifty records for the Sophos Endpoint Protection custom command.
 
     * Fixed a permissions issue that wouldn't allow users to make use of the notable event assignment functionality.
 
@@ -560,8 +560,8 @@ parent: Release Notes
         * Users needs to have version 1.3.0 of the Lansweeper Add-on to collect the Antivirus related data.
 
     * Updated the following Antivirus releated alerts to reduce the number of false positives using Lansweeper's asset data. The updated alerts will filter the host if it has any other antivirus enabled on it.
-        * Sophos - Endpoint Not Protected by Sophos
-        * Sophos - Sophos Service is not Running
+        * Sophos Endpoint Protection - Endpoint Not Protected by Sophos
+        * Sophos Endpoint Protection - Sophos  Service is not Running
         * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
 
     * Enhanced the search query for the `Windows Defender - Windows Defender RealTime Protection Disabled or Failed` alert to reduce the number of false positives.
@@ -744,8 +744,8 @@ parent: Release Notes
         * Individual alerts can now be hidden from the dashboard. 
         * Office 365 alerts are data dependent. If there is no data coming under this index, then the following alerts will not populate notable events:  
             * Currently not Operational O365 Services
-            * Currently Disabled/Stopped Sophos Services 
-            * Currently Stopped/Disabled Sophos RealTime Protection 
+            * Currently Disabled/Stopped Sophos Endpoint Protection Services 
+            * Currently Stopped/Disabled Sophos Endpoint Protection RealTime Protection 
             * Currently Disabled/Stopped Windows Defender Services 
             * Currently Stopped/Disabled Windows Defender RealTime Protection 
     * Tenable Dashboard  
@@ -945,7 +945,7 @@ parent: Release Notes
 
 * ### Issues Fixed:
     * Fixed a minor Python error for device inventory gen python custom command: Removed unused Float Validator and improved error handling was added. 
-    * Fixed a Python issue with Sophos custom command: Variable conflict has been resolved. 
+    * Fixed a Python issue with Sophos Endpoint Protection custom command: Variable conflict has been resolved. 
     * Fixed an issue where the Notable Events dashboard panel was incorrectly displaying information for the AD - User Locked Out alert in the Forensics dashboard. 
         * Old: 
 
@@ -1208,7 +1208,7 @@ parent: Release Notes
 * ### Renamed Sophos alerts. 
 
 * ### New Antivirus category found under the Reports drop-down: 
-    * Sophos alerts and reports have moved to the Antivirus section. 
+    * Sophos Endpoint Protection alerts and reports have moved to the Antivirus section. 
     * Added alerts and reports for CrowdStrike. 
     * Added alerts and reports for Windows Defender. 
 
@@ -1223,7 +1223,7 @@ parent: Release Notes
 
 ## Upgrade Guide from version 1.0.0 to 1.1.0 
 
-* ### Sophos' saved searches and alerts have been renamed: 
+* ### Sophos Endpoint Protection' saved searches and alerts have been renamed: 
     * If one or more alerts have been previously enabled, it will need to be re-enabled in order to function properly. 1.0 alerts will need to be removed altogether. 
 
 * ### Notable events for alerts are now stored in the index named **cyences** and its corresponding sourcetype is named **stash**: 
@@ -1249,7 +1249,7 @@ parent: Release Notes
     * Network Reports
     * Office 365 
     * Palo Alto 
-    * Sophos 
+    * Sophos Endpoint Protection 
     * VPN 
 
 * ### Added App Configuration dashboard.

@@ -10,7 +10,7 @@ auth_token = <string> API auth token
 cust_id = <string> UUID generated automatically while Configuration
 
 [cs_sophos_endpoint]
-# Sophos Configuration, 
+# Sophos Endpoint Protection Configuration, 
 client_id = <string> Client ID
 client_secret = <string> Client Secret
 

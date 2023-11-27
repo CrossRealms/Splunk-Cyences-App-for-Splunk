@@ -184,7 +184,7 @@ require([
                     | fields - ip, hostname, mac_address] 
                 | append 
                     [| inputlookup cs_sophos_inventory 
-                    | rename time as sophos_last_event 
+                    | rename time as Sophos_last_event 
                     | fields - ip, hostname, mac_address] 
                 | append 
                     [| inputlookup cs_windows_defender_inventory 
