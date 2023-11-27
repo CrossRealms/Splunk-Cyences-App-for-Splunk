@@ -74,7 +74,7 @@
       <title>RSA Radius Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
 | chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
@@ -115,7 +115,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
 | `drop_dm_object_name(Authentication)`
 | eval over_field=user."|".app
 | chart sum(count) as count, max(last_login) as last_login over over_field by action
