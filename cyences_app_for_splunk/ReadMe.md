@@ -41,7 +41,7 @@ This app can be set up in two ways:
 
 INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
 ------------------------------------------------------------
-Visit https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/ for the complete configuration guide.
+Visit https://cyences.com for the complete configuration guide.
 
 
 UNINSTALL APP
@@ -55,9 +55,9 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
-Please read the Release Notes and Upgrade Guide for the latest version here - https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/release_notes/
+Please read the Release Notes and Upgrade Guide for the latest version here - https://cyences.com/release_notes/
 
-You can read the Release Notes and Upgrade Guide for the older version of the App here - https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/release_notes/old_release_notes/
+You can read the Release Notes and Upgrade Guide for the older version of the App here - https://cyences.com/release_notes/old_release_notes/
 
 
 OPEN SOURCE COMPONENTS AND LICENSES
