@@ -102,9 +102,9 @@ let allMacros = [
         ]
     },
     {
-        section: 'RSA Radius Authentication',
+        section: 'Radius Authentication',
         macros: [
-            { name: 'cs_rsa_radius_authentication_excessive_login_failure_limit' },
+            { name: 'cs_radius_authentication_excessive_login_failure_limit' },
         ]
     },
     {

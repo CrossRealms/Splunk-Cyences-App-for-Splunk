@@ -17,7 +17,7 @@
     <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
     <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
     <view name="cs_vpn_reports" /><!--VPN-->
-    <view name="cs_rsa_radius_authentication" /><!--RSA Radius Authentication-->
+    <view name="cs_radius_authentication" /><!--Radius Authentication-->
     <collection label="Antivirus">
       <view name="cs_sophos_reports" /><!--Sophos-->
       <view name="cs_windows_defender_reports" /><!--Windows Defender-->

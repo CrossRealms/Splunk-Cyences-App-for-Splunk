@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>RSA Radius Authentication</label>
+  <label>Radius Authentication</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -14,7 +14,7 @@
       <fieldForLabel>app</fieldForLabel>
       <fieldForValue>app</fieldForValue>
       <search>
-        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" by Authentication.app | rename "Authentication.app" as app</query>
+        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` dest_category="radius_auth" by Authentication.app | rename "Authentication.app" as app</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -24,13 +24,13 @@
   <row>
     <panel>
       <html>
-        <p>RSA Radius Authentication Reports</p>
-        <p>This dashboard includes all authentication attempts related to RSA Radius.</p>
-        <p>If the data is present in Splunk but isn't being displayed by this dashboard, please check the mapping and support by Cyences App. And also check "RSA Radius Authentication Data (indexes)" macro (cs_rsa_radius_authentication_indexes) definition (Settings &gt; Configuration).</p>
+        <p>Radius Authentication Reports</p>
+        <p>This dashboard includes all authentication attempts related to Radius.</p>
+        <p>If the data is present in Splunk but isn't being displayed by this dashboard, please check the mapping and support by Cyences App. And also check "Radius Authentication Data (indexes)" macro (cs_radius_authentication_indexes) definition (Settings &gt; Configuration).</p>
       </html>
       <table>
         <search>
-          <query>`cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_rsa_radius_authentication_indexes` dest_category=rsa_radius_auth" | table label, data</query>
+          <query>`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -44,10 +44,10 @@
   </row>
   <row>
     <panel>
-      <title>RSA Radius Authentications</title>
+      <title>Radius Authentications</title>
       <chart>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by _time Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by _time Authentication.action
 | timechart span=1h count, dc(Authentication.user) by Authentication.action
 | eval "Unique Users"='dc(Authentication.user): failure'+'dc(Authentication.user): success'
 | fields - "dc(Authentication.user): failure", "dc(Authentication.user): success"
@@ -71,10 +71,10 @@
       </html>
     </panel>
     <panel>
-      <title>RSA Radius Authentication Success Rate</title>
+      <title>Radius Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
 | chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
@@ -105,7 +105,7 @@
   </row>
   <row>
     <panel>
-      <title>RSA Radius Authentication Activities</title>
+      <title>Radius Authentication Activities</title>
       <input type="text" token="tkn_user_tmp">
         <label>User</label>
         <change>
@@ -115,7 +115,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_rsa_radius_authentication_indexes` dest_category="rsa_radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
 | `drop_dm_object_name(Authentication)`
 | eval over_field=user."|".app
 | chart sum(count) as count, max(last_login) as last_login over over_field by action
