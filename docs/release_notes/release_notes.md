@@ -46,8 +46,8 @@ has_children: true
     * Email:
         * Email - Suspicious Subject or Attachment
         * Email - With Known Abuse Web Service Link
-    * Sophos Endpoint Protection:
-        * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
+    * Sophos:
+        * Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos
     * Ransomware
         * Ransomware - Endpoint Compromise - Malicious Package Found
 
@@ -78,4 +78,4 @@ has_children: true
 ## Upgrade Guide from 4.3.0 to 4.4.0
 
   * To onboard the Google Workspace data, Refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
-  * To use the Sophos Endpoint Protection dashboard and alerts, Install the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/)
+  * To use the Sophos dashboard and alerts, Install the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/)

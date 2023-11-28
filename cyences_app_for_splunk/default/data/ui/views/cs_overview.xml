@@ -335,18 +335,18 @@
       <title>Antivirus</title>
       <table id="tbl_antivirus">
         <search>
-          <query>`cs_cyences_index` alert_name IN ("*Sophos *", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
+          <query>`cs_cyences_index` alert_name IN ("*Sophos Endpoint Protection*", "*Windows Defender *", "*CrowdStrike *", "*Defender ATP*") | eval cyences_severity = case(cyences_severity=="critical", 5, cyences_severity=="high", 4, cyences_severity=="medium", 3, cyences_severity=="low", 2, cyences_severity=="info", 1) 
 | search cyences_severity IN $tkn_severity$
 | `cs_add_notable_event_editor_fields`
 | search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")`]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP")`]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
 | streamstats count as newcount by savedsearch_name
 | where (cyences_severity!="unknown" OR newcount=1)
-| `cs_filter_savedsearches("Sophos|Windows Defender|CrowdStrike|Defender ATP")` 
+| `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP")` 
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
 | eval Name=case(Name=="Sophos Endpoint Protection Service is not Running","Sophos Endpoint Protection Service Stopped/Disabled Events",Name=="Sophos Endpoint Protection RealTime Protection Disabled","Sophos Endpoint Protection RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected by Windows Defender","Windows Defender Endpoint Stopped/Disabled Events",Name=="Windows Defender RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
@@ -369,7 +369,7 @@
     | stats count as Count
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently Stopped/Disabled Sophos RealTime Protection"
+    | eval Name="Currently Stopped/Disabled Sophos Endpoint Protection RealTime Protection"
     | eval cyences_severity = 4
     | search cyences_severity IN $tkn_severity$]
 | append

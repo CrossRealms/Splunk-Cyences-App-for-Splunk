@@ -18,7 +18,7 @@
     <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
     <view name="cs_vpn_reports" /><!--VPN-->
     <collection label="Antivirus">
-      <view name="cs_sophos_enpoint_protection_reports" /><!--Sophos Endpoint Protection -->
+      <view name="cs_sophos_reports" /><!--Sophos Endpoint Protection -->
       <view name="cs_windows_defender_reports" /><!--Windows Defender-->
       <view name="cs_o365_defender_atp" /><!--Office 365 Defender ATP-->
       <view name="cs_crowdstrike_reports" /><!--CrowdStrike EventStream-->
