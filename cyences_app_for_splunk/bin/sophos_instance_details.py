@@ -49,7 +49,7 @@ class SophosEndpointDetails(GeneratingCommand):
         if ("errorCode" in response_json and response_json['errorCode'] == 'success'):
             return response_json['access_token'] if "access_token" in response_json else None
         else:
-            raise Exception("Error from sophos: {}".format(response_json))
+            raise Exception("Error from sophos endpoint protection: {}".format(response_json))
 
     def get_tenant_from_organization(self,barier_token,organization_id):
 
@@ -173,7 +173,7 @@ class SophosEndpointDetails(GeneratingCommand):
             client_id,client_secret = self.get_client_details()
 
             if not client_id or not client_secret:
-                raise Exception("Sophos Client ID or Client Secret or both not found in the cs_configurations.conf file.")
+                raise Exception("Sophos Endpoint Protection Client ID or Client Secret or both not found in the cs_configurations.conf file.")
 
             barier_token = self.get_barier_token(client_id,client_secret)
             self.get_tenant_list(barier_token)

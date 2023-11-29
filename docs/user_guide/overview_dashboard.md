@@ -14,7 +14,7 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 ## Overview Dashboard Features:
 
 ### Alerts
-* Each alert is inspired by common security use cases to detect problems in your environment (i.e., Sophos Service is not Running is an alert that identifies when a Sophos antivirus service stops running on an endpoint).
+* Each alert is inspired by common security use cases to detect problems in your environment (i.e., Sophos Endpoint Protection  Service is not Running is an alert that identifies when a Sophos antivirus service stops running on an endpoint).
 * All of the dashboard panels (except for Globally Detected Malicious IPs) in the Overview dashboard displays the status for each alert in the selected time-range.
 * All of the alerts are distributed in a categorized fashion, so some alerts may fall into multiple categories (i.e., Fake Windows Processes alert is present in both Ransomware and Windows). This allows for a more thorough breakdown for any Splunk environment and can easily assist with all sorts of security vulnerabilities that may appear. 
 * If the **Notable Events** count is greater than zero and changes from green to another color, then that indicates a security violation for the specified alert. Notable events are the number of security issues that the Cyences App has detected via Splunk events (logs). The severity of a security violation for a notable event is highlighted in either: green, yellow, orange, or red (green = informational and low severity; yellow = medium severity; orange = high severity; red = critical severity). A multi-select filter for severity is present to allow Splunk users a more customizable view based on their security needs.  

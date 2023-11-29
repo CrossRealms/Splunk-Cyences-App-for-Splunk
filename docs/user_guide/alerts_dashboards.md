@@ -54,13 +54,13 @@ There are several security related alerts to choose from and they are all locate
     * Defender ATP - Defender ATP Alerts
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
-* Sophos Alerts:
-    * Sophos - Endpoint Not Protected by Sophos
-    * Sophos - Failed to clean up threat by Sophos 
-    * Sophos - Sophos RealTime Protection Disabled 
-    * Sophos - Sophos Service is not Running 
-    * Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos
-* Sophos Dashboard panels:
+* Sophos Endpoint Protection Alerts:
+    * Sophos Endpoint Protection - Endpoint Not Protected by Sophos
+    * Sophos Endpoint Protection - Failed to clean up threat by Sophos 
+    * Sophos Endpoint Protection - Sophos RealTime Protection Disabled 
+    * Sophos Endpoint Protection - Sophos Service is not Running 
+    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
+* Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
     * Core Restore Failed

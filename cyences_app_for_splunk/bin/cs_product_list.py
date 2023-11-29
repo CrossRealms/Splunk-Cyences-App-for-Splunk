@@ -240,7 +240,7 @@ PRODUCTS = [
     ]
 },
 {
-    'name': 'Sophos',
+    'name': 'Sophos Endpoint Protection',
     'macro_configurations': [
         {
             'macro_name': 'cs_sophos',

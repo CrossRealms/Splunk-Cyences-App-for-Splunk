@@ -48,6 +48,7 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
       </table>
     </panel>
   </row>

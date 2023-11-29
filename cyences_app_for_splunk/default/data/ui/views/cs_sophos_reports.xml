@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>Sophos</label>
+  <label>Sophos Endpoint Protection</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -9,7 +9,7 @@
       </default>
     </input>
     <input type="dropdown" token="tkn_host">
-      <label>Sophos Splunk Data Collection Host</label>
+      <label>Sophos Endpoint Protection Splunk Data Collection Host</label>
       <choice value="*">All</choice>
       <default>*</default>
       <fieldForLabel>host</fieldForLabel>
