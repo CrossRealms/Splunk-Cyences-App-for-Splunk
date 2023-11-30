@@ -132,7 +132,7 @@ List of Device Inventory related searches that users can execute individually to
 * Device Inventory - CrowdStrike 
 * Device Inventory - Lansweeper 
 * Device Inventory - Qualys 
-* Device Inventory - Sophos 
+* Device Inventory - Sophos Endpoint Protection 
 * Device Inventory - Tenable 
 * Device Inventory - Tenable Vuln
 * Device Inventory - Windows Defender 

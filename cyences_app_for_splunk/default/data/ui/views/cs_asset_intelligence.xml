@@ -398,7 +398,7 @@
   </row>
   <row depends="$tkn_show_hide_sophos$">
     <panel>
-      <title>Antivirus - Sophos $tkn_filter_main_label$</title>
+      <title>Antivirus - Sophos Endpoint Protection $tkn_filter_main_label$</title>
       <input type="time" token="tkn_timeRange_av_sophos">
         <label></label>
         <default>
@@ -409,7 +409,7 @@
       <table>
         <title>Endpoint Service Not Running</title>
         <search>
-          <query>`cs_sophos` sourcetype="sophos_events"  type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored")| rename location as host | eval ip=source_info.ip | search $tkn_filter_main$
+          <query>`cs_sophos` sourcetype="sophos_events" type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored")| rename location as host | eval ip=source_info.ip | search $tkn_filter_main$
 | stats count, latest(_time) as _time, values(source_info.ip) as src_ip, values(user) as user latest(type) as type by host
 | where type=="Event::Endpoint::ServiceNotRunning"
 | `cs_human_readable_time_format(_time, "Service Disabled Since")`
@@ -423,7 +423,7 @@
       <table>
         <title>Real-Time Protection Disabled</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Sav*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Sav*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) as type by host
 | where type=="Event::Endpoint::SavDisabled"
 | `cs_human_readable_time_format(_time, "RTP Disabled Since")`
 | table host, src_ip, user, "RTP Disabled Since"</query>
@@ -436,7 +436,7 @@
       <table>
         <title>Endpoints in Isolation</title>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Isolation::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) by host
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Isolation::*" | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | stats count, latest(_time) as _time, values(src_ip) as src_ip, values(suser) as user, latest(type) by host
 | where type=="Event::Endpoint::Isolation::Isolated"
 | `cs_human_readable_time_format(_time, "In Isolation Since")`
 | table host, src_ip, user, "In Isolation Since"</query>
@@ -463,7 +463,7 @@
       <table>
         <title>Other Sophos Events</title>
         <search>
-          <query>`cs_sophos` NOT type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored", "Event::Endpoint::Sav*", "Event::Endpoint::Isolation::*", "Event::Endpoint::Management::*") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | table _time, host, src_ip, user, category, vendor_action, name, action, severity, signature, type</query>
+          <query>`cs_sophos` sourcetype="sophos_events" NOT type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored", "Event::Endpoint::Sav*", "Event::Endpoint::Isolation::*", "Event::Endpoint::Management::*") | rename dhost as host | eval ip=src_ip | search $tkn_filter_main$ | table _time, host, src_ip, user, category, vendor_action, name, action, severity, signature, type</query>
           <earliest>$tkn_timeRange_av_sophos.earliest$</earliest>
           <latest>$tkn_timeRange_av_sophos.latest$</latest>
         </search>
