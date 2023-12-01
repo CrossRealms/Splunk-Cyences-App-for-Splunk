@@ -14,7 +14,7 @@ const TABS = [
     'Macro Setup',
     'HoneyDB Configuration',
     'MaliciousIP Collector Configuration',
-    'Sophos Endpoint API Configuration',
+    'Sophos Central API Configuration',
     'Cyences Email Action Configuration',
     'Device Inventory Configuration'
 ]

@@ -244,11 +244,11 @@ PRODUCTS = [
     'macro_configurations': [
         {
             'macro_name': 'cs_sophos',
-            'label': 'Sophos Central Data',
+            'label': 'Sophos Endpoint Protection Data',
             'search': build_search_query(
                         macro='cs_sophos',
                         by='sourcetype',
-                        values='sophos:central:events'
+                        values='sophos_events'
                         ),
             'earliest_time': '-7d@d',
             'latest_time': 'now',
