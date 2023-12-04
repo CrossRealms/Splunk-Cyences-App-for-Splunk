@@ -48,6 +48,8 @@ has_children: true
 
     * Hiding the security components from **Device Inventory** dashboard that are not relevent to the splunk environment.
 
+    * Added malicious Python packages and NPM packages to the list of malicious packages for the **Ransomware - Endpoint Compromise - Malicious Package Found** alert.
+
 
 * ### Bug Fixes
 
