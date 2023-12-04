@@ -96,6 +96,7 @@ To grant the privileges to the user from **User Inventory** dashboard, navigate 
 
 ![alt]({{ site.baseurl }}/assets/privilege_the_users.png)
 
+The Cyences alerts will use this information to determine severity based on the user involved, whether they are privileged or usual.
 
 ## Intelligence Dashboard
 

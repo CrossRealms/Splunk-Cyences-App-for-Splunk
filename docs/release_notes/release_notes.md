@@ -30,12 +30,12 @@ has_children: true
 
     * Added option to privilege the user on **User Inventory** dashboard.
     * Added the IsPrivilegedUser field to the User Inventory table to identify privileged users.
-    * Modified the severity of all the user activity related alerts based on the privileged user.
+    * We have updated the severity of all alerts in the App to indicate whether the user involved with the alerts has privileges.
 
 
 * ### Enhancements
 
-    * #### Sophos has been replaced with Sophos Endpoint Protection
+    * #### Renamed Sophos to Sophos Endpoint Protection to make it more clear
         * Removed the below alerts and replaced them with related alerts.
             * **Sophos - Endpoint Not Protected by Sophos** is replaced with **Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection**
             * **Sophos - Sophos RealTime Protection Disabled** is replaced with **Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled**
@@ -61,3 +61,5 @@ has_children: true
 ## Upgrade Guide from 4.4.0 to 4.5.0
 
   * To grant privileges to the user, refer [User Inventory]({{ site.baseurl }}/user_guide/intelligence_dashboard/#user-inventory) section.
+
+  * Renamed the Sophos alerts and dashboard name. For more details, refer [Enhancements]({{ site.baseurl }}/release_notes/#enhancements) section.
