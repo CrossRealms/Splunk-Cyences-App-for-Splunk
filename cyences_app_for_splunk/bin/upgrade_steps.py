@@ -62,6 +62,19 @@ def upgrade_4_5_0(session_key, logger):
     logger.info("Running Device Inventory - Sophos search to add sophos devices to Device Inventory table")
     response = service.jobs.oneshot(SOPHOS_DEVICE_INVENTORY_SEARCH, output_mode="json", earliest_time='-1d@m', latest_time='now')
     handle_results(response, logger)
+    time.sleep(60)
+
+    SOPHOS_USERS_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesusermanager operation="cleanup" products_to_cleanup="Sophos" minindextime=$time$"'
+    logger.info("Cleaning up the sophos users from User Inventory, as the product name is changing from sophos to sophos endpoint protection")
+    response = service.jobs.oneshot(SOPHOS_USERS_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+    time.sleep(60)
+
+    USER_INVENTORY_LOOKUP_GEN_SEARCH = '| savedsearch "User Inventory - Lookup Gen"'
+    logger.info("Running User Inventory - Lookup Gen search to add sophos endpoint protection users to User Inventory table")
+    response = service.jobs.oneshot(USER_INVENTORY_LOOKUP_GEN_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+
 
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
