@@ -92,6 +92,11 @@ The User Inventory dashboard has several drilldown options, which allows Splunk 
 * It automatically merges the users based on its name. Also, It compares the user by removing the prefixes and postfixes configured in macros. 
 * It assigns unique UUID to each user.
 
+To grant the privileges to the user from **User Inventory** dashboard, navigate to the **User Inventory Table** panel.
+
+![alt]({{ site.baseurl }}/assets/privilege_the_users.png)
+
+The Cyences alerts will use this information to determine severity based on the user involved, whether they are privileged or usual.
 
 ## Intelligence Dashboard
 

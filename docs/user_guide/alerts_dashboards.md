@@ -125,6 +125,7 @@ There are several security related alerts to choose from and they are all locate
     * AWS - Successful Login From Unusual Country
     * AWS - Daily Login Failure
     * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * AWS - Failed Login From Unusual Country
 * Amazone Web Services Dashboard panels:
     * Active Users
     * Login Types
@@ -158,6 +159,7 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Alerts Center Alert
     * Google Workspace - Google Drive objects shared Outside or with External User
     * Google Workspace - Suspicious File Shared by External User on Google Drive
+    * Google Workspace - Failed Login From Unusual Country
 * Google Workspace Dashboard panels:
     * Login Types
     * Login by Location
@@ -193,6 +195,7 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Security Compliance Alert
     * O365 - Successful Login From Unusual Country
     * O365 - Successful Login Outside Home Country
+    * O365 - Failed Login From Unusual Country
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Change/Update
     * Azure Active Directory - AuthorizationPolicy Change/Update
@@ -279,6 +282,14 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
+* Fortigate Firewall Alerts:
+    * Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole
+    * Fortigate Firewall - Network Compromise - Fortigate High Threats Alert
+    * Fortigate Firewall - Network Compromise - Fortigate High System Alert
+* Fortigate Firewall Dashboard panels:
+    * List of Firewall Devices
+    * Fortigate Firewall Login Failures
+    * System Alerts and Threats
 * Palo Alto Networks Alerts:
     * Palo Alto Firewall - Commits 
     * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
