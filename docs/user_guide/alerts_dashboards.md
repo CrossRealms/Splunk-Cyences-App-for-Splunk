@@ -59,7 +59,7 @@ There are several security related alerts to choose from and they are all locate
     * Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled 
     * Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running 
     * Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection
-    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos Endpoint Protection
+    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
 * Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
