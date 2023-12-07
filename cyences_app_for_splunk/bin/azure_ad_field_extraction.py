@@ -23,7 +23,7 @@ class DeepDiff:
         self.generate_single_level_dict(dict2, self.dict2)
         self.logger.info("Generated single level dict2 = {}".format(self.dict2))
         self.final_dict = {}
-        self.dict_diff()
+        self.find_dict_diff()
         self.logger.info("Difference between dicts = {}".format(self.final_dict))
 
     def generate_single_level_dict(self, nested_dict, single_level_dict, prefix=""):
@@ -38,7 +38,7 @@ class DeepDiff:
                     value.sort()
                 single_level_dict[prefix + key] = value
 
-    def dict_diff(self):
+    def find_dict_diff(self):
         for key in self.dict1:
             if key in self.key_to_ignore:
                 continue
