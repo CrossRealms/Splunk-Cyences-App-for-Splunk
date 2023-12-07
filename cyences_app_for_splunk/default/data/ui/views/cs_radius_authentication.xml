@@ -106,12 +106,11 @@
   <row>
     <panel>
       <title>Radius Authentication Activities</title>
-      <input type="text" token="tkn_user_tmp">
+      <input type="text" token="tkn_user">
         <label>User</label>
-        <change>
-          <set token="tkn_user">*$tkn_user_tmp$*</set>
-        </change>
         <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
       </input>
       <table>
         <search>
