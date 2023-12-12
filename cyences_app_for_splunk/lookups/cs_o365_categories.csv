@@ -1,106 +1,131 @@
 Action,Category
 "-----------------------------------------------Role---",""
-"Update role.",Role
-"Add member to role.",Role
-"Remove member from role.",Role
-"Add scoped member to role.",Role
-"Remove scoped member from role.",Role
-"Add role from template.",Role
-"User consent disabled.",Role
+"Update role",Role
+"Add member to role",Role
+"Remove member from role",Role
+"Add scoped member to role",Role
+"Remove scoped member from role",Role
+"Add role from template",Role
+"User consent disabled",Role
 "-------------------------------------------------User---",""
-"Add user.",User
-"Update user.",User
-"Enable account.",User
-"Disable account.",User
-"Restore user.",User
-"Delete user.",User
-"Hard Delete user.",User
-"Set user manager.",User
-"Change user license.",User
-"Change user password.",User
-"Reset user password.",User
-"Create application password for user.",User
-"Delete application password for user.",User
-"Disable Strong Authentication.",User
-"Enable Strong Authentication.",User
-"Remove users strong authentication phone app detail.",User
+"Add user",User
+"Update user",User
+"Enable account",User
+"Disable account",User
+"Restore user",User
+"Delete user",User
+"Hard Delete user",User
+"Set user manager",User
+"Change user license",User
+"Change user password",User
+"Reset user password",User
+"Create application password for user",User
+"Delete application password for user",User
+"Disable Strong Authentication",User
+"Enable Strong Authentication",User
+"Remove users strong authentication phone app detail",User
 "Update external secrets",User
-"Update StsRefreshTokenValidFrom Timestamp.",User
-"Add a deletion-marked app role assignment grant to user as part of link removal.",User
-"Add app role assignment grant to user.",User
-"Remove app role assignment from user.",User
+"Update StsRefreshTokenValidFrom Timestamp",User
+"Add a deletion-marked app role assignment grant to user as part of link removal",User
+"Add app role assignment grant to user",User
+"Remove app role assignment from user",User
+"Add passwordless phone sign-in credential",User
+"Admin deleted security info",User
+"Admin registered security info",User
+"Change password (self-service)",User
+"Delete passwordless phone sign-in credential",User
+"Fraud reported - no action taken",User
+"Invite external user",User
+"Redeem external user invite",User
+"Self-service password reset flow activity progress",User
+"User changed default security info",User
+"User deleted security info",User
+"User registered all required security info",User
+"User registered security info",User
+"User started security info registration",User
 "----------------------------------------Group Membership---",""
-"Add member to group.",GroupMembership
-"Remove member from group.",GroupMembership
+"Add member to group",GroupMembership
+"Add owner to group",GroupMembership
+"Remove member from group",GroupMembership
+"Remove owner from group",GroupMembership
 "---------------------------------------------------Group---",""
-"Add group.",Group
-"Update group.",Group
-"Delete group.",Group
-"Hard Delete group.",Group
-"Restore Group.",Group
-"Add owner to group.",Group
-"Remove owner from group.",Group
-"Set group license.",Group
-"Finish applying group based license to users.",Group
-"Start applying group based license to users.",Group
-"Add app role assignment to group.",Group
-"Remove app role assignment from group.",Group
-"Add a deletion-marked app role assignment grant to group as part of link removal.",Group
+"Add group",Group
+"Update group",Group
+"Delete group",Group
+"Hard Delete group",Group
+"Restore Group",Group
+"Add owner to group",Group
+"Remove owner from group",Group
+"Set group license",Group
+"Finish applying group based license to users",Group
+"Start applying group based license to users",Group
+"Add app role assignment to group",Group
+"Remove app role assignment from group",Group
+"Add a deletion-marked app role assignment grant to group as part of link removal",Group
 "------------------------------------------Service Principal---",""
-"Add OAuth2PermissionGrant.",ServicePrincipal
-"Add app role assignment to service principal.",ServicePrincipal
-"Add delegated permission grant.",ServicePrincipal
-"Add owner to service principal.",ServicePrincipal
-"Add policy to service principal.",ServicePrincipal
-"Revoke consent.",ServicePrincipal
+"Add OAuth2PermissionGrant",ServicePrincipal
+"Add app role assignment to service principal",ServicePrincipal
+"Remove app role assignment from service principal",ServicePrincipal
+"Add delegated permission grant",ServicePrincipal
+"Add owner to service principal",ServicePrincipal
+"Add policy to service principal",ServicePrincipal
+"Revoke consent",ServicePrincipal
 "Update external secrets",ServicePrincipal
-"Update service principal.",ServicePrincipal
-"Add service principal credentials.",ServicePrincipal
-"Add service principal.",ServicePrincipal
-"Consent to application.",ServicePrincipal
-"Remove delegated permission grant.",ServicePrincipal
-"Remove owner from service principal.",ServicePrincipal
-"Remove service principal credentials.",ServicePrincipal
-"Remove service principal.",ServicePrincipal
+"Update service principal",ServicePrincipal
+"Add service principal credentials",ServicePrincipal
+"Add service principal",ServicePrincipal
+"Remove delegated permission grant",ServicePrincipal
+"Remove owner from service principal",ServicePrincipal
+"Remove service principal credentials",ServicePrincipal
+"Remove service principal",ServicePrincipal
+"Hard delete service principal",ServicePrincipal
 "------------------------------------------------Application---",""
-"Add application.",Application
-"Update application.",Application
-"Delete application.",Application
-"Hard Delete application.",Application
-"Add owner to application.",Application
-"Remove owner from application.",Application
+"Add application",Application
+"Update application",Application
+"Delete application",Application
+"Hard Delete application",Application
+"Add owner to application",Application
+"Remove owner from application",Application
 "Update application – Certificates and secrets management ",Application
+"Consent to application",Application
 "-----------------------------------------------------Contact---",""
-"Add contact.",Contact
-"Update contact.",Contact
+"Add contact",Contact
+"Update contact",Contact
 "------------------------------------------------------Device---",""
-"Add device.",Device
-"Update device.",Device
-"Delete device.",Device
-"Add registered owner to device.",Device
-"Add registered users to device.",Device
-"Device no longer compliant.",Device
-"Device no longer managed.",Device
+"Add device",Device
+"Update device",Device
+"Delete device",Device
+"Add registered owner to device",Device
+"Add registered users to device",Device
+"Device no longer compliant",Device
+"Device no longer managed",Device
+"Register device",Device
+"Unregister device",Device
 "-------------------------------------------------------Policy---",""
-"Add policy.",Policy
-"Update policy.",Policy
-"Delete policy.",Policy
-"Add owner to policy.",Policy
-"Remove owner from policy.",Policy
-"Remove policy credentials.",Policy
+"Add policy",Policy
+"Update policy",Policy
+"Delete policy",Policy
+"Add owner to policy",Policy
+"Remove owner from policy",Policy
+"Remove policy credentials",Policy
+"Add conditional access policy",Policy
+"Delete conditional access policy",Policy
+"Set device registration policies",Policy
+"Update conditional access policy",Policy
+"Update named location",Policy
 "---------------------------------------------------------Company---",""
 "Create company",Company
 "Update company",Company
 "Create company settings",Company
-"Add partner to company.",Company
-"Set Company Information.",Company
-"Set DirSync feature.",Company
-"Set directory feature on tenant.",Company
+"Add partner to company",Company
+"Set Company Information",Company
+"Set DirSync feature",Company
+"Set directory feature on tenant",Company
 "Update company settings",Company
 "-----------------------------------------------------------Domain---",""
-"Update domain.",Domain
-"Verify domain.",Domain
-"Add unverified domain.",Domain
-"Remove unverified domain.",Domain
+"Update domain",Domain
+"Verify domain",Domain
+"Add unverified domain",Domain
+"Remove unverified domain",Domain
 "-------------------------------------------------AuthorizationPolicy---",""
-"Update authorization policy.",AuthorizationPolicy
+"Update authorization policy",AuthorizationPolicy

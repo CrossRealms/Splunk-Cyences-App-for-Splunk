@@ -35,7 +35,7 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>| tstats count where ((`cs_o365`) OR (`cs_azure_securityscore`)) by host</query>
+        <query>| tstats count where ((`cs_o365`) OR (`cs_azure_securityscore`) OR (`cs_azure` sourcetype="azure:aad:audit")) by host</query>
         <earliest>-7d@h</earliest>
         <latest>now</latest>
       </search>
@@ -49,12 +49,16 @@
         <p>Office 365 - Azure</p>
         <p>
           <b>Data Collection:</b> Office 365 management activity data from <a href="https://splunkbase.splunk.com/app/4055/" target="_blank">Splunk Add-on for Office 365</a>.<br/>
+          Azure AD data (azure:aad:audit) from <a href="https://splunkbase.splunk.com/app/3757/" target="_blank">Splunk Add on for Microsoft Azure</a>.<br/>
           Microsoft Azure Security Score data from <a href="https://splunkbase.splunk.com/app/5693/" target="_blank">Microsoft Graph Security Score Add-on for Splunk</a>.</p>
       </html>
       <table>
         <search>
           <query>| tstats count where `cs_o365` sourcetype="o365:management:activity" $tkn_host$ 
 | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" 
+| append 
+    [| tstats count where `cs_azure` sourcetype="azure:aad:audit"  $tkn_host$ 
+    | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_azure` sourcetype=\"azure:aad:audit\"" ] 
 | append 
     [| tstats count where `cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ 
     | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_azure_securityscore` sourcetype=\"graphsecurity:score\"" ] 
@@ -420,8 +424,7 @@
       </input>
       <event depends="$tkn_raw_events_authorizationpolicy$">
         <search>
-          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_host$ $tkn_raw_events_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ 
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("AuthorizationPolicy")` $tkn_host$ $tkn_raw_events_authorizationpolicy$ Command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ 
 | `cs_o365_authorizationpolicy_change_internal_filter` 
 | `cs_o365_authorizationpolicy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -432,11 +435,15 @@
       </event>
       <table depends="$tkn_show_table_authorizationpolicy$">
         <search>
-          <query>`cs_o365_managementactivity_change("AuthorizationPolicy")` $tkn_show_table_authorizationpolicy$ command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ $tkn_host$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_authorizationpolicy_change_internal_filter` 
-| `cs_o365_authorizationpolicy_change_filter` 
-| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("AuthorizationPolicy")` $tkn_show_table_authorizationpolicy$ Command IN ($tkn_command_authorizationpolicy$) $tkn_text_search_authorizationpolicy$ $tkn_host$ 
+| `cs_o365_authorizationpolicy_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_authorizationpolicy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -484,8 +491,7 @@
       </input>
       <event depends="$tkn_raw_events_policy$">
         <search>
-          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_raw_events_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("Policy")` $tkn_host$ $tkn_raw_events_policy$ Command IN ($tkn_command_policy$) $tkn_text_search_policy$
 | `cs_o365_policy_change_internal_filter` 
 | `cs_o365_policy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -496,10 +502,15 @@
       </event>
       <table depends="$tkn_show_table_policy$">
         <search>
-          <query>`cs_o365_managementactivity_change("Policy")` $tkn_host$ $tkn_show_table_policy$ command IN ($tkn_command_policy$) $tkn_text_search_policy$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_policy_change_internal_filter` 
-| `cs_o365_policy_change_filter`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("Policy")` $tkn_host$ $tkn_show_table_policy$ Command IN ($tkn_command_policy$) $tkn_text_search_policy$ 
+| `cs_o365_policy_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ") 
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details 
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_policy_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -547,8 +558,7 @@
       </input>
       <event depends="$tkn_raw_events_role$">
         <search>
-          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_raw_events_role$ $tkn_text_search_role$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("RoleManagement")` $tkn_host$ Command IN ($tkn_command_role$) $tkn_raw_events_role$ $tkn_text_search_role$
 | `cs_o365_role_change_internal_filter` 
 | `cs_o365_role_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -559,10 +569,15 @@
       </event>
       <table depends="$tkn_show_table_role$">
         <search>
-          <query>`cs_o365_managementactivity_change("Role")` $tkn_host$ command IN ($tkn_command_role$) $tkn_show_table_role$ $tkn_text_search_role$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_role_change_internal_filter` 
-| `cs_o365_role_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("RoleManagement")` $tkn_host$ Command IN ($tkn_command_role$) $tkn_show_table_role$ $tkn_text_search_role$ 
+| `cs_o365_role_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_role_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -610,8 +625,7 @@
       </input>
       <event depends="$tkn_raw_events_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("Group")` (Operation!="Add member to group." AND Operation!="Remove member from group.") $tkn_host$ command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("GroupManagement")` `cs_azure_ad_unneccesary_group_change_events` NOT activityDisplayName IN ("Add member to group", "Add owner to group", "Remove member from group", "Remove owner from group") $tkn_host$ Command IN ($tkn_command_group$) $tkn_raw_events_group$ $tkn_text_search_group$
 | `cs_o365_group_change_internal_filter` 
 | `cs_o365_group_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -622,10 +636,15 @@
       </event>
       <table depends="$tkn_show_table_group$">
         <search>
-          <query>`cs_o365_managementactivity_change("Group")` (Operation!="Add member to group." AND Operation!="Remove member from group.") $tkn_host$ command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_group_change_internal_filter` 
-| `cs_o365_group_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("GroupManagement")` `cs_azure_ad_unneccesary_group_change_events` NOT activityDisplayName IN ("Add member to group", "Add owner to group", "Remove member from group", "Remove owner from group") $tkn_host$ Command IN ($tkn_command_group$) $tkn_show_table_group$ $tkn_text_search_group$ 
+| `cs_o365_group_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_group_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -673,8 +692,7 @@
       </input>
       <event depends="$tkn_raw_events_group_membership$">
         <search>
-          <query>((`cs_o365_managementactivity_change("Group")` (Operation="Add member to group." OR Operation="Remove member from group.")) OR (`cs_o365_managementactivity_change("GroupMembership")`)) $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("GroupManagement")` activityDisplayName IN ("Add member to group", "Add owner to group", "Remove member from group", "Remove owner from group") $tkn_host$ Command IN ($tkn_command_group_membership$) $tkn_raw_events_group_membership$ $tkn_text_search_group_membership$
 | `cs_o365_group_membership_change_internal_filter` 
 | `cs_o365_group_membership_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -685,10 +703,15 @@
       </event>
       <table depends="$tkn_show_table_group_membership$">
         <search>
-          <query>((`cs_o365_managementactivity_change("Group")` (Operation="Add member to group." OR Operation="Remove member from group.")) OR (`cs_o365_managementactivity_change("GroupMembership")`)) $tkn_host$ command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_group_membership_change_internal_filter` 
-| `cs_o365_group_membership_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("GroupManagement")` activityDisplayName IN ("Add member to group", "Add owner to group", "Remove member from group", "Remove owner from group") $tkn_host$ Command IN ($tkn_command_group_membership$) $tkn_show_table_group_membership$ $tkn_text_search_group_membership$ 
+| `cs_o365_group_membership_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_group_membership_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -736,8 +759,7 @@
       </input>
       <event depends="$tkn_raw_events_user$">
         <search>
-          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_raw_events_user$ $tkn_text_search_user$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("UserManagement")` $tkn_host$ Command IN ($tkn_command_user$) $tkn_raw_events_user$ $tkn_text_search_user$
 | `cs_o365_user_change_internal_filter` 
 | `cs_o365_user_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -748,10 +770,16 @@
       </event>
       <table depends="$tkn_show_table_user$">
         <search>
-          <query>`cs_o365_managementactivity_change("User")` $tkn_host$ command IN ($tkn_command_user$) $tkn_show_table_user$ $tkn_text_search_user$ 
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("UserManagement")` $tkn_host$ Command IN ($tkn_command_user$) $tkn_show_table_user$ $tkn_text_search_user$ 
 | `cs_o365_user_change_internal_filter` 
-| `cs_o365_user_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+| eval additional_details = mvzip(key, value, " = ") 
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details 
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties 
+| `cs_user_privilege_mapping(Target_DisplayName)` 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details, is_privileged_user
+| sort 0 - event_time
+| `cs_o365_user_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -799,8 +827,7 @@
       </input>
       <event depends="$tkn_raw_events_serviceprincipal$">
         <search>
-          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_raw_events_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("ApplicationManagement")` activityDisplayName!="*application*" $tkn_host$ Command IN ($tkn_command_serviceprincipal$) $tkn_raw_events_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
 | `cs_o365_serviceprincipal_change_internal_filter` 
 | `cs_o365_serviceprincipal_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -811,10 +838,15 @@
       </event>
       <table depends="$tkn_show_table_serviceprincipal$">
         <search>
-          <query>`cs_o365_managementactivity_change("ServicePrincipal")` $tkn_host$ command IN ($tkn_command_serviceprincipal$) $tkn_show_table_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_serviceprincipal_change_internal_filter` 
-| `cs_o365_serviceprincipal_change_filter`| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("ApplicationManagement")` activityDisplayName!="*application*" $tkn_host$ Command IN ($tkn_command_serviceprincipal$) $tkn_show_table_serviceprincipal$ $tkn_text_search_serviceprincipal$ 
+| `cs_o365_serviceprincipal_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_serviceprincipal_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -862,8 +894,7 @@
       </input>
       <event depends="$tkn_raw_events_application$">
         <search>
-          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_raw_events_application$ $tkn_text_search_application$
-| `cs_o365_managementactivity_change_out` 
+          <query>`cs_azure_ad_changes("ApplicationManagement")` activityDisplayName="*application*" $tkn_host$ Command IN ($tkn_command_application$) $tkn_raw_events_application$ $tkn_text_search_application$
 | `cs_o365_application_change_internal_filter` 
 | `cs_o365_application_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -874,10 +905,15 @@
       </event>
       <table depends="$tkn_show_table_application$">
         <search>
-          <query>`cs_o365_managementactivity_change("Application")` $tkn_host$ command IN ($tkn_command_application$) $tkn_show_table_application$ $tkn_text_search_application$ 
-| `cs_o365_managementactivity_change_out` 
-| `cs_o365_application_change_internal_filter` 
-| `cs_o365_application_change_filter` | table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+          <query>`cs_azure_ad_changes("ApplicationManagement")` activityDisplayName="*application*" $tkn_host$ Command IN ($tkn_command_application$) $tkn_show_table_application$ $tkn_text_search_application$ 
+| `cs_o365_application_change_internal_filter`
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_application_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -897,7 +933,7 @@
         <fieldForLabel>command</fieldForLabel>
         <fieldForValue>command</fieldForValue>
         <search>
-          <query>| inputlookup cs_o365_categories.csv where Category!="Application" Category!="AuthorizationPolicy" Category!="Policy" Category!="Role" Category!="Group" Category!="User" Category!="ServicePrincipal"
+          <query>| inputlookup cs_o365_categories.csv where Category!="Application" Category!="AuthorizationPolicy" Category!="Policy" Category!="Role" Category!="Group" Category!="User" Category!="ServicePrincipal" Category!="GroupMembership" Category!=""
     | rename Action as command</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
@@ -925,9 +961,7 @@
       </input>
       <event depends="$tkn_raw_events_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory NOT extendedAuditEventCategory IN ("Application", "AuthorizationPolicy", "Policy", "Role", "User", "GroupMembership", "Group", "ServicePrincipal") NOT Operation IN ("UserLoggedIn", "UserLoginFailed")
-           command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$
-| `cs_o365_managementactivity_change_out`
+          <query>`cs_azure_ad_changes("*")` $tkn_host$ NOT category IN ("AuthorizationPolicy", "Policy", "RoleManagement", "GroupManagement", "UserManagement", "ApplicationManagement") Command IN ($tkn_command_other$) $tkn_raw_events_other$ $tkn_text_search_other$
 | `cs_o365_ad_other_change_internal_filter`
 | `cs_o365_ad_other_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -938,12 +972,15 @@
       </event>
       <table depends="$tkn_show_table_other$">
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" $tkn_host$ Workload=AzureActiveDirectory NOT extendedAuditEventCategory IN ("Application", "AuthorizationPolicy", "Policy", "Role", "User", "GroupMembership", "Group", "ServicePrincipal") NOT Operation IN ("UserLoggedIn", "UserLoginFailed")
-           command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
-| `cs_o365_managementactivity_change_out`
+          <query>`cs_azure_ad_changes("*")` $tkn_host$ NOT category IN ("AuthorizationPolicy", "Policy", "RoleManagement", "GroupManagement", "UserManagement", "ApplicationManagement") Command IN ($tkn_command_other$) $tkn_show_table_other$ $tkn_text_search_other$ 
 | `cs_o365_ad_other_change_internal_filter`
-| `cs_o365_ad_other_change_filter`
-| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, ModifiedProperties, MetaData</query>
+| eval additional_details = mvzip(key, value, " = ")
+| fields _time, Actor, Command, Target_ObjectID, Target_DisplayName, displayName, oldValue, newValue, ResultStatus, modified_properties, additional_details
+| azureadmodifiedpropertiesformatter old_value_field=oldValue new_value_field=newValue property_name_field=displayName field_to_update=modified_properties
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Actor, Command, Target_ObjectID, Target_DisplayName, ResultStatus, modified_properties, additional_details
+| sort 0 - event_time
+| `cs_o365_ad_other_change_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
