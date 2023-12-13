@@ -131,6 +131,9 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                                 + "-------------------------------------------------"
                                 + "\n"
                             )
+                            if str(property_names[i]) in self.additional_fields:
+                                record["old_"+str(property_names[i])] = str(old_values[i])
+                                record["new_"+str(property_names[i])] = str(new_values[i])
 
                         new_value = new_value[:-50]
                     # If field is str and not empty
@@ -142,6 +145,9 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                             + " ==> "
                             + str(new_values)
                         )
+                        if str(property_names) in self.additional_fields:
+                            record["old_"+str(property_names)] = str(old_values)
+                            record["new_"+str(property_names)] = str(new_values)
                     else:
                         new_value = "-"
 
