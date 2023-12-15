@@ -15,7 +15,7 @@ PRODUCTS = [
             'search': build_search_query(
                         macro='cs_aws',
                         by='sourcetype',
-                        values='aws:addon:account,aws:cloudtrail'
+                        values='aws:cloudtrail'
                         ),
             'earliest_time': '-1d@d',
             'latest_time': 'now',
@@ -95,7 +95,7 @@ PRODUCTS = [
             'search': build_search_query(
                         macro='cs_gws',
                         by='sourcetype',
-                        values='gws:reports:admin,gws:reports:login'
+                        values='gws:reports:admin,gws:reports:login,gws:reports:groups_enterprise,gws:alerts,gws:reports:drive,gws:gmail'
                         ),
             'earliest_time': '-7d@d',
             'latest_time': 'now',
@@ -174,6 +174,17 @@ PRODUCTS = [
                         by='sourcetype',
                         values='GraphSecurity:Score',
                         more='sourcetype="GraphSecurity:Score"'
+                        ),
+            'earliest_time': '-2d@d',
+            'latest_time': 'now',
+        },
+        {
+            'macro_name': 'cs_azure',
+            'label': 'Azure Active Directory Data',
+            'search': build_search_query(
+                        macro='cs_azure',
+                        by='sourcetype',
+                        values='azure:aad:audit'
                         ),
             'earliest_time': '-2d@d',
             'latest_time': 'now',
