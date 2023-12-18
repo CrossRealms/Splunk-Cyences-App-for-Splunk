@@ -38,6 +38,7 @@
   </collection>
   <collection label="Cyences Settings">
     <view name="cs_configuration" />
+    <view name="cs_data_reviewer" />
     <view name="cs_decommision_host" />
     <view name="cs_sysmon_deploy_audit" /><!--Sysmon-->
     <view name="cs_o365_defender_atp_audit" /><!--Office 365 Defender ATP-->
