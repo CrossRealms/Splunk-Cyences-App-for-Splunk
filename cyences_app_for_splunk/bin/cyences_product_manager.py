@@ -42,22 +42,16 @@ class CyencesProductManager(GeneratingCommand):
             elif self.operation == "buildproductspecificsearches":
                 host_reviewer_search = ""
                 sources_reviewer_search = ""
-                metadata_count_search = "| tstats count where index=* "
+                metadata_count_search = ""
                 for product in all_products:
+                    metadata_count_search = product.get("metadata_count_search")
                     if product["name"].lower() == self.product_name.lower():
                         for index in range(len(product["macro_configurations"])):
                             if index > 0:
                                 host_reviewer_search += " | append ["
-                                metadata_count_search += " OR "
                                 sources_reviewer_search += " | append ["
 
                             host_reviewer_search += product["macro_configurations"][index].get("host_reviewer_search")
-
-                            if product["macro_configurations"][index].get("metadata_count_search"):
-                                metadata_count_search = product["macro_configurations"][index].get("metadata_count_search")
-                            else:
-                                metadata_count_search += "{by} IN ({values})".format(by=product["macro_configurations"][index].get("search_by"), values=product["macro_configurations"][index].get("search_values"))
-
                             sources_reviewer_search += product["macro_configurations"][index].get("sources_reviewer_search")
 
                             if index > 0:

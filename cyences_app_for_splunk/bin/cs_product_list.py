@@ -11,6 +11,10 @@ def build_host_reviewer_search(by, values):
     )
 
 
+def build_metadata_count_search(by, values):
+    return "{by} IN ({values}) OR ".format(by=by, values=values)
+
+
 def build_source_reviewer_search(by, values):
     search = ""
     values = values.split(",")
@@ -301,6 +305,7 @@ PRODUCTS = [
     },
     {
         "name": "VPN",
+        "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
         "macro_configurations": [
             {
                 "macro_name": "cs_vpn_indexes",
@@ -308,7 +313,6 @@ PRODUCTS = [
                 "search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by index, sourcetype',
                 "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
-                "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -316,6 +320,7 @@ PRODUCTS = [
     },
     {
         "name": "Windows",
+        "metadata_count_search": "| tstats count where `cs_windows_idx` OR (index=* sourcetype IN (*WinEventLog,MSAD:*:Health,ActiveDirectory) OR source IN (*WinEventLog:Security,*WinEventLog:System,powershell*))",
         "macro_configurations": [
             {
                 "macro_name": "cs_windows_idx",
@@ -332,7 +337,6 @@ PRODUCTS = [
 | tstats values(host) as hosts where index=* sourcetype="*WinEventLog" source="*WinEventLog:System" by source sourcetype index | eval sources = source." (".sourcetype.")" | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:System (WinEventLog)")] | append [
 | tstats values(host) as hosts where index=* source="powershell*" sourcetype="MSAD:*:Health" by source sourcetype index | eval sources = source." (".sourcetype.")" | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"powershell (MSAD:*:Health)")] | append [
 | tstats values(host) as hosts where index=* sourcetype="ActiveDirectory" by sourcetype index | stats count values(index) as index dc(hosts) as host_count by sourcetype | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"ActiveDirectory")  | rename sourcetype as sources]""",
-                "metadata_count_search": "| tstats count where `cs_windows_idx` OR (index=* sourcetype IN (*WinEventLog,MSAD:*:Health,ActiveDirectory) OR source IN (*WinEventLog:Security,*WinEventLog:System,powershell*))",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -355,6 +359,7 @@ PRODUCTS = [
 ]
 
 for product in PRODUCTS:
+    metadata_count_search = "| tstats count where index=* "
     for macro_config in product["macro_configurations"]:
         if not macro_config.get("search"):
             macro_config["search"] = build_search_query(
@@ -373,6 +378,13 @@ for product in PRODUCTS:
                 by=macro_config["search_by"],
                 values=macro_config["search_values"],
             )
+        if not product.get("metadata_count_search"):
+            metadata_count_search += build_metadata_count_search(
+                by=macro_config["search_by"],
+                values=macro_config["search_values"],
+            )
+    if not product.get("metadata_count_search"):
+        product["metadata_count_search"] = metadata_count_search[:-3]
 
 
 PRODUCTS.sort(key=lambda x: x["name"].lower())
