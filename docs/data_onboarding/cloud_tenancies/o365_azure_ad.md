@@ -2,7 +2,7 @@
 layout: default
 title: O365 Azure Active Directory
 permalink: /data_onboarding/cloud_tenancies/o365_azure_ad/
-nav_order: 5
+nav_order: 4
 parent: Cloud Tenancies 
 grand_parent: Data Onboarding
 ---

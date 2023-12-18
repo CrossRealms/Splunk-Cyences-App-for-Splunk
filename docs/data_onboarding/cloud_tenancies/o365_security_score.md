@@ -2,7 +2,7 @@
 layout: default
 title: Microsoft Azure Security Score
 permalink: /data_onboarding/cloud_tenancies/o365_security_score/
-nav_order: 4
+nav_order: 5
 parent: Cloud Tenancies 
 grand_parent: Data Onboarding
 ---
