@@ -8,20 +8,6 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="multiselect" token="tkn_vul_severity" searchWhenChanged="true">
-      <label>Vulnerability Severity</label>
-      <choice value="critical">Critical</choice>
-      <choice value="high">High</choice>
-      <choice value="medium">Medium</choice>
-      <choice value="low">Low</choice>
-      <choice value="information">Information</choice>
-      <default>critical,high,medium</default>
-      <valuePrefix>severity="</valuePrefix>
-      <valueSuffix>"</valueSuffix>
-      <delimiter> OR </delimiter>
-      <prefix>(</prefix>
-      <suffix>)</suffix>
-    </input>
     <input type="multiselect" token="tkn_action">
       <label>Action</label>
       <choice value="*">All</choice>
@@ -68,7 +54,7 @@
   </row>
   <row>
     <panel>
-      <title>Internal Traffic</title>
+      <title>All Internal Traffic</title>
       <viz type="flow_map_viz.flow_map_viz">
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)`AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
@@ -172,7 +158,7 @@
   </row>
   <row>
     <panel>
-      <title>Internal Traffic</title>
+      <title>All Internal Traffic</title>
       <table>
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
@@ -190,13 +176,14 @@
   </row>
   <row>
     <panel>
-      <title>Inbound Traffic</title>
+      <title>All Inbound Traffic</title>
       <map>
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval color=if(action="allowed", "Allowed", "Other") 
 | eval total_MB = round(total_bytes/1024/1024)
+| eval total_MB = if(total_MB&lt;1, 1, total_MB)
 | iplocation src_ip 
 | geostats sum(total_MB) by color</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -205,19 +192,21 @@
         <option name="drilldown">all</option>
         <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
         <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
         <drilldown>
           <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.dest_ip)%20dest_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
     </panel>
     <panel>
-      <title>Outbound Traffic</title>
+      <title>All Outbound Traffic</title>
       <map>
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval color=if(action="allowed", "Allowed", "Other") 
 | eval total_MB = round(total_bytes/1024/1024)
+| eval total_MB = if(total_MB&lt;1, 1, total_MB)
 | iplocation dest_ip 
 | geostats sum(total_MB) by color</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -226,6 +215,7 @@
         <option name="drilldown">all</option>
         <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
         <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
         <drilldown>
           <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.src_ip)%20as%20src_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.dest_ip%2C%20All_Traffic.action%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
@@ -259,6 +249,211 @@
             <b>Description:</b> Scans over 100 ports and displays port scanning attempts on your network.</p>
         </div>
       </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Network Traffic on Vulnerable Machines</title>
+      <input type="multiselect" token="tkn_vul_severity" searchWhenChanged="true">
+        <label>Vulnerability Severity</label>
+        <choice value="critical">Critical</choice>
+        <choice value="high">High</choice>
+        <choice value="medium">Medium</choice>
+        <choice value="low">Low</choice>
+        <choice value="information">Information</choice>
+        <default>critical,high,medium</default>
+        <valuePrefix>severity="</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> OR </delimiter>
+        <prefix>(</prefix>
+        <suffix>)</suffix>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Vulnerable Internal Traffic</title>
+      <viz type="flow_map_viz.flow_map_viz">
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)`AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+| `drop_dm_object_name(All_Traffic)` 
+| rex field=src_ip "(?&lt;src_subnet&gt;\d+\.\d+\.\d+)\.\d+"
+| rex field=dest_ip "(?&lt;dest_subnet&gt;\d+\.\d+\.\d+)\.\d+"
+| stats sum(total_bytes) as total_bytes by src_subnet, dest_subnet, action
+| eval total_MB = round(total_bytes/1024/1024)
+| eval good = if(action=="allowed", total_MB, null()) | eval error = if(action!="allowed", total_MB, null())
+| eval label = if(action=="allowed", "Allowed:"+total_MB, "Blocked:"+total_MB)
+| stats values(*) as * by src_subnet, dest_subnet
+| sort - total_MB | head 30
+| rename src_subnet as from, dest_subnet as to
+| eval label=mvjoin(label, " ")</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="flow_map_viz.flow_map_viz.background_color">#37444E</option>
+        <option name="flow_map_viz.flow_map_viz.background_mode">custom</option>
+        <option name="flow_map_viz.flow_map_viz.coarse_positions">yes</option>
+        <option name="flow_map_viz.flow_map_viz.labels_as_html">no</option>
+        <option name="flow_map_viz.flow_map_viz.line_style">solid</option>
+        <option name="flow_map_viz.flow_map_viz.link_color">#cccccc</option>
+        <option name="flow_map_viz.flow_map_viz.link_distance">200</option>
+        <option name="flow_map_viz.flow_map_viz.link_label_color">#C6C6C6</option>
+        <option name="flow_map_viz.flow_map_viz.link_opacity">0.5</option>
+        <option name="flow_map_viz.flow_map_viz.link_speed">90</option>
+        <option name="flow_map_viz.flow_map_viz.link_text_size">10</option>
+        <option name="flow_map_viz.flow_map_viz.link_width">1</option>
+        <option name="flow_map_viz.flow_map_viz.maxnodes">100</option>
+        <option name="flow_map_viz.flow_map_viz.node_bg_color">#cccccc</option>
+        <option name="flow_map_viz.flow_map_viz.node_border_color">#000000</option>
+        <option name="flow_map_viz.flow_map_viz.node_border_mode">darker1</option>
+        <option name="flow_map_viz.flow_map_viz.node_border_width">1</option>
+        <option name="flow_map_viz.flow_map_viz.node_center_force">0.1</option>
+        <option name="flow_map_viz.flow_map_viz.node_height">20</option>
+        <option name="flow_map_viz.flow_map_viz.node_radius">2</option>
+        <option name="flow_map_viz.flow_map_viz.node_repel_force">1000</option>
+        <option name="flow_map_viz.flow_map_viz.node_shadow_color">#000000</option>
+        <option name="flow_map_viz.flow_map_viz.node_shadow_mode">custom</option>
+        <option name="flow_map_viz.flow_map_viz.node_text_color">#000000</option>
+        <option name="flow_map_viz.flow_map_viz.node_text_size">12</option>
+        <option name="flow_map_viz.flow_map_viz.node_width">60</option>
+        <option name="flow_map_viz.flow_map_viz.particle_blur">0</option>
+        <option name="flow_map_viz.flow_map_viz.particle_error_color">#0000FF</option>
+        <option name="flow_map_viz.flow_map_viz.particle_good_color">#1a9035</option>
+        <option name="flow_map_viz.flow_map_viz.particle_limit">60</option>
+        <option name="flow_map_viz.flow_map_viz.particle_size">3</option>
+        <option name="flow_map_viz.flow_map_viz.particle_spread">5</option>
+        <option name="flow_map_viz.flow_map_viz.particle_warn_color">#d16f18</option>
+        <option name="flow_map_viz.flow_map_viz.renderer">webgl</option>
+        <option name="height">550</option>
+        <option name="refresh.display">progressbar</option>
+      </viz>
+      <html>
+        <div>
+          <p>This chart shows only top 30 subnet link. Traffic shown here is in MB.</p>
+          <p>Drilldown Guide: Click on a node to see the traffic to and from that Subnets. Click on the link to see the traffic between those Subnets.</p>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row depends="$flow_map_viz-from$,$flow_map_viz-to$">
+    <panel>
+      <title>Vulnerable Internal Traffic - Drilldown on Link between Subnet</title>
+      <table>
+        <title>From $flow_map_viz-from$ To $flow_map_viz-to$</title>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ AND All_Traffic.src_ip="$flow_map_viz-from$*" AND All_Traffic.dest_ip="$flow_map_viz-to$*" by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+| `drop_dm_object_name(All_Traffic)` 
+| eval total_MB = round(total_bytes/1024/1024, 2) 
+| eval total_k_packets = round(total_packets/1000)
+| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$flow_map_viz-node$">
+    <panel>
+      <title>Vulnerable Internal Traffic - Drilldown on Subnet</title>
+      <table>
+        <title>Subnet = $flow_map_viz-node$</title>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ AND (All_Traffic.src_ip="$flow_map_viz-node$*" OR All_Traffic.dest_ip="$flow_map_viz-node$*") by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+| `drop_dm_object_name(All_Traffic)` 
+| eval total_MB = round(total_bytes/1024/1024, 2) 
+| eval total_k_packets = round(total_packets/1000)
+| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Vulnerable Internal Traffic</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+| `drop_dm_object_name(All_Traffic)` 
+| eval total_MB = round(total_bytes/1024/1024, 2) 
+| eval total_k_packets = round(total_packets/1000)
+| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Inbound Traffic on Vulnerable Port</title>
+      <map>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action
+| `drop_dm_object_name(All_Traffic)` 
+| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ((severity="critical" OR severity="high" OR severity="medium")) 
+    | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
+    | makemv ip delim="~~" 
+    | stats count as vul by ip port 
+    | rename ip as dest_ip, port as dest_port]
+| eventstats first(vul) as vul by dest_ip, dest_port
+| search vul=* total_bytes=*
+| stats sum(total_bytes) as total_bytes by src_ip, action
+| eval color=if(action="allowed", "Allowed", "Other") 
+| eval total_KB = round(total_bytes/1024)
+| eval total_KB = if(total_KB&lt;1, 1, total_KB)
+| iplocation src_ip 
+| geostats sum(total_KB) by color</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.dest_ip%2C%20All_Traffic.dest_port%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20port!%3D%220%22%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0A%20%20%20%20%7C%20rename%20ip%20as%20dest_ip%2C%20port%20as%20dest_port%5D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20dest_ip%2C%20dest_port%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0A%7C%20stats%20values(dest_ip)%20as%20dest_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20src_ip%2C%20action%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
+    </panel>
+    <panel>
+      <title>Outbound Traffic from Vulnerable Machine</title>
+      <map>
+        <search>
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.src_port, All_Traffic.dest_ip, All_Traffic.action 
+| `drop_dm_object_name(All_Traffic)` 
+| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND ((severity="critical" OR severity="high" OR severity="medium")) 
+    | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
+    | makemv ip delim="~~" 
+    | stats count as vul by ip port 
+    | rename ip as src_ip, port as src_port]
+| eventstats first(vul) as vul by src_ip, src_port
+| search vul=* total_bytes=*
+| stats sum(total_bytes) as total_bytes by dest_ip, action
+| eval color=if(action="allowed", "Allowed", "Other") 
+| eval total_KB = round(total_bytes/1024)
+| eval total_KB = if(total_KB&lt;1, 1, total_KB)
+| iplocation dest_ip 
+| geostats sum(total_KB) by color</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">all</option>
+        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <drilldown>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.src_port%2C%20All_Traffic.dest_ip%2C%20All_Traffic.action%20%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0D%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0D%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0D%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0D%0A%20%20%20%20%7C%20rename%20ip%20as%20src_ip%2C%20port%20as%20src_port%5D%0D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20src_ip%2C%20src_port%0D%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0D%0A%7C%20stats%20values(src_ip)%20as%20src_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20dest_ip%2C%20action%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+        </drilldown>
+      </map>
     </panel>
   </row>
   <row>
@@ -450,7 +645,7 @@
       <title>Internal Traffic</title>
       <table>
         <search>
-          <query>$disable$ | tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | append 
     [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$) 
