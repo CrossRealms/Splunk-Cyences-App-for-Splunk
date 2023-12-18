@@ -88,6 +88,44 @@
   </row>
   <row>
     <panel>
+      <table>
+        <title>Host List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by host | table host</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Source List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by source | table source</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>SourceType List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by sourcetype | table sourcetype</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>$product_name$ Sources/Sourcetypes Review</title>
       <input type="text" token="tkn_source_sourcetypes">
         <label>Source/SourceType</label>
