@@ -20,4 +20,5 @@ Installation and Configuration Guide:
 **Note:** Use index=**azure** for data collection or update the macro definition for `cs_azure` (**Settings > Configuration**).
 
 ## Estimated Data Size
-<#TODO>
+
+The license usage consumed by this Add-On is based on the size of your environment, the number of users, and the amount of user activity taking place in your environment.
