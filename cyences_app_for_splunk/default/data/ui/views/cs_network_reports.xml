@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>Network Telemetry - Vatsal</label>
+  <label>Network Telemetry</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -100,7 +100,7 @@
         <option name="flow_map_viz.flow_map_viz.node_text_size">12</option>
         <option name="flow_map_viz.flow_map_viz.node_width">60</option>
         <option name="flow_map_viz.flow_map_viz.particle_blur">0</option>
-        <option name="flow_map_viz.flow_map_viz.particle_error_color">#0000FF</option>
+        <option name="flow_map_viz.flow_map_viz.particle_error_color">#FF6347</option>
         <option name="flow_map_viz.flow_map_viz.particle_good_color">#1a9035</option>
         <option name="flow_map_viz.flow_map_viz.particle_limit">60</option>
         <option name="flow_map_viz.flow_map_viz.particle_size">3</option>
@@ -190,7 +190,7 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">all</option>
-        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
+        <option name="mapping.fieldColors">{"Other": #FF6347, "Allowed": #008000}</option>
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
@@ -213,7 +213,7 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">all</option>
-        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #008000}</option>
+        <option name="mapping.fieldColors">{"Other": #FF6347, "Allowed": #008000}</option>
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
@@ -238,6 +238,7 @@
         </search>
         <option name="drilldown">all</option>
         <option name="mapping.type">marker</option>
+        <option name="mapping.seriesColors">[#FF0000]</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
           <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20dc(All_Traffic.dest_port)%20as%20dc_port%20from%20datamodel%3DNetwork_Traffic%20where%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20$tkn_action$%20by%20All_Traffic.src_ip%20%7C%20%60drop_dm_object_name(All_Traffic)%60%20%7C%20search%20%60cs_filter_private_ips%60%0A%7C%20where%20dc_port%3E%3D%60cs_network_scanning_min_dc_ports%60%0A%7C%20%60cs_network_scanning_map_filter%60%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
@@ -337,7 +338,7 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">all</option>
-        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #FF0000}</option>
+        <option name="mapping.fieldColors">{"Other": #008000, "Allowed": #FF0000}</option>
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
@@ -371,7 +372,7 @@
               <td>Inbound traffic on the <b>vulnerable ports</b> that are <b>allowed</b> by the firewall.</td>
             </tr>
             <tr>
-              <td>Blue</td>
+              <td>Green</td>
               <td>Inbound traffic on the <b>vulnerable ports</b> that are <b>blocked</b> by the firewall.</td>
             </tr>
           </table>
@@ -405,7 +406,7 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">all</option>
-        <option name="mapping.fieldColors">{"Other": #0000FF, "Allowed": #FFA500}</option>
+        <option name="mapping.fieldColors">{"Other": #008000, "Allowed": #FFA500}</option>
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
@@ -439,7 +440,7 @@
               <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>allowed</b> by the firewall.</td>
             </tr>
             <tr>
-              <td>Blue</td>
+              <td>Green</td>
               <td>Outbound traffic on the <b>vulnerable devices</b> that are <b>blocked</b> by the firewall.</td>
             </tr>
           </table>
