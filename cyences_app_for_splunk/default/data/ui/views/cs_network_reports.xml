@@ -4,7 +4,7 @@
     <input type="time" token="timeRange">
       <label>Time Range</label>
       <default>
-        <earliest>-60m@m</earliest>
+        <earliest>-4h@m</earliest>
         <latest>now</latest>
       </default>
     </input>
@@ -278,7 +278,7 @@
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | append 
-    [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$) 
+    [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
     | makemv ip delim="~~" 
     | stats count by ip port 
@@ -320,7 +320,7 @@
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action
 | `drop_dm_object_name(All_Traffic)` 
-| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ((severity="critical" OR severity="high" OR severity="medium")) 
+| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
     | makemv ip delim="~~" 
     | stats count as vul by ip port 
@@ -388,7 +388,7 @@
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.src_port, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
-| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND ((severity="critical" OR severity="high" OR severity="medium")) 
+| append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
     | makemv ip delim="~~" 
     | stats count as vul by ip port 
