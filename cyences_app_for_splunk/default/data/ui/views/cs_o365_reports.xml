@@ -225,8 +225,8 @@
 | fields _time host sourcetype user ClientIP Id user_type authentication_method 
 | append 
     [| search `cs_o365` sourcetype=o365:graph:api source="AuditLogs.SignIns" status.errorCode=0 $tkn_host$
-    | fields _time host sourcetype userPrincipalName ipAddress id LogonError appDisplayName clientAppUsed conditionalAccessStatus isInteractive deviceDetail.* org_country org_region org_city 
-    | rename userPrincipalName as user, ipAddress as ClientIP, id as Id ] 
+    | fields _time host sourcetype userPrincipalName ipAddress id LogonError appDisplayName clientAppUsed conditionalAccessStatus isInteractive status.additionalDetails deviceDetail.* org_country org_region org_city 
+    | rename userPrincipalName as user, ipAddress as ClientIP, id as Id, status.additionalDetails as additionalDetails ] 
 | eval user = lower(user) 
 | stats values(*) as *, max(_time) as Last_Success_Login by Id, host, user, ClientIP 
 | search sourcetype="o365:management:activity" 
@@ -237,7 +237,7 @@
 | eval Region = if(isnotnull(org_country), org_region, Region) 
 | eval City = if(isnotnull(org_country), org_city, City) 
 | search $tkn_drop__country$ user=$tkn__user|s$ 
-| table user, ClientIP, count, Country, Region, City, Last_Success_Login, user_type, authentication_method, appDisplayName clientAppUsed conditionalAccessStatus isInteractive deviceDetail.* 
+| table user, ClientIP, count, Country, Region, City, Last_Success_Login, user_type, authentication_method, additionalDetails, appDisplayName, clientAppUsed, conditionalAccessStatus, isInteractive, deviceDetail.* 
 | `cs_human_readable_time_format(Last_Success_Login)` 
 | `cs_o365_success_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -299,19 +299,19 @@
 | eval ExtendedProperties=mvzip('ExtendedProperties{}.Name','ExtendedProperties{}.Value'," : ") 
 | append 
     [| search `cs_o365` sourcetype=o365:graph:api source="AuditLogs.SignIns" status.errorCode!=0 $tkn_host$ $tkn_logon_error$ 
-    | fields _time host sourcetype userPrincipalName ipAddress id LogonError appDisplayName clientAppUsed conditionalAccessStatus isInteractive deviceDetail.* org_country org_region org_city 
-    | rename userPrincipalName as user, ipAddress as ClientIP, id as Id ] 
+    | fields _time host sourcetype userPrincipalName ipAddress id LogonError appDisplayName clientAppUsed conditionalAccessStatus isInteractive deviceDetail.* status.* org_country org_region org_city 
+    | rename userPrincipalName as user, ipAddress as ClientIP, id as Id, status.failureReason as failureReason, status.additionalDetails as additionalDetails ] 
 | eval user = lower(user) 
 | stats values(*) as *, max(_time) as _time by Id, host, user, ClientIP, LogonError 
 | search sourcetype="o365:management:activity" 
-| fields - Id, sourcetype, lat, lon, deviceDetail.deviceId 
+| fields - Id, sourcetype, lat, lon, deviceDetail.deviceId, status.errorCode 
 | stats count, values(*) as *, max(_time) as Last_Failed_Login by host, user, ClientIP, LogonError 
 | iplocation ClientIP 
 | eval Country = if(isnotnull(org_country), org_country, Country) 
 | eval Region = if(isnotnull(org_country), org_region, Region) 
 | eval City = if(isnotnull(org_country), org_city, City) 
 | search $tkn_drop_country$  user=$tkn_user|s$
-| table user, ClientIP, LogonError, count, Country, Region, City, Last_Failed_Login, user_type, authentication_method, appDisplayName clientAppUsed conditionalAccessStatus isInteractive deviceDetail.* , ExtendedProperties
+| table user, ClientIP, LogonError, count, Country, Region, City, Last_Failed_Login, failureReason, additionalDetails, user_type, authentication_method, appDisplayName, clientAppUsed, conditionalAccessStatus, isInteractive, deviceDetail.* , ExtendedProperties
 | `cs_human_readable_time_format(Last_Failed_Login)` 
 | `cs_o365_failed_login_outside_country_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
