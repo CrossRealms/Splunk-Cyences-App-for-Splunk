@@ -7,9 +7,13 @@ import sys
 import logger_manager
 from splunklib.searchcommands import Configuration, Option, StreamingCommand, dispatch
 
-logger = logger_manager.setup_logging("azure_ad_modified_properties_formatter", logging.INFO)
-# Field names to ignore while comparing two dictionaries
+logger = logger_manager.setup_logging(
+    "azure_ad_modified_properties_formatter", logging.INFO
+)
+# json key to ignore while comparing two dictionaries
 KEYS_TO_IGNORE = ["modifiedDateTime"]
+# Field name of the property to ignore
+PROPERTIES_TO_IGNORE = ["Included Updated Properties"]
 
 
 class DeepDiff:
@@ -58,7 +62,9 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
     new_value_field = Option(name="new_value_field", require=True)
     property_name_field = Option(name="property_name_field", require=True)
     field_to_update = Option(name="field_to_update", require=True)
-    additional_fields = Option(name="additional_fields", require=False, default=None)  # list of comma seperated fields, for that add old and new values to the output of the command
+    additional_fields = Option(
+        name="additional_fields", require=False, default=None
+    )  # list of comma seperated fields, for that add old and new values to the output of the command
 
     @staticmethod
     def validate_param_value_and_type(field_value):
@@ -66,23 +72,26 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
             field_value = []
         elif type(field_value) is str:
             field_value = [
-                element.strip().strip('\'"')
-                for element in field_value.strip('\'"()').split(",")
+                element.strip().strip("'\"")
+                for element in field_value.strip("'\"()").split(",")
                 if element.strip()
             ]
         elif type(field_value) is list:
             for element in field_value:
-                element.strip().strip('\'"')
+                element.strip().strip("'\"")
         else:
             raise Exception("{} value is not as expected.".format(field_value))
         return field_value
 
     def stream(self, records):
         try:
-            self.additional_fields = self.validate_param_value_and_type(self.additional_fields)
+            self.additional_fields = self.validate_param_value_and_type(
+                self.additional_fields
+            )
 
             for record in records:
                 try:
+                    affected_properties = []
                     # Find the difference
                     diff = DeepDiff(
                         json.loads(record[self.old_value_field]),
@@ -104,16 +113,19 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                             + "-------------------------------------------------"
                             + "\n"
                         )
+                        affected_properties.append(str(key))
 
                     for field in self.additional_fields:
-                        record["old_"+field] = diff.dict1.get(field)
-                        record["new_"+field] = diff.dict2.get(field)
+                        record["old_" + field] = diff.dict1.get(field)
+                        record["new_" + field] = diff.dict2.get(field)
 
                     record[self.field_to_update] = new_value[:-50]
+                    record["affected_properties"] = affected_properties
                     yield record
                 except Exception:
                     # If field is not in json format
                     new_value = ""
+                    affected_properties = []
                     property_names = record[self.property_name_field]
                     old_values = record[self.old_value_field]
                     new_values = record[self.new_value_field]
@@ -121,6 +133,12 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                     # If field is multivalued
                     if type(property_names) is list:
                         for i in range(len(property_names)):
+                            if (property_names[i] in PROPERTIES_TO_IGNORE) or (
+                                property_names[i] == "TargetId.UserType"
+                                and old_values[i] == "null"
+                                and new_values[i] == '"Member"'
+                            ):
+                                continue
                             new_value += (
                                 str(property_names[i])
                                 + ":: "
@@ -131,11 +149,25 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                                 + "-------------------------------------------------"
                                 + "\n"
                             )
+
+                            affected_properties.append(str(property_names[i]))
+
                             if str(property_names[i]) in self.additional_fields:
-                                record["old_"+str(property_names[i])] = str(old_values[i])
-                                record["new_"+str(property_names[i])] = str(new_values[i])
+                                record["old_" + str(property_names[i])] = str(
+                                    old_values[i]
+                                )
+                                record["new_" + str(property_names[i])] = str(
+                                    new_values[i]
+                                )
 
                         new_value = new_value[:-50]
+                    # If field is Included Updated Properties then ideally there will not be any field updated so it will be empty string
+                    elif (property_names in PROPERTIES_TO_IGNORE) or (
+                        property_names == "TargetId.UserType"
+                        and old_values == "null"
+                        and new_values == '"Member"'
+                    ):
+                        pass
                     # If field is str and not empty
                     elif property_names:
                         new_value = (
@@ -145,17 +177,23 @@ class AzureAdModifiedPropertiesFormatterCommand(StreamingCommand):
                             + " ==> "
                             + str(new_values)
                         )
+
+                        affected_properties.append(str(property_names))
+
                         if str(property_names) in self.additional_fields:
-                            record["old_"+str(property_names)] = str(old_values)
-                            record["new_"+str(property_names)] = str(new_values)
-                    else:
-                        new_value = "-"
+                            record["old_" + str(property_names)] = str(old_values)
+                            record["new_" + str(property_names)] = str(new_values)
 
                     record[self.field_to_update] = new_value
+                    record["affected_properties"] = affected_properties
                     yield record
         except Exception as e:
-            logger.exception("Error in azureadmodifiedpropertiesformatter command: {}".format(e))
+            logger.exception(
+                "Error in azureadmodifiedpropertiesformatter command: {}".format(e)
+            )
             raise e
 
 
-dispatch(AzureAdModifiedPropertiesFormatterCommand, sys.argv, sys.stdin, sys.stdout, __name__)
+dispatch(
+    AzureAdModifiedPropertiesFormatterCommand, sys.argv, sys.stdin, sys.stdout, __name__
+)
