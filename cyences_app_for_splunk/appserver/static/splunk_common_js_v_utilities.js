@@ -290,12 +290,100 @@ define([
     }
 
 
+    function addCSSForNotification(){
+        // Create a style element.
+        const style = document.createElement('style');
+
+        // Define keyframes animation.
+        style.innerHTML = `
+            .cju-toast {
+                visibility: hidden;
+                position: fixed;
+                top: 30px;
+                right: 0;
+                z-index: 1000;
+                min-width: 250px;
+                margin-left: -125px;
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 1.2rem 1rem;
+            }
+
+            .cju-toast.cju-show {
+                visibility: visible;
+                -webkit-animation: cju-slidein 2s;
+                animation: cju-slidein 2s;
+            }
+
+            .cju-toast.cju-hide {
+                visibility: visible;
+                -webkit-animation: cju-slideout 2s;
+                animation: cju-slideout 2s;
+            }
+
+            .cju-toast.cju-success {
+                background-color: green;
+            }
+            .cju-toast.cju-error {
+                background-color: #cc0033;
+            }
+
+            @-webkit-keyframes cju-slidein {
+                from {right: -100%; opacity: 0;}
+                to {right: 0; opacity: 1;}
+            }
+            
+            @keyframes cju-slidein {
+                from {right: -100%; opacity: 0;}
+                to {right: 0; opacity: 1;}
+            }
+            
+            @-webkit-keyframes cju-slideout {
+                from {right: 0; opacity: 1;}
+                to {right: -100%; opacity: 0;}
+            }
+            
+            @keyframes cju-slideout {
+                from {right: 0; opacity: 1;}
+                to {right: -100%; opacity: 0;}
+            }
+        `;
+
+        // Append the style element to the document's head.
+        document.head.appendChild(style);
+    }
+    addCSSForNotification();
+
+
+    function vNotification(type, msg, availableMilliseconds=5000){
+        const notificationElement = $(`<div class="cju-toast">${msg}</div>`);
+        $('body').append(notificationElement);
+
+        notificationElement.addClass("cju-show");
+        notificationElement.addClass(`cju-${type}`);
+
+        // Hide the notification after 5 seconds.
+        setTimeout(() => {
+            notificationElement.removeClass('cju-show');
+            notificationElement.addClass('cju-hide');
+
+            // Remove the element from html all together.
+            setTimeout(() => {
+                notificationElement.remove();
+            }, 200);
+        }, availableMilliseconds);
+    }
+
+
     return {
         'VSearchManagerUtility': VSearchManagerUtility,
         'vWaitUntil': vWaitUntil,
         'VTokenManager': VTokenManager,
         'VTokenManagerObj': VTokenManagerObj,
         'vSetupMultiSelectInputHandler': vSetupMultiSelectInputHandler,
-        'vSetupMultiSelectHandlerOnAll': vSetupMultiSelectHandlerOnAll
+        'vSetupMultiSelectHandlerOnAll': vSetupMultiSelectHandlerOnAll,
+        'vNotification': vNotification
     }
 });
