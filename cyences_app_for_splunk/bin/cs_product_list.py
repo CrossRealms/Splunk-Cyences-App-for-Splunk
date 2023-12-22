@@ -1,3 +1,41 @@
+WINDOWS_SOURCES = '"*WinEventLog:Security","*WinEventLog:System"'
+WINDOWS_SOURCE_TYPES = '"powershell*"'
+WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders"'
+WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","ActiveDirectory"'
+WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
+WINDOWS_DNS_SOURCE_TYPES = '"MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS"'
+
+
+def build_windows_append_search():
+    search_to_append = ""
+    for source in WINDOWS_SOURCES.split(","):
+        search_to_append += "| append [ | tstats count where index=* source={source} | eval sources={source} ]".format(
+            source=source
+        )
+
+    for sourcetype in WINDOWS_SOURCE_TYPES.split(","):
+        search_to_append += "| append [ | tstats count where index=* sourcetype={sourcetype} | eval sources={sourcetype} ] ".format(
+            sourcetype=sourcetype
+        )
+
+    return search_to_append
+
+
+def build_windows_append_source_reviewer_search():
+    search_to_append = ""
+    for source in WINDOWS_SOURCES.split(","):
+        search_to_append += "| append [ | tstats values(host) as hosts where index=* source={source} by source index | rename source as sources | stats values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * sum(host_count) as host_count | eval sources=if(count>0,sources,{source})] ".format(
+            source=source
+        )
+
+    for sourcetype in WINDOWS_SOURCE_TYPES.split(","):
+        search_to_append += "| append [ | tstats values(host) as hosts where index=* sourcetype={sourcetype} by sourcetype index | rename sourcetype as sources | stats values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * sum(host_count) as host_count | eval sources=if(count>0,sources,{sourcetype})] ".format(
+            sourcetype=sourcetype
+        )
+
+    return search_to_append
+
+
 def build_search_query(macro, by, values, more=""):
     SEARCH_QUERY_TEMPLATE = """`{macro}` {more} | stats count by {by} 
 | append [| makeresults | eval {by}=split("{values}", ","), count=0 | mvexpand {by}] 
@@ -320,21 +358,32 @@ PRODUCTS = [
     },
     {
         "name": "Windows",
-        "metadata_count_search": '| tstats count where ((`cs_windows_idx`) OR (index=* sourcetype IN ("*WinEventLog","ActiveDirectory") OR source IN ("*WinEventLog:Security","*WinEventLog:System","powershell*"))) NOT source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders","WinEventLog:DNS Server") NOT sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") ',
+        "metadata_count_search": """| tstats count where (`cs_windows_idx` OR `cs_windows_cert_store_idx` OR (index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}))) NOT source IN ({ad_and_dns_sources}) NOT sourcetype IN ({ad_and_dns_sourcetypes}) """.format(
+            windows_sourcetypes=WINDOWS_SOURCE_TYPES,
+            windows_sources=WINDOWS_SOURCES,
+            ad_and_dns_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES,
+            ad_and_dns_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES,
+        ),
         "macro_configurations": [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows Data",
-                "search": r"""`cs_windows_idx` NOT source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders","WinEventLog:DNS Server") NOT sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") | stats count | eval label="Windows" 
-| append [| search `cs_windows_idx` sourcetype="*WinEventLog" source="*WinEventLog:Security" | stats count | eval label="Windows Security", search="sourcetype=\"*WinEventLog\" source=\"*WinEventLog:Security\""] 
-| append [| search `cs_windows_idx` sourcetype="*WinEventLog" source="*WinEventLog:System" | stats count | eval label="Windows System", search="sourcetype=\"*WinEventLog\" source=\"*WinEventLog:System\""] 
-| append [| search `cs_windows_idx` sourcetype="ActiveDirectory" | stats count | eval label="Windows AD", search="sourcetype=\"ActiveDirectory\""] 
-| table label search count""",
-                "host_reviewer_search": '| tstats count where ((`cs_windows_idx`) OR (index=* sourcetype IN ("*WinEventLog","ActiveDirectory") OR source IN ("*WinEventLog:Security","*WinEventLog:System","powershell*"))) NOT source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders","WinEventLog:DNS Server") NOT sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") by source sourcetype host | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources host',
-                "sources_reviewer_search": r"""| tstats values(host) as hosts where ((`cs_windows_idx`) OR (index=* sourcetype IN ("*WinEventLog","ActiveDirectory") OR source IN ("*WinEventLog:Security","*WinEventLog:System","powershell*"))) NOT source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders","WinEventLog:DNS Server") NOT sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") by source sourcetype index | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats count values(index) as index dc(hosts) as host_count by sources | eval sources=if(count>0,sources,"`cs_windows_idx`") | append [
-| tstats values(host) as hosts where index=* sourcetype="*WinEventLog" source="*WinEventLog:Security" by source sourcetype index | eval sources = source." (".sourcetype.")" | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:Security (WinEventLog)")] | append [
-| tstats values(host) as hosts where index=* sourcetype="*WinEventLog" source="*WinEventLog:System" by source sourcetype index | eval sources = source." (".sourcetype.")" | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:System (WinEventLog)")] | append [
-| tstats values(host) as hosts where index=* sourcetype="ActiveDirectory" by sourcetype index | stats count values(index) as index dc(hosts) as host_count by sourcetype | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"ActiveDirectory")  | rename sourcetype as sources]""",
+                "search": """| tstats count where `cs_windows_idx` OR `cs_windows_cert_store_idx` NOT source IN ({ad_and_dns_and_windows_sources}) NOT sourcetype IN ({ad_and_dns_and_windows_sourcetypes}) by source sourcetype | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources {append_windows_source_and_sourcetypes}""".format(
+                    ad_and_dns_and_windows_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES + "," + WINDOWS_SOURCES,
+                    ad_and_dns_and_windows_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES + "," + WINDOWS_SOURCE_TYPES,
+                    append_windows_source_and_sourcetypes=build_windows_append_search(),
+                ),
+                "host_reviewer_search": """| tstats count where (`cs_windows_idx`  OR `cs_windows_cert_store_idx` OR (index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}))) NOT source IN ({ad_and_dns_sources}) NOT sourcetype IN ({ad_and_dns_sourcetypes}) by source sourcetype host | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources host""".format(
+                    windows_sourcetypes=WINDOWS_SOURCE_TYPES,
+                    windows_sources=WINDOWS_SOURCES,
+                    ad_and_dns_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES,
+                    ad_and_dns_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES,
+                ),
+                "sources_reviewer_search": """| tstats values(host) as hosts where `cs_windows_idx` OR `cs_windows_cert_store_idx` NOT source IN ({ad_and_dns_and_windows_sources}) NOT sourcetype IN ({ad_and_dns_and_windows_sourcetypes}) by source sourcetype index | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats values(index) as index dc(hosts) as host_count by sources {append_windows_source_and_sourcetypes}""".format(
+                    ad_and_dns_and_windows_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES + "," + WINDOWS_SOURCES,
+                    ad_and_dns_and_windows_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES + "," + WINDOWS_SOURCE_TYPES,
+                    append_windows_source_and_sourcetypes=build_windows_append_source_reviewer_search(),
+                ),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -342,34 +391,29 @@ PRODUCTS = [
     },
     {
         "name": "Windows AD",
-        "metadata_count_search": '| tstats count where index=* source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders") OR sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued") ',
+        "metadata_count_search": """| tstats count where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) """.format(
+            ad_sources=WINDOWS_AD_SOURCES, ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES
+        ),
         "macro_configurations": [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows AD Data",
-                "search": r"""| tstats count where index=* source="WinEventLog:DFS Replication" by source | rename source as sources | stats count | eval sources=if(count>0, sources, "WinEventLog:DFS Replication") | append [
-                | tstats count where index=* source="WinEventLog:Directory Service" by source | rename source as sources | stats count | eval sources=if(count>0, sources, "WinEventLog:Directory Service")] | append [
-                | tstats count where index=* source="WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin" by source | rename source as sources | stats count | eval sources=if(count>0, sources, "WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin")] | append [
-                | tstats count where index=* source="PerfmonMk:DFS_Replicated_Folders" by source | rename source as sources | stats count | eval sources=if(count>0, sources, "PerfmonMk:DFS_Replicated_Folders")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:Netlogon" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:Netlogon")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:Replication" by sourcetype  | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:Replication")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:Health" by sourcetype  | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:Health")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:SiteInfo" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:SiteInfo")] | append [
-                | tstats count where index=* sourcetype="Script:TimesyncConfiguration" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "Script:TimesyncConfiguration")] | append [
-                | tstats count where index=* sourcetype="Script:TimesyncStatus" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "Script:TimesyncStatus")] | append [
-                | tstats count where index=* sourcetype="windows:certstore:ca:issued" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "windows:certstore:ca:issued")] """,
-                "host_reviewer_search": '| tstats count where index=* source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders") OR sourcetype IN ("MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued") by source sourcetype host | eval sources = if(source IN ("WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders"), source, sourcetype) | stats sum(count) as count by sources host',
-                "sources_reviewer_search": r"""| tstats values(host) as hosts where index=* source="WinEventLog:DFS Replication" by source index | rename source as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:DFS Replication") | append [
-                | tstats values(host) as hosts where index=* source="WinEventLog:Directory Service" by source index | rename source as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:Directory Service")] | append [
-                | tstats values(host) as hosts where index=* source="WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin" by source index | rename source as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin")] | append [
-                | tstats values(host) as hosts where index=* source="PerfmonMk:DFS_Replicated_Folders" by source index | rename source as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"PerfmonMk:DFS_Replicated_Folders")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:Netlogon" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:Netlogon")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:Replication" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:Replication")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:Health" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:Health")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:SiteInfo" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:SiteInfo")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="Script:TimesyncConfiguration" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"Script:TimesyncConfiguration")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="Script:TimesyncStatus" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"Script:TimesyncStatus")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="windows:certstore:ca:issued" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"windows:certstore:ca:issued")]""",
+                "search": """| tstats count where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype | eval sources = if(source IN ({ad_sources}), source, sourcetype)
+                | append [| makeresults | eval sources=split("{ad_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
+                    ad_sources=WINDOWS_AD_SOURCES,
+                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
+                    ad_source_and_sourcetypes=(WINDOWS_AD_SOURCES + "," + WINDOWS_AD_SOURCE_TYPES).replace("\"",""),
+                ),
+                "host_reviewer_search": """| tstats count where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype host | eval sources = if(source IN ({ad_sources}), source, sourcetype) | stats sum(count) as count by sources host""".format(
+                    ad_sources=WINDOWS_AD_SOURCES,
+                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
+                ),
+                "sources_reviewer_search": """| tstats values(host) as hosts where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype index | eval sources = if(source IN ({ad_sources}), source, sourcetype) | stats values(index) as index dc(hosts) as host_count by sources
+                | append [| makeresults | eval sources=split("{ad_source_and_sourcetypes}", ",") | mvexpand sources] | stats values(*) as * by sources""".format(
+                    ad_sources=WINDOWS_AD_SOURCES,
+                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
+                    ad_source_and_sourcetypes=(WINDOWS_AD_SOURCES + "," + WINDOWS_AD_SOURCE_TYPES).replace("\"",""),
+                ),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -377,22 +421,30 @@ PRODUCTS = [
     },
     {
         "name": "Windows DNS",
-        "metadata_count_search": '| tstats count where index=* source IN ("WinEventLog:DNS Server") OR sourcetype IN ("MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") ',
+        "metadata_count_search": """| tstats count where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) """.format(
+            dns_sources=WINDOWS_DNS_SOURCES,
+            dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
+        ),
         "macro_configurations": [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows DNS Data",
-                "search": r"""| tstats count where index=* source="WinEventLog:DNS Server" by source | rename source as sources | stats count | eval sources=if(count>0, sources, "WinEventLog:DNS Server") | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:DNS" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:DNS")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:DNS-Health" by sourcetype  | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:DNS-Health")] | append [
-                | tstats count where index=* sourcetype="MSAD:NT6:DNS-Zone-Information" by sourcetype  | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "MSAD:NT6:DNS-Zone-Information")] | append [
-                | tstats count where index=* sourcetype="PerfmonMk:DNS" by sourcetype | rename sourcetype as sources | stats count | eval sources=if(count>0, sources, "PerfmonMk:DNS")]""",
-                "host_reviewer_search": '| tstats count where index=* source IN ("WinEventLog:DNS Server") OR sourcetype IN ("MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS") by source sourcetype host | eval sources = if(source=="WinEventLog:DNS Server", source, sourcetype) | stats sum(count) as count by sources host',
-                "sources_reviewer_search": r"""| tstats values(host) as hosts where index=* source="WinEventLog:DNS Server" by source index | rename source as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sources=if(count>0,sources,"WinEventLog:DNS Server") | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:DNS" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:DNS")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:DNS-Health" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:DNS-Health")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="MSAD:NT6:DNS-Zone-Information" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"MSAD:NT6:DNS-Zone-Information")] | append [
-                | tstats values(host) as hosts where index=* sourcetype="PerfmonMk:DNS" by sourcetype index | rename sourcetype as sources | stats count values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * | eval sourcetype=if(count>0,sourcetype,"PerfmonMk:DNS")]""",
+                "search": """| tstats count where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype | eval sources = if(source IN ({dns_sources}), source, sourcetype)
+                | append [| makeresults | eval sources=split("{dns_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
+                    dns_sources=WINDOWS_DNS_SOURCES,
+                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
+                    dns_source_and_sourcetypes=(WINDOWS_DNS_SOURCES + "," + WINDOWS_DNS_SOURCE_TYPES).replace("\"",""),
+                ),
+                "host_reviewer_search": "| tstats count where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype host | eval sources = if(source IN ({dns_sources}), source, sourcetype) | stats sum(count) as count by sources host".format(
+                    dns_sources=WINDOWS_DNS_SOURCES,
+                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
+                ),
+                "sources_reviewer_search": """| tstats values(host) as hosts where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype index | eval sources = if(source IN ({dns_sources}), source, sourcetype) | stats values(index) as index dc(hosts) as host_count by sources
+                | append [| makeresults | eval sources=split("{dns_source_and_sourcetypes}", ",") | mvexpand sources] | stats values(*) as * by sources""".format(
+                    dns_sources=WINDOWS_DNS_SOURCES,
+                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
+                    dns_source_and_sourcetypes=(WINDOWS_DNS_SOURCES + "," + WINDOWS_DNS_SOURCE_TYPES).replace("\"",""),
+                ),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
