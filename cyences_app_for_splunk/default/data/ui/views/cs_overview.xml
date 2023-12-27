@@ -96,28 +96,7 @@
     </panel>
   </row>
   <row>
-    <panel>
-      <title>Network Compromise &amp; Cisco IOS</title>
-      <table id="tbl_network_compromise">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
+    <panel depends="$authentication$">
       <title>Authentication</title>
       <table id="tbl_authentication">
         <search base="basesearch">
@@ -138,200 +117,7 @@
         </drilldown>
       </table>
     </panel>
-    <panel>
-      <title>Credential Compromise</title>
-      <table id="tbl_credential_compromise">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Credential Compromise")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Linux/Unix</title>
-      <table id="tbl_linux">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Linux")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
-      <title>Active Directory &amp; Windows</title>
-      <table id="tbl_ad_windows">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Windows|AD")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
-      <title>Email</title>
-      <table id="tbl_email">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Email")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Office 365</title>
-      <table id="tbl_o365">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("O365")` 
-| append 
-    [| search `cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus"))  earliest=$timeRange.earliest$ latest=$timeRange.latest$
-    | eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
-    | stats latest(Status) as Status latest(_time) as _time by Service host 
-    | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
-    | stats count as Count
-    $tkn_not_triggered_alert_filter_2$
-    | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
-    | eval Name="Currently not Operational O365 Services"
-    | eval cyences_severity=3
-    | search cyences_severity IN $tkn_severity$
-    | eval Count = cyences_severity."|".Count
-    | rename Count as "Notable Events"]
-| sort - cyences_severity</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <condition match="'row.Name'==&quot;Currently not Operational O365 Services&quot;">
-            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
-          </condition>
-          <condition>
-            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-          </condition>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
-      <title>Google Workspace</title>
-      <table id="tbl_gws">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Google Workspace")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
-      <title>AWS</title>
-      <table id="tbl_aws">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("AWS")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Ransomware</title>
-      <table id="tbl_ransomware">
-        <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Ransomware")`</query>
-        </search>
-        <option name="count">10</option>
-        <option name="drilldown">row</option>
-        <option name="refresh.display">progressbar</option>
-        <format type="color" field="disabled">
-          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
-        </format>
-        <format type="color" field="is_scheduled">
-          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
-        </format>
-        <fields>["Name","Notable Events"]</fields>
-        <drilldown>
-          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
-        </drilldown>
-      </table>
-    </panel>
-    <panel>
+    <panel depends="$antivirus$">
       <title>Antivirus</title>
       <table id="tbl_antivirus">
         <search>
@@ -436,11 +222,225 @@
         </drilldown>
       </table>
     </panel>
-      <panel>
+    <panel depends="$aws$">
+      <title>AWS</title>
+      <table id="tbl_aws">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("AWS")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel depends="$gws$">
+      <title>Google Workspace</title>
+      <table id="tbl_gws">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Google Workspace")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$o365$">
+      <title>Office 365</title>
+      <table id="tbl_o365">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("O365")` 
+| append 
+    [| search `cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus"))  earliest=$timeRange.earliest$ latest=$timeRange.latest$
+    | eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
+    | stats latest(Status) as Status latest(_time) as _time by Service host 
+    | search Status IN ("ExtendedRecovery","InformationUnavailable","Investigating*","RestoringService","ServiceDegradation","ServiceInterruption") 
+    | stats count as Count
+    $tkn_not_triggered_alert_filter_2$
+    | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
+    | eval Name="Currently not Operational O365 Services"
+    | eval cyences_severity=3
+    | search cyences_severity IN $tkn_severity$
+    | eval Count = cyences_severity."|".Count
+    | rename Count as "Notable Events"]
+| sort - cyences_severity</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <condition match="'row.Name'==&quot;Currently not Operational O365 Services&quot;">
+            <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$</link>
+          </condition>
+          <condition>
+            <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+          </condition>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$email$">
+      <title>Email</title>
+      <table id="tbl_email">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Email")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel depends="$network_compromise$">
+      <title>Network Compromise &amp; Cisco IOS</title>
+      <table id="tbl_network_compromise">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$vulnerability$">
       <title>Vulnerability</title>
       <table id="tbl_vulnerability">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("Vulnerability")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$ad_windows$">
+      <title>Active Directory &amp; Windows</title>
+      <table id="tbl_ad_windows">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Windows|AD")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel depends="$credential_compromise$">
+      <title>Credential Compromise</title>
+      <table id="tbl_credential_compromise">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Credential Compromise")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$ransomware$">
+      <title>Ransomware</title>
+      <table id="tbl_ransomware">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Ransomware")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$linux$">
+      <title>Linux/Unix</title>
+      <table id="tbl_linux">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Linux")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
