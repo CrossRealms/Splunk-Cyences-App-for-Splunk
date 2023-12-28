@@ -84,7 +84,7 @@ Run the search below and it should return events with no errors:
 
 ## Sophos Central API Endpoints Configuration
 
-Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_central/#sophos-central-metadata-through-api) section for more information. 
+Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_endpoint_protection/#sophos-central-metadata-through-api) section for more information. 
 
 
 ## Cyences Email Settings for Alerts

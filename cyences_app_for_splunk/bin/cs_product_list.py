@@ -74,34 +74,6 @@ def build_source_reviewer_search(by, values):
 
 PRODUCTS = [
     {
-        "name": "AWS",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_aws",
-                "label": "AWS Data",
-                "search_macro": "cs_aws",
-                "search_by": "sourcetype",
-                "search_values": "aws:cloudtrail",
-                "earliest_time": "-1d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "Cisco IOS",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_cisco_ios",
-                "label": "Cisco IOS Data",
-                "search_macro": "cs_cisco_ios",
-                "search_by": "sourcetype",
-                "search_values": "cisco:ios",
-                "earliest_time": "-4h@h",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
         "name": "CrowdStrike EventStream",
         "macro_configurations": [
             {
@@ -110,48 +82,6 @@ PRODUCTS = [
                 "search_macro": "cs_crowdstrike_eventstream",
                 "search_by": "sourcetype",
                 "search_values": "CrowdStrike:Event:Streams:JSON",
-                "earliest_time": "-7d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "CrowdStrike Spotlight",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_crowdstrike_vuln",
-                "label": "CrowdStrike Spotlight Data",
-                "search_macro": "cs_crowdstrike_vuln",
-                "search_by": "sourcetype",
-                "search_values": "crowdstrike:spotlight:vulnerability",
-                "earliest_time": "-7d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "FortiGate",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_fortigate",
-                "label": "FortiGate Data",
-                "search_macro": "cs_fortigate",
-                "search_by": "sourcetype",
-                "search_values": "fortigate_event,fortigate_traffic,fortigate_utm",
-                "earliest_time": "-4h@h",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "Google Workspace",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_gws",
-                "label": "Google Workspace Data",
-                "search_macro": "cs_gws",
-                "search_by": "sourcetype",
-                "search_values": "gws:reports:admin,gws:reports:login,gws:reports:groups_enterprise,gws:alerts,gws:reports:drive,gws:gmail",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
@@ -172,31 +102,80 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "Lansweeper",
+        "name": "Office 365 Defender ATP",
         "macro_configurations": [
             {
-                "macro_name": "cs_lansweeper",
-                "label": "Lansweeper Data",
-                "search_macro": "cs_lansweeper",
+                "macro_name": "cs_o365_defender_atp",
+                "label": "Microsoft 365 Defender ATP Data",
+                "search_macro": "cs_o365_defender_atp",
                 "search_by": "sourcetype",
-                "search_values": "lansweeper:asset:onprem,lansweeper:asset:v2",
-                "earliest_time": "-2d@d",
+                "search_values": "ms:defender:atp:alerts",
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            },
+            {
+                "macro_name": "cs_o365_defender_atp_audit",
+                "label": "Microsoft 365 Defender ATP Audit Data",
+                "search_macro": "cs_o365_defender_atp_audit",
+                "search_by": "sourcetype",
+                "search_values": "DefenderATPStatusLog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            },
+        ],
+    },
+    {
+        "name": "Sophos Endpoint Protection",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_sophos",
+                "label": "Sophos Endpoint Protection Data",
+                "search_macro": "cs_sophos",
+                "search_by": "sourcetype",
+                "search_values": "sophos_events",
+                "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
         ],
     },
     {
-        "name": "Linux",
-        "label": "Linux/Unix",
+        "name": "Windows Defender",
         "macro_configurations": [
             {
-                "macro_name": "cs_linux",
-                "label": "Linux Data",
-                "search_macro": "cs_linux",
+                "macro_name": "cs_windows_defender",
+                "label": "Windows Defender Data",
+                "search_macro": "cs_windows_defender",
+                "search_by": "source",
+                "search_values": "WinEventLog:Microsoft-Windows-Windows Defender/Operational",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "AWS",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_aws",
+                "label": "AWS Data",
+                "search_macro": "cs_aws",
                 "search_by": "sourcetype",
-                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit",
-                "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit)",
-                "earliest_time": "-2d@d",
+                "search_values": "aws:cloudtrail",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Google Workspace",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_gws",
+                "label": "Google Workspace Data",
+                "search_macro": "cs_gws",
+                "search_by": "sourcetype",
+                "search_values": "gws:reports:admin,gws:reports:login,gws:reports:groups_enterprise,gws:alerts,gws:reports:drive,gws:gmail",
+                "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
         ],
@@ -235,26 +214,31 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "Office 365 Defender ATP",
+        "name": "Cisco IOS",
         "macro_configurations": [
             {
-                "macro_name": "cs_o365_defender_atp",
-                "label": "Microsoft 365 Defender ATP Data",
-                "search_macro": "cs_o365_defender_atp",
+                "macro_name": "cs_cisco_ios",
+                "label": "Cisco IOS Data",
+                "search_macro": "cs_cisco_ios",
                 "search_by": "sourcetype",
-                "search_values": "ms:defender:atp:alerts",
-                "earliest_time": "-7d@d",
+                "search_values": "cisco:ios",
+                "earliest_time": "-4h@h",
                 "latest_time": "now",
-            },
+            }
+        ],
+    },
+    {
+        "name": "FortiGate",
+        "macro_configurations": [
             {
-                "macro_name": "cs_o365_defender_atp_audit",
-                "label": "Microsoft 365 Defender ATP Audit Data",
-                "search_macro": "cs_o365_defender_atp_audit",
+                "macro_name": "cs_fortigate",
+                "label": "FortiGate Data",
+                "search_macro": "cs_fortigate",
                 "search_by": "sourcetype",
-                "search_values": "DefenderATPStatusLog",
-                "earliest_time": "-1d@d",
+                "search_values": "fortigate_event,fortigate_traffic,fortigate_utm",
+                "earliest_time": "-4h@h",
                 "latest_time": "now",
-            },
+            }
         ],
     },
     {
@@ -267,34 +251,6 @@ PRODUCTS = [
                 "search_by": "sourcetype",
                 "search_values": "pan:config,pan:globalprotect,pan:system,pan:threat,pan:traffic",
                 "earliest_time": "-1d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "Qualys",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_qualys",
-                "label": "Qualys Data",
-                "search_macro": "cs_qualys",
-                "search_by": "sourcetype",
-                "search_values": "qualys:hostDetection",
-                "earliest_time": "-7d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "Sophos Endpoint Protection",
-        "macro_configurations": [
-            {
-                "macro_name": "cs_sophos",
-                "label": "Sophos Endpoint Protection Data",
-                "search_macro": "cs_sophos",
-                "search_by": "sourcetype",
-                "search_values": "sophos_events",
-                "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
         ],
@@ -314,15 +270,29 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "Sysmon",
+        "name": "CrowdStrike Spotlight",
         "macro_configurations": [
             {
-                "macro_name": "cs_sysmon",
-                "label": "Sysmon Data",
-                "search_macro": "cs_sysmon",
-                "search_by": "source",
-                "search_values": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
-                "earliest_time": "-4h@h",
+                "macro_name": "cs_crowdstrike_vuln",
+                "label": "CrowdStrike Spotlight Data",
+                "search_macro": "cs_crowdstrike_vuln",
+                "search_by": "sourcetype",
+                "search_values": "crowdstrike:spotlight:vulnerability",
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Qualys",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_qualys",
+                "label": "Qualys Data",
+                "search_macro": "cs_qualys",
+                "search_by": "sourcetype",
+                "search_values": "qualys:hostDetection",
+                "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
         ],
@@ -342,16 +312,15 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "VPN",
-        "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
+        "name": "Sysmon",
         "macro_configurations": [
             {
-                "macro_name": "cs_vpn_indexes",
-                "label": "VPN Data (indexes)",
-                "search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by index, sourcetype',
-                "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
-                "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
-                "earliest_time": "-1d@d",
+                "macro_name": "cs_sysmon",
+                "label": "Sysmon Data",
+                "search_macro": "cs_sysmon",
+                "search_by": "source",
+                "search_values": "WinEventLog:Microsoft-Windows-Sysmon/Operational, XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+                "earliest_time": "-4h@h",
                 "latest_time": "now",
             }
         ],
@@ -451,14 +420,45 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "Windows Defender",
+        "name": "Lansweeper",
         "macro_configurations": [
             {
-                "macro_name": "cs_windows_defender",
-                "label": "Windows Defender Data",
-                "search_macro": "cs_windows_defender",
-                "search_by": "source",
-                "search_values": "XmlWinEventLog:Defender",
+                "macro_name": "cs_lansweeper",
+                "label": "Lansweeper Data",
+                "search_macro": "cs_lansweeper",
+                "search_by": "sourcetype",
+                "search_values": "lansweeper:asset:onprem,lansweeper:asset:v2",
+                "earliest_time": "-2d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Linux",
+        "label": "Linux/Unix",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_linux",
+                "label": "Linux Data",
+                "search_macro": "cs_linux",
+                "search_by": "sourcetype",
+                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit",
+                "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit)",
+                "earliest_time": "-2d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "VPN",
+        "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
+        "macro_configurations": [
+            {
+                "macro_name": "cs_vpn_indexes",
+                "label": "VPN Data (indexes)",
+                "search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -493,6 +493,3 @@ for product in PRODUCTS:
             )
     if not product.get("metadata_count_search"):
         product["metadata_count_search"] = metadata_count_search[:-3]
-
-
-PRODUCTS.sort(key=lambda x: x["name"].lower())
