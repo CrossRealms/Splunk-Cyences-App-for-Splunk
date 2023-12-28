@@ -3,6 +3,7 @@
   <view name="cs_forensics" />
   <view name="cs_soc" />
   <collection label="Dashboards">
+    <view name="cs_authentication_reports" />
     <collection label="Antivirus">
       <view name="cs_crowdstrike_reports" /><!--CrowdStrike EventStream-->
       <view name="cs_kaspersky_reports" /><!--Kaspersky-->
@@ -30,7 +31,6 @@
       <view name="cs_vulnerability" />
     </collection>
     <view name="cs_ad_reports" /><!--Windows-->
-    <view name="cs_authentication_reports" />
     <view name="cs_dns_tracker" /><!--Windows-->
     <view name="cs_lansweeper" /><!--Lansweeper-->
     <view name="cs_linux_reports" /><!--Linux-->
