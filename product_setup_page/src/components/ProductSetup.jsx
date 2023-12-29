@@ -19,6 +19,8 @@ export default function ProductSetup(props) {
   const [macros, setMacros] = useState(productInfo.macro_configurations)
   const [response, setResponse] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
 
   function changeEnabled() {
     const [finalEnabled, enabledLabel] = effectiveEnabled(enabled);
@@ -31,12 +33,15 @@ export default function ProductSetup(props) {
       .then((resp) => {
         generateToast(`Successfully ${!finalEnabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
         setEnabled(!finalEnabled);
-        setResponse(resp.data.entry[0].content.message)
+        setResponse(resp.data.entry[0].content.message);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         generateToast(`Failed to update "${payload.product}". check console for more detail.`, "error")
-      })
+        setIsLoading(false);
+      });
+    setIsLoading(true);
   }
 
   function updateMacroDefinition(macro, definition) {
@@ -87,6 +92,7 @@ export default function ProductSetup(props) {
       ))}
       <Button label="Save" appearance="primary" onClick={saveMacros} updateMacroDefinition={updateMacroDefinition} />
       {response && <pre>{response}</pre>}
+      {isLoading ? <div class="full_page_spinner">Spinner here</div> : null}
     </div>
   );
 }
