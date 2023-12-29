@@ -1,7 +1,7 @@
 WINDOWS_SOURCES = '"*WinEventLog:Security","*WinEventLog:System"'
 WINDOWS_SOURCE_TYPES = '"powershell*"'
 WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders"'
-WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","Script:TimesyncConfiguration","Script:TimesyncStatus","windows:certstore:ca:issued","ActiveDirectory"'
+WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","windows:certstore:ca:issued","ActiveDirectory"'
 WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
 WINDOWS_DNS_SOURCE_TYPES = '"MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS"'
 
@@ -60,12 +60,12 @@ def build_source_reviewer_search(by, values):
     for index in range(len(values)):
         if index > 0:
             search += " | append ["
-        search += """| tstats values(host) as hosts where index=* {by} IN ({value}) by {by} index
+        search += """| tstats values(host) as hosts where index=* {by} IN ("{value}") by {by} index
         | stats count values(*) as * dc(hosts) as host_count by {by}
-        | stats count values(*) as *
+        | stats count values(*) as * sum(host_count) as host_count
         | eval {by}=if(count>0,{by},"{value}")
         | rename {by} as sources""".format(
-            by=by, value=values[index]
+            by=by, value=values[index].strip('"')
         )
         if index > 0:
             search += "]"
@@ -146,7 +146,7 @@ PRODUCTS = [
                 "label": "Windows Defender Data",
                 "search_macro": "cs_windows_defender",
                 "search_by": "source",
-                "search_values": "WinEventLog:Microsoft-Windows-Windows Defender/Operational",
+                "search_values": '"*WinEventLog:Microsoft-Windows-Windows Defender/Operational"',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -319,7 +319,7 @@ PRODUCTS = [
                 "label": "Sysmon Data",
                 "search_macro": "cs_sysmon",
                 "search_by": "source",
-                "search_values": "WinEventLog:Microsoft-Windows-Sysmon/Operational, XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+                "search_values": "*WinEventLog:Microsoft-Windows-Sysmon/Operational",
                 "earliest_time": "-4h@h",
                 "latest_time": "now",
             }
@@ -427,7 +427,7 @@ PRODUCTS = [
                 "label": "Lansweeper Data",
                 "search_macro": "cs_lansweeper",
                 "search_by": "sourcetype",
-                "search_values": "lansweeper:asset:onprem,lansweeper:asset:v2",
+                "search_values": "lansweeper:asset:*",
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             }
