@@ -2,7 +2,7 @@
 layout: default
 title: Lansweeper
 permalink: /data_onboarding/lansweeper/
-nav_order: 24
+nav_order: 23
 parent: Data Onboarding
 ---
 
