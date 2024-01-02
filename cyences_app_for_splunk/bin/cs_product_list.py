@@ -79,7 +79,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_crowdstrike_eventstream",
                 "label": "CrowdStrike EventStream Data",
-                "search_macro": "cs_crowdstrike_eventstream",
                 "search_by": "sourcetype",
                 "search_values": "CrowdStrike:Event:Streams:JSON",
                 "earliest_time": "-7d@d",
@@ -93,7 +92,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_kaspersky",
                 "label": "Kaspersky Data",
-                "search_macro": "cs_kaspersky",
                 "search_by": "sourcetype",
                 "search_values": "kaspersky:leef,kaspersky:klaud,kaspersky:klprci,kaspersky:klbl,kaspersky:klsrv,kaspersky:gnrl,kaspersky:klnag",
                 "earliest_time": "-1d@d",
@@ -107,7 +105,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_o365_defender_atp",
                 "label": "Microsoft 365 Defender ATP Data",
-                "search_macro": "cs_o365_defender_atp",
                 "search_by": "sourcetype",
                 "search_values": "ms:defender:atp:alerts",
                 "earliest_time": "-7d@d",
@@ -116,7 +113,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_o365_defender_atp_audit",
                 "label": "Microsoft 365 Defender ATP Audit Data",
-                "search_macro": "cs_o365_defender_atp_audit",
                 "search_by": "sourcetype",
                 "search_values": "DefenderATPStatusLog",
                 "earliest_time": "-1d@d",
@@ -130,7 +126,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_sophos",
                 "label": "Sophos Endpoint Protection Data",
-                "search_macro": "cs_sophos",
                 "search_by": "sourcetype",
                 "search_values": "sophos_events",
                 "earliest_time": "-7d@d",
@@ -144,7 +139,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_windows_defender",
                 "label": "Windows Defender Data",
-                "search_macro": "cs_windows_defender",
                 "search_by": "source",
                 "search_values": '"*WinEventLog:Microsoft-Windows-Windows Defender/Operational"',
                 "earliest_time": "-1d@d",
@@ -158,7 +152,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_aws",
                 "label": "AWS Data",
-                "search_macro": "cs_aws",
                 "search_by": "sourcetype",
                 "search_values": "aws:cloudtrail",
                 "earliest_time": "-1d@d",
@@ -172,7 +165,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_gws",
                 "label": "Google Workspace Data",
-                "search_macro": "cs_gws",
                 "search_by": "sourcetype",
                 "search_values": "gws:reports:admin,gws:reports:login,gws:reports:groups_enterprise,gws:alerts,gws:reports:drive,gws:gmail",
                 "earliest_time": "-7d@d",
@@ -186,7 +178,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_o365",
                 "label": "Office 365 Data",
-                "search_macro": "cs_o365",
                 "search_by": "sourcetype",
                 "search_values": "o365:management:activity,o365:service:healthIssue,o365:reporting:messagetrace",
                 "earliest_time": "-1d@d",
@@ -195,7 +186,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_azure_securityscore",
                 "label": "Azure Security Score Data",
-                "search_macro": "cs_azure_securityscore",
                 "search_by": "sourcetype",
                 "search_values": "GraphSecurity:Score",
                 "search_more": 'sourcetype="GraphSecurity:Score"',
@@ -205,7 +195,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_azure",
                 "label": "Azure Active Directory Data",
-                "search_macro": "cs_azure",
                 "search_by": "sourcetype",
                 "search_values": "azure:aad:audit",
                 "earliest_time": "-2d@d",
@@ -219,7 +208,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_cisco_ios",
                 "label": "Cisco IOS Data",
-                "search_macro": "cs_cisco_ios",
                 "search_by": "sourcetype",
                 "search_values": "cisco:ios",
                 "earliest_time": "-4h@h",
@@ -233,7 +221,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_fortigate",
                 "label": "FortiGate Data",
-                "search_macro": "cs_fortigate",
                 "search_by": "sourcetype",
                 "search_values": "fortigate_event,fortigate_traffic,fortigate_utm",
                 "earliest_time": "-4h@h",
@@ -247,7 +234,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_palo",
                 "label": "Palo Alto Data",
-                "search_macro": "cs_palo",
                 "search_by": "sourcetype",
                 "search_values": "pan:config,pan:globalprotect,pan:system,pan:threat,pan:traffic",
                 "earliest_time": "-1d@d",
@@ -261,7 +247,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_sophos_firewall",
                 "label": "Sophos Firewall Data",
-                "search_macro": "cs_sophos_firewall",
                 "search_by": "sourcetype",
                 "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp",
                 "earliest_time": "-1d@d",
@@ -275,7 +260,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_crowdstrike_vuln",
                 "label": "CrowdStrike Spotlight Data",
-                "search_macro": "cs_crowdstrike_vuln",
                 "search_by": "sourcetype",
                 "search_values": "crowdstrike:spotlight:vulnerability",
                 "earliest_time": "-7d@d",
@@ -289,7 +273,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_qualys",
                 "label": "Qualys Data",
-                "search_macro": "cs_qualys",
                 "search_by": "sourcetype",
                 "search_values": "qualys:hostDetection",
                 "earliest_time": "-7d@d",
@@ -303,7 +286,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_tenable",
                 "label": "Tenable Data",
-                "search_macro": "cs_tenable",
                 "search_by": "sourcetype",
                 "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln",
                 "earliest_time": "-7d@d",
@@ -317,7 +299,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_sysmon",
                 "label": "Sysmon Data",
-                "search_macro": "cs_sysmon",
                 "search_by": "source",
                 "search_values": "*WinEventLog:Microsoft-Windows-Sysmon/Operational",
                 "earliest_time": "-4h@h",
@@ -425,7 +406,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_lansweeper",
                 "label": "Lansweeper Data",
-                "search_macro": "cs_lansweeper",
                 "search_by": "sourcetype",
                 "search_values": "lansweeper:asset:*",
                 "earliest_time": "-2d@d",
@@ -440,7 +420,6 @@ PRODUCTS = [
             {
                 "macro_name": "cs_linux",
                 "label": "Linux Data",
-                "search_macro": "cs_linux",
                 "search_by": "sourcetype",
                 "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit",
                 "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit)",
@@ -471,7 +450,7 @@ for product in PRODUCTS:
     for macro_config in product["macro_configurations"]:
         if not macro_config.get("search"):
             macro_config["search"] = build_search_query(
-                macro=macro_config["search_macro"],
+                macro=macro_config["macro_name"],
                 by=macro_config["search_by"],
                 values=macro_config["search_values"],
                 more=macro_config.get("search_more", ""),
