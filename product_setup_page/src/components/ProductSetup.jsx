@@ -4,6 +4,7 @@ import Switch from '@splunk/react-ui/Switch'
 import DataMacroConfiguration from './DataMacroConfiguration';
 import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
+import '../css/spinner.css'
 
 function effectiveEnabled(enabled) {
   if (enabled.toString().toLowerCase() === "unknown") {
@@ -92,7 +93,7 @@ export default function ProductSetup(props) {
       ))}
       <Button label="Save" appearance="primary" onClick={saveMacros} updateMacroDefinition={updateMacroDefinition} />
       {response && <pre>{response}</pre>}
-      {isLoading ? <div class="full_page_spinner">Spinner here</div> : null}
+      {isLoading ? <div id="spinner"></div>: null}
     </div>
   );
 }
