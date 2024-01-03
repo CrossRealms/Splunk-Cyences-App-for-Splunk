@@ -40,7 +40,7 @@ def build_search_query(macro, by, values, more=""):
     SEARCH_QUERY_TEMPLATE = """`{macro}` {more} | stats count by {by} 
 | append [| makeresults | eval {by}=split("{values}", ","), count=0 | mvexpand {by}] 
 | stats sum(count) as count by {by}"""
-    return SEARCH_QUERY_TEMPLATE.format(macro=macro, by=by, values=values, more=more)
+    return SEARCH_QUERY_TEMPLATE.format(macro=macro, by=by, values=values.strip('"'), more=more)
 
 
 def build_host_reviewer_search(by, values):
