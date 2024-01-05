@@ -1,39 +1,9 @@
-WINDOWS_SOURCES = '"*WinEventLog:Security","*WinEventLog:System"'
-WINDOWS_SOURCE_TYPES = '"powershell*"'
-WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin","PerfmonMk:DFS_Replicated_Folders"'
+WINDOWS_SOURCES = '"*WinEventLog:Application","*WinEventLog:Security","*WinEventLog:System","powershell://generate_windows_update_logs"'
+WINDOWS_SOURCE_TYPES = '"Script:ListeningPorts","WinRegistry","WindowsFirewallStatus","windows:certstore:local","DhcpSrvLog","WindowsUpdateLog","DomainController:SecurityEvents"'
+WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin"'
 WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","windows:certstore:ca:issued","ActiveDirectory"'
 WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
-WINDOWS_DNS_SOURCE_TYPES = '"MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information","PerfmonMk:DNS"'
-
-
-def build_windows_append_search():
-    search_to_append = ""
-    for source in WINDOWS_SOURCES.split(","):
-        search_to_append += "| append [ | tstats count where index=* source={source} | eval sources={source} ]".format(
-            source=source
-        )
-
-    for sourcetype in WINDOWS_SOURCE_TYPES.split(","):
-        search_to_append += "| append [ | tstats count where index=* sourcetype={sourcetype} | eval sources={sourcetype} ] ".format(
-            sourcetype=sourcetype
-        )
-
-    return search_to_append
-
-
-def build_windows_append_source_reviewer_search():
-    search_to_append = ""
-    for source in WINDOWS_SOURCES.split(","):
-        search_to_append += "| append [ | tstats values(host) as hosts where index=* source={source} by source index | rename source as sources | stats values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * sum(host_count) as host_count | eval sources=if(count>0,sources,{source})] ".format(
-            source=source
-        )
-
-    for sourcetype in WINDOWS_SOURCE_TYPES.split(","):
-        search_to_append += "| append [ | tstats values(host) as hosts where index=* sourcetype={sourcetype} by sourcetype index | rename sourcetype as sources | stats values(index) as index dc(hosts) as host_count by sources | stats count values(*) as * sum(host_count) as host_count | eval sources=if(count>0,sources,{sourcetype})] ".format(
-            sourcetype=sourcetype
-        )
-
-    return search_to_append
+WINDOWS_DNS_SOURCE_TYPES = '"MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information"'
 
 
 def build_search_query(macro, by, values, more=""):
@@ -53,12 +23,12 @@ def build_metadata_count_search(by, values):
     return "{by} IN ({values}) OR ".format(by=by, values=values)
 
 
-def build_source_reviewer_search(by, values):
+def build_source_reviewer_search(by, values, first_call=True):
     search = ""
     values = values.split(",")
 
     for index in range(len(values)):
-        if index > 0:
+        if index > 0 or first_call is False:
             search += " | append ["
         search += """| tstats values(host) as hosts where index=* {by} IN ("{value}") by {by} index
         | stats count values(*) as * dc(hosts) as host_count by {by}
@@ -67,7 +37,7 @@ def build_source_reviewer_search(by, values):
         | rename {by} as sources""".format(
             by=by, value=values[index].strip('"')
         )
-        if index > 0:
+        if index > 0 or first_call is False:
             search += "]"
     return search
 
@@ -308,32 +278,22 @@ PRODUCTS = [
     },
     {
         "name": "Windows",
-        "metadata_count_search": """| tstats count where (`cs_windows_idx` OR `cs_windows_cert_store_idx` OR (index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}))) NOT source IN ({ad_and_dns_sources}) NOT sourcetype IN ({ad_and_dns_sourcetypes}) """.format(
+        "metadata_count_search": """| tstats count where index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}) """.format(
             windows_sourcetypes=WINDOWS_SOURCE_TYPES,
             windows_sources=WINDOWS_SOURCES,
-            ad_and_dns_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES,
-            ad_and_dns_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES,
         ),
         "macro_configurations": [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows Data",
-                "search": """| tstats count where `cs_windows_idx` OR `cs_windows_cert_store_idx` NOT source IN ({ad_and_dns_and_windows_sources}) NOT sourcetype IN ({ad_and_dns_and_windows_sourcetypes}) by source sourcetype | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources {append_windows_source_and_sourcetypes}""".format(
-                    ad_and_dns_and_windows_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES + "," + WINDOWS_SOURCES,
-                    ad_and_dns_and_windows_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES + "," + WINDOWS_SOURCE_TYPES,
-                    append_windows_source_and_sourcetypes=build_windows_append_search(),
-                ),
-                "host_reviewer_search": """| tstats count where (`cs_windows_idx`  OR `cs_windows_cert_store_idx` OR (index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}))) NOT source IN ({ad_and_dns_sources}) NOT sourcetype IN ({ad_and_dns_sourcetypes}) by source sourcetype host | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources host""".format(
+                "search": """| tstats count where index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}) by source sourcetype | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources
+                | append [| makeresults | eval sources=split("{windows_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
                     windows_sourcetypes=WINDOWS_SOURCE_TYPES,
                     windows_sources=WINDOWS_SOURCES,
-                    ad_and_dns_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES,
-                    ad_and_dns_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES,
+                    windows_source_and_sourcetypes=(WINDOWS_SOURCES + "," + WINDOWS_SOURCE_TYPES).replace("\"",""),
                 ),
-                "sources_reviewer_search": """| tstats values(host) as hosts where `cs_windows_idx` OR `cs_windows_cert_store_idx` NOT source IN ({ad_and_dns_and_windows_sources}) NOT sourcetype IN ({ad_and_dns_and_windows_sourcetypes}) by source sourcetype index | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats values(index) as index dc(hosts) as host_count by sources {append_windows_source_and_sourcetypes}""".format(
-                    ad_and_dns_and_windows_sources=WINDOWS_AD_SOURCES + "," + WINDOWS_DNS_SOURCES + "," + WINDOWS_SOURCES,
-                    ad_and_dns_and_windows_sourcetypes=WINDOWS_AD_SOURCE_TYPES + "," + WINDOWS_DNS_SOURCE_TYPES + "," + WINDOWS_SOURCE_TYPES,
-                    append_windows_source_and_sourcetypes=build_windows_append_source_reviewer_search(),
-                ),
+                "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES) + "]",
+                "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -354,16 +314,8 @@ PRODUCTS = [
                     ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
                     ad_source_and_sourcetypes=(WINDOWS_AD_SOURCES + "," + WINDOWS_AD_SOURCE_TYPES).replace("\"",""),
                 ),
-                "host_reviewer_search": """| tstats count where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype host | eval sources = if(source IN ({ad_sources}), source, sourcetype) | stats sum(count) as count by sources host""".format(
-                    ad_sources=WINDOWS_AD_SOURCES,
-                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
-                ),
-                "sources_reviewer_search": """| tstats values(host) as hosts where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype index | eval sources = if(source IN ({ad_sources}), source, sourcetype) | stats values(index) as index dc(hosts) as host_count by sources
-                | append [| makeresults | eval sources=split("{ad_source_and_sourcetypes}", ",") | mvexpand sources] | stats values(*) as * by sources""".format(
-                    ad_sources=WINDOWS_AD_SOURCES,
-                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
-                    ad_source_and_sourcetypes=(WINDOWS_AD_SOURCES + "," + WINDOWS_AD_SOURCE_TYPES).replace("\"",""),
-                ),
+                "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES) + "]",
+                "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -385,16 +337,8 @@ PRODUCTS = [
                     dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
                     dns_source_and_sourcetypes=(WINDOWS_DNS_SOURCES + "," + WINDOWS_DNS_SOURCE_TYPES).replace("\"",""),
                 ),
-                "host_reviewer_search": "| tstats count where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype host | eval sources = if(source IN ({dns_sources}), source, sourcetype) | stats sum(count) as count by sources host".format(
-                    dns_sources=WINDOWS_DNS_SOURCES,
-                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
-                ),
-                "sources_reviewer_search": """| tstats values(host) as hosts where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype index | eval sources = if(source IN ({dns_sources}), source, sourcetype) | stats values(index) as index dc(hosts) as host_count by sources
-                | append [| makeresults | eval sources=split("{dns_source_and_sourcetypes}", ",") | mvexpand sources] | stats values(*) as * by sources""".format(
-                    dns_sources=WINDOWS_DNS_SOURCES,
-                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
-                    dns_source_and_sourcetypes=(WINDOWS_DNS_SOURCES + "," + WINDOWS_DNS_SOURCE_TYPES).replace("\"",""),
-                ),
+                "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES) + "]",
+                "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -421,8 +365,8 @@ PRODUCTS = [
                 "macro_name": "cs_linux",
                 "label": "Linux Data",
                 "search_by": "sourcetype",
-                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit",
-                "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,openPorts,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:UserAccounts,Unix:Version,Unix:Uptime,package,hardware,lsof,linux_secure,linux:audit)",
+                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit",
+                "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit)",
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             }
