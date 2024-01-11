@@ -6,11 +6,19 @@ WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
 WINDOWS_DNS_SOURCE_TYPES = '"MSAD:NT6:DNS","MSAD:NT6:DNS-Health","MSAD:NT6:DNS-Zone-Information"'
 
 
-def build_search_query(macro, by, values, more=""):
-    SEARCH_QUERY_TEMPLATE = """`{macro}` {more} | stats count by {by} 
-| append [| makeresults | eval {by}=split("{values}", ","), count=0 | mvexpand {by}] 
-| stats sum(count) as count by {by}"""
-    return SEARCH_QUERY_TEMPLATE.format(macro=macro, by=by, values=values.strip('"'), more=more)
+def build_search_query(macro, by, values, first_call=True):
+    search = ""
+    values = values.split(",")
+
+    for index in range(len(values)):
+        if index > 0 or first_call is False:
+            search += " | append ["
+        search += """| tstats count where `{macro}` {by} IN ("{value}") | eval {by}="{value}" | rename {by} as sources | table sources count""".format(
+            macro=macro, by=by, value=values[index].strip('"')
+        )
+        if index > 0 or first_call is False:
+            search += "]"
+    return search
 
 
 def build_host_reviewer_search(by, values):
@@ -158,7 +166,6 @@ PRODUCTS = [
                 "label": "Azure Security Score Data",
                 "search_by": "sourcetype",
                 "search_values": "GraphSecurity:Score",
-                "search_more": 'sourcetype="GraphSecurity:Score"',
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             },
@@ -286,12 +293,7 @@ PRODUCTS = [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows Data",
-                "search": """| tstats count where index=* sourcetype IN ({windows_sourcetypes}) OR source IN ({windows_sources}) by source sourcetype | eval sources = if(sourcetype IN ("WinEventLog","WinHostMon","exec","XmlWinEventLog*","powershell"),source,sourcetype) | stats sum(count) as count by sources
-                | append [| makeresults | eval sources=split("{windows_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
-                    windows_sourcetypes=WINDOWS_SOURCE_TYPES,
-                    windows_sources=WINDOWS_SOURCES,
-                    windows_source_and_sourcetypes=(WINDOWS_SOURCES + "," + WINDOWS_SOURCE_TYPES).replace("\"",""),
-                ),
+                "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
@@ -308,12 +310,7 @@ PRODUCTS = [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows AD Data",
-                "search": """| tstats count where index=* source IN ({ad_sources}) OR sourcetype IN ({ad_sourcetypes}) by source sourcetype | eval sources = if(source IN ({ad_sources}), source, sourcetype)
-                | append [| makeresults | eval sources=split("{ad_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
-                    ad_sources=WINDOWS_AD_SOURCES,
-                    ad_sourcetypes=WINDOWS_AD_SOURCE_TYPES,
-                    ad_source_and_sourcetypes=(WINDOWS_AD_SOURCES + "," + WINDOWS_AD_SOURCE_TYPES).replace("\"",""),
-                ),
+                "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_AD_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
@@ -331,12 +328,7 @@ PRODUCTS = [
             {
                 "macro_name": "cs_windows_idx",
                 "label": "Windows DNS Data",
-                "search": """| tstats count where index=* source IN ({dns_sources}) OR sourcetype IN ({dns_sourcetypes}) by source sourcetype | eval sources = if(source IN ({dns_sources}), source, sourcetype)
-                | append [| makeresults | eval sources=split("{dns_source_and_sourcetypes}", ","), count=0 | mvexpand sources] | stats sum(count) as count by sources""".format(
-                    dns_sources=WINDOWS_DNS_SOURCES,
-                    dns_sourcetypes=WINDOWS_DNS_SOURCE_TYPES,
-                    dns_source_and_sourcetypes=(WINDOWS_DNS_SOURCES + "," + WINDOWS_DNS_SOURCE_TYPES).replace("\"",""),
-                ),
+                "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_DNS_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
@@ -366,7 +358,6 @@ PRODUCTS = [
                 "label": "Linux Data",
                 "search_by": "sourcetype",
                 "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit",
-                "search_more": "sourcetype IN (usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,sudousers,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit)",
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             }
@@ -397,7 +388,6 @@ for product in PRODUCTS:
                 macro=macro_config["macro_name"],
                 by=macro_config["search_by"],
                 values=macro_config["search_values"],
-                more=macro_config.get("search_more", ""),
             )
         if not macro_config.get("host_reviewer_search"):
             macro_config["host_reviewer_search"] = build_host_reviewer_search(
