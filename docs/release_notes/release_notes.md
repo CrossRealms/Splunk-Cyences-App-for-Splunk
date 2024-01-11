@@ -15,6 +15,7 @@ has_children: true
 
 * ### Data Reviewer Dashboard
     * Added new dashboard to review the onboarded data sources in the splunk environment.
+    * It includes panels to review sources, sourcetypes and hosts.
 
 
 * ### Enhancements
