@@ -9,7 +9,7 @@ has_children: true
 # Release Notes
 
 
-## Version 4.6.0 (January 2023)
+## Version 4.6.0 (January 2024)
 
 * ### Data Reviewer Dashboard
     * Added new dashboard to review the onboarded data sources in the splunk environment.
