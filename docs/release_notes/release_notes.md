@@ -44,3 +44,4 @@ has_children: true
 
     * Please install the [Flow Map Viz App](https://splunkbase.splunk.com/app/4657) from Splunkbase for Network Traffic visualization.
     * Please install the [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757) and configure it for o365 Azure Active Directory alerts/dashboard.
+    * To get the latest navigation design of the dashboards, disable and re-enable one of the product from the product setup page.
