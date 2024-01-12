@@ -15,10 +15,10 @@ has_children: true
     * Added new dashboard to review the onboarded data sources in the splunk environment.
     * It includes panels to review sources, sourcetypes and hosts.
 
-* #### Network Telemetry Dashboard
+* ### Network Telemetry Dashboard
     * The Network Telemetry dashboard has been completely rewamped to include new charts and panels to show more information regarding network traffic.
 
-* #### Office 365 Azure Active Directory Alerts/Dashboard
+* ### Office 365 Azure Active Directory Alerts/Dashboard
     * Updated the azure active directory data source from **Office 365 management activity data (Splunk Add-on for Office 365)** to **azure:aad:audit data (Splunk Add on for Microsoft Azure)** which gives more details of the activities.
     * Added a custom command to simplify the view of the modified properties.
     * Updated the severities based on the important modified properties.
@@ -43,6 +43,8 @@ has_children: true
 
 ## Upgrade Guide from 4.5.0 to 4.6.0
 
-    * Please install the [Flow Map Viz App](https://splunkbase.splunk.com/app/4657) from Splunkbase for Network Traffic visualization.
-    * Please install the [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757) and configure it for Office 365 Azure Active Directory alerts/dashboard.
-    * To get the latest navigation design of the dashboards, disable and re-enable one of the product from the product setup page.
+* Please install the [Flow Map Viz App](https://splunkbase.splunk.com/app/4657) from Splunkbase for Network Traffic visualization.
+
+* Please install the [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757) and configure it for Office 365 Azure Active Directory alerts/dashboard.
+
+* To get the latest navigation design of the dashboards, disable and re-enable one of the product from the product setup page.
