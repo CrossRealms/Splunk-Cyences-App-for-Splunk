@@ -9,57 +9,40 @@ has_children: true
 # Release Notes
 
 
-## Version 4.5.0 (December 2023)
+## Version 4.6.0 (January 2023)
 
-* ### Fortigate Firewall
+* ### Data Reviewer Dashboard
+    * Added new dashboard to review the onboarded data sources in the splunk environment.
+    * It includes panels to review sources, sourcetypes and hosts.
 
-    * Added new alerts:
-        * Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole
-        * Fortigate Firewall - Network Compromise - Fortigate High Threats Alert
-        * Fortigate Firewall - Network Compromise - Fortigate High System Alert
+* #### Network Telemetry Dashboard
+    * The Network Telemetry dashboard has been completely rewamped to include new charts and panels to show more information regarding network traffic.
 
-    * Added new dashboard named **Fortigate Firewall**
+* #### Office 365 Azure Active Directory Alerts/Dashboard
+    * Updated the azure active directory data source from **Office 365 management activity data (Splunk Add-on for Office 365)** to **azure:aad:audit data (Splunk Add on for Microsoft Azure)** which gives more details of the activities.
+    * Added a custom command to simplify the view of the modified properties.
+    * Updated the severities based on the important modified properties.
+    * Added new fields like failureReason and additionalDetails for Office 365 login activity related alerts and dashboards.
 
-* ### Added new alert for O365, AWS and Google Workspace
-
-    * O365 - Failed Login From Unusual Country
-    * AWS - Failed Login From Unusual Country
-    * Google Workspace - Failed Login From Unusual Country
-
-* ### User Privilege Option
-
-    * Added option to privilege the user on **User Inventory** dashboard.
-    * Added the IsPrivilegedUser field to the User Inventory table to identify privileged users.
-    * We have updated the severity of all alerts in the App to indicate whether the user involved with the alerts has privileges.
+* Added a new alert named **Authentication - Failed VPN Login From Unusual Country**.
 
 
 * ### Enhancements
 
-    * #### Renamed Sophos to Sophos Endpoint Protection to make it more clear
-        * Removed the below alerts and replaced them with related alerts.
-            * **Sophos - Endpoint Not Protected by Sophos** is replaced with **Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection**
-            * **Sophos - Sophos RealTime Protection Disabled** is replaced with **Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled**
-            * **Sophos - Sophos Service is not Running** is replaced with **Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running**
-            * **Sophos - Failed to clean up threat by Sophos** is replaced with **Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection**
-            * **Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos** is replaced with **Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos Endpoint Protection**
-        * Removed the **Sophos** dashboard and replaced it with the **Sophos Endpoint Protection** dashboard.
+    * #### Cyences App Configuration Dashboard
+        * Added the capability to show/hide panels and dashboards associated with products that are enabled/disabled from Cyences App Configuration.
+        * Improved the time taken by the Product Setup section to enable/disable a product and added a loader.
+        * Synchronized the order of dashboards/products on the Cyences App Configuration page, Cyences Overview page and Dashboard navigation menu.
+        * Simplified and Categorized the Windows sources into multiple products like Windows AD, Windows DNS on Cyences App Configuration page.
 
-    * For **Network Compromise - DDoS Behavior Detected** alert, A new is_internal_top5_src_ip field was added to identify whether the source IP is internal or external, and the severity has been updated accordingly.
+    * Added traffic_info field to the **Network Compromise - Basic Scanning** alert to display the allowed/blocked traffic and based on that updated the severity.
 
-    * Hiding the security components from **Device Inventory** dashboard that are not relevent to the splunk environment.
-
-    * Added malicious Python packages and NPM packages to the list of malicious packages for the **Ransomware - Endpoint Compromise - Malicious Package Found** alert.
+    * Rearranged the fields for **Cyences Digest Email** alert according to their priority.
 
 
-* ### Bug Fixes
 
-    * Fixed the issue where Sophos devices were being merged in device inventory unnecessarily. It's caused by multiple devices sharing the same mac address.
+## Upgrade Guide from 4.5.0 to 4.6.0
 
-    * Fixed an issue with selecting a checkbox while paginating the Forensics dashboard table.
-
-
-## Upgrade Guide from 4.4.0 to 4.5.0
-
-  * To grant privileges to the user, refer [User Inventory]({{ site.baseurl }}/user_guide/intelligence_dashboard/#user-inventory) section.
-
-  * Renamed the Sophos alerts and dashboard name. For more details, refer [Enhancements]({{ site.baseurl }}/release_notes/#enhancements) section.
+    * Please install the [Flow Map Viz App](https://splunkbase.splunk.com/app/4657) from Splunkbase for Network Traffic visualization.
+    * Please install the [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757) and configure it for Office 365 Azure Active Directory alerts/dashboard.
+    * To get the latest navigation design of the dashboards, disable and re-enable one of the product from the product setup page.

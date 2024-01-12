@@ -11,25 +11,23 @@ parent: User Guide
 There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (**Settings > Settings > Searches, Reports and Alerts**) of the Cyences App (alerts are disabled by default). There are also several security related dashboards to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and dashboards should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and dashboards (as dashboard panels):
 
 
-## Active Directory
+## Authentication (for all authentication related activities)
 * Alerts:
-    * AD - Bulk User Creation or Deletion
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Multiple Password Changes in Short Time Period 
-    * AD - Password Change Outside Working Hour 
-    * AD - User Changed
-    * AD - User Locked Out
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
+    * Authentication - Successful VPN Login From Unusual Country
+    * Authentication - Successful VPN Login Outside Home Country
+    * Authentication - VPN Login Attempts Outside Working Hours
+    * Authentication - Failed VPN Login From Unusual Country
 * Dashboard panels:
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Password Change Outside of Working Hours 
-    * AD - User Account Locked Out
-    * AD - User Changed
-    * Failed Logons
-    * Successful Logons
+    * All Authentications
+    * Application Authentication Success Rate
+    * Authentication Failure Reasons Over Time
+    * User Authentication Activities 
+
 
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
@@ -89,21 +87,6 @@ There are several security related alerts to choose from and they are all locate
     * Update Errors
     * Windows Defender Health Report
 
-## Authentication (for all authentication related activities)
-* Alerts:
-    * Authentication - Bruteforce Attempt for a User
-    * Authentication - Bruteforce Attempt from a Source
-    * Authentication - Excessive Failed VPN Logins for a User
-    * Authentication - Excessive Failed VPN Logins from a Source
-    * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
-    * Authentication - VPN Login Attempts Outside Working Hours
-* Dashboard panels:
-    * All Authentications
-    * Application Authentication Success Rate
-    * Authentication Failure Reasons Over Time
-    * User Authentication Activities 
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
@@ -217,22 +200,6 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Login from Unknown UserId 
     * Office 365/Azure - Successful Logins
 
-## DNS Tracker
-* Dashboard panels:
-    * DNS Log Volume Over Time
-    * DNS Rquesters 
-    * DNS Server
-    * DNS Server No. of Queries Received 
-    * DNS Server No. of Queries Send to External DNS Server 
-    * Internal DNS Server to DNS Server Requests
-    * Record Types 
-    * Record Types over Time 
-    * Top Categories
-    * Top External DNS Servers being Queried 
-    * Top Non-success Code Queries 
-    * Top Non-success Code Requesters 
-    * Top Queries
-    * Top Requesters 
 
 ## Email
 * Alerts:
@@ -241,37 +208,6 @@ There are several security related alerts to choose from and they are all locate
     * Email - Suspicious Subject or Attachment
     * Email - With Known Abuse Web Service Link
 
-## Lansweeper (asset management tool)
-The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences app mainly uses this data for IT discovery and inventory. This dashboard displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
-
-* Apple Macintosh 
-* ESXi servers
-* Hyper-V Guests
-* Location
-* Linux
-* Monitor
-* Network devices
-* Other devices
-* VMware Guests
-* VMware vCenter services
-* Web Servers
-* Windows
-
-The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System logs for improved security on those assets.
-
-* Dashboard panels:
-    * Apple Mac Devices
-    * Linux Devices
-    * Location
-    * Monitor
-    * Network Devices
-    * Other Devices
-    * VMWare/Hyper-V Guests - Linux
-    * VMWare/Hyper-V Guests - Other
-    * VMWare/Hyper-V Guests - Windows
-    * VMWare vCenter server and ESXi server 
-    * Web Servers
-    * Windows Devices 
 
 ## Network Devices
 * General alerts for all Network Data:
@@ -309,6 +245,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * List of Firewall Devices
     * System Events
 
+
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
 (Basically we correlate data from vulnerability tools like Qualys or Tenable and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
@@ -318,6 +255,88 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Inbound Network Telemetry
     * Outbound Network Telemetry
     * Internal Traffic
+
+
+## Vulnerability
+
+* Alerts:
+    * Vulnerability - Detected Vulnerabilities
+
+Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys & Tenable IO
+
+These vendor security solutions are designed to detect vulnerabilities present in your environment.
+
+The Cyences app utilizes the data provided by the aforementioned vendor products to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
+
+The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
+
+Dashboard panels:
+* New Vulnerability Found Over Time
+* Vulnerabilities
+* Vulnerability Count By Severity
+
+![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)
+
+
+## Windows
+
+* Alerts:
+    * Windows - Hosts Missing Update
+    * Windows - Endpoint Compromise - Windows Firewall Disabled Event
+    * Windows - Windows Process Tampering Detected
+    * Windows - Windows Firewall is Disabled
+    * Windows - Certificate is Expiring Soon
+* Dashboard panels:
+    * Windows Users and Privileges
+    * Privileged Service Accessed
+    * Operation Attempted on Privileged Object 
+    * Listening Ports on Host
+    * Windows Firewall Status
+    * Windows Update Events
+    * Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events
+    * Approved Certificate Request
+    * Issued Certificates on CA
+    * Local Certificates On Servers
+
+
+## Active Directory
+* Alerts:
+    * AD - Bulk User Creation or Deletion
+    * AD - Group Changed
+    * AD - Group Membership Changed
+    * AD - Group Policy Changed
+    * AD - Multiple Password Changes in Short Time Period 
+    * AD - Password Change Outside Working Hour 
+    * AD - User Changed
+    * AD - User Locked Out
+* Dashboard panels:
+    * AD - Group Changed
+    * AD - Group Membership Changed
+    * AD - Group Policy Changed
+    * AD - Password Change Outside of Working Hours 
+    * AD - User Account Locked Out
+    * AD - User Changed
+    * Failed Logons
+    * Successful Logons
+
+
+## DNS Tracker
+* Dashboard panels:
+    * DNS Log Volume Over Time
+    * DNS Rquesters 
+    * DNS Server
+    * DNS Server No. of Queries Received 
+    * DNS Server No. of Queries Send to External DNS Server 
+    * Internal DNS Server to DNS Server Requests
+    * Record Types 
+    * Record Types over Time 
+    * Top Categories
+    * Top External DNS Servers being Queried 
+    * Top Non-success Code Queries 
+    * Top Non-success Code Requesters 
+    * Top Queries
+    * Top Requesters 
+
 
 ## Ransomware
 * Ransomware Alerts:
@@ -331,6 +350,57 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Ransomware - Spike in File Writes
     * Ransomware - Windows - Windows Event Log Cleared
     * Ransomware - Endpoint Compromise - Malicious Package Found
+
+
+## Lansweeper (asset management tool)
+The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences app mainly uses this data for IT discovery and inventory. This dashboard displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
+
+* Apple Macintosh 
+* ESXi servers
+* Hyper-V Guests
+* Location
+* Linux
+* Monitor
+* Network devices
+* Other devices
+* VMware Guests
+* VMware vCenter services
+* Web Servers
+* Windows
+
+The Lansweeper dashboard also provides information about whether the IT asset is sending useful security logs based on the type of asset. For example, Windows assets should send Sysmon, WinEventLog:Security, and WinEventLog:System logs for improved security on those assets.
+
+* Dashboard panels:
+    * Apple Mac Devices
+    * Linux Devices
+    * Location
+    * Monitor
+    * Network Devices
+    * Other Devices
+    * VMWare/Hyper-V Guests - Linux
+    * VMWare/Hyper-V Guests - Other
+    * VMWare/Hyper-V Guests - Windows
+    * VMWare vCenter server and ESXi server 
+    * Web Servers
+    * Windows Devices
+
+
+## Linux/Unix
+* Alerts:
+    * Linux - User Added/Updated/Deleted
+    * Linux - Group Added/Updated/Deleted
+* Dashboard panels:
+    * Hosts Details
+    * Linux Group Added/Updated/Removed
+    * Linux User Added/Updated/Removed
+    * Success Login by Host, Users
+    * Failed Login by Host, Users
+    * Password Change(unix/linux)
+    * Interfaces on Hosts
+    * Mount Points on Hosts
+    * Listening Ports on Host
+    * List of Services on Hosts
+
 
 ## VPN
 * Cisco Anyconnect Alerts:
@@ -387,20 +457,3 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Successful Session
     * Successful vs Failed Logins
     * Unique Users by Country
-
-## Vulnerability
-
-Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys & Tenable IO
-
-These vendor security solutions are designed to detect vulnerabilities present in your environment.
-
-The Cyences app utilizes the data provided by the aforementioned vendor products to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
-
-The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
-
-Dashboard panels:
-* New Vulnerability Found Over Time
-* Vulnerabilities
-* Vulnerability Count By Severity
-
-![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)
