@@ -79,5 +79,5 @@ SUPPORT
 -------
 * Contact - CrossRealms International Inc.
   * US: +1-312-278-4445
-* License Agreement - https://d38o4gzaohghws.cloudfront.net/static/misc/eula.html
-* Copyright - Copyright CrossRealms Internationals, 2023
+* License Agreement - https://cdn.splunkbase.splunk.com/static/misc/eula.html
+* Copyright - Copyright CrossRealms Internationals, 2024
