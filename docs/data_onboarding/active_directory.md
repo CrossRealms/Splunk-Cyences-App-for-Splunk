@@ -14,7 +14,7 @@ Use the Windows Add-on to collect Active Directory related logs [https://docs.sp
 
 This data is required for Active Directory related alerts/dashboards (Group Changes, Group Policy Changes, and User Changes) and it is only compatible with plain text formatted events. 
 
-Refer to `TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Windows-Input-Apps) for inputs.conf reference.
+Refer to `A-TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
 Reference for admon input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
 

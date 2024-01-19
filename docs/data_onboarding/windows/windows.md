@@ -17,7 +17,7 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview)
 
-Refer to `TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Windows-Input-Apps) for inputs.conf reference.
+Refer to `A-TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
 **Note:** Configure the index value `index IN (wineventlog, windows, msad)` for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
