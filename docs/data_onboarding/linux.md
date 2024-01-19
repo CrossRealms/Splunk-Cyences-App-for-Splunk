@@ -16,8 +16,6 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About](https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About) 
 
-Refer to `A-TA-nix_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
-
 
 ### Collect Users and Groups related data from Linux
 
@@ -26,8 +24,8 @@ We have created a specific shell script to collect information about which users
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/) 
 
-Refer to `A-TA-cyences_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
+Refer to `A-TA-linux_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
 **Note:** Use index=`os`, for data collection or update the macro definition for Linux Data (**Settings > Configuration**).
 
