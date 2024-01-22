@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-
+import time
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
 
 import cs_utils
@@ -134,6 +134,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
     def transform(self, records):
         try:
             logger.info("Custom command CyencesSendDigestEmailCommand loaded.")
+            start_time = time.time()
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
             config_handler = cs_utils.ConfigHandler(logger, session_key)
 
@@ -144,9 +145,11 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
             alert_action_config.update(alert_specific_action_config)
 
+            logger.info("Time taken to fetch the final configurations = {} seconds".format(time.time() - start_time))
 
             param_email_to = alert_action_config.get("param.email_to", '')
             param_severities = alert_action_config.get("param.cyences_severities", '')
+            subject_prefix = alert_action_config.get("param.subject_prefix", '') + " "
             param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
 
             final_email_to = self.email_to if self.email_to is not None else param_email_to
@@ -180,16 +183,16 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
                     if html_body.strip() != '':
                         if len(list_of_result_chunks) <= 1:
-                            subject = self.alert_name
+                            subject = subject_prefix + self.alert_name
                         else:
-                            subject = '{} Part-{}'.format(self.alert_name, email_counter)
+                            subject = '{}{} Part-{}'.format(subject_prefix, self.alert_name, email_counter)
                             email_counter += 1
 
                         cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
-                        log_msg =  "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
+                        log_msg = "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
                         logger.info(log_msg)
                         yield {
-                            "msg" : log_msg
+                            "msg": log_msg
                         }
                     else:
                         logger.info("No matching event found")
