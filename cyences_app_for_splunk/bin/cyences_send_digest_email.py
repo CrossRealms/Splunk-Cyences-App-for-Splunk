@@ -149,7 +149,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
             param_email_to = alert_action_config.get("param.email_to", '')
             param_severities = alert_action_config.get("param.cyences_severities", '')
-            subject_prefix = alert_action_config.get("param.subject_prefix", '') + " "
+            subject_prefix = "[" + alert_action_config.get("param.subject_prefix", '') + "] "
             param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
 
             final_email_to = self.email_to if self.email_to is not None else param_email_to
@@ -188,7 +188,7 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                             subject = '{}{} Part-{}'.format(subject_prefix, self.alert_name, email_counter)
                             email_counter += 1
 
-                        cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
+                        cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body, is_digest=True)
                         log_msg = "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
                         logger.info(log_msg)
                         yield {

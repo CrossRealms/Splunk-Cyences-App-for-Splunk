@@ -8,9 +8,11 @@ import Text from '@splunk/react-ui/Text';
 
 
 const EmailConfigurationFields = {
-    emailSubjectLabel: 'Email Subject Prefix',
-    emaiSubjectHelp: 'Text to add as a prefix to email subject. For best practice, it is recommended to enclose text in brackets. E.g. [CrossRealms]',
+    emailSubjectLabel: 'Environment Name',
+    emaiSubjectHelp: 'This will be used in the alert emails sent by Cyences and other places.',
 }
+
+const macroName = "cs_email_subject_prefix"
 
 
 export default function CyencesGeneralConfiguration() {
@@ -66,22 +68,33 @@ export default function CyencesGeneralConfiguration() {
                 console.log(error);
                 generateToast(`Failed to update Cyences digest email alert action configuration. check console for more detail.`, "error")
             })
+        
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-macros/${macroName}`,
+            body: new URLSearchParams({ 'definition': prefixValue }),
+            customHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            method: "post",
+        })
+            .then((resp) => {
+                generateToast(`Successfully updated "${macroName}" macro.`, "success")
+            })
+            .catch((error) => {
+                console.log(error);
+                generateToast(`Failed updated "${macroName}" macro. check console for more detail.`, "error")
+            })
 
     }
 
     return (
-        <>
-            <Heading style={{ marginLeft: '20px' }}>Email Configuration</Heading>
-            <div style={{ marginTop: '15px' }} onSubmit={handleSubmit} >
-                <form >
-                    <ControlGroup required={true} label={EmailConfigurationFields.emailSubjectLabel} help={EmailConfigurationFields.emaiSubjectHelp} >
-                        <Text inline name='subjectPrefix' value={prefixValue} onChange={(e, { value }) => setData(value)} />
-                    </ControlGroup>
-                    <ControlGroup label=''>
-                        <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
-                    </ControlGroup>
-                </form>
-            </div>
-        </>
+        <div style={{ marginTop: '15px' }} onSubmit={handleSubmit} >
+            <form >
+                <ControlGroup required={true} label={EmailConfigurationFields.emailSubjectLabel} help={EmailConfigurationFields.emaiSubjectHelp} >
+                    <Text inline name='subjectPrefix' value={prefixValue} onChange={(e, { value }) => setData(value)} />
+                </ControlGroup>
+                <ControlGroup label=''>
+                    <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
+                </ControlGroup>
+            </form>
+        </div>
     );
 }
