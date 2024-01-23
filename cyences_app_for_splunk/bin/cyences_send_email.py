@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import time
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
 
@@ -26,6 +27,7 @@ class CyencesSendEmailCommand(EventingCommand):
     def transform(self, records):
         try:
             logger.info("Custom command CyencesSendEmailCommand loaded.")
+            start_time = time.time()
             session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
             config_handler = cs_utils.ConfigHandler(logger, session_key)
 
@@ -36,12 +38,15 @@ class CyencesSendEmailCommand(EventingCommand):
 
             alert_action_config.update(alert_specific_action_config)
 
+            logger.info("Time taken to fetch the final configurations = {} seconds".format(time.time() - start_time))
+
             logger.debug("Final alert action config: {}".format(alert_action_config))
 
             email_to_default = cs_utils.convert_to_set(alert_action_config.get("param.email_to_default"))
             cyences_severities = cs_utils.convert_to_set(alert_action_config.get("param.cyences_severities"))
             email_to_exclude = cs_utils.convert_to_set(alert_action_config.get("param.email_to_exclude"))
             email_to_include = cs_utils.convert_to_set(alert_action_config.get("param.email_to_include"))
+            subject_prefix = "Cyences Alert: [" + alert_action_config.get("param.subject_prefix", '') + "] "
             disable_email = cs_utils.is_true(alert_action_config.get("param.disable_email"))
 
             email_to_include.update(email_to_default)
@@ -65,7 +70,7 @@ class CyencesSendEmailCommand(EventingCommand):
                 yield {
                     'msg': msg
                 }
-            
+
             else:
                 filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severities]
 
@@ -75,13 +80,15 @@ class CyencesSendEmailCommand(EventingCommand):
                     yield {
                         'msg': msg
                     }
-                
+
                 else:
                     html_body = CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=filtered_records)
 
-                    cyences_email_utility.send(to=final_to, subject=self.alert_name, html_body=html_body)
+                    email_subject = subject_prefix + self.alert_name
 
-                    log_msg = "Email sent. subject={}, no_of_results={}".format(self.alert_name, len(filtered_records))
+                    cyences_email_utility.send(to=final_to, subject=email_subject, html_body=html_body)
+
+                    log_msg = "Email sent. subject={}, no_of_results={}".format(email_subject, len(filtered_records))
                     logger.info(log_msg)
                     yield {
                         "msg" : log_msg

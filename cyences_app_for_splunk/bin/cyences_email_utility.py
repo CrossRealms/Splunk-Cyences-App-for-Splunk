@@ -269,10 +269,7 @@ class CyencesEmailUtility:
             return recipients
 
 
-    def send(self, to, cc=[], bcc=[], subject='Splunk Alert', html_body=''):
-
-        subject = 'Splunk Alert: {}'.format(subject)
-
+    def send(self, to, cc=[], bcc=[], subject='Cyences Alert', html_body=''):
         # Define Email
         email = MIMEMultipart('mixed')
         email.preamble = 'This is a multi-part message in MIME format.'
