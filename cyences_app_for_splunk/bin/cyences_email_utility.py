@@ -269,11 +269,7 @@ class CyencesEmailUtility:
             return recipients
 
 
-    def send(self, to, cc=[], bcc=[], subject='Cyences Alert', html_body='', is_digest=False):
-
-        is_digest = " Digest" if is_digest is True else ""
-        subject = 'Cyences Alert{}: {}'.format(is_digest, subject)
-
+    def send(self, to, cc=[], bcc=[], subject='Cyences Alert', html_body=''):
         # Define Email
         email = MIMEMultipart('mixed')
         email.preamble = 'This is a multi-part message in MIME format.'

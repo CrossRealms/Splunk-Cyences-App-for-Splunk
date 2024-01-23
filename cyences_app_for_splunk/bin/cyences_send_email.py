@@ -46,7 +46,7 @@ class CyencesSendEmailCommand(EventingCommand):
             cyences_severities = cs_utils.convert_to_set(alert_action_config.get("param.cyences_severities"))
             email_to_exclude = cs_utils.convert_to_set(alert_action_config.get("param.email_to_exclude"))
             email_to_include = cs_utils.convert_to_set(alert_action_config.get("param.email_to_include"))
-            subject_prefix = "[" + alert_action_config.get("param.subject_prefix", '') + "] "
+            subject_prefix = "Cyences Alert: [" + alert_action_config.get("param.subject_prefix", '') + "] "
             disable_email = cs_utils.is_true(alert_action_config.get("param.disable_email"))
 
             email_to_include.update(email_to_default)
