@@ -249,7 +249,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -323,7 +324,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -986,6 +988,31 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>OneDrive or SharePoint File Sharing with External User</title>
+      <table>
+        <search>
+          <query>index=o365 Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") 
+| stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+| `cs_human_readable_time_format(FirstTime)`
+| `cs_human_readable_time_format(LastTime)`
+| table UserId, SourceFileName,EventSource,ItemType Operations, FirstTime, LastTime, EventData</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
       </table>
     </panel>
   </row>
