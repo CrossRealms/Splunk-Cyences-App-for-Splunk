@@ -998,10 +998,9 @@
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") 
 | stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
-| eval cyences_severity = "high"
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
-| table UserId, SourceFileName,EventSource,ItemType Operations, FirstTime, LastTime, EventData, cyences_severity</query>
+| table UserId,SourceFileName,EventSource,ItemType,Operations,FirstTime,LastTime,EventData</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
