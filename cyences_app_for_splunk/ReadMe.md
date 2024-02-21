@@ -25,7 +25,7 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 * No of Custom Alert Actions: **3**
 * No of Data Models: **3**
 * No of Lookups - KVStore Collections: **20**
-* No of Static CSV Lookup Files: **17**
+* No of Static CSV Lookup Files: **18**
 
 
 
