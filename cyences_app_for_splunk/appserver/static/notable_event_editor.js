@@ -498,7 +498,7 @@ require([
                return cell.field === 'notable_event_id';
             }).value;
     
-            this._searchManagerNotableEventResult.executeReusableSearch(`\`cs_cyences_index\` notable_event_id="${notable_event_id}" | fields - _raw, notable_event_id, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype
+            this._searchManagerNotableEventResult.executeReusableSearch(`\`cs_cyences_index\` notable_event_id="${notable_event_id}" | fields - _raw, notable_event_id, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype, avoid_es_fields
             | rename * AS X_*_NEW
             | foreach * [ eval newFieldName=replace("<<FIELD>>", "\\s+", "_"), {newFieldName}='<<FIELD>>' ] | fields - "* *", newFieldName
             | foreach X_*_NEW [ eval <<MATCHSTR>>=<<FIELD>> ]
