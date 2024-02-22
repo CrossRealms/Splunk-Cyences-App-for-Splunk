@@ -30,6 +30,7 @@
       <initialValue>*</initialValue>
     </input>
   </fieldset>
+  <!-- TODO: Add usecases for the packages source  -->
   <row>
     <panel>
       <html>
@@ -50,7 +51,6 @@
 | append [| tstats count where `cs_linux_unix_version`  | eval label="`cs_linux` sourcetype=\"Unix:Version\""]
 | append [| tstats count where `cs_linux_unix_uptime`  | eval label="`cs_linux` sourcetype=\"Unix:Uptime\""]
 | append [| tstats count where `cs_linux_hardware`  | eval label="`cs_linux` sourcetype=\"hardware\""]
-| append [| tstats count where `cs_linux_open_ports`  | eval label="`cs_linux` sourcetype=\"openPorts\""]
 | append [| tstats count where `cs_linux_interfaces`  | eval label="`cs_linux` sourcetype=\"interfaces\""]
 | append [| tstats count where `cs_linux_df`  | eval label="`cs_linux` sourcetype=\"df\""]
 | append [| tstats count where `cs_linux_unix_listening_ports`  | eval label="`cs_linux` sourcetype=\"Unix:ListeningPorts\""]

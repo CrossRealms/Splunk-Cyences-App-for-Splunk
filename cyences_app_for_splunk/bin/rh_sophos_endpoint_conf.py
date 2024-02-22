@@ -25,7 +25,7 @@ class SophosConfRestcall(admin.MConfigHandler):
 
 
     def handleList(self, conf_info):
-        # Get Sophos Configuration
+        # Get Sophos Endpoint Protection Configuration
         try:
             _, serverContent = rest.simpleRequest("/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(cs_utils.APP_NAME, CONF_FILE), sessionKey=self.getSessionKey())
             data = json.loads(serverContent)['entry']
@@ -42,7 +42,7 @@ class SophosConfRestcall(admin.MConfigHandler):
     
 
     def handleEdit(self, conf_info):
-        # Update the Sophos configuration
+        # Update the Sophos Endpoint Protection configuration
         try:
             data = json.loads(self.callerArgs['data'][0])
             client_id = str(data['client_id'])

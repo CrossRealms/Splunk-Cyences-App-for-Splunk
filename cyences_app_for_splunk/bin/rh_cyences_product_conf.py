@@ -1,6 +1,7 @@
 import re
 import copy
 import json
+import concurrent.futures
 import splunk.admin as admin
 from splunk import rest
 import cs_utils
@@ -80,22 +81,38 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
         savedsearches = self.get_saved_searches()
 
         changed_savedsearches = []
+        messages_to_display = []
+        errors = []
         for name, content in savedsearches.items():
             products = cs_utils.convert_to_set(content["action.cyences_notable_event_action.products"])
             current_disabled = cs_utils.is_true(content["disabled"])
 
-            if len(products&disabled_products)>0:
+            if len(products - disabled_products) == 0:
                 new_disabled = True
-            elif len(products&enabled_products)>0:
+            elif len(products & enabled_products) > 0:
                 new_disabled = False
             else:
                 new_disabled = current_disabled
-            
-            if current_disabled != new_disabled:
-                self.conf_manager.update_savedsearch(name, {"disabled": new_disabled})
-                changed_savedsearches.append(name + " => " + ("Disabled" if new_disabled else "Enabled"))
 
-        return '\n'.join(changed_savedsearches)
+            if current_disabled != new_disabled:
+                changed_savedsearches.append([name, new_disabled])
+                messages_to_display.append(name + " => " + ("Disabled" if new_disabled else "Enabled"))
+
+        if len(changed_savedsearches) > 0:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(changed_savedsearches), 15)) as executor:
+                futures = {
+                    executor.submit(self.conf_manager.update_savedsearch, changes[0], {"disabled": changes[1]}): changes for changes in changed_savedsearches
+                }
+                for future in concurrent.futures.as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        errors.append(str(e))
+
+            if len(errors) > 0:
+                raise Exception(errors)
+
+        return '\n'.join(messages_to_display)
 
 
     def configure_nav_bar(self, enabled_products, disabled_products):

@@ -17,10 +17,10 @@ The Cyences App for Splunk is a Splunk App to provide complete security to the e
 
 ## What's inside the App
 
-* No of XML Dashboards: **33**
-* Approx Total Viz(Charts/Tables/Map) in XML dashboards: **290**
-* No of Reports and Alerts: **156**
-* No of Custom Commands: **16**
+* No of XML Dashboards: **35**
+* Approx Total Viz(Charts/Tables/Map) in XML dashboards: **309**
+* No of Reports and Alerts: **163**
+* No of Custom Commands: **18**
 * No of Custom Visualization: **1**
 * No of Custom Alert Actions: **3**
 * No of Data Models: **3**
@@ -41,7 +41,7 @@ This app can be set up in two ways:
 
 INSTALLATION, DEPENDENCIES, DATA COLLECTION & CONFIGURATION
 ------------------------------------------------------------
-Visit https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/ for the complete configuration guide.
+Visit https://cyences.com for the complete configuration guide.
 
 
 UNINSTALL APP
@@ -55,9 +55,9 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
-Please read the Release Notes and Upgrade Guide for the latest version here - https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/release_notes/
+Please read the Release Notes and Upgrade Guide for the latest version here - https://cyences.com/release_notes/
 
-You can read the Release Notes and Upgrade Guide for the older version of the App here - https://crossrealms.github.io/Splunk-Cyences-App-for-Splunk/release_notes/old_release_notes/
+You can read the Release Notes and Upgrade Guide for the older version of the App here - https://cyences.com/release_notes/old_release_notes/
 
 
 OPEN SOURCE COMPONENTS AND LICENSES
@@ -74,11 +74,12 @@ CONTRIBUTORS
 * Bhavik Bhalodia
 * Mahir Chavda
 * Hardik Dholariya
+* Roaa Attalla
 
 
 SUPPORT
 -------
 * Contact - CrossRealms International Inc.
   * US: +1-312-278-4445
-* License Agreement - https://d38o4gzaohghws.cloudfront.net/static/misc/eula.html
-* Copyright - Copyright CrossRealms Internationals, 2023
+* License Agreement - https://cdn.splunkbase.splunk.com/static/misc/eula.html
+* Copyright - Copyright CrossRealms Internationals, 2024

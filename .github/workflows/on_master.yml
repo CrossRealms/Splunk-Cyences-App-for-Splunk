@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: VatsalJagani/splunk-app-action@v2
+      - uses: VatsalJagani/splunk-app-action@v3
         with:
           app_dir: "cyences_app_for_splunk"
           splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}
@@ -24,7 +24,7 @@ jobs:
           logger_log_files_prefix: "cyences"
           logger_sourcetype: "cyences:logs"
 
-      - uses: VatsalJagani/splunk-app-action@v2
+      - uses: VatsalJagani/splunk-app-action@v3
         with:
           app_dir: "TA-cyences"
           splunkbase_username: ${{ secrets.SPLUNKBASE_USERNAME }}

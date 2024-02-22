@@ -26,7 +26,7 @@ export default function SophosEndpointAPISetup() {
                 setData({ client_id, client_secret: '' });
             })
             .catch((error) => {
-                generateToast(`Failed to load Sophos Endpoint Configuration. check console for more detail.`, "error");
+                generateToast(`Failed to load Sophos Endpoint Protection Configuration. check console for more detail.`, "error");
                 console.log(error);
             })
 
@@ -44,11 +44,11 @@ export default function SophosEndpointAPISetup() {
             method: "post",
         })
             .then((resp) => {
-                generateToast(`Sophos Endpoint configuration saved successfully`, "success")
+                generateToast(`Sophos Endpoint Protection configuration saved successfully`, "success")
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update Sophos Endpoint Configuration. check console for more detail.`, "error")
+                generateToast(`Failed to update Sophos Endpoint Protection Configuration. check console for more detail.`, "error")
             })
     }
 

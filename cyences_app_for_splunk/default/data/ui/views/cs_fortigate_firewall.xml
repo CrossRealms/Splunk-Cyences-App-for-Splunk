@@ -1,0 +1,164 @@
+<form theme="dark" version="1.1">
+  <label>Fortigate Firewall</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Fortigate Firewall Sources</p>
+        <p>
+          <b>Data Collection:</b> The fortigate_event, fortigate_utm, and fortigate_traffic sourcetypes are necessary to collect firewall data via the <a href="https://splunkbase.splunk.com/app/2846/" target="_blank">Fortinet FortiGate Add-On for Splunk</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_fortigate` sourcetype="fortigate_utm" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_utm\""
+| append [| search `cs_fortigate` sourcetype="fortigate_traffic" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_traffic\""]
+| append [| search `cs_fortigate` sourcetype="fortigate_event" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_event\""]
+| table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>List of Firewall Devices</title>
+      <table>
+        <search>
+          <query>`cs_fortigate` sourcetype IN ("fortigate_utm", "fortigate_traffic", "fortigate_event")
+| stats values(devid) as devid, values(sourcetype) as sourcetype, values(host) as host by dvc</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Fortigate Firewall Login Failures</title>
+      <table>
+        <search>
+<!-- TODO -Need to test this search as data is not present. it's written based on eventtype defined in TA. -->
+          <query>`cs_fortigate` sourcetype="fortigate_event" subtype="user" vendor_action="authentication" vendor_status="failure" 
+| stats values(src) as Source, values(dvc) as dvc, latest(_time) as LastLoginTime, count by user 
+| `cs_human_readable_time_format(LastLoginTime)`
+| sort - count </query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p><b>Description:</b> Fortigate firewall login failures by users.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>System Alerts and Threats</title>
+      <input type="multiselect" token="tkn_threat_severity">
+        <label>Severity</label>
+        <choice value="critical">Critical</choice>
+        <choice value="high">High</choice>
+        <choice value="medium">Medium</choice>
+        <choice value="low">Low</choice>
+        <choice value="informational">Informational</choice>
+        <default>critical,high</default>
+        <prefix>severity IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter> , </delimiter>
+      </input>
+      <input type="dropdown" token="tkn_threat_fortigate_device">
+        <label>Fortigate Device</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>dvc</fieldForLabel>
+        <fieldForValue>dvc</fieldForValue>
+        <search>
+          <query>`cs_fortigate` sourcetype IN ("fortigate_utm", "fortigate_event") | dedup dvc | table dvc</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <default>*</default>
+      </input>
+      <input type="multiselect" token="tkn_threat_logsubtype">
+        <label>Log Subtype</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <prefix>subtype IN (</prefix>
+        <suffix>)</suffix>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+        <fieldForLabel>subtype</fieldForLabel>
+        <fieldForValue>subtype</fieldForValue>
+        <search>
+          <query>`cs_fortigate` sourcetype IN ("fortigate_utm", "fortigate_event") | dedup subtype | table subtype</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+      </input>
+      <input type="text" token="tkn_threat_search">
+        <label>Text Search in Logs</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+      </input>
+      <table>
+        <title>Threat Events</title>
+        <search>
+          <query>`cs_fortigate` sourcetype="fortigate_utm" $tkn_threat_severity$ dvc=$tkn_threat_fortigate_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$
+| rename srccountry as src_location, dstcountry as dest_location, signature as threat
+| table dvc, _time, subtype, severity, category, threat, msg, action, app, src, src_port, src_location, src_zone, dest, dest_port, dest_location, dest_zone, url, session_id
+| `cs_human_readable_time_format(_time, event_time)`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+        </format>
+        <format type="color" field="action">
+          <colorPalette type="map">{"allowed":#F7BC38,"blocked":#A2CC3E,"deferred":#6A5C9E,"dropped":#65A637}</colorPalette>
+        </format>
+      </table>
+      <table>
+        <title>System Events</title>
+        <search>
+          <query>`cs_fortigate` sourcetype="fortigate_event" $tkn_threat_severity$ dvc=$tkn_threat_fortigate_device|s$ $tkn_threat_logsubtype$ $tkn_threat_search|s$
+| rename logdesc as description
+| table dvc, _time, subtype, severity, description, signature, action, user, src
+| `cs_human_readable_time_format(_time, event_time)`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="severity">
+          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+        </format>
+        <format type="color" field="action">
+          <colorPalette type="map">{"failure":#F7BC38,"success":#A2CC3E}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

@@ -2,7 +2,7 @@
 layout: default
 title: Windows Firewall Status 
 permalink: /data_onboarding/windows/firewall_status
-nav_order: 4
+nav_order: 3
 parent: Windows
 grand_parent: Data Onboarding
 ---

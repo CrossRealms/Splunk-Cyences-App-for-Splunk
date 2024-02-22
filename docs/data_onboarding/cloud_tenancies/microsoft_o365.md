@@ -17,6 +17,13 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps)
 
+Required inputs to be configured (If input has "Content Type" dropdown then create input for each Content Type):
+* Management Activity
+* Message Trace
+* Service Health & Communications
+* Cloud Application Security
+* Audit Logs
+
 **Note:** Configure the index value for **Office 365 Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 [comment]: <> (TODO_LATER: add estimated data size)

@@ -65,7 +65,7 @@ let allMacros = [
         ]
     },
     {
-        section: 'Sophos',
+        section: 'Sophos Endpoint Protection',
         macros: [
             { name: 'cs_sophos_update_errors_filter' },
             { name: 'cs_sophos_endpoint_outofdate_filter' },

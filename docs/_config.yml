@@ -2,8 +2,9 @@
 # Comment out for local development
 remote_theme: just-the-docs/just-the-docs 
 
-baseurl: "/Splunk-Cyences-App-for-Splunk"
-url: "https://CrossRealms.github.io"
+# baseurl: "/Splunk-Cyences-App-for-Splunk"
+# custom domain don't require base URL as there is no prefix in the base URL
+url: "https://cyences.com"
 
 #---
 

@@ -11,25 +11,23 @@ parent: User Guide
 There are several security related alerts to choose from and they are all located under the **Settings** drop-down in the navigation bar (**Settings > Settings > Searches, Reports and Alerts**) of the Cyences App (alerts are disabled by default). There are also several security related dashboards to choose from and they are all located under the **Dashboards** drop-down in the navigation bar of the Cyences App. Alerts and dashboards should be reviewed regularly as they can help pinpoint any security risks that may be present in your Splunk environment. Each category contains the following alerts and dashboards (as dashboard panels):
 
 
-## Active Directory
+## Authentication (for all authentication related activities)
 * Alerts:
-    * AD - Bulk User Creation or Deletion
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Multiple Password Changes in Short Time Period 
-    * AD - Password Change Outside Working Hour 
-    * AD - User Changed
-    * AD - User Locked Out
+    * Authentication - Bruteforce Attempt for a User
+    * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Excessive Failed VPN Logins for a User
+    * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Long Running VPN Session Disconnected
+    * Authentication - Successful VPN Login From Unusual Country
+    * Authentication - Successful VPN Login Outside Home Country
+    * Authentication - VPN Login Attempts Outside Working Hours
+    * Authentication - Failed VPN Login From Unusual Country
 * Dashboard panels:
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Password Change Outside of Working Hours 
-    * AD - User Account Locked Out
-    * AD - User Changed
-    * Failed Logons
-    * Successful Logons
+    * All Authentications
+    * Application Authentication Success Rate
+    * Authentication Failure Reasons Over Time
+    * User Authentication Activities 
+
 
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
@@ -54,13 +52,13 @@ There are several security related alerts to choose from and they are all locate
     * Defender ATP - Defender ATP Alerts
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
-* Sophos Alerts:
-    * Sophos - Endpoint Not Protected by Sophos
-    * Sophos - Failed to clean up threat by Sophos 
-    * Sophos - Sophos RealTime Protection Disabled 
-    * Sophos - Sophos Service is not Running 
-    * Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos
-* Sophos Dashboard panels:
+* Sophos Endpoint Protection Alerts:
+    * Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection
+    * Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled 
+    * Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running 
+    * Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection
+    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
+* Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
     * Core Restore Failed
@@ -89,21 +87,6 @@ There are several security related alerts to choose from and they are all locate
     * Update Errors
     * Windows Defender Health Report
 
-## Authentication (for all authentication related activities)
-* Alerts:
-    * Authentication - Bruteforce Attempt for a User
-    * Authentication - Bruteforce Attempt from a Source
-    * Authentication - Excessive Failed VPN Logins for a User
-    * Authentication - Excessive Failed VPN Logins from a Source
-    * Authentication - Long Running VPN Session Disconnected
-    * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
-    * Authentication - VPN Login Attempts Outside Working Hours
-* Dashboard panels:
-    * All Authentications
-    * Application Authentication Success Rate
-    * Authentication Failure Reasons Over Time
-    * User Authentication Activities 
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
@@ -125,6 +108,7 @@ There are several security related alerts to choose from and they are all locate
     * AWS - Successful Login From Unusual Country
     * AWS - Daily Login Failure
     * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * AWS - Failed Login From Unusual Country
 * Amazone Web Services Dashboard panels:
     * Active Users
     * Login Types
@@ -158,6 +142,7 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Alerts Center Alert
     * Google Workspace - Google Drive objects shared Outside or with External User
     * Google Workspace - Suspicious File Shared by External User on Google Drive
+    * Google Workspace - Failed Login From Unusual Country
 * Google Workspace Dashboard panels:
     * Login Types
     * Login by Location
@@ -193,6 +178,7 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Security Compliance Alert
     * O365 - Successful Login From Unusual Country
     * O365 - Successful Login Outside Home Country
+    * O365 - Failed Login From Unusual Country
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Change/Update
     * Azure Active Directory - AuthorizationPolicy Change/Update
@@ -214,6 +200,126 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Login from Unknown UserId 
     * Office 365/Azure - Successful Logins
 
+
+## Email
+* Alerts:
+    * Email - Daily Spam Email 
+    * Email - Hourly Increase in Emails Over Baseline
+    * Email - Suspicious Subject or Attachment
+    * Email - With Known Abuse Web Service Link
+
+
+## Network Devices
+* General alerts for all Network Data:
+    * Network Compromise - Basic Scanning
+    * Network Compromise - Inbound Vulnerable Traffic
+    * Network Compromise - DDoS Behavior Detected
+
+* Cisco IOS Alerts:
+    * Cisco IOS - Device Failed Login
+    * Cisco IOS - New Connection For User
+* Fortigate Firewall Alerts:
+    * Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole
+    * Fortigate Firewall - Network Compromise - Fortigate High Threats Alert
+    * Fortigate Firewall - Network Compromise - Fortigate High System Alert
+* Fortigate Firewall Dashboard panels:
+    * List of Firewall Devices
+    * Fortigate Firewall Login Failures
+    * System Alerts and Threats
+* Palo Alto Networks Alerts:
+    * Palo Alto Firewall - Commits 
+    * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
+    * Palo Alto Firewall - Network Compromise - Palo Alto High System Alert
+    * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
+    * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
+* Palo Alto Networks Dashboard panels:
+    * DDoS Attack Prevented by Palo Alto Firewall
+    * Inbound Traffic from Blocked IPs 
+    * License Events
+    * List of Firewall Devices
+    * Outbound Traffic to Blocked IPs
+    * Palo Alto Firewall Login Failures
+    * System Alerts and Threats
+* Sophos Firewall Dashboard panels:
+    * ATP & IPS Events
+    * List of Firewall Devices
+    * System Events
+
+
+## Network Telemetry
+Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
+(Basically we correlate data from vulnerability tools like Qualys or Tenable and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
+
+* Dashboard panels:
+    * Port Scanning Attempts
+    * Inbound Network Telemetry
+    * Outbound Network Telemetry
+    * Internal Traffic
+
+
+## Vulnerability
+
+* Alerts:
+    * Vulnerability - Detected Vulnerabilities
+
+Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys & Tenable IO
+
+These vendor security solutions are designed to detect vulnerabilities present in your environment.
+
+The Cyences app utilizes the data provided by the aforementioned vendor products to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
+
+The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
+
+Dashboard panels:
+* New Vulnerability Found Over Time
+* Vulnerabilities
+* Vulnerability Count By Severity
+
+![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)
+
+
+## Windows
+
+* Alerts:
+    * Windows - Hosts Missing Update
+    * Windows - Endpoint Compromise - Windows Firewall Disabled Event
+    * Windows - Windows Process Tampering Detected
+    * Windows - Windows Firewall is Disabled
+    * Windows - Certificate is Expiring Soon
+* Dashboard panels:
+    * Windows Users and Privileges
+    * Privileged Service Accessed
+    * Operation Attempted on Privileged Object 
+    * Listening Ports on Host
+    * Windows Firewall Status
+    * Windows Update Events
+    * Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events
+    * Approved Certificate Request
+    * Issued Certificates on CA
+    * Local Certificates On Servers
+
+
+## Active Directory
+* Alerts:
+    * AD - Bulk User Creation or Deletion
+    * AD - Group Changed
+    * AD - Group Membership Changed
+    * AD - Group Policy Changed
+    * AD - Multiple Password Changes in Short Time Period 
+    * AD - Password Change Outside Working Hour 
+    * AD - User Changed
+    * AD - User Locked Out
+* Dashboard panels:
+    * AD - Group Changed
+    * AD - Group Membership Changed
+    * AD - Group Policy Changed
+    * AD - Password Change Outside of Working Hours 
+    * AD - User Account Locked Out
+    * AD - User Changed
+    * Failed Logons
+    * Successful Logons
+
+
 ## DNS Tracker
 * Dashboard panels:
     * DNS Log Volume Over Time
@@ -231,12 +337,20 @@ There are several security related alerts to choose from and they are all locate
     * Top Queries
     * Top Requesters 
 
-## Email
-* Alerts:
-    * Email - Daily Spam Email 
-    * Email - Hourly Increase in Emails Over Baseline
-    * Email - Suspicious Subject or Attachment
-    * Email - With Known Abuse Web Service Link
+
+## Ransomware
+* Ransomware Alerts:
+    * Ransomware - Common Ransomware File Extensions
+    * Ransomware - Common Ransomware Notes
+    * Ransomware - Endpoint Compromise - Fake Windows Processes
+    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
+    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows 
+    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
+    * Ransomware - Scheduled tasks used in BadRabbit ransomware 
+    * Ransomware - Spike in File Writes
+    * Ransomware - Windows - Windows Event Log Cleared
+    * Ransomware - Endpoint Compromise - Malicious Package Found
+
 
 ## Lansweeper (asset management tool)
 The Lansweeper dashboard is powered by Lansweeper's data [https://www.lansweeper.com](https://www.lansweeper.com). The Cyences app mainly uses this data for IT discovery and inventory. This dashboard displays information about every IT asset present in your environment. Here are some of the various types of IT assets which are acknowledged by Lansweeper: 
@@ -268,58 +382,25 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * VMWare/Hyper-V Guests - Windows
     * VMWare vCenter server and ESXi server 
     * Web Servers
-    * Windows Devices 
+    * Windows Devices
 
-## Network Devices
-* General alerts for all Network Data:
-    * Network Compromise - Basic Scanning
-    * Network Compromise - Inbound Vulnerable Traffic
-    * Network Compromise - DDoS Behavior Detected
 
-* Cisco IOS Alerts:
-    * Cisco IOS - Device Failed Login
-    * Cisco IOS - New Connection For User
-* Palo Alto Networks Alerts:
-    * Palo Alto Firewall - Commits 
-    * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
-    * Palo Alto Firewall - Network Compromise - Palo Alto High System Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
-* Palo Alto Networks Dashboard panels:
-    * DDoS Attack Prevented by Palo Alto Firewall
-    * Inbound Traffic from Blocked IPs 
-    * License Events
-    * List of Firewall Devices
-    * Outbound Traffic to Blocked IPs
-    * Palo Alto Firewall Login Failures
-    * System Alerts and Threats
-* Sophos Firewall Dashboard panels:
-    * ATP & IPS Events
-    * List of Firewall Devices
-    * System Events
-
-## Network Telemetry
-Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
-(Basically we correlate data from vulnerability tools like Qualys or Tenable and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
-
+## Linux/Unix
+* Alerts:
+    * Linux - User Added/Updated/Deleted
+    * Linux - Group Added/Updated/Deleted
 * Dashboard panels:
-    * Port Scanning Attempts
-    * Inbound Network Telemetry
-    * Outbound Network Telemetry
-    * Internal Traffic
+    * Hosts Details
+    * Linux Group Added/Updated/Removed
+    * Linux User Added/Updated/Removed
+    * Success Login by Host, Users
+    * Failed Login by Host, Users
+    * Password Change(unix/linux)
+    * Interfaces on Hosts
+    * Mount Points on Hosts
+    * Listening Ports on Host
+    * List of Services on Hosts
 
-## Ransomware
-* Ransomware Alerts:
-    * Ransomware - Common Ransomware File Extensions
-    * Ransomware - Common Ransomware Notes
-    * Ransomware - Endpoint Compromise - Fake Windows Processes
-    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
-    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows 
-    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
-    * Ransomware - Scheduled tasks used in BadRabbit ransomware 
-    * Ransomware - Spike in File Writes
-    * Ransomware - Windows - Windows Event Log Cleared
-    * Ransomware - Endpoint Compromise - Malicious Package Found
 
 ## VPN
 * Cisco Anyconnect Alerts:
@@ -376,20 +457,3 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
     * Successful Session
     * Successful vs Failed Logins
     * Unique Users by Country
-
-## Vulnerability
-
-Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys & Tenable IO
-
-These vendor security solutions are designed to detect vulnerabilities present in your environment.
-
-The Cyences app utilizes the data provided by the aforementioned vendor products to obtain information pertaining to any vulnerabilities that may exist on an IT asset within your environment.
-
-The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
-
-Dashboard panels:
-* New Vulnerability Found Over Time
-* Vulnerabilities
-* Vulnerability Count By Severity
-
-![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)

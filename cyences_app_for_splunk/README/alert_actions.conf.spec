@@ -6,10 +6,12 @@ param.filter_macro_value = <str> Filter macro value
 param.email_to = <str> Comma separated email addresses
 param.cyences_severities =  <str> Comma separated severities. ie. critical,high,medium,low,info
 param.exclude_alerts = <str> Comma separated alert names to exclude from digest email
+param.subject_prefix = <str> Text to add as a prefix of email subject
 
 [cyences_send_email_action]
 param.email_to_default =  <str> Comma separated email addresses
 param.cyences_severities =  <str> Comma separated severities. ie. critical,high,medium,low,info
 param.email_to_include =  <str> Comma separated email addresses to be added in addition to email_to_default
 param.email_to_exclude =  <str> Comma separated email addresses to exclude from email_to_default
+param.subject_prefix = <str> Text to add as a prefix of email subject
 param.disable_email = <0|1> 1 to disable email and 0 to enable email

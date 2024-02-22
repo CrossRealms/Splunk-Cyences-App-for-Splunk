@@ -9,73 +9,42 @@ has_children: true
 # Release Notes
 
 
-## Version 4.4.0 (November 2023)
+## Version 4.6.0 (January 2024)
+
+* ### Data Reviewer Dashboard
+    * Added new dashboard to review the onboarded data sources in the splunk environment.
+    * It includes panels to review sources, sourcetypes and hosts.
+
+* ### Network Telemetry Dashboard
+    * The Network Telemetry dashboard has been completely rewamped to include new charts and panels to show more information regarding network traffic.
+
+* ### Office 365 Azure Active Directory Alerts/Dashboard
+    * Updated the azure active directory data source from **Office 365 management activity data (Splunk Add-on for Office 365)** to **azure:aad:audit data (Splunk Add on for Microsoft Azure)** which gives more details of the activities.
+    * Added a custom command to simplify the view of the modified properties.
+    * Updated the severities based on the important modified properties.
+    * Added new fields like failureReason and additionalDetails for Office 365 login activity related alerts and dashboards.
+
+* Added a new alert named **Authentication - Failed VPN Login From Unusual Country**.
 
 
-* ### Added New Alerts
-    * Amazon Web Services
-        * AWS - IAM AccessKey Creation or Deletion
-        * AWS - IAM Login Profile Change/Update
-        * AWS - IAM User Creation or Deletion
-        * AWS - IAM Policy Creation or Deletion
-        * AWS - IAM Group Change/Update
-        * AWS - IAM Group Membership Change/Update
-        * AWS - IAM Role Creation or Deletion
-        * AWS - Network Access Control List Creation or Deletion
-        * AWS - Concurrent Sessions From Different IPs
-        * AWS - Multiple Failed MFA Requests For User
-        * AWS - Created a Policy Version that allows All Resources to be Accessed
-        * AWS - Someone Tries to Retrieve the Encrypted Administrator Password
-        * AWS - RDS Master User Password has been Reset
-        * AWS - Bucket Versioning is Disabled
-        * AWS - Multi Factor Authentication is Disabled for IAM User
-        * AWS - Successful Login From Unusual Country
-        * AWS - Daily Login Failure
-        * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
-    * Google Workspace
-        * Google Workspace - User Change/Update
-        * Google Workspace - Enterprise Group Change/Update
-        * Google Workspace - Enterprise Group Membership Change/Update
-        * Google Workspace - Role Change/Update
-        * Google Workspace - Successful Login From Unusual Country
-        * Google Workspace - Suspicious Login Activity by User
-        * Google Workspace - Daily Login Failure
-        * Google Workspace - Alerts Center Alert
-        * Google Workspace - Google Drive objects shared Outside or with External User
-        * Google Workspace - Suspicious File Shared by External User on Google Drive
-    * Email:
-        * Email - Suspicious Subject or Attachment
-        * Email - With Known Abuse Web Service Link
-    * Sophos:
-        * Sophos - Failed to CleanUp Potentially Unwanted Application by Sophos
-    * Ransomware
-        * Ransomware - Endpoint Compromise - Malicious Package Found
+* ### Enhancements
+
+    * #### Cyences App Configuration Dashboard
+        * Added the capability to show/hide panels and dashboards associated with products that are enabled/disabled from Cyences App Configuration.
+        * Improved the time taken by the Product Setup section to enable/disable a product and added a loader.
+        * Synchronized the order of dashboards/products on the Cyences App Configuration page, Cyences Overview page and Dashboard navigation menu.
+        * Simplified and Categorized the Windows sources into multiple products like Windows AD, Windows DNS on Cyences App Configuration page.
+
+    * Added traffic_info field to the **Network Compromise - Basic Scanning** alert to display the allowed/blocked traffic and based on that updated the severity.
+
+    * Rearranged the fields for **Cyences Digest Email** alert according to their priority.
 
 
-* ### Enhancements  
 
-    * #### GSuite has been replaced with Google Workspace
-        * GSuite Add-on is no longer supported, kindly remove related Add-ons.
-        * Install the **Splunk Add-on for Google Workspace** and configure it for data collection. For more details, refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
-        * Removed the below alerts and replaced them with related alerts.
-            * **Gsuite - Bulk User Creation or Deletion** is replaced with **Google Workspace - Bulk User Creation or Deletion**
-            * **Gsuite - Multiple Password Changes in Short Time Period** is replaced with **Google Workspace - Multiple Password Changes in Short Time Period**
-        * Removed the **GSuite** dashboard and replaced it with the **Google Workspace** dashboard.
-        * Replaced the **cs_gsuite** macro with **cs_gws** so add the data collection index into the **cs_gws** macro. (Default index is **google**)
+## Upgrade Guide from 4.5.0 to 4.6.0
 
-    * #### Sophos Central Add-on for data collection has been changed
-        * Use the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/) and remove [Sophos Central SIEM Integration Add-on](https://splunkbase.splunk.com/app/4647/)
-        * All alerts and dashboard should work seamlessly with the new data.
-        * The alerts and dashboard for Sophos Endpoint protection do not guarantee to support old Add-on anymore.
-    
-    * Added new panels to the Google Workspace and AWS dashboards.
+* Please install the [Flow Map Viz App](https://splunkbase.splunk.com/app/4657) from Splunkbase for Network Traffic visualization.
 
-    * Added "User Inventory" panel to the "Intelligence" dashboard.
+* Please install the [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757) and configure it for Office 365 Azure Active Directory alerts/dashboard.
 
-    * Added "Google Workspace" and "AWS" panels to the "Overview" dashboard.
-
-
-## Upgrade Guide from 4.3.0 to 4.4.0
-
-  * To onboard the Google Workspace data, Refer [Google Workspace Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws)
-  * To use the Sophos dashboard and alerts, Install the [Sophos Central Addon](https://splunkbase.splunk.com/app/6186/)
+* To get the latest navigation design of the dashboards, disable and re-enable one of the product from the product setup page.
