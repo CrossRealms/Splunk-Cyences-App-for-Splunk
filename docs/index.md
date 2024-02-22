@@ -28,7 +28,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * CrowdStrike  
     * Kaspersky
     * Office 365 Defender ATP
-    * Sophos Central
+    * Sophos Endpoint Protection
     * Windows Defender 
 
 * Authentication 

@@ -1,5 +1,5 @@
 <form theme="dark" version="1.1">
-  <label>Sophos</label>
+  <label>Sophos Endpoint Protection</label>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -9,13 +9,13 @@
       </default>
     </input>
     <input type="dropdown" token="tkn_host">
-      <label>Sophos Splunk Data Collection Host</label>
+      <label>Splunk Data Collection Host</label>
       <choice value="*">All</choice>
       <default>*</default>
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>| tstats count where `cs_sophos` by host</query>
+        <query>| tstats count where `cs_sophos` sourcetype="sophos_events" by host</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -34,7 +34,7 @@
       <fieldForLabel>location</fieldForLabel>
       <fieldForValue>location</fieldForValue>
       <search>
-        <query>`cs_sophos` | dedup location | table location</query>
+        <query>`cs_sophos` sourcetype="sophos_events" | dedup location | table location</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -51,7 +51,7 @@
       <fieldForLabel>user</fieldForLabel>
       <fieldForValue>user</fieldForValue>
       <search>
-        <query>`cs_sophos` | dedup user | table user</query>
+        <query>`cs_sophos` sourcetype="sophos_events" | dedup user | table user</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -60,11 +60,11 @@
   <row>
     <panel>
       <html>
-        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/4647/" target="_blank">Sophos Central SIEM Integration Add-on</a> for collecting Sophos data.</p>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/6186/" target="_blank">Sophos Central Add-on for Splunk</a> for collecting Sophos data.</p>
       </html>
       <table>
         <search>
-          <query>`cs_sophos` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos`" | table label, data</query>
+          <query>`cs_sophos` sourcetype="sophos_events" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos` sourcetype=\"sophos_events\"" | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -152,7 +152,7 @@
       <title>Update Errors</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::UpdateFailure::*" NOT type IN ("Event::Endpoint::UpdateFailure::UPDATED_SUCCESSFULLY", "Event::Endpoint::UpdateFailure::RESTART_NEEDED", "Event::Endpoint::UpdateFailure::RESTARTING") $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_update_errors_filter`</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::UpdateFailure::*" NOT type IN ("Event::Endpoint::UpdateFailure::UPDATED_SUCCESSFULLY", "Event::Endpoint::UpdateFailure::RESTART_NEEDED", "Event::Endpoint::UpdateFailure::RESTARTING") $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_update_errors_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -166,7 +166,7 @@
       <title>Endpoint Out of Date</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::OutOfDate" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_endpoint_outofdate_filter`</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::OutOfDate" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_endpoint_outofdate_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -180,7 +180,7 @@
       <title>Core Restore Failed</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Core*RestoreFailed" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_core_restore_failed_filter`</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Core*RestoreFailed" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost, type | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_core_restore_failed_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -194,7 +194,7 @@
       <title>Certificate/License Expiration Messages</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Smc::Renew*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_expiration_messages_filter`</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Smc::Renew*" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count | `cs_sophos_expiration_messages_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -243,7 +243,7 @@
       <title>Application Blocked</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::Application::Blocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::Application::Blocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -257,14 +257,14 @@
       <title>Web Control Violation</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::WebControlViolation" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::WebControlViolation" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">cell</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%60cs_sophos%60%20type%3D%22Event%3A%3AEndpoint%3A%3AWebControlViolation%22%20host%3D$row.host|s$%20dhost%3D$row.dhost|s$%20%7C%20stats%20count%20by%20name%2C%20severity%20%7C%20sort%20-%20count&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%60cs_sophos%60%20sourcetype%3D%22sophos_events%22%20type%3D%22Event%3A%3AEndpoint%3A%3AWebControlViolation%22%20host%3D$row.host|s$%20dhost%3D$row.dhost|s$%20%7C%20stats%20count%20by%20name%2C%20severity%20%7C%20sort%20-%20count&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </table>
     </panel>
@@ -274,7 +274,7 @@
       <title>Web Filtering Blocked</title>
       <table>
         <search>
-          <query>`cs_sophos` type="Event::Endpoint::WebFilteringBlocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
+          <query>`cs_sophos` sourcetype="sophos_events" type="Event::Endpoint::WebFilteringBlocked" $tkn_host$ $tkn_dhost$ $tkn_user$ | stats count, latest(_time) as latest_event, values(name) as description, values(src_ip) as src_ip, values(suser) as user by host, dhost | `cs_human_readable_time_format(latest_event)` | sort -count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

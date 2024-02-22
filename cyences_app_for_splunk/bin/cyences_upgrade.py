@@ -40,6 +40,9 @@ class CyencesUpgrade(GeneratingCommand):
 
                 for version, func in version_upgrade[index+1:]:
                     if func is None:
+                        if version == latest_app_version:
+                            self.conf_manger.update_macro(CY_VERSION_MACRO, {"definition": version})
+                            break
                         continue
                     logger.info("Performing upgrade steps for version {}".format(version))
                     try:

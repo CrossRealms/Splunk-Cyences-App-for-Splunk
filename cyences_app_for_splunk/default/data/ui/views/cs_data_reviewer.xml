@@ -1,0 +1,202 @@
+<form theme="dark" version="1.1">
+  <label>Data Reviewer</label>
+  <fieldset submitButton="false">
+    <input type="dropdown" token="product_name" searchWhenChanged="true">
+      <label>Product</label>
+      <search>
+        <query>| cyencesproductmanager operation="getproducts" 
+| table products</query>
+        <earliest>1</earliest>
+        <latest>now</latest>
+      </search>
+      <fieldForLabel>products</fieldForLabel>
+      <fieldForValue>products</fieldForValue>
+      <change>
+        <condition match="isnull($product_name$)">
+          <unset token="tkn_host_reviewer_search"></unset>
+          <unset token="tkn_metadata_count_search"></unset>
+          <unset token="tkn_sources_reviewer_search"></unset>
+        </condition>
+      </change>
+    </input>
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label>Time</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row depends="$hidden$">
+    <panel>
+      <table>
+        <search>
+          <done>
+            <set token="tkn_host_reviewer_search">$result.host_reviewer_search$</set>
+            <set token="tkn_metadata_count_search">$result.metadata_count_search$</set>
+            <set token="tkn_sources_reviewer_search">$result.sources_reviewer_search$</set>
+          </done>
+          <query>| cyencesproductmanager operation="buildproductspecificsearches" product_name=$product_name|s$ | table host_reviewer_search, metadata_count_search, sources_reviewer_search</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>Hosts</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by host 
+| stats count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Sources</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by source 
+| stats count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>SourceTypes</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by sourcetype 
+| stats count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Host List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by host | table host</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Source List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by source | table source</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>SourceType List</title>
+        <search>
+          <query>$tkn_metadata_count_search$ by sourcetype | table sourcetype</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>$product_name$ Sources/Sourcetypes Review</title>
+      <input type="text" token="tkn_source_sourcetypes">
+        <label>Source/SourceType</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_index">
+        <label>Index</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <table>
+        <search>
+          <query>$tkn_sources_reviewer_search$
+| fillnull value=0 host_count 
+| fillnull value="-" index 
+| search sources=$tkn_source_sourcetypes|s$ index=$tkn_index|s$
+| rename sources as sources/sourcetypes
+| table sources/sourcetypes index host_count
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color">
+          <colorPalette type="list">[#a3030b,#03991a]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>$product_name$ Hosts Review</title>
+      <input type="text" token="tkn_host">
+        <label>Host</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_sources">
+        <label>Source/SourceType</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <table>
+        <search>
+          <query>$tkn_host_reviewer_search$
+| search host=$tkn_host|s$ sources=$tkn_sources|s$
+| chart useother=false values(count) as count by host sources limit=0
+| fillnull value=0</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="wrap">true</option>
+        <format type="color">
+          <colorPalette type="list">[#a3030b,#03991a]</colorPalette>
+          <scale type="threshold">1</scale>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

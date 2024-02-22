@@ -84,7 +84,7 @@ Run the search below and it should return events with no errors:
 
 ## Sophos Central API Endpoints Configuration
 
-Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_central/#sophos-central-metadata-through-api) section for more information. 
+Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_endpoint_protection/#sophos-central-metadata-through-api) section for more information. 
 
 
 ## Cyences Email Settings for Alerts
@@ -132,7 +132,7 @@ List of Device Inventory related searches that users can execute individually to
 * Device Inventory - CrowdStrike 
 * Device Inventory - Lansweeper 
 * Device Inventory - Qualys 
-* Device Inventory - Sophos 
+* Device Inventory - Sophos Endpoint Protection 
 * Device Inventory - Tenable 
 * Device Inventory - Tenable Vuln
 * Device Inventory - Windows Defender 

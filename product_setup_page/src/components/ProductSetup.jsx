@@ -4,6 +4,7 @@ import Switch from '@splunk/react-ui/Switch'
 import DataMacroConfiguration from './DataMacroConfiguration';
 import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
+import '../css/spinner.css'
 
 function effectiveEnabled(enabled) {
   if (enabled.toString().toLowerCase() === "unknown") {
@@ -19,6 +20,8 @@ export default function ProductSetup(props) {
   const [macros, setMacros] = useState(productInfo.macro_configurations)
   const [response, setResponse] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
 
   function changeEnabled() {
     const [finalEnabled, enabledLabel] = effectiveEnabled(enabled);
@@ -31,12 +34,15 @@ export default function ProductSetup(props) {
       .then((resp) => {
         generateToast(`Successfully ${!finalEnabled ? 'enabled' : 'disabled'} "${payload.product}".`, "success")
         setEnabled(!finalEnabled);
-        setResponse(resp.data.entry[0].content.message)
+        setResponse(resp.data.entry[0].content.message);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         generateToast(`Failed to update "${payload.product}". check console for more detail.`, "error")
-      })
+        setIsLoading(false);
+      });
+    setIsLoading(true);
   }
 
   function updateMacroDefinition(macro, definition) {
@@ -87,6 +93,7 @@ export default function ProductSetup(props) {
       ))}
       <Button label="Save" appearance="primary" onClick={saveMacros} updateMacroDefinition={updateMacroDefinition} />
       {response && <pre>{response}</pre>}
+      {isLoading ? <div id="spinner"></div>: null}
     </div>
   );
 }

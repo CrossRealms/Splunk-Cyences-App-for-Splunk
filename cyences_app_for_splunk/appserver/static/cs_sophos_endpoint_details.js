@@ -127,7 +127,7 @@ require([
           ' <div class="modal-body modal-body-scrolling">' +
           ' <div class="form form-horizontal form-complex" style="display: block;">' +
           ' <div class="control-group shared-controls-controlgroup">' +
-          ' <label for="incident_id" class="control">Are you sure to isolated selected instances in Sophos?</label>' +
+          ' <label for="incident_id" class="control">Are you sure to isolated selected instances in Sophos Endpoint Protection?</label>' +
           ' </div>' + 
           ' <div class="control-group shared-controls-controlgroup">' +
           ' <label for="message-text" class="control-label" style="width:100px" hight="25px">If Yes, then please add the comment:</label>' +
@@ -159,7 +159,7 @@ require([
           var fullarray = selected_values_array.join();
 
           let status = '-';
-          let COMMON_ERROR_MSG = "Some Error Occured. Please check whether SOPHOS configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central";
+          let COMMON_ERROR_MSG = "Some Error Occured. Please check whether Sophos Endpoint Protection configuration added on Configuration Page or not. Or connectivity possible b/w Splunk Instance and Sophos Central";
           new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
                     if (results == null){
