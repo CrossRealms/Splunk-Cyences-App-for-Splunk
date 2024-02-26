@@ -994,13 +994,43 @@
   <row>
     <panel>
       <title>OneDrive or SharePoint File Sharing with External User</title>
+      <input type="checkbox" token="tkn_exclude_teams_filter" searchWhenChanged="true">
+      <label>Eclude Microsoft Teams</label>
+      <choice value="1">Exclude Microsoft Teams</choice>
+      <delimiter> </delimiter>
+      <initialValue>1</initialValue>
+      <change>
+        <condition match="$tkn_exclude_teams$==1">
+          <set token="tkn_exclude_teams_filter">ApplicationDisplayName!=Microsoft Teams</set>
+        </condition>
+        <condition>
+          <set token="tkn_exclude_teams_filter"></set>
+        </condition>
+      </change>
+      </input>
+       <input type="dropdown" token="tkn_application_name">
+      <label>Apllication Name</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <fieldForLabel>application</fieldForLabel>
+      <fieldForValue>application</fieldForValue>
+      <search>
+        <query>index=365 sourcetype="o365:management:activity" |table ApplicationDisplayName</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+      <prefix>ApplicationDisplayName="</prefix>
+      <suffix>"</suffix>
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") 
-| stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+| stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+|rename UserId as User
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
-| table UserId,SourceFileName,EventSource,ItemType,Operations,FirstTime,LastTime,EventData</query>
+| `cs_user_privilege_mapping(User)`
+| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,cyences_severity</query>
+| `cs_o365_sharing_file_with_external_user_filter`
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -1010,6 +1040,33 @@
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+    <panel>
+      <title>OneDrive or SharePoint Link Accessed By External User</title>
+      <table>
+        <search>
+          <query>`cs_o365` Workload IN (OneDrive, SharePoint) Operation IN ("AnonymousLinkUsed","SharingLinkUsed") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup")
+|search UserId=anonymous
+| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+|rename UserId as UserAccessingFile
+| `cs_human_readable_time_format(FirstTime)`
+| `cs_human_readable_time_format(LastTime)`
+| `cs_user_privilege_mapping(User)`
+| table UserAccessingFile,is_privileged_user,SourceFileName,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName</query>
+|`cs_o365_external_user_accessing_file_filter`
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>ntimeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
