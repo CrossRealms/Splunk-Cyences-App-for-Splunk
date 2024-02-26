@@ -378,6 +378,21 @@ PRODUCTS = [
             }
         ],
     },
+    {
+        'name': 'Radius Authentication',
+        "metadata_count_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count ',
+        "macro_configurations": [
+            {
+                "macro_name": "cs_radius_authentication_indexes",
+                "label": "Radius Authentication Data (indexes)",
+                "search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
 ]
 
 for product in PRODUCTS:

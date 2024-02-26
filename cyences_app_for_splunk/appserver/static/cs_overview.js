@@ -45,6 +45,7 @@ require([
         { id: 'cs_lansweeper', title: 'Lansweeper' },
         { id: 'cs_linux_reports', title: 'Linux' },
         { id: 'cs_vpn_reports', title: 'VPN' },
+        { id: 'cs_radius_authentication', title: 'Radius Authentication' },
         { id: 'cs_device_inventory_table', title: 'Device Inventory' },
         { id: 'cs_user_inventory_table', title: 'User Inventory' },
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },

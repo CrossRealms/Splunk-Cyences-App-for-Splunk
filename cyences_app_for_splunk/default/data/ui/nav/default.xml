@@ -35,6 +35,7 @@
     <view name="cs_lansweeper" /><!--Lansweeper-->
     <view name="cs_linux_reports" /><!--Linux-->
     <view name="cs_vpn_reports" /><!--VPN-->
+    <view name="cs_radius_authentication" /><!--Radius Authentication-->
   </collection>
   <collection label="Intelligence">
     <view name="cs_device_inventory_table" />

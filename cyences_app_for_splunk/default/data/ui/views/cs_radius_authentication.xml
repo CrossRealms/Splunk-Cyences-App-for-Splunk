@@ -1,0 +1,135 @@
+<form theme="dark" version="1.1">
+  <label>Radius Authentication</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="tkn_app">
+      <label>App</label>
+      <choice value="*">All</choice>
+      <fieldForLabel>app</fieldForLabel>
+      <fieldForValue>app</fieldForValue>
+      <search>
+        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" by Authentication.app | rename "Authentication.app" as app</query>
+        <earliest>$timeRange.earliest$</earliest>
+        <latest>$timeRange.latest$</latest>
+      </search>
+      <default>*</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Radius Authentication Reports</p>
+        <p>This dashboard includes all authentication attempts related to Radius.</p>
+        <p>If the data is present in Splunk but isn't being displayed by this dashboard, please check the mapping and support by Cyences App. And also check "Radius Authentication Data (indexes)" macro (cs_radius_authentication_indexes) definition (Settings &gt; Configuration).</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Radius Authentications</title>
+      <chart>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by _time Authentication.action
+| timechart span=1h count, dc(Authentication.user) by Authentication.action
+| eval "Unique Users"='dc(Authentication.user): failure'+'dc(Authentication.user): success'
+| fields - "dc(Authentication.user): failure", "dc(Authentication.user): success"
+| rename "count: failure" as "Failure", "count: success" as "Success"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.overlayFields">"Unique Users"</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="charting.fieldColors">{"Success": 0x53a051, "Failure": 0xdc4e41}</option>
+      </chart>
+      <html>
+        <p>
+          <b>Description:</b> Displays unusual behavior for users with a large number of failure attempts and abnormal behavior from the number of unique users.</p>
+      </html>
+    </panel>
+    <panel>
+      <title>Radius Authentication Success Rate</title>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+| chart count by app action
+| addtotals
+| eval "Success%" = round(success / Total * 100,2)
+| fields - Total
+| rename failure as "Failure", success as "Success"
+| sort + "Success%"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">row</option>
+        <option name="rowNumbers">true</option>
+        <format type="number" field="Success%">
+          <option name="unit">%</option>
+        </format>
+        <format type="color" field="Success%">
+          <colorPalette type="list">[#DC4E41,#F1813F,#F8BE34,#53A051,#53A051]</colorPalette>
+          <scale type="threshold">50,90,95,100</scale>
+        </format>
+        <option name="drilldown">none</option>
+      </table>
+      <html>
+        <p>
+          <b>Description:</b> A low authentication success rate should be further investigated to determine if this is an issue for a single user or of greater impact.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Radius Authentication Activities</title>
+      <input type="text" token="tkn_user">
+        <label>User</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
+| `drop_dm_object_name(Authentication)`
+| eval over_field=user." - ".app
+| chart sum(count) as count, max(last_login) as last_login over over_field by action
+| rex field=over_field "(?&lt;user&gt;.*) - (?&lt;app&gt;.*)" | fields - over_field
+| rename "count: failure" as failure, "count: success" as success, "last_login: success" as last_success_login, "last_login: failure" as last_failed_login
+| `cs_human_readable_time_format(last_success_login)`
+| `cs_human_readable_time_format(last_failed_login)`
+| table user, app, success, last_success_login, failure, last_failed_login
+| fillnull success, failure value=0
+| sort -failure, -success</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

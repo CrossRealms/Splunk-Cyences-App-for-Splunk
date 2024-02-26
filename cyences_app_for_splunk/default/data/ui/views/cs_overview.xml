@@ -100,7 +100,7 @@
       <title>Authentication</title>
       <table id="tbl_authentication">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Authentication")`</query>
+          <query>| `cs_filter_savedsearches("Authentication|VPN|Radius Authentication")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>

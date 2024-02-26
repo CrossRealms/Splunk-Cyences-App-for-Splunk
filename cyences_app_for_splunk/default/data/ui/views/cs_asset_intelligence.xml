@@ -50,7 +50,7 @@
         <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
         <br/>Qualys -&gt; $tkn_show_hide_qualys$ - $tkn_filter_ip_only$ - $tkn_filter_ip_only_label$
         <br/>Tenable -&gt; $tkn_show_hide_tenable$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
-        <br/>VPN, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
+        <br/>VPN, Radius Authentication, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
         <br/>CrowdStrike -&gt; $tkn_show_hide_crowdstrike$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Kaspersky -&gt; $tkn_show_hide_kaspersky$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Sophos -&gt; $tkn_show_hide_sophos$ - $tkn_filter_main$ - $tkn_filter_main_label$
@@ -319,6 +319,29 @@
         | sort - _time</query>
           <earliest>$tkn_timeRange_vpn.earliest$</earliest>
           <latest>$tkn_timeRange_vpn.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Radius Authentication activities $tkn_filter_authentication_label$</title>
+      <input type="time" token="tkn_timeRange_radius_authentication">
+        <label></label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <table>
+        <search>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` $tkn_filter_authentication$ Authentication.action IN ("success","failure") Authentication.app="*" by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <earliest>$tkn_timeRange_radius_authentication.earliest$</earliest>
+          <latest>$tkn_timeRange_radius_authentication.latest$</latest>
         </search>
         <option name="count">5</option>
         <option name="drilldown">none</option>
