@@ -10,6 +10,8 @@
     <set token="tkn_show_table_user"></set>
     <set token="tkn_show_table_serviceprincipal"></set>
     <set token="tkn_show_table_other"></set>
+    <set token="tkn_exclude_teams">ApplicationDisplayName!="Microsoft Teams"</set>
+    <set token="tkn_exclude_teams_link_accessed">ApplicationDisplayName!="Microsoft Teams"</set>
   </init>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
@@ -249,7 +251,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Successful logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -323,7 +326,8 @@
         <option name="refresh.display">progressbar</option>
       </table>
       <html>
-        <p><b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
+        <p>
+          <b>Description:</b> Failed logins that have occurred outside of the specified country. The country can be changed by updating the following macro (Cyences Settings &gt; Cyences App Configuration &gt; Macro Setup &gt; Network): cs_home_country.</p>
       </html>
     </panel>
   </row>
@@ -985,6 +989,111 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>OneDrive or SharePoint File Sharing with External User</title>
+      <input type="dropdown" token="tkn_application_name">
+        <label>Apllication Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>ApplicationDisplayName</fieldForLabel>
+        <fieldForValue>ApplicationDisplayName</fieldForValue>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <prefix>ApplicationDisplayName="</prefix>
+        <suffix>"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_exclude_teams_filter" searchWhenChanged="true">
+        <label></label>
+        <choice value="1">Exclude Microsoft Teams</choice>
+        <delimiter> </delimiter>
+        <initialValue>1</initialValue>
+        <change>
+          <condition match="$tkn_exclude_teams_filter$==1">
+            <set token="tkn_exclude_teams">ApplicationDisplayName!="Microsoft Teams"</set>
+          </condition>
+          <condition>
+            <set token="tkn_exclude_teams"></set>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
+| stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+| rename UserId as User
+| `cs_human_readable_time_format(FirstTime)`
+| `cs_human_readable_time_format(LastTime)`
+| `cs_user_privilege_mapping(User)`
+| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,cyences_severity
+| `cs_o365_sharing_file_with_external_user_filter`
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="maxLines">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>OneDrive or SharePoint Link Accessed By External User</title>
+      <input type="dropdown" token="tkn_application_name_link_accessed">
+        <label>Apllication Name</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>ApplicationDisplayName</fieldForLabel>
+        <fieldForValue>ApplicationDisplayName</fieldForValue>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("AnonymousLinkUsed","SharingLinkUsed") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <prefix>ApplicationDisplayName="</prefix>
+        <suffix>"</suffix>
+      </input>
+      <input type="checkbox" token="tkn_exclude_teams_link_accessed_filter" searchWhenChanged="true">
+        <label></label>
+        <choice value="1">Exclude Microsoft Teams</choice>
+        <delimiter> </delimiter>
+        <initialValue>1</initialValue>
+        <change>
+          <condition match="$tkn_exclude_teams_link_accessed_filter$==1">
+            <set token="tkn_exclude_teams_link_accessed">ApplicationDisplayName!="Microsoft Teams"</set>
+          </condition>
+          <condition>
+            <set token="tkn_exclude_teams_link_accessed"></set>
+          </condition>
+        </change>
+      </input>
+      <table>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("AnonymousLinkUsed","SharingLinkUsed") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams_link_accessed$ $tkn_application_name_link_accessed$
+|search UserId=anonymous
+| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+|rename UserId as UserAccessingFile
+| `cs_human_readable_time_format(FirstTime)`
+| `cs_human_readable_time_format(LastTime)`
+| `cs_user_privilege_mapping(User)`
+| table UserAccessingFile,is_privileged_user,SourceFileName,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName
+|`cs_o365_external_user_accessing_file_filter`
+</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="maxLines">10</option>
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
