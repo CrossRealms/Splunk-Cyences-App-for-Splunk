@@ -58,7 +58,7 @@ def upgrade_4_5_0(session_key, logger):
     handle_results(response, logger)
     time.sleep(60)
 
-    SOPHOS_DEVICE_INVENTORY_SEARCH = '| savedsearch "Device Inventory - Sophos Endpoint Protection"'
+    SOPHOS_DEVICE_INVENTORY_SEARCH = '| cyencesinventorybackfill search_prefix="Device Inventory - Sophos Endpoint Protection" earliest_time="-1d@m" latest_time="now"'
     logger.info("Running Device Inventory - Sophos search to add sophos devices to Device Inventory table")
     response = service.jobs.oneshot(SOPHOS_DEVICE_INVENTORY_SEARCH, output_mode="json", earliest_time='-1d@m', latest_time='now')
     handle_results(response, logger)
