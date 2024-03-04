@@ -1027,9 +1027,9 @@
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
-          | iplocation ClientIP 
+| iplocation ClientIP 
 | fillnull value="" Country, Region, City 
-| eval Source = ClientIP 
+| rename ClientIP as Source
 | stats values(Operation) AS Operations, values(EventData) AS EventData, values(Source) as Source, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId
 | rename UserId as User
 | `cs_human_readable_time_format(FirstTime)`
@@ -1085,7 +1085,7 @@
 | search UserId=anonymous
 | iplocation ClientIP  
 | fillnull value="" Country, Region, City 
-| eval Source = ClientIP 
+| rename ClientIP as Source
 | stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(Source) as Source,values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId 
 | rename UserId as UserAccessingFile
 | `cs_human_readable_time_format(FirstTime)`
