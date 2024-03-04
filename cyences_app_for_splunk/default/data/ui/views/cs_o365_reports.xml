@@ -1027,12 +1027,15 @@
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
-| stats values(Operation) AS Operations, values(EventData) AS EventData, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
+          | iplocation ClientIP 
+| fillnull value="" Country, Region, City 
+| eval Source = ClientIP 
+| stats values(Operation) AS Operations, values(EventData) AS EventData, values(Source) as Source, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId
 | rename UserId as User
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,cyences_severity
+| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,cyences_severity,Source,Country,City,Region
 | `cs_o365_sharing_file_with_external_user_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
@@ -1079,14 +1082,17 @@
       <table>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("AnonymousLinkUsed","SharingLinkUsed") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams_link_accessed$ $tkn_application_name_link_accessed$
-|search UserId=anonymous
-| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime by SourceFileName, UserId 
-|rename UserId as UserAccessingFile
+| search UserId=anonymous
+| iplocation ClientIP  
+| fillnull value="" Country, Region, City 
+| eval Source = ClientIP 
+| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(Source) as Source,values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId 
+| rename UserId as UserAccessingFile
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table UserAccessingFile,is_privileged_user,SourceFileName,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName
-|`cs_o365_external_user_accessing_file_filter`
+| table UserAccessingFile,is_privileged_user,SourceFileName,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName,Source,Country,City,Region
+| `cs_o365_external_user_accessing_file_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
