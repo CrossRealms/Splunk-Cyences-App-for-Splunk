@@ -1035,7 +1035,7 @@
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,cyences_severity,Source,Country,City,Region
+| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,Source,Country,City,Region
 | `cs_o365_sharing_file_with_external_user_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
