@@ -59,3 +59,7 @@
     border-radius: 5px;
 }
 
+.splunk-multidropdown div[data-inline] {
+    padding: 0 5px 5px 0px;
+    border-radius: 5px;
+}
