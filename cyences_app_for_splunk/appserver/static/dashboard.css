@@ -72,3 +72,24 @@
 .input-multiselect label{
     font-size: 16px;
 }
+
+.table-drilldown>tbody>tr>td {
+    color: #fff;
+}
+
+.table-drilldown>tbody>tr>td:hover {
+    color: #3ebcff;
+}
+
+.table .sorts a {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.myinfo table, .myinfo th, .myinfo td, .myinfo tr {
+    border: 1px solid #454545 !important;
+}
+
+.highcharts-container {
+    border-radius: 0 0 0.8rem 0.8rem;
+}
