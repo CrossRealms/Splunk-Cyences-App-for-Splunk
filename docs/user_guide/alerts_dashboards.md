@@ -179,6 +179,8 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Successful Login From Unusual Country
     * O365 - Successful Login Outside Home Country
     * O365 - Failed Login From Unusual Country
+    * O365 - OneDrive or SharePoint File Sharing with External User
+    * O365 - OneDrive or SharePoint Link Accessed By External User
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Change/Update
     * Azure Active Directory - AuthorizationPolicy Change/Update
