@@ -48,7 +48,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="status">
-          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #B83C08, "Report is enabled": #03991a, "Report is disabled": #B83C08}</colorPalette>
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08, "Report is enabled": #008000, "Report is disabled": #B83C08}</colorPalette>
         </format>
       </table>
       <html>
@@ -258,26 +258,26 @@
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
         <format type="color" field="qualys">
-          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
-          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
-          <colorPalette type="list">[#03991a,#B83C08]</colorPalette>
+          <colorPalette type="list">[#008000,#B83C08]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
         <format type="color" field="defender">
-          <colorPalette type="map">{"Enabled": #03991a, "Disabled": #B83C08, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Enabled": #008000, "Disabled": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="sophos">
-          <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #B83C08, "Service not Running": #B83C08, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"RTP Enabled": #008000, "RTP Disabled": #B83C08, "Service not Running": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="crowdstrike">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Present": #008000, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="kaspersky">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030, "Disabled" : #B83C08}</colorPalette>
+          <colorPalette type="map">{"Present": #008000, "-": #363030, "Disabled" : #B83C08}</colorPalette>
         </format>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>

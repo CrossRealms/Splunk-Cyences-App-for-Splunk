@@ -156,7 +156,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color">
-          <colorPalette type="list">[#B83C08,#03991a]</colorPalette>
+          <colorPalette type="list">[#B83C08,#008000]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
       </table>
@@ -193,7 +193,7 @@
         <option name="drilldown">none</option>
         <option name="wrap">true</option>
         <format type="color">
-          <colorPalette type="list">[#B83C08,#03991a]</colorPalette>
+          <colorPalette type="list">[#B83C08,#008000]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
       </table>
