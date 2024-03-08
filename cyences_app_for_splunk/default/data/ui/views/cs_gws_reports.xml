@@ -45,7 +45,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="data">
-          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #B83C08}</colorPalette>
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
         </format>
       </table>
     </panel>
@@ -137,7 +137,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="Action">
-          <colorPalette type="map">{"success": #03991a, "failure": #B83C08}</colorPalette>
+          <colorPalette type="map">{"success": #008000, "failure": #B83C08}</colorPalette>
         </format>
       </table>
       <html>
@@ -181,7 +181,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="Action">
-          <colorPalette type="map">{"success": #03991a, "failure": #B83C08}</colorPalette>
+          <colorPalette type="map">{"success": #008000, "failure": #B83C08}</colorPalette>
         </format>
       </table>
       <html>
