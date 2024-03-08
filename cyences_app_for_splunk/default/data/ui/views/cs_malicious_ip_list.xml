@@ -46,7 +46,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="report_status">
-          <colorPalette type="map">{"Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+          <colorPalette type="map">{"Report is enabled": #03991a, "Report is disabled": #B83C08}</colorPalette>
         </format>
       </table>
     </panel>
