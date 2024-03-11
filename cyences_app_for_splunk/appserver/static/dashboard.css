@@ -93,3 +93,7 @@
 .highcharts-container {
     border-radius: 0 0 0.8rem 0.8rem;
 }
+
+div[data-view="views/shared/MenuDialog"]{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(250, 250, 250, 0.3) 0px 8px 16px -5px;
+}
