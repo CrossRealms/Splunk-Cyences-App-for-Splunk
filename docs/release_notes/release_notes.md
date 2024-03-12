@@ -23,7 +23,7 @@ has_children: true
 
 * ### Google Workspace Alerts/Dashboard
     * Added new alerts:
-        * 
+        * TODO
 
     * Added panels related to mentioned alerts on **Google Workspace** dashboard.
 
@@ -40,7 +40,9 @@ has_children: true
 
     * Added src_ip field to the **Fortigate Firewall - Network Compromise - Fortigate High System Alert** alert.
 
-    * Fixed issue with empty prop definition after upgrading to Splunk 9.2.0.1
+    * Fixed the issue as mentioned in following screenshot after upgrading to Splunk 9.2.0.1
+
+    ![alt]({{ site.baseurl }}/assets/splunk_upgrade_9_2_0_1_error.png)
 
 
 ## Upgrade Guide from 4.6.0 to 4.7.0
