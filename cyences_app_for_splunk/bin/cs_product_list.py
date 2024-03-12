@@ -232,6 +232,19 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "CrowdStrike Devices",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_crowdstrike_devices",
+                "label": "CrowdStrike Devices Data",
+                "search_by": "sourcetype",
+                "search_values": "crowdstrike:device:json",
+                "earliest_time": "-3d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "CrowdStrike Spotlight",
         "macro_configurations": [
             {
