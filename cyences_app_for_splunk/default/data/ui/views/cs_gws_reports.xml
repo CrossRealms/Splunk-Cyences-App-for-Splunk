@@ -539,9 +539,9 @@
 | rex field=target_user "[^@]+@(?&lt;dest_domain&gt;[^@]+)" 
 | where isnotnull(src_domain) AND isnotnull(dest_domain)
 | search src_domain IN `cs_email_user_domain` AND NOT dest_domain IN `cs_email_user_domain`
-| rename actor.email as external_email
-| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(email) as dst_email_list,  values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by external_email
-| `cs_user_privilege_mapping(external_email)` 
+| rename actor.email as actor
+| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(email) as dst_email_list,  values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by actor
+| `cs_user_privilege_mapping(actor)` 
 | `cs_human_readable_time_format(firstTime)` 
 | `cs_human_readable_time_format(lastTime)`
 | `cs_gws_google_drive_objects_shared_externally_filter`</query>
@@ -565,10 +565,9 @@
 | rex field=email "[^@]+@(?&lt;dest_domain&gt;[^@]+)" 
 | where isnotnull(src_domain) AND isnotnull(dest_domain)
 | search src_domain IN `cs_email_user_domain` AND NOT dest_domain IN `cs_email_user_domain`
-| rename email as external_email
 | `cs_user_privilege_mapping(owner)` 
-| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(owner) as src_email_list,  values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by external_email
-| `cs_human_readable_time_format(firstTime)` 
+| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(owner) as src_email_list, values(is_privileged_user) as is_privileged_user, values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by email
+| rename email as external_email
 | `cs_human_readable_time_format(lastTime)`
 | `cs_gws_google_drive_objects_accessed_by_external_user`</query>
 <earliest>$timeRange.earliest$</earliest>
