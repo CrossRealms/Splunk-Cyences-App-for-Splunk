@@ -109,7 +109,8 @@ This dashboard displays the following information about devices:
 * Host Vulnerabilities
 * Sophos Endpoint Protection + Windows Defender (Antivirus) status and related events 
 * VPN activities from the device or by the selected user
-* Various authentication activities like RDP and Linux logins 
+* RSA Radius activities from the device or by the selected user
+* Various authentication activities like RDP and Linux logins
 * If an asset is involved in any kind of Splunk security alert
 
 ![alt]({{ site.baseurl }}/assets/asset_intelligence_dashboard.png)
