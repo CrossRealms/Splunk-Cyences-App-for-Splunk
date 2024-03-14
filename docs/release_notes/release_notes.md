@@ -23,8 +23,7 @@ has_children: true
 
 * ### Google Workspace Alerts/Dashboard
     * Added new alerts:
-        * TODO
-
+        * Google Workspace - Google Drive objects accessed by External User
     * Added panels related to mentioned alerts on **Google Workspace** dashboard.
 
 * Added feature to include environment name as a subject prefix of alert emails to make filtering easier. To configure the environment name, navigate to **Cyences Settings > Cyences App Configuration > Cyences General Configuration**.

@@ -141,9 +141,9 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Daily Login Failure
     * Google Workspace - Alerts Center Alert
     * Google Workspace - Google Drive objects shared Outside or with External User
+    * Google Workspace - Google Drive objects accessed by External User
     * Google Workspace - Suspicious File Shared by External User on Google Drive
     * Google Workspace - Failed Login From Unusual Country
-    * TODO
 * Google Workspace Dashboard panels:
     * Login Types
     * Login by Location
@@ -157,7 +157,8 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Enterprise Group Change/Update
     * Google Workspace - Enterprise GroupMembership Change/Update
     * Google Workspace - User Change/Update
-    * TODO
+    * Google Drive objects shared Outside or with External User
+    * Google Drive objects accessed by External User
 * Microsoft Office 365 Alerts:
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - Azure Active Directory - Application Change/Update 
