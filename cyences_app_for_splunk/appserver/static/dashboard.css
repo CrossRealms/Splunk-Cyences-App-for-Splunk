@@ -45,55 +45,57 @@
     white-space:nowrap;
 }
 
-.splunk-view input[type] {
-    border: 2px solid #454545 !important;
-}
-
+/* For Inputs inside panels */
 .splunk-view input[type],.dashboard-form-fieldset div[data-inline] {
     background-color: #000;
 }
 
+/* For Global Inputs */
 .dashboard-form-globalfieldset input[type] {
     background-color: rgb(92, 103, 115);
     border: none !important;
     border-radius: 5px;
 }
 
+/* For Multiselect Inputs */
 .splunk-multidropdown div[data-inline] {
     padding: 0 5px 5px 0px;
     border-radius: 5px;
 }
 
+/* For Multiselect Inputs option */
 .splunk-multidropdown button {
     margin: 5px 0 0 5px;
     border-radius: 4px;
 }
 
-.input-multiselect label{
+/* For Inputs Label font */
+.input label {
     font-size: 16px;
 }
 
+/* For Table Text Font */
 .table-drilldown>tbody>tr>td {
-    color: #fff;
+    color: #fff; 
 }
 
+/* For Table Text Font Hover */
 .table-drilldown>tbody>tr>td:hover {
     color: #3ebcff;
 }
 
+/* For Table Header Font */
 .table .sorts a {
     font-size: 16px;
     font-weight: 500;
 }
 
-.myinfo table, .myinfo th, .myinfo td, .myinfo tr {
-    border: 1px solid #454545 !important;
-}
-
+/* To remove unnecessary line above charts */
 .highcharts-container {
     border-radius: 0 0 0.8rem 0.8rem;
 }
 
+/* For Dropdown Menu */
 div[data-view="views/shared/MenuDialog"]{
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(250, 250, 250, 0.3) 0px 8px 16px -5px;
 }
