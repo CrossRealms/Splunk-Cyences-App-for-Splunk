@@ -27,9 +27,7 @@
       <view name="cs_windows_patch" /><!--Windows-->
       <view name="cs_windows_cert_store" /><!--Windows-->
     </collection>
-    <collection label="Vulnerability Scanners">
-      <view name="cs_vulnerability" />
-    </collection>
+    <view name="cs_vulnerability" />
     <view name="cs_ad_reports" /><!--Windows-->
     <view name="cs_dns_tracker" /><!--Windows-->
     <view name="cs_lansweeper" /><!--Lansweeper-->
