@@ -76,6 +76,22 @@ def upgrade_4_5_0(session_key, logger):
     handle_results(response, logger)
 
 
+def upgrade_4_8_0(session_key, logger):
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+
+    CROWDSTRIKE_DEVICES_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesdevicemanager operation="cleanup" products_to_cleanup="CrowdStrike" minindextime=$time$"'
+    logger.info("Cleaning up the old Crowdstrike devices, As the new sourcetype is giving actual asset information")
+    response = service.jobs.oneshot(CROWDSTRIKE_DEVICES_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+    time.sleep(60)
+
+    CROWDSTRIKE_USERS_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesusermanager operation="cleanup" products_to_cleanup="CrowdStrike" minindextime=$time$"'
+    logger.info("Cleaning up the old Crowdstrike users, As the new sourcetype is giving actual asset information")
+    response = service.jobs.oneshot(CROWDSTRIKE_USERS_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+    time.sleep(60)
+
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -87,4 +103,5 @@ version_upgrade = (
     ('4.3.0', upgrade_4_3_0),
     ('4.4.0', None),
     ('4.5.0', upgrade_4_5_0),
+    ('4.8.0', upgrade_4_8_0),
 )
