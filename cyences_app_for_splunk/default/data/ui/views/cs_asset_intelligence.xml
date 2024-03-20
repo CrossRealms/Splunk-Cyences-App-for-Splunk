@@ -376,7 +376,7 @@
   <row depends="$tkn_show_hide_crowdstrike$">
     <panel>
       <title>Devices - CrowdStrike $tkn_filter_main_label$</title>
-      <input type="time" token="tkn_timeRange_av_crowdstrike">
+      <input type="time" token="tkn_timeRange_devices_crowdstrike">
         <label></label>
         <default>
           <earliest>-24h@h</earliest>
@@ -387,8 +387,8 @@
         <title>CrowdStrike Devices</title>
         <search>
           <query>`cs_crowdstrike_devices` | rename falcon_device.* as * | rename local_ip as ip, hostname as host | fillnull user value="" | search $tkn_filter_main$</query>
-          <earliest>$tkn_timeRange_av_crowdstrike.earliest$</earliest>
-          <latest>$tkn_timeRange_av_crowdstrike.latest$</latest>
+          <earliest>$tkn_timeRange_devices_crowdstrike.earliest$</earliest>
+          <latest>$tkn_timeRange_devices_crowdstrike.latest$</latest>
         </search>
         <option name="count">5</option>
         <option name="list.drilldown">none</option>
