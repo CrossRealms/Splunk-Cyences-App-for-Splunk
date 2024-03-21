@@ -540,11 +540,11 @@
 | where isnotnull(src_domain) AND isnotnull(dest_domain)
 | search src_domain IN `cs_email_user_domain` AND NOT dest_domain IN `cs_email_user_domain`
 | rename actor.email as actor
-| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(email) as dst_email_list,  values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by actor
+| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(target_user) as dst_email_list,  values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by actor
 | `cs_user_privilege_mapping(actor)` 
 | `cs_human_readable_time_format(firstTime)` 
 | `cs_human_readable_time_format(lastTime)`
-| `cs_gws_google_drive_objects_shared_externally_filter`</query>
+| `cs_gws_drive_object_shared_outside_filter`</query>
 <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
