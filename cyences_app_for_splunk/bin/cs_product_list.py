@@ -78,7 +78,7 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "MSSQL Database",
+        "name": "MSSQL",
         "macro_configurations": [
             {
                 "macro_name": "cs_mssql",
@@ -91,7 +91,7 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "Oracle Database",
+        "name": "Oracle",
         "macro_configurations": [
             {
                 "macro_name": "cs_oracle",
