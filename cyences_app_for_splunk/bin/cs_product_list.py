@@ -78,6 +78,32 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "MSSQL Database",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_mssql",
+                "label": "MSSQL Data",
+                "search_by": "sourcetype",
+                "search_values": "mssql:audit",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Oracle Database",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_oracle",
+                "label": "Oracle Data",
+                "search_by": "sourcetype",
+                "search_values": "oracle:audit:xml",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Office 365 Defender ATP",
         "macro_configurations": [
             {
