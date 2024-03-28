@@ -74,26 +74,26 @@
           <colorPalette type="map">{"-": #363030}</colorPalette>
         </format>
         <format type="color" field="qualys">
-          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
-          <colorPalette type="map">{"Green": #03991a, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
-          <colorPalette type="list">[#03991a,#a3030b]</colorPalette>
+          <colorPalette type="list">[#008000,#B83C08]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
         <format type="color" field="defender">
-          <colorPalette type="map">{"Enabled": #03991a, "Disabled": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Enabled": #008000, "Disabled": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="sophos">
-          <colorPalette type="map">{"RTP Enabled": #03991a, "RTP Disabled": #a3030b, "Service not Running": #a3030b, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"RTP Enabled": #008000, "RTP Disabled": #B83C08, "Service not Running": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="crowdstrike">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030}</colorPalette>
+          <colorPalette type="map">{"Present": #008000, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="kaspersky">
-          <colorPalette type="map">{"Present": #03991a, "-": #363030, "Disabled" : #a3030b}</colorPalette>
+          <colorPalette type="map">{"Present": #008000, "-": #363030, "Disabled" : #B83C08}</colorPalette>
         </format>
       </table>
       <html>
@@ -184,7 +184,7 @@
         <option name="rowNumbers">true</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="critical_active_vuln">
-          <colorPalette type="list">[#c90000]</colorPalette>
+          <colorPalette type="list">[#B83C08]</colorPalette>
           <scale type="threshold">1</scale>
         </format>
         <format type="color" field="high_active_vuln">
@@ -235,10 +235,10 @@
         <option name="rowNumbers">true</option>
         <option name="wrap">false</option>
         <format type="color" field="severity">
-          <colorPalette type="map">{"critical":#c90000, "high": #d96704, "medium" : #dbb300}</colorPalette>
+          <colorPalette type="map">{"critical":#B83C08, "high": #d96704, "medium" : #dbb300}</colorPalette>
         </format>
         <format type="color" field="status">
-          <colorPalette type="map">{"open":#c90000, "reopened":#c90000}</colorPalette>
+          <colorPalette type="map">{"open":#B83C08, "reopened":#B83C08}</colorPalette>
         </format>
       </table>
     </panel>

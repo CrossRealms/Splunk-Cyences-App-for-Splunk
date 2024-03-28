@@ -109,7 +109,7 @@
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
         <format type="color" field="cyences_severity">
-          <colorPalette type="map">{"critical": "#ff0000", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
+          <colorPalette type="map">{"critical": "#B83C08", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "info": "#9acd32"}</colorPalette>
         </format>
       </table>
     </panel>
