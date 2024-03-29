@@ -35,10 +35,10 @@
       <title>Audit Logs</title>
       <table>
         <search>
-          <query>`cs_mssql` sourcetype="mssql:audit" $tkn_host$ $tkn_action_name$
+          <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") $tkn_host$ | rename properties.* as *  
 | fillnull value="-" database_principal_name
-| search $tkn_user$
-| eval status = if(succeeded==1, "success", "failure") 
+| search $tkn_user$ $tkn_action_name$
+| eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
 | rename server_instance_name as db_host, database_principal_name as user, class_type_desc as object_type, client_ip as src, server_principal_name as os_user, application_name as client_app
 | table _time host db_host user action_name schema_name database_name object_name object_type src os_user client_app statement status 
 </query>

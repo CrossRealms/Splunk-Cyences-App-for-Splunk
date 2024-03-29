@@ -84,7 +84,7 @@ PRODUCTS = [
                 "macro_name": "cs_mssql",
                 "label": "MSSQL Data",
                 "search_by": "sourcetype",
-                "search_values": "mssql:audit",
+                "search_values": "mssql:audit,mssql:audit:json",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
