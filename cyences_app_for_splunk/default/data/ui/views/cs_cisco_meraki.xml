@@ -1,0 +1,34 @@
+<form theme="dark" version="1.1">
+  <label>Cisco Meraki</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Cisco Meraki</p>
+        <p>
+          <b>Data Collection:</b> Cisco Meraki data via the <a href="https://splunkbase.splunk.com/app/5580" target="_blank">Splunk Add-on for Cisco Meraki</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_cisco_meraki` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_cisco_meraki`"
+| table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>
