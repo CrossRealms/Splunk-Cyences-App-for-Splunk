@@ -48,7 +48,7 @@
       </input>
       <table>
         <search>
-          <query>index="cisco_meraki" sourcetype="meraki:organizationsecurity" eventType=$tkn_event_type|s$ | table _time, eventType, message, priority, srcIp, destIp, deviceMac, clientMac, protocol, blocked, classification</query>
+          <query>`cs_cisco_meraki` sourcetype="meraki:organizationsecurity" eventType=$tkn_event_type|s$ | table _time, eventType, message, priority, srcIp, destIp, deviceMac, clientMac, protocol, blocked, classification</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
