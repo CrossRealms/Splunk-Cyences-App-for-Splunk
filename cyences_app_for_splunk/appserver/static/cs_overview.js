@@ -49,6 +49,8 @@ require([
         { id: 'cs_device_inventory_table', title: 'Device Inventory' },
         { id: 'cs_user_inventory_table', title: 'User Inventory' },
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
+        { id: 'cs_mssql', title: 'MSSQL' },
+        { id: 'cs_oracle', title: 'Oracle' },
     ]
 
     let panel_depends_tokens = [
