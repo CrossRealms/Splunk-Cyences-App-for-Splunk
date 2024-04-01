@@ -48,7 +48,9 @@
       </input>
       <table>
         <search>
-          <query>`cs_cisco_meraki` sourcetype="meraki:organizationsecurity" eventType=$tkn_event_type|s$ | table _time, eventType, message, priority, srcIp, destIp, deviceMac, clientMac, protocol, blocked, classification</query>
+          <query>`cs_cisco_meraki` sourcetype="meraki:organizationsecurity" eventType=$tkn_event_type|s$ 
+          | `cs_human_readable_time_format(_time, event_time)`
+          | table event_time, eventType, message, priority, srcIp, destIp, deviceMac, clientMac, protocol, blocked, classification</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -99,7 +101,9 @@
       </input>
       <table>
         <search>
-          <query>`cs_cisco_meraki` sourcetype="meraki:audit"  adminEmail=$tkn_admin_email|s$ page=$tkn_page|s$ | fillnull networkName value="-None-" | search networkName=$tkn_network|s$ | eval time=strftime(_time, "%F %T %Z") | table time, page, networkName, networkId, adminName, adminEmail, label, oldValue, newValue</query>
+          <query>`cs_cisco_meraki` sourcetype="meraki:audit" adminEmail=$tkn_admin_email|s$ page=$tkn_page|s$ | fillnull networkName value="-None-" | search networkName=$tkn_network|s$
+          | `cs_human_readable_time_format(_time, event_time)`
+          | table event_time, page, networkName, networkId, adminName, adminEmail, label, oldValue, newValue</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
