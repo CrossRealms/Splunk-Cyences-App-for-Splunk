@@ -32,7 +32,7 @@ require([
         { id: 'cs_gws_reports', title: 'Google Workspace' },
         { id: 'cs_o365_reports', title: 'Office 365' },
         { id: 'cs_network_reports', title: 'Network Telemetry' },
-        { id: 'cs_fortigate_firewall', title: 'Fortigate Firewall' },
+        { id: 'cs_fortigate_firewall', title: 'Fortigate' },
         { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
         { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
         { id: 'cs_windows_reports', title: 'Windows' },
