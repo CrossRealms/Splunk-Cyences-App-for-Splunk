@@ -1,10 +1,10 @@
-splunk_sdk-2.0.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
-splunk_sdk-2.0.0.dist-info/METADATA,sha256=Fhl6G5mlJrEbQtQ0akadljZR2yriKjLLHAvYGzG1KVQ,713
-splunk_sdk-2.0.0.dist-info/RECORD,,
-splunk_sdk-2.0.0.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
-splunk_sdk-2.0.0.dist-info/WHEEL,sha256=GJ7t_kWBFywbagK5eo9IoUwLW6oyOeTKmQ-9iHFVNxQ,92
-splunk_sdk-2.0.0.dist-info/top_level.txt,sha256=taq2YYfOB31tNefwW73s54xytiB_sy8bpbyBAfn0kr8,10
-splunklib/__init__.py,sha256=FyR9TWDz0nDZvvI9rdijFgpir1gT-xSxpcmEcTJJ8mo,1304
+splunk_sdk-2.0.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+splunk_sdk-2.0.1.dist-info/METADATA,sha256=4jOonJImY0jwhUphHuJrAuGcBT2N6VclMnmTK3vvzGQ,740
+splunk_sdk-2.0.1.dist-info/RECORD,,
+splunk_sdk-2.0.1.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+splunk_sdk-2.0.1.dist-info/WHEEL,sha256=GJ7t_kWBFywbagK5eo9IoUwLW6oyOeTKmQ-9iHFVNxQ,92
+splunk_sdk-2.0.1.dist-info/top_level.txt,sha256=taq2YYfOB31tNefwW73s54xytiB_sy8bpbyBAfn0kr8,10
+splunklib/__init__.py,sha256=22TfR73rGV7m4sOBndaJP_xqjTkFnbp-7n8HcXmoSPk,1304
 splunklib/__pycache__/__init__.cpython-311.pyc,,
 splunklib/__pycache__/binding.cpython-311.pyc,,
 splunklib/__pycache__/client.cpython-311.pyc,,

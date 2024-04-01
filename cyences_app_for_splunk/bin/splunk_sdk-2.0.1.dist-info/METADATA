@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: splunk-sdk
-Version: 2.0.0
+Version: 2.0.1
 Summary: The Splunk Software Development Kit for Python.
 Home-page: http://github.com/splunk/splunk-sdk-python
 Author: Splunk, Inc.
@@ -14,4 +14,5 @@ Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Libraries :: Application Frameworks
+Requires-Dist: deprecation
 
