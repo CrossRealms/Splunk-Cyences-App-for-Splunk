@@ -53,7 +53,7 @@ require([
     ]
 
     let panel_depends_tokens = [
-        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Cisco Meraki']  },
+        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Radius Authentication', 'Cisco Meraki']  },
         { token: 'antivirus', associated_products: ['Sophos Endpoint Protection', 'Windows Defender', 'CrowdStrike EventStream', 'Office 365 Defender ATP'] },
         { token: 'aws', associated_products: ['AWS'] },
         { token: 'gws', associated_products: ['Google Workspace'] },
