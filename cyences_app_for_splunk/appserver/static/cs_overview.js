@@ -35,6 +35,7 @@ require([
         { id: 'cs_fortigate_firewall', title: 'Fortigate Firewall' },
         { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
         { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
+        { id: 'cs_cisco_meraki', title: 'Cisco Meraki' },
         { id: 'cs_windows_reports', title: 'Windows' },
         { id: 'cs_windows_patch', title: 'Windows Patch' },
         { id: 'cs_windows_cert_store', title: 'Windows Certs' },
@@ -52,17 +53,17 @@ require([
     ]
 
     let panel_depends_tokens = [
-        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows']  },
+        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Cisco Meraki']  },
         { token: 'antivirus', associated_products: ['Sophos Endpoint Protection', 'Windows Defender', 'CrowdStrike EventStream', 'Office 365 Defender ATP'] },
         { token: 'aws', associated_products: ['AWS'] },
         { token: 'gws', associated_products: ['Google Workspace'] },
         { token: 'o365', associated_products: ['Office 365'] },
         { token: 'email', associated_products: ['Office 365', 'Google Workspace'] },
-        { token: 'network_compromise', associated_products: ['Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Windows DNS'] },
+        { token: 'network_compromise', associated_products: ['Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
         { token: 'vulnerability', associated_products: ['Qualys', 'Tenable', 'CrowdStrike Spotlight'] },
         { token: 'ad_windows', associated_products: ['Sysmon', 'Windows', 'Windows AD', 'Windows DNS'] },
         { token: 'credential_compromise', associated_products: ['Sysmon'] },
-        { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Windows DNS'] },
+        { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
         { token: 'linux', associated_products: ['Linux'] },
     ]
 

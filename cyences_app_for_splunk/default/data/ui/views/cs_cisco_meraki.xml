@@ -1,0 +1,115 @@
+<form theme="dark" version="1.1">
+  <label>Cisco Meraki</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p>Cisco Meraki</p>
+        <p>
+          <b>Data Collection:</b> Cisco Meraki data via the <a href="https://splunkbase.splunk.com/app/5580" target="_blank">Splunk Add-on for Cisco Meraki</a>.</p>
+      </html>
+      <table>
+        <search>
+          <query>`cs_cisco_meraki` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_cisco_meraki`"
+| table label, data</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #03991a, "Data Not Present": #a3030b, "Report is enabled": #03991a, "Report is disabled": #a3030b}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Organizational Security Events</title>
+      <input type="dropdown" token="tkn_event_type">
+        <label>Event Type</label>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:organizationsecurity" | dedup eventType</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>eventType</fieldForLabel>
+        <fieldForValue>eventType</fieldForValue>
+      </input>
+      <table>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:organizationsecurity" eventType=$tkn_event_type|s$ 
+          | `cs_human_readable_time_format(_time, event_time)`
+          | table event_time, eventType, message, priority, srcIp, destIp, deviceMac, clientMac, protocol, blocked, classification</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Config Changes</title>
+      <input type="dropdown" token="tkn_admin_email">
+        <label>Admin</label>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:audit" | dedup adminEmail | eval adminLabel=adminName." (".adminEmail.")"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>adminLabel</fieldForLabel>
+        <fieldForValue>adminEmail</fieldForValue>
+      </input>
+      <input type="dropdown" token="tkn_network">
+        <label>Network</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:audit" | fillnull networkName value="-None-" | dedup networkName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <fieldForLabel>networkName</fieldForLabel>
+        <fieldForValue>networkName</fieldForValue>
+      </input>
+      <input type="dropdown" token="tkn_page">
+        <label>Configuration Page</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>page</fieldForLabel>
+        <fieldForValue>page</fieldForValue>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:audit" | dedup page</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_cisco_meraki` sourcetype="meraki:audit" adminEmail=$tkn_admin_email|s$ page=$tkn_page|s$ | fillnull networkName value="-None-" | search networkName=$tkn_network|s$
+          | `cs_human_readable_time_format(_time, event_time)`
+          | table event_time, page, networkName, networkId, adminName, adminEmail, label, oldValue, newValue</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>
