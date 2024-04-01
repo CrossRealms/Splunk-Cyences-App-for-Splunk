@@ -232,6 +232,19 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Cisco Meraki",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_cisco_meraki",
+                "label": "Cisco Meraki Data",
+                "search_by": "sourcetype",
+                "search_values": "meraki:securityappliances,meraki:organizationsecurity,meraki:audit,meraki:accesspoints,meraki:switches,meraki:networkdevices,meraki:devices",
+                "earliest_time": "-3d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "CrowdStrike Devices",
         "macro_configurations": [
             {
