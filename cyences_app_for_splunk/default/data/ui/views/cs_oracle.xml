@@ -35,8 +35,7 @@
       <title>Audit Logs</title>
       <table>
         <search>
-          <query>`cs_oracle` sourcetype="oracle:audit:xml" $tkn_host$ $tkn_action_name$
-| dedup vendor_action
+          <query>`cs_oracle` sourcetype="oracle:audit:xml" $tkn_host$ $tkn_action_name$ vendor_action=*
 | fillnull value="-" user
 | search $tkn_user$
 | eval status = if(RETURNCODE==0, "success", "failure"), db_host = host 
