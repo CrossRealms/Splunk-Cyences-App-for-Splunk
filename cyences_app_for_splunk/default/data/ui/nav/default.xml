@@ -22,7 +22,7 @@
     </collection>
     <collection label="Network Devices">
       <view name="cs_network_reports" />
-      <view name="cs_fortigate_firewall" /><!--Fortigate Firewall-->
+      <view name="cs_fortigate_firewall" /><!--FortiGate-->
       <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
       <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
       <view name="cs_cisco_meraki" /><!--Cisco Meraki-->
@@ -33,8 +33,8 @@
       <view name="cs_windows_cert_store" /><!--Windows-->
     </collection>
     <view name="cs_vulnerability" />
-    <view name="cs_ad_reports" /><!--Windows-->
-    <view name="cs_dns_tracker" /><!--Windows-->
+    <view name="cs_ad_reports" /><!--Windows AD-->
+    <view name="cs_dns_tracker" /><!--Windows DNS-->
     <view name="cs_lansweeper" /><!--Lansweeper-->
     <view name="cs_linux_reports" /><!--Linux-->
     <view name="cs_vpn_reports" /><!--VPN-->
