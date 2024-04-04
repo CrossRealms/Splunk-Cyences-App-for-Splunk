@@ -1,4 +1,4 @@
-<form version="1.1" theme="light">
+<form version="1.1" theme="dark">
   <label>MSSQL</label>
   <fieldset submitButton="false">
     <input type="time" token="tkn_time" searchWhenChanged="true">
@@ -40,7 +40,8 @@
 | search $tkn_user$ $tkn_action_name$
 | eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
 | rename server_instance_name as db_host, database_principal_name as user, class_type_desc as object_type, client_ip as src, server_principal_name as os_user, application_name as client_app
-| table _time host db_host user action_name schema_name database_name object_name object_type src os_user client_app statement status 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host db_host user action_name schema_name database_name object_name object_type src os_user client_app statement status 
 </query>
           <earliest>$tkn_time.earliest$</earliest>
           <latest>$tkn_time.latest$</latest>
