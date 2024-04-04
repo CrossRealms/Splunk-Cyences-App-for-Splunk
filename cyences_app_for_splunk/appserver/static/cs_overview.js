@@ -55,7 +55,7 @@ require([
     ]
 
     let panel_depends_tokens = [
-        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Cisco Meraki']  },
+        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Cisco Meraki', 'MSSQL', 'Oracle']  },
         { token: 'antivirus', associated_products: ['Sophos Endpoint Protection', 'Windows Defender', 'CrowdStrike EventStream', 'Office 365 Defender ATP'] },
         { token: 'aws', associated_products: ['AWS'] },
         { token: 'gws', associated_products: ['Google Workspace'] },
@@ -67,6 +67,8 @@ require([
         { token: 'credential_compromise', associated_products: ['Sysmon'] },
         { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
         { token: 'linux', associated_products: ['Linux'] },
+        { token: 'db_oracle', associated_products: ['Oracle'] },
+        { token: 'db_mssql', associated_products: ['MSSQL'] },
     ]
 
 
@@ -169,7 +171,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability" ];
+    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
