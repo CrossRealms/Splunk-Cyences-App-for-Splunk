@@ -330,10 +330,10 @@
   </row>
   <row>
     <panel depends="$network_compromise$">
-      <title>Network Compromise &amp; Cisco IOS</title>
+      <title>Network Compromise &amp; Cisco IOS &amp; Cisco Meraki</title>
       <table id="tbl_network_compromise">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS")`</query>
+          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS|Cisco Meraki")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
