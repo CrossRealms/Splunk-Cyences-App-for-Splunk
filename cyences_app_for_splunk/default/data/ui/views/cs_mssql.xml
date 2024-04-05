@@ -10,8 +10,11 @@
     </input>
     <input type="multiselect" token="tkn_host" searchWhenChanged="true">
       <label>Host</label>
-      <prefix>host="</prefix>
-      <suffix>"</suffix>
+      <prefix>host IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
       <default>*</default>
       <initialValue>*</initialValue>
       <choice value="*">All</choice>
@@ -25,9 +28,12 @@
     </input>
     <input type="multiselect" token="tkn_user" searchWhenChanged="true">
       <label>User</label>
+      <prefix>database_principal_name IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
       <default>*</default>
-      <prefix>database_principal_name="</prefix>
-      <suffix>"</suffix>
       <initialValue>*</initialValue>
       <choice value="*">All</choice>
       <fieldForLabel>database_principal_name</fieldForLabel>
@@ -40,9 +46,12 @@
     </input>
     <input type="multiselect" token="tkn_action_name" searchWhenChanged="true">
       <label>Action Name</label>
+      <prefix>action_name IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
       <default>*</default>
-      <prefix>action_name="</prefix>
-      <suffix>"</suffix>
       <initialValue>*</initialValue>
       <choice value="*">All</choice>
       <fieldForLabel>action_name</fieldForLabel>
