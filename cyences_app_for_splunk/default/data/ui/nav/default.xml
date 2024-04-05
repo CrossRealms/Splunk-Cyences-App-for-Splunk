@@ -16,6 +16,10 @@
       <view name="cs_gws_reports" /><!--Google Workspace-->
       <view name="cs_o365_reports" /><!--Office 365-->
     </collection>
+    <collection label="Database">
+      <view name="cs_mssql" /><!--MSSQL-->
+      <view name="cs_oracle" /><!--Oracle-->
+    </collection>
     <collection label="Network Devices">
       <view name="cs_network_reports" />
       <view name="cs_fortigate_firewall" /><!--FortiGate-->

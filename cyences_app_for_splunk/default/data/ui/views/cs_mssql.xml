@@ -1,0 +1,61 @@
+<form version="1.1" theme="dark">
+  <label>MSSQL</label>
+  <fieldset submitButton="false">
+    <input type="time" token="tkn_time" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_host" searchWhenChanged="true">
+      <label>Host</label>
+      <prefix>host="</prefix>
+      <suffix>"</suffix>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_user" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+      <prefix>database_principal_name="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_action_name" searchWhenChanged="true">
+      <label>Action Name</label>
+      <default>*</default>
+      <prefix>action_name="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Audit Logs</title>
+      <table>
+        <search>
+          <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") $tkn_host$ | rename properties.* as *  
+| fillnull value="-" database_principal_name
+| search $tkn_user$ $tkn_action_name$
+| eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
+| rename server_instance_name as db_host, database_principal_name as user, class_type_desc as object_type, client_ip as src, server_principal_name as os_user, application_name as client_app
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host db_host user action_name schema_name database_name object_name object_type src os_user client_app statement status 
+</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,60 @@
+<form version="1.1" theme="dark">
+  <label>Oracle</label>
+  <fieldset submitButton="false">
+    <input type="time" token="tkn_time" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_host" searchWhenChanged="true">
+      <label>Host</label>
+      <prefix>host="</prefix>
+      <suffix>"</suffix>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_user" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+      <prefix>user="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_action_name" searchWhenChanged="true">
+      <label>Action Name</label>
+      <default>*</default>
+      <prefix>vendor_action="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Audit Logs</title>
+      <table>
+        <search>
+          <query>`cs_oracle` sourcetype="oracle:audit:xml" $tkn_host$ $tkn_action_name$ 
+| fillnull value="-" user
+| search $tkn_user$
+| eval status = if(RETURNCODE==0, "success", "failure"), db_host = host 
+| rename vendor_action as action_name, DB_UNIQUE_NAME as database_name, object as object_name, object_category as object_type, OSUSERID as os_user, command as statement
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host db_host user action_name database_name object_name object_type src os_user statement status</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>
