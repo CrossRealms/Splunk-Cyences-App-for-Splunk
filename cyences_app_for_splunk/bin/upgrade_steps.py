@@ -103,5 +103,6 @@ version_upgrade = (
     ('4.3.0', upgrade_4_3_0),
     ('4.4.0', None),
     ('4.5.0', upgrade_4_5_0),
-    ('4.8.0', upgrade_4_8_0),
+    # TODO
+    # ('4.8.0', upgrade_4_8_0),
 )
