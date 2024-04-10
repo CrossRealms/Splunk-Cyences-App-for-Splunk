@@ -21,7 +21,7 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") | fields host | stats count by host</query>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields host | stats count by host</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -39,7 +39,7 @@
       <fieldForLabel>server_principal_name</fieldForLabel>
       <fieldForValue>server_principal_name</fieldForValue>
       <search>
-        <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") | fields server_principal_name | stats count by server_principal_name</query>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields server_principal_name | stats count by server_principal_name</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
