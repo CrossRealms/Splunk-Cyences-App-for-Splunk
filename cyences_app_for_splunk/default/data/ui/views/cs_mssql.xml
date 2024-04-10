@@ -21,14 +21,14 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") | fields host | stats count by host</query>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields host | stats count by host</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
     </input>
     <input type="multiselect" token="tkn_user" searchWhenChanged="true">
       <label>User</label>
-      <prefix>database_principal_name IN (</prefix>
+      <prefix>server_principal_name IN (</prefix>
       <suffix>)</suffix>
       <valuePrefix>"</valuePrefix>
       <valueSuffix>"</valueSuffix>
@@ -36,10 +36,10 @@
       <default>*</default>
       <initialValue>*</initialValue>
       <choice value="*">All</choice>
-      <fieldForLabel>database_principal_name</fieldForLabel>
-      <fieldForValue>database_principal_name</fieldForValue>
+      <fieldForLabel>server_principal_name</fieldForLabel>
+      <fieldForValue>server_principal_name</fieldForValue>
       <search>
-        <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") | fields database_principal_name | stats count by database_principal_name</query>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields server_principal_name | stats count by server_principal_name</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -57,7 +57,7 @@
       <fieldForLabel>action_name</fieldForLabel>
       <fieldForValue>action_name</fieldForValue>
       <search>
-        <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") | fields action_name | stats count by action_name</query>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields action_name | stats count by action_name</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -68,13 +68,13 @@
       <title>Audit Logs</title>
       <table>
         <search>
-          <query>`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json") $tkn_host$ | rename properties.* as *  
-| fillnull value="-" database_principal_name
+          <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) $tkn_host$ | rename properties.* as *  
+| fillnull value="-" server_principal_name
 | search $tkn_user$ $tkn_action_name$
 | eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
-| rename server_instance_name as db_host, database_principal_name as user, class_type_desc as object_type, client_ip as src, server_principal_name as os_user, application_name as client_app
+| rename server_instance_name as db_host, server_principal_name as user, class_type_desc as object_type, client_ip as src, database_principal_name as db_user, application_name as client_app
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time host db_host user action_name schema_name database_name object_name object_type src os_user client_app statement status 
+| table event_time host db_host user action_name schema_name database_name object_name object_type src db_user client_app statement status 
 </query>
           <earliest>$tkn_time.earliest$</earliest>
           <latest>$tkn_time.latest$</latest>
