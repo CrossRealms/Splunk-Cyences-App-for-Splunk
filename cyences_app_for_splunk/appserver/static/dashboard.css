@@ -46,12 +46,12 @@
 }
 
 /* For Inputs inside panels */
-.splunk-view input[type],.dashboard-form-fieldset div[data-inline] {
+.splunk-view span:has(> input[type]),.dashboard-form-fieldset div[data-inline] {
     background-color: #000;
 }
 
 /* For Global Inputs */
-.dashboard-form-globalfieldset input[type] {
+.dashboard-form-globalfieldset span:has(> input[type]) {
     background-color: rgb(92, 103, 115);
     border: none !important;
     border-radius: 5px;
