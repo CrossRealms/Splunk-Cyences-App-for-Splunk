@@ -207,6 +207,9 @@ There are several security related alerts to choose from and they are all locate
     * OneDrive or SharePoint File Sharing with External User
     * OneDrive or SharePoint Link Accessed By External User
 
+## Database
+* Alerts:
+    * User Changes
 
 ## Email
 * Alerts:
