@@ -97,7 +97,7 @@ PRODUCTS = [
                 "macro_name": "cs_oracle",
                 "label": "Oracle Data",
                 "search_by": "sourcetype",
-                "search_values": "oracle:audit:xml",
+                "search_values": "oracle:audit:xml,oracle:audit:unified",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
