@@ -550,7 +550,7 @@
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
-        <option name="maxLines">10</option>
+        <option name="count">10</option>
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
@@ -566,16 +566,43 @@
 | where isnotnull(src_domain) AND isnotnull(dest_domain)
 | search src_domain IN `cs_email_user_domain` AND NOT dest_domain IN `cs_email_user_domain`
 | `cs_user_privilege_mapping(owner)` 
-| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(owner) as src_email_list, values(is_privileged_user) as is_privileged_user, values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by email
+| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(owner) as owner_email_list, values(is_privileged_user) as is_privileged_user, values(visibility) as visibility, count, min(_time) as firstTime, max(_time) as lastTime by email
 | rename email as external_email
+| `cs_human_readable_time_format(firstTime)`
 | `cs_human_readable_time_format(lastTime)`
 | `cs_gws_google_drive_objects_accessed_by_external_user`</query>
-<earliest>$timeRange.earliest$</earliest>
+          <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="drilldown">none</option>
-        <option name="maxLines">10</option>
+        <option name="count">10</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Suspicious File Shared by External User on Google Drive</title>
+      <table>
+        <search>
+          <query>`cs_gws` sourcetype="gws:reports:drive"
+| `cs_gws_search_suspicious_title` 
+| rex field=owner "[^@]+@(?&lt;src_domain&gt;[^@]+)" 
+| where isnotnull(src_domain) 
+| search NOT src_domain IN `cs_email_user_domain` 
+| `cs_user_privilege_mapping(target_user)` 
+| stats values(doc_title) as doc_title, values(doc_type) as doc_type, values(event.name) as event.name, values(target_user) as dst_email_list, values(is_privileged_user) as is_privileged_user, count, min(_time) as firstTime, max(_time) as lastTime by owner 
+| rename owner as external_user
+| `cs_human_readable_time_format(firstTime)`
+| `cs_human_readable_time_format(lastTime)`
+| `cs_gws_suspicious_file_shared_by_external_user_filter`</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="count">10</option>
         <option name="refresh.display">progressbar</option>
       </table>
     </panel>
