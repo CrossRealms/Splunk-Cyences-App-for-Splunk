@@ -19,7 +19,7 @@ const DigestEmailConfigurationFields = {
     usernameHelp: 'comma separated list of email addresses who wish to receive all Cyences digest alerts in the form of an email based on the desired severity level(s)',
     passwordLabel: 'Severities',
     passwordType: 'text',
-    passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - high & medium severity only',
+    passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - high & medium severities',
 }
 
 export default function SendEmailSetup() {
