@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Link from '@splunk/react-ui/Link';
 import Heading from '@splunk/react-ui/Heading';
 import SimpleForm from './components/SimpleForm';
 import CyencesDocFooter from './components/CyencesDocFooter';
@@ -15,9 +14,18 @@ const EmailConfigurationFields = {
     passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - critical severity only',
 }
 
+const DigestEmailConfigurationFields = {
+    usernameLabel: 'Default Email Recipients',
+    usernameHelp: 'comma separated list of email addresses who wish to receive all Cyences digest alerts in the form of an email based on the desired severity level(s)',
+    passwordLabel: 'Severities',
+    passwordType: 'text',
+    passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - high & medium severity only',
+}
+
 export default function SendEmailSetup() {
 
     const [data, setData] = useState('');
+    const [digestData, setDigestData] = useState('');
 
     useEffect(() => {
         axiosCallWrapper({
@@ -31,6 +39,23 @@ export default function SendEmailSetup() {
             })
             .catch((error) => {
                 generateToast(`Failed to load Cyences email alert action configuration. check console for more detail.`, "error");
+                console.log(error);
+            })
+
+    }, []);
+
+    useEffect(() => {
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-alert_actions/cyences_send_digest_email_action`
+        })
+            .then((resp) => {
+                const content = resp.data.entry[0].content;
+                const email_to = content['param.email_to'];
+                const cyences_severities = content['param.cyences_severities'];
+                setDigestData({ email_to: email_to, cyences_severities: cyences_severities });
+            })
+            .catch((error) => {
+                generateToast(`Failed to load Cyences digest email alert action configuration. check console for more detail.`, "error");
                 console.log(error);
             })
 
@@ -56,10 +81,30 @@ export default function SendEmailSetup() {
             })
     }
 
+    function onDigestSave(username, password) {
+        const payload = {
+            "param.email_to": username,
+            "param.cyences_severities": password
+        }
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-alert_actions/cyences_send_digest_email_action`,
+            body: new URLSearchParams(payload),
+            customHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            method: "post",
+        })
+            .then((resp) => {
+                generateToast(`Cyences digest email alert action configuration saved successfully`, "success")
+            })
+            .catch((error) => {
+                console.log(error);
+                generateToast(`Failed to update Cyences digest email alert action configuration. check console for more detail.`, "error")
+            })
+    }
+
     return (
         <>
             <Heading style={{ marginLeft: '20px' }}>Digest Email Configuration</Heading>
-            <Link style={{ marginLeft: '40px', marginTop: '15px' }} to="/en-GB/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&count=100&offset=0&itemType=&owner=nobody&search=cyences digest" openInNewContext>Open Digest Alert</Link>
+            <SimpleForm key='senddigestemailconfiguration' {...DigestEmailConfigurationFields} onSave={onDigestSave} username={digestData.email_to} password={digestData.cyences_severities} />
 
             <Heading style={{ marginLeft: '20px' }}>Critical Email Configuration</Heading>
             <SimpleForm key='sendemailconfiguration' {...EmailConfigurationFields} onSave={onSave} username={data.email_to_default} password={data.cyences_severities} />
