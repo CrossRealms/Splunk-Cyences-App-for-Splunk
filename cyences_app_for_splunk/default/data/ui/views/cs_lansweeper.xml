@@ -18,8 +18,8 @@
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" AND OS="Windows *" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
 | table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, OSVersion, Domain, User, active_antivirus, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
 | eval active_antivirus = mvjoin(active_antivirus, " &amp; ")
@@ -35,8 +35,8 @@
 | table Site, Type, Name, State, Domain, Version, IPAddress, MacAddress, OSVersion, User, OS, IPLocation, Description, FQDN 
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" AND OS="VMware *" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
 | fillnull Qualys, Tenable value="Absent"
 | table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, OSVersion, Version, Qualys, Tenable
 | sort Name</query>
@@ -54,8 +54,8 @@
 | join type="left" name_lower [| tstats count where `cs_wineventlog_system` `cs_wineventlog_system_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval WinEventLog_System="Present"]
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
 | eval OS=coalesce(OS, os)
 | fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
 | table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
@@ -73,8 +73,8 @@
 | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User, OS, IPLocation, Description, FQDN, active_antivirus 
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
 | eval OS=coalesce(OS, os)
 | fillnull Qualys, Tenable value="Absent"
 | table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, active_antivirus, Qualys, Tenable
@@ -93,8 +93,8 @@
 | table Site, Name, State, Domain, IPAddress, MacAddress, OSVersion, User, OS, IPLocation, Description, FQDN, active_antivirus 
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
 | eval OS=coalesce(OS, os)
 | fillnull Qualys, Tenable value="Absent"
 | table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, User, active_antivirus, Qualys, Tenable
@@ -110,8 +110,8 @@
 | rename lansweeper_id as id, AssetName as Name, AssetType as Type, lansweeper_state as State, mac_address as MacAddress, AssetVersion as Version, lansweeper_user as User, ip as IPAddress, lansweeper_fqdn as FQDN, lansweeper_os as OS
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
 | eval OS=coalesce(OS, os)
 | fillnull Qualys, Tenable value="Absent"
 | table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Qualys, Tenable
@@ -126,8 +126,8 @@
 | rename lansweeper_id as id, AssetName as Name, AssetType as Type, lansweeper_state as State, mac_address as MacAddress, AssetVersion as Version, lansweeper_user as User, ip as IPAddress, lansweeper_fqdn as FQDN, lansweeper_os as OS
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
-| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
-| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
 | eval OS=coalesce(OS, os)
 | fillnull Qualys, Tenable value="Absent"
 | table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Model, Qualys, Tenable

@@ -316,7 +316,7 @@ PRODUCTS = [
                 "macro_name": "cs_tenable",
                 "label": "Tenable Data",
                 "search_by": "sourcetype",
-                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln",
+                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
