@@ -221,6 +221,7 @@ There are several security related alerts to choose from and they are all locate
     * Network Compromise - Basic Scanning
     * Network Compromise - Inbound Vulnerable Traffic
     * Network Compromise - DDoS Behavior Detected
+    * Network Compromise - Unusual Outbound Traffic
 
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login

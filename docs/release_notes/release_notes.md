@@ -9,41 +9,60 @@ has_children: true
 # Release Notes
 
 
-## Version 4.7.0 (March 2024)
+## Version 4.8.0 (May 2024)
 
-* ### RSA Radius Authentication
-    * Added new dashboard named **RSA Radius Authentication**.
-    * Added new alert named **RSA Radius Authentication - Excessive Failed Logins for a User**.
-
-* ### Office 365 Alerts/Dashboard
+* ### Cisco Meraki
     * Added new alerts:
-        * O365 - OneDrive or SharePoint File Sharing with External User
-        * O365 - OneDrive or SharePoint Link Accessed By External User
-    * Added panels related to mentioned alerts on **Office 365** dashboard.
+        * Cisco Meraki - Organizational Security Events
+        * Cisco Meraki - Config Changes
+    * Added new dashboard named **Cisco Meraki**
 
-* ### Google Workspace Alerts/Dashboard
-    * Added new alerts:
-        * Google Workspace - Google Drive objects accessed by External User
-    * Added panels related to mentioned alerts on **Google Workspace** dashboard.
+* ### Databases
+    * #### MSSQL
+        * Added new alert named **MSSQL - User Changes**
+        * Added new dashboard named **MSSQL**
+    * #### Oracle
+        * Added new alert named **Oracle - User Changes**
+        * Added new dashboard named **Oracle**
 
-* Added feature to include environment name as a subject prefix of alert emails to make filtering easier. To configure the environment name, navigate to **Cyences Settings > Cyences App Configuration > Cyences General Configuration**.
+* Added Tenable SC support along with Tenable IO.
+
+* Added new report/alert:
+    * Network Compromise - Calculate UpperBound for Spike in Outbound Network Traffic
+    * Network Compromise - Unusual Outbound Traffic
 
 
 * ### Enhancements
 
-    * Utilized the Network Traffic datamodel for the **Network Compromise - Basic Scanning** alert to improve search performance.
+    * #### App UI Changes
+        * Enhanced the view, style and color contrast for the inputs like multiselect, dropdown, textbox and checkbox.
+        * Enhanced the navigation panel view on the Overview dashboard.
+        * Enhanced the Label fonts and Table headers.
+        * Drilldown text's color changes when hovered over.
+        * Synced the color combination across all dashboards.
 
-    * For **O365 - Login Failure From Unusual Country Due To Multi Factor Authentication** alert, reduced the severity if user not available.
+    * #### CrowdStrike Devices
+        * **Device Inventory - CrowdStrike** search is now using [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570) to get detailed information of crowdstrike devices.
+        * Made crowdstrike devices related changes to **Device Inventory** and **Intelligence** dashboard.
+    
+    * Removed internal IPs from **Network Compromise - DDoS Behavior Detected** alert.
 
-    * Added Target_userPrincipalName field to the Azure AD changes related alerts.
+    * For Office 365 login related alerts, excluded the events having field value user="not available".
 
-    * Added src_ip field to the **Fortigate Firewall - Network Compromise - Fortigate High System Alert** alert.
+    * Updated Splunk-python-sdk to the latest version.
 
-    * Fixed the issue as mentioned in following screenshot after upgrading to Splunk 9.2.0.1
-
-    ![alt]({{ site.baseurl }}/assets/splunk_upgrade_9_2_0_1_error.png)
+    * For **O365 - Login Failure From Unusual Country Due To Multi Factor Authentication** alert, the severity was reduced for new users who attempted to login the first time.
 
 
-## Upgrade Guide from 4.6.0 to 4.7.0
+* ### Bug Fixes
 
-* To configure the environment name, Navigate to **Cyences Settings > Cyences App Configuration > Cyences General Configuration**.
+    * Fixed the dashboard show/hide issue for the fortigate.
+
+    * For **Cyences Digest Email** alert, fixed the field display issue which has dot(.) in the field name.
+
+    * Fixed the current week login count logic for VPN login related alerts.
+
+
+## Upgrade Guide from 4.7.0 to 4.8.0
+
+* To collect the crowdstrike devices information, install and configure the [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570).
