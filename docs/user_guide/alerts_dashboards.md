@@ -251,6 +251,12 @@ There are several security related alerts to choose from and they are all locate
     * ATP & IPS Events
     * List of Firewall Devices
     * System Events
+* Cisco Meraki Alerts:
+    * Organizational Security Events
+    * Config Changes
+* Cisco Meraki Dashboard panels:
+    * Organizational Security Events
+    * Config Changes
 
 
 ## Network Telemetry
