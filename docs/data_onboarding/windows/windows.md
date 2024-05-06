@@ -2,7 +2,7 @@
 layout: default
 title: Windows 
 permalink: /data_onboarding/windows/
-nav_order: 6
+nav_order: 7
 parent: Data Onboarding
 has_children: true
 ---

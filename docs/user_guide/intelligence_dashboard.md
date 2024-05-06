@@ -41,7 +41,7 @@ The Device Inventory dashboard contains a list of every asset or device present 
 
 It is populated from a lookup which is built by scheduled reports. The lookup is generated from the following data sources (the table can still function even if one or more categories of data are not present): 
 
-* CrowdStrike
+* CrowdStrike Falcon Devices
 * Lansweeper
 * Qualys
 * Sophos Endpoint Protection

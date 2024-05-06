@@ -2,7 +2,7 @@
 layout: default
 title: Network Devices
 permalink: /data_onboarding/network_devices/
-nav_order: 4
+nav_order: 5
 parent: Data Onboarding
 has_children: true
 ---

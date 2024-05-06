@@ -207,6 +207,16 @@ There are several security related alerts to choose from and they are all locate
     * OneDrive or SharePoint File Sharing with External User
     * OneDrive or SharePoint Link Accessed By External User
 
+## Database
+
+* MSSQL Alerts:
+    * MSSQL - User Changes
+* MSSQL Dashboard panels:
+    * Audit Logs
+* Oracle Alerts:
+    * Oracle - User Changes
+* Oracle Dashboard panels:
+    * Audit Logs
 
 ## Email
 * Alerts:

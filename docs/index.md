@@ -39,6 +39,10 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Microsoft Office 365
         * Microsoft Azure Graph Security Score
 
+* Database
+    * MSSQL
+    * Oracle
+
 * DNS Tracker
 
 * Email
