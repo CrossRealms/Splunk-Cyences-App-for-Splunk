@@ -39,14 +39,16 @@ A few of the included alerts and reports are dependent on other reports being en
     * Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs
     * Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs
         * Dynamically Update Blocked IPs with HoneyDB
-    * Ransomware - Spike in File Writes
-        * Ransomware - Calculate UpperBound for Spike in File Writes
-    * Network Compromise - DDoS Behavior Detected
-        * Network Compromise - Calculate UpperBound for Spike in Network Traffic
-    * Windows - Hosts Missing Update
-        * Windows - Hosts Lookup Gen (this report is enabled by default)
-    * Device Inventory Gen 
-        * View the [Installation/Configuration > Device Inventory]({{ site.baseurl }}/install_configure/configuration/#device-inventory) section for more details.
+* Ransomware - Spike in File Writes
+    * Ransomware - Calculate UpperBound for Spike in File Writes
+* Network Compromise - DDoS Behavior Detected
+    * Network Compromise - Calculate UpperBound for Spike in Network Traffic
+* Network Compromise - Unusual Outbound Traffic
+    * Network Compromise - Calculate UpperBound for Spike in Outbound Network Traffic
+* Windows - Hosts Missing Update
+    * Windows - Hosts Lookup Gen (this report is enabled by default)
+* Device Inventory Gen 
+    * View the [Installation/Configuration > Device Inventory]({{ site.baseurl }}/install_configure/configuration/#device-inventory) section for more details.
 
 ### Enable Email Notifications with Alerts
 Email notifications are disabled by default for all alerts. 
