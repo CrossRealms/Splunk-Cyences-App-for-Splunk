@@ -1003,7 +1003,7 @@
         <fieldForLabel>ApplicationDisplayName</fieldForLabel>
         <fieldForValue>ApplicationDisplayName</fieldForValue>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged"."SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -1026,16 +1026,17 @@
       </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged"."SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
 | iplocation ClientIP 
 | fillnull value="" Country, Region, City 
 | rename ClientIP as Source
-| stats values(Operation) AS Operations, values(EventData) AS EventData, values(Source) as Source, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId
+| stats values(Operation) as Operations, values(EventData) as EventData, values(Source) as Source, values(SharingLinkScope) as SharingLinkScope, values(Permission) as Permission, values(ItemType) as ItemType, values(ApplicationDisplayName) as ApplicationDisplayName, values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId 
+| search SharingLinkScope!="Organization"
 | rename UserId as User
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table User,is_privileged_user,SourceFileName,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,Source,Country,City,Region
+| table User,is_privileged_user,SourceFileName,SharingLinkScope,Permission,EventSource,ItemType,Operations,ApplicationDisplayName,FirstTime,LastTime,EventData,Source,Country,City,Region
 | `cs_o365_sharing_file_with_external_user_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
@@ -1086,12 +1087,12 @@
 | iplocation ClientIP  
 | fillnull value="" Country, Region, City 
 | rename ClientIP as Source
-| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(ApplicationDisplayName) as ApplicationDisplayName, values(Source) as Source,values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId 
+| stats values(Operation) AS Operations, values(ObjectId) as ObjectId , values(SharingLinkScope) as SharingLinkScope, values(Permission) as Permission, values(ApplicationDisplayName) as ApplicationDisplayName, values(Source) as Source,values(EventData) as EventData, values(ItemType) as ItemType,values(EventSource) as EventSource latest(_time) as LastTime earliest(_time) as FirstTime, values(Country) as Country, values(City) as City, values(Region) as Region by SourceFileName, UserId 
 | rename UserId as UserAccessingFile
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table UserAccessingFile,is_privileged_user,SourceFileName,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName,Source,Country,City,Region
+| table UserAccessingFile,is_privileged_user,SourceFileName,Permission,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName,Source,Country,City,Region
 | `cs_o365_external_user_accessing_file_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
