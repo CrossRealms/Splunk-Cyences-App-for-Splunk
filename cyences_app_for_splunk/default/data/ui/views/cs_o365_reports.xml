@@ -1003,7 +1003,7 @@
         <fieldForLabel>ApplicationDisplayName</fieldForLabel>
         <fieldForValue>ApplicationDisplayName</fieldForValue>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged"."SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged","SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") | dedup ApplicationDisplayName | table ApplicationDisplayName</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -1026,7 +1026,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged"."SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload IN (OneDrive, SharePoint) Operation IN ("SharingSet", "AccessRequestApproved", "SharingRestored", "AnonymousLinkCreated", "SharingInvitationCreated", "SharingInvitationUpdated", "AddedToSecureLink", "SharingPolicyChanged","SharingLinkCreated") NOT TargetUserOrGroupType IN ("Member", "SharePointGroup") $tkn_exclude_teams$ $tkn_application_name$
 | iplocation ClientIP 
 | fillnull value="" Country, Region, City 
 | rename ClientIP as Source
@@ -1092,7 +1092,7 @@
 | `cs_human_readable_time_format(FirstTime)`
 | `cs_human_readable_time_format(LastTime)`
 | `cs_user_privilege_mapping(User)`
-| table UserAccessingFile,is_privileged_user,SourceFileName,Permission,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName,Source,Country,City,Region
+| table UserAccessingFile,is_privileged_user,SourceFileName,SharingLinkScope,Permission,ObjectId,EventSource,ItemType,Operations,FirstTime,LastTime,ApplicationDisplayName,Source,Country,City,Region
 | `cs_o365_external_user_accessing_file_filter`
 </query>
           <earliest>$timeRange.earliest$</earliest>
