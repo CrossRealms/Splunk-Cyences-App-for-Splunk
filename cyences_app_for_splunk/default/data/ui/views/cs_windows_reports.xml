@@ -1,6 +1,28 @@
 <form theme="dark" version="1.1">
   <label>Windows</label>
-  <fieldset submitButton="false"></fieldset>
+  <fieldset submitButton="false">
+    <input type="time" token="timeRange">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="text" token="tkn_host" searchWhenChanged="true">
+      <label>Host</label>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tkn_user" searchWhenChanged="true">
+      <label>User</label>
+      <default>*</default>
+      <prefix>*</prefix>
+      <suffix>*</suffix>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <html>
@@ -22,29 +44,6 @@
       </table>
     </panel>
   </row>
-  <row>
-    <panel>
-      <input type="time" token="timeRange">
-        <label>Time Range</label>
-        <default>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
-        </default>
-      </input>
-      <input type="text" token="tkn_host" searchWhenChanged="true">
-        <label>Host</label>
-        <default>*</default>
-        <prefix>*</prefix>
-        <suffix>*</suffix>
-      </input>
-      <input type="text" token="tkn_user" searchWhenChanged="true">
-        <label>User</label>
-        <default>*</default>
-        <prefix>*</prefix>
-        <suffix>*</suffix>
-      </input>
-    </panel>
-  </row>
   <row depends="$hidden_row$">
     <panel>
       <table>
@@ -57,6 +56,64 @@
           <earliest>-24h@h</earliest>
           <latest>now</latest>
         </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>User Login Activity</title>
+      <input type="multiselect" token="tkn_logon_type" searchWhenChanged="true">
+        <label>Logon Type</label>
+        <default>*</default>
+        <prefix>Logon_Type IN (</prefix>
+        <suffix>)</suffix>
+        <choice value="*">All</choice>
+        <choice value="2">Interactive</choice>
+        <choice value="3">Network</choice>
+        <choice value="4">Batch</choice>
+        <choice value="5">Service</choice>
+        <choice value="7">Unlock</choice>
+        <choice value="8">NetworkCleartext</choice>
+        <choice value="9">NewCredentials</choice>
+        <choice value="10">RemoteInteractive</choice>
+        <choice value="11">CachedInteractive</choice>
+        <initialValue>*</initialValue>
+        <delimiter>, </delimiter>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+      </input>
+      <input type="text" token="tkn_computer_name" searchWhenChanged="true">
+        <label>Computer Name</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <title>Successful Login/Logoff Events (EventCode=4624,4625)</title>
+        <search>
+          <query>`cs_wineventlog_security`  EventCode IN (4624, 4634) host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, user, ComputerName, signature, user_type</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <title>Failed Login Attempts by User (EventCode=4625)</title>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4625 host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
+| stats count as "Failed Attempts" values(signature) as "Failure Reasons" values(ComputerName) as "Computer Names" by user
+| sort - "Failed Attempts"</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">5</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
@@ -140,7 +197,8 @@
           <query>index IN (wineventlog, windows, msad) sourcetype=Script:ListeningPorts host=$tkn_host$ transport=$transport$ dest_port=$port$
 | fillnull value="-" appname
 | dedup host, transport, dest_port, pid, appname 
-| table host, _time , transport, dest_port, pid, appname</query>
+| `cs_human_readable_time_format(_time, event_time)`
+| table host, event_time , transport, dest_port, pid, appname</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -154,7 +212,7 @@
   </row>
   <row>
     <panel>
-      <title>Windows Firewall Status</title>    
+      <title>Windows Firewall Status</title>
       <table>
         <search>
           <query>`cs_windows_firewall_status_logs` host=$tkn_host|s$ 
