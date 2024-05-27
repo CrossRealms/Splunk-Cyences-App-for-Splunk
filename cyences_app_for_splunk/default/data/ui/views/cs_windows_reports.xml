@@ -92,11 +92,11 @@
         <initialValue>*</initialValue>
       </input>
       <table>
-        <title>Successful Login/Logoff Events (EventCode=4624,4625)</title>
+        <title>Successful Login Events (EventCode=4624)</title>
         <search>
-          <query>`cs_wineventlog_security`  EventCode IN (4624, 4634) host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
+          <query>`cs_wineventlog_security`  EventCode="4624" host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, user, ComputerName, signature, user_type</query>
+| table event_time, user, LogonType, ComputerName, signature, user_type</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -108,7 +108,7 @@
         <title>Failed Login Attempts by User (EventCode=4625)</title>
         <search>
           <query>`cs_wineventlog_security` EventCode=4625 host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
-| stats count as "Failed Attempts" values(signature) as "Failure Reasons" values(ComputerName) as "Computer Names" by user
+| stats count as "Failed Attempts" values(signature) as "Failure Reasons" values(LogonType) as "Logon Type" values(ComputerName) as "Computer Names" by user
 | sort - "Failed Attempts"</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
