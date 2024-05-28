@@ -80,6 +80,8 @@
           <query>`cs_wineventlog_security` EventCode IN ("4624", "4625") 
 | dedup LogonType 
 | table LogonType,Logon_Type</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
       </input>
       <input type="text" token="tkn_computer_name" searchWhenChanged="true">
