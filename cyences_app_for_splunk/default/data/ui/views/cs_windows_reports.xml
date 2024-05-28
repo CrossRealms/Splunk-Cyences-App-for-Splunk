@@ -70,19 +70,17 @@
         <prefix>Logon_Type IN (</prefix>
         <suffix>)</suffix>
         <choice value="*">All</choice>
-        <choice value="2">Interactive</choice>
-        <choice value="3">Network</choice>
-        <choice value="4">Batch</choice>
-        <choice value="5">Service</choice>
-        <choice value="7">Unlock</choice>
-        <choice value="8">NetworkCleartext</choice>
-        <choice value="9">NewCredentials</choice>
-        <choice value="10">RemoteInteractive</choice>
-        <choice value="11">CachedInteractive</choice>
         <initialValue>*</initialValue>
         <delimiter>, </delimiter>
         <valuePrefix>"</valuePrefix>
         <valueSuffix>"</valueSuffix>
+        <fieldForLabel>LogonType</fieldForLabel>
+        <fieldForValue>Logon_Type</fieldForValue>
+        <search>
+          <query>`cs_wineventlog_security` EventCode IN ("4624", "4625") 
+| dedup LogonType 
+| table LogonType,Logon_Type</query>
+        </search>
       </input>
       <input type="text" token="tkn_computer_name" searchWhenChanged="true">
         <label>Computer Name</label>
