@@ -286,7 +286,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
 * Alerts:
     * Vulnerability - Detected Vulnerabilities
 
-Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO & Tenable SC
+Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO, Tenable SC & Nessus:Pro
 
 These vendor security solutions are designed to detect vulnerabilities present in your environment.
 
