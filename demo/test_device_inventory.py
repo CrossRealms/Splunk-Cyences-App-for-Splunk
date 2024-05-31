@@ -4,8 +4,11 @@
 import os, sys
 import hashlib
 
-parent_dir = os.path.dirname
-APP_BIN_PATH = os.path.join(parent_dir(parent_dir(__file__)), "cyences_app_for_splunk", "bin")
+APP_BIN_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)
+    )), "cyences_app_for_splunk", "bin")
+
 sys.path.insert(0, APP_BIN_PATH)
 
 from device_inventory_util import DeviceEntry, DeviceManager
