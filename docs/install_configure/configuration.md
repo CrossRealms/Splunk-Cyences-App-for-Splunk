@@ -135,6 +135,8 @@ List of Device Inventory related searches that users can execute individually to
 * Device Inventory - Sophos Endpoint Protection 
 * Device Inventory - Tenable 
 * Device Inventory - Tenable Vuln
+* Device Inventory - Nessus 
+* Device Inventory - Nessus Vuln
 * Device Inventory - Windows Defender 
 * Device Inventory - Kaspersky
 * Device Inventory - Splunk Internal 
