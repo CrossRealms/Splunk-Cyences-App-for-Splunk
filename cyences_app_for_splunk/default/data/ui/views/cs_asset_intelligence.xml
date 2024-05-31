@@ -11,7 +11,7 @@
     <latest>now</latest>
   </search>
   <search base="base_inventory_table" id="show_hide_search">
-    <query>| stats first(lansweeper_last_event) as field_lansweeper, first(qualys_last_event) as field_qualys, first(tenable_last_event) as field_tenable, first(sophos_last_event) as field_sophos, first(defender_last_event) as field_defender, first(crowdstrike_last_event) as field_crowdstrike, first(kaspersky_last_event) as field_kaspersky</query>
+    <query>| stats first(lansweeper_last_event) as field_lansweeper, first(qualys_last_event) as field_qualys, first(tenable_last_event) as field_tenable, first(nessus_last_event) as field_nessus, first(sophos_last_event) as field_sophos, first(defender_last_event) as field_defender, first(crowdstrike_last_event) as field_crowdstrike, first(kaspersky_last_event) as field_kaspersky</query>
   </search>
   <fieldset submitButton="false"></fieldset>
   <row>
@@ -50,6 +50,7 @@
         <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
         <br/>Qualys -&gt; $tkn_show_hide_qualys$ - $tkn_filter_ip_only$ - $tkn_filter_ip_only_label$
         <br/>Tenable -&gt; $tkn_show_hide_tenable$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
+        <br/>Nessus -&gt; $tkn_show_hide_nessus$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
         <br/>VPN, Radius Authentication, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
         <br/>CrowdStrike -&gt; $tkn_show_hide_crowdstrike$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Kaspersky -&gt; $tkn_show_hide_kaspersky$ - $tkn_filter_main$ - $tkn_filter_main_label$
@@ -63,9 +64,9 @@
       <title>Device Inventory $tkn_filter_main_label$</title>
       <table>
         <search base="base_inventory_table">
-          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
+          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
         </search>
-        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$</fields>
+        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$</fields>
         <option name="count">5</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -77,6 +78,9 @@
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="nessus">
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">

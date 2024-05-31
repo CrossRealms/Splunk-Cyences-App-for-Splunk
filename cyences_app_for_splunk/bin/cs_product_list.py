@@ -314,9 +314,22 @@ PRODUCTS = [
         "macro_configurations": [
             {
                 "macro_name": "cs_tenable",
-                "label": "Tenable/Nessus Data",
+                "label": "Tenable Data",
                 "search_by": "sourcetype",
-                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln,nessus:pro:vuln,nessus:pro:plugin",
+                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln",
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Nessus",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_nessus",
+                "label": "Nessus Data",
+                "search_by": "sourcetype",
+                "search_values": "nessus:pro:vuln,nessus:pro:plugin,nessus_json",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }

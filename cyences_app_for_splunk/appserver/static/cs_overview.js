@@ -62,7 +62,7 @@ require([
         { token: 'o365', associated_products: ['Office 365'] },
         { token: 'email', associated_products: ['Office 365', 'Google Workspace'] },
         { token: 'network_compromise', associated_products: ['Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
-        { token: 'vulnerability', associated_products: ['Qualys', 'Tenable', 'CrowdStrike Spotlight'] },
+        { token: 'vulnerability', associated_products: ['Qualys', 'Tenable', 'Nessus', 'CrowdStrike Spotlight'] },
         { token: 'ad_windows', associated_products: ['Sysmon', 'Windows', 'Windows AD', 'Windows DNS'] },
         { token: 'credential_compromise', associated_products: ['Sysmon'] },
         { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
