@@ -737,7 +737,7 @@
                     "editable": true,
                     "comment": "",
                     "calculationType": "Eval",
-                    "expression": "coalesce(error_code,Error_Code, \"unknown\")"
+                    "expression": "if((EventCode=4768 OR EventCode=4771), Result_Code, coalesce(error_code,Error_Code, \"unknown\"))"
                 }
             ],
             "constraints": [
