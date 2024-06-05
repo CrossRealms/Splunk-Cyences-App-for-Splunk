@@ -131,7 +131,7 @@ PRODUCTS = [
                 "macro_name": "cs_sophos",
                 "label": "Sophos Endpoint Protection Data",
                 "search_by": "sourcetype",
-                "search_values": "sophos_events",
+                "search_values": "sophos_events,sophos_endpoints",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
