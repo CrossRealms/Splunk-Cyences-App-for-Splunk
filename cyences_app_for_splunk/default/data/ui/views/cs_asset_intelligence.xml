@@ -339,7 +339,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` $tkn_filter_authentication$ Authentication.action IN ("success","failure") Authentication.app="*" by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` $tkn_filter_authentication$ Authentication.action IN ("success","failure") Authentication.app="*" by Authentication.app Authentication.action Authentication.user, Authentication.src | `drop_dm_object_name(Authentication)`  | iplocation src | fields - lat lon</query>
           <earliest>$tkn_timeRange_radius_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_radius_authentication.latest$</latest>
         </search>
@@ -362,7 +362,8 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src
+          | `drop_dm_object_name(Authentication)`  | iplocation src | fields - lat lon</query>
           <earliest>$tkn_timeRange_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_authentication.latest$</latest>
         </search>
