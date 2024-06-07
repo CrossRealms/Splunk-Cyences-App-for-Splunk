@@ -316,7 +316,7 @@
           <!-- When second_bit_in_mac_binary (from first part of mac_address) is 1 that is locally administratored mac_address, we'll filter those mac_address from showing. -->
           <query>| cyencesdevicemanager operation="getdevices" 
 | table * 
-| eval ip_all=mvjoin(ips, ","), mac_address_all=mvjoin(mac_addresses, ",") 
+| eval ip_all=mvjoin(ips, ","), mac_address_all=mvjoin(mac_addresses, ",") , hostnames_all=mvjoin(hostnames, ",") 
 | multireport 
     [| stats values(*) as * by mac_addresses 
     | where isnotnull(mac_addresses) AND mac_addresses!="" AND mac_addresses!=" " 
@@ -332,14 +332,22 @@
     | eval second_bit_in_mac_binary=mvindex(binary,1) 
     | where second_bit_in_mac_binary=0 
     | eval Type="Mac Address Matches", ips="" 
-    | table Type, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
+    | table Type, mac_addresses, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids] 
     [| stats values(*) as * by ips 
     | where isnotnull(ips) AND ips!="" AND ips!=" " 
     | eval no_uuids=mvcount(uuid) 
     | where no_uuids&gt;1 
     | eval Type="IP Matches", mac_addresses="" 
-    | table Type, ips, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
-| table Type, ips, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids
+    | table Type, ips, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids] 
+    [| stats values(*) as * by hostnames 
+    | where isnotnull(hostnames) AND hostnames!="" AND hostnames!=" " 
+    | removepostfixes postfix_macro_name="cs_device_inventory_hostname_postfixes" field_to_check="hostnames" 
+    | stats values(*) as * by hostnames 
+    | eval no_uuids=mvcount(uuid) 
+    | where no_uuids&gt;1 
+    | eval Type="Hostname Matches" 
+    | table Type, hostnames, uuid, no_uuids,hostnames_all, ip_all, mac_address_all, product_uuids] 
+| table Type, hostnames, ips, mac_addresses, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids 
 | sort - no_uuids</query>
           <earliest>0</earliest>
           <latest></latest>
