@@ -66,16 +66,19 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
         for arg in ['data']:
             self.supportedArgs.addOptArg(arg)
 
-
     def get_saved_searches(self):
         data = self.conf_manager.get_saved_searches()
 
         results = {}
         for item in data:
-            if item["content"].get("action.cyences_notable_event_action.products") is not None:
+            if item["content"].get("action.cyences_notable_event_action.products") is not None and cs_utils.is_true(
+                item["content"].get(
+                    "action.cyences_notable_event_action.param.alert_state_change_from_setup_page",
+                    "1",  # The savedsearch endpoint does not provide default alert action param values hence returning default value 1
+                )
+            ):
                 results[item["name"]] = item["content"]
         return results
-
 
     def configure_saved_searches(self, enabled_products, disabled_products):
         savedsearches = self.get_saved_searches()
@@ -114,7 +117,6 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
 
         return '\n'.join(messages_to_display)
 
-
     def configure_nav_bar(self, enabled_products, disabled_products):
 
         nav_bar_xml = build_new_nav_bar(enabled_products, disabled_products)
@@ -136,7 +138,6 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
             }
         )
 
-
     def get_product_configuration(self):
         data = self.conf_manager.get_conf_stanza(CONF_FILE, APP_CONFIG_STANZA)
 
@@ -148,7 +149,6 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
         enabled_products = cs_utils.convert_to_set(product_config[ENABLED_PRODUCTS_KEY])
         disabled_products = cs_utils.convert_to_set(product_config[DISABLED_PRODUCTS_KEY])
         return enabled_products, disabled_products
-
 
     def handleList(self, conf_info):
         self.conf_manager = cs_utils.ConfigHandler(logger, self.getSessionKey())
@@ -166,17 +166,15 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
                     product["enabled"] = False
                 else:
                     product["enabled"] = "Unknown"
-                
+
                 for macro_item in product["macro_configurations"]:
                     macro_item["macro_definition"] = macros[macro_item["macro_name"]]
-
 
             conf_info[APP_CONFIG_STANZA][PRODUCTS_KEY] = json.dumps(all_products)
 
         except Exception as e:
             logger.exception('Unable to fetch product_config {}'.format(e))
             raise admin.ArgValidationException('Unable to fetch product_config {}'.format(e))
-
 
     def handleEdit(self, conf_info):
         self.conf_manager = cs_utils.ConfigHandler(logger, self.getSessionKey())
@@ -190,7 +188,6 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
         except Exception as e:
             logger.exception("Unable to parsed the payload")
             raise admin.ArgValidationException('Data is not in proper format. {} - {}'.format(e, self.callerArgs["data"]))
-
 
         if product_enabled is None and not macro_configurations:
             raise admin.ArgValidationException("Provide either enabled or macro_configurations")
@@ -207,7 +204,7 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
                 if not product_enabled:
                     disabled_products.add(product)
                     enabled_products.discard(product)
-                
+
                 logger.info("final enabled_product={} and disabled_products={}".format(enabled_products, disabled_products))
 
                 self.configure_nav_bar(enabled_products, disabled_products)
@@ -218,7 +215,6 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
         except Exception as e:
             logger.exception("Unable to update Cyences app configuration.")
             raise admin.ArgValidationException('Unable to update Cyences app configuration. {} - {}'.format(e, self.callerArgs["data"]))
-
 
         try:
             if macro_configurations is not None:
@@ -231,9 +227,8 @@ class CyencesProductConfigurationHandler(admin.MConfigHandler):
                     current_macro_value = macros.get(macro_name)
                     if current_macro_value == macro_definition:
                         continue
-                    
-                    self.conf_manager.update_macro(macro_name, {"definition": macro_definition})
 
+                    self.conf_manager.update_macro(macro_name, {"definition": macro_definition})
 
                 conf_info["result"]['message'] = "Updated Cyences app configuration successfully"
 
