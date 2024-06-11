@@ -33,6 +33,17 @@ Filter example:
 
 **Note:** Macro updates may not happen in real-time as we are performing updates every five minutes.
 
+### How to disable the alert state changes performed from the cyences setup page 
+
+1. Open the **Cyences App for Splunk**.
+2. Navigate to **Settings > Searches, reports, and alerts** and select **All** for the **Owner** filter.
+3. Find the alert for which you would like to avoid state changes from setup page and Click **Edit > Edit Alert**.
+4. Deselect the **Allow alert state change from setup page?** checkbox under **When triggered > Cyences Action - Notable Event**.
+5. Save the changes.
+
+![alt]({{ site.baseurl }}/assets/alert_state_change.png)
+
+
 ### Filter Alert Results Based on the Time of the Event
 
 Since version 1.4.0, time-based filtering has been made available to every alert in the Cyences App. Let's go over a use case to understand what that is, why you need it, and how to apply it. 
