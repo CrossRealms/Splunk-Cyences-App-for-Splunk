@@ -314,9 +314,9 @@ PRODUCTS = [
         "macro_configurations": [
             {
                 "macro_name": "cs_tenable",
-                "label": "Tenable/Nessus Data",
+                "label": "Tenable Data",
                 "search_by": "sourcetype",
-                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln,nessus:pro:vuln,nessus:pro:plugin",
+                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
