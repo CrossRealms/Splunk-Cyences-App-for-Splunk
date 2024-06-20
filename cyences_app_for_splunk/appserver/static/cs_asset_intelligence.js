@@ -62,6 +62,8 @@ function(mvc, SplunkCommonUtilities){
                 unsetToken("tkn_show_hide_crowdstrike");
                 setToken("tkn_tablefields_kaspersky", "");
                 unsetToken("tkn_show_hide_kaspersky");
+                setToken("tkn_tablefields_splunk", "");
+
             }
             let results = data.rows[0];   // only one row of data is important for us
             let lansweeper = results[0];
@@ -72,6 +74,7 @@ function(mvc, SplunkCommonUtilities){
             let defender = results[5];
             let crowdstrike = results[6];
             let kaspersky = results[7];
+            let splunk = results[8]
 
             if(lansweeper > 0){
                 setToken("tkn_tablefields_lansweeper", ", lansweeper");
@@ -143,6 +146,13 @@ function(mvc, SplunkCommonUtilities){
             else{
                 setToken("tkn_tablefields_kaspersky", "");
                 unsetToken("tkn_show_hide_kaspersky");
+            }
+
+            if(splunk > 0){
+                setToken("tkn_tablefields_splunk", ", splunk");
+            }
+            else{
+                setToken("tkn_tablefields_splunk", "");
             }
         }
     ).searchById("show_hide_search");

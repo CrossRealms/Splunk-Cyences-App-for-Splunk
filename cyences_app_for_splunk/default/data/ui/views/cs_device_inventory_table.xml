@@ -13,8 +13,8 @@
     <latest>now</latest>
   </search>
   <search base="base_inventory_table">
-    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(nessus_last_event) as field_nessus, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike,sum(kaspersky_last_event) as field_kaspersky
-| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_nessus=if(field_nessus&gt;0, ", nessus", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", ""), field_kaspersky=if(field_kaspersky&gt;0, ", kaspersky", "")</query>
+    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(nessus_last_event) as field_nessus, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike,sum(kaspersky_last_event) as field_kaspersky,sum(splunk_last_event) as field_splunk
+| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_nessus=if(field_nessus&gt;0, ", nessus", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", ""), field_kaspersky=if(field_kaspersky&gt;0, ", kaspersky", ""), field_splunk=if(field_splunk&gt;0, ", splunk", "")</query>
     <done>
       <set token="tkn_tablefields_lansweeper">$result.field_lansweeper$</set>
       <set token="tkn_tablefields_qualys">$result.field_qualys$</set>
@@ -24,6 +24,7 @@
       <set token="tkn_tablefields_defender">$result.field_defender$</set>
       <set token="tkn_tablefields_crowdstrike">$result.field_crowdstrike$</set>
       <set token="tkn_tablefields_kaspersky">$result.field_kaspersky$</set>
+      <set token="tkn_tablefields_splunk">$result.field_splunk$</set>
     </done>
   </search>
   <search id="base_summary">
@@ -111,7 +112,7 @@
             <set token="tkn_sp_filter">kaspersky_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Splunk&quot;">
-            <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
+            <set token="tkn_sp_filter">splunk_last_event=*</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -137,7 +138,7 @@
         <option name="refresh.display">progressbar</option>
         <drilldown>
           <condition match="$click.name2$ == &quot;All&quot;">
-            <set token="tkn_sp_filter">((lansweeper_last_event=*) AND (product_names="Splunk Internal") AND (tenable_last_event=* OR nessus_last_event=* OR qualys_last_event=*) AND (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*))</set>
+            <set token="tkn_sp_filter">((lansweeper_last_event=*) AND (splunk_last_event=*) AND (tenable_last_event=* OR nessus_last_event=* OR qualys_last_event=*) AND (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*))</set>
           </condition>
           <condition match="$click.name2$ == &quot;Lansweeper&quot;">
             <set token="tkn_sp_filter">lansweeper_last_event=*</set>
@@ -149,7 +150,7 @@
             <set token="tkn_sp_filter">(sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;Splunk&quot;">
-            <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
+            <set token="tkn_sp_filter">splunk_last_event=*</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -182,7 +183,7 @@
             <set token="tkn_sp_filter">NOT (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;No_Splunk&quot;">
-            <set token="tkn_sp_filter">NOT (product_names="Splunk Internal")</set>
+            <set token="tkn_sp_filter">NOT (splunk_last_event=*)</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -252,9 +253,9 @@
       </html>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
-        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$</fields>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$</fields>
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
@@ -285,6 +286,9 @@
         </format>
         <format type="color" field="kaspersky">
           <colorPalette type="map">{"Present": #008000, "-": #363030, "Disabled" : #B83C08}</colorPalette>
+        </format>
+        <format type="color" field="splunk">
+          <colorPalette type="map">{"uf": #008000, "full" : #008000, "-": #363030}</colorPalette>
         </format>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>
