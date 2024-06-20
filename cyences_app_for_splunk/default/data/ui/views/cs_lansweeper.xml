@@ -19,9 +19,11 @@
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host  | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" AND OS="Windows *" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
-| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
-| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, OSVersion, Domain, User, active_antivirus, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Nessus="Present"]
+| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, OSVersion, Domain, User, active_antivirus, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable, Nessus
 | eval active_antivirus = mvjoin(active_antivirus, " &amp; ")
 | sort Name</query>
     <earliest>-4h@m</earliest>
@@ -36,9 +38,11 @@
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" AND OS="VMware *" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Tenable="Present"]
-| fillnull Qualys, Tenable value="Absent"
-| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, OSVersion, Version, Qualys, Tenable
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname | rename asset_hostname as name_lower | eval Nessus="Present"]
+| fillnull Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, OSVersion, Version, Qualys, Tenable, Nessus
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
@@ -55,10 +59,12 @@
 | join type="left" name_lower [| tstats count where `cs_sysmon` `cs_sysmon_timerange` by host | table host | rename host as name_lower | eval name_lower=lower(name_lower) | eval Sysmon="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Nessus="Present"]
 | eval OS=coalesce(OS, os)
-| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable value="Absent"
-| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable
+| fillnull WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , Type, OS, WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable, Nessus
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
@@ -74,10 +80,12 @@
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Nessus="Present"]
 | eval OS=coalesce(OS, os)
-| fillnull Qualys, Tenable value="Absent"
-| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, active_antivirus, Qualys, Tenable
+| fillnull Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, active_antivirus, Qualys, Tenable, Nessus
 | eval active_antivirus = mvjoin(active_antivirus, " &amp; ")
 | sort Name</query>
     <earliest>-4h@m</earliest>
@@ -94,10 +102,12 @@
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Nessus="Present"]
 | eval OS=coalesce(OS, os)
-| fillnull Qualys, Tenable value="Absent"
-| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, User, active_antivirus, Qualys, Tenable
+| fillnull Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, Description, State, IPAddress, MacAddress, IPLocation, FQDN , OS, User, active_antivirus, Qualys, Tenable, Nessus
 | eval active_antivirus = mvjoin(active_antivirus, " &amp; ")
 | sort Name</query>
     <earliest>-4h@m</earliest>
@@ -111,10 +121,12 @@
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Nessus="Present"]
 | eval OS=coalesce(OS, os)
-| fillnull Qualys, Tenable value="Absent"
-| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Qualys, Tenable
+| fillnull Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Qualys, Tenable, Nessus
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
@@ -127,10 +139,12 @@
 | eval name_lower=lower(Name)
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Qualys Cloud Platform" | search os IN `cs_qualys_linux_os` | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Qualys="Present"]
 | join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Tenable="Present"]
+| join type=left IPAddress [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_ip delim="~~" | mvexpand asset_ip | dedup asset_ip | table asset_ip, os | rename asset_ip as IPAddress | eval Nessus="Present"]
 | join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Tenable.io" OR vendor_product="Tenable.sc" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Tenable="Present"]
+| join type=left name_lower [| inputlookup cs_all_assets where vendor_product="Nessus:Pro" OR vendor_product="Nessus" | makemv asset_hostname delim="~~" | mvexpand asset_hostname | dedup asset_hostname | table asset_hostname, os | rename asset_hostname as name_lower | eval Nessus="Present"]
 | eval OS=coalesce(OS, os)
-| fillnull Qualys, Tenable value="Absent"
-| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Model, Qualys, Tenable
+| fillnull Qualys, Tenable, Nessus value="Absent"
+| table Site, Name, State, IPAddress, MacAddress, OS, DNSName, IPLocation, Model, Qualys, Tenable, Nessus
 | sort Name</query>
     <earliest>-4h@m</earliest>
     <latest>now</latest>
@@ -177,7 +191,7 @@
         <ul>
           <li>Last four hours - Lansweeper, Sysmon, and WinEventLog (security and system)</li>
           <li>Last seven days - Qualys</li>
-          <li>Tenable does not have a specified time range, since the data is pulled from lookups.</li>
+          <li>Tenable/Nessus does not have a specified time range, since the data is pulled from lookups.</li>
         </ul>
       </html>
     </panel>
@@ -275,9 +289,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_windows">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_windows_assets">
-          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_win_security_logs|s$ WinEventLog_System=$tkn_win_system_logs|s$ Sysmon=$tkn_sysmon_logs|s$ Qualys=$tkn_qualys_logs_windows|s$ Tenable=$tkn_tenable_logs_windows|s$</query>
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_win_security_logs|s$ WinEventLog_System=$tkn_win_system_logs|s$ Sysmon=$tkn_sysmon_logs|s$ Qualys=$tkn_qualys_logs_windows|s$ Tenable=$tkn_tenable_logs_windows|s$ Nessus=$tkn_nessus_logs_windows|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -295,6 +316,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
@@ -341,9 +365,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_vmware_nessus_logs_windows">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_vmware_guest_assets">
-          <query>search OS="*Windows*" $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_vmware_win_security_logs|s$ WinEventLog_System=$tkn_vmware_win_system_logs|s$ Sysmon=$tkn_vmware_sysmon_logs|s$ Qualys=$tkn_vmware_qualys_logs_windows|s$ Tenable=$tkn_vmware_tenable_logs_windows|s$</query>
+          <query>search OS="*Windows*" $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ WinEventLog_Security=$tkn_vmware_win_security_logs|s$ WinEventLog_System=$tkn_vmware_win_system_logs|s$ Sysmon=$tkn_vmware_sysmon_logs|s$ Qualys=$tkn_vmware_qualys_logs_windows|s$ Tenable=$tkn_vmware_tenable_logs_windows|s$ Nessus=$tkn_vmware_nessus_logs_windows|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -361,6 +392,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
@@ -386,9 +420,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_linux">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_linux_assets">
-          <query>search OS IN `cs_qualys_linux_os`| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_linux|s$ Tenable=$tkn_tenable_logs_linux|s$</query>
+          <query>search OS IN `cs_qualys_linux_os`| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_linux|s$ Tenable=$tkn_tenable_logs_linux|s$ Nessus=$tkn_nessus_logs_linux|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -397,6 +438,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
@@ -422,9 +466,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_vmware_nessus_logs_linux">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_vmware_guest_assets">
-          <query>search OS IN `cs_qualys_linux_os` $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_vmware_qualys_logs_linux|s$ Tenable=$tkn_vmware_tenable_logs_linux|s$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon</query>
+          <query>search OS IN `cs_qualys_linux_os` $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_vmware_qualys_logs_linux|s$ Tenable=$tkn_vmware_tenable_logs_linux|s$ Nessus=$tkn_vmware_nessus_logs_linux|s$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -433,6 +484,9 @@
           <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <drilldown>
@@ -446,7 +500,7 @@
       <title>VMware/Hyper-V Guests - Other</title>
       <table>
         <search base="search_vmware_guest_assets">
-          <query>search NOT OS="*Windows*" NOT OS IN `cs_qualys_linux_os` | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable</query>
+          <query>search NOT OS="*Windows*" NOT OS IN `cs_qualys_linux_os` | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ | fields - WinEventLog_Security, WinEventLog_System, Sysmon, Qualys, Tenable, Nessus</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -456,7 +510,7 @@
         </drilldown>
       </table>
       <html>
-        <p>Note - Operating systems for VMWare Guests are determined by Qualys or Tenable data, since in some cases Lansweeper do not identify OS information. This also applies for the "VMWare Guests – Windows" and "VMWare Guests – Linux" dashboard panels.</p>
+        <p>Note - Operating systems for VMWare Guests are determined by Qualys, Tenable or Nessus data, since in some cases Lansweeper do not identify OS information. This also applies for the "VMWare Guests – Windows" and "VMWare Guests – Linux" dashboard panels.</p>
       </html>
     </panel>
   </row>
@@ -477,9 +531,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_vmware_server">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_vmware_server_assets">
-          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_vmware_server|s$ Tenable=$tkn_tenable_logs_vmware_server|s$ | fields - OS, OSVersion</query>
+          <query>search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_vmware_server|s$ Tenable=$tkn_tenable_logs_vmware_server|s$ Nessus=$tkn_nessus_logs_vmware_server|s$ | fields - OS, OSVersion</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -489,6 +550,9 @@
           <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700B,"Absent":#BD0D00}</colorPalette>
         </format>
         <drilldown>
@@ -514,9 +578,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_mac">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_mac_assets">
-          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_mac|s$ Tenable=$tkn_tenable_logs_mac|s$</query>
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_mac|s$ Tenable=$tkn_tenable_logs_mac|s$ Nessus=$tkn_nessus_logs_mac|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -525,6 +596,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
@@ -550,9 +624,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_network">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_network_assets">
-          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_network|s$ Tenable=$tkn_tenable_logs_network|s$</query>
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_network|s$ Tenable=$tkn_tenable_logs_network|s$ Nessus=$tkn_nessus_logs_network|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -561,6 +642,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>
@@ -586,9 +670,16 @@
         <choice value="Absent">Absent</choice>
         <default>*</default>
       </input>
+      <input type="dropdown" token="tkn_nessus_logs_webserver">
+        <label>Nessus Data</label>
+        <choice value="*">All</choice>
+        <choice value="Present">Present</choice>
+        <choice value="Absent">Absent</choice>
+        <default>*</default>
+      </input>
       <table>
         <search base="search_webserver_assets">
-          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_webserver|s$ Tenable=$tkn_tenable_logs_webserver|s$</query>
+          <query>| search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_asset_state$ Qualys=$tkn_qualys_logs_webserver|s$ Tenable=$tkn_tenable_logs_webserver|s$ Nessus=$tkn_nessus_logs_webserver|s$</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -597,6 +688,9 @@
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <format type="color" field="Tenable">
+          <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
+        </format>
+        <format type="color" field="Nessus">
           <colorPalette type="map">{"Present":#00700b, "Absent":#bd0d00}</colorPalette>
         </format>
         <drilldown>

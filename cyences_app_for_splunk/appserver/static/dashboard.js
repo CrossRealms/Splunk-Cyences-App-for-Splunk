@@ -79,6 +79,5 @@ require([
 
     // Handles the multi-select option properly
     SplunkCommonUtilities.vSetupMultiSelectHandlerOnAll();
-    // TODO - Add this to release notes as this is major useful feature for user.
     // When user selects any item, it will automatically unselect "All" option. And when user selects "All" option then it will automatically unselect all other.
 });

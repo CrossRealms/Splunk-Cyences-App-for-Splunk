@@ -52,6 +52,8 @@ function(mvc, SplunkCommonUtilities){
                 unsetToken("tkn_show_hide_qualys");
                 setToken("tkn_tablefields_tenable", "");
                 unsetToken("tkn_show_hide_tenable");
+                setToken("tkn_tablefields_nessus", "");
+                unsetToken("tkn_show_hide_nessus");
                 setToken("tkn_tablefields_sophos", "");
                 unsetToken("tkn_show_hide_sophos");
                 setToken("tkn_tablefields_defender", "");
@@ -65,10 +67,11 @@ function(mvc, SplunkCommonUtilities){
             let lansweeper = results[0];
             let qualys = results[1];
             let tenable = results[2];
-            let sophos = results[3];
-            let defender = results[4];
-            let crowdstrike = results[5];
-            let kaspersky = results[6];
+            let nessus = results[3];
+            let sophos = results[4];
+            let defender = results[5];
+            let crowdstrike = results[6];
+            let kaspersky = results[7];
 
             if(lansweeper > 0){
                 setToken("tkn_tablefields_lansweeper", ", lansweeper");
@@ -95,6 +98,15 @@ function(mvc, SplunkCommonUtilities){
             else{
                 setToken("tkn_tablefields_tenable", "");
                 unsetToken("tkn_show_hide_tenable");
+            }
+
+            if(nessus > 0){
+                setToken("tkn_tablefields_nessus", ", nessus");
+                setToken("tkn_show_hide_nessus", "true");
+            }
+            else{
+                setToken("tkn_tablefields_nessus", "");
+                unsetToken("tkn_show_hide_nessus");
             }
 
             if(sophos > 0){
