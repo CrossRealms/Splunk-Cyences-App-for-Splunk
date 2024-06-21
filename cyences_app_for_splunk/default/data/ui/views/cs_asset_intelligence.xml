@@ -54,6 +54,7 @@
         <br/>VPN, Radius Authentication, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
         <br/>CrowdStrike -&gt; $tkn_show_hide_crowdstrike$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Kaspersky -&gt; $tkn_show_hide_kaspersky$ - $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>Splunk -&gt; $tkn_show_hide_splunk$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Sophos -&gt; $tkn_show_hide_sophos$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Windows Defender -&gt; $tkn_show_hide_defender$ - $tkn_filter_host_only$ - $tkn_filter_host_only_label$
       </html>
@@ -547,6 +548,20 @@
 | rename AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
           <earliest>$tkn_timeRange_av_windefender.earliest$</earliest>
           <latest>$tkn_timeRange_av_windefender.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$tkn_show_hide_splunk$">
+    <panel>
+      <title>Splunk Device Information - $tkn_filter_main_label$</title>
+      <table>
+        <search>
+          <query>| inputlookup cs_splunk_inventory | rename hostname as host | fillnull value="-" | search $tkn_filter_main$ | table host ip splunk_arch splunk_forwarder_type splunk_os splunk_version</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>

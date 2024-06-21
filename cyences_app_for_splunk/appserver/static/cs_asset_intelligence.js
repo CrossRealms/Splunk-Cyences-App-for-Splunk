@@ -63,6 +63,7 @@ function(mvc, SplunkCommonUtilities){
                 setToken("tkn_tablefields_kaspersky", "");
                 unsetToken("tkn_show_hide_kaspersky");
                 setToken("tkn_tablefields_splunk", "");
+                unsetToken("tkn_show_hide_splunk");
 
             }
             let results = data.rows[0];   // only one row of data is important for us
@@ -150,9 +151,11 @@ function(mvc, SplunkCommonUtilities){
 
             if(splunk > 0){
                 setToken("tkn_tablefields_splunk", ", splunk");
+                setToken("tkn_show_hide_splunk", "true");
             }
             else{
                 setToken("tkn_tablefields_splunk", "");
+                unsetToken("tkn_show_hide_splunk");
             }
         }
     ).searchById("show_hide_search");
