@@ -92,6 +92,14 @@ def upgrade_4_8_0(session_key, logger):
     time.sleep(60)
 
 
+def upgrade_4_9_0(session_key, logger):
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+
+    SPLUNK_DEVICES_CLEANUP_SEARCH = '| makeresults count=1 | eval time=now() | map search="| cyencesdevicemanager operation="cleanup" products_to_cleanup="Splunk Internal" minindextime=$time$"'
+    logger.info("Cleaning up the Splunk devices from the device inventory due to field names changes")
+    response = service.jobs.oneshot(SPLUNK_DEVICES_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -104,4 +112,5 @@ version_upgrade = (
     ('4.4.0', None),
     ('4.5.0', upgrade_4_5_0),
     ('4.8.0', upgrade_4_8_0),
+    ('4.9.0', upgrade_4_9_0),
 )
