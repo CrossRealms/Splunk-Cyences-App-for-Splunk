@@ -128,11 +128,11 @@
       <table>
         <title>From $flow_map_viz-from$ To $flow_map_viz-to$</title>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND All_Traffic.src_ip="$flow_map_viz-from$*" AND All_Traffic.dest_ip="$flow_map_viz-to$*" by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND All_Traffic.src_ip="$flow_map_viz-from$*" AND All_Traffic.dest_ip="$flow_map_viz-to$*" by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -147,11 +147,11 @@
       <table>
         <title>Subnet = $flow_map_viz-node$</title>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND (All_Traffic.src_ip="$flow_map_viz-node$*" OR All_Traffic.dest_ip="$flow_map_viz-node$*") by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND (All_Traffic.src_ip="$flow_map_viz-node$*" OR All_Traffic.dest_ip="$flow_map_viz-node$*") by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -165,11 +165,11 @@
       <title>All Internal Traffic</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -280,24 +280,24 @@
       <title>Vulnerable Internal Traffic</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, values(host) as host from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | append 
     [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
     | makemv ip delim="~~" 
-    | stats count by ip port 
+    | stats count, values(signature) as signature by ip port 
     | eval is_vul = 1 ] 
 | eval existing = 1 
 | appendpipe 
     [| eval src_ip = coalesce(ip, src_ip), src_port = coalesce(port, src_port) 
     | eval single_field1 = dest_ip."#".dest_port."#".action."#".total_bytes."#".total_packets 
-    | stats count, values(single_field1) as single_field1, values(is_vul) as is_src_vul by src_ip src_port] 
+    | stats count, values(host) as host, values(signature) as signature, values(single_field1) as single_field1, values(is_vul) as is_src_vul by src_ip src_port] 
 | appendpipe 
     [| where existing=1 
     | eval dest_ip = coalesce(ip, dest_ip), dest_port = coalesce(port, dest_port) 
     | eval single_field2 = src_ip."#".src_port."#".action."#".total_bytes."#".total_packets 
-    | stats count, values(single_field2) as single_field2, values(is_vul) as is_dest_vul by dest_ip dest_port] 
+    | stats count, values(host) as host, values(signature) as signature, values(single_field2) as single_field2, values(is_vul) as is_dest_vul by dest_ip dest_port] 
 | search (single_field1=* OR single_field2=*) (is_src_vul=* OR is_dest_vul=*)
 | mvexpand single_field1 
 | mvexpand single_field2 
@@ -306,10 +306,10 @@
 | sort 0 -action, -total_bytes 
 | eval total_KB = round(total_bytes/1024, 2) 
 | eval total_k_packets = round(total_packets/1000,1)
-| table src_ip src_port is_src_vul dest_ip dest_port is_dest_vul action total_KB total_k_packets
-| appendpipe [| where is_src_vul=1 | stats values(is_src_vul) as is_src_vul, values(dest_ip) as dest_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(dest_port) as no_dest_ports by src_ip, src_port, action | eval is_new=1]
-| appendpipe [| where is_dest_vul=1 | stats values(is_dest_vul) as is_dest_vul, values(src_ip) as src_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(src_port) as no_src_ports by dest_ip, dest_port, action | eval is_new=1]
-| where is_new=1 | fields - is_new</query>
+| table host src_ip src_port is_src_vul dest_ip dest_port is_dest_vul action total_KB total_k_packets signature
+| appendpipe [| where is_src_vul=1 | stats values(host) as reporting_device_ip, values(is_src_vul) as is_src_vul, values(dest_ip) as dest_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(dest_port) as no_dest_ports, values(signature) as signature by src_ip, src_port, action | eval is_new=1]
+| appendpipe [| where is_dest_vul=1 | stats values(host) as reporting_device_ip, values(is_dest_vul) as is_dest_vul, values(src_ip) as src_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(src_port) as no_src_ports, values(signature) as signature by dest_ip, dest_port, action | eval is_new=1]
+| where is_new=1 | fields - is_new, host</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
