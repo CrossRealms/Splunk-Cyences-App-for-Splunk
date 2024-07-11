@@ -46,7 +46,7 @@ It is populated from a lookup which is built by scheduled reports. The lookup is
 * Qualys
 * Sophos Endpoint Protection
 * Tenable
-* Nessus:Pro
+* Nessus:Pro (Nessus Professional)
 * Windows Defender
 * Kaspersky
 * Splunk Internal Logs
