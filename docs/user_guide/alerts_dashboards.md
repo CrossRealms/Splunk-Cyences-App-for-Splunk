@@ -222,8 +222,6 @@ There are several security related alerts to choose from and they are all locate
 * Alerts:
     * Email - Daily Spam Email 
     * Email - Hourly Increase in Emails Over Baseline
-    * Email - Suspicious Subject or Attachment
-    * Email - With Known Abuse Web Service Link
 
 
 ## Network Devices
@@ -295,9 +293,11 @@ The Cyences app utilizes the data provided by the aforementioned vendor products
 The Vulnerability dashboard is designed to view the vulnerability count by severity, new vulnerabilities found over time, a vulnerability summary based on host(s), and a list of vulnerabilities. Splunk users can further use the drilldown capability to view a vulnerability list for a single host or a list of hosts affected by a vulnerability.
 
 Dashboard panels:
-* New Vulnerability Found Over Time
+* New Unique Vulnerability Found Over Time
+* New Total Vulnerability Found Over Time
 * Vulnerabilities
-* Vulnerability Count By Severity
+* Unique Vulnerability Count By Severity
+* Total Vulnerability Count By Severity
 
 ![alt]({{ site.baseurl }}/assets/vulnerability_dashboard.png)
 
@@ -311,6 +311,8 @@ Dashboard panels:
     * Windows - Windows Firewall is Disabled
     * Windows - Certificate is Expiring Soon
 * Dashboard panels:
+    * Successful Login Events
+    * Failed Login Attempts by User
     * Windows Users and Privileges
     * Privileged Service Accessed
     * Operation Attempted on Privileged Object 
@@ -333,6 +335,7 @@ Dashboard panels:
     * AD - Password Change Outside Working Hour 
     * AD - User Changed
     * AD - User Locked Out
+    * AD - Login Failure due to Password Expired
 * Dashboard panels:
     * AD - Group Changed
     * AD - Group Membership Changed
@@ -373,7 +376,6 @@ Dashboard panels:
     * Ransomware - Scheduled tasks used in BadRabbit ransomware 
     * Ransomware - Spike in File Writes
     * Ransomware - Windows - Windows Event Log Cleared
-    * Ransomware - Endpoint Compromise - Malicious Package Found
 
 
 ## Lansweeper (asset management tool)
