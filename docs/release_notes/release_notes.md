@@ -15,9 +15,13 @@ has_children: true
 
 * Added checkbox on alert page to prevent the alert state from being updated from the Cyences setup page. Check the upgrade guide for more details.
 
-* Added the following panels for user login activity on the **Windows** dashboard.
+* Added the following panels for user login activity on the **Windows** dashboard:
     * Successful Login Events
     * Failed Login Attempts by User
+
+* Added the following panels to the **Vulnerability** dahboard:
+    * Total Vulnerability Count By Severity
+    * New Total Vulnerability Found Over Time
 
 * Added a separate alert for password expired events called **AD - Login Failure due to Password Expired** and filtered out the password expired events from authentication alerts.
 
@@ -44,10 +48,6 @@ has_children: true
     * #### Network Telemetry dashboard
         * Added filter to search port number.
         * Added reporting device IP information as well as vulnerability information for the vulnerable traffic.
-
-    * Added the following panels to the **Vulnerability** dahboard:
-        * Total Vulnerability Count By Severity
-        * New Total Vulnerability Found Over Time
 
     * Enhanced the **O365 - OneDrive or SharePoint File Sharing with External User** and **O365 - OneDrive or SharePoint Link Accessed By External User** alerts to get accurate results.
 
