@@ -108,7 +108,6 @@ require([
             new SplunkCommonUtilities.VSearchManagerUtility(
                 function(results){
                     if (results != null) {
-                        // TODO - read through the output of the results and validate the custom command was successful.
                         searchesCompleted[i] = true;
                     }
                 },

@@ -30,6 +30,10 @@
       <label>IP Address</label>
       <default>*</default>
     </input>
+    <input type="text" token="tkn_port" searchWhenChanged="true">
+      <label>Port Number</label>
+      <default>*</default>
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -57,7 +61,7 @@
       <title>All Internal Traffic</title>
       <viz type="flow_map_viz.flow_map_viz">
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)`AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)`AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | rex field=src_ip "(?&lt;src_subnet&gt;\d+\.\d+\.\d+)\.\d+"
 | rex field=dest_ip "(?&lt;dest_subnet&gt;\d+\.\d+\.\d+)\.\d+"
@@ -124,11 +128,11 @@
       <table>
         <title>From $flow_map_viz-from$ To $flow_map_viz-to$</title>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ AND All_Traffic.src_ip="$flow_map_viz-from$*" AND All_Traffic.dest_ip="$flow_map_viz-to$*" by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND All_Traffic.src_ip="$flow_map_viz-from$*" AND All_Traffic.dest_ip="$flow_map_viz-to$*" by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -143,11 +147,11 @@
       <table>
         <title>Subnet = $flow_map_viz-node$</title>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ AND (All_Traffic.src_ip="$flow_map_viz-node$*" OR All_Traffic.dest_ip="$flow_map_viz-node$*") by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ AND (All_Traffic.src_ip="$flow_map_viz-node$*" OR All_Traffic.dest_ip="$flow_map_viz-node$*") by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -161,11 +165,11 @@
       <title>All Internal Traffic</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, dc(All_Traffic.src_port) as no_src_port, dc(All_Traffic.dest_port) as no_dest_port, values(host) as reporting_device_ip from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval total_MB = round(total_bytes/1024/1024, 2) 
 | eval total_k_packets = round(total_packets/1000)
-| table src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
+| table reporting_device_ip src_ip no_src_port dest_ip no_dest_port action total_MB total_k_packets</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -179,7 +183,7 @@
       <title>All Inbound Traffic</title>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval color=if(action="allowed", "Allowed", "Other") 
 | eval total_MB = round(total_bytes/1024/1024)
@@ -194,7 +198,7 @@
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.dest_ip)%20dest_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.dest_ip)%20dest_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20(All_Traffic.dest_port%3D$tkn_port$%20OR%20All_Traffic.src_port%3D$tkn_port$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
     </panel>
@@ -202,7 +206,7 @@
       <title>All Outbound Traffic</title>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | eval color=if(action="allowed", "Allowed", "Other") 
 | eval total_MB = round(total_bytes/1024/1024)
@@ -217,7 +221,7 @@
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.src_ip)%20as%20src_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.dest_ip%2C%20All_Traffic.action%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%2C%20values(All_Traffic.src_ip)%20as%20src_ip%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20(All_Traffic.dest_port%3D$tkn_port$%20OR%20All_Traffic.src_port%3D$tkn_port$)%20$tkn_action$%20by%20All_Traffic.dest_ip%2C%20All_Traffic.action%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
     </panel>
@@ -227,7 +231,7 @@
       <title>Port Scanning Attempts</title>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` dc(All_Traffic.dest_port) as dc_port from datamodel=Network_Traffic where (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)` | search `cs_filter_private_ips`
+          <query>| tstats `cs_summariesonly_network_traffic` dc(All_Traffic.dest_port) as dc_port from datamodel=Network_Traffic where (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip | `drop_dm_object_name(All_Traffic)` | search `cs_filter_private_ips`
 | where dc_port&gt;=`cs_network_scanning_min_dc_ports`
 | `cs_network_scanning_map_filter`
 | iplocation src_ip
@@ -241,7 +245,7 @@
         <option name="mapping.seriesColors">[#B83C08]</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20dc(All_Traffic.dest_port)%20as%20dc_port%20from%20datamodel%3DNetwork_Traffic%20where%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20$tkn_action$%20by%20All_Traffic.src_ip%20%7C%20%60drop_dm_object_name(All_Traffic)%60%20%7C%20search%20%60cs_filter_private_ips%60%0A%7C%20where%20dc_port%3E%3D%60cs_network_scanning_min_dc_ports%60%0A%7C%20%60cs_network_scanning_map_filter%60%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20dc(All_Traffic.dest_port)%20as%20dc_port%20from%20datamodel%3DNetwork_Traffic%20where%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20(All_Traffic.dest_port%3D$tkn_port$%20OR%20All_Traffic.src_port%3D$tkn_port$)%20AND%20$tkn_action$%20by%20All_Traffic.src_ip%20%7C%20%60drop_dm_object_name(All_Traffic)%60%20%7C%20search%20%60cs_filter_private_ips%60%0A%7C%20where%20dc_port%3E%3D%60cs_network_scanning_min_dc_ports%60%0A%7C%20%60cs_network_scanning_map_filter%60%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
       <html>
@@ -276,24 +280,24 @@
       <title>Vulnerable Internal Traffic</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets, values(host) as host from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.src_port, All_Traffic.dest_port All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | append 
     [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
     | makemv ip delim="~~" 
-    | stats count by ip port 
+    | stats count, values(signature) as signature by ip port 
     | eval is_vul = 1 ] 
 | eval existing = 1 
 | appendpipe 
     [| eval src_ip = coalesce(ip, src_ip), src_port = coalesce(port, src_port) 
     | eval single_field1 = dest_ip."#".dest_port."#".action."#".total_bytes."#".total_packets 
-    | stats count, values(single_field1) as single_field1, values(is_vul) as is_src_vul by src_ip src_port] 
+    | stats count, values(host) as host, values(signature) as signature, values(single_field1) as single_field1, values(is_vul) as is_src_vul by src_ip src_port] 
 | appendpipe 
     [| where existing=1 
     | eval dest_ip = coalesce(ip, dest_ip), dest_port = coalesce(port, dest_port) 
     | eval single_field2 = src_ip."#".src_port."#".action."#".total_bytes."#".total_packets 
-    | stats count, values(single_field2) as single_field2, values(is_vul) as is_dest_vul by dest_ip dest_port] 
+    | stats count, values(host) as host, values(signature) as signature, values(single_field2) as single_field2, values(is_vul) as is_dest_vul by dest_ip dest_port] 
 | search (single_field1=* OR single_field2=*) (is_src_vul=* OR is_dest_vul=*)
 | mvexpand single_field1 
 | mvexpand single_field2 
@@ -302,10 +306,10 @@
 | sort 0 -action, -total_bytes 
 | eval total_KB = round(total_bytes/1024, 2) 
 | eval total_k_packets = round(total_packets/1000,1)
-| table src_ip src_port is_src_vul dest_ip dest_port is_dest_vul action total_KB total_k_packets
-| appendpipe [| where is_src_vul=1 | stats values(is_src_vul) as is_src_vul, values(dest_ip) as dest_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(dest_port) as no_dest_ports by src_ip, src_port, action | eval is_new=1]
-| appendpipe [| where is_dest_vul=1 | stats values(is_dest_vul) as is_dest_vul, values(src_ip) as src_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(src_port) as no_src_ports by dest_ip, dest_port, action | eval is_new=1]
-| where is_new=1 | fields - is_new</query>
+| table host src_ip src_port is_src_vul dest_ip dest_port is_dest_vul action total_KB total_k_packets signature
+| appendpipe [| where is_src_vul=1 | stats values(host) as reporting_device_ip, values(is_src_vul) as is_src_vul, values(dest_ip) as dest_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(dest_port) as no_dest_ports, values(signature) as signature by src_ip, src_port, action | eval is_new=1]
+| appendpipe [| where is_dest_vul=1 | stats values(host) as reporting_device_ip, values(is_dest_vul) as is_dest_vul, values(src_ip) as src_ips, sum(total_KB) as total_KB, sum(total_k_packets) as total_k_packets, dc(src_port) as no_src_ports, values(signature) as signature by dest_ip, dest_port, action | eval is_new=1]
+| where is_new=1 | fields - is_new, host</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -319,7 +323,7 @@
       <title>Inbound Traffic on Vulnerable Port</title>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.dest_ip)` AND `cs_public_ips(All_Traffic.src_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.dest_port, All_Traffic.action
 | `drop_dm_object_name(All_Traffic)` 
 | append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND port!="0" AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
@@ -342,7 +346,7 @@
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.dest_ip%2C%20All_Traffic.dest_port%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20port!%3D%220%22%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0A%20%20%20%20%7C%20rename%20ip%20as%20dest_ip%2C%20port%20as%20dest_port%5D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20dest_ip%2C%20dest_port%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0A%7C%20stats%20values(dest_ip)%20as%20dest_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20src_ip%2C%20action%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.dest_ip)%60%20AND%20%60cs_public_ips(All_Traffic.src_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20(All_Traffic.dest_port%3D$tkn_port$%20OR%20All_Traffic.src_port%3D$tkn_port$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.dest_ip%2C%20All_Traffic.dest_port%2C%20All_Traffic.action%20%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20port!%3D%220%22%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0A%20%20%20%20%7C%20rename%20ip%20as%20dest_ip%2C%20port%20as%20dest_port%5D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20dest_ip%2C%20dest_port%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0A%7C%20stats%20values(dest_ip)%20as%20dest_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20src_ip%2C%20action%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0A%7C%20iplocation%20src_ip%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
       <html>
@@ -387,7 +391,7 @@
       <title>Outbound Traffic from Vulnerable Machine</title>
       <map>
         <search>
-          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.src_port, All_Traffic.dest_ip, All_Traffic.action 
+          <query>| tstats `cs_summariesonly_network_traffic` sum(All_Traffic.bytes) as total_bytes from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_public_ips(All_Traffic.dest_ip)` AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.src_port, All_Traffic.dest_ip, All_Traffic.action 
 | `drop_dm_object_name(All_Traffic)` 
 | append [| inputlookup cs_all_vuln where (status="open" OR status="reopened") AND ($tkn_vul_severity$)
     | lookup cs_all_assets asset_id as dest_id output asset_ip as ip 
@@ -410,7 +414,7 @@
         <option name="mapping.type">marker</option>
         <option name="refresh.display">progressbar</option>
         <drilldown>
-          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.src_port%2C%20All_Traffic.dest_ip%2C%20All_Traffic.action%20%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0D%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0D%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0D%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0D%0A%20%20%20%20%7C%20rename%20ip%20as%20src_ip%2C%20port%20as%20src_port%5D%0D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20src_ip%2C%20src_port%0D%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0D%0A%7C%20stats%20values(src_ip)%20as%20src_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20dest_ip%2C%20action%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+          <link target="_blank">search?q=%7C%20tstats%20%60cs_summariesonly_network_traffic%60%20sum(All_Traffic.bytes)%20as%20total_bytes%20from%20datamodel%3DNetwork_Traffic%20where%20%60cs_private_ips(All_Traffic.src_ip)%60%20AND%20%60cs_public_ips(All_Traffic.dest_ip)%60%20AND%20(All_Traffic.dest_ip%3D$tkn_ip$%20OR%20All_Traffic.src_ip%3D$tkn_ip$)%20AND%20(All_Traffic.dest_port%3D$tkn_port$%20OR%20All_Traffic.src_port%3D$tkn_port$)%20$tkn_action$%20by%20All_Traffic.src_ip%2C%20All_Traffic.src_port%2C%20All_Traffic.dest_ip%2C%20All_Traffic.action%20%0D%0A%7C%20%60drop_dm_object_name(All_Traffic)%60%20%0D%0A%7C%20append%20%5B%7C%20inputlookup%20cs_all_vuln%20where%20(status%3D%22open%22%20OR%20status%3D%22reopened%22)%20AND%20((severity%3D%22critical%22%20OR%20severity%3D%22high%22%20OR%20severity%3D%22medium%22))%20%0D%0A%20%20%20%20%7C%20lookup%20cs_all_assets%20asset_id%20as%20dest_id%20output%20asset_ip%20as%20ip%20%0D%0A%20%20%20%20%7C%20makemv%20ip%20delim%3D%22~~%22%20%0D%0A%20%20%20%20%7C%20stats%20count%20as%20vul%20by%20ip%20port%20%0D%0A%20%20%20%20%7C%20rename%20ip%20as%20src_ip%2C%20port%20as%20src_port%5D%0D%0A%7C%20eventstats%20first(vul)%20as%20vul%20by%20src_ip%2C%20src_port%0D%0A%7C%20search%20vul%3D*%20total_bytes%3D*%0D%0A%7C%20stats%20values(src_ip)%20as%20src_ips%2C%20sum(total_bytes)%20as%20total_bytes%20by%20dest_ip%2C%20action%0D%0A%7C%20eval%20total_MB%20%3D%20round(total_bytes%2F1024%2F1024%2C%202)%0D%0A%7C%20iplocation%20dest_ip%20%0D%0A%7C%20search%20lat%3E%3D$click.bounds.south$%20lat%3C$click.bounds.north$%20lon%3E%3D$click.bounds.west$%20lon%3C$click.bounds.east$&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
         </drilldown>
       </map>
       <html>

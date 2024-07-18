@@ -13,23 +13,25 @@
     <latest>now</latest>
   </search>
   <search base="base_inventory_table">
-    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike,sum(kaspersky_last_event) as field_kaspersky
-| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", ""), field_kaspersky=if(field_kaspersky&gt;0, ", kaspersky", "")</query>
+    <query>| stats sum(lansweeper_last_event) as field_lansweeper, sum(qualys_last_event) as field_qualys, sum(tenable_last_event) as field_tenable, sum(nessus_last_event) as field_nessus, sum(sophos_last_event) as field_sophos, sum(defender_last_event) as field_defender, sum(crowdstrike_last_event) as field_crowdstrike,sum(kaspersky_last_event) as field_kaspersky,sum(splunk_last_event) as field_splunk
+| eval field_lansweeper=if(field_lansweeper&gt;0, ", lansweeper", ""), field_qualys=if(field_qualys&gt;0, ", qualys", ""), field_tenable=if(field_tenable&gt;0, ", tenable", ""), field_nessus=if(field_nessus&gt;0, ", nessus", ""), field_sophos=if(field_sophos&gt;0, ", sophos", ""), field_defender=if(field_defender&gt;0, ", defender", ""), field_crowdstrike=if(field_crowdstrike&gt;0, ", crowdstrike", ""), field_kaspersky=if(field_kaspersky&gt;0, ", kaspersky", ""), field_splunk=if(field_splunk&gt;0, ", splunk", "")</query>
     <done>
       <set token="tkn_tablefields_lansweeper">$result.field_lansweeper$</set>
       <set token="tkn_tablefields_qualys">$result.field_qualys$</set>
       <set token="tkn_tablefields_tenable">$result.field_tenable$</set>
+      <set token="tkn_tablefields_nessus">$result.field_nessus$</set>
       <set token="tkn_tablefields_sophos">$result.field_sophos$</set>
       <set token="tkn_tablefields_defender">$result.field_defender$</set>
       <set token="tkn_tablefields_crowdstrike">$result.field_crowdstrike$</set>
       <set token="tkn_tablefields_kaspersky">$result.field_kaspersky$</set>
+      <set token="tkn_tablefields_splunk">$result.field_splunk$</set>
     </done>
   </search>
   <search id="base_summary">
     <query>| cyencesdevicemanager operation="getdevices" 
 | table product_names 
-| stats count as Total, sum(eval(if(product_names="Lansweeper", 1, 0))) as Lansweeper, sum(eval(if(product_names="Splunk Internal", 1, 0))) as Splunk, sum(eval(if(product_names="Qualys", 1, 0))) as Qualys, sum(eval(if(product_names="Tenable", 1, 0))) as Tenable, sum(eval(if(product_names="Windows Defender", 1, 0))) as Defender, sum(eval(if((product_names="Sophos Endpoint Protection"), 1, 0))) as Sophos, sum(eval(if(product_names="CrowdStrike", 1, 0))) as CrowdStrike, sum(eval(if(product_names="Kaspersky", 1, 0))) as Kaspersky, sum(eval(if(((product_names="Lansweeper") AND (product_names="Splunk Internal") AND ((product_names="Qualys") OR (product_names="Tenable")) AND ((product_names="Windows Defender") OR (product_names="Sophos Endpoint Protection") OR (product_names="CrowdStrike") OR (product_names="Kaspersky"))), 1, 0))) as All, sum(eval(if(((product_names="Qualys") OR (product_names="Tenable")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((product_names="Windows Defender") OR (product_names="Sophos Endpoint Protection") OR (product_names="CrowdStrike")OR (product_names="Kaspersky")), 1, 0))) as Antivirus
-| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Kaspersky=Total-Kaspersky, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner, No_Splunk=Total-Splunk</query>
+| stats count as Total, sum(eval(if(product_names="Lansweeper", 1, 0))) as Lansweeper, sum(eval(if(product_names="Splunk Internal", 1, 0))) as Splunk, sum(eval(if(product_names="Qualys", 1, 0))) as Qualys, sum(eval(if(product_names="Tenable", 1, 0))) as Tenable, sum(eval(if(product_names="Nessus", 1, 0))) as Nessus, sum(eval(if(product_names="Windows Defender", 1, 0))) as Defender, sum(eval(if((product_names="Sophos Endpoint Protection"), 1, 0))) as Sophos, sum(eval(if(product_names="CrowdStrike", 1, 0))) as CrowdStrike, sum(eval(if(product_names="Kaspersky", 1, 0))) as Kaspersky, sum(eval(if(((product_names="Lansweeper") AND (product_names="Splunk Internal") AND ((product_names="Qualys") OR (product_names="Tenable") OR (product_names="Nessus")) AND ((product_names="Windows Defender") OR (product_names="Sophos Endpoint Protection") OR (product_names="CrowdStrike") OR (product_names="Kaspersky"))), 1, 0))) as All, sum(eval(if(((product_names="Qualys") OR (product_names="Tenable") OR (product_names="Nessus")), 1, 0))) as Vulnerability_Scanner, sum(eval(if(((product_names="Windows Defender") OR (product_names="Sophos Endpoint Protection") OR (product_names="CrowdStrike")OR (product_names="Kaspersky")), 1, 0))) as Antivirus
+| eval No_Lansweeper=Total-Lansweeper, No_Qualys=Total-Qualys, No_Tenable=Total-Tenable, No_Nessus=Total-Nessus, No_Sophos=Total-Sophos, No_Defender=Total-Defender, No_CrowdStrike=Total-CrowdStrike, No_Kaspersky=Total-Kaspersky, No_Antivirus=Total-Antivirus, No_Vulnerability_Scanner=Total-Vulnerability_Scanner, No_Splunk=Total-Splunk</query>
     <earliest>0</earliest>
     <latest>now</latest>
   </search>
@@ -41,7 +43,7 @@
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos Endpoint Protection", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory - Kaspersky", "Device Inventory - Splunk Internal", "Device Inventory Backfill", "Device Inventory Lookup CleanUp", "Device Inventory Merge Similar Devices") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("Device Inventory - Lansweeper", "Device Inventory - Tenable", "Device Inventory - Tenable Vuln", "Device Inventory - Nessus", "Device Inventory - Nessus Vuln", "Device Inventory - Qualys", "Device Inventory - Sophos Endpoint Protection", "Device Inventory - Windows Defender", "Device Inventory - CrowdStrike", "Device Inventory - Kaspersky", "Device Inventory - Splunk Internal", "Device Inventory Backfill", "Device Inventory Lookup CleanUp", "Device Inventory Merge Similar Devices") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
@@ -78,7 +80,7 @@
       <chart>
         <title>Number of Devices That Are Connected To A Specific Security Component</title>
         <search base="base_summary">
-          <query>| table Total, Lansweeper, Qualys, Tenable, Sophos, Defender, CrowdStrike, Kaspersky, Splunk | transpose 0 | where 'row 1'!=0 | transpose 0 header_field=column | fields - column</query>
+          <query>| table Total, Lansweeper, Qualys, Tenable, Nessus, Sophos, Defender, CrowdStrike, Kaspersky, Splunk | transpose 0 | where 'row 1'!=0 | transpose 0 header_field=column | fields - column</query>
         </search>
         <option name="charting.chart">bar</option>
         <option name="charting.chart.showDataLabels">all</option>
@@ -94,6 +96,9 @@
           <condition match="$click.name2$ == &quot;Tenable&quot;">
             <set token="tkn_sp_filter">tenable_last_event=*</set>
           </condition>
+          <condition match="$click.name2$ == &quot;Nessus&quot;">
+            <set token="tkn_sp_filter">nessus_last_event=*</set>
+          </condition>
           <condition match="$click.name2$ == &quot;Sophos&quot;">
             <set token="tkn_sp_filter">sophos_last_event=*</set>
           </condition>
@@ -107,7 +112,7 @@
             <set token="tkn_sp_filter">kaspersky_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Splunk&quot;">
-            <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
+            <set token="tkn_sp_filter">splunk_last_event=*</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -133,19 +138,19 @@
         <option name="refresh.display">progressbar</option>
         <drilldown>
           <condition match="$click.name2$ == &quot;All&quot;">
-            <set token="tkn_sp_filter">((lansweeper_last_event=*) AND (product_names="Splunk Internal") AND (tenable_last_event=* OR qualys_last_event=*) AND (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*))</set>
+            <set token="tkn_sp_filter">((lansweeper_last_event=*) AND (splunk_last_event=*) AND (tenable_last_event=* OR nessus_last_event=* OR qualys_last_event=*) AND (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*))</set>
           </condition>
           <condition match="$click.name2$ == &quot;Lansweeper&quot;">
             <set token="tkn_sp_filter">lansweeper_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;Vulnerability_Scanner&quot;">
-            <set token="tkn_sp_filter">(tenable_last_event=* OR qualys_last_event=*)</set>
+            <set token="tkn_sp_filter">(tenable_last_event=* OR nessus_last_event=* OR qualys_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;Antivirus&quot;">
             <set token="tkn_sp_filter">(sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;Splunk&quot;">
-            <set token="tkn_sp_filter">product_names="Splunk Internal"</set>
+            <set token="tkn_sp_filter">splunk_last_event=*</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -154,7 +159,7 @@
       </chart>
       <html>
         <p>
-          <b>Description</b>: Each bar represents the total number of devices that are connected to a particular security component. The Lansweeper bar displays the number of devices that have Lansweeper. The Vulnerability Scanner bar displays the number of devices that have either Qualys or Tenable. The Antivirus bar displays the number of devices that have CrowdStrike, Kaspersky, Defender, or Sophos.</p>
+          <b>Description</b>: Each bar represents the total number of devices that are connected to a particular security component. The Lansweeper bar displays the number of devices that have Lansweeper. The Vulnerability Scanner bar displays the number of devices that have either Qualys, Tenable or Nessus. The Antivirus bar displays the number of devices that have CrowdStrike, Kaspersky, Defender, or Sophos.</p>
       </html>
     </panel>
     <panel>
@@ -172,13 +177,13 @@
             <set token="tkn_sp_filter">NOT lansweeper_last_event=*</set>
           </condition>
           <condition match="$click.name2$ == &quot;No_Vulnerability_Scanner&quot;">
-            <set token="tkn_sp_filter">NOT (tenable_last_event=* OR qualys_last_event=*)</set>
+            <set token="tkn_sp_filter">NOT (tenable_last_event=* OR nessus_last_event=* OR qualys_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;No_Antivirus&quot;">
             <set token="tkn_sp_filter">NOT (sophos_last_event=* OR defender_last_event=* OR crowdstrike_last_event=* OR kaspersky_last_event=*)</set>
           </condition>
           <condition match="$click.name2$ == &quot;No_Splunk&quot;">
-            <set token="tkn_sp_filter">NOT (product_names="Splunk Internal")</set>
+            <set token="tkn_sp_filter">NOT (splunk_last_event=*)</set>
           </condition>
           <condition>
             <set token="tkn_sp_filter">()</set>
@@ -187,7 +192,7 @@
       </chart>
       <html>
         <p>
-          <b>Description</b>: Each bar represents the total number of devices that lack a particular security component. The Lansweeper bar displays the number of devices where Lansweeper is absent. The Vulnerability Scanner displays the number of devices where Qualys or Tenable are absent. The Antivirus bar displays the number of devices that lack the following antivirus software: CrowdStrike, Kaspersky, Defender, and Sophos.</p>
+          <b>Description</b>: Each bar represents the total number of devices that lack a particular security component. The Lansweeper bar displays the number of devices where Lansweeper is absent. The Vulnerability Scanner displays the number of devices where Qualys, Tenable or Nessus are absent. The Antivirus bar displays the number of devices that lack the following antivirus software: CrowdStrike, Kaspersky, Defender, and Sophos.</p>
       </html>
     </panel>
   </row>
@@ -248,9 +253,9 @@
       </html>
       <table id="device_inventory_table">
         <search base="base_inventory_table">
-          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
+          <query>search $tkn_sp_filter$ | table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$ tmp_* ip_drilldown hostname_drilldown user_drilldown | search $tkn_host$ $tkn_ip$ $tkn_user$ $tkn_mac$</query>
         </search>
-        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$</fields>
+        <fields>uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$</fields>
         <option name="drilldown">row</option>
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
@@ -261,6 +266,9 @@
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="nessus">
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
@@ -279,6 +287,9 @@
         <format type="color" field="kaspersky">
           <colorPalette type="map">{"Present": #008000, "-": #363030, "Disabled" : #B83C08}</colorPalette>
         </format>
+        <format type="color" field="splunk">
+          <colorPalette type="map">{"uf": #008000, "full" : #008000, "-": #363030}</colorPalette>
+        </format>
         <drilldown>
           <link target="_blank">/app/cyences_app_for_splunk/cs_asset_intelligence?form.tkn_ip_tmp=$row.ip_drilldown$&amp;form.tkn_host_tmp=$row.hostname_drilldown$&amp;form.tkn_user_tmp=$row.user_drilldown$</link>
         </drilldown>
@@ -294,7 +305,7 @@
           <li>Blue = Low severity (level 2)</li>
           <li>Green = No active vulnerabilities (Info level is not considered)</li>
         </ul>
-        <p>Tenable Status</p>
+        <p>Tenable/Nessus Status</p>
         <ul>
           <li>Red = Urgent severity</li>
           <li>Orange = High severity</li>
@@ -316,7 +327,7 @@
           <!-- When second_bit_in_mac_binary (from first part of mac_address) is 1 that is locally administratored mac_address, we'll filter those mac_address from showing. -->
           <query>| cyencesdevicemanager operation="getdevices" 
 | table * 
-| eval ip_all=mvjoin(ips, ","), mac_address_all=mvjoin(mac_addresses, ",") 
+| eval ip_all=mvjoin(ips, ","), mac_address_all=mvjoin(mac_addresses, ",") , hostnames_all=mvjoin(hostnames, ",") 
 | multireport 
     [| stats values(*) as * by mac_addresses 
     | where isnotnull(mac_addresses) AND mac_addresses!="" AND mac_addresses!=" " 
@@ -332,14 +343,22 @@
     | eval second_bit_in_mac_binary=mvindex(binary,1) 
     | where second_bit_in_mac_binary=0 
     | eval Type="Mac Address Matches", ips="" 
-    | table Type, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
+    | table Type, mac_addresses, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids] 
     [| stats values(*) as * by ips 
     | where isnotnull(ips) AND ips!="" AND ips!=" " 
     | eval no_uuids=mvcount(uuid) 
     | where no_uuids&gt;1 
     | eval Type="IP Matches", mac_addresses="" 
-    | table Type, ips, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids] 
-| table Type, ips, mac_addresses, uuid, no_uuids, hostnames, ip_all, mac_address_all, product_uuids
+    | table Type, ips, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids] 
+    [| stats values(*) as * by hostnames 
+    | where isnotnull(hostnames) AND hostnames!="" AND hostnames!=" " 
+    | removepostfixes postfix_macro_name="cs_device_inventory_hostname_postfixes" field_to_check="hostnames" 
+    | stats values(*) as * by hostnames 
+    | eval no_uuids=mvcount(uuid) 
+    | where no_uuids&gt;1 
+    | eval Type="Hostname Matches" 
+    | table Type, hostnames, uuid, no_uuids,hostnames_all, ip_all, mac_address_all, product_uuids] 
+| table Type, hostnames, ips, mac_addresses, uuid, no_uuids, hostnames_all, ip_all, mac_address_all, product_uuids 
 | sort - no_uuids</query>
           <earliest>0</earliest>
           <latest></latest>

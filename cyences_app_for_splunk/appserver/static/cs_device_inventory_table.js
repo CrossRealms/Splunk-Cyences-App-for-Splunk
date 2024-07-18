@@ -179,6 +179,10 @@ require([
                     | rename time as tenable_last_event, created_at as tenable_created_at, first_seen as tenable_first_seen, last_seen as tenable_last_seen 
                     | fields - ip, hostname, mac_address] 
                 | append 
+                    [| inputlookup cs_nessus_inventory
+                    | rename time as nessus_last_event, created_at as nessus_created_at, first_seen as nessus_first_seen, last_seen as nessus_last_seen 
+                    | fields - ip, hostname, mac_address] 
+                | append 
                     [| inputlookup cs_qualys_inventory
                     | rename time as qualys_last_event 
                     | fields - ip, hostname, mac_address] 
@@ -197,6 +201,10 @@ require([
                 | append 
                     [| inputlookup cs_kaspersky_inventory
                     | rename time as kaspersky_last_event 
+                    | fields - ip, hostname, mac_address] 
+                | append 
+                    [| inputlookup cs_splunk_inventory
+                    | rename time as splunk_last_event 
                     | fields - ip, hostname, mac_address] ] 
             | stats values(*) as * by uuid 
             | eval lansweeper_os=coalesce(lansweeper_os, AssetType." ".OSVersion." ".AssetVersion) 
@@ -205,7 +213,7 @@ require([
             | eval _time=strftime(latest_time, "%F %T") 
             | eval Select="CHECKBOX_THIS_".uuid 
             | rename ips as ip, hostnames as hostname, mac_addresses as mac_address
-            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_id,kaspersky_collected_by,kaspersky_version,kaspersky_host, kaspersky_status windows_defender_host 
+            | table uuid, Select, _time, ip, hostname, mac_address, lansweeper_id, lansweeper_state, lansweeper_asset_type, lansweeper_os, lansweeper_user, lansweeper_description, qualys_id, QUALYS_OS, qualys_network_id, tenable_uuid, tenable_os, nessus_uuid, nessus_os, sophos_uuid, sophos_type, sophos_os, sophos_user, sophos_login_via, sophos_health, sophos_product_installed, crowdstrike_id,kaspersky_collected_by,kaspersky_version,kaspersky_host, kaspersky_status, windows_defender_host, splunk_host, splunk_os, splunk_version, splunk_forwarder_type
             | transpose 0 header_field=uuid column_name=field include_empty=false`);
                 // $container is the jquery object where we can put out content.
                 // In this case we will render our chart and add it to the $container

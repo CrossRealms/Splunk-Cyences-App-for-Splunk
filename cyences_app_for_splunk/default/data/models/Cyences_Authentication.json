@@ -737,7 +737,7 @@
                     "editable": true,
                     "comment": "",
                     "calculationType": "Eval",
-                    "expression": "coalesce(error_code,Error_Code, \"unknown\")"
+                    "expression": "case(EventCode=4768, Result_Code, EventCode=4771, Failure_Code, true(), coalesce(error_code, Error_Code, \"unknown\"))"
                 }
             ],
             "constraints": [

@@ -11,7 +11,7 @@
     <latest>now</latest>
   </search>
   <search base="base_inventory_table" id="show_hide_search">
-    <query>| stats first(lansweeper_last_event) as field_lansweeper, first(qualys_last_event) as field_qualys, first(tenable_last_event) as field_tenable, first(sophos_last_event) as field_sophos, first(defender_last_event) as field_defender, first(crowdstrike_last_event) as field_crowdstrike, first(kaspersky_last_event) as field_kaspersky</query>
+    <query>| stats first(lansweeper_last_event) as field_lansweeper, first(qualys_last_event) as field_qualys, first(tenable_last_event) as field_tenable, first(nessus_last_event) as field_nessus, first(sophos_last_event) as field_sophos, first(defender_last_event) as field_defender, first(crowdstrike_last_event) as field_crowdstrike, first(kaspersky_last_event) as field_kaspersky, first(splunk_last_event) as field_splunk</query>
   </search>
   <fieldset submitButton="false"></fieldset>
   <row>
@@ -50,9 +50,11 @@
         <br/>Lansweeper -&gt; $tkn_show_hide_lansweeper$ - $tkn_filter_main_label$
         <br/>Qualys -&gt; $tkn_show_hide_qualys$ - $tkn_filter_ip_only$ - $tkn_filter_ip_only_label$
         <br/>Tenable -&gt; $tkn_show_hide_tenable$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
+        <br/>Nessus -&gt; $tkn_show_hide_nessus$ - $tkn_filter_ip_host$ - $tkn_filter_ip_host_label$
         <br/>VPN, Radius Authentication, Authentication -&gt; $tkn_filter_authentication$ - $tkn_filter_authentication_label$
         <br/>CrowdStrike -&gt; $tkn_show_hide_crowdstrike$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Kaspersky -&gt; $tkn_show_hide_kaspersky$ - $tkn_filter_main$ - $tkn_filter_main_label$
+        <br/>Splunk -&gt; $tkn_show_hide_splunk$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Sophos -&gt; $tkn_show_hide_sophos$ - $tkn_filter_main$ - $tkn_filter_main_label$
         <br/>Windows Defender -&gt; $tkn_show_hide_defender$ - $tkn_filter_host_only$ - $tkn_filter_host_only_label$
       </html>
@@ -63,9 +65,9 @@
       <title>Device Inventory $tkn_filter_main_label$</title>
       <table>
         <search base="base_inventory_table">
-          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
+          <query>table uuid, hostname, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$ tmp_*  | rename hostname as host | search $tkn_filter_main$</query>
         </search>
-        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$</fields>
+        <fields>uuid, host, ip, mac_address, os, user $tkn_tablefields_lansweeper$ $tkn_tablefields_qualys$ $tkn_tablefields_tenable$ $tkn_tablefields_nessus$, active_vul, high_vul $tkn_tablefields_sophos$ $tkn_tablefields_defender$ $tkn_tablefields_crowdstrike$ $tkn_tablefields_kaspersky$ $tkn_tablefields_splunk$</fields>
         <option name="count">5</option>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
@@ -77,6 +79,9 @@
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="tenable">
+          <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
+        </format>
+        <format type="color" field="nessus">
           <colorPalette type="map">{"Green": #008000, "Blue": "#6DB7C6", "Yellow": #cbcf00, "Orange": #ff8c00, "Red": #B83C08, "-": #363030}</colorPalette>
         </format>
         <format type="color" field="high_vul">
@@ -94,6 +99,9 @@
         </format>
         <format type="color" field="kaspersky">
           <colorPalette type="map">{"Present": #008000, "-": #363030, "Disabled" : #B83C08}</colorPalette>
+        </format>
+        <format type="color" field="splunk">
+          <colorPalette type="map">{"uf": #008000, "full" : #008000, "-": #363030}</colorPalette>
         </format>
       </table>
       <html>
@@ -339,7 +347,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` $tkn_filter_authentication$ Authentication.action IN ("success","failure") Authentication.app="*" by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` $tkn_filter_authentication$ Authentication.action IN ("success","failure") Authentication.app="*" by Authentication.app Authentication.action Authentication.user, Authentication.src | `drop_dm_object_name(Authentication)`  | iplocation src | fields - lat lon</query>
           <earliest>$tkn_timeRange_radius_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_radius_authentication.latest$</latest>
         </search>
@@ -362,7 +370,8 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src</query>
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src
+          | `drop_dm_object_name(Authentication)`  | iplocation src | fields - lat lon</query>
           <earliest>$tkn_timeRange_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_authentication.latest$</latest>
         </search>
@@ -539,6 +548,20 @@
 | rename AVSignature_version as "Signature Version", AV_signature_creation_time as "AV Update Time", BM_state as "Behavior Monitoring state", IOAV_state as "IE Downloads and Outlook Express Attachments state", OA_state as "On Access state", RTP_state as "RealTime Protection State"</query>
           <earliest>$tkn_timeRange_av_windefender.earliest$</earliest>
           <latest>$tkn_timeRange_av_windefender.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$tkn_show_hide_splunk$">
+    <panel>
+      <title>Splunk Device Information - $tkn_filter_main_label$</title>
+      <table>
+        <search>
+          <query>| inputlookup cs_splunk_inventory | rename hostname as host | fillnull value="-" | search $tkn_filter_main$ | table host ip splunk_arch splunk_forwarder_type splunk_os splunk_version</query>
+          <earliest>0</earliest>
+          <latest></latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>

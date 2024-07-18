@@ -131,7 +131,7 @@ PRODUCTS = [
                 "macro_name": "cs_sophos",
                 "label": "Sophos Endpoint Protection Data",
                 "search_by": "sourcetype",
-                "search_values": "sophos_events",
+                "search_values": "sophos_events,sophos_endpoints",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
@@ -316,7 +316,20 @@ PRODUCTS = [
                 "macro_name": "cs_tenable",
                 "label": "Tenable Data",
                 "search_by": "sourcetype",
-                "search_values": "tenable:io:assets,tenable:io:plugin,tenable:io:vuln,tenable:sc:assets,tenable:sc:plugin,tenable:sc:vuln",
+                "search_values": "tenable:io:assets,tenable:io:vuln,tenable:sc:assets,tenable:sc:vuln",
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Nessus",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_nessus",
+                "label": "Nessus Data",
+                "search_by": "sourcetype",
+                "search_values": "nessus:pro:vuln,nessus_json",
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
