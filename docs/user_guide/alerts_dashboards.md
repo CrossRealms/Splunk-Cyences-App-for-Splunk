@@ -270,7 +270,7 @@ There are several security related alerts to choose from and they are all locate
 
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
-(Basically we correlate data from vulnerability tools like Qualys or Tenable and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
+(Basically we correlate data from vulnerability tools like Qualys, Tenable or Nessus and correlate with Network Traffic logs from Palo Alto or Fortigate to show if the target is being actively exploited. This would have been very difficult to implement with traditional security tools.)
 
 * Dashboard panels:
     * Port Scanning Attempts
@@ -284,7 +284,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
 * Alerts:
     * Vulnerability - Detected Vulnerabilities
 
-Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO & Tenable SC
+Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO, Tenable SC & Nessus:Pro
 
 These vendor security solutions are designed to detect vulnerabilities present in your environment.
 
