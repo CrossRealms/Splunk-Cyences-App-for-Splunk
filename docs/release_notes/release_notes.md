@@ -9,60 +9,69 @@ has_children: true
 # Release Notes
 
 
-## Version 4.8.0 (May 2024)
+## Version 4.9.0 (July 2024)
 
-* ### Cisco Meraki
-    * Added new alerts:
-        * Cisco Meraki - Organizational Security Events
-        * Cisco Meraki - Config Changes
-    * Added new dashboard named **Cisco Meraki**
+* Added support for Nessus:Pro (Nessus Professional). Configure the [Nessus Professional Add-On for Splunk](https://splunkbase.splunk.com/app/7464/) to onboard the logs.
 
-* ### Databases
-    * #### MSSQL
-        * Added new alert named **MSSQL - User Changes**
-        * Added new dashboard named **MSSQL**
-    * #### Oracle
-        * Added new alert named **Oracle - User Changes**
-        * Added new dashboard named **Oracle**
+* Added functionality to prevent the alert state from being updated from the Cyences setup page. If user wants to keep any alerts enabled/disabled permanently without affecting when the changes made from cyences setup page then refer the steps mentioned [here]({{ site.baseurl }}/install_configure/alert_configuration/#how-to-disable-the-alert-state-changes-performed-from-the-cyences-setup-page)
 
-* Added Tenable SC support along with Tenable IO.
+* Added the following panels for user login activity on the **Windows** dashboard:
+    * Successful Login Events
+    * Failed Login Attempts by User
 
-* Added new report/alert:
-    * Network Compromise - Calculate UpperBound for Spike in Outbound Network Traffic
-    * Network Compromise - Unusual Outbound Traffic
+* Added the following panels to the **Vulnerability** dahboard:
+    * Total Vulnerability Count By Severity
+    * New Total Vulnerability Found Over Time
+
+* Added a separate alert for password expired events called **AD - Login Failure due to Password Expired** and filtered out the password expired events from authentication alerts.
+
+* Added a section to configure the digest email configs on **Cyences Settings > Cyences App Configuration > Cyences Email Action Configuration**.
+
+* Removed the following alerts as it contains static lookup causing many false positives:
+    * Email - Suspicious Subject or Attachment
+    * Email - With Known Abuse Web Service Link
+    * Ransomware - Endpoint Compromise - Malicious Package Found
 
 
 * ### Enhancements
 
-    * #### App UI Changes
-        * Enhanced the view, style and color contrast for the inputs like multiselect, dropdown, textbox and checkbox.
-        * Enhanced the navigation panel view on the Overview dashboard.
-        * Enhanced the Label fonts and Table headers.
-        * Drilldown text's color changes when hovered over.
-        * Synced the color combination across all dashboards.
+    * #### Sophos Endpoint data
+        * Removed the Sophos UI configuration from Cyences configuration page & sophosinstancedetails custom command to fetch sophos endpoints.
+        * Sophos device inventory alert will now support the 'sophos_endpoints' source. Configure the sophos endpoint input on [Sophos Central Add-on for Splunk](https://splunkbase.splunk.com/app/6186/) to onboard the logs.
 
-    * #### CrowdStrike Devices
-        * **Device Inventory - CrowdStrike** search is now using [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570) to get detailed information of crowdstrike devices.
-        * Made crowdstrike devices related changes to **Device Inventory** and **Intelligence** dashboard.
-    
-    * Removed internal IPs from **Network Compromise - DDoS Behavior Detected** alert.
+    * #### Device Inventory dashboard
+        * On **Possible Merge UUIDs (Devices) in Device Inventory** panel, added possible combinations of devices that can be merged based on hostname matching.
+        * Added more details from the Splunk devices like os, host, forwarder-type to the **Device Inventory** table.
+        * Added more details from the splunk devices like os, host, version, forwarder-type to compare with other devices on **Possible Merge UUIDs (Devices) in Device Inventory** panel.
+        * Added panel for the splunk devices on Intelligence dashboard.
 
-    * For Office 365 login related alerts, excluded the events having field value user="not available".
+    * #### Network Telemetry dashboard
+        * Added filter to search port number.
+        * Added reporting device IP information as well as vulnerability information for the vulnerable traffic.
+
+    * Filtered out events having sharing scope within the organization for the **O365 - OneDrive or SharePoint File Sharing with External User** and **O365 - OneDrive or SharePoint Link Accessed By External User** alerts to get accurate results.
+
+    * Converted the detection time format as per the local timezone for **Windows Defender - Malware Detected** alert.
+
+    * Filtered out events having the user "Not Available" from **Authentication - Bruteforce Attempt for a User** alert.
+
+    * Filtered out compliance related events from Tenable SC vulnerability data which is used by the alerts like **Asset Inventory - Vulnerability Lookup Gen** & **Device Inventory - Tenable Vuln**.
+
+    * Added location information to the **Authentication activities** & **Radius Authentication activities** panels on the Intelligence dashboard.
+
+    * Reduced the severity to "low" for **Authentication - Excessive Failed VPN Logins for a User** alert.
+
+    * Reduced the severity of the **Email - Hourly Increase In Emails Over Baseline** alert.
+
+    * Improved the upperbound value calculation for the **Network Compromise - Calculate UpperBound for Spike in Network Traffic** and **Network Compromise - Calculate UpperBound for Spike in Outbound Network Traffic** alerts.
 
     * Updated Splunk-python-sdk to the latest version.
 
-    * For **O365 - Login Failure From Unusual Country Due To Multi Factor Authentication** alert, the severity was reduced for new users who attempted to login the first time.
 
+## Upgrade Guide from 4.8.0 to 4.9.0
 
-* ### Bug Fixes
+* To onboard the nessus pro logs, configure the [Nessus Professional Add-On for Splunk](https://splunkbase.splunk.com/app/7464/)
 
-    * Fixed the dashboard show/hide issue for the fortigate.
+* Check all the cyences alerts and if the user wants to keep it enabled/disabled permanently then perform the steps mentioned [here]({{ site.baseurl }}/install_configure/alert_configuration/#how-to-disable-the-alert-state-changes-performed-from-the-cyences-setup-page)
 
-    * For **Cyences Digest Email** alert, fixed the field display issue which has dot(.) in the field name.
-
-    * Fixed the current week login count logic for VPN login related alerts.
-
-
-## Upgrade Guide from 4.7.0 to 4.8.0
-
-* To collect the crowdstrike devices information, install and configure the [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570).
+* After upgrade, Sophos Endpoint logs need to be collected to keep Device inventory working. To onboard the logs, configure the Sophos Endpoint input on [Sophos Central Add-on for Splunk](https://splunkbase.splunk.com/app/6186/)
