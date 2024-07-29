@@ -11,12 +11,20 @@
 | `cs_add_notable_event_editor_fields`
 | search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
+| join type=left savedsearch_name
+    [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
+    | fields title action.cyences_notable_event_action.teams 
+    | rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title action.cyences_notable_event_action.teams
+| rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
 | streamstats count as newcount by savedsearch_name
 | where (cyences_severity!="unknown" OR newcount=1)
+| makemv delim="," teams
+| eval teams=trim(teams)
+| search $tkn_teams$
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | search $tkn_not_triggered_alert_filter_1$
@@ -68,6 +76,23 @@
           <eval token="tkn_status_drilldown">"form.tkn_status=" . mvjoin(split(replace(trim(trim($tkn_status$, "("), ")"), "\"", ""), ","), "&amp;form.tkn_status=")</eval>
         </condition>
       </change>
+    </input>
+    <input type="multiselect" token="tkn_teams" searchWhenChanged="true">
+      <label>Team</label>
+      <choice value="*">All</choice>
+      <choice value="SOC">SOC</choice>
+      <choice value="Compliance">Compliance</choice>
+      <choice value="NetOps">NetOps</choice>
+      <choice value="CloudOps">CloudOps</choice>
+      <choice value="EndpointOps">EndpointOps</choice>
+      <choice value="DatabaseOps">DatabaseOps</choice>
+      <default>*</default>
+      <prefix>teams IN (</prefix>
+      <suffix>)</suffix>
+      <initialValue>*</initialValue>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
     </input>
     <input type="checkbox" token="tkn_not_triggered_alert_checkbox" searchWhenChanged="true">
       <label></label>
@@ -126,12 +151,20 @@
 | `cs_add_notable_event_editor_fields`
 | search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP")`]
+| join type=left savedsearch_name
+    [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
+    | fields title action.cyences_notable_event_action.teams 
+    | rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title action.cyences_notable_event_action.teams
+| rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams | eval cyences_severity="unknown" | `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP")`]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
 | streamstats count as newcount by savedsearch_name
 | where (cyences_severity!="unknown" OR newcount=1)
+| makemv delim="," teams
+| eval teams=trim(teams)
+| search $tkn_teams$
 | `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP")` 
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
@@ -145,8 +178,10 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Disabled/Stopped Sophos Endpoint Protection Services"
-    | eval cyences_severity = 4
-    | search cyences_severity IN $tkn_severity$] 
+    | eval cyences_severity = 4, teams="SOC, Compliance, EndpointOps"
+    | makemv delim="," teams
+    | eval teams=trim(teams)
+    | search cyences_severity IN $tkn_severity$ AND $tkn_teams$] 
 | append
     [| search `cs_sophos` type="Event::Endpoint::Sav*" host="*" dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields host dhost type 
@@ -156,8 +191,10 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Sophos Endpoint RealTime Protection"
-    | eval cyences_severity = 4
-    | search cyences_severity IN $tkn_severity$]
+    | eval cyences_severity = 4, teams="SOC, Compliance, EndpointOps"
+    | makemv delim="," teams
+    | eval teams=trim(teams)
+    | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
 | append
     [| search ((`cs_wineventlog_system` SourceName="Microsoft-Windows-Service Control Manager" Message="The Windows Defender Antivirus Service service entered the *" Message=stopped) OR (`cs_windows_defender` EventCode IN (1150, 1151))) earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
       | fields EventCode, host 
@@ -166,8 +203,10 @@
       $tkn_not_triggered_alert_filter_2$
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
       | eval Name="Currently Disabled/Stopped Windows Defender Services"
-    | eval cyences_severity = 4
-    | search cyences_severity IN $tkn_severity$]
+    | eval cyences_severity = 4, teams="Compliance"
+    | makemv delim="," teams
+    | eval teams=trim(teams)
+    | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
 | append
     [| search `cs_windows_defender` EventCode=1151  earliest=$timeRange.earliest$ latest=$timeRange.latest$ 
     | fields RTP_state host 
@@ -177,8 +216,10 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
-    | eval cyences_severity = 4
-    | search cyences_severity IN $tkn_severity$]
+    | eval cyences_severity = 4, teams="Compliance"
+    | makemv delim="," teams
+    | eval teams=trim(teams)
+    | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
 | eval cyences_severity=if(Count==0, 0, cyences_severity)
 | sort - cyences_severity
 | eval problem = cyences_severity."|".Count
@@ -280,8 +321,10 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently not Operational O365 Services"
-    | eval cyences_severity=3
-    | search cyences_severity IN $tkn_severity$
+    | eval cyences_severity=3, teams="SOC, CloudOps"
+    | makemv delim="," teams
+    | eval teams=trim(teams)
+    | search cyences_severity IN $tkn_severity$ AND $tkn_teams$
     | eval Count = cyences_severity."|".Count
     | rename Count as "Notable Events"]
 | sort - cyences_severity</query>
@@ -519,12 +562,20 @@
 | `cs_add_notable_event_editor_fields`
 | search notable_event_status="BANANABANANA" OR notable_event_status IN $tkn_status$
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title | rename title as savedsearch_name | eval cyences_severity="unknown"]
+| join type=left savedsearch_name
+    [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
+    | fields title action.cyences_notable_event_action.teams 
+    | rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title action.cyences_notable_event_action.teams
+| rename title as savedsearch_name, action.cyences_notable_event_action.teams as teams | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
 | streamstats count as newcount by savedsearch_name
 | where (cyences_severity!="unknown" OR newcount=1)
+| makemv delim="," teams
+| eval teams=trim(teams)
+| search $tkn_teams$
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | search $tkn_not_triggered_alert_filter_1$
