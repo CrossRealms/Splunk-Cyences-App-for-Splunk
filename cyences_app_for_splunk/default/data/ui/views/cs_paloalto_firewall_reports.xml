@@ -160,7 +160,7 @@
         </search>
         <option name="drilldown">none</option>
         <format type="color" field="severity">
-          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+          <colorPalette type="map">{"critical": "#B83C08", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "informational": "#9acd32"}</colorPalette>
         </format>
         <format type="color" field="action">
           <colorPalette type="map">{"allowed":#F7BC38,"blocked":#A2CC3E,"deferred":#6A5C9E,"dropped":#65A637}</colorPalette>
@@ -177,7 +177,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="severity">
-          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+          <colorPalette type="map">{"critical": "#B83C08", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "informational": "#9acd32"}</colorPalette>
         </format>
         <format type="color" field="action">
           <colorPalette type="map">{"failure":#F7BC38,"success":#A2CC3E}</colorPalette>
@@ -198,7 +198,7 @@
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
         <format type="color" field="severity">
-          <colorPalette type="map">{"critical":#D93F3C,"high":#ED8440,"medium":#F7BC38,"low":#65A637,"informational":#6DB7C6}</colorPalette>
+          <colorPalette type="map">{"critical": "#B83C08", "high": "#ffa500", "medium": "#ffd301", "low": "#9acd32", "informational": "#9acd32"}</colorPalette>
         </format>
         <format type="color" field="action">
           <colorPalette type="map">{"failure":#F7BC38,"success":#A2CC3E}</colorPalette>
