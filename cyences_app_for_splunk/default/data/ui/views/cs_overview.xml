@@ -82,7 +82,7 @@
       <choice value="*">All</choice>
       <choice value="SOC">SOC</choice>
       <choice value="Compliance">Compliance</choice>
-      <choice value="NetOps">NetOps</choice>
+      <choice value="NetworkOps">NetworkOps</choice>
       <choice value="CloudOps">CloudOps</choice>
       <choice value="EndpointOps">EndpointOps</choice>
       <choice value="DatabaseOps">DatabaseOps</choice>
