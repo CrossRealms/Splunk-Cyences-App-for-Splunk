@@ -232,6 +232,19 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "F5 BIGIP",
+        "macro_configurations": [
+            {
+                "macro_name": "cs_f5_bigip",
+                "label": "F5 BIGIP Data",
+                "search_by": "sourcetype",
+                "search_values": "f5:bigip:syslog,f5:bigip:asm:syslog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Palo Alto",
         "macro_configurations": [
             {

@@ -1,0 +1,242 @@
+<form version="1.1" theme="dark">
+  <label>F5 BIGIP ASM</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
+      <label>Severity</label>
+      <choice value="critical">critical</choice>
+      <choice value="high">high</choice>
+      <choice value="medium">medium</choice>
+      <choice value="low">low</choice>
+      <choice value="informational">informational</choice>
+      <default>critical,high,medium,low</default>
+      <prefix>severity IN (</prefix>
+      <suffix>)</suffix>
+      <initialValue>critical,high,medium,low</initialValue>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>,</delimiter>
+    </input>
+    <input type="text" token="tkn_src_ip" searchWhenChanged="true">
+      <label>Source IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <prefix>ip_client="</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="text" token="tkn_dest_ip" searchWhenChanged="true">
+      <label>Destionation IP</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <prefix>dest_ip="</prefix>
+      <suffix>"</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Top 10 Attack Type</title>
+      <table>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">100</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top 10 Attack Type</title>
+      <chart>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top 10 Source IP</title>
+      <table>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">100</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Top 10 Source IP</title>
+      <chart>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Top Rules</title>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by policy_name</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top Action</title>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by enforcement_action</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Top Blocked Source IPs</title>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by ip_client</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top Blocked Destionation IPs</title>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by dest_ip</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Blocked Source IPs</title>
+      <map>
+        <search>
+          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | iplocation ip_client | geostats latfield=lat longfield=lon count</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="mapping.choroplethLayer.colorBins">5</option>
+        <option name="mapping.choroplethLayer.colorMode">auto</option>
+        <option name="mapping.choroplethLayer.maximumColor">0xaf575a</option>
+        <option name="mapping.choroplethLayer.minimumColor">0x62b3b2</option>
+        <option name="mapping.choroplethLayer.neutralPoint">0</option>
+        <option name="mapping.choroplethLayer.shapeOpacity">0.75</option>
+        <option name="mapping.choroplethLayer.showBorder">1</option>
+        <option name="mapping.data.maxClusters">100</option>
+        <option name="mapping.legend.placement">bottomright</option>
+        <option name="mapping.map.center">(0,0)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
+        <option name="mapping.map.zoom">2</option>
+        <option name="mapping.markerLayer.markerMaxSize">50</option>
+        <option name="mapping.markerLayer.markerMinSize">10</option>
+        <option name="mapping.markerLayer.markerOpacity">0.8</option>
+        <option name="mapping.showTiles">1</option>
+        <option name="mapping.tileLayer.maxZoom">7</option>
+        <option name="mapping.tileLayer.minZoom">0</option>
+        <option name="mapping.tileLayer.tileOpacity">1</option>
+        <option name="mapping.type">marker</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>All Events</title>
+        <search>
+          <query>`cs_f5_asm` $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
+| table _time ip_client src_port dest_ip dest_port manage_ip_addr x_fwd_hdr_val attack_type enforcement_action blocking_exception_reason client_type credential_stuffing_lookup_result device_id enforced_by geo_info http_class ip_addr_intelli ip_route_domain  login_result method mobile_application_name mobile_application_version policy_apply_date policy_name protocol protocol_info req_status resp_code route_domain severity sig_ids sig_names sub_violates threat_campaign_names unit_host uri username violate_details violate_rate violations virus_name  is_trunct</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Attacks by IP</title>
+        <search>
+          <query>`cs_f5_asm`  attack_type!="N/A"  $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
+| table _time ip_client src_port dest_ip dest_port manage_ip_addr x_fwd_hdr_val attack_type enforcement_action blocking_exception_reason client_type credential_stuffing_lookup_result device_id enforced_by geo_info http_class ip_addr_intelli ip_route_domain  login_result method mobile_application_name mobile_application_version policy_apply_date policy_name protocol protocol_info req_status resp_code route_domain severity sig_ids sig_names sub_violates threat_campaign_names unit_host uri username violate_details violate_rate violations virus_name  is_trunct
+| eval action = if(isnull(enforcement_action), "allow", enforcement_action)
+| stats values(attack_type) as attack_type, count by ip_client, action
+| eval action = action. "(". count . ")"
+| stats  values(attack_type) as attack_type, values(action) as action, sum(count) as total by ip_client
+| iplocation ip_client
+| fields - lat lon Region City
+| sort - total</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
