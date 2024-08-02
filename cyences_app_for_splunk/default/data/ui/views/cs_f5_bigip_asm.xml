@@ -2,7 +2,7 @@
   <label>F5 BIGIP ASM</label>
   <fieldset submitButton="false">
     <input type="time" token="timerange">
-      <label></label>
+      <label>Time Range</label>
       <default>
         <earliest>-24h@h</earliest>
         <latest>now</latest>
@@ -111,7 +111,7 @@
   <row>
     <panel>
       <chart>
-        <title>Top Rules</title>
+        <title>Top Rules Over Time</title>
         <search>
           <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by policy_name</query>
           <earliest>$timerange.earliest$</earliest>
