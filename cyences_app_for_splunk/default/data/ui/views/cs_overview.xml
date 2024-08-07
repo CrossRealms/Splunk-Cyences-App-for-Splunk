@@ -82,10 +82,6 @@
       <choice value="*">All</choice>
       <choice value="SOC">SOC</choice>
       <choice value="Compliance">Compliance</choice>
-      <choice value="NetworkOps">NetworkOps</choice>
-      <choice value="CloudOps">CloudOps</choice>
-      <choice value="EndpointOps">EndpointOps</choice>
-      <choice value="DatabaseOps">DatabaseOps</choice>
       <default>*</default>
       <prefix>teams IN (</prefix>
       <suffix>)</suffix>
@@ -178,7 +174,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Disabled/Stopped Sophos Endpoint Protection Services"
-    | eval cyences_severity = 4, teams="SOC, Compliance, EndpointOps"
+    | eval cyences_severity = 4, teams="SOC"
     | makemv delim="," teams
     | eval teams=trim(teams)
     | search cyences_severity IN $tkn_severity$ AND $tkn_teams$] 
@@ -191,7 +187,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_sophos` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Sophos Endpoint RealTime Protection"
-    | eval cyences_severity = 4, teams="SOC, Compliance, EndpointOps"
+    | eval cyences_severity = 4, teams="SOC"
     | makemv delim="," teams
     | eval teams=trim(teams)
     | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
@@ -203,7 +199,7 @@
       $tkn_not_triggered_alert_filter_2$
       | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
       | eval Name="Currently Disabled/Stopped Windows Defender Services"
-    | eval cyences_severity = 4, teams="Compliance"
+    | eval cyences_severity = 4, teams="SOC"
     | makemv delim="," teams
     | eval teams=trim(teams)
     | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
@@ -216,7 +212,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_windows_defender` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently Stopped/Disabled Windows Defender RealTime Protection"
-    | eval cyences_severity = 4, teams="Compliance"
+    | eval cyences_severity = 4, teams="SOC"
     | makemv delim="," teams
     | eval teams=trim(teams)
     | search cyences_severity IN $tkn_severity$ AND $tkn_teams$]
@@ -321,7 +317,7 @@
     $tkn_not_triggered_alert_filter_2$
     | search [| search `cs_o365` earliest=$timeRange.earliest$ latest=$timeRange.latest$ | head 1 | stats count | eval search=if(count&gt;0, "", "sourcetype=DONOTRETURNANYRESULTS") | fields search | return $search]
     | eval Name="Currently not Operational O365 Services"
-    | eval cyences_severity=3, teams="SOC, CloudOps"
+    | eval cyences_severity=3, teams="Compliance"
     | makemv delim="," teams
     | eval teams=trim(teams)
     | search cyences_severity IN $tkn_severity$ AND $tkn_teams$
