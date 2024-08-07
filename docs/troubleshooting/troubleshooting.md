@@ -13,8 +13,6 @@ has_children: false
 
 ![alt]({{ site.baseurl }}/assets/vpn_dashboard_not_loading.png)
 
-* Verify that the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) is installed.
-
 * Verify that the [Splunk CIM](https://splunkbase.splunk.com/app/1621/) is installed and the Authentication data model is accelerated.
 
 * Verify that the CIM Authentication data model does not filter the VPN index (check the macro definition for `cim_Authentication_indexes`). 
