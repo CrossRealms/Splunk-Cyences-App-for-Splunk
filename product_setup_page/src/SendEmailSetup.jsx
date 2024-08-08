@@ -4,6 +4,7 @@ import SimpleForm from './components/SimpleForm';
 import CyencesDocFooter from './components/CyencesDocFooter';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import { generateToast } from './utils/util';
+import { MacroSetup } from './MacroSetupApp';
 
 
 const EmailConfigurationFields = {
@@ -12,6 +13,7 @@ const EmailConfigurationFields = {
     passwordLabel: 'Severities',
     passwordType: 'text',
     passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - critical severity only',
+    marginLeft: '70px'
 }
 
 const DigestEmailConfigurationFields = {
@@ -20,7 +22,13 @@ const DigestEmailConfigurationFields = {
     passwordLabel: 'Severities',
     passwordType: 'text',
     passwordHelp: 'comma separated list of alert severity levels that are included in the email; default - high & medium severities',
+    marginLeft: '70px'
 }
+
+const TeamEmailConfigurationMacros = [
+    {name: 'cs_soc_team_email', description: 'Comma separated list of email addresses of the SOC team/members.' },
+    {name: 'cs_compliance_team_email', description: 'Comma separated list of email addresses of the Compliance team/members.' }
+]
 
 export default function SendEmailSetup() {
 
@@ -103,6 +111,10 @@ export default function SendEmailSetup() {
 
     return (
         <>
+            <Heading style={{ marginLeft: '20px' }}>Team Email Configuration</Heading>
+            <div style={{ marginLeft: '70px'}}>
+                {TeamEmailConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description}/>)}
+            </div>
             <Heading style={{ marginLeft: '20px' }}>Digest Email Configuration</Heading>
             <SimpleForm key='senddigestemailconfiguration' {...DigestEmailConfigurationFields} onSave={onDigestSave} username={digestData.email_to} password={digestData.cyences_severities} />
 
