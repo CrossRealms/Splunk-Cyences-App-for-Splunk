@@ -14,6 +14,8 @@ logger = logger_manager.setup_logging('send_email_action', logging.INFO)
 
 
 ALERT_ACTION_NAME = 'cyences_send_email_action'
+SOC_TEAM_EMAIL_MACRO = 'cs_soc_team_email'
+COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_team_email'
 
 
 @Configuration()
@@ -48,6 +50,16 @@ class CyencesSendEmailCommand(EventingCommand):
             email_to_include = cs_utils.convert_to_set(alert_action_config.get("param.email_to_include"))
             subject_prefix = "Cyences Alert: [" + alert_action_config.get("param.subject_prefix", '') + "] "
             disable_email = cs_utils.is_true(alert_action_config.get("param.disable_email"))
+            soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
+            compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
+
+            associated_teams = config_handler.get_conf_stanza("savedsearches", self.alert_name)[0]["content"].get("action.cyences_notable_event_action.teams", "").split(", ")
+
+            if "SOC" in associated_teams:
+                email_to_include.update(soc_team_emails)
+
+            if "Compliance" in associated_teams:
+                email_to_include.update(compliance_team_emails)
 
             email_to_include.update(email_to_default)
             final_to = email_to_include.difference(email_to_exclude)
