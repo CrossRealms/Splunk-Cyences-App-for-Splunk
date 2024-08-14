@@ -3,6 +3,7 @@
 import cs_imports
 import sys
 import time
+import copy
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
 
 import cs_utils
@@ -16,7 +17,8 @@ logger = logger_manager.setup_logging('send_digest_email_action', logging.INFO)
 
 ALERT_ACTION_NAME = 'cyences_send_digest_email_action'
 FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS = 'search_name'
-
+SOC_TEAM_EMAIL_MACRO = 'cs_soc_team_email'
+COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_team_email'
 
 # We'll be sorting this in ascending order
 ALERT_SEVERITIES = {
@@ -131,6 +133,42 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 full_html_body += CyencesEmailHTMLBodyBuilder.htmlTableTemplate().render(results=events, title=title, is_table_truncated=data['is_truncated'], total_entries=data['total_entries'], entries_displaying=data['entries_displaying'])
         return full_html_body
 
+    def categorize_events_by_team(self, records):
+        soc_events = []
+        compliance_events = []
+        for event in records:
+            teams = [item.strip() for item in event["teams"].split(",") if item.strip()]
+
+            if "SOC" in teams:
+                soc_events.append(copy.deepcopy(event))
+
+            if "Compliance" in teams:
+                compliance_events.append(copy.deepcopy(event))
+
+        return soc_events, compliance_events
+
+    def event_processing(self, team, records, cyences_email_utility, email_to):
+        results = self.filter_results_and_group_by_alert(records, self.final_severities, self.param_exclude_alerts)
+        results = self.limit_no_of_events_per_alert(results)
+        list_of_result_chunks = self.divide_alerts_in_chunks(results)
+
+        email_counter = 1
+        for result_chunk in list_of_result_chunks:
+            html_body = self.convert_results_to_html_body(result_chunk)
+            # logger.debug("html_body: {}".format(html_body))  # too large log
+
+            if html_body.strip() != '':
+                if len(list_of_result_chunks) <= 1:
+                    subject = self.subject_prefix + self.alert_name
+                else:
+                    subject = '{}{} Part-{}'.format(self.subject_prefix, self.alert_name, email_counter)
+                    email_counter += 1
+
+                cyences_email_utility.send(to=email_to, subject=subject, html_body=html_body)
+                log_msg = "Email sent to {} team. subject={}, no_of_alerts={}".format(team, subject, len(result_chunk))
+                logger.info(log_msg)
+            else:
+                logger.info("No matching event found")
 
     def transform(self, records):
         try:
@@ -150,19 +188,24 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
             param_email_to = alert_action_config.get("param.email_to", '')
             param_severities = alert_action_config.get("param.cyences_severities", '')
-            subject_prefix = "Cyences Alert Digest: [" + alert_action_config.get("param.subject_prefix", '') + "] "
-            param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
+            self.subject_prefix = "Cyences Alert Digest: [" + alert_action_config.get("param.subject_prefix", '') + "] "
+            self.param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
+            soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
+            compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
 
-            final_email_to = self.email_to if self.email_to is not None else param_email_to
-            final_severities = self.severities if self.severities is not None else param_severities
+            default_email_to = cs_utils.convert_to_set(self.email_to) if self.email_to is not None else cs_utils.convert_to_set(param_email_to)
 
-            if final_email_to.strip() == '':
+            soc_team_emails.update(default_email_to)
+            compliance_team_emails.update(default_email_to)
+            self.final_severities = cs_utils.convert_to_set(self.severities) if self.severities is not None else cs_utils.convert_to_set(param_severities)
+
+            if len(soc_team_emails) == 0 and len(compliance_team_emails) == 0:
                 msg = "Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured."
                 logger.warning(msg)
                 yield {
                     'msg': msg
                 }
-            elif final_severities.strip() == '':
+            elif len(self.final_severities) == 0:
                 msg = "Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty."
                 logger.warning(msg)
                 yield {
@@ -170,36 +213,18 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 }
 
             else:
-                final_email_to = cs_utils.convert_to_set(final_email_to)
-                final_severities = cs_utils.convert_to_set(final_severities)
+                soc_events, compliance_events = self.categorize_events_by_team(records)
 
-                results = self.filter_results_and_group_by_alert(records, final_severities, param_exclude_alerts)
-                results = self.limit_no_of_events_per_alert(results)
-                list_of_result_chunks = self.divide_alerts_in_chunks(results)
+                if len(soc_events) > 0 and len(soc_team_emails) > 0:
+                    self.event_processing("SOC", soc_events, cyences_email_utility, soc_team_emails)
 
-                email_counter = 1
-                for result_chunk in list_of_result_chunks:
-                    html_body = self.convert_results_to_html_body(result_chunk)
-                    # logger.debug("html_body: {}".format(html_body))  # too large log
+                if len(compliance_events) > 0 and len(compliance_team_emails) > 0:
+                    self.event_processing("Compliance", compliance_events, cyences_email_utility, compliance_team_emails)
 
-                    if html_body.strip() != '':
-                        if len(list_of_result_chunks) <= 1:
-                            subject = subject_prefix + self.alert_name
-                        else:
-                            subject = '{}{} Part-{}'.format(subject_prefix, self.alert_name, email_counter)
-                            email_counter += 1
+                yield {
+                    'msg': "Sent an Email to the respective teams."
+                }
 
-                        cyences_email_utility.send(to=final_email_to, subject=subject, html_body=html_body)
-                        log_msg = "Email sent. subject={}, no_of_alerts={}".format(subject, len(result_chunk))
-                        logger.info(log_msg)
-                        yield {
-                            "msg": log_msg
-                        }
-                    else:
-                        logger.info("No matching event found")
-                        yield {
-                            "msg" : "No matching event found"
-                        }
         except:
             logger.exception("Exception in command CyencesSendDigestEmailCommand.")
             self.write_error("Exception in command CyencesSendDigestEmailCommand.")

@@ -54,7 +54,9 @@ class CyencesSendEmailCommand(EventingCommand):
             soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
             compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
 
-            associated_teams = config_handler.get_conf_stanza("savedsearches", self.alert_name)[0]["content"].get("action.cyences_notable_event_action.teams", "").split(", ")
+            associated_teams = config_handler.get_conf_stanza("savedsearches", self.alert_name)[0]["content"].get("action.cyences_notable_event_action.teams", "")
+
+            associated_teams = [item.strip() for item in associated_teams.split(",") if item.strip()]
 
             if "SOC" in associated_teams:
                 email_to_include.update(soc_team_emails)
