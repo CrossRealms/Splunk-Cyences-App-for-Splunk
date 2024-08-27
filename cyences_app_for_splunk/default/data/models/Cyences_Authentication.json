@@ -742,7 +742,7 @@
             ],
             "constraints": [
                 {
-                    "search": "(`cim_Authentication_indexes`) tag=authentication NOT (action=success user=*$)",
+                    "search": "(`cs_cim_authentication_indexes`) tag=authentication NOT (action=success user=*$)",
                     "owner": "Authentication"
                 }
             ],
