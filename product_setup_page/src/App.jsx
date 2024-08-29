@@ -6,7 +6,7 @@ import ProductSetupApp from './ProductSetupApp';
 import MacroSetupApp from './MacroSetupApp';
 import HoneyDBSetup from './HoneyDBSetup';
 import MaliciousIPCollectorSetup from './MaliciousIPCollectorSetup';
-import SendEmailSetup from './SendEmailSetup';
+import CyencesAlertSetup from './CyencesAlertSetup';
 import DeviceInventorySetup from './DeviceInventorySetup';
 
 const TABS = [
@@ -15,7 +15,7 @@ const TABS = [
     'Macro Setup',
     'HoneyDB Configuration',
     'MaliciousIP Collector Configuration',
-    'Cyences Email Action Configuration',
+    'Cyences Alerts Configuration',
     'Device Inventory Configuration'
 ]
 
@@ -48,7 +48,7 @@ export default function App() {
                 <MaliciousIPCollectorSetup />
             </div>
             <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
-                <SendEmailSetup />
+                <CyencesAlertSetup />
             </div>
             <div key={TABS[6]} style={{ display: activeTabId === TABS[6] ? 'block' : 'none' }}>
                 <DeviceInventorySetup />
