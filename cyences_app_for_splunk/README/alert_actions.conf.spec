@@ -7,6 +7,7 @@ param.alert_state_change_from_setup_page = <1|0> Allow alert state change from s
 param.subject_prefix = <str> Text to add as a prefix of email subject
 
 [cyences_send_email_action]
+param.email_to_default = <deprecated parameter> Kept this parameter for the uninterrupted upgrade 
 param.cyences_severities_to_include = <str> Comma separated severities to add to default severities. ie. critical,high,medium,low,info
 param.cyences_severities_to_exclude =  <str> Comma separated severities to exclude from default severities. ie. critical,high,medium,low,info
 param.email_to_include =  <str> Comma separated email addresses to be added in addition to configured team emails
