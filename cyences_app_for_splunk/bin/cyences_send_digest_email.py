@@ -16,8 +16,14 @@ logger = logger_manager.setup_logging('send_digest_email_action', logging.INFO)
 
 ALERT_ACTION_NAME = 'cyences_send_digest_email_action'
 FIELD_FOR_ALERT_NAME_IN_NOTABLE_EVENTS = 'search_name'
-SOC_TEAM_EMAIL_MACRO = 'cs_soc_team_email'
-COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_team_email'
+SOC_TEAM_EMAIL_MACRO = 'cs_soc_email'
+COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_email'
+SOC_TEAM_SEVERITIES_MACRO = 'cs_soc_digest_alert_severities'
+COMPLIANCE_TEAM_SEVERITIES_MACRO = 'cs_compliance_digest_alert_severities'
+SOC_ALERTS_TO_EXCLUDE_MACRO = 'cs_soc_alerts_to_exclude_from_digest_alert'
+COMPLIANCE_ALERTS_TO_EXCLUDE_MACRO = 'cs_compliance_alerts_to_exclude_from_digest_alert'
+SOC_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_soc_recipients_to_exclude_for_digest_alert'
+COMPLIANCE_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_compliance_recipients_to_exclude_for_digest_alert'
 
 # We'll be sorting this in ascending order
 ALERT_SEVERITIES = {
@@ -34,11 +40,8 @@ ALERT_SEVERITIES = {
 class CyencesSendDigestEmailCommand(EventingCommand):
 
     alert_name = Option(name="alert_name", require=True)
-    email_to = Option(name='email_to', require=False, default=None)
-    severities = Option(name='cyences_severities', require=False, default=None)
     max_results_per_alert = Option(name='max_results_per_alert', require=False, default=15, validate=validators.Integer(minimum=1, maximum=500))
     max_alerts_per_email = Option(name='max_alerts_per_email', require=False, default=10, validate=validators.Integer(minimum=1, maximum=500))
-
 
     def filter_results_and_group_by_alert(self, results, severity_filter, alerts_to_exclude):
         logger.debug("severity_filter={}".format(severity_filter))
@@ -146,8 +149,8 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
         return soc_events, compliance_events
 
-    def event_processing(self, team, records, cyences_email_utility, email_to):
-        results = self.filter_results_and_group_by_alert(records, self.final_severities, self.param_exclude_alerts)
+    def event_processing(self, team, records, cyences_email_utility, email_to, severities, exclude_alerts):
+        results = self.filter_results_and_group_by_alert(records, severities, exclude_alerts)
         results = self.limit_no_of_events_per_alert(results)
         list_of_result_chunks = self.divide_alerts_in_chunks(results)
 
@@ -183,29 +186,31 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
             alert_action_config.update(alert_specific_action_config)
 
+            self.subject_prefix = "Cyences Alert Digest: [" + alert_action_config.get("param.subject_prefix", '') + "] "
+            soc_exclude_alerts = cs_utils.convert_to_set(config_handler.get_macro(SOC_ALERTS_TO_EXCLUDE_MACRO))
+            compliance_exclude_alerts = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_ALERTS_TO_EXCLUDE_MACRO))
+
+            soc_severities = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_SEVERITIES_MACRO))
+            compliance_severities = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_SEVERITIES_MACRO))
+
+            soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
+            exclude_soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO))
+            compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
+            exclude_compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO))
+
             logger.info("Time taken to fetch the final configurations = {} seconds".format(time.time() - start_time))
 
-            param_email_to = alert_action_config.get("param.email_to", '')
-            param_severities = alert_action_config.get("param.cyences_severities", '')
-            self.subject_prefix = "Cyences Alert Digest: [" + alert_action_config.get("param.subject_prefix", '') + "] "
-            self.param_exclude_alerts = cs_utils.convert_to_set(alert_action_config.get("param.exclude_alerts", ''))
-            soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
-            compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
+            final_soc_emails = soc_team_emails.difference(exclude_soc_team_emails)
+            final_compliance_emails = compliance_team_emails.difference(exclude_compliance_team_emails)
 
-            default_email_to = cs_utils.convert_to_set(self.email_to) if self.email_to is not None else cs_utils.convert_to_set(param_email_to)
-
-            soc_team_emails.update(default_email_to)
-            compliance_team_emails.update(default_email_to)
-            self.final_severities = cs_utils.convert_to_set(self.severities) if self.severities is not None else cs_utils.convert_to_set(param_severities)
-
-            if len(soc_team_emails) == 0 and len(compliance_team_emails) == 0:
-                msg = "Please check the Cyences Send Digest Email alert action configuration. Email/Recipients is not configured."
+            if len(final_soc_emails) == 0 and len(final_compliance_emails) == 0:
+                msg = "Please check the Cyences Alerts Configuration on Cyences App Configuration page. Email/Recipients is not configured."
                 logger.warning(msg)
                 yield {
                     'msg': msg
                 }
-            elif len(self.final_severities) == 0:
-                msg = "Please check the Cyences Send Digest Email alert action configuration. The Severities field is empty."
+            elif len(soc_severities) == 0 and len(compliance_severities) == 0:
+                msg = "Please check the Cyences Alerts Configuration on Cyences App Configuration page. Severities are not configured."
                 logger.warning(msg)
                 yield {
                     'msg': msg
@@ -214,11 +219,11 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             else:
                 soc_events, compliance_events = self.categorize_events_by_team(records)
 
-                if len(soc_events) > 0 and len(soc_team_emails) > 0:
-                    self.event_processing("SOC", soc_events, cyences_email_utility, soc_team_emails)
+                if len(soc_events) > 0 and len(final_soc_emails) > 0:
+                    self.event_processing("SOC", soc_events, cyences_email_utility, final_soc_emails, soc_severities, soc_exclude_alerts)
 
-                if len(compliance_events) > 0 and len(compliance_team_emails) > 0:
-                    self.event_processing("Compliance", compliance_events, cyences_email_utility, compliance_team_emails)
+                if len(compliance_events) > 0 and len(final_compliance_emails) > 0:
+                    self.event_processing("Compliance", compliance_events, cyences_email_utility, final_compliance_emails, compliance_severities, compliance_exclude_alerts)
 
                 yield {
                     'msg': "Sent an Email to the respective teams."
