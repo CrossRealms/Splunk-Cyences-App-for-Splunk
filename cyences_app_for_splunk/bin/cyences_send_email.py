@@ -15,17 +15,16 @@ logger = logger_manager.setup_logging('send_email_action', logging.INFO)
 
 
 ALERT_ACTION_NAME = 'cyences_send_email_action'
-SOC_TEAM_EMAIL_MACRO = 'cs_soc_team_email'
-COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_team_email'
+SOC_TEAM_EMAIL_MACRO = 'cs_soc_email'
+COMPLIANCE_TEAM_EMAIL_MACRO = 'cs_compliance_email'
+SOC_TEAM_SEVERITIES_MACRO = 'cs_soc_immediate_alert_severities'
+COMPLIANCE_TEAM_SEVERITIES_MACRO = 'cs_compliance_immediate_alert_severities'
 
 
 @Configuration()
 class CyencesSendEmailCommand(EventingCommand):
 
     alert_name = Option(name="alert_name", require=True)
-    email_to = Option(name='email_to', require=False, default=None)
-    severities = Option(name='cyences_severities', require=False, default=None)
-
 
     def transform(self, records):
         try:
@@ -45,14 +44,17 @@ class CyencesSendEmailCommand(EventingCommand):
 
             logger.debug("Final alert action config: {}".format(alert_action_config))
 
-            email_to_default = cs_utils.convert_to_set(alert_action_config.get("param.email_to_default"))
-            cyences_severities = cs_utils.convert_to_set(alert_action_config.get("param.cyences_severities"))
+            cyences_severities_to_include = cs_utils.convert_to_set(alert_action_config.get("param.cyences_severities_to_include"))
+            cyences_severities_to_exclude = cs_utils.convert_to_set(alert_action_config.get("param.cyences_severities_to_exclude"))
             email_to_exclude = cs_utils.convert_to_set(alert_action_config.get("param.email_to_exclude"))
             email_to_include = cs_utils.convert_to_set(alert_action_config.get("param.email_to_include"))
             subject_prefix = "Cyences Alert: [" + alert_action_config.get("param.subject_prefix", '') + "] "
             disable_email = cs_utils.is_true(alert_action_config.get("param.disable_email"))
             soc_team_emails = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_EMAIL_MACRO))
             compliance_team_emails = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_EMAIL_MACRO))
+            soc_team_severities = cs_utils.convert_to_set(config_handler.get_macro(SOC_TEAM_SEVERITIES_MACRO))
+            compliance_team_severities = cs_utils.convert_to_set(config_handler.get_macro(COMPLIANCE_TEAM_SEVERITIES_MACRO))
+
 
             associated_teams = config_handler.get_conf_stanza("savedsearches", self.alert_name)[0]["content"].get("action.cyences_notable_event_action.teams", "")
 
@@ -60,12 +62,14 @@ class CyencesSendEmailCommand(EventingCommand):
 
             if "SOC" in associated_teams:
                 email_to_include.update(soc_team_emails)
+                cyences_severities_to_include.update(soc_team_severities)
 
             if "Compliance" in associated_teams:
                 email_to_include.update(compliance_team_emails)
+                cyences_severities_to_include.update(compliance_team_severities)
 
-            email_to_include.update(email_to_default)
             final_to = email_to_include.difference(email_to_exclude)
+            final_severities = cyences_severities_to_include.difference(cyences_severities_to_exclude)
 
             if disable_email:
                 msg = "Sending email is disabled."
@@ -73,21 +77,21 @@ class CyencesSendEmailCommand(EventingCommand):
                 yield {
                     'msg': msg
                 }
-            elif len(cyences_severities) == 0:
-                msg = "Please check Cyences Send Email alert action configuration no severities selected."
+            elif len(final_severities) == 0:
+                msg = "Please configure the appropriate severities for the alert."
                 logger.warning(msg)
                 yield {
                     'msg': msg
                 }
             elif len(final_to) == 0:
-                msg = "Please check the Cyences Send Email alert action configuration no email recipients configured."
+                msg = "Please configure the appropriate recepient emails for the alert."
                 logger.warning(msg)
                 yield {
                     'msg': msg
                 }
 
             else:
-                filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in cyences_severities]
+                filtered_records = [ event for event in records if event.get('cyences_severity', '').lower() in final_severities]
 
                 if len(filtered_records) == 0:
                     msg = "No matching event found"
