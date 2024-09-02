@@ -38,10 +38,6 @@ access = read : [ * ], write : [ * ]
 export = system
 
 
-[visualizations/flow_map_viz]
-export = system
-
-
 ### ALERT ACTIONS
 
 [alert_actions]
