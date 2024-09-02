@@ -52,6 +52,7 @@ require([
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
         { id: 'cs_mssql', title: 'MSSQL' },
         { id: 'cs_oracle', title: 'Oracle' },
+        { id: 'cs_f5_bigip_asm', title: 'F5 BIGIP' },
     ]
 
     let panel_depends_tokens = [
@@ -69,6 +70,7 @@ require([
         { token: 'linux', associated_products: ['Linux'] },
         { token: 'db_oracle', associated_products: ['Oracle'] },
         { token: 'db_mssql', associated_products: ['MSSQL'] },
+        { token: 'f5_bigip', associated_products: ['F5 BIGIP'] },
     ]
 
 
@@ -171,7 +173,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
+    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_f5_bigip", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {

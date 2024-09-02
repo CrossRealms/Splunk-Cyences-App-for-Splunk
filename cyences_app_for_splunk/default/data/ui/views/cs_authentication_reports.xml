@@ -96,7 +96,7 @@
       <title>Application Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `cs_drop_dm_object_name(Authentication)`
 | chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
@@ -122,7 +122,7 @@
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports</link>
           </condition>
           <condition>
-            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$click.value|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$click.value|s$%20%7C%20%60cs_drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
           </condition>
         </drilldown>
       </table>
@@ -144,7 +144,7 @@
       <table>
         <search>
           <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
-| `drop_dm_object_name(Authentication)`
+| `cs_drop_dm_object_name(Authentication)`
 | eval over_field=user."|".app
 | chart sum(count) as count, max(last_login) as last_login over over_field by action
 | rex field=over_field "(?&lt;user&gt;[^\|]*)\|(?&lt;app&gt;.*)" | fields - over_field
@@ -163,7 +163,7 @@
             <link target="_blank">/app/cyences_app_for_splunk/cs_o365_reports?form.tkn_user=$row.user$&amp;form.tkn__user=$row.user$</link>
           </condition>
           <condition>
-            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$row.app|s$%20Authentication.user%3D$row.user|s$%20%7C%20%60drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
+            <link target="_blank">search?q=%7C%20datamodel%20Authentication%20search%20strict_fields%3Dfalse%20%7C%20search%20Authentication.action%20IN%20(%22success%22%2C%20%22failure%22)%20Authentication.app%3D$row.app|s$%20Authentication.user%3D$row.user|s$%20%7C%20%60cs_drop_dm_object_name(Authentication)%60&amp;earliest=$timeRange.earliest$&amp;latest=$timeRange.latest$</link>
           </condition>
         </drilldown>
       </table>
