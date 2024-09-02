@@ -38,7 +38,7 @@ access = read : [ * ], write : [ * ]
 export = system
 
 
-[visualizations/network_telemetry_map]
+[visualizations/flow_map_viz]
 export = system
 
 

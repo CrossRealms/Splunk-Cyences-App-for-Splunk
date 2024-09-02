@@ -59,7 +59,7 @@
   <row>
     <panel>
       <title>All Internal Traffic</title>
-      <viz type="flow_map_viz.flow_map_viz">
+      <viz type="cyences_app_for_splunk.flow_map_viz">
         <search>
           <query>| tstats `cs_summariesonly_network_traffic` count, sum(All_Traffic.bytes) as total_bytes, sum(All_Traffic.packets) as total_packets from datamodel=Network_Traffic where `cs_private_ips(All_Traffic.src_ip)` AND `cs_private_ips(All_Traffic.dest_ip)`AND (All_Traffic.dest_ip=$tkn_ip$ OR All_Traffic.src_ip=$tkn_ip$) AND (All_Traffic.dest_port=$tkn_port$ OR All_Traffic.src_port=$tkn_port$) AND $tkn_action$ by All_Traffic.src_ip, All_Traffic.dest_ip, All_Traffic.action 
 | `cs_drop_dm_object_name(All_Traffic)` 
@@ -77,40 +77,40 @@
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
-        <option name="flow_map_viz.flow_map_viz.background_color">#37444E</option>
-        <option name="flow_map_viz.flow_map_viz.background_mode">custom</option>
-        <option name="flow_map_viz.flow_map_viz.coarse_positions">yes</option>
-        <option name="flow_map_viz.flow_map_viz.labels_as_html">no</option>
-        <option name="flow_map_viz.flow_map_viz.line_style">solid</option>
-        <option name="flow_map_viz.flow_map_viz.link_color">#cccccc</option>
-        <option name="flow_map_viz.flow_map_viz.link_distance">200</option>
-        <option name="flow_map_viz.flow_map_viz.link_label_color">#C6C6C6</option>
-        <option name="flow_map_viz.flow_map_viz.link_opacity">0.5</option>
-        <option name="flow_map_viz.flow_map_viz.link_speed">90</option>
-        <option name="flow_map_viz.flow_map_viz.link_text_size">10</option>
-        <option name="flow_map_viz.flow_map_viz.link_width">1</option>
-        <option name="flow_map_viz.flow_map_viz.maxnodes">100</option>
-        <option name="flow_map_viz.flow_map_viz.node_bg_color">#cccccc</option>
-        <option name="flow_map_viz.flow_map_viz.node_border_color">#000000</option>
-        <option name="flow_map_viz.flow_map_viz.node_border_mode">darker1</option>
-        <option name="flow_map_viz.flow_map_viz.node_border_width">1</option>
-        <option name="flow_map_viz.flow_map_viz.node_center_force">0.1</option>
-        <option name="flow_map_viz.flow_map_viz.node_height">20</option>
-        <option name="flow_map_viz.flow_map_viz.node_radius">2</option>
-        <option name="flow_map_viz.flow_map_viz.node_repel_force">1000</option>
-        <option name="flow_map_viz.flow_map_viz.node_shadow_color">#000000</option>
-        <option name="flow_map_viz.flow_map_viz.node_shadow_mode">custom</option>
-        <option name="flow_map_viz.flow_map_viz.node_text_color">#000000</option>
-        <option name="flow_map_viz.flow_map_viz.node_text_size">12</option>
-        <option name="flow_map_viz.flow_map_viz.node_width">60</option>
-        <option name="flow_map_viz.flow_map_viz.particle_blur">0</option>
-        <option name="flow_map_viz.flow_map_viz.particle_error_color">#FF6347</option>
-        <option name="flow_map_viz.flow_map_viz.particle_good_color">#1a9035</option>
-        <option name="flow_map_viz.flow_map_viz.particle_limit">60</option>
-        <option name="flow_map_viz.flow_map_viz.particle_size">3</option>
-        <option name="flow_map_viz.flow_map_viz.particle_spread">5</option>
-        <option name="flow_map_viz.flow_map_viz.particle_warn_color">#d16f18</option>
-        <option name="flow_map_viz.flow_map_viz.renderer">webgl</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.background_color">#37444E</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.background_mode">custom</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.coarse_positions">yes</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.labels_as_html">no</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.line_style">solid</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_color">#cccccc</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_distance">200</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_label_color">#C6C6C6</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_opacity">0.5</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_speed">90</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_text_size">10</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.link_width">1</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.maxnodes">100</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_bg_color">#cccccc</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_border_color">#000000</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_border_mode">darker1</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_border_width">1</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_center_force">0.1</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_height">20</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_radius">2</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_repel_force">1000</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_shadow_color">#000000</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_shadow_mode">custom</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_text_color">#000000</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_text_size">12</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.node_width">60</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_blur">0</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_error_color">#FF6347</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_good_color">#1a9035</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_limit">60</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_size">3</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_spread">5</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.particle_warn_color">#d16f18</option>
+        <option name="cyences_app_for_splunk.flow_map_viz.renderer">webgl</option>
         <option name="height">550</option>
         <option name="refresh.display">progressbar</option>
       </viz>
