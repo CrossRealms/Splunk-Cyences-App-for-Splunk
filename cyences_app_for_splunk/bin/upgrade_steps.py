@@ -100,6 +100,16 @@ def upgrade_4_9_0(session_key, logger):
     response = service.jobs.oneshot(SPLUNK_DEVICES_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
     handle_results(response, logger)
 
+
+def upgrade_5_0_0(session_key, logger):
+    conf_manager = cs_utils.ConfigHandler(logger, session_key)
+    default_emails = conf_manager.get_conf_stanza('alert_actions', 'cyences_send_email_action')[0]["content"]["param.email_to_default"]
+
+    SOC_EMAIL_CONFIG_MACRO = 'cs_soc_email'
+    conf_manager.update_macro(SOC_EMAIL_CONFIG_MACRO, {"definition": default_emails})
+    logger.info("Updated the {} macro with the default emails configured for the cyences_send_email_action.".format(SOC_EMAIL_CONFIG_MACRO))
+
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -113,4 +123,5 @@ version_upgrade = (
     ('4.5.0', upgrade_4_5_0),
     ('4.8.0', upgrade_4_8_0),
     ('4.9.0', upgrade_4_9_0),
+    ('5.0.0', upgrade_5_0_0),
 )
