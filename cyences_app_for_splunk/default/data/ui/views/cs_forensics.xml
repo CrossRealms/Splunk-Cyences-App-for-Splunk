@@ -8,7 +8,7 @@
 | search cyences_severity IN $tkn_severity$
 | fields - _raw, search_name, alert_name, category, info_min_time, info_max_time, info_search_time, search_now, timestartpos, timeendpos, eventtype, linecount, splunk_server, splunk_server_group, tag, "tag::*", date_*, host, index, source, sourcetype, avoid_es_fields
 | rename * AS X_*_NEW 
-| foreach * [ eval newFieldName=replace("&lt;&lt;FIELD&gt;&gt;", "\s+", "_"), {newFieldName}='&lt;&lt;FIELD&gt;&gt;' ] | fields - "* *", newFieldName 
+| foreach * [ eval newFieldName=replace("&lt;&lt;FIELD&gt;&gt;", "\s+|\.+", "_"), {newFieldName}='&lt;&lt;FIELD&gt;&gt;' ] | fields - "* *", newFieldName 
 | foreach X_*_NEW [ eval &lt;&lt;MATCHSTR&gt;&gt;=&lt;&lt;FIELD&gt;&gt; ]
 | fields - X_*_NEW 
 | rename orig_* as * 
