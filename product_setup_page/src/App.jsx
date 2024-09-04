@@ -8,6 +8,7 @@ import HoneyDBSetup from './HoneyDBSetup';
 import MaliciousIPCollectorSetup from './MaliciousIPCollectorSetup';
 import SendEmailSetup from './SendEmailSetup';
 import DeviceInventorySetup from './DeviceInventorySetup';
+import CyencesDependencies from './CyencesDependencies';
 
 const TABS = [
     'Cyences General Configuration',
@@ -16,7 +17,8 @@ const TABS = [
     'HoneyDB Configuration',
     'MaliciousIP Collector Configuration',
     'Cyences Email Action Configuration',
-    'Device Inventory Configuration'
+    'Device Inventory Configuration',
+    'Cyences Dependencies'
 ]
 
 export default function App() {
@@ -52,6 +54,9 @@ export default function App() {
             </div>
             <div key={TABS[6]} style={{ display: activeTabId === TABS[6] ? 'block' : 'none' }}>
                 <DeviceInventorySetup />
+            </div>
+            <div key={TABS[7]} style={{ display: activeTabId === TABS[7] ? 'block' : 'none' }}>
+                <CyencesDependencies />
             </div>
         </div>
     );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Table from '@splunk/react-ui/Table';
 import SearchJob from '@splunk/search-job';
 import { app } from '@splunk/splunk-utils/config';
+import Link from '@splunk/react-ui/Link';
 
 
 export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
@@ -51,7 +52,7 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
                 {data.results?.map((row, index) => (
                     <Table.Row key={index}>
                         {data.fields?.map(field => (
-                            <Table.Cell key={index + field.name}>{row[field.name]}</Table.Cell>
+                            <Table.Cell key={index + field.name}>{field.name == 'Splunkbase Link'? <Link to={row[field.name]} openInNewContext>{row[field.name]}</Link>: row[field.name] }</Table.Cell>
                         ))}
                     </Table.Row>
                 ))}
