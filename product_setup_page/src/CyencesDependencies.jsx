@@ -22,6 +22,7 @@ const searchQuery = `| rest /services/apps/local splunk_server=local
     | table label, is_installed, disabled, link] 
 | stats first(*) as * by label 
 | eval disabled = case(disabled=0, "Enabled", disabled=1, "Disabled", 1==1, "-") 
+| table label, is_installed, disabled, link
 | rename label as "App Name", is_installed as "Installation Status", link as "Splunkbase Link", disabled as "Enabled/Disabled"
 `
 
