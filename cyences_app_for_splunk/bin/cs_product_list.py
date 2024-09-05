@@ -122,10 +122,6 @@ PRODUCTS = [
         "name": "MSSQL",
         "app_dependencies": [
             {
-                "label": "Splunk DB Connect",
-                "link": "https://splunkbase.splunk.com/app/2686/"
-            },
-            {
                 "label": "Splunk Add-on for Microsoft SQL Server",
                 "link": "https://splunkbase.splunk.com/app/2648/"
             }
