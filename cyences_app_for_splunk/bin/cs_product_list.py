@@ -388,6 +388,10 @@ PRODUCTS = [
             {
                 "label": "Sophos XG Firewall Add-on For Splunk",
                 "link": "https://splunkbase.splunk.com/app/6187/"
+            },
+            {
+                "label": "Sophos Central Addon for Splunk",
+                "link": "https://splunkbase.splunk.com/app/6186/"
             }
         ],
         "macro_configurations": [
@@ -397,6 +401,14 @@ PRODUCTS = [
                 "search_by": "sourcetype",
                 "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp",
                 "earliest_time": "-1d@d",
+                "latest_time": "now",
+            },
+            {
+                "macro_name": "cs_sophos",
+                "label": "Sophos Firewall Data",
+                "search_by": "sourcetype",
+                "search_values": "sophos_events",
+                "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
         ],
