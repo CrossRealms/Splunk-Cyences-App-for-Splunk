@@ -62,6 +62,31 @@
         <latest>$tkn_time.latest$</latest>
       </search>
     </input>
+    <input type="multiselect" token="tkn_class_type" searchWhenChanged="true">
+      <label>Object Type</label>
+      <prefix>class_type_desc IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>class_type_desc</fieldForLabel>
+      <fieldForValue>class_type_desc</fieldForValue>
+      <search>
+        <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields class_type_desc | stats count by class_type_desc</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="text" token="tkn_object" searchWhenChanged="true">
+      <label>Object Name</label>
+      <default>*</default>
+      <prefix>object_name="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -69,8 +94,8 @@
       <table>
         <search>
           <query>(`cs_mssql` (sourcetype="mssql:audit" OR sourcetype="mssql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) $tkn_host$ | rename properties.* as *  
-| fillnull value="-" server_principal_name
-| search $tkn_user$ $tkn_action_name$
+| fillnull value="-" server_principal_name object_name
+| search $tkn_user$ $tkn_action_name$ $tkn_class_type$ $tkn_object$
 | eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
 | rename server_instance_name as db_host, server_principal_name as user, class_type_desc as object_type, client_ip as src, database_principal_name as db_user, application_name as client_app
 | `cs_human_readable_time_format(_time, event_time)`
