@@ -62,6 +62,31 @@
         <latest>$tkn_time.latest$</latest>
       </search>
     </input>
+    <input type="multiselect" token="tkn_object_type" searchWhenChanged="true">
+      <label>Object Type</label>
+      <prefix>object_type IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>object_type</fieldForLabel>
+      <fieldForValue>object_type</fieldForValue>
+      <search>
+        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields object_category, AUDIT_TYPE | eval object_type = coalesce(object_category, AUDIT_TYPE) | stats count by object_type</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="text" token="tkn_object" searchWhenChanged="true">
+      <label>Object Name</label>
+      <default>*</default>
+      <prefix>object_name="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -70,8 +95,8 @@
         <search>
           <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") $tkn_host$
 | eval action_name = coalesce(vendor_action, ACTION_NAME), database_name = coalesce(DB_UNIQUE_NAME, database_name), schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), db_user = coalesce(DB_User, DBUSERNAME), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0, "success", "failure"), db_host = host 
-| fillnull value="-" user
-| search $tkn_user$ $tkn_action_name$ 
+| fillnull value="-" user object_name
+| search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time host db_host user action_name schema_name database_name object_name object_type src db_user client_app statement status</query>
           <earliest>$tkn_time.earliest$</earliest>
