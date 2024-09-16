@@ -2,6 +2,7 @@
   <label>VPN</label>
   <init>
     <set token="tkn_filter_home_country"></set>
+    <set token="tkn_product_name_for_data_availability_search">VPN</set>
   </init>
   <search id="bs0">
     <query>
@@ -110,7 +111,7 @@
       </html>
       <table>
         <search>
-          <query>`cs_vpn_indexes` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_vpn_indexes`" | table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$time.earliest$</earliest>
           <latest>$time.latest$</latest>
         </search>

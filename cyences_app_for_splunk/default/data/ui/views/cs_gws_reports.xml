@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>Google Workspace</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Google Workspace</set>
+  </init>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
     <earliest>0</earliest>
@@ -32,13 +35,7 @@
       </html>
       <table>
         <search>
-          <query>| tstats count where `cs_gws` sourcetype="gws:reports:login" 
-| eval label="`cs_gws` sourcetype=gws:reports:login" 
-| append [| tstats count where `cs_gws` sourcetype="gws:reports:admin" | eval label="`cs_gws` sourcetype=gws:reports:admin"] 
-| append [| tstats count where `cs_gws` sourcetype="gws:reports:groups_enterprise" | eval label="`cs_gws` sourcetype=gws:reports:groups_enterprise"] 
-| append [| tstats count where `cs_gws` sourcetype="gws:alerts" | eval label="`cs_gws` sourcetype=gws:alerts"] 
-| eval data=if(count&gt;0, "Data Present", "Data Not Present") 
-| table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

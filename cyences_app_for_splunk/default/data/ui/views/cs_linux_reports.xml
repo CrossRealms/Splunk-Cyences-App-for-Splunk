@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>Linux/Unix</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Linux</set>
+  </init>
   <search id="base_search_host_details">
     <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
   | fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
@@ -42,20 +45,7 @@
       </html>
       <table>
         <search>
-          <query>| tstats count where `cs_linux` | eval label="`cs_linux`"
-| append [| tstats count where `cs_linux_users_with_previledge` | eval label="`cs_linux` sourcetype=\"usersWithLoginPrivs\"" ]
-| append [| search index=* `cs_linux_failed_login` | head 1 | stats count  | eval label="`cs_linux` (sourcetype=linux_secure eventtype=*failed_login*) OR (source=/var/log/audit.log user=* process=sshd action=failure)"]
-| append [| search index=* `cs_linux_success_login` | head 1 | stats count | eval label="`cs_linux` (source=/var/log/secure app=sshd) OR (source=/var/log/audit.log user=* process=sshd ) action=success"]
-| append [| tstats count where `cs_linux_users`  | eval label="`cs_linux` sourcetype=\"cyences:linux:users\""]
-| append [| tstats count where `cs_linux_groups`  | eval label="`cs_linux` sourcetype=\"cyences:linux:groups\""]
-| append [| tstats count where `cs_linux_unix_version`  | eval label="`cs_linux` sourcetype=\"Unix:Version\""]
-| append [| tstats count where `cs_linux_unix_uptime`  | eval label="`cs_linux` sourcetype=\"Unix:Uptime\""]
-| append [| tstats count where `cs_linux_hardware`  | eval label="`cs_linux` sourcetype=\"hardware\""]
-| append [| tstats count where `cs_linux_interfaces`  | eval label="`cs_linux` sourcetype=\"interfaces\""]
-| append [| tstats count where `cs_linux_df`  | eval label="`cs_linux` sourcetype=\"df\""]
-| append [| tstats count where `cs_linux_unix_listening_ports`  | eval label="`cs_linux` sourcetype=\"Unix:ListeningPorts\""]
-| append [| tstats count where `cs_linux_unix_service`  | eval label="`cs_linux` sourcetype=\"Unix:Service\""]
-| eval data=if(count&gt;0, "Data Present", "Data Not Present") | table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

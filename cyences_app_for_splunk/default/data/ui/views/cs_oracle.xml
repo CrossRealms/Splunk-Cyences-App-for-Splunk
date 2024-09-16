@@ -1,5 +1,8 @@
 <form version="1.1" theme="dark">
   <label>Oracle</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Oracle</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="tkn_time" searchWhenChanged="true">
       <label>Time Range</label>
@@ -88,6 +91,25 @@
       <initialValue>*</initialValue>
     </input>
   </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/1910/" target="_blank">Splunk Add-on for Oracle</a> for collecting Oracle data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
   <row>
     <panel>
       <title>Audit Logs</title>
