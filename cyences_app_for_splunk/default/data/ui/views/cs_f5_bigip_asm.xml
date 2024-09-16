@@ -43,7 +43,7 @@
       <title>Top 10 Attack Type</title>
       <table>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -62,7 +62,7 @@
       <title>Top 10 Attack Type</title>
       <chart>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top attack_type</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -78,7 +78,7 @@
       <title>Top 10 Source IP</title>
       <table>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -97,7 +97,7 @@
       <title>Top 10 Source IP</title>
       <chart>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | top ip_client</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -113,7 +113,7 @@
       <chart>
         <title>Top Rules Over Time</title>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by policy_name</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by policy_name</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -126,7 +126,7 @@
       <chart>
         <title>Top Action</title>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by enforcement_action</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by enforcement_action</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -141,7 +141,7 @@
       <chart>
         <title>Top Blocked Source IPs</title>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by ip_client</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by ip_client</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -154,7 +154,7 @@
       <chart>
         <title>Top Blocked Destionation IPs</title>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by dest_ip</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | timechart count by dest_ip</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -169,7 +169,7 @@
       <title>Blocked Source IPs</title>
       <map>
         <search>
-          <query>`cs_f5_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | iplocation ip_client | geostats latfield=lat longfield=lon count</query>
+          <query>`cs_f5_bigip_asm` attack_type!="N/A" enforcement_action="block" $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$ | iplocation ip_client | geostats latfield=lat longfield=lon count</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -208,7 +208,7 @@
       <table>
         <title>All Events</title>
         <search>
-          <query>`cs_f5_asm` $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
+          <query>`cs_f5_bigip_asm` $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
 | table _time ip_client src_port dest_ip dest_port manage_ip_addr x_fwd_hdr_val attack_type enforcement_action blocking_exception_reason client_type credential_stuffing_lookup_result device_id enforced_by geo_info http_class ip_addr_intelli ip_route_domain  login_result method mobile_application_name mobile_application_version policy_apply_date policy_name protocol protocol_info req_status resp_code route_domain severity sig_ids sig_names sub_violates threat_campaign_names unit_host uri username violate_details violate_rate violations virus_name  is_trunct</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
@@ -223,7 +223,7 @@
       <table>
         <title>Attacks by IP</title>
         <search>
-          <query>`cs_f5_asm`  attack_type!="N/A"  $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
+          <query>`cs_f5_bigip_asm`  attack_type!="N/A"  $tkn_src_ip$ $tkn_dest_ip$ $tkn_severity$
 | table _time ip_client src_port dest_ip dest_port manage_ip_addr x_fwd_hdr_val attack_type enforcement_action blocking_exception_reason client_type credential_stuffing_lookup_result device_id enforced_by geo_info http_class ip_addr_intelli ip_route_domain  login_result method mobile_application_name mobile_application_version policy_apply_date policy_name protocol protocol_info req_status resp_code route_domain severity sig_ids sig_names sub_violates threat_campaign_names unit_host uri username violate_details violate_rate violations virus_name  is_trunct
 | eval action = if(isnull(enforcement_action), "allow", enforcement_action)
 | stats values(attack_type) as attack_type, count by ip_client, action
