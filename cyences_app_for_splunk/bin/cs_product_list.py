@@ -50,6 +50,23 @@ def build_source_reviewer_search(by, values, first_call=True):
     return search
 
 
+def build_data_availablity_panel_search(macro, by, values, first_call=True):
+    search = ""
+    values = values.split(",")
+
+    for index in range(len(values)):
+        if index > 0 or first_call is False:
+            search += " | append ["
+        search += """| tstats count where `{macro}` {by}="{value}"
+        | eval label="`{macro}` {by}=\\"{value}\\""
+        """.format(
+            macro=macro, by=by, value=values[index].strip('"')
+        )
+        if index > 0 or first_call is False:
+            search += "]"
+    return search
+
+
 def build_app_dependency_search(app_list):
     search = ""
     count = 0
@@ -553,6 +570,7 @@ PRODUCTS = [
                 "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
+                "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -576,6 +594,7 @@ PRODUCTS = [
                 "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_AD_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
+                "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_AD_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -600,6 +619,7 @@ PRODUCTS = [
                 "search": build_search_query(macro="cs_windows_idx", by="source", values=WINDOWS_DNS_SOURCES) + build_search_query(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
+                "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_DNS_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -664,6 +684,7 @@ PRODUCTS = [
                 "search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by index, sourcetype',
                 "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_vpn_indexes` dest_category="vpn_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vpn_indexes` dest_category=vpn_auth" | table label, data',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -685,6 +706,7 @@ PRODUCTS = [
                 "search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count by index, sourcetype',
                 "host_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data',
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
@@ -714,6 +736,12 @@ for product in PRODUCTS:
             )
         if not product.get("metadata_count_search"):
             metadata_count_search += build_metadata_count_search(
+                by=macro_config["search_by"],
+                values=macro_config["search_values"],
+            )
+        if not macro_config.get("data_availablity_panel_search"):
+            macro_config["data_availablity_panel_search"] = build_data_availablity_panel_search(
+                macro=macro_config["macro_name"],
                 by=macro_config["search_by"],
                 values=macro_config["search_values"],
             )

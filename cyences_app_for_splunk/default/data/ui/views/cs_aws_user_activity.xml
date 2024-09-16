@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>AWS</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">AWS</set>
+  </init>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
     <earliest>0</earliest>
@@ -112,7 +115,7 @@
       </html>
       <table>
         <search>
-          <query>`cs_aws_cloudtrail_logs` | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_aws_cloudtrail_logs`" | table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

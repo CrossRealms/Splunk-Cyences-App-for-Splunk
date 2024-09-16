@@ -1,5 +1,8 @@
 <form version="1.1" theme="dark">
   <label>F5 BIGIP ASM</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">F5 BIGIP</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="timerange">
       <label>Time Range</label>
@@ -38,6 +41,25 @@
       <suffix>"</suffix>
     </input>
   </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/2680/" target="_blank">Splunk Add-on for F5 BIG-IP</a> for collecting F5 BIGIP data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
   <row>
     <panel>
       <title>Top 10 Attack Type</title>

@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>Fortigate Firewall</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">FortiGate</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -18,10 +21,7 @@
       </html>
       <table>
         <search>
-          <query>`cs_fortigate` sourcetype="fortigate_utm" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_utm\""
-| append [| search `cs_fortigate` sourcetype="fortigate_traffic" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_traffic\""]
-| append [| search `cs_fortigate` sourcetype="fortigate_event" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_fortigate` sourcetype=\"fortigate_event\""]
-| table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
