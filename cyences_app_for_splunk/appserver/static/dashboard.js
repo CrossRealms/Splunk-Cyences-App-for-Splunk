@@ -83,19 +83,20 @@ require([
 
     ProductName = SplunkCommonUtilities.VTokenManagerObj.getToken('tkn_product_name_for_data_availability_search');
 
-    var searchQuery = '| cyencesproductmanager operation="buildproductspecificsearches" product_name="' + ProductName + '" | table data_availablity_panel_search';
+    if (ProductName!= undefined){
+        var searchQuery = '| cyencesproductmanager operation="buildproductspecificsearches" product_name="' + ProductName + '" | table data_availablity_panel_search';
 
-    new SplunkCommonUtilities.VSearchManagerUtility(
-        function(results){
-            if (results == null){
-                return;
+        new SplunkCommonUtilities.VSearchManagerUtility(
+            function(results){
+                if (results == null){
+                    return;
+                }
+                SplunkCommonUtilities.VTokenManagerObj.setToken('tkn_data_availablity_search', results["rows"][0][0]);
+
+            },
+            function(errorProperties){
+                alert("Unable to execute the data availability search.");
             }
-            SplunkCommonUtilities.VTokenManagerObj.setToken('tkn_data_availablity_search', results["rows"][0][0]);
-
-        },
-        function(errorProperties){
-            alert("Unable to execute the data availability search.");
-        }
-    ).searchByQuery(searchQuery);
-
+        ).searchByQuery(searchQuery);
+    }
 });
