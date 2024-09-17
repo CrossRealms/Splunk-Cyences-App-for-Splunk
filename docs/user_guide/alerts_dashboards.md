@@ -31,7 +31,7 @@ There are several security related alerts to choose from and they are all locate
 
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
-    * CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike
+    * Suspicious Activity or Malware Detected
 * CrowdStrike Dashboard panels:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
@@ -49,15 +49,15 @@ There are several security related alerts to choose from and they are all locate
     * Virus Found and Blocked
     * Virus Found and Passed
 * Office 365 Defender ATP Alerts:
-    * Defender ATP - Defender ATP Alerts
+    * Defender ATP - Alerts
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
 * Sophos Endpoint Protection Alerts:
-    * Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection
-    * Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled 
-    * Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running 
-    * Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection
-    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
+    * Endpoint Not Protected by Sophos Endpoint Protection
+    * Sophos Endpoint RealTime Protection Disabled 
+    * Sophos Endpoint Protection Service is not Running 
+    * Failed to CleanUp Threat by Sophos Endpoint Protection
+    * Failed to CleanUp Potentially Unwanted Application by Sophos
 * Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
@@ -73,9 +73,9 @@ There are several security related alerts to choose from and they are all locate
     * Web Control Violation
     * Web Filtering Blocked
 * Windows Defender Alerts:
-    * Windows Defender - Endpoint Not Protected by Windows Defender
-    * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
-    * Windows Defender - Malware Detected
+    * Endpoint Not Protected
+    * Windows Defender RealTime Protection Disabled or Failed
+    * Malware Detected by Windows Defender
 * Windows Defender Dashboard panels:
     * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
     * Antimalware will Drop Support for Operating System Soon 
@@ -91,11 +91,11 @@ There are several security related alerts to choose from and they are all locate
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
     * AWS - IAM AccessKey Creation or Deletion
-    * AWS - IAM Login Profile Change/Update
-    * AWS - IAM User Creation or Deletion
-    * AWS - IAM Policy Creation or Deletion
-    * AWS - IAM Group Change/Update
-    * AWS - IAM Group Membership Change/Update
+    * AWS - IAM Login Profile Changes
+    * AWS - IAM User Changes
+    * AWS - IAM Policy Changes
+    * AWS - IAM Group Changes
+    * AWS - IAM Group Membership Changes
     * AWS - IAM Role Creation or Deletion
     * AWS - Network Access Control List Creation or Deletion
     * AWS - Concurrent Sessions From Different IPs
@@ -115,14 +115,14 @@ There are several security related alerts to choose from and they are all locate
     * Login by Location
     * Successful Logins
     * Failed Logins
-    * AWS - IAM - Policy Creation/Deletion
-    * AWS - IAM - Role Creation/Deletion
-    * AWS - IAM - AccessKey Creation/Deletion
-    * AWS - IAM - Login Profile Change/Update
-    * AWS - IAM - Group Change/Update
-    * AWS - IAM - GroupMembership Change/Update
-    * AWS - IAM - User Creation/Deletion
-    * AWS - Network Access Control List Creation/Deletion
+    * AWS - IAM - Policy Changes
+    * AWS - IAM - Role Changes
+    * AWS - IAM - AccessKey Changes
+    * AWS - IAM - Login Profile Changes
+    * AWS - IAM - Group Changes
+    * AWS - IAM - GroupMembership Changes
+    * AWS - IAM - User Changes
+    * AWS - Network Access Control List Changes
     * Most Recent User Activity Grouped by Event Name
     * Total Activities 
     * Error Activities
@@ -131,10 +131,10 @@ There are several security related alerts to choose from and they are all locate
     * User Activity by User Name Over Time
 * Google Workspace Alerts:
     * Google Workspace - Bulk User Creation or Deletion
-    * Google Workspace - User Change/Update
-    * Google Workspace - Enterprise Group Change/Update
-    * Google Workspace - Enterprise Group Membership Change/Update
-    * Google Workspace - Role Change/Update
+    * Google Workspace - User Changes
+    * Google Workspace - Group Changes
+    * Google Workspace - Group Membership Changes
+    * Google Workspace - Role Changes
     * Google Workspace - Multiple Password Changes in Short Time Period
     * Google Workspace - Successful Login From Unusual Country
     * Google Workspace - Suspicious Login Activity by User
@@ -153,22 +153,22 @@ There are several security related alerts to choose from and they are all locate
     * Password Updated
     * Other Login Related Events
     * Google Workspace - Alerts Center Details
-    * Google Workspace - Role Change/Update
-    * Google Workspace - Enterprise Group Change/Update
-    * Google Workspace - Enterprise GroupMembership Change/Update
-    * Google Workspace - User Change/Update
+    * Google Workspace - Role Changes
+    * Google Workspace - Group Changes
+    * Google Workspace - GroupMembership Changes
+    * Google Workspace - User Changes
     * Google Drive objects shared Outside or with External User
     * Google Drive objects accessed by External User
 * Microsoft Office 365 Alerts:
+    * Azure Active Directory - Application Changes
+    * Azure Active Directory - AuthorizationPolicy Changes
+    * Azure Active Directory - Group Changes
+    * Azure Active Directory - GroupMembership Changes
+    * Azure Active Directory - Policy Changes
+    * Azure Active Directory - Role Changes
+    * Azure Active Directory - ServicePrincipal Changes
+    * Azure Active Directory - User Changes
     * O365 - Authentication Blocked by Conditional Access Policy
-    * O365 - Azure Active Directory - Application Change/Update 
-    * O365 - Azure Active Directory - AuthorizationPolicy Change/Update
-    * O365 - Azure Active Directory - Group Change/Update
-    * O365 - Azure Active Directory - GroupMembership Change/Update
-    * O365 - Azure Active Directory - Policy Change/Update 
-    * O365 - Azure Active Directory - Role Change/Update
-    * O365 - Azure Active Directory - ServicePrincipal Change/Update
-    * O365 - Azure Active Directory - User Change/Update 
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
     * O365 - Daily Login Failure
@@ -185,15 +185,15 @@ There are several security related alerts to choose from and they are all locate
     * O365 - OneDrive or SharePoint File Sharing with External User
     * O365 - OneDrive or SharePoint Link Accessed By External User
 * Microsoft Office 365 Dashboard panels: 
-    * Azure Active Directory - Application Change/Update
-    * Azure Active Directory - AuthorizationPolicy Change/Update
-    * Azure Active Directory - Group Change/Update
-    * Azure Active Directory - GroupMembership Change/Update
-    * Azure Active Directory - Other Change/Update
-    * Azure Active Directory - Policy Change/Update
-    * Azure Active Directory - Role Change/Update
-    * Azure Active Directory - ServicePrincipal Change/Update
-    * Azure Active Directory - User Change/Update
+    * Azure Active Directory - Application Changes
+    * Azure Active Directory - AuthorizationPolicy Changes
+    * Azure Active Directory - Group Changes
+    * Azure Active Directory - GroupMembership Change
+    * Azure Active Directory - Other Changes
+    * Azure Active Directory - Policy Changes
+    * Azure Active Directory - Role Changes
+    * Azure Active Directory - ServicePrincipal Changes
+    * Azure Active Directory - User Changes
     * Azure - Current Security Score
     * Azure - Current Security Score(In Percentage) 
     * External Users Added to Teams
@@ -413,8 +413,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 
 ## Linux/Unix
 * Alerts:
-    * Linux - User Added/Updated/Deleted
-    * Linux - Group Added/Updated/Deleted
+    * Linux - User Changes
+    * Linux - Group Changes
 * Dashboard panels:
     * Hosts Details
     * Linux Group Added/Updated/Removed
