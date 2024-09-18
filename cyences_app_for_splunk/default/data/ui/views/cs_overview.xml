@@ -33,7 +33,7 @@
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
 | sort - cyences_severity
-| table savedsearch_name, "Notable Events", cyences_severity</query>
+| table savedsearch_name, "Notable Events", cyences_severity, alert_products</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>
@@ -585,7 +585,7 @@
 | eval problem = cyences_severity."|".problems
 | sort - cyences_severity
 | rename savedsearch_name as Name, problem as "Notable Events"
-| table Name, "Notable Events", cyences_severity</query>
+| table Name, "Notable Events", cyences_severity, alert_products</query>
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
