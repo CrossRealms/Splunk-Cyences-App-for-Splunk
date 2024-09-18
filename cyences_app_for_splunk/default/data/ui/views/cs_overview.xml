@@ -148,7 +148,7 @@
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
 | rename savedsearch_name as Name
-| eval Name=case(Name=="Endpoint Protection Service is not Running","Sophos Endpoint Protection Service Stopped/Disabled Events",Name=="Endpoint RealTime Protection Disabled","Sophos Endpoint Protection RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected","Windows Defender Endpoint Stopped/Disabled Events",Name=="RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
+| eval Name=case(Name=="Endpoint Protection Service is Not Running","Sophos Endpoint Protection Service Stopped/Disabled Events",Name=="Endpoint RealTime Protection Disabled","Sophos Endpoint Protection RealTime Protection Stopped/Disabled Events",Name=="Endpoint Not Protected","Windows Defender Endpoint Stopped/Disabled Events",Name=="RealTime Protection Disabled or Failed","Windows Defender RealTime Protection Stopped/Disabled/Failed Events",true(),Name)
 | append 
     [| search `cs_sophos` type IN ("Event::Endpoint::ServiceNotRunning", "Event::Endpoint::ServiceRestored") dhost IN ("*") user IN ("*") earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | fields _time host dhost type 
