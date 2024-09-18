@@ -12,6 +12,9 @@ There are several security related alerts to choose from and they are all locate
 
 
 ## Authentication (for all authentication related activities)
+
+* TODO - Need to re-add all the alerts and dashboard panel list here
+
 * Alerts:
     * Authentication - Bruteforce Attempt for a User
     * Authentication - Bruteforce Attempt from a Source
