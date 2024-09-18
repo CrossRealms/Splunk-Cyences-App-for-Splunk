@@ -24,6 +24,7 @@ jobs:
           my_github_token: ${{ secrets.MY_GITHUB_TOKEN }}
           logger_log_files_prefix: "cyences"
           logger_sourcetype: "cyences:logs"
+          splunk_python_sdk_install_path: "lib"
 
       - uses: VatsalJagani/splunk-app-action@v4
         with:
