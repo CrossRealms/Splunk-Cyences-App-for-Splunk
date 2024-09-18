@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import cs_imports
 import sys
 import time
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option, validators
