@@ -112,8 +112,8 @@ def upgrade_5_0_0(session_key, logger):
     vpn_login_attempt_old_macro_name = "cs_authentication_vpn_login_attemps_outside_working_hour_filter"
     vpn_login_attempt_new_macro_name = "cs_authentication_vpn_login_attempts_outside_working_hour_filter"
     try:
-        old_macro_definition = conf_manager.get_conf_stanza('macros', vpn_login_attempt_old_macro_name)[0]["content"]["definition"]
-        conf_manager.update_macro(vpn_login_attempt_new_macro_name, old_macro_definition)
+        old_macro_definition = conf_manager.get_macro(vpn_login_attempt_old_macro_name)
+        conf_manager.update_macro(vpn_login_attempt_new_macro_name, {"definition": old_macro_definition})
         logger.info("Macro value (cs_authentication_vpn_login_attempts_outside_working_hour_filter) has been successfully migrated to the renamed macro.")
     except:
         logger.info("Old macro value for (cs_authentication_vpn_login_attemps_outside_working_hour_filter) in the user environment does not exist, skipping the upgrade step.")
