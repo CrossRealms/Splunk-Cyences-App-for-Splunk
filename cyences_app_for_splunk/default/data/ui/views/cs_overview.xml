@@ -144,7 +144,7 @@
       <title>Antivirus</title>
       <table id="tbl_antivirus">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP|Office 365 Defender ATP")`
+          <query>| `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Office 365 Defender ATP")`
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
 | rename savedsearch_name as Name
@@ -291,7 +291,7 @@
       <title>Office 365</title>
       <table id="tbl_o365">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("O365|Office 365")` 
+          <query>| `cs_filter_savedsearches("Office 365")` 
 | append 
     [| search `cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus"))  earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
@@ -398,7 +398,7 @@
       <title>Active Directory &amp; Windows</title>
       <table id="tbl_ad_windows">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Windows|AD")`</query>
+          <query>| `cs_filter_savedsearches("Windows|Windows AD")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -610,7 +610,7 @@
       <title>Other Alerts</title>
       <table id="tbl_other_alerts">
         <search base="basesearch">
-          <query> eval products_to_search="Authentication|VPN|Radius Authentication|Sophos Endpoint Protection|Windows Defender|CrowdStrike|Defender ATP|Office 365 Defender ATP|AWS|Google Workspace|O365|Office 365|Email|Network Compromise|Cisco IOS|Cisco Meraki|Vulnerability|Windows|AD|Credential Compromise|Ransomware|Linux|F5 BIGIP|Oracle|MSSQL"
+          <query> eval products_to_search="Authentication|VPN|Radius Authentication|Sophos Endpoint Protection|Windows Defender|CrowdStrike|Office 365 Defender ATP|AWS|Google Workspace|Office 365|Email|Network Compromise|Cisco IOS|Cisco Meraki|Vulnerability|Windows|Windows AD|Credential Compromise|Ransomware|Linux|F5 BIGIP|Oracle|MSSQL"
 | makemv delim="|" products_to_search | eval products_to_search=trim(products_to_search)
 | cyencesmvintersection set1="products_to_search" set2="alert_products"
 | where mvcount(intersection)=0
