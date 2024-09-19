@@ -605,8 +605,8 @@
       </table>
     </panel>
   </row>
-  <row>
-    <panel> <!-- TODO - hide logic to add-->
+  <row depends="$other_alerts_panel$">
+    <panel>
       <title>Other Alerts</title>
       <table id="tbl_other_alerts">
         <search base="basesearch">
@@ -616,6 +616,14 @@
 | where mvcount(intersection)=0
 | rex field=savedsearch_name "^.*\-\s(?&lt;Name&gt;.*)$"
 | eval Name=if(isnull(Name), savedsearch_name, Name)</query>
+          <progress>
+            <condition match="'job.resultCount' &gt; 0">
+              <set token="other_alerts_panel">true</set>
+            </condition>
+            <condition>
+              <unset token="other_alerts_panel"></unset>
+            </condition>
+          </progress>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
