@@ -45,7 +45,6 @@
     <view name="cs_device_inventory_table" />
     <view name="cs_user_inventory_table" />
     <view name="cs_asset_intelligence" />
-    <view name="cs_malicious_ip_list" />
   </collection>
   <collection label="Cyences Settings">
     <view name="cs_configuration" />

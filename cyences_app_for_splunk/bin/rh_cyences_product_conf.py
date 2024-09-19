@@ -15,7 +15,6 @@ logger = logger_manager.setup_logging('rh_cyences_configuration', logging.INFO)
 
 
 CONF_FILE = 'cs_configurations'
-HONEYDB_STANZA = 'honeydb'
 
 APP_CONFIG_STANZA = 'product_config'
 PRODUCTS_KEY = 'products'
