@@ -55,12 +55,8 @@ let allMacros = [
     {
         section: 'Palo Alto',
         macros: [
-            { name: 'cs_palo_ddos_prevented_filter' },
             { name: 'cs_palo_firewall_login_failure_filter' },
-            { name: 'cs_palo_blocked_ip_inbound_filter' },
-            { name: 'cs_palo_blocked_ip_outbound_filter' },
             { name: 'cs_palo_malicious_ip_list_filter' },
-            { name: 'cs_palo_search_blocked_ip_lookup_name', description: 'Lookup for blocked IP list (default is ip_blocked_list, which stores the blocked IP list from HoneyDB)' },
             { name: 'cs_palo_malicious_ip_list_filter_old_results', description: 'Only update the value between the quotes (the default value is -7d@h, which means the list of Globally Detected Malicious IPs keeps any IP address for seven days since the last appearance of any IP address)' },
         ]
     },
