@@ -25,19 +25,19 @@ has_children: true
     * Added new dashboard named **F5 BIGIP ASM**.
     * Added new alert named **F5 BIGIP - Not Blocked Attacks**.
 
-* Added new alerts for the Sophos Firewall:
+* Added new alerts for the **Sophos Firewall**:
     * Sophos Firewall - Lost Connection to Sophos Central
     * Sophos Firewall - VPN Tunnel Down
     * Sophos Firewall - Gateway Down
     * Sophos Firewall - Advanced Threat Detected
 
-* Added new alerts for the MSSQL and Oracle databases:
+* Added new alerts for **MSSQL** Database and **Oracle** Database:
     * MSSQL - Database Changes
     * MSSQL - Role Changes
     * Oracle - Database Changes
     * Oracle - Role Changes
 
-* Added new alerts for the Defender ATP:
+* Added new alerts for the **Defender ATP**:
     * Defender ATP - System is Offboarded
     * Defender ATP - System is not Connected since a Week
 
@@ -48,10 +48,6 @@ has_children: true
     * O365 - Successful Login Outside Home Country
     * Authentication - Successful VPN Login Outside Home Country
     * Linux - Change in Sudo Access of Local Linux Account
-
-* Removed the following other app dependent macros and defined related macro in app itself:
-    * Added **cs_drop_dm_object_name** macro to replace the **drop_dm_object_name** macro.
-    * Added **cs_cim_authentication_indexes** macro to replace the **cim_Authentication_indexes** macro.
 
 * Removed **Google Workspace - Suspicious File Shared by External User on Google Drive** alert and related panel from **Google Workspace** dashboard as it contains static lookup causing many false positives.
 
@@ -89,11 +85,17 @@ has_children: true
     * Fixed the typo in the macro name from **cs_authentication_vpn_login_attemps_outside_working_hour_filter** to **cs_authentication_vpn_login_attempts_outside_working_hour_filter**
 
 
+* ### For Splunk Admins
+
+    * Removed the following other app dependent macros and defined related macro in app itself:
+        * Added **cs_drop_dm_object_name** macro to replace the **drop_dm_object_name** macro.
+        * Added **cs_cim_authentication_indexes** macro to replace the **cim_Authentication_indexes** macro.
+
 
 ## Upgrade Guide from 4.9.0 to 5.0.0
     
 * After upgrade, only SOC related alerts will be received to existing configured critical emails. To make more changes, configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
 
-* In order to use the sophos firewall alerts, onboard the **sophos_events** data from [Sophos Central Addon for Splunk](https://splunkbase.splunk.com/app/6186/).
+* In order to use the sophos firewall alerts, onboard the **sophos_events** data from [Sophos Central Addon for Splunk](https://splunkbase.splunk.com/app/6186/). For more details, refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall)
 
 

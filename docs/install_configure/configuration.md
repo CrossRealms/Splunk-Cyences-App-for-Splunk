@@ -25,11 +25,13 @@ For optimal performance, it is recommended to enable the data model acceleration
 
 
 ## Products Setup (Data Source Macros)
-Users can use the Products Setup page to customize the dashboards they want to see/hide and the alerts they want to enable/disable. There is a toggle button on the configuration page on each product page to do that. Users can enable or disable it. Showing status as "Unknown" means it's enabled and dashboards are visible. It's recommended to move toggle it to either "Enabled" or "Disabled" status.
+Users can use the Products Setup page to customize the dashboards they want to see/hide, overview page panels to show/hide and the alerts they want to enable/disable. There is a toggle button on the configuration page on each product page to do that. Users can enable or disable it. Showing status as "Unknown" means it's enabled and dashboards are visible. It's recommended to move toggle it to either "Enabled" or "Disabled" status.
 
 The Products Setup page allows you to see if the data-source configuration (index macro) is accurate and if your Splunk environment has data for it or not and modify the configuration if required.
 
 Navigate to **Cyences Settings > Cyences App Configuration** and **Products Setup** section where you can view and update several macro definitions. Verify that the macro definitions match the data source (index) used in your Splunk environment.
+
+Also, **App Dependencies** table shows you the product specific dependent app installation status, enabled/disabled status if it's installed and app installation link information.
 
 ![alt]({{ site.baseurl }}/assets/data_source_macros.png)
 
@@ -40,53 +42,7 @@ Navigate to **Cyences Settings > Cyences App Configuration > Macro Setup** where
 ![alt]({{ site.baseurl }}/assets/other_macros.png)
 
 
-## Honey DB Configuration
-
-We are using an IP block list from HoneyDB to detect malicious IP addresses coming in and out of the firewall. HoneyDB is a paid service that is used to obtain the list of blocked hosts/IPs. We are using API calls to get the most recent lists and then we correlate it with firewall logs. 
-
-A scheduled saved search is used to update the blocklist every two hours. Internally, the search query uses custom commands to make API calls to HoneyDB's API to update the blocked list lookup. 
-
-### Configuration of API and Secret Key for HoneyDB
-
-The Splunk user has to add the API ID and API key to make HoneyDB API calls to retrieve the blocked IP list. Follow these steps to update the API ID and API key for the Cyences App:
-
-1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
-
-2. On the left panel of the dashboard there is a section for **HoneyDB Configuration**
-
-3. Update the **API ID** and **API Key** for the HoneyDB API. 
-
-![alt]({{ site.baseurl }}/assets/honeydb_config.png)
-
-
-## Configuration of Malicious IP Collector Server
-
-The Splunk user has to add the API URL and Auth token to make API calls to Cyences Malicious IP List server to create malicious IP list and retrieve the latest malicious IP list from the server. Follow these steps to update the same for the Cyences App: 
-
-1. Navigate to the Cyences app and from the navigation bar go to **Cyences Settings > Cyences App Configuration**.
-
-2. On the left panel of the dashboard there is a section for **MaliciousIP Collector Configuration**.
-
-3. Update the **API URL** and **Auth Token** for the Cyences Server API. 
-
-![alt]({{ site.baseurl }}/assets/malicious_ip_collector_config.png)
-
-**Note:** Contact the CrossRealms Cyences team to get API URL and Authentication Token.
-
-How to test whether the configuration is functioning correctly? 
-
-Run the search below and it should return events with no errors: 
-
-        | maliciousiplookupgen update_lookup=False generate_events=True 
-
-![alt]({{ site.baseurl }}/assets/malicious_ip_lookupgen_search.png)
-
-
-## Sophos Central API Endpoints Configuration
-
-Refer to the [Data Onboarding > Sophos Central Metadata through API]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/sophos_endpoint_protection/#sophos-central-metadata-through-api) section for more information. 
-
-
+<!-- TODO - Needs to update this entire section when we have latest screenshot -->
 ## Cyences Email Settings for Alerts
 
 The way Splunk currently handles alerts, users are only able to set up email notifications, which is not always optimal as some alerts may generate a lot of false positives. Not every alert needs to be received by email, especially those labeled with lower severity levels. 
