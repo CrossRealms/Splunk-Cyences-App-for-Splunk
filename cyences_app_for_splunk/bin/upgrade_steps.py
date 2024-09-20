@@ -114,9 +114,18 @@ def upgrade_5_0_0(session_key, logger):
     try:
         old_macro_definition = conf_manager.get_macro(vpn_login_attempt_old_macro_name)
         conf_manager.update_macro(vpn_login_attempt_new_macro_name, {"definition": old_macro_definition})
-        logger.info("Macro value (cs_authentication_vpn_login_attempts_outside_working_hour_filter) has been successfully migrated to the renamed macro.")
+        logger.info("Macro value ({}) has been successfully migrated to the renamed macro={}.".format(old_macro_definition, vpn_login_attempt_new_macro_name))
     except:
-        logger.info("Old macro value for (cs_authentication_vpn_login_attemps_outside_working_hour_filter) in the user environment does not exist, skipping the upgrade step.")
+        logger.info("Old macro value for ({}) does not exist in the user environment , skipping the upgrade step.".format(vpn_login_attempt_old_macro_name))
+
+    cim_authentication_old_macro_name = "cim_Authentication_indexes"
+    cim_authentication_new_macro_name = "cs_cim_authentication_indexes"
+    try:
+        old_macro_definition = conf_manager.get_macro(cim_authentication_old_macro_name)
+        conf_manager.update_macro(cim_authentication_new_macro_name, {"definition": old_macro_definition})
+        logger.info("Macro value ({}) has been successfully migrated to the renamed macro={}.".format(old_macro_definition, cim_authentication_new_macro_name))
+    except:
+        logger.info("Old macro value for ({}) does not exist in the user environment , skipping the upgrade step.".format(cim_authentication_old_macro_name))
 
     # TODO - Upgrade step to call to the rest endpoint - CyencesProductConfiguration/product_config - to automatically enable/disable all the renamed alerts based on existing settings
 
