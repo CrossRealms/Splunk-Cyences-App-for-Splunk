@@ -18,13 +18,13 @@ Installation Guide:
 [https://splunkbase.splunk.com/app/2680/#/details](https://splunkbase.splunk.com/app/2680/#/details) 
 
 
-## How to Install and Configure the Palo Alto Add-on: 
+## How to Install and Configure the F5 BIGIP Addon: 
 
 1. Install the Add-on on the Heavy Forwarder.
 
 2. Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [https://splunk.paloaltonetworks.com/getting-data-in.html](https://splunk.paloaltonetworks.com/getting-data-in.html).
-    * Create an index named **f5** or update the macro definition in Cyences' configuration page.  
+    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2680/#/details).
+    * Create an index named **f5** or update the macro definition in Cyences' configuration page.
 
 3. Install the Add-on on the Search Head.
 

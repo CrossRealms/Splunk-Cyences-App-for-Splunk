@@ -84,12 +84,12 @@ has_children: true
 
     * Fixed the typo in the macro name from **cs_authentication_vpn_login_attemps_outside_working_hour_filter** to **cs_authentication_vpn_login_attempts_outside_working_hour_filter**
 
-
+<!-- TODO - we might need to check this before release and discuss and possibly remove it. -->
 * ### For Splunk Admins
 
     * Removed the following other app dependent macros and defined related macro in app itself:
         * Added **cs_drop_dm_object_name** macro to replace the **drop_dm_object_name** macro.
-        * Added **cs_cim_authentication_indexes** macro to replace the **cim_Authentication_indexes** macro.
+        * Removed **cs_cim_authentication_indexes** macro and used the **cs_authentication_indexes** macro.
 
 
 ## Upgrade Guide from 4.9.0 to 5.0.0
@@ -97,5 +97,7 @@ has_children: true
 * After upgrade, only SOC related alerts will be received to existing configured critical emails. To make more changes, configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
 
 * In order to use the sophos firewall alerts, onboard the **sophos_events** data from [Sophos Central Addon for Splunk](https://splunkbase.splunk.com/app/6186/). For more details, refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall)
+
+**NOTE:** Please go through every section of the **Cyences Settings > Cyences App Configuration** page to ensure it is configured according to how the user wants the app to behave.
 
 

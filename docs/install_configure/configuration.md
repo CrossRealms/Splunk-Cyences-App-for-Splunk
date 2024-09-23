@@ -25,7 +25,7 @@ For optimal performance, it is recommended to enable the data model acceleration
 
 
 ## Products Setup (Data Source Macros)
-Users can use the Products Setup page to customize the dashboards they want to see/hide, overview page panels to show/hide and the alerts they want to enable/disable. There is a toggle button on the configuration page on each product page to do that. Users can enable or disable it. Showing status as "Unknown" means it's enabled and dashboards are visible. It's recommended to move toggle it to either "Enabled" or "Disabled" status.
+Users can use the Products Setup page to customize the dashboards they want to see/hide, Overview page panels to show/hide and the alerts they want to enable/disable. There is a toggle button on the configuration page on each product page to do that. Users can enable or disable it. Showing status as "Unknown" means it's enabled and dashboards are visible. It's recommended to move toggle it to either "Enabled" or "Disabled" status.
 
 The Products Setup page allows you to see if the data-source configuration (index macro) is accurate and if your Splunk environment has data for it or not and modify the configuration if required.
 
