@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import cs_imports
 import sys
 
 from splunklib.searchcommands import dispatch, EventingCommand, Configuration, Option
