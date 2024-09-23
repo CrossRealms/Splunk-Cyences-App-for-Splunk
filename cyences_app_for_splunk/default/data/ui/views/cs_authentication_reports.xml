@@ -14,7 +14,7 @@
       <fieldForLabel>app</fieldForLabel>
       <fieldForValue>app</fieldForValue>
       <search>
-        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` `cs_authentication_app_filter` by Authentication.app | rename "Authentication.app" as app</query>
+        <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_app_filter` by Authentication.app | rename "Authentication.app" as app</query>
         <earliest>$timeRange.earliest$</earliest>
         <latest>$timeRange.latest$</latest>
       </search>
@@ -48,7 +48,7 @@
       <title>All Authentications</title>
       <chart>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count as count, dc(Authentication.user) as dc_users from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.action
 | timechart span=1h count, dc(Authentication.user) by Authentication.action
 | eval "Unique Users"='dc(Authentication.user): failure'+'dc(Authentication.user): success'
 | fields - "dc(Authentication.user): failure", "dc(Authentication.user): success"
@@ -75,7 +75,7 @@
       <title>Authentication Failure Reasons Over Time</title>
       <chart>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` nodename=Authentication.Failed_Authentication Authentication.action=failure Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.signature
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` nodename=Authentication.Failed_Authentication Authentication.action=failure Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by _time Authentication.signature
 | timechart span=1h count by Authentication.signature limit=0</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -96,7 +96,7 @@
       <title>Application Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `cs_drop_dm_object_name(Authentication)`
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ `cs_authentication_app_filter` by Authentication.app Authentication.action | `cs_drop_dm_object_name(Authentication)`
 | chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
@@ -143,7 +143,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
+          <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ `cs_authentication_app_filter` by Authentication.user, Authentication.app, Authentication.action
 | `cs_drop_dm_object_name(Authentication)`
 | eval over_field=user."|".app
 | chart sum(count) as count, max(last_login) as last_login over over_field by action
