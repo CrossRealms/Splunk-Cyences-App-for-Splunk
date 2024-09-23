@@ -619,25 +619,4 @@
       </table>
     </panel>
   </row>
-  <row>
-    <panel>
-      <title>Globally Detected Malicious IPs</title>
-      <table>
-        <search>
-          <query>| inputlookup cs_malicious_ip_list.csv
-| `cs_human_readable_time_format(last_seen)` 
-| table ip, last_seen, ip_location, description</query>
-          <earliest>0</earliest>
-          <latest></latest>
-        </search>
-        <option name="count">8</option>
-        <option name="drilldown">none</option>
-      </table>
-      <html>
-        <div>
-          <p>For more information about the Malicious IP List, please click <a href="/app/cyences_app_for_splunk/cs_malicious_ip_list" target="_black">here</a>.</p>
-        </div>
-      </html>
-    </panel>
-  </row>
 </form>
