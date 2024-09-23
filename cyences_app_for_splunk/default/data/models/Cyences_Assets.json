@@ -198,7 +198,7 @@
             "calculations": [],
             "constraints": [
                 {
-                    "search": "(`cs_cim_assets_indexes`) tag=asset tag=cyences",
+                    "search": "(`cs_assets_indexes`) tag=asset tag=cyences",
                     "owner": "Assets"
                 }
             ],

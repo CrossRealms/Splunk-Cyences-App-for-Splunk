@@ -551,7 +551,7 @@
             ],
             "constraints": [
                 {
-                    "search": "(`cs_cim_vulnerabilities_indexes`) tag=vulnerability tag=report tag=cyences",
+                    "search": "(`cs_vulnerabilities_indexes`) tag=vulnerability tag=report tag=cyences",
                     "owner": "Vulnerabilities"
                 }
             ],
