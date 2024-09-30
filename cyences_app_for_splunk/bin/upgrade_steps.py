@@ -1,8 +1,10 @@
 import time
+import json
 import cs_utils
 
 import splunklib.client as client
 import splunklib.results as results
+from splunk import rest
 
 
 def handle_results(response, logger):
@@ -118,21 +120,151 @@ def upgrade_5_0_0(session_key, logger):
     except:
         logger.info("Old macro value for (cs_authentication_vpn_login_attemps_outside_working_hour_filter) in the user environment does not exist, skipping the upgrade step.")
 
-    # TODO - Upgrade step to call to the rest endpoint - CyencesProductConfiguration/product_config - to automatically enable/disable all the renamed alerts based on existing settings
+    try:
+        enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
+        product = enabled_product.split(",")[0].strip()
+
+        if product:
+            payload = {
+                "product": product,
+                "enabled": 0,
+            }
+            rest.simpleRequest(
+                "/servicesNS/nobody/{}/CyencesProductConfiguration/product_config?output_mode=json".format(
+                    cs_utils.APP_NAME),
+                postargs={"data": json.dumps(payload)},
+                method="POST",
+                sessionKey=session_key,
+                raiseAllErrors=True,
+            )
+
+            logger.info("Disabled the product={}".format(product))
+
+            payload = {
+                "product": product,
+                "enabled": 1,
+            }
+
+            rest.simpleRequest(
+                "/servicesNS/nobody/{}/CyencesProductConfiguration/product_config?output_mode=json".format(
+                    cs_utils.APP_NAME
+                ),
+                postargs={"data": json.dumps(payload)},
+                method="POST",
+                sessionKey=session_key,
+                raiseAllErrors=True,
+            )
+
+            logger.info("Re-enabled the product={}".format(product))
+    except Exception:
+        logger.info("Error while product enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page")
+
+    alerts_to_disable = [
+        "CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike",
+        "Defender ATP - Defender ATP Alerts",
+        "Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection",
+        "Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled",
+        "Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running",
+        "Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection",
+        "Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos",
+        "Windows Defender - Endpoint Not Protected by Windows Defender",
+        "Windows Defender - Windows Defender RealTime Protection Disabled or Failed",
+        "AWS - IAM AccessKey Creation or Deletion",
+        "AWS - IAM Login Profile Change/Update",
+        "AWS - IAM User Creation or Deletion",
+        "AWS - IAM Policy Creation or Deletion",
+        "AWS - IAM Group Change/Update",
+        "AWS - IAM Group Membership Change/Update",
+        "AWS - IAM Role Creation or Deletion",
+        "AWS - Network Access Control List Creation or Deletion",
+        "Google Workspace - User Change/Update",
+        "Google Workspace - Enterprise Group Change/Update",
+        "Google Workspace - Enterprise Group Membership Change/Update",
+        "Google Workspace - Role Change/Update",
+        "Google Workspace - Multiple Password Changes in Short Time Period",
+        "O365 - DLP event in Exchange",
+        "O365 - DLP event in SharePoint",
+        "O365 - O365 Service is not Operational",
+        "O365 - Azure Active Directory - AuthorizationPolicy Change/Update",
+        "O365 - Azure Active Directory - Policy Change/Update",
+        "O365 - Azure Active Directory - Role Change/Update",
+        "O365 - Azure Active Directory - Group Change/Update",
+        "O365 - Azure Active Directory - GroupMembership Change/Update",
+        "O365 - Azure Active Directory - User Change/Update",
+        "O365 - Azure Active Directory - ServicePrincipal Change/Update",
+        "O365 - Azure Active Directory - Application Change/Update",
+        "Email - Calculate UpperBound for Spike In Emails",
+        "Email - Hourly Increase In Emails Over Baseline",
+        "Email - Daily Spam Email",
+        "Network Compromise - Calculate UpperBound for Spike in Network Traffic",
+        "Network Compromise - Calculate UpperBound for Spike in Outbound Network Traffic",
+        "Network Compromise - DDoS Behavior Detected",
+        "Network Compromise - Unusual Outbound Traffic",
+        "Network Compromise - Basic Scanning",
+        "Network Compromise - Inbound Vulnerable Traffic",
+        "Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole",
+        "Fortigate Firewall - Network Compromise - Fortigate High Threats Alert",
+        "Fortigate Firewall - Network Compromise - Fortigate High System Alert",
+        "Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole",
+        "Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert",
+        "Palo Alto Firewall - Network Compromise - Palo Alto High System Alert",
+        "Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert",
+        "Palo Alto Firewall - Network Compromise - DDoS Attack Prevented",
+        "Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs",
+        "Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs",
+        "Palo Alto Firewall - Commits",
+        "Dynamically Update Blocked IPs with HoneyDB",
+        "Palo Alto Firewall - Malicious IP List Gen",
+        "Sophos Firewall - Firewall Lost Connection to Sophos Central",
+        "Sophos Firewall - Firewall VPN Tunnel Down",
+        "Sophos Firewall - Firewall Gateway Down",
+        "Vulnerability - Detected Vulnerabilities",
+        "Windows - Hosts Missing Update",
+        "Windows - Endpoint Compromise - Windows Firewall Disabled Event",
+        "Windows - Windows Process Tampering Detected",
+        "Windows - Windows Firewall is Disabled",
+        "AD - Group Changed",
+        "AD - Group Membership Changed",
+        "AD - Group Policy Changed",
+        "AD - User Changed",
+        "AD - Password Change Outside Working Hour",
+        "AD - Multiple Password Changes in Short Time Period",
+        "Ransomware - Endpoint Compromise - Fake Windows Processes",
+        "Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic",
+        "Ransomware - Common Ransomware File Extensions",
+        "Ransomware - Scheduled tasks used in BadRabbit ransomware",
+        "Ransomware - Endpoint Compromise - USN Journal Deletion on Windows",
+        "Ransomware - Windows - Windows Event Log Cleared",
+        "Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement",
+        "Credential Compromise - Windows - Credential Dumping through LSASS Access",
+        "Credential Compromise - Windows - Credential Dumping via Symlink to Shadow Copy",
+        "Credential Compromise - Windows - Credential Dumping via Copy Command from Shadow Copy",
+        "Credential Compromise - Windows - Credential Dump From Registry via Reg exe",
+        "Authentication - VPN Login Attemps Outside Working Hours",
+        "Linux - User Added/Updated/Deleted",
+        "Linux - Group Added/Updated/Deleted",
+        "F5 BIGIP - Not Blocked Attacks",
+    ]
+
+    for alert in alerts_to_disable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 1})
+        except Exception:
+            logger.info("Alert={} is not found.".format(alert))
 
 
 # Note:
-# When the new alerts are introduced, we need to manually check whether the product is enabled for that alert. 
+# When the new alerts are introduced, we need to manually check whether the product is enabled for that alert.
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
 
 
 version_upgrade = (
-    ('3.1.0', None),
-    ('4.0.0', upgrade_4_0_0),
-    ('4.3.0', upgrade_4_3_0),
-    ('4.4.0', None),
-    ('4.5.0', upgrade_4_5_0),
-    ('4.8.0', upgrade_4_8_0),
-    ('4.9.0', upgrade_4_9_0),
-    ('5.0.0', upgrade_5_0_0),
+    ("3.1.0", None),
+    ("4.0.0", upgrade_4_0_0),
+    ("4.3.0", upgrade_4_3_0),
+    ("4.4.0", None),
+    ("4.5.0", upgrade_4_5_0),
+    ("4.8.0", upgrade_4_8_0),
+    ("4.9.0", upgrade_4_9_0),
+    ("5.0.0", upgrade_5_0_0),
 )
