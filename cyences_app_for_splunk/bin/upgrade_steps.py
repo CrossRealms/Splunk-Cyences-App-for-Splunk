@@ -156,9 +156,10 @@ def upgrade_5_0_0(session_key, logger):
             )
 
             logger.info("Re-enabled the product={}".format(product))
-    except Exception:
-        logger.info("Error while product enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page")
+    except Exception as e:
+        logger.error("Error while product enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(str(e)))
 
+    # Renamed the following alerts and it might be present in apps/cyences_app_for_splunk/local/savedsearches.conf, which would constantly generate errors or run searches in all times etc. To avoid this we are disabling all these alerts if they present in the local folder.
     alerts_to_disable = [
         "CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike",
         "Defender ATP - Defender ATP Alerts",
