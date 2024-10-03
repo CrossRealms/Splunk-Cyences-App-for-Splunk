@@ -73,14 +73,8 @@
         <search>
           <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 SourceName="Microsoft-Windows-WindowsUpdateClient" NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
 | eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
-| append 
-    [| inputlookup all_windows_hosts.csv 
-    | search host="$host$" $tkn_host_filter$ 
-    | eval no_event="No Update Event Found"] 
-| stats first(message) as message, first(no_event) as no_event by host 
-| eval message = if(isnull(message), no_event, message) 
-| table host message 
-| sort host</query>
+| table _time host message 
+| sort -_time host</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -100,14 +94,8 @@
         <search>
           <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 ("Microsoft Endpoint Protection" OR "Microsoft Defender Antivirus") 
 | eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
-| append 
-    [| inputlookup all_windows_hosts.csv 
-    | search host="$host$" $tkn_host_filter$ 
-    | eval no_event="No Update Event Found"] 
-| stats first(message) as message, first(no_event) as no_event by host 
-| eval message = if(isnull(message), no_event, message) 
-| table host message 
-| sort host</query>
+| table _time host message 
+| sort -_time host</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
