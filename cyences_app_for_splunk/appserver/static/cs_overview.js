@@ -56,7 +56,7 @@ require([
     ]
 
     let panel_depends_tokens = [
-        { token: 'authentication', associated_products: ['Authentication', 'VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Radius Authentication', 'Cisco Meraki', 'MSSQL', 'Oracle']  },
+        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Radius Authentication', 'Cisco Meraki', 'MSSQL', 'Oracle']  },
         { token: 'antivirus', associated_products: ['Sophos Endpoint Protection', 'Windows Defender', 'CrowdStrike EventStream', 'Office 365 Defender ATP'] },
         { token: 'aws', associated_products: ['AWS'] },
         { token: 'gws', associated_products: ['Google Workspace'] },
@@ -66,7 +66,7 @@ require([
         { token: 'vulnerability', associated_products: ['Qualys', 'Tenable', 'Nessus', 'CrowdStrike Spotlight'] },
         { token: 'ad_windows', associated_products: ['Sysmon', 'Windows', 'Windows AD', 'Windows DNS'] },
         { token: 'credential_compromise', associated_products: ['Sysmon'] },
-        { token: 'ransomware', associated_products: ['Ransomware', 'Sysmon'] },
+        { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
         { token: 'linux', associated_products: ['Linux'] },
         { token: 'db_oracle', associated_products: ['Oracle'] },
         { token: 'db_mssql', associated_products: ['MSSQL'] },

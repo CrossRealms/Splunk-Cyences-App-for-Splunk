@@ -13,10 +13,10 @@
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
 | join type=left savedsearch_name
     [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
-    | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products"
-    | rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products]
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products"
-| rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products | eval cyences_severity="unknown"]
+    | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products" "action.cyences_notable_event_action.category"
+    | rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products, "action.cyences_notable_event_action.category" as alert_category]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products" "action.cyences_notable_event_action.category"
+| rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products, "action.cyences_notable_event_action.category" as alert_category | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search NOT savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
@@ -27,13 +27,15 @@
 | search $tkn_teams$
 | makemv delim="," alert_products
 | eval alert_products=trim(alert_products)
+| makemv delim="," alert_category
+| eval alert_category=trim(alert_category)
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | search $tkn_not_triggered_alert_filter_1$
 | eval problem = cyences_severity."|".problems
 | rename problem as "Notable Events"
 | sort - cyences_severity
-| table savedsearch_name, "Notable Events", cyences_severity, alert_products</query>
+| table savedsearch_name, "Notable Events", cyences_severity, alert_products, alert_category</query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
     <sampleRatio>1</sampleRatio>
@@ -123,7 +125,7 @@
       <title>Authentication</title>
       <table id="tbl_authentication">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Authentication|VPN|Radius Authentication")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Authentication|Radius Authentication")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -144,7 +146,7 @@
       <title>Antivirus</title>
       <table id="tbl_antivirus">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Sophos Endpoint Protection|Windows Defender|CrowdStrike|Office 365 Defender ATP")`
+          <query>| `cs_filter_savedsearches_by_product("Sophos Endpoint Protection|Windows Defender|CrowdStrike EventStream|Office 365 Defender ATP")`
 | eval Count=if(isnull(problems), 0, problems)
 | search $tkn_not_triggered_alert_filter_1$
 | rename savedsearch_name as Name
@@ -247,7 +249,7 @@
       <title>AWS</title>
       <table id="tbl_aws">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("AWS")`</query>
+          <query>| `cs_filter_savedsearches_by_product("AWS")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -270,7 +272,7 @@
       <title>Google Workspace</title>
       <table id="tbl_gws">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Google Workspace")`</query>
+          <query>| `cs_filter_savedsearches_by_product("Google Workspace")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -291,7 +293,7 @@
       <title>Office 365</title>
       <table id="tbl_o365">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Office 365")` 
+          <query>| `cs_filter_savedsearches_by_product("Office 365")` 
 | append 
     [| search `cs_o365` (sourcetype="o365:service:healthIssue" OR (sourcetype="o365:service:status" source="*CurrentStatus"))  earliest=$timeRange.earliest$ latest=$timeRange.latest$
     | eval Status = coalesce(status, Status), Service = coalesce(service, WorkloadDisplayName) 
@@ -333,7 +335,7 @@
       <title>Email</title>
       <table id="tbl_email">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Email")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Email")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -353,10 +355,10 @@
   </row>
   <row>
     <panel depends="$network_compromise$">
-      <title>Network Compromise &amp; Cisco IOS</title>
+      <title>Network Compromise</title>
       <table id="tbl_network_compromise">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Network Compromise|Cisco IOS|Cisco Meraki")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Network")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -377,7 +379,7 @@
       <title>Vulnerability</title>
       <table id="tbl_vulnerability">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Vulnerability")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Vulnerability")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -398,7 +400,7 @@
       <title>Active Directory &amp; Windows</title>
       <table id="tbl_ad_windows">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Windows|Windows AD")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Windows")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -421,7 +423,7 @@
       <title>Credential Compromise</title>
       <table id="tbl_credential_compromise">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Credential Compromise")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Credential Compromise")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -442,7 +444,7 @@
       <title>Ransomware</title>
       <table id="tbl_ransomware">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Ransomware")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Ransomware")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -463,7 +465,7 @@
       <title>Linux/Unix</title>
       <table id="tbl_linux">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Linux")`</query>
+          <query>| `cs_filter_savedsearches_by_category("Linux")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -484,7 +486,7 @@
       <title>F5 BIGIP</title>
       <table id="tbl_f5_bigip">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("F5 BIGIP")`</query>
+          <query>| `cs_filter_savedsearches_by_product("F5 BIGIP")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -507,7 +509,7 @@
       <title>Oracle Database</title>
       <table id="tbl_db_oracle">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("Oracle")`</query>
+          <query>| `cs_filter_savedsearches_by_product("Oracle")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -528,7 +530,7 @@
       <title>MSSQL Database</title>
       <table id="tbl_db_mssql">
         <search base="basesearch">
-          <query>| `cs_filter_savedsearches("MSSQL")`</query>
+          <query>| `cs_filter_savedsearches_by_product("MSSQL")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>
@@ -565,10 +567,10 @@
 | stats count as problems by alert_name, cyences_severity | rename alert_name as savedsearch_name
 | join type=left savedsearch_name
     [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local 
-    | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products"
-    | rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products]
-| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products"
-| rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products | eval cyences_severity="unknown"]
+    | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products" "action.cyences_notable_event_action.category"
+    | rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products, "action.cyences_notable_event_action.category" as alert_category]
+| append [| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" "action.cyences_notable_event_action"="1" disabled=0 is_scheduled=1 | fields title "action.cyences_notable_event_action.teams" "action.cyences_notable_event_action.products" "action.cyences_notable_event_action.category"
+| rename title as savedsearch_name, "action.cyences_notable_event_action.teams" as teams, "action.cyences_notable_event_action.products" as alert_products, "action.cyences_notable_event_action.category" as alert_category | eval cyences_severity="unknown"]
 | stats first(*) as * by savedsearch_name, cyences_severity
 | search savedsearch_name IN `cs_monthly_alerts`
 | sort savedsearch_name, cyences_severity
@@ -579,13 +581,15 @@
 | search $tkn_teams$
 | makemv delim="," alert_products
 | eval alert_products=trim(alert_products)
+| makemv delim="," alert_category
+| eval alert_category=trim(alert_category)
 | eval problems=if(isnull(problems), 0, problems)
 | eval cyences_severity=if(problems==0, 0, cyences_severity)
 | search $tkn_not_triggered_alert_filter_1$
 | eval problem = cyences_severity."|".problems
 | sort - cyences_severity
 | rename savedsearch_name as Name, problem as "Notable Events"
-| table Name, "Notable Events", cyences_severity, alert_products</query>
+| table Name, "Notable Events", cyences_severity, alert_products, alert_category</query>
           <earliest>$timeRange_long.earliest$</earliest>
           <latest>$timeRange_long.latest$</latest>
         </search>
@@ -611,8 +615,12 @@
       <table id="tbl_other_alerts">
         <search base="basesearch">
           <query> eval products_to_search="Authentication|VPN|Radius Authentication|Sophos Endpoint Protection|Windows Defender|CrowdStrike|Office 365 Defender ATP|AWS|Google Workspace|Office 365|Email|Network Compromise|Cisco IOS|Cisco Meraki|Vulnerability|Windows|Windows AD|Credential Compromise|Ransomware|Linux|F5 BIGIP|Oracle|MSSQL"
+| eval category_to_search="Authentication"
 | makemv delim="|" products_to_search | eval products_to_search=trim(products_to_search)
+| makemv delim="|" category_to_search | eval category_to_search=trim(category_to_search)
 | cyencesmvintersection set1="products_to_search" set2="alert_products"
+| where mvcount(intersection)=0
+| cyencesmvintersection set1="category_to_search" set2="alert_category"
 | where mvcount(intersection)=0
 | rex field=savedsearch_name "^.*\-\s(?&lt;Name&gt;.*)$"
 | eval Name=if(isnull(Name), savedsearch_name, Name)</query>
