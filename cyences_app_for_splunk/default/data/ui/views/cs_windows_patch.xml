@@ -69,7 +69,33 @@
   <row>
     <panel>
       <table>
-        <title>Windows Update Events</title>
+        <title>Latest Windows Update Events</title>
+        <search>
+          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 SourceName="Microsoft-Windows-WindowsUpdateClient" NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
+| eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
+| append 
+    [| inputlookup all_windows_hosts.csv 
+    | search host="$host$" $tkn_host_filter$ 
+    | eval no_event="No Update Event Found"] 
+| stats latest(_time) as _time, latest(message) as message, first(no_event) as no_event by host 
+| eval message = if(isnull(message), no_event, message) 
+| table _time host message 
+| rename message as latest_update 
+| sort -_time host</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="latest_update">
+          <colorPalette type="map">{"No Update Event Found": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>All Windows Update Events</title>
         <search>
           <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 SourceName="Microsoft-Windows-WindowsUpdateClient" NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
 | eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
@@ -90,7 +116,33 @@
   <row>
     <panel>
       <table>
-        <title>Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events</title>
+        <title>Latest Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events</title>
+        <search>
+          <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 ("Microsoft Endpoint Protection" OR "Microsoft Defender Antivirus") 
+| eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
+| append 
+    [| inputlookup all_windows_hosts.csv 
+    | search host="$host$" $tkn_host_filter$ 
+    | eval no_event="No Update Event Found"] 
+| stats latest(_time) as _time, latest(message) as message, first(no_event) as no_event by host 
+| eval message = if(isnull(message), no_event, message) 
+| table _time host message 
+| rename message as latest_update 
+| sort -_time host</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <format type="color" field="latest_update">
+          <colorPalette type="map">{"No Update Event Found": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>All Microsoft Endpoint Protection/Microsoft Defender Antivirus Update Events</title>
         <search>
           <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 ("Microsoft Endpoint Protection" OR "Microsoft Defender Antivirus") 
 | eval message=replace(Message, "^Installation Successful: Windows successfully installed the following update: ", "") 
