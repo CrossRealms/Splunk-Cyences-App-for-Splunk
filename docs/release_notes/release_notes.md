@@ -105,8 +105,8 @@ has_children: true
 | Ransomware - Endpoint Compromise - USN Journal Deletion on Windows | USN Journal Deletion on Windows |
 | Ransomware - Windows - Windows Event Log Cleared | Windows Event Log Cleared |
 | Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement | Windows WMI Lateral Movement |
-| Credential Compromise - Windows - Credential Dumping through LSASS Access | Windows Credential Dumping through LSASS Access |
-| Credential Compromise - Windows - Credential Dumping via Symlink to Shadow Copy | Windows Credential Dumping via Symlink to Shadow Copy |
+| Credential Compromise - Windows - Credential Dumping through LSASS Access | Windows - Credential Dumping through LSASS Access |
+| Credential Compromise - Windows - Credential Dumping via Symlink to Shadow Copy | Windows - Credential Dumping via Symlink to Shadow Copy |
 | Credential Compromise - Windows - Credential Dumping via Copy Command from Shadow Copy | Windows - Credential Dumping via Copy Command from Shadow Copy |
 | Credential Compromise - Windows - Credential Dump From Registry via Reg exe | Windows - Credential Dump From Registry via Reg exe |
 | Authentication - VPN Login Attemps Outside Working Hours | Authentication - VPN Login Attempts Outside Working Hours |
