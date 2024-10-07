@@ -699,16 +699,7 @@ PRODUCTS = [
     },
     {
         "name": "VPN",
-        "app_dependencies": [
-            {
-                "label": "Palo Alto Networks Add-on",
-                "link": "https://splunkbase.splunk.com/app/2757/"
-            },
-            {
-                "label": "Fortinet Fortigate Add-on for Splunk",
-                "link": "https://splunkbase.splunk.com/app/2846/"
-            }
-        ],
+        "app_dependencies": [],
         "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
         "macro_configurations": [
             {

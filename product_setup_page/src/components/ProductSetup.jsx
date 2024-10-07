@@ -8,6 +8,8 @@ import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
 import '../css/spinner.css'
 
+const appIndependentProducts = ["Network", "VPN", "Vulnerability", "Authentication"]
+
 function effectiveEnabled(enabled) {
   if (enabled.toString().toLowerCase() === "unknown") {
     return [false, "Unknown"];
@@ -96,8 +98,7 @@ export default function ProductSetup(props) {
       {response && <pre>{response}</pre>}
       {isLoading ? <div id="spinner"></div>: null}
 
-        <Heading>App Dependencies</Heading>
-        <SearchTable searchQuery={productInfo.app_dependency_search} />
+       { appIndependentProducts.includes(productInfo.name) ? null: <><Heading>App Dependencies</Heading><SearchTable searchQuery={productInfo.app_dependency_search} /></>}
     </div>
   );
 }
