@@ -93,8 +93,6 @@ def build_app_dependency_search(app_list):
             | table label, is_installed, disabled, link
             | rename label as "App Name", is_installed as "Installation Status", link as "Splunkbase Link", disabled as "Enabled/Disabled"
             """
-    else:
-        search = "index=do-not-search"
     return search
 
 
