@@ -301,7 +301,7 @@ PRODUCTS = [
         ],
         "macro_configurations": [
             {
-                "macro_name": "cs_email_indexes",
+                "macro_name": "cs_email_sources",
                 "label": "Email Data",
                 "search_by": "sourcetype",
                 "search_values": "ms:o365:reporting:messagetrace,o365:reporting:messagetrace,gws:gmail",
@@ -475,15 +475,15 @@ PRODUCTS = [
     {
         "name": "Vulnerability",
         "app_dependencies": [],
-        "metadata_count_search": '`cs_vulnerabilities_indexes` sourcetype="*vuln*" | stats count',
+        "metadata_count_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count',
         "macro_configurations": [
             {
                 "macro_name": "cs_vulnerabilities_indexes",
                 "label": "Vulnerability Data (indexes)",
-                "search": '`cs_vulnerabilities_indexes` sourcetype="*vuln*" | stats count by index, sourcetype',
-                "host_reviewer_search": '`cs_vulnerabilities_indexes` sourcetype="*vuln*" | stats count by sourcetype host | rename sourcetype as sources',
-                "sources_reviewer_search": '`cs_vulnerabilities_indexes` sourcetype="*vuln*" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
-                "data_availablity_panel_search": '`cs_vulnerabilities_indexes` sourcetype="*vuln*" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vulnerabilities_indexes` sourcetype="*vuln*" | table label, data',
+                "search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | table label, data',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
