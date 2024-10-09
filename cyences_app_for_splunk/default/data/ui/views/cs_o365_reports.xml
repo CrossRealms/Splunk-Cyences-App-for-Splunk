@@ -12,6 +12,7 @@
     <set token="tkn_show_table_other"></set>
     <set token="tkn_exclude_teams">ApplicationDisplayName!="Microsoft Teams"</set>
     <set token="tkn_exclude_teams_link_accessed">ApplicationDisplayName!="Microsoft Teams"</set>
+    <set token="tkn_product_name_for_data_availability_search">Office 365</set>
   </init>
   <search>
     <query>| makeresults | eval country=`cs_home_country`</query>
@@ -56,15 +57,7 @@
       </html>
       <table>
         <search>
-          <query>| tstats count where `cs_o365` sourcetype="o365:management:activity" $tkn_host$ 
-| eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_o365` sourcetype=\"o365:management:activity\"" 
-| append 
-    [| tstats count where `cs_azure` sourcetype="azure:aad:audit"  $tkn_host$ 
-    | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_azure` sourcetype=\"azure:aad:audit\"" ] 
-| append 
-    [| tstats count where `cs_azure_securityscore` sourcetype="graphsecurity:score"  $tkn_host$ 
-    | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_azure_securityscore` sourcetype=\"graphsecurity:score\"" ] 
-| table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

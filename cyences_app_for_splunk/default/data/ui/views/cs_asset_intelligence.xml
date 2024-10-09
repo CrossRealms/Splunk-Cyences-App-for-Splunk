@@ -292,7 +292,8 @@
 | append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip IN $tkn_filter_ip_only$ by All_Traffic.dest_ip | `cs_drop_dm_object_name(All_Traffic)` | iplocation dest_ip]
 | eval ip=coalesce(src_ip, dest_ip)
 | `cs_network_generate_location_for_internal_network(ip)`
-| lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked 
+<!-- TODO - Add blocked IP mapping with src_ip field  -->
+<!-- | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked  -->
 | eval inbound_mal = if(isnotnull(blocked), inbound, null()), inbound = if(isnull(blocked), inbound, null())
 | eval outbound_mal = if(isnotnull(blocked), outbound, null()), outbound = if(isnull(blocked), outbound, null())
 | geostats sum(inbound) as inbound_traffic, sum(outbound) as outbound_traffic, sum(inbound_mal) as inbound_malicious_traffic, sum(outbound_mal) as outbound_malicious_traffic</query>
@@ -370,7 +371,7 @@
       </input>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` `cs_authentication_indexes` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src
+          <query>| tstats `cs_summariesonly_authentication` count from datamodel=Cyences_Authentication where `cs_o365_login_filter_source` $tkn_filter_authentication$ Authentication.app!=OktaIM2:log Authentication.action IN ("success","failure") Authentication.app="*" `cs_authentication_app_filter` by Authentication.app Authentication.action Authentication.user, Authentication.src
           | `cs_drop_dm_object_name(Authentication)`  | iplocation src | fields - lat lon</query>
           <earliest>$tkn_timeRange_authentication.earliest$</earliest>
           <latest>$tkn_timeRange_authentication.latest$</latest>
