@@ -128,12 +128,12 @@
       </table>
     </panel>
   </row>
-  <row depends="$tkn_ip_tmp$">
+  <row depends="$tkn_filter_ip_only$">
     <panel>
-      <title>IP info $$tkn_filter_ip_only_label$$</title>
+      <title>IP info $tkn_filter_ip_only_label$</title>
       <table>
         <search>
-          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | cyencesipinfo fieldname="ip" | table <TODO - display necessary fields>
+          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | cyencesipinfo fieldname="ip" | fields - _time | table ip, *
           </query>
         </search>
         <option name="count">5</option>
@@ -141,6 +141,9 @@
         <option name="refresh.display">progressbar</option>
         <option name="rowNumbers">true</option>
       </table>
+      <html>
+        <p>This panel shows IP related information. For now, it supports only IP not IP subnet.</p>
+      </html>
     </panel>
   </row>
   <row depends="$tkn_show_hide_lansweeper$">

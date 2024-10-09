@@ -31,7 +31,7 @@ class CyencesIPInfoCommand(EventingCommand):
 
     fieldname = Option(name="fieldname", require=True, default=None)
 
-    def get_api_info(self):
+    def get_blockshield_creds(self):
         logger.info("Getting BlockShield API Info.")
         _, serverContent = rest.simpleRequest(
             "/servicesNS/nobody/{}/configs/conf-{}?output_mode=json".format(
@@ -53,6 +53,7 @@ class CyencesIPInfoCommand(EventingCommand):
         return username, password
 
     def get_ip_info(self, ip_address, username, password):
+        ipinfo = {}
         response = requests.get(
             API_ENDPOINT + str(ip_address),
             auth=(username, password),
@@ -61,23 +62,79 @@ class CyencesIPInfoCommand(EventingCommand):
         )
 
         response.raise_for_status()
+        response = response.json()
 
-        return response.json()["data"]
+        ipinfo["isTor"] = response.get("abuseipdb", {}).get("info", {}).get("isTor")
+        ipinfo["whois"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("whois")
+        )
+        ipinfo["country"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("country")
+        )
+        ipinfo["reputation"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("reputation")
+        )
+        ipinfo["malicious"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("last_analysis_stats", {})
+            .get("malicious")
+        )
+        ipinfo["suspicious"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("last_analysis_stats", {})
+            .get("suspicious")
+        )
+        ipinfo["undetected"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("last_analysis_stats", {})
+            .get("undetected")
+        )
+        ipinfo["harmless"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("last_analysis_stats", {})
+            .get("harmless")
+        )
+        ipinfo["timeout"] = (
+            response.get("virustotal", {})
+            .get("data", {})
+            .get("attributes", {})
+            .get("last_analysis_stats", {})
+            .get("timeout")
+        )
+        return ipinfo
 
     def transform(self, records):
         self.session_key = cs_utils.GetSessionKey(logger).from_custom_command(self)
-        # Read API ID and API Key
-        username, password = self.get_api_info()
-
-        for record in records:
-            ip_address = record.get(self.fieldname)
-            if ip_address:
-                try:
+        # Read Username and Password
+        try:
+            username, password = self.get_blockshield_creds()
+        except Exception as e:
+            logger.error("Error while retriving username and password of blockshield. error={}".format(e))
+            self.write_error("Error while retriving username and password of blockshield. Please configure it properly to Cyences Settings > Cyences App Configuration > BlockShield API Configuration page.")
+        else:
+            for record in records:
+                ip_address = record.get(self.fieldname)
+                if ip_address:
                     ipinfo = self.get_ip_info(ip_address, username, password)
                     record.update(ipinfo)
-                except Exception as e:
-                    logger.error("Error while accessing the API. error={}".format(str(e)))
-            yield record
+                yield record
 
 
 dispatch(CyencesIPInfoCommand, sys.argv, sys.stdin, sys.stdout, __name__)
