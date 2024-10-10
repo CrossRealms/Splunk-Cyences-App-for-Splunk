@@ -53,8 +53,6 @@ has_children: true
 
 * Removed the [Splunk Add-on for RWI - Executive Dashboard](https://splunkbase.splunk.com/app/5063/) app dependency.
 
-
-
 * ### Alert Renaming
 
     * Multiple Alerts have renamed as below, if you have any custom setting like sending email and stuff, that needs to be re-configured.
@@ -150,17 +148,11 @@ has_children: true
 | Linux - Group Added/Updated/Deleted | Linux - Group Changes |
 
 
-
-
-
 * ### Enhancements
 
     * #### Cyences App Configuration UI changes
         * Added **Cyences Dependencies** section to show the dependent app installation status, enable/disable status along with splunk base link.
         * Added **App Dependecies** table for each product present under **Products Setup** section.
-
-    * #### Cyences Alert Name Changes
-        <!-- TODO - add list of alerts and other details. -->
 
     * Added option to exclude informational vulnerability by default from the **Vulnerability** dashboard.
 
@@ -202,8 +194,6 @@ has_children: true
 * After upgrade, only SOC related alerts will be received to existing configured critical emails. To make more changes, configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
 
 * In order to use the sophos firewall alerts, onboard the **sophos_events** data from [Sophos Central Addon for Splunk](https://splunkbase.splunk.com/app/6186/). For more details, refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall)
-
-**NOTE:** Please go through every section of the **Cyences Settings > Cyences App Configuration** page to ensure it is configured according to how the user wants the app to behave.
 
 * Multiple rename has been reconfigured, please find the full list in the above release-notes section.
     * Run the below search to find-out any custom email configuration has been setup in your environment to be reconfigured in the new alert.
@@ -299,3 +289,5 @@ has_children: true
         | fields title, "action.email*"
         | where 'action.email'!=0
         ```
+
+**NOTE:** Please go through every section of the **Cyences Settings > Cyences App Configuration** page to ensure it is configured according to how the user wants the app to behave.
