@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Button from '@splunk/react-ui/Button';
 import Switch from '@splunk/react-ui/Switch'
 import DataMacroConfiguration from './DataMacroConfiguration';
+import Heading from '@splunk/react-ui/Heading';
+import SearchTable from './SearchTable';
 import { generateToast } from '../utils/util';
 import { saveProductConfig } from '../utils/api';
 import '../css/spinner.css'
@@ -21,7 +23,6 @@ export default function ProductSetup(props) {
   const [response, setResponse] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
-
 
   function changeEnabled() {
     const [finalEnabled, enabledLabel] = effectiveEnabled(enabled);
@@ -94,6 +95,9 @@ export default function ProductSetup(props) {
       <Button label="Save" appearance="primary" onClick={saveMacros} updateMacroDefinition={updateMacroDefinition} />
       {response && <pre>{response}</pre>}
       {isLoading ? <div id="spinner"></div>: null}
+
+        <Heading>App Dependencies</Heading>
+        <SearchTable searchQuery={productInfo.app_dependency_search} />
     </div>
   );
 }

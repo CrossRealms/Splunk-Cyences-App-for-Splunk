@@ -525,11 +525,33 @@
                     "comment": "",
                     "calculationType": "Eval",
                     "expression": "coalesce(published_time, PUBLISHED_DATETIME)"
+                },
+                {
+                    "outputFields": [
+                        {
+                            "fieldName": "indextime",
+                            "owner": "Vulnerabilities",
+                            "type": "number",
+                            "fieldSearch": "",
+                            "required": false,
+                            "multivalue": false,
+                            "hidden": false,
+                            "editable": true,
+                            "displayName": "indextime",
+                            "comment": ""
+                        }
+                    ],
+                    "calculationID": "l8nd1toreq",
+                    "owner": "Vulnerabilities",
+                    "editable": true,
+                    "comment": "",
+                    "calculationType": "Eval",
+                    "expression": "_indextime"
                 }
             ],
             "constraints": [
                 {
-                    "search": "(`cs_cim_vulnerabilities_indexes`) tag=vulnerability tag=report tag=cyences",
+                    "search": "(`cs_vulnerabilities_indexes`) tag=vulnerability tag=report tag=cyences",
                     "owner": "Vulnerabilities"
                 }
             ],

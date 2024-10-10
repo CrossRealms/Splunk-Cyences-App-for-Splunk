@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>Sophos Endpoint Protection</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Sophos Endpoint Protection</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -64,7 +67,7 @@
       </html>
       <table>
         <search>
-          <query>`cs_sophos` sourcetype="sophos_events" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_sophos` sourcetype=\"sophos_events\"" | table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

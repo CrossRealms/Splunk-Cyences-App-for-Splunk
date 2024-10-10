@@ -1,5 +1,8 @@
 <form theme="dark" version="1.1">
   <label>Radius Authentication</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Radius Authentication</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="timeRange">
       <label>Time Range</label>
@@ -30,7 +33,7 @@
       </html>
       <table>
         <search>
-          <query>`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data</query>
+          <query>$tkn_data_availablity_search$</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -74,7 +77,7 @@
       <title>Radius Authentication Success Rate</title>
       <table>
         <search>
-          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `drop_dm_object_name(Authentication)`
+          <query>| tstats `cs_summariesonly_authentication` prestats=t count from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ by Authentication.app Authentication.action | `cs_drop_dm_object_name(Authentication)`
 | chart count by app action
 | addtotals
 | eval "Success%" = round(success / Total * 100,2)
@@ -115,7 +118,7 @@
       <table>
         <search>
           <query>| tstats `cs_summariesonly_authentication` count as count, latest(_time) as last_login from datamodel=Cyences_Authentication where `cs_radius_authentication_indexes` Authentication.dest_category="radius_auth" Authentication.action IN ("success","failure") Authentication.app=$tkn_app|s$ Authentication.user=$tkn_user|s$ by Authentication.user, Authentication.app, Authentication.action
-| `drop_dm_object_name(Authentication)`
+| `cs_drop_dm_object_name(Authentication)`
 | eval over_field=user." - ".app
 | chart sum(count) as count, max(last_login) as last_login over over_field by action
 | rex field=over_field "(?&lt;user&gt;.*) - (?&lt;app&gt;.*)" | fields - over_field

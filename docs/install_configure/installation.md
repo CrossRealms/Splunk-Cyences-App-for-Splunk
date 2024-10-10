@@ -34,7 +34,6 @@ There are dependent apps which also need to be installed on the Search Head alon
 |--------|--------|-------------|
 | ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some lookups
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
-| Splunk Add-on for RWI - Executive Dashboard | [https://splunkbase.splunk.com/app/5063/](https://splunkbase.splunk.com/app/5063/) | For field extraction (VPN data)
 | Flow Map Viz | [https://splunkbase.splunk.com/app/4657](https://splunkbase.splunk.com/app/4657) | For internal network traffic visualization |
 
 * Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.

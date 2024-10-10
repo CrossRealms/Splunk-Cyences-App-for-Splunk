@@ -38,10 +38,6 @@ access = read : [ * ], write : [ * ]
 export = system
 
 
-[visualizations/network_telemetry_map]
-export = system
-
-
 ### ALERT ACTIONS
 
 [alert_actions]

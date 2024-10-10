@@ -4,19 +4,17 @@ import NavBar from './components/NavBar';
 import CyencesGeneralConfiguration from './CyencesGeneralConfiguration';
 import ProductSetupApp from './ProductSetupApp';
 import MacroSetupApp from './MacroSetupApp';
-import HoneyDBSetup from './HoneyDBSetup';
-import MaliciousIPCollectorSetup from './MaliciousIPCollectorSetup';
 import CyencesAlertSetup from './CyencesAlertSetup';
 import DeviceInventorySetup from './DeviceInventorySetup';
+import CyencesDependencies from './CyencesDependencies';
 
 const TABS = [
     'Cyences General Configuration',
     'Products Setup',
     'Macro Setup',
-    'HoneyDB Configuration',
-    'MaliciousIP Collector Configuration',
     'Cyences Alerts Configuration',
-    'Device Inventory Configuration'
+    'Device Inventory Configuration',
+    'Cyences Dependencies'
 ]
 
 export default function App() {
@@ -42,16 +40,13 @@ export default function App() {
                 <MacroSetupApp />
             </div>
             <div key={TABS[3]} style={{ display: activeTabId === TABS[3] ? 'block' : 'none' }}>
-                <HoneyDBSetup />
-            </div>
-            <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
-                <MaliciousIPCollectorSetup />
-            </div>
-            <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
                 <CyencesAlertSetup />
             </div>
-            <div key={TABS[6]} style={{ display: activeTabId === TABS[6] ? 'block' : 'none' }}>
+            <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
                 <DeviceInventorySetup />
+            </div>
+            <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
+                <CyencesDependencies />
             </div>
         </div>
     );

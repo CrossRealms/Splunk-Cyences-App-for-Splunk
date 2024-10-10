@@ -52,24 +52,36 @@ require([
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
         { id: 'cs_mssql', title: 'MSSQL' },
         { id: 'cs_oracle', title: 'Oracle' },
+        { id: 'cs_f5_bigip_asm', title: 'F5 BIGIP' },
     ]
 
     let panel_depends_tokens = [
-        { token: 'authentication', associated_products: ['VPN', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Google Workspace', 'Office 365', 'Linux', 'Sophos Endpoint Protection', 'Sophos Firewall', 'Windows', 'Radius Authentication', 'Cisco Meraki', 'MSSQL', 'Oracle']  },
-        { token: 'antivirus', associated_products: ['Sophos Endpoint Protection', 'Windows Defender', 'CrowdStrike EventStream', 'Office 365 Defender ATP'] },
-        { token: 'aws', associated_products: ['AWS'] },
-        { token: 'gws', associated_products: ['Google Workspace'] },
-        { token: 'o365', associated_products: ['Office 365'] },
-        { token: 'email', associated_products: ['Office 365', 'Google Workspace'] },
-        { token: 'network_compromise', associated_products: ['Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
-        { token: 'vulnerability', associated_products: ['Qualys', 'Tenable', 'Nessus', 'CrowdStrike Spotlight'] },
-        { token: 'ad_windows', associated_products: ['Sysmon', 'Windows', 'Windows AD', 'Windows DNS'] },
-        { token: 'credential_compromise', associated_products: ['Sysmon'] },
-        { token: 'ransomware', associated_products: ['Sysmon', 'Windows', 'Cisco IOS', 'FortiGate', 'Palo Alto', 'Sophos Firewall', 'Cisco Meraki'] },
-        { token: 'linux', associated_products: ['Linux'] },
-        { token: 'db_oracle', associated_products: ['Oracle'] },
-        { token: 'db_mssql', associated_products: ['MSSQL'] },
-    ]
+        { token: "authentication", product: "Authentication" },
+        { token: "vpn", product: "VPN" },
+        { token: "radius_authentication", product: "Radius Authentication" },
+        { token: "crowdstrike_eventstream", product: "CrowdStrike EventStream" },
+        { token: "sophos", product: "Sophos Endpoint Protection" },
+        { token: "windows_defender", product: "Windows Defender" },
+        { token: "o365_defender_atp", product: "Office 365 Defender ATP" },
+        { token: "aws", product: "AWS" },
+        { token: "gws", product: "Google Workspace" },
+        { token: "o365", product: "Office 365" },
+        { token: "email", product: "Email" },
+        { token: "network_compromise", product: "Network" },
+        { token: "cisco_ios", product: "Cisco IOS" },
+        { token: "fortigate", product: "FortiGate" },
+        { token: "palo_alto", product: "Palo Alto" },
+        { token: "sophos_firewall", product: "Sophos Firewall" },
+        { token: "cisco_meraki", product: "Cisco Meraki" },
+        { token: "f5_bigip", product: "F5 BIGIP" },
+        { token: "windows", product: "Windows" },
+        { token: "ad_windows", product: "Windows AD" },
+        { token: "sysmon", product: "Sysmon" },
+        { token: "linux", product: "Linux" },
+        { token: "vulnerability", product: "Vulnerability" },
+        { token: "db_oracle", product: "Oracle" },
+        { token: "db_mssql", product: "MSSQL" }
+    ];
 
 
     $.each(panel_depends_tokens, function (index, panel) {
@@ -122,12 +134,9 @@ require([
     function unsetTokenForDisabledProducts(disabled_products) {
 
         $.each(panel_depends_tokens, function (index, panel) {
-
-            let difference = panel.associated_products.filter(x => !disabled_products.includes(x.toLowerCase()));
-            if (difference.length == 0){
+            if (disabled_products.includes(panel.product.toLowerCase())){
                 unsetToken(panel.token);
             }
-           
         });
     }
 
@@ -171,7 +180,8 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
+    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_sophos", "tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_monthly_alerts", "tbl_other_alerts" ];
+    // TODO - Add code to get all table_ids and exclude only specific
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
