@@ -27,7 +27,7 @@ CONF_FILE = "cs_configurations"
 
 
 @Configuration()
-class CyencesIPInfoCommand(EventingCommand):
+class BlockShieldIPInfoCommand(EventingCommand):
 
     fieldname = Option(name="fieldname", require=True, default=None)
 
@@ -137,4 +137,4 @@ class CyencesIPInfoCommand(EventingCommand):
                 yield record
 
 
-dispatch(CyencesIPInfoCommand, sys.argv, sys.stdin, sys.stdout, __name__)
+dispatch(BlockShieldIPInfoCommand, sys.argv, sys.stdin, sys.stdout, __name__)
