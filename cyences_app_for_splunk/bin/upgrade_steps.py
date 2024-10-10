@@ -120,6 +120,36 @@ def upgrade_5_0_0(session_key, logger):
     except:
         logger.info("Old macro value for (cs_authentication_vpn_login_attemps_outside_working_hour_filter) in the user environment does not exist, skipping the upgrade step.")
 
+    old_macro_name = "cs_o365_failed_login_due_to_mfs_filter"
+    new_macro_name = "cs_o365_failed_login_due_to_mfa_filter"
+    try:
+        old_macro_definition = conf_manager.get_macro(old_macro_name)
+        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
+        logger.info("Macro value (cs_o365_failed_login_due_to_mfa_filter) has been successfully migrated to the renamed macro.")
+    except:
+        logger.info("Old macro value for (cs_o365_failed_login_due_to_mfs_filter) in the user environment does not exist, skipping the upgrade step.")
+
+
+    old_macro_name = "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter"
+    new_macro_name = "cs_o365_failed_login_due_to_mfa_from_unusual_country_filter"
+    try:
+        old_macro_definition = conf_manager.get_macro(old_macro_name)
+        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
+        logger.info("Macro value (cs_o365_failed_login_due_to_mfa_from_unusual_country_filter) has been successfully migrated to the renamed macro.")
+    except:
+        logger.info("Old macro value for (cs_o365_failed_login_due_to_mfs_from_unusual_country_filter) in the user environment does not exist, skipping the upgrade step.")
+
+
+    old_macro_name = "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter"
+    new_macro_name = "cs_aws_failed_login_due_to_mfa_from_unusual_country_filter"
+    try:
+        old_macro_definition = conf_manager.get_macro(old_macro_name)
+        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
+        logger.info("Macro value (cs_aws_failed_login_due_to_mfa_from_unusual_country_filter) has been successfully migrated to the renamed macro.")
+    except:
+        logger.info("Old macro value for (cs_aws_failed_login_due_to_mfs_from_unusual_country_filter) in the user environment does not exist, skipping the upgrade step.")
+
+
     try:
         enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
         product = enabled_product.split(",")[0].strip()
@@ -178,11 +208,15 @@ def upgrade_5_0_0(session_key, logger):
         "AWS - IAM Group Membership Change/Update",
         "AWS - IAM Role Creation or Deletion",
         "AWS - Network Access Control List Creation or Deletion",
+        "AWS - Multi Factor Authentication is Disabled for IAM User",
+        "AWS - Login Failure From Unusual Country Due To Multi Factor Authentication",
         "Google Workspace - User Change/Update",
         "Google Workspace - Enterprise Group Change/Update",
         "Google Workspace - Enterprise Group Membership Change/Update",
         "Google Workspace - Role Change/Update",
         "Google Workspace - Multiple Password Changes in Short Time Period",
+        "O365 - Login Failure Due To Multi Factor Authentication",
+        "O365 - Login Failure From Unusual Country Due To Multi Factor Authentication",
         "O365 - DLP event in Exchange",
         "O365 - DLP event in SharePoint",
         "O365 - O365 Service is not Operational",
