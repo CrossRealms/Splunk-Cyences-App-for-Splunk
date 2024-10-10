@@ -69,9 +69,13 @@ has_children: true
 
     * Updated the **Network Compromise - Unusual Outbound Traffic** alert logic of traffic calculation for each source instead of entire network.
 
+    * Removed failed authentication user related events and unnecessary sourcetypes from the **User Inventory - Lookup Gen** search.
+
     * Enhanced the "Data Availability" panel present on each dashboard by generalizing the panel search.
 
     * Moved the splunk python sdk to the **lib** folder for better folder structure.
+
+    * Added **All Windows Update Events** panel to the **Window Patch** dashboard.
 
 
 * ### Bug Fixes
@@ -95,11 +99,9 @@ has_children: true
 
 
 ## Upgrade Guide from 4.9.0 to 5.0.0
-    
+
 * After upgrade, only SOC related alerts will be received to existing configured critical emails. To make more changes, configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
 
 * In order to use the sophos firewall alerts, onboard the **sophos_events** data from [Sophos Central Addon for Splunk](https://splunkbase.splunk.com/app/6186/). For more details, refer [Sophos Firewall Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall)
 
 **NOTE:** Please go through every section of the **Cyences Settings > Cyences App Configuration** page to ensure it is configured according to how the user wants the app to behave.
-
-
