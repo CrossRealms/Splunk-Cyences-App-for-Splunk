@@ -136,44 +136,6 @@ PRODUCTS = [
         ],
     },
     {
-        "name": "MSSQL",
-        "app_dependencies": [
-            {
-                "label": "Splunk Add-on for Microsoft SQL Server",
-                "link": "https://splunkbase.splunk.com/app/2648/"
-            }
-        ],
-        "macro_configurations": [
-            {
-                "macro_name": "cs_mssql",
-                "label": "MSSQL Data",
-                "search_by": "sourcetype",
-                "search_values": "mssql:audit,mssql:audit:json",
-                "earliest_time": "-1d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "Oracle",
-        "app_dependencies": [
-            {
-                "label": "Splunk Add-on for Oracle",
-                "link": "https://splunkbase.splunk.com/app/1910/"
-            }
-        ],
-        "macro_configurations": [
-            {
-                "macro_name": "cs_oracle",
-                "label": "Oracle Data",
-                "search_by": "sourcetype",
-                "search_values": "oracle:audit:xml,oracle:audit:unified",
-                "earliest_time": "-1d@d",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
         "name": "Office 365 Defender ATP",
         "app_dependencies": [
             {
@@ -324,6 +286,46 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Email",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Google Workspace",
+                "link": "https://splunkbase.splunk.com/app/5556/"
+            },
+            {
+                "label": "Splunk Add-on for Microsoft Office 365",
+                "link": "https://splunkbase.splunk.com/app/4055/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_email_sources",
+                "label": "Email Data",
+                "search_by": "sourcetype",
+                "search_values": "ms:o365:reporting:messagetrace,o365:reporting:messagetrace,gws:gmail",
+                "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Network",
+        "app_dependencies": [],
+        "metadata_count_search": '`cs_network_indexes` tag=network tag=communicate | stats count',
+        "macro_configurations": [
+            {
+                "macro_name": "cs_network_indexes",
+                "label": "Network Data (indexes)",
+                "search": '`cs_network_indexes` tag=network tag=communicate | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_network_indexes` tag=network tag=communicate | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_network_indexes` tag=network tag=communicate | table label, data',
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Cisco IOS",
         "app_dependencies": [
             {
@@ -357,25 +359,6 @@ PRODUCTS = [
                 "search_by": "sourcetype",
                 "search_values": "fortigate_event,fortigate_traffic,fortigate_utm",
                 "earliest_time": "-4h@h",
-                "latest_time": "now",
-            }
-        ],
-    },
-    {
-        "name": "F5 BIGIP",
-        "app_dependencies": [
-            {
-                "label": "Splunk Add-on for F5 BIG-IP",
-                "link": "https://splunkbase.splunk.com/app/2680/"
-            }
-        ],
-        "macro_configurations": [
-            {
-                "macro_name": "cs_f5_bigip",
-                "label": "F5 BIGIP Data",
-                "search_by": "sourcetype",
-                "search_values": "f5:bigip:syslog,f5:bigip:asm:syslog",
-                "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
         ],
@@ -450,6 +433,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "F5 BIGIP",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for F5 BIG-IP",
+                "link": "https://splunkbase.splunk.com/app/2680/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_f5_bigip",
+                "label": "F5 BIGIP Data",
+                "search_by": "sourcetype",
+                "search_values": "f5:bigip:syslog,f5:bigip:asm:syslog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "CrowdStrike Devices",
         "app_dependencies": [
             {
@@ -464,6 +466,23 @@ PRODUCTS = [
                 "search_by": "sourcetype",
                 "search_values": "crowdstrike:device:json",
                 "earliest_time": "-3d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Vulnerability",
+        "app_dependencies": [],
+        "metadata_count_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count',
+        "macro_configurations": [
+            {
+                "macro_name": "cs_vulnerabilities_indexes",
+                "label": "Vulnerability Data (indexes)",
+                "search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | table label, data',
+                "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
         ],
@@ -678,16 +697,7 @@ PRODUCTS = [
     },
     {
         "name": "VPN",
-        "app_dependencies": [
-            {
-                "label": "Palo Alto Networks Add-on",
-                "link": "https://splunkbase.splunk.com/app/2757/"
-            },
-            {
-                "label": "Fortinet Fortigate Add-on for Splunk",
-                "link": "https://splunkbase.splunk.com/app/2846/"
-            }
-        ],
+        "app_dependencies": [],
         "metadata_count_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count ',
         "macro_configurations": [
             {
@@ -697,6 +707,23 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_vpn_indexes` dest_category="vpn_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vpn_indexes` dest_category=vpn_auth" | table label, data',
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        'name': 'Authentication',
+        "app_dependencies": [],
+        "metadata_count_search": '`cs_authentication_indexes` tag=authentication | stats count ',
+        "macro_configurations": [
+            {
+                "macro_name": "cs_authentication_indexes",
+                "label": "Authentication Data (indexes)",
+                "search": '`cs_authentication_indexes` tag=authentication | stats count by index, sourcetype',
+                "host_reviewer_search": '`cs_authentication_indexes` tag=authentication | stats count by sourcetype host | rename sourcetype as sources',
+                "sources_reviewer_search": '`cs_authentication_indexes` tag=authentication | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
+                "data_availablity_panel_search": '`cs_authentication_indexes` tag=authentication | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_authentication_indexes`  tag=authentication | table label, data',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -720,6 +747,44 @@ PRODUCTS = [
                 "sources_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data',
                 "earliest_time": "-7d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "MSSQL",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Microsoft SQL Server",
+                "link": "https://splunkbase.splunk.com/app/2648/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_mssql",
+                "label": "MSSQL Data",
+                "search_by": "sourcetype",
+                "search_values": "mssql:audit,mssql:audit:json",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Oracle",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Oracle",
+                "link": "https://splunkbase.splunk.com/app/1910/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_oracle",
+                "label": "Oracle Data",
+                "search_by": "sourcetype",
+                "search_values": "oracle:audit:xml,oracle:audit:unified",
+                "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
         ],
