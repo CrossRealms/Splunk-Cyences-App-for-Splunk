@@ -128,6 +128,24 @@
       </table>
     </panel>
   </row>
+  <row depends="$tkn_filter_ip_only$">
+    <panel>
+      <title>IP info $tkn_filter_ip_only_label$</title>
+      <table>
+        <search>
+          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | blockshieldipinfo fieldname="ip" | fields - _time | table ip, *
+          </query>
+        </search>
+        <option name="count">5</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>This panel shows Public IP related information.</p>
+      </html>
+    </panel>
+  </row>
   <row depends="$tkn_show_hide_lansweeper$">
     <panel>
       <title>Lansweeper $tkn_filter_main_label$</title>

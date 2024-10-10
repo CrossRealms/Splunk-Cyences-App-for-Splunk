@@ -7,11 +7,13 @@ import MacroSetupApp from './MacroSetupApp';
 import SendEmailSetup from './SendEmailSetup';
 import DeviceInventorySetup from './DeviceInventorySetup';
 import CyencesDependencies from './CyencesDependencies';
+import BlockShieldAPIConfiguration from './BlockShieldAPIConfiguration';
 
 const TABS = [
     'Cyences General Configuration',
     'Products Setup',
     'Macro Setup',
+    'BlockShield API Configuration',
     'Cyences Email Action Configuration',
     'Device Inventory Configuration',
     'Cyences Dependencies'
@@ -40,12 +42,15 @@ export default function App() {
                 <MacroSetupApp />
             </div>
             <div key={TABS[3]} style={{ display: activeTabId === TABS[3] ? 'block' : 'none' }}>
-                <SendEmailSetup />
+                <BlockShieldAPIConfiguration />
             </div>
             <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
-                <DeviceInventorySetup />
+                <SendEmailSetup />
             </div>
             <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
+                <DeviceInventorySetup />
+            </div>
+            <div key={TABS[6]} style={{ display: activeTabId === TABS[6] ? 'block' : 'none' }}>
                 <CyencesDependencies />
             </div>
         </div>
