@@ -41,6 +41,9 @@ has_children: true
     * Defender ATP - System is Offboarded
     * Defender ATP - System is not Connected since a Week
 
+* Added new alert for the **Office 365**:
+    * O365 - Risky Login Detected by Microsoft
+
 * Added "Object Type" and "Object Name" filter on **MSSQL** and **Oracle** dashboards.
 
 * Removed the following deprecated alerts:
