@@ -22,7 +22,6 @@ There are several security related alerts to choose from and they are all locate
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
     * Authentication - Failed VPN Login From Unusual Country
 * Dashboard panels:
@@ -107,10 +106,10 @@ There are several security related alerts to choose from and they are all locate
     * AWS - Someone Tries to Retrieve the Encrypted Administrator Password
     * AWS - RDS Master User Password has been Reset
     * AWS - Bucket Versioning is Disabled
-    * AWS - Multi Factor Authentication is Disabled for IAM User
+    * AWS - MFA is Disabled for IAM User
     * AWS - Successful Login From Unusual Country
     * AWS - Daily Login Failure
-    * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * AWS - Login Failure From Unusual Country Due To MFA
     * AWS - Failed Login From Unusual Country
 * Amazone Web Services Dashboard panels:
     * Active Users
@@ -176,14 +175,12 @@ There are several security related alerts to choose from and they are all locate
     * O365 - DLP event in SharePoint 
     * O365 - Daily Login Failure
     * O365 - External User Added to Microsoft Teams
-    * O365 - Login Failure Due To Multi Factor Authentication
-    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
-    * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
+    * O365 - Login Failure Due To MFA
+    * O365 - Login Failure From Unusual Country Due To MFA
     * O365 - Login From Unknown User
     * O365 - O365 Service is not Operational 
     * O365 - Security Compliance Alert
     * O365 - Successful Login From Unusual Country
-    * O365 - Successful Login Outside Home Country
     * O365 - Failed Login From Unusual Country
     * O365 - OneDrive or SharePoint File Sharing with External User
     * O365 - OneDrive or SharePoint Link Accessed By External User
@@ -443,7 +440,6 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
 * Dashboard panels: 
     * Connected Workforce by Location

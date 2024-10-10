@@ -46,6 +46,8 @@ has_children: true
 | AWS - IAM Group Membership Change/Update | AWS - IAM Group Membership Changes |
 | AWS - IAM Role Creation or Deletion | AWS - IAM Role Changes |
 | AWS - Network Access Control List Creation or Deletion | AWS - Network Access Control List Changes |
+| AWS - Multi Factor Authentication is Disabled for IAM User | AWS - MFA is Disabled for IAM User |
+| AWS - Login Failure From Unusual Country Due To Multi Factor Authentication | AWS - Login Failure From Unusual Country Due To MFA |
 | Google Workspace - User Change/Update | Google Workspace - User Changes |
 | Google Workspace - Enterprise Group Change/Update | Google Workspace - Group Changes |
 | Google Workspace - Enterprise Group Membership Change/Update | Google Workspace - Group Membership Changes |
@@ -62,6 +64,8 @@ has_children: true
 | O365 - Azure Active Directory - User Change/Update | Azure AD - User Changes |
 | O365 - Azure Active Directory - ServicePrincipal Change/Update | Azure AD - ServicePrincipal Changes |
 | O365 - Azure Active Directory - Application Change/Update | Azure AD - Application Changes |
+| O365 - Login Failure Due To Multi Factor Authentication | O365 - Login Failure Due To MFA |
+| O365 - Login Failure From Unusual Country Due To Multi Factor Authentication | O365 - Login Failure From Unusual Country Due To MFA |
 | Email - Calculate UpperBound for Spike In Emails | Calculate UpperBound for Spike In Emails |
 | Email - Hourly Increase In Emails Over Baseline | Hourly Increase In Emails Over Baseline |
 | Email - Daily Spam Email | Daily Spam Emails |
@@ -112,7 +116,7 @@ has_children: true
 | Authentication - VPN Login Attemps Outside Working Hours | Authentication - VPN Login Attempts Outside Working Hours |
 | Linux - User Added/Updated/Deleted | Linux - User Changes |
 | Linux - Group Added/Updated/Deleted | Linux - Group Changes |
-| F5 BIGIP - Not Blocked Attacks | F5 BIGIP - Not Blocked Attacks |
+
 
 
 
@@ -149,11 +153,15 @@ has_children: true
 "AWS - IAM Group Membership Change/Update", 
 "AWS - IAM Role Creation or Deletion", 
 "AWS - Network Access Control List Creation or Deletion", 
+"AWS - Multi Factor Authentication is Disabled for IAM User",
+"AWS - Login Failure From Unusual Country Due To Multi Factor Authentication",
 "Google Workspace - User Change/Update", 
 "Google Workspace - Enterprise Group Change/Update", 
 "Google Workspace - Enterprise Group Membership Change/Update", 
 "Google Workspace - Role Change/Update", 
 "Google Workspace - Multiple Password Changes in Short Time Period", 
+"O365 - Login Failure Due To Multi Factor Authentication",
+"O365 - Login Failure From Unusual Country Due To Multi Factor Authentication",
 "O365 - DLP event in Exchange", 
 "O365 - DLP event in SharePoint", 
 "O365 - O365 Service is not Operational", 
@@ -214,8 +222,7 @@ has_children: true
 "Credential Compromise - Windows - Credential Dump From Registry via Reg exe", 
 "Authentication - VPN Login Attemps Outside Working Hours", 
 "Linux - User Added/Updated/Deleted", 
-"Linux - Group Added/Updated/Deleted", 
-"F5 BIGIP - Not Blocked Attacks")
+"Linux - Group Added/Updated/Deleted")
         | fields title, "action.email*"
         | where 'action.email'!=0
         ```
