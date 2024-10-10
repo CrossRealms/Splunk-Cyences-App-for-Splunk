@@ -52,6 +52,8 @@ There are several security related alerts to choose from and they are all locate
     * Virus Found and Passed
 * Office 365 Defender ATP Alerts:
     * Defender ATP - Alerts
+    * Defender ATP - System is Offboarded
+    * Defender ATP - System is not Connected since a Week
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
 * Sophos Endpoint Protection Alerts:
@@ -144,7 +146,6 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Alerts Center Alert
     * Google Workspace - Google Drive objects shared Outside or with External User
     * Google Workspace - Google Drive objects accessed by External User
-    * Google Workspace - Suspicious File Shared by External User on Google Drive
     * Google Workspace - Failed Login From Unusual Country
 * Google Workspace Dashboard panels:
     * Login Types
@@ -211,10 +212,14 @@ There are several security related alerts to choose from and they are all locate
 
 * MSSQL Alerts:
     * MSSQL - User Changes
+    * MSSQL - Database Changes
+    * MSSQL - Role Changes
 * MSSQL Dashboard panels:
     * Audit Logs
 * Oracle Alerts:
     * Oracle - User Changes
+    * Oracle - Database Changes
+    * Oracle - Role Changes
 * Oracle Dashboard panels:
     * Audit Logs
 
@@ -249,13 +254,15 @@ There are several security related alerts to choose from and they are all locate
     * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
     * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
 * Palo Alto Networks Dashboard panels:
-    * DDoS Attack Prevented by Palo Alto Firewall
-    * Inbound Traffic from Blocked IPs 
     * License Events
     * List of Firewall Devices
-    * Outbound Traffic to Blocked IPs
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
+* Sophos Firewall Alerts:
+    * Sophos Firewall - Lost Connection to Sophos Central
+    * Sophos Firewall - VPN Tunnel Down
+    * Sophos Firewall - Gateway Down
+    * Sophos Firewall - Advanced Threat Detected
 * Sophos Firewall Dashboard panels:
     * ATP & IPS Events
     * List of Firewall Devices
@@ -266,7 +273,18 @@ There are several security related alerts to choose from and they are all locate
 * Cisco Meraki Dashboard panels:
     * Organizational Security Events
     * Config Changes
-
+* F5 BIGIP Alerts:
+    * F5 BIGIP - Not Blocked Attacks
+* F5 BIGIP Dashboard panels:
+    * Top 10 Attack Type
+    * Top 10 Source IP
+    * Top Rules Over Time
+    * Top Action
+    * Top Blocked Source IPs
+    * Top Blocked Destionation IPs
+    * Blocked Source IPs
+    * All Events
+    * Attacks by IP
 
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.

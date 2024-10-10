@@ -56,6 +56,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Palo Alto Networks
     * Sophos Firewall
     * Cisco Meraki
+    * F5 BIGIP
 
 * Ransomware
 
@@ -79,7 +80,6 @@ Apart from alerts and dashboards, the Cyences App also integrates with some othe
 * Intelligence
 * Device Inventory Table
 * User Inventory Table
-* Globally Detected Malicious IPs
 
 
 How does the Cyences app differentiate itself from Enterprise Security?

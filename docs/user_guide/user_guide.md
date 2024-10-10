@@ -34,11 +34,6 @@ Please follow the steps below to enable various alerts and reports in Splunk.
 4. Click on **Edit > Enable** to enable the desired alert/report.
 
 A few of the included alerts and reports are dependent on other reports being enabled. The additional reports that are essential for these three dependent reports to function are outlined below:
-* Palo Alto Firewall - Malicious IP List Gen
-    * Palo Alto Firewall - Network Compromise - DDoS Attack Prevented
-    * Palo Alto Firewall - Network Compromise - Inbound Traffic from Blocked IPs
-    * Palo Alto Firewall - Network Compromise - Outbound Traffic to Blocked IPs
-        * Dynamically Update Blocked IPs with HoneyDB
 * Ransomware - Spike in File Writes
     * Ransomware - Calculate UpperBound for Spike in File Writes
 * Network Compromise - DDoS Behavior Detected

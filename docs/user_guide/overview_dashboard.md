@@ -22,8 +22,3 @@ The Overview dashboard displays the overall security status of the Splunk enviro
 * The **Monthly Alerts** section focuses on important aspects of your environment that are less active, but are still necessary to keep track of (i.e., Windows Hosts Missing Update).
 
 **Note**: After installing the Cyences App, the Overview dashboard will be empty by default. The Overview dashboard only displays enabled alerts and they each have to be manually enabled. Refer to the **Enable Alerts and Reports** section to find out how to enable alerts/reports within the Cyences App.
-
-### Globally Detected Malicious IPs
-* The Globally Detected Malicious IPs is a list of all IP addresses found by Cyences' reports. 
-* It is important to review this list as you may discover some bad IP addresses coming in and out of your firewall. 
-* Refer to the **Globally Detected Malicious IPs** section for more information. 
