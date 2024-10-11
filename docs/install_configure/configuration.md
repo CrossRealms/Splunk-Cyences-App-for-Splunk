@@ -42,7 +42,7 @@ Navigate to **Cyences Settings > Cyences App Configuration > Macro Setup** where
 ![alt]({{ site.baseurl }}/assets/other_macros.png)
 
 
-<!-- TODO - Needs to update this entire section when we have latest screenshot -->
+<!-- TODONOW - Needs to update this entire section when we have latest screenshot -->
 ## Cyences Email Settings for Alerts
 
 The way Splunk currently handles alerts, users are only able to set up email notifications, which is not always optimal as some alerts may generate a lot of false positives. Not every alert needs to be received by email, especially those labeled with lower severity levels. 

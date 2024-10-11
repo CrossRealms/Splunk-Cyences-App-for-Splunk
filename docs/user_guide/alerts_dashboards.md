@@ -13,8 +13,6 @@ There are several security related alerts to choose from and they are all locate
 
 ## Authentication (for all authentication related activities)
 
-* TODO - Need to re-add all the alerts and dashboard panel list here
-
 * Alerts:
     * Authentication - Bruteforce Attempt for a User
     * Authentication - Bruteforce Attempt from a Source
@@ -33,7 +31,7 @@ There are several security related alerts to choose from and they are all locate
 
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
-    * Suspicious Activity or Malware Detected
+    * CrowdStrike - Suspicious Activity or Malware Detected
 * CrowdStrike Dashboard panels:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
@@ -57,11 +55,11 @@ There are several security related alerts to choose from and they are all locate
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
 * Sophos Endpoint Protection Alerts:
-    * Endpoint Not Protected by Sophos Endpoint Protection
-    * Sophos Endpoint RealTime Protection Disabled 
-    * Sophos Endpoint Protection Service is not Running 
-    * Failed to CleanUp Threat by Sophos Endpoint Protection
-    * Failed to CleanUp Potentially Unwanted Application by Sophos
+    * Sophos - Endpoint Not Protected
+    * Sophos - Endpoint RealTime Protection Disabled
+    * Sophos - Endpoint Protection Service is Not Running
+    * Sophos - Failed to CleanUp Threat
+    * Sophos - Failed to CleanUp Potentially Unwanted Application
 * Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
@@ -77,9 +75,9 @@ There are several security related alerts to choose from and they are all locate
     * Web Control Violation
     * Web Filtering Blocked
 * Windows Defender Alerts:
-    * Endpoint Not Protected
-    * Windows Defender RealTime Protection Disabled or Failed
-    * Malware Detected by Windows Defender
+    * Windows Defender - Endpoint Not Protected
+    * Windows Defender - RealTime Protection Disabled or Failed
+    * Windows Defender - Malware Detected
 * Windows Defender Dashboard panels:
     * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
     * Antimalware will Drop Support for Operating System Soon 
@@ -94,14 +92,14 @@ There are several security related alerts to choose from and they are all locate
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
-    * AWS - IAM AccessKey Creation or Deletion
+    * AWS - IAM Access Key Changes
     * AWS - IAM Login Profile Changes
     * AWS - IAM User Changes
     * AWS - IAM Policy Changes
     * AWS - IAM Group Changes
     * AWS - IAM Group Membership Changes
-    * AWS - IAM Role Creation or Deletion
-    * AWS - Network Access Control List Creation or Deletion
+    * AWS - IAM Role Changes
+    * AWS - Network Access Control List Changes
     * AWS - Concurrent Sessions From Different IPs
     * AWS - Multiple Failed MFA Requests For User
     * AWS - Created a Policy Version that allows All Resources to be Accessed
@@ -163,14 +161,15 @@ There are several security related alerts to choose from and they are all locate
     * Google Drive objects shared Outside or with External User
     * Google Drive objects accessed by External User
 * Microsoft Office 365 Alerts:
-    * Azure Active Directory - Application Changes
+    * Azure AD - Application Changes
     * Azure Active Directory - AuthorizationPolicy Changes
-    * Azure Active Directory - Group Changes
-    * Azure Active Directory - GroupMembership Changes
-    * Azure Active Directory - Policy Changes
-    * Azure Active Directory - Role Changes
-    * Azure Active Directory - ServicePrincipal Changes
-    * Azure Active Directory - User Changes
+    * Azure AD - Group Changes
+    * Azure AD - GroupMembership Changes
+    * Azure AD - Policy Changes
+    * Azure AD - Role Changes
+    * Azure AD - ServicePrincipal Changes
+    * Azure AD - User 
+    * O365 - Risky Login Detected by Microsoft
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
@@ -225,34 +224,35 @@ There are several security related alerts to choose from and they are all locate
 
 ## Email
 * Alerts:
-    * Email - Daily Spam Email 
-    * Email - Hourly Increase in Emails Over Baseline
+    * Daily Spam Email 
+    * Hourly Increase in Emails Over Baseline
 
 
 ## Network Devices
 * General alerts for all Network Data:
-    * Network Compromise - Basic Scanning
-    * Network Compromise - Inbound Vulnerable Traffic
-    * Network Compromise - DDoS Behavior Detected
-    * Network Compromise - Unusual Outbound Traffic
+    * Basic Network Scanning
+    * Inbound Vulnerable Traffic
+    * DDoS Behavior Detected on the Network
+    * Unusual Outbound Traffic
+    * TOR Traffic detected by Firewall
 
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
 * Fortigate Firewall Alerts:
-    * Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole
-    * Fortigate Firewall - Network Compromise - Fortigate High Threats Alert
-    * Fortigate Firewall - Network Compromise - Fortigate High System Alert
+    * Fortigate - DNS Sinkhole
+    * Fortigate - High Threats Alert
+    * Fortigate - High System Alert
 * Fortigate Firewall Dashboard panels:
     * List of Firewall Devices
     * Fortigate Firewall Login Failures
     * System Alerts and Threats
 * Palo Alto Networks Alerts:
-    * Palo Alto Firewall - Commits 
-    * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
-    * Palo Alto Firewall - Network Compromise - Palo Alto High System Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
+    * Palo Alto - Commits 
+    * Palo Alto - DNS Sinkhole
+    * Palo Alto - High System Alert
+    * Palo Alto - Palo Alto High Threats Alert
+    * Palo Alto - WildFire Alert
 * Palo Alto Networks Dashboard panels:
     * License Events
     * List of Firewall Devices
@@ -268,8 +268,8 @@ There are several security related alerts to choose from and they are all locate
     * List of Firewall Devices
     * System Events
 * Cisco Meraki Alerts:
-    * Organizational Security Events
-    * Config Changes
+    * Cisco Meraki - Organizational Security Events
+    * Cisco Meraki - Config Changes
 * Cisco Meraki Dashboard panels:
     * Organizational Security Events
     * Config Changes
@@ -300,7 +300,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
 ## Vulnerability
 
 * Alerts:
-    * Vulnerability - Detected Vulnerabilities
+    * Detected New Vulnerabilities
 
 Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO, Tenable SC & Nessus:Pro
 
@@ -323,11 +323,13 @@ Dashboard panels:
 ## Windows
 
 * Alerts:
-    * Windows - Hosts Missing Update
-    * Windows - Endpoint Compromise - Windows Firewall Disabled Event
-    * Windows - Windows Process Tampering Detected
-    * Windows - Windows Firewall is Disabled
+    * Windows - Host is Missing Windows Updates
+    * Windows - Firewall Disabled Event
+    * Windows - Process Tampering Detected
+    * Windows - Firewall is Disabled
     * Windows - Certificate is Expiring Soon
+    * Windows - Fake Windows Process
+    * Windows - Event Log Cleared
 * Dashboard panels:
     * Successful Login Events
     * Failed Login Attempts by User
@@ -346,14 +348,15 @@ Dashboard panels:
 ## Active Directory
 * Alerts:
     * AD - Bulk User Creation or Deletion
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Multiple Password Changes in Short Time Period 
-    * AD - Password Change Outside Working Hour 
-    * AD - User Changed
+    * AD - Group Changes
+    * AD - Group Membership Changes
+    * AD - Group Policy Changes
+    * AD - Multiple Password Changes in a Short Period of Time
+    * AD - Password Change Outside Working Hours
+    * AD - User Changes
     * AD - User Locked Out
-    * AD - Login Failure due to Password Expired
+    * AD - Login Failure Due to Password Expired
+    * AD - Login Failure Due To Credential Revoked
 * Dashboard panels:
     * AD - Group Changed
     * AD - Group Membership Changed
@@ -383,17 +386,18 @@ Dashboard panels:
     * Top Requesters 
 
 
-## Ransomware
-* Ransomware Alerts:
+## Sysmon
+* Sysmon Alerts:
     * Ransomware - Common Ransomware File Extensions
     * Ransomware - Common Ransomware Notes
-    * Ransomware - Endpoint Compromise - Fake Windows Processes
-    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
-    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows 
-    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
+    * USN Journal Deletion on Windows
+    * Windows WMI Lateral Movement
     * Ransomware - Scheduled tasks used in BadRabbit ransomware 
     * Ransomware - Spike in File Writes
-    * Ransomware - Windows - Windows Event Log Cleared
+    * Windows - Credential Dumping through LSASS Access
+    * Windows - Credential Dumping via Symlink to Shadow Copy
+    * Windows - Credential Dumping via Copy Command from Shadow Copy
+    * Windows - Credential Dump From Registry via Reg exe
 
 
 ## Lansweeper (asset management tool)
@@ -474,8 +478,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * Supported Systems
     * Palo Alto system logs
 * Alerts:
-    * RSA Radius Authentication - Excessive Failed Logins for a User
+    * Radius Authentication - Excessive Failed Logins for a User
 * Dashboard panels:
-    * RSA Radius Authentications
-    * RSA Radius Authentication Success Rate
-    * RSA Radius Authentication Activities
+    * Radius Authentications
+    * Radius Authentication Success Rate
+    * Radius Authentication Activities

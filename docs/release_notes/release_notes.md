@@ -18,8 +18,9 @@ has_children: true
     * Updated the alerting logic (for regular and digest alerts) based on the teams.
 
 * ### BlockShield Integration
-    <!-- TODO - Add detailed info on this section. -->
     * Removed everything related to honeyDB, blocked IPs.
+    * Added **BlockShield API Configuration** section under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** to configure the blockshield credentials.
+    * Added **IP info** panel on **Intelligence** dashboard to show the IP related information.
 
 * ### F5 BIGIP
     * Added new dashboard named **F5 BIGIP ASM**.
@@ -182,7 +183,7 @@ has_children: true
 
     * Fixed the typo in the macro name from **cs_authentication_vpn_login_attemps_outside_working_hour_filter** to **cs_authentication_vpn_login_attempts_outside_working_hour_filter**
 
-<!-- TODO - we might need to check this before release and discuss and possibly remove it. -->
+<!-- TODONOW - we might need to check this before release and discuss and possibly remove it. -->
 * ### For Splunk Admins
 
     * Removed the following other app dependent macros and defined related macro in app itself:
