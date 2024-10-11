@@ -118,6 +118,7 @@ class BlockShieldIPInfoCommand(EventingCommand):
             .get("last_analysis_stats", {})
             .get("timeout")
         )
+        ipinfo["isblocked"] = 1 if response.get("isblocked") == "true" else 0
         return ipinfo
 
     def transform(self, records):
