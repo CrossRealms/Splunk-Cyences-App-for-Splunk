@@ -310,7 +310,7 @@
 | append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip IN $tkn_filter_ip_only$ by All_Traffic.dest_ip | `cs_drop_dm_object_name(All_Traffic)` | iplocation dest_ip]
 | eval ip=coalesce(src_ip, dest_ip)
 | `cs_network_generate_location_for_internal_network(ip)`
-<!-- TODO - Add blocked IP mapping with src_ip field  -->
+<!-- TODONOW - Add blocked IP mapping with src_ip field  -->
 <!-- | lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked  -->
 | eval inbound_mal = if(isnotnull(blocked), inbound, null()), inbound = if(isnull(blocked), inbound, null())
 | eval outbound_mal = if(isnotnull(blocked), outbound, null()), outbound = if(isnull(blocked), outbound, null())
