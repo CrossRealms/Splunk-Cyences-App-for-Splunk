@@ -133,7 +133,7 @@
       <title>IP info $tkn_filter_ip_only_label$</title>
       <table>
         <search>
-          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | blockshieldipinfo fieldname="ip" | fields - _time | table ip, *
+          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | blockshieldipinfo fieldname="ip" | fields - _time | table ip, isblocked, *
           </query>
         </search>
         <option name="count">5</option>
