@@ -44,7 +44,7 @@ has_children: true
 
 * Added new alert for the **Office 365**:
     * O365 - Risky Login Detected by Microsoft
-    * O365 - Successful Login by Multiple Users from Same IP
+    * O365 - Successful Login for Multiple Users from Same IP
 
 * Added "Object Type" and "Object Name" filter on **MSSQL** and **Oracle** dashboards.
 

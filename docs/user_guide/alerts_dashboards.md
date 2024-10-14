@@ -170,7 +170,7 @@ There are several security related alerts to choose from and they are all locate
     * Azure AD - ServicePrincipal Changes
     * Azure AD - User 
     * O365 - Risky Login Detected by Microsoft
-    * O365 - Successful Login by Multiple Users from Same IP
+    * O365 - Successful Login for Multiple Users from Same IP
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
