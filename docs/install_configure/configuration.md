@@ -24,6 +24,10 @@ For optimal performance, it is recommended to enable the data model acceleration
 ![alt]({{ site.baseurl }}/assets/data_models_acceleration.png)
 
 
+## Cyences General Setup 
+This section contains the general settings for the Cyences app. For ex. environment name. It will be used in the alert emails sent by Cyences and other places.
+![alt]({{ site.baseurl }}/assets/cs_general_setup.png)
+
 ## Products Setup (Data Source Macros)
 Users can use the Products Setup page to customize the dashboards they want to see/hide, Overview page panels to show/hide and the alerts they want to enable/disable. There is a toggle button on the configuration page on each product page to do that. Users can enable or disable it. Showing status as "Unknown" means it's enabled and dashboards are visible. It's recommended to move toggle it to either "Enabled" or "Disabled" status.
 
@@ -42,34 +46,51 @@ Navigate to **Cyences Settings > Cyences App Configuration > Macro Setup** where
 ![alt]({{ site.baseurl }}/assets/other_macros.png)
 
 
-<!-- TODONOW - Needs to update this entire section when we have latest screenshot -->
-## Cyences Email Settings for Alerts
+## Cyences Alerts Configuration
 
 The way Splunk currently handles alerts, users are only able to set up email notifications, which is not always optimal as some alerts may generate a lot of false positives. Not every alert needs to be received by email, especially those labeled with lower severity levels. 
+
+Cyences 5.0.0 categorizes all alerts into two teams SOC and Compliance.
+
+* Users can do separate alert configuration for SOC related alerts and Compliance related alerts.
+* Navigate to **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section where you can configure the following alert configs for SOC or Compliance alerts separately:
+
+    * Receipients to receive alerts 
+    * Alert severities to consider for the immediate alerts
+    * Alert severities to consider for the digest alert
+    * Specific alerts' list to exclude from the digest alert
+    * Any receipient to exclude from the digest alert
+
+![alt]({{ site.baseurl }}/assets/soc_and_compliance_conf.png)
+
 
 Cyences 3.0.0 contains two new email settings to reduce noise:
 
 ### 1. Regular Alert Digest Email
 
-* Sends notifications about triggered notable events in the last twenty-four hours for each Cyences alert in a single email. 
-* By default, this will include both high and medium severity notable events, but users can adjust the severity level as needed.  
-* This configuration can be edited from the **Cyences Action - Send Digest Email** alert action inside of the **Cyences Digest Email** alert. 
-![alt]({{ site.baseurl }}/assets/digest_email_configuration.png)
-* The alert digest email will be sent once a day.
+* Daily sends single email which includes each cyence alert triggered in the last twenty-four hours.
+* By default, digest alerts include both high and medium severity notable events, but users can adjust the severity level as needed.  
 * Users may receive multiple digest emails as there is a limit of ten alerts per digest email and each alert will be limited to fifteen notable events for the total result count information. 
 
 ### 2. Critical Alert Email
 
 * Sends an email immediately after an alert gets triggered if the notable event has been labeled with a critical severity level (default setting). Users can customize the severity level for this email setting as needed. 
-* Users will receive an immediate notification about important items within the email.
-* Users will no longer have to manually configure their email for every Cyences alert. Users can add their email address to each alert from a single source. Navigate to **Cyences Settings > Cyences App Configuration > Cyences Email Action Configuration**.  
-![alt]({{ site.baseurl }}/assets/cyences_action_send_email_default_common_config.png)
-* Users have an option to exclude themselves from specific alerts, to include their email addresses for specific alerts, or to disable an email altogether. This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
+* Users will no longer have to manually configure their email for every Cyences alert. Users can configure their emails for SOC and Compliance related alerts as mentioned in the above section.
+* Users have an option to exclude or include receipient emails and alert severities for specific alerts. This configuration can be done at the alert level by editing the **Cyences Action - Send Email** alert action for a particular alert.
 ![alt]({{ site.baseurl }}/assets/cyences_email_configuration.png)
-* To override the email setting for a particular alert, go to the individual alert and remove the email address from the **Exclude Recipients** section. 
-* Add an email address to the **Include Additional Recipients** section if you only want to receive emails for a specific alert.
 
-**Note** Users can continue to use Splunk's default email functionality as desired for any alert and independently of the aforementioned Cyences email settings.
+**Note** Users can continue to use Splunk's default email functionality as desired for any alert and independently of the above mentioned Cyences email settings.
+
+
+## BlockShiield API Configuration
+
+* Navigate to **Cyences Settings > Cyences App Configuration > BlockShiield API Configuration** section to configure the Username and Password of the BlockShield API to get the IP related information. Contact the BlockShield team in order to get the credentials.
+![alt]({{ site.baseurl }}/assets/blockshield_api_conf.png)
+
+## Cyences Dependencies
+
+* Navigate to **Cyences Settings > Cyences App Configuration > Cyences Dependencies** section to see the Cyences dependent app installation status.
+![alt]({{ site.baseurl }}/assets/cs_app_dependency.png)
 
 
 ## Device Inventory

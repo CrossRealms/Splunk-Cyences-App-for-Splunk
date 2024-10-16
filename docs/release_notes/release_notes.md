@@ -173,6 +173,8 @@ has_children: true
 
     * Added **All Windows Update Events** panel to the **Window Patch** dashboard.
 
+    * Updated the severity for the **Windows - Certificate is Expiring Soon** alert.
+
 
 * ### Bug Fixes
 
