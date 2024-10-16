@@ -278,8 +278,7 @@ def upgrade_5_0_0(session_key, logger):
         "Credential Compromise - Windows - Credential Dump From Registry via Reg exe",
         "Authentication - VPN Login Attemps Outside Working Hours",
         "Linux - User Added/Updated/Deleted",
-        "Linux - Group Added/Updated/Deleted",
-        "F5 BIGIP - Not Blocked Attacks",
+        "Linux - Group Added/Updated/Deleted"
     ]
 
     for alert in alerts_to_disable:
