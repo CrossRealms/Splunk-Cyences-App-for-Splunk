@@ -34,7 +34,7 @@ export default function CyencesAlertSetup() {
                 {ComplianceTeamConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description} />)}
             </div>
 
-            <CyencesDocFooter location="install_configure/configuration/#cyences-email-settings-for-alerts"></CyencesDocFooter>
+            <CyencesDocFooter location="install_configure/configuration/#cyences-alerts-configuration"></CyencesDocFooter>
         </>
     );
 }

@@ -95,6 +95,7 @@ export default function CyencesGeneralConfiguration() {
                     <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
                 </ControlGroup>
             </form>
+            <CyencesDocFooter location="install_configure/configuration/#cyences-general-setup"></CyencesDocFooter>
         </div>
     );
 }
