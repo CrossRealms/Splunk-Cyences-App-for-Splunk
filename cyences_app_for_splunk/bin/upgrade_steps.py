@@ -171,6 +171,8 @@ def upgrade_5_0_0(session_key, logger):
 
             logger.info("Disabled the product={}".format(product))
 
+            time.sleep(10)
+
             payload = {
                 "product": product,
                 "enabled": 1,
@@ -284,8 +286,8 @@ def upgrade_5_0_0(session_key, logger):
     for alert in alerts_to_disable:
         try:
             conf_manager.update_savedsearch(alert, {"disabled": 1})
-        except Exception:
-            logger.info("Alert={} is not found.".format(alert))
+        except Exception as e:
+            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
 
 
 # Note:
