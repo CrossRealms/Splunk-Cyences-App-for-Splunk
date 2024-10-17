@@ -13,25 +13,8 @@ parent: User Guide
     * Intelligence
     * Device Inventory
     * User Inventory
-    * Globally Detected Malicious IPs
 
 * The "Intelligence" dashboard has been added to the Cyences app in version 1.4.0, initially named "Asset Intelligence", later renamed to "Intelligence" in version 4.3.0.
-
-## Globally Detected Malicious IPs
-
-The Globally Detected Malicious IPs list is generated from a combination of dashboards, scheduled reports, and a paid service through HoneyDB's APIs. It goes into extensive detail by providing the location of the bad IP address to the last seen time. This list covers the following topics: 
-
-* DDoS attacks on Palo Alto firewalls
-* Inbound traffic from blocked IPs
-* Outbound traffic to blocked IPs
-
-If an IP address is involved in any of the above scenarios, then it will automatically be added to the list. The goal of Globally Detected Malicious IPs is to assist Splunk users to learn even more about their environment and to help identify suspicious activity in order to take the appropriate security measures to strengthen their network. Do not let your business become the next victim. For more information, please refer to the **Globally Detected Malicious IPs** dashboard. 
-
-![alt]({{ site.baseurl }}/assets/malicious_ip.png)
-
-Beginning with version 1.1.0, the Globally Detected Malicious IPs list is now being generated on the Malicious IP list server, which is deployed by CrossRealms International. This list is based on bad IP address activity that's detected in Splunk environments across all installations where Cyences is configured. This list provides Splunk users with the latest globally detected malicious IP list and stores it back into the lookup within the Cyences app. This will result in a more robust list for Splunk users to rely on. For Splunk Admins, please refer to the **Configuration of Access Token for Malicious IP List** section to learn more about the API configuration process. 
-
-**Note**: The Malicious IP List Gen does not disclose any private information from a Splunk user's environment.
 
 ## Device Inventory
 
