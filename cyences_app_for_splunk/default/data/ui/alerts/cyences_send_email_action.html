@@ -14,8 +14,12 @@
         <splunk-text-input name="action.cyences_send_email_action.param.email_to_exclude" id="email_to_exclude">
         </splunk-text-input>
     </splunk-control-group>
-    <splunk-control-group label="Severities" help="Comma separated severities. ie. critical,high,medium,low,info">
-        <splunk-text-input name="action.cyences_send_email_action.param.cyences_severities" id="cyences_severities">
+    <splunk-control-group label="Include Additional Severities" help="Comma separated severities to add to default severities. ie. critical,high,medium,low,info">
+        <splunk-text-input name="action.cyences_send_email_action.param.cyences_severities_to_include" id="cyences_severities_to_include">
+        </splunk-text-input>
+    </splunk-control-group>
+    <splunk-control-group label="Exclude Severities" help="Comma separated severities to exclude from default severities. ie. critical,high,medium,low,info">
+        <splunk-text-input name="action.cyences_send_email_action.param.cyences_severities_to_exclude" id="cyences_severities_to_exclude">
         </splunk-text-input>
     </splunk-control-group>
 </form>

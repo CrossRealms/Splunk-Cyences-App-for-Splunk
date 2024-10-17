@@ -4,7 +4,7 @@ import NavBar from './components/NavBar';
 import CyencesGeneralConfiguration from './CyencesGeneralConfiguration';
 import ProductSetupApp from './ProductSetupApp';
 import MacroSetupApp from './MacroSetupApp';
-import SendEmailSetup from './SendEmailSetup';
+import CyencesAlertSetup from './CyencesAlertSetup';
 import DeviceInventorySetup from './DeviceInventorySetup';
 import CyencesDependencies from './CyencesDependencies';
 import BlockShieldAPIConfiguration from './BlockShieldAPIConfiguration';
@@ -13,8 +13,8 @@ const TABS = [
     'Cyences General Configuration',
     'Products Setup',
     'Macro Setup',
+    'Cyences Alerts Configuration',
     'BlockShield API Configuration',
-    'Cyences Email Action Configuration',
     'Device Inventory Configuration',
     'Cyences Dependencies'
 ]
@@ -42,10 +42,10 @@ export default function App() {
                 <MacroSetupApp />
             </div>
             <div key={TABS[3]} style={{ display: activeTabId === TABS[3] ? 'block' : 'none' }}>
-                <BlockShieldAPIConfiguration />
+                <CyencesAlertSetup />
             </div>
             <div key={TABS[4]} style={{ display: activeTabId === TABS[4] ? 'block' : 'none' }}>
-                <SendEmailSetup />
+                <BlockShieldAPIConfiguration />
             </div>
             <div key={TABS[5]} style={{ display: activeTabId === TABS[5] ? 'block' : 'none' }}>
                 <DeviceInventorySetup />

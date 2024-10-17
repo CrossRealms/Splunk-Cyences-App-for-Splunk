@@ -9,7 +9,7 @@ import { generateToast } from './utils/util';
 import allMacros from "./allMacros";
 
 
-function MacroSetup(props) {
+export function MacroSetup(props) {
     const { macroName, description = '' } = props;
     const [macro, setMacro] = useState('Loading...');
 

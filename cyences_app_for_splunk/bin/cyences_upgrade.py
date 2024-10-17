@@ -59,7 +59,7 @@ class CyencesUpgrade(GeneratingCommand):
                 yield {"msg": "Successfully completed"}
 
         except Exception as e:
-            logger.exception("Error in sync_filter_macros command: {}".format(e))
+            logger.exception("Error in cyencesupgrade command: {}".format(e))
             raise e
 
 

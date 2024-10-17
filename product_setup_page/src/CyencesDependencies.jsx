@@ -32,6 +32,7 @@ export default function CyencesDependencies() {
         <div style={{ marginLeft: '20px' }}>
             <Heading>App Dependencies</Heading>
             <SearchTable searchQuery={searchQuery} />
+            <CyencesDocFooter location="install_configure/configuration/#cyences-dependencies"></CyencesDocFooter>
         </div>
     );
 }
