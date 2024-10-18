@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Heading from '@splunk/react-ui/Heading';
 import SearchTable from './components/SearchTable';
+import CyencesDocFooter from './components/CyencesDocFooter';
 
 
 
