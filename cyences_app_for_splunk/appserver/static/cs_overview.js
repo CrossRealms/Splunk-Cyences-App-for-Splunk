@@ -71,6 +71,7 @@ require([
         { token: 'db_oracle', associated_products: ['Oracle'] },
         { token: 'db_mssql', associated_products: ['MSSQL'] },
         { token: 'f5_bigip', associated_products: ['F5 BIGIP'] },
+        { token: 'cloudflare', associated_products: ['Cloudflare'] },
     ]
 
 
@@ -173,7 +174,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_f5_bigip", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
+    var tableIDs = ["tbl_network_compromise", "tbl_authentication", "tbl_credential_compromise", "tbl_ransomware", "tbl_linux", "tbl_f5_bigip", "tbl_cloudflare", "tbl_ad_windows", "tbl_email", "tbl_o365", "tbl_gws", "tbl_aws", "tbl_antivirus", "tbl_monthly_alerts", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
