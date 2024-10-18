@@ -681,6 +681,10 @@ PRODUCTS = [
             {
                 "label": "Splunk Add-on for Unix and Linux",
                 "link": "https://splunkbase.splunk.com/app/833/"
+            },
+            {
+                "label": "Cyences Add-on for Splunk",
+                "link": "https://splunkbase.splunk.com/app/5659/"
             }
         ],
         "label": "Linux/Unix",
