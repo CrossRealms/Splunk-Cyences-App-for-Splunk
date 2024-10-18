@@ -133,7 +133,7 @@
       <title>IP info $tkn_filter_ip_only_label$</title>
       <table>
         <search>
-          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | blockshieldipinfo fieldname="ip" | fields - _time | table ip, *
+          <query>| makeresults count=1 | eval ip=$tkn_filter_ip_only$ | blockshieldipinfo fieldname="ip" | fields - _time | table ip, isblocked, *
           </query>
         </search>
         <option name="count">5</option>
@@ -310,9 +310,9 @@
 | append [| tstats `cs_summariesonly_network_traffic` count as outbound from datamodel=Network_Traffic where All_Traffic.src_ip IN $tkn_filter_ip_only$ by All_Traffic.dest_ip | `cs_drop_dm_object_name(All_Traffic)` | iplocation dest_ip]
 | eval ip=coalesce(src_ip, dest_ip)
 | `cs_network_generate_location_for_internal_network(ip)`
-| lookup `cs_palo_search_blocked_ip_lookup_name` ip as src_ip OUTPUT blocked 
-| eval inbound_mal = if(isnotnull(blocked), inbound, null()), inbound = if(isnull(blocked), inbound, null())
-| eval outbound_mal = if(isnotnull(blocked), outbound, null()), outbound = if(isnull(blocked), outbound, null())
+| blockshieldipinfo fieldname="src_ip"
+| eval inbound_mal = if(isnotnull(is_blocked), inbound, null()), inbound = if(isnull(is_blocked), inbound, null())
+| eval outbound_mal = if(isnotnull(is_blocked), outbound, null()), outbound = if(isnull(is_blocked), outbound, null())
 | geostats sum(inbound) as inbound_traffic, sum(outbound) as outbound_traffic, sum(inbound_mal) as inbound_malicious_traffic, sum(outbound_mal) as outbound_malicious_traffic</query>
           <earliest>$tkn_timeRange_network_traffic.earliest$</earliest>
           <latest>$tkn_timeRange_network_traffic.latest$</latest>
