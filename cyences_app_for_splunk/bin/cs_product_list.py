@@ -433,6 +433,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Cloudflare",
+        "app_dependencies": [
+            {
+                "label": "Cloudflare App for Splunk",
+                "link": "https://splunkbase.splunk.com/app/4501"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_cloudflare",
+                "label": "Cloudflare Data",
+                "search_by": "sourcetype",
+                "search_values": "cloudflare:json",
+                "earliest_time": "-4h@h",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "F5 BIGIP",
         "app_dependencies": [
             {
