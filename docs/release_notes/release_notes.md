@@ -139,7 +139,6 @@ has_children: true
 | AD - Multiple Password Changes in Short Time Period | AD - Multiple Password Changes in a Short Period of Time |
 | Ransomware - Endpoint Compromise - Fake Windows Processes | Windows - Fake Windows Process |
 | Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic | TOR Traffic detected by Firewall |
-| Ransomware - Common Ransomware File Extensions | Ransomware - Common Ransomware File Extensions |
 | Ransomware - Scheduled tasks used in BadRabbit ransomware | Ransomware - Scheduled Tasks Used in BadRabbit Ransomware |
 | Ransomware - Endpoint Compromise - USN Journal Deletion on Windows | USN Journal Deletion on Windows |
 | Ransomware - Windows - Windows Event Log Cleared | Windows Event Log Cleared |
@@ -281,7 +280,6 @@ has_children: true
 "AD - Multiple Password Changes in Short Time Period", 
 "Ransomware - Endpoint Compromise - Fake Windows Processes", 
 "Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic", 
-"Ransomware - Common Ransomware File Extensions", 
 "Ransomware - Scheduled tasks used in BadRabbit ransomware", 
 "Ransomware - Endpoint Compromise - USN Journal Deletion on Windows", 
 "Ransomware - Windows - Windows Event Log Cleared", 
