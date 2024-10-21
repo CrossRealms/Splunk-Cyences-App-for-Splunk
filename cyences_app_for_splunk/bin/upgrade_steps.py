@@ -104,6 +104,15 @@ def upgrade_4_9_0(session_key, logger):
     handle_results(response, logger)
 
 
+def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro_name, new_alert_name):
+    try:
+        old_macro_definition = conf_manager.get_macro(old_macro_name)
+        conf_manager.update_savedsearch(new_alert_name, {"action.cyences_notable_event_action.param.filter_macro_value": old_macro_definition})
+        logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
+    except:
+        logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
+
+
 def upgrade_5_0_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
     default_emails = conf_manager.get_conf_stanza('alert_actions', 'cyences_send_email_action')[0]["content"]["param.email_to_default"]
@@ -112,44 +121,10 @@ def upgrade_5_0_0(session_key, logger):
     conf_manager.update_macro(SOC_EMAIL_CONFIG_MACRO, {"definition": default_emails})
     logger.info("Updated the {} macro with the default emails configured for the cyences_send_email_action.".format(SOC_EMAIL_CONFIG_MACRO))
 
-    vpn_login_attempt_old_macro_name = "cs_authentication_vpn_login_attemps_outside_working_hour_filter"
-    vpn_login_attempt_new_macro_name = "cs_authentication_vpn_login_attempts_outside_working_hour_filter"
-    try:
-        old_macro_definition = conf_manager.get_macro(vpn_login_attempt_old_macro_name)
-        conf_manager.update_macro(vpn_login_attempt_new_macro_name, {"definition": old_macro_definition})
-        logger.info("Macro value (cs_authentication_vpn_login_attempts_outside_working_hour_filter) has been successfully migrated to the renamed macro.")
-    except:
-        logger.info("Old macro value for (cs_authentication_vpn_login_attemps_outside_working_hour_filter) in the user environment does not exist, skipping the upgrade step.")
-
-    old_macro_name = "cs_o365_failed_login_due_to_mfs_filter"
-    new_macro_name = "cs_o365_failed_login_due_to_mfa_filter"
-    try:
-        old_macro_definition = conf_manager.get_macro(old_macro_name)
-        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Macro value (cs_o365_failed_login_due_to_mfa_filter) has been successfully migrated to the renamed macro.")
-    except:
-        logger.info("Old macro value for (cs_o365_failed_login_due_to_mfs_filter) in the user environment does not exist, skipping the upgrade step.")
-
-
-    old_macro_name = "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter"
-    new_macro_name = "cs_o365_failed_login_due_to_mfa_from_unusual_country_filter"
-    try:
-        old_macro_definition = conf_manager.get_macro(old_macro_name)
-        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Macro value (cs_o365_failed_login_due_to_mfa_from_unusual_country_filter) has been successfully migrated to the renamed macro.")
-    except:
-        logger.info("Old macro value for (cs_o365_failed_login_due_to_mfs_from_unusual_country_filter) in the user environment does not exist, skipping the upgrade step.")
-
-
-    old_macro_name = "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter"
-    new_macro_name = "cs_aws_failed_login_due_to_mfa_from_unusual_country_filter"
-    try:
-        old_macro_definition = conf_manager.get_macro(old_macro_name)
-        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Macro value (cs_aws_failed_login_due_to_mfa_from_unusual_country_filter) has been successfully migrated to the renamed macro.")
-    except:
-        logger.info("Old macro value for (cs_aws_failed_login_due_to_mfs_from_unusual_country_filter) in the user environment does not exist, skipping the upgrade step.")
-
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_authentication_vpn_login_attemps_outside_working_hour_filter", "Authentication - VPN Login Attempts Outside Working Hours")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_filter", "O365 - Login Failure Due To MFA")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter", "O365 - Login Failure From Unusual Country Due To MFA")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter", "AWS - Login Failure From Unusual Country Due To MFA")
 
     try:
         enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
@@ -190,7 +165,7 @@ def upgrade_5_0_0(session_key, logger):
 
             logger.info("Re-enabled the product={}".format(product))
     except Exception as e:
-        logger.error("Error while product enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(str(e)))
+        logger.error("Error while product={} enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(product, str(e)))
 
     # Renamed the following alerts and it might be present in apps/cyences_app_for_splunk/local/savedsearches.conf, which would constantly generate errors or run searches in all times etc. To avoid this we are disabling all these alerts if they present in the local folder.
     alerts_to_disable = [
@@ -269,7 +244,6 @@ def upgrade_5_0_0(session_key, logger):
         "AD - Multiple Password Changes in Short Time Period",
         "Ransomware - Endpoint Compromise - Fake Windows Processes",
         "Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic",
-        "Ransomware - Common Ransomware File Extensions",
         "Ransomware - Scheduled tasks used in BadRabbit ransomware",
         "Ransomware - Endpoint Compromise - USN Journal Deletion on Windows",
         "Ransomware - Windows - Windows Event Log Cleared",
