@@ -320,7 +320,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_network_indexes` tag=network tag=communicate | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_network_indexes` tag=network tag=communicate | table label, data',
-                "earliest_time": "-1d@d",
+                "earliest_time": "-4h@h",
                 "latest_time": "now",
             }
         ],
