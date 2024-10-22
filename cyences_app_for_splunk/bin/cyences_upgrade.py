@@ -32,9 +32,9 @@ class CyencesUpgrade(GeneratingCommand):
             macro_app_version = macro_app_version.strip()
             latest_app_version = latest_app_version.strip()
             if macro_app_version == "":
-                macro_app_version = "3.1.0" # When upgrade command was introduced
-
-            if macro_app_version == latest_app_version:
+                self.conf_manger.update_macro(CY_VERSION_MACRO, {"definition": latest_app_version})
+                yield {"msg": "No need to execute the upgrade steps as it is fresh installation."}
+            elif macro_app_version == latest_app_version:
                 yield {"msg": "Nothing to do"}
             else:
                 index = list(map(lambda x: x[0], version_upgrade)).index(macro_app_version)
