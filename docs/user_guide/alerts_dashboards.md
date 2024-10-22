@@ -170,7 +170,6 @@ There are several security related alerts to choose from and they are all locate
     * Azure AD - ServicePrincipal Changes
     * Azure AD - User 
     * O365 - Risky Login Detected by Microsoft
-    * O365 - Successful Login for Multiple Users from Same IP
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
@@ -464,6 +463,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
     * Authentication - VPN Login Attempts Outside Working Hours
+    * Authentication - Successful Login for Multiple Users from Same IP
 * Dashboard panels: 
     * Connected Workforce by Location
     * Elapsed Time Per Session
