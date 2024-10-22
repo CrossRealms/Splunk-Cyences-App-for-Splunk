@@ -185,15 +185,6 @@ has_children: true
 
     * Fixed the typo in the macro name from **cs_authentication_vpn_login_attemps_outside_working_hour_filter** to **cs_authentication_vpn_login_attempts_outside_working_hour_filter**
 
-<!-- TODONOW - we might need to check this before release and discuss and possibly remove it. -->
-* ### For Splunk Admins
-
-    * Removed the following other app dependent macros and defined related macro in app itself:
-        * Added **cs_drop_dm_object_name** macro to replace the **drop_dm_object_name** macro.
-        * Removed **cim_Authentication_indexes** macro and used the **cs_authentication_indexes** macro.
-        * Renamed the macro **cs_cim_assets_indexes** to **cs_assets_indexes**.
-        * Renamed the macro **cs_cim_vulnerabilities_indexes** to **cs_vulnerabilities_indexes**.
-
 
 ## Upgrade Guide from 4.9.0 to 5.0.0
 
