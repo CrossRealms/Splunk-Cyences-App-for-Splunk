@@ -44,7 +44,9 @@ has_children: true
 
 * Added new alert for the **Office 365**:
     * O365 - Risky Login Detected by Microsoft
-    * O365 - Successful Login for Multiple Users from Same IP
+
+* Added new alert for the **Authentication**:
+    * Authentication - Successful Login for Multiple Users from Same IP
 
 * Added "Object Type" and "Object Name" filter on **MSSQL** and **Oracle** dashboards.
 
@@ -139,7 +141,6 @@ has_children: true
 | AD - Multiple Password Changes in Short Time Period | AD - Multiple Password Changes in a Short Period of Time |
 | Ransomware - Endpoint Compromise - Fake Windows Processes | Windows - Fake Windows Process |
 | Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic | TOR Traffic detected by Firewall |
-| Ransomware - Common Ransomware File Extensions | Ransomware - Common Ransomware File Extensions |
 | Ransomware - Scheduled tasks used in BadRabbit ransomware | Ransomware - Scheduled Tasks Used in BadRabbit Ransomware |
 | Ransomware - Endpoint Compromise - USN Journal Deletion on Windows | USN Journal Deletion on Windows |
 | Ransomware - Windows - Windows Event Log Cleared | Windows Event Log Cleared |
@@ -185,15 +186,6 @@ has_children: true
     * Fixed the informational severity typo for the nessus:pro:vuln sourcetype.
 
     * Fixed the typo in the macro name from **cs_authentication_vpn_login_attemps_outside_working_hour_filter** to **cs_authentication_vpn_login_attempts_outside_working_hour_filter**
-
-<!-- TODONOW - we might need to check this before release and discuss and possibly remove it. -->
-* ### For Splunk Admins
-
-    * Removed the following other app dependent macros and defined related macro in app itself:
-        * Added **cs_drop_dm_object_name** macro to replace the **drop_dm_object_name** macro.
-        * Removed **cim_Authentication_indexes** macro and used the **cs_authentication_indexes** macro.
-        * Renamed the macro **cs_cim_assets_indexes** to **cs_assets_indexes**.
-        * Renamed the macro **cs_cim_vulnerabilities_indexes** to **cs_vulnerabilities_indexes**.
 
 
 ## Upgrade Guide from 4.9.0 to 5.0.0
@@ -281,7 +273,6 @@ has_children: true
 "AD - Multiple Password Changes in Short Time Period", 
 "Ransomware - Endpoint Compromise - Fake Windows Processes", 
 "Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic", 
-"Ransomware - Common Ransomware File Extensions", 
 "Ransomware - Scheduled tasks used in BadRabbit ransomware", 
 "Ransomware - Endpoint Compromise - USN Journal Deletion on Windows", 
 "Ransomware - Windows - Windows Event Log Cleared", 
