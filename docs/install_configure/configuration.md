@@ -82,9 +82,9 @@ Cyences 3.0.0 contains two new email settings to reduce noise:
 **Note** Users can continue to use Splunk's default email functionality as desired for any alert and independently of the above mentioned Cyences email settings.
 
 
-## BlockShiield API Configuration
+## BlockShield API Configuration
 
-* Navigate to **Cyences Settings > Cyences App Configuration > BlockShiield API Configuration** section to configure the Username and Password of the BlockShield API to get the IP related information. Contact the BlockShield team in order to get the credentials.
+* Navigate to **Cyences Settings > Cyences App Configuration > BlockShield API Configuration** section to configure the Username and Password of the BlockShield API to get the IP related information. Contact the BlockShield team in order to get the credentials.
 ![alt]({{ site.baseurl }}/assets/blockshield_api_conf.png)
 
 ## Cyences Dependencies
