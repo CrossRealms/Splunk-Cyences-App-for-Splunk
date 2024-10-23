@@ -30,10 +30,12 @@ The Cyences App needs to be installed on the Search Head only.
 
 There are dependent apps which also need to be installed on the Search Head along with the Cyences app itself (follow the same steps mentioned in the previous section to install the apps).
 
+User can check the dependent app list and installtion status on the **Cyences Settings > Cyences App Configuration > Cyences Dependencies** section.
+
 | App Name | Splunkbase Link | What is this used for? |
 |--------|--------|-------------|
 | ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some lookups
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
 | Flow Map Viz | [https://splunkbase.splunk.com/app/4657](https://splunkbase.splunk.com/app/4657) | For internal network traffic visualization |
 
-* Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information.
+* Note - Additional add-ons are necessary depending on the data present in your Splunk environment. For example, if there is Windows data present, then you need to install and configure the Splunk Add-on for Windows. Please visit the Data Onboarding section for more information. You can check the dependent app installation status for each products under the **App Dependencies** table on **Cyences Settings > Cyences App Configuration > Products Setup** section.

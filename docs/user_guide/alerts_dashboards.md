@@ -12,6 +12,7 @@ There are several security related alerts to choose from and they are all locate
 
 
 ## Authentication (for all authentication related activities)
+
 * Alerts:
     * Authentication - Bruteforce Attempt for a User
     * Authentication - Bruteforce Attempt from a Source
@@ -19,7 +20,6 @@ There are several security related alerts to choose from and they are all locate
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
     * Authentication - Failed VPN Login From Unusual Country
 * Dashboard panels:
@@ -31,7 +31,7 @@ There are several security related alerts to choose from and they are all locate
 
 ## Antivirus / Antimalware
 * CrowdStrike Alerts:
-    * CrowdStrike - Suspicious Activity or Malware Detected by CrowdStrike
+    * CrowdStrike - Suspicious Activity or Malware Detected
 * CrowdStrike Dashboard panels:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
@@ -49,15 +49,17 @@ There are several security related alerts to choose from and they are all locate
     * Virus Found and Blocked
     * Virus Found and Passed
 * Office 365 Defender ATP Alerts:
-    * Defender ATP - Defender ATP Alerts
+    * Defender ATP - Alerts
+    * Defender ATP - System is Offboarded
+    * Defender ATP - System is not Connected since a Week
 * Office 365 Defender ATP Dashboard panels:
     * All Alerts
 * Sophos Endpoint Protection Alerts:
-    * Sophos Endpoint Protection - Endpoint Not Protected by Sophos Endpoint Protection
-    * Sophos Endpoint Protection - Sophos Endpoint RealTime Protection Disabled 
-    * Sophos Endpoint Protection - Sophos Endpoint Protection Service is not Running 
-    * Sophos Endpoint Protection - Failed to CleanUp Threat by Sophos Endpoint Protection
-    * Sophos Endpoint Protection - Failed to CleanUp Potentially Unwanted Application by Sophos
+    * Sophos - Endpoint Not Protected
+    * Sophos - Endpoint RealTime Protection Disabled
+    * Sophos - Endpoint Protection Service is Not Running
+    * Sophos - Failed to CleanUp Threat
+    * Sophos - Failed to CleanUp Potentially Unwanted Application
 * Sophos Endpoint Protection Dashboard panels:
     * Application Blocked
     * Certificate/License Expiration Messages
@@ -73,8 +75,8 @@ There are several security related alerts to choose from and they are all locate
     * Web Control Violation
     * Web Filtering Blocked
 * Windows Defender Alerts:
-    * Windows Defender - Endpoint Not Protected by Windows Defender
-    * Windows Defender - Windows Defender RealTime Protection Disabled or Failed
+    * Windows Defender - Endpoint Not Protected
+    * Windows Defender - RealTime Protection Disabled or Failed
     * Windows Defender - Malware Detected
 * Windows Defender Dashboard panels:
     * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
@@ -90,24 +92,24 @@ There are several security related alerts to choose from and they are all locate
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
-    * AWS - IAM AccessKey Creation or Deletion
-    * AWS - IAM Login Profile Change/Update
-    * AWS - IAM User Creation or Deletion
-    * AWS - IAM Policy Creation or Deletion
-    * AWS - IAM Group Change/Update
-    * AWS - IAM Group Membership Change/Update
-    * AWS - IAM Role Creation or Deletion
-    * AWS - Network Access Control List Creation or Deletion
+    * AWS - IAM Access Key Changes
+    * AWS - IAM Login Profile Changes
+    * AWS - IAM User Changes
+    * AWS - IAM Policy Changes
+    * AWS - IAM Group Changes
+    * AWS - IAM Group Membership Changes
+    * AWS - IAM Role Changes
+    * AWS - Network Access Control List Changes
     * AWS - Concurrent Sessions From Different IPs
     * AWS - Multiple Failed MFA Requests For User
     * AWS - Created a Policy Version that allows All Resources to be Accessed
     * AWS - Someone Tries to Retrieve the Encrypted Administrator Password
     * AWS - RDS Master User Password has been Reset
     * AWS - Bucket Versioning is Disabled
-    * AWS - Multi Factor Authentication is Disabled for IAM User
+    * AWS - MFA is Disabled for IAM User
     * AWS - Successful Login From Unusual Country
     * AWS - Daily Login Failure
-    * AWS - Login Failure From Unusual Country Due To Multi Factor Authentication
+    * AWS - Login Failure From Unusual Country Due To MFA
     * AWS - Failed Login From Unusual Country
 * Amazone Web Services Dashboard panels:
     * Active Users
@@ -115,14 +117,14 @@ There are several security related alerts to choose from and they are all locate
     * Login by Location
     * Successful Logins
     * Failed Logins
-    * AWS - IAM - Policy Creation/Deletion
-    * AWS - IAM - Role Creation/Deletion
-    * AWS - IAM - AccessKey Creation/Deletion
-    * AWS - IAM - Login Profile Change/Update
-    * AWS - IAM - Group Change/Update
-    * AWS - IAM - GroupMembership Change/Update
-    * AWS - IAM - User Creation/Deletion
-    * AWS - Network Access Control List Creation/Deletion
+    * AWS - IAM - Policy Changes
+    * AWS - IAM - Role Changes
+    * AWS - IAM - AccessKey Changes
+    * AWS - IAM - Login Profile Changes
+    * AWS - IAM - Group Changes
+    * AWS - IAM - GroupMembership Changes
+    * AWS - IAM - User Changes
+    * AWS - Network Access Control List Changes
     * Most Recent User Activity Grouped by Event Name
     * Total Activities 
     * Error Activities
@@ -131,10 +133,10 @@ There are several security related alerts to choose from and they are all locate
     * User Activity by User Name Over Time
 * Google Workspace Alerts:
     * Google Workspace - Bulk User Creation or Deletion
-    * Google Workspace - User Change/Update
-    * Google Workspace - Enterprise Group Change/Update
-    * Google Workspace - Enterprise Group Membership Change/Update
-    * Google Workspace - Role Change/Update
+    * Google Workspace - User Changes
+    * Google Workspace - Group Changes
+    * Google Workspace - Group Membership Changes
+    * Google Workspace - Role Changes
     * Google Workspace - Multiple Password Changes in Short Time Period
     * Google Workspace - Successful Login From Unusual Country
     * Google Workspace - Suspicious Login Activity by User
@@ -142,7 +144,6 @@ There are several security related alerts to choose from and they are all locate
     * Google Workspace - Alerts Center Alert
     * Google Workspace - Google Drive objects shared Outside or with External User
     * Google Workspace - Google Drive objects accessed by External User
-    * Google Workspace - Suspicious File Shared by External User on Google Drive
     * Google Workspace - Failed Login From Unusual Country
 * Google Workspace Dashboard panels:
     * Login Types
@@ -153,47 +154,46 @@ There are several security related alerts to choose from and they are all locate
     * Password Updated
     * Other Login Related Events
     * Google Workspace - Alerts Center Details
-    * Google Workspace - Role Change/Update
-    * Google Workspace - Enterprise Group Change/Update
-    * Google Workspace - Enterprise GroupMembership Change/Update
-    * Google Workspace - User Change/Update
+    * Google Workspace - Role Changes
+    * Google Workspace - Group Changes
+    * Google Workspace - GroupMembership Changes
+    * Google Workspace - User Changes
     * Google Drive objects shared Outside or with External User
     * Google Drive objects accessed by External User
 * Microsoft Office 365 Alerts:
+    * Azure AD - Application Changes
+    * Azure Active Directory - AuthorizationPolicy Changes
+    * Azure AD - Group Changes
+    * Azure AD - GroupMembership Changes
+    * Azure AD - Policy Changes
+    * Azure AD - Role Changes
+    * Azure AD - ServicePrincipal Changes
+    * Azure AD - User 
+    * O365 - Risky Login Detected by Microsoft
     * O365 - Authentication Blocked by Conditional Access Policy
-    * O365 - Azure Active Directory - Application Change/Update 
-    * O365 - Azure Active Directory - AuthorizationPolicy Change/Update
-    * O365 - Azure Active Directory - Group Change/Update
-    * O365 - Azure Active Directory - GroupMembership Change/Update
-    * O365 - Azure Active Directory - Policy Change/Update 
-    * O365 - Azure Active Directory - Role Change/Update
-    * O365 - Azure Active Directory - ServicePrincipal Change/Update
-    * O365 - Azure Active Directory - User Change/Update 
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
     * O365 - Daily Login Failure
     * O365 - External User Added to Microsoft Teams
-    * O365 - Login Failure Due To Multi Factor Authentication
-    * O365 - Login Failure From Unusual Country Due To Multi Factor Authentication
-    * O365 - Login Failure Outside Home Country Due To Multi Factor Authentication
+    * O365 - Login Failure Due To MFA
+    * O365 - Login Failure From Unusual Country Due To MFA
     * O365 - Login From Unknown User
     * O365 - O365 Service is not Operational 
     * O365 - Security Compliance Alert
     * O365 - Successful Login From Unusual Country
-    * O365 - Successful Login Outside Home Country
     * O365 - Failed Login From Unusual Country
     * O365 - OneDrive or SharePoint File Sharing with External User
     * O365 - OneDrive or SharePoint Link Accessed By External User
 * Microsoft Office 365 Dashboard panels: 
-    * Azure Active Directory - Application Change/Update
-    * Azure Active Directory - AuthorizationPolicy Change/Update
-    * Azure Active Directory - Group Change/Update
-    * Azure Active Directory - GroupMembership Change/Update
-    * Azure Active Directory - Other Change/Update
-    * Azure Active Directory - Policy Change/Update
-    * Azure Active Directory - Role Change/Update
-    * Azure Active Directory - ServicePrincipal Change/Update
-    * Azure Active Directory - User Change/Update
+    * Azure Active Directory - Application Changes
+    * Azure Active Directory - AuthorizationPolicy Changes
+    * Azure Active Directory - Group Changes
+    * Azure Active Directory - GroupMembership Change
+    * Azure Active Directory - Other Changes
+    * Azure Active Directory - Policy Changes
+    * Azure Active Directory - Role Changes
+    * Azure Active Directory - ServicePrincipal Changes
+    * Azure Active Directory - User Changes
     * Azure - Current Security Score
     * Azure - Current Security Score(In Percentage) 
     * External Users Added to Teams
@@ -211,62 +211,80 @@ There are several security related alerts to choose from and they are all locate
 
 * MSSQL Alerts:
     * MSSQL - User Changes
+    * MSSQL - Database Changes
+    * MSSQL - Role Changes
 * MSSQL Dashboard panels:
     * Audit Logs
 * Oracle Alerts:
     * Oracle - User Changes
+    * Oracle - Database Changes
+    * Oracle - Role Changes
 * Oracle Dashboard panels:
     * Audit Logs
 
 ## Email
 * Alerts:
-    * Email - Daily Spam Email 
-    * Email - Hourly Increase in Emails Over Baseline
+    * Daily Spam Email 
+    * Hourly Increase in Emails Over Baseline
 
 
 ## Network Devices
 * General alerts for all Network Data:
-    * Network Compromise - Basic Scanning
-    * Network Compromise - Inbound Vulnerable Traffic
-    * Network Compromise - DDoS Behavior Detected
-    * Network Compromise - Unusual Outbound Traffic
+    * Basic Network Scanning
+    * Inbound Vulnerable Traffic
+    * DDoS Behavior Detected on the Network
+    * Unusual Outbound Traffic
+    * TOR Traffic detected by Firewall
 
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
 * Fortigate Firewall Alerts:
-    * Fortigate Firewall - Network Compromise - Fortigate DNS Sinkhole
-    * Fortigate Firewall - Network Compromise - Fortigate High Threats Alert
-    * Fortigate Firewall - Network Compromise - Fortigate High System Alert
+    * Fortigate - DNS Sinkhole
+    * Fortigate - High Threats Alert
+    * Fortigate - High System Alert
 * Fortigate Firewall Dashboard panels:
     * List of Firewall Devices
     * Fortigate Firewall Login Failures
     * System Alerts and Threats
 * Palo Alto Networks Alerts:
-    * Palo Alto Firewall - Commits 
-    * Palo Alto Firewall - Network Compromise - Palo Alto DNS Sinkhole
-    * Palo Alto Firewall - Network Compromise - Palo Alto High System Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto High Threats Alert
-    * Palo Alto Firewall - Network Compromise - Palo Alto WildFire Alert
+    * Palo Alto - Commits 
+    * Palo Alto - DNS Sinkhole
+    * Palo Alto - High System Alert
+    * Palo Alto - Palo Alto High Threats Alert
+    * Palo Alto - WildFire Alert
 * Palo Alto Networks Dashboard panels:
-    * DDoS Attack Prevented by Palo Alto Firewall
-    * Inbound Traffic from Blocked IPs 
     * License Events
     * List of Firewall Devices
-    * Outbound Traffic to Blocked IPs
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
+* Sophos Firewall Alerts:
+    * Sophos Firewall - Lost Connection to Sophos Central
+    * Sophos Firewall - VPN Tunnel Down
+    * Sophos Firewall - Gateway Down
+    * Sophos Firewall - Advanced Threat Detected
 * Sophos Firewall Dashboard panels:
     * ATP & IPS Events
     * List of Firewall Devices
     * System Events
 * Cisco Meraki Alerts:
-    * Organizational Security Events
-    * Config Changes
+    * Cisco Meraki - Organizational Security Events
+    * Cisco Meraki - Config Changes
 * Cisco Meraki Dashboard panels:
     * Organizational Security Events
     * Config Changes
-
+* F5 BIGIP Alerts:
+    * F5 BIGIP - Not Blocked Attacks
+* F5 BIGIP Dashboard panels:
+    * Top 10 Attack Type
+    * Top 10 Source IP
+    * Top Rules Over Time
+    * Top Action
+    * Top Blocked Source IPs
+    * Top Blocked Destionation IPs
+    * Blocked Source IPs
+    * All Events
+    * Attacks by IP
 
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
@@ -282,7 +300,7 @@ Cyences has a dashboard called "Network Telemetry" which shows if there is activ
 ## Vulnerability
 
 * Alerts:
-    * Vulnerability - Detected Vulnerabilities
+    * Detected New Vulnerabilities
 
 Supported vendor products include: CrowdStrike Spotlight, Nessus, Qualys, Tenable IO, Tenable SC & Nessus:Pro
 
@@ -305,11 +323,13 @@ Dashboard panels:
 ## Windows
 
 * Alerts:
-    * Windows - Hosts Missing Update
-    * Windows - Endpoint Compromise - Windows Firewall Disabled Event
-    * Windows - Windows Process Tampering Detected
-    * Windows - Windows Firewall is Disabled
+    * Windows - Host is Missing Windows Updates
+    * Windows - Firewall Disabled Event
+    * Windows - Process Tampering Detected
+    * Windows - Firewall is Disabled
     * Windows - Certificate is Expiring Soon
+    * Windows - Fake Windows Process
+    * Windows - Event Log Cleared
 * Dashboard panels:
     * Successful Login Events
     * Failed Login Attempts by User
@@ -328,14 +348,15 @@ Dashboard panels:
 ## Active Directory
 * Alerts:
     * AD - Bulk User Creation or Deletion
-    * AD - Group Changed
-    * AD - Group Membership Changed
-    * AD - Group Policy Changed
-    * AD - Multiple Password Changes in Short Time Period 
-    * AD - Password Change Outside Working Hour 
-    * AD - User Changed
+    * AD - Group Changes
+    * AD - Group Membership Changes
+    * AD - Group Policy Changes
+    * AD - Multiple Password Changes in a Short Period of Time
+    * AD - Password Change Outside Working Hours
+    * AD - User Changes
     * AD - User Locked Out
-    * AD - Login Failure due to Password Expired
+    * AD - Login Failure Due to Password Expired
+    * AD - Login Failure Due To Credential Revoked
 * Dashboard panels:
     * AD - Group Changed
     * AD - Group Membership Changed
@@ -365,17 +386,18 @@ Dashboard panels:
     * Top Requesters 
 
 
-## Ransomware
-* Ransomware Alerts:
+## Sysmon
+* Sysmon Alerts:
     * Ransomware - Common Ransomware File Extensions
     * Ransomware - Common Ransomware Notes
-    * Ransomware - Endpoint Compromise - Fake Windows Processes
-    * Ransomware - Endpoint Compromise - Network Compromise - TOR Traffic
-    * Ransomware - Endpoint Compromise - USN Journal Deletion on Windows 
-    * Ransomware - Endpoint Compromise - Windows - WMI Lateral Movement
+    * USN Journal Deletion on Windows
+    * Windows WMI Lateral Movement
     * Ransomware - Scheduled tasks used in BadRabbit ransomware 
     * Ransomware - Spike in File Writes
-    * Ransomware - Windows - Windows Event Log Cleared
+    * Windows - Credential Dumping through LSASS Access
+    * Windows - Credential Dumping via Symlink to Shadow Copy
+    * Windows - Credential Dumping via Copy Command from Shadow Copy
+    * Windows - Credential Dump From Registry via Reg exe
 
 
 ## Lansweeper (asset management tool)
@@ -413,8 +435,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 
 ## Linux/Unix
 * Alerts:
-    * Linux - User Added/Updated/Deleted
-    * Linux - Group Added/Updated/Deleted
+    * Linux - User Changes
+    * Linux - Group Changes
 * Dashboard panels:
     * Hosts Details
     * Linux Group Added/Updated/Removed
@@ -440,8 +462,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Authentication - Excessive Failed VPN Logins from a Source
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
-    * Authentication - Successful VPN Login Outside Home Country
     * Authentication - VPN Login Attempts Outside Working Hours
+    * Authentication - Successful Login for Multiple Users from Same IP
 * Dashboard panels: 
     * Connected Workforce by Location
     * Elapsed Time Per Session
@@ -457,8 +479,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * Supported Systems
     * Palo Alto system logs
 * Alerts:
-    * RSA Radius Authentication - Excessive Failed Logins for a User
+    * Radius Authentication - Excessive Failed Logins for a User
 * Dashboard panels:
-    * RSA Radius Authentications
-    * RSA Radius Authentication Success Rate
-    * RSA Radius Authentication Activities
+    * Radius Authentications
+    * Radius Authentication Success Rate
+    * Radius Authentication Activities
