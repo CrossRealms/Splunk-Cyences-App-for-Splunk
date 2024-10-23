@@ -56,7 +56,7 @@ export default function BlockShieldAPIConfiguration() {
     return (
         <>
             <SimpleForm key="blockshield" {...BlockShieldFields} onSave={onSave} username={data.username} password={data.password} />
-            <CyencesDocFooter location="install_configure/configuration/#block-shield-configuration"></CyencesDocFooter>
+            <CyencesDocFooter location="install_configure/configuration/#blockshield-api-configuration"></CyencesDocFooter>
         </>
     );
 }

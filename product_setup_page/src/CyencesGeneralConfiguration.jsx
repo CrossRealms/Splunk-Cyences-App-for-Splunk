@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Heading from '@splunk/react-ui/Heading';
 import { generateToast } from './utils/util';
 import { axiosCallWrapper } from './utils/axiosCallWrapper';
 import ControlGroup from '@splunk/react-ui/ControlGroup';
 import Button from '@splunk/react-ui/Button';
 import Text from '@splunk/react-ui/Text';
+import CyencesDocFooter from './components/CyencesDocFooter';
 
 
 const EmailConfigurationFields = {
@@ -95,6 +95,7 @@ export default function CyencesGeneralConfiguration() {
                     <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
                 </ControlGroup>
             </form>
+            <CyencesDocFooter location="install_configure/configuration/#cyences-general-setup"></CyencesDocFooter>
         </div>
     );
 }
