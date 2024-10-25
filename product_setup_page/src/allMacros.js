@@ -14,6 +14,7 @@ let allMacros = [
             {name: 'cs_network_traffic_map_filter' },
             {name: 'cs_network_scanning_map_filter' },
             {name: 'cs_home_country', description: 'Used to determine and filter the home location in the VPN dashboard and to identify O365 logins outside of home country. The country name should be compatible with the iplocation command (add quotes around the value in the macro definition)' },
+            {name: 'cs_customer_own_public_ips', description: "Provide comma separated list of customer own public IPs. Ex. (20.x.x.x, 120.x.x.x, 101.x.x.x) " },
             {name: 'cs_network_home_location_lat', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map" },
             {name: 'cs_network_home_location_lon', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map" },
         ]
