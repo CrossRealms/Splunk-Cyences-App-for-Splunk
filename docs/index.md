@@ -16,6 +16,8 @@ Splunkbase Download App:
 ## Overview
 The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators. The forensic interface based on the MITRE ATT&CK framework to quickly identify areas of concern. continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
+Cyences is one of the component of UCMC (Unified Cyber Management Center). Cyences includes the SOC and Compliance related security use-cases which helps to detect and monitor the security issues which makes UCMC platform better. UCMC is all in one package for the cyber protection which includes the other components along with the cyences like blockshield, vulnerability scanning, SOAR (Security Orchestration and Automatic Response) etc.
+
 By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
 
 * Active Directory / Azure Active Directory 
@@ -83,6 +85,8 @@ Apart from alerts and dashboards, the Cyences App also integrates with some othe
 
 
 How does the Cyences app differentiate itself from Enterprise Security?
+
+Compared to ES, Cyences is very easy to manage and fully customizable, allowing users to keep only the products relevant to their environment. Also, It contains the product-focused security usecases categorized in SOC and Compliance so that it's easy to review for the respective team memebers.  
 
 For new Splunk users, Enterprise Security requires a lot of fine tuning in order to get the most optimal experience and they may have trouble doing so as there's so much to learn before even reaching that point. For example, users have to configure several correlation searches within Enterprise Security and understand how it ties into specific use cases as well. On the other hand, the Cyences app was created with having one goal in mind and that is to provide an out of the box end-to-end security solution. Meaning, Splunk users don't have to configure all that much in order to get things started right away. Additionally, the alerting feature found within the Cyences app allows users to receive alerts via Slack or by email all while keeping the false positives at a bare minimum.
 
