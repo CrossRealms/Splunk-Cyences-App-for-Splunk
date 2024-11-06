@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Heading from '@splunk/react-ui/Heading';
 import CyencesDocFooter from './components/CyencesDocFooter';
+import { axiosCallWrapper } from './utils/axiosCallWrapper';
+import ControlGroup from '@splunk/react-ui/ControlGroup';
 import { MacroSetup } from './MacroSetupApp';
+import Switch from '@splunk/react-ui/Switch';
+import { isTrue, generateToast } from './utils/util';
 
+
+const SeparateDigestMacro = "cs_separate_digest_required_for_common_recipients"
 
 const SOCTeamConfigurationMacros = [
     { name: 'cs_soc_email', description: 'comma separated list of email addresses of the SOC team/members' },
@@ -22,8 +28,47 @@ const ComplianceTeamConfigurationMacros = [
 
 export default function CyencesAlertSetup() {
 
+    const [isEnabled, setEnabled] = useState(null)
+
+    useEffect(() => {
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-macros/${SeparateDigestMacro}`
+        })
+            .then((resp) => {
+                setEnabled(isTrue(resp.data.entry[0].content.definition));
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+    }, [SeparateDigestMacro]);
+
+    function updateMacro() {
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-macros/${SeparateDigestMacro}`,
+            body: new URLSearchParams({ 'definition': !isEnabled }),
+            customHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            method: "post",
+        })
+            .then((resp) => {
+                generateToast(`Successfully updated "${SeparateDigestMacro}" macro.`, "success")
+                setEnabled(!isEnabled)
+            })
+            .catch((error) => {
+                console.log(error);
+                generateToast(`Failed updated "${SeparateDigestMacro}" macro. check console for more detail.`, "error")
+            })
+    }
+
     return (
         <>
+            <Heading style={{ marginLeft: '20px' }}>General Alert Configuration</Heading>
+            <div style={{ marginLeft: '250px' }}>
+                <ControlGroup style={{marginLeft: '20px'}} label="Do you want separate digest alert for the common SOC and Compliance receipents?" help="">
+                    <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>
+                </ControlGroup>
+            </div>
+
             <Heading style={{ marginLeft: '20px' }}>SOC Team Configuration</Heading>
             <div style={{ marginLeft: '250px' }}>
                 {SOCTeamConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description} />)}
