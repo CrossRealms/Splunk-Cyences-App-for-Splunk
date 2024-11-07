@@ -25,6 +25,7 @@ SOC_ALERTS_TO_EXCLUDE_MACRO = 'cs_soc_alerts_to_exclude_from_digest_alert'
 COMPLIANCE_ALERTS_TO_EXCLUDE_MACRO = 'cs_compliance_alerts_to_exclude_from_digest_alert'
 SOC_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_soc_recipients_to_exclude_for_digest_alert'
 COMPLIANCE_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_compliance_recipients_to_exclude_for_digest_alert'
+SEPARATE_DIGEST_MACRO = "cs_separate_digest_for_common_recipients"
 
 # We'll be sorting this in ascending order
 ALERT_SEVERITIES = {
@@ -89,7 +90,6 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
         return alerts
 
-
     def limit_no_of_events_per_alert(self, results):
         for alert_name, data in results.items():
             events = data['events']
@@ -104,10 +104,9 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 data['total_entries'] = len(events)
                 data['entries_displaying'] = data['total_entries']
                 data['events'] = sorted_events
-            
+
             data[alert_name] = data
         return results
-
 
     def divide_alerts_in_chunks(self, results):
         list_of_result_chunks = []
@@ -124,9 +123,8 @@ class CyencesSendDigestEmailCommand(EventingCommand):
 
         if counter > 0:
             list_of_result_chunks.append(result_chunk)
-        
-        return list_of_result_chunks
 
+        return list_of_result_chunks
 
     def convert_results_to_html_body(self, results):
         full_html_body = ''
@@ -137,8 +135,11 @@ class CyencesSendDigestEmailCommand(EventingCommand):
         return full_html_body
 
     def categorize_events_by_team(self, records):
+        only_soc_events = []
+        only_compliance_events = []
         soc_events = []
         compliance_events = []
+        soc_and_compliance_events = []
         for event in records:
             teams = [item.strip() for item in event["teams"].split(",") if item.strip()]
 
@@ -148,11 +149,19 @@ class CyencesSendDigestEmailCommand(EventingCommand):
             if "Compliance" in teams:
                 compliance_events.append(copy.deepcopy(event))
 
-        return soc_events, compliance_events
+            if "SOC" in teams and "Compliance" in teams:
+                soc_and_compliance_events.append(copy.deepcopy(event))
 
-    def event_processing(self, team, records, cyences_email_utility, email_to, severities, exclude_alerts):
-        results = self.filter_results_and_group_by_alert(records, severities, exclude_alerts)
-        results = self.limit_no_of_events_per_alert(results)
+            if "SOC" in teams and "Compliance" not in teams:
+                only_soc_events.append(copy.deepcopy(event))
+
+            if "Compliance" in teams and "SOC" not in teams:
+                only_compliance_events.append(copy.deepcopy(event))
+
+        return soc_events, compliance_events, soc_and_compliance_events, only_soc_events, only_compliance_events
+
+    def send_emails(self, team, records, cyences_email_utility, email_to):
+        results = self.limit_no_of_events_per_alert(records)
         list_of_result_chunks = self.divide_alerts_in_chunks(results)
 
         email_counter = 1
@@ -218,13 +227,42 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 }
 
             else:
-                soc_events, compliance_events = self.categorize_events_by_team(records)
+                is_separate_digest_required = config_handler.get_macro(SEPARATE_DIGEST_MACRO)
+                soc_events, compliance_events, soc_and_compliance_events, only_soc_events, only_compliance_events = self.categorize_events_by_team(records)
 
-                if len(soc_events) > 0 and len(final_soc_emails) > 0:
-                    self.event_processing("SOC", soc_events, cyences_email_utility, final_soc_emails, soc_severities, soc_exclude_alerts)
+                if cs_utils.is_true(is_separate_digest_required):
+                    common_emails = final_soc_emails.intersection(final_compliance_emails)
+                    only_compliance_emails = final_compliance_emails - common_emails
+                    only_soc_emails = final_soc_emails - common_emails
 
-                if len(compliance_events) > 0 and len(final_compliance_emails) > 0:
-                    self.event_processing("Compliance", compliance_events, cyences_email_utility, final_compliance_emails, compliance_severities, compliance_exclude_alerts)
+                    if len(soc_events) > 0 and len(only_soc_emails) > 0:
+                        results = self.filter_results_and_group_by_alert(soc_events, soc_severities, soc_exclude_alerts)
+                        self.send_emails("SOC", results, cyences_email_utility, only_soc_emails)
+
+                    if len(compliance_events) > 0 and len(only_compliance_emails) > 0:
+                        results = self.filter_results_and_group_by_alert(compliance_events, compliance_severities, compliance_exclude_alerts)
+                        self.send_emails("Compliance", results, cyences_email_utility, only_compliance_emails)
+
+                    if len(common_emails) > 0:
+                        soc_results = self.filter_results_and_group_by_alert(only_soc_events, soc_severities, soc_exclude_alerts)
+                        compliance_results = self.filter_results_and_group_by_alert(only_compliance_events, compliance_severities, compliance_exclude_alerts)
+
+                        combined_severity = soc_severities.union(compliance_severities)
+                        combined_exclude_alerts = soc_exclude_alerts.union(compliance_exclude_alerts)
+                        soc_and_compliance_results = self.filter_results_and_group_by_alert(soc_and_compliance_events, combined_severity, combined_exclude_alerts)
+
+                        soc_and_compliance_results.update(soc_results)
+                        soc_and_compliance_results.update(compliance_results)
+                        self.send_emails("SOC and Compliance", soc_and_compliance_results, cyences_email_utility, common_emails)
+
+                else:
+                    if len(soc_events) > 0 and len(final_soc_emails) > 0:
+                        results = self.filter_results_and_group_by_alert(soc_events, soc_severities, soc_exclude_alerts)
+                        self.send_emails("SOC", results, cyences_email_utility, final_soc_emails)
+
+                    if len(compliance_events) > 0 and len(final_compliance_emails) > 0:
+                        results = self.filter_results_and_group_by_alert(compliance_events, compliance_severities, compliance_exclude_alerts)
+                        self.send_emails("Compliance", results, cyences_email_utility, final_compliance_emails)
 
                 yield {
                     'msg': "Sent an Email to the respective teams."
