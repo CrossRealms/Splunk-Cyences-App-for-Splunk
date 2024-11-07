@@ -62,13 +62,6 @@ export default function CyencesAlertSetup() {
 
     return (
         <>
-            <Heading style={{ marginLeft: '20px' }}>General Alert Configuration</Heading>
-            <div style={{ marginLeft: '250px' }}>
-                <ControlGroup style={{marginLeft: '20px'}} label="Do you want separate digest alert for the common SOC and Compliance receipents?" help="">
-                    <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>
-                </ControlGroup>
-            </div>
-
             <Heading style={{ marginLeft: '20px' }}>SOC Team Configuration</Heading>
             <div style={{ marginLeft: '250px' }}>
                 {SOCTeamConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description} />)}
@@ -78,7 +71,10 @@ export default function CyencesAlertSetup() {
             <div style={{ marginLeft: '250px' }}>
                 {ComplianceTeamConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description} />)}
             </div>
-
+            
+            <div style={{ marginLeft: '30px' }}>
+                <b>NOTE:</b> Would you like separate digest alert for the common recipients of SOC and Compliance?  <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>
+            </div>
             <CyencesDocFooter location="install_configure/configuration/#cyences-alerts-configuration"></CyencesDocFooter>
         </>
     );
