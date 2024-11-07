@@ -25,7 +25,7 @@ SOC_ALERTS_TO_EXCLUDE_MACRO = 'cs_soc_alerts_to_exclude_from_digest_alert'
 COMPLIANCE_ALERTS_TO_EXCLUDE_MACRO = 'cs_compliance_alerts_to_exclude_from_digest_alert'
 SOC_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_soc_recipients_to_exclude_for_digest_alert'
 COMPLIANCE_RECIPIENTS_TO_EXCLUDE_FROM_ALERT_MACRO = 'cs_compliance_recipients_to_exclude_for_digest_alert'
-SEPARATE_DIGEST_MACRO = "cs_separate_digest_required_for_common_recipients"
+SEPARATE_DIGEST_MACRO = "cs_separate_digest_for_common_recipients"
 
 # We'll be sorting this in ascending order
 ALERT_SEVERITIES = {
@@ -227,10 +227,10 @@ class CyencesSendDigestEmailCommand(EventingCommand):
                 }
 
             else:
-                macro_value = config_handler.get_macro(SEPARATE_DIGEST_MACRO)
+                is_separate_digest_required = config_handler.get_macro(SEPARATE_DIGEST_MACRO)
                 soc_events, compliance_events, soc_and_compliance_events, only_soc_events, only_compliance_events = self.categorize_events_by_team(records)
 
-                if cs_utils.is_true(macro_value):
+                if cs_utils.is_true(is_separate_digest_required):
                     common_emails = final_soc_emails.intersection(final_compliance_emails)
                     only_compliance_emails = final_compliance_emails - common_emails
                     only_soc_emails = final_soc_emails - common_emails

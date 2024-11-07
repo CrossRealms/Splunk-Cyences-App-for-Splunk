@@ -8,7 +8,7 @@ import Switch from '@splunk/react-ui/Switch';
 import { isTrue, generateToast } from './utils/util';
 
 
-const SeparateDigestMacro = "cs_separate_digest_required_for_common_recipients"
+const SeparateDigestMacro = "cs_separate_digest_for_common_recipients"
 
 const SOCTeamConfigurationMacros = [
     { name: 'cs_soc_email', description: 'comma separated list of email addresses of the SOC team/members' },
@@ -72,9 +72,11 @@ export default function CyencesAlertSetup() {
                 {ComplianceTeamConfigurationMacros.map((macroItem) => <MacroSetup key={macroItem.name} macroName={macroItem.name} description={macroItem.description} />)}
             </div>
             
+            <Heading style={{ marginLeft: '20px' }}>Common Recipient Configuration</Heading>
             <div style={{ marginLeft: '30px' }}>
-                <b>NOTE:</b> Would you like separate digest alert for the common recipients of SOC and Compliance?  <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>
+                Alerts associated to SOC and Compliance both will duplicate for the common recipients. <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>  Common recipients of SOC and Compliance would receive an individual digest alert.
             </div>
+
             <CyencesDocFooter location="install_configure/configuration/#cyences-alerts-configuration"></CyencesDocFooter>
         </>
     );
