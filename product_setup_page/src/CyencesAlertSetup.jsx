@@ -74,7 +74,7 @@ export default function CyencesAlertSetup() {
             
             <Heading style={{ marginLeft: '20px' }}>Common Recipient Configuration</Heading>
             <div style={{ marginLeft: '30px' }}>
-                Alerts associated to SOC and Compliance both will duplicate for the common recipients. <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>  Common recipients of SOC and Compliance would receive an individual digest alert.
+                Common recipient will receive both SOC and Compliance Digest <Switch inline key={SeparateDigestMacro} value={SeparateDigestMacro} selected={isEnabled} appearance="toggle" onClick={updateMacro}></Switch>  Common recipient will be excluded from SOC and Compliance digest and will instead get separate combined Digest
             </div>
 
             <CyencesDocFooter location="install_configure/configuration/#cyences-alerts-configuration"></CyencesDocFooter>
