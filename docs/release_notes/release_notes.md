@@ -11,7 +11,7 @@ has_children: true
 
 ## Version 5.1.0 (November 2024)
 
-* Added option to receive the separate cyences digest alert for the common recipients of SOC and Compliance team members. To configure navigate to **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
+* Added option to receive the separate cyences digest alert for the common recipients of SOC and Compliance team members. To configure, navigate to **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
 
 * ### Enhancements
 
@@ -22,4 +22,4 @@ has_children: true
 
 ## Upgrade Guide from 5.0.0 to 5.1.0
 
-* Configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section.
+* Configure the SOC and Compliance teams related configs under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** section. Ignore if it is already configured.
