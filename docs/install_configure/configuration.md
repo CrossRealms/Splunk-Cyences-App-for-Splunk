@@ -60,6 +60,7 @@ Cyences 5.0.0 categorizes all alerts into two teams SOC and Compliance.
     * Alert severities to consider for the digest alert
     * Specific alerts' list to exclude from the digest alert
     * Any receipient to exclude from the digest alert
+    * Toggle button to receive separate digest alert for the common recipients of SOC and Compliance.
 
 ![alt]({{ site.baseurl }}/assets/soc_and_compliance_conf.png)
 
