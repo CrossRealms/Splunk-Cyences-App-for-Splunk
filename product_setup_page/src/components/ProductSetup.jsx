@@ -41,7 +41,7 @@ export default function ProductSetup(props) {
       })
       .catch((error) => {
         console.log(error);
-        generateToast(`Failed to update "${payload.product}". check console for more detail.`, "error")
+        generateToast(`Failed to update "${payload.product}". error=${error}`, "error")
         setIsLoading(false);
       });
     setIsLoading(true);
@@ -68,7 +68,7 @@ export default function ProductSetup(props) {
       })
       .catch((error) => {
         console.log(error);
-        generateToast(`Failed to update "${payload.product}" macros. check console for more detail.`, "error")
+        generateToast(`Failed to update "${payload.product}" macros. error=${error}`, "error")
       })
   }
 

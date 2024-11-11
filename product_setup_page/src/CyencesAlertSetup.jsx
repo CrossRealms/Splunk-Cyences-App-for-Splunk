@@ -56,7 +56,7 @@ export default function CyencesAlertSetup() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed updated "${SeparateDigestMacro}" macro. check console for more detail.`, "error")
+                generateToast(`Failed updated "${SeparateDigestMacro}" macro. error=${error}`, "error")
             })
     }
 

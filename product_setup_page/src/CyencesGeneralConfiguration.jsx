@@ -29,7 +29,7 @@ export default function CyencesGeneralConfiguration() {
                 setData(subject_prefix);
             })
             .catch((error) => {
-                generateToast(`Failed to load Cyences email alert action configuration. check console for more detail.`, "error");
+                generateToast(`Failed to load Cyences email alert action configuration. error=${error}`, "error");
                 console.log(error);
             })
     }, []);
@@ -52,7 +52,7 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update Cyences email alert action configuration. check console for more detail.`, "error")
+                generateToast(`Failed to update Cyences email alert action configuration. error=${error}`, "error")
             })
 
         axiosCallWrapper({
@@ -66,7 +66,7 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update Cyences digest email alert action configuration. check console for more detail.`, "error")
+                generateToast(`Failed to update Cyences digest email alert action configuration. error=${error}`, "error")
             })
         
         axiosCallWrapper({
@@ -80,7 +80,7 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed updated "${macroName}" macro. check console for more detail.`, "error")
+                generateToast(`Failed updated "${macroName}" macro. error=${error}`, "error")
             })
 
     }
