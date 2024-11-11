@@ -38,6 +38,9 @@ export function MacroSetup(props) {
             })
             .catch((error) => {
                 console.log(error);
+                if (error.response.data.messages[0].text){
+                    error=error.response.data.messages[0].text;
+                }
                 generateToast(`Failed updated "${macroName}" macro. error=${error}`, "error")
             })
     }
