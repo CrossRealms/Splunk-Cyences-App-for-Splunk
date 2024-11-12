@@ -29,8 +29,11 @@ export default function CyencesGeneralConfiguration() {
                 setData(subject_prefix);
             })
             .catch((error) => {
-                generateToast(`Failed to load Cyences email alert action configuration. check console for more detail.`, "error");
                 console.log(error);
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to load Cyences email alert action configuration. error=${error}`, "error");
             })
     }, []);
 
@@ -52,7 +55,10 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update Cyences email alert action configuration. check console for more detail.`, "error")
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to update Cyences email alert action configuration. error=${error}`, "error")
             })
 
         axiosCallWrapper({
@@ -66,7 +72,10 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update Cyences digest email alert action configuration. check console for more detail.`, "error")
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to update Cyences digest email alert action configuration. error=${error}`, "error")
             })
         
         axiosCallWrapper({
@@ -80,7 +89,10 @@ export default function CyencesGeneralConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed updated "${macroName}" macro. check console for more detail.`, "error")
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed updated "${macroName}" macro. error=${error}`, "error")
             })
 
     }

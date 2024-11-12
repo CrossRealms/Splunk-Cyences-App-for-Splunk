@@ -27,8 +27,11 @@ export default function BlockShieldAPIConfiguration() {
                 setData({ username, password: '' });
             })
             .catch((error) => {
-                generateToast(`Failed to load BlockShield Configuration. check console for more detail.`, "error");
                 console.log(error);
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to load BlockShield Configuration. error=${error}`, "error");
             })
 
     }, []);
@@ -49,7 +52,10 @@ export default function BlockShieldAPIConfiguration() {
             })
             .catch((error) => {
                 console.log(error);
-                generateToast(`Failed to update BlockShield Configuration. check console for more detail.`, "error")
+                if (error?.response?.data?.messages[0]?.text){
+                    error=error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to update BlockShield Configuration. error=${error}`, "error")
             })
     }
 
