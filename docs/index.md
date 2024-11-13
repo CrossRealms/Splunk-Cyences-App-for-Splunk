@@ -16,7 +16,7 @@ Splunkbase Download App:
 ## Overview
 The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators. The forensic interface based on the MITRE ATT&CK framework to quickly identify areas of concern. continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
-Cyences is one of the component of UCMC (Unified Cyber Management Center). Cyences includes the SOC and Compliance related security use-cases which helps to detect and monitor the security issues which makes UCMC platform better. UCMC is all in one package for the cyber protection which includes the other components along with the cyences like blockshield, vulnerability scanning, SOAR (Security Orchestration and Automatic Response) etc.
+Cyences is one of the core components of the Unified Cyber Management Center (UCMC). It includes SOC (Security Operations Center) and compliance-related security use cases, which are essential for detecting, monitoring, and responding to security threats. These capabilities significantly enhance the UCMC platform’s effectiveness. In addition to Cyences, UCMC also integrates other powerful components like SOC, Compliance  and Countermeasures. Together, these tools provide a comprehensive, all-in-one package for cyber protection, allowing for more efficient management and security of digital assets.
 
 By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
 
