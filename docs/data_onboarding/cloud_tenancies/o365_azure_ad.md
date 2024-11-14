@@ -18,7 +18,7 @@ Installation and Configuration Guide:
 [https://splunkbase.splunk.com/app/3757/#/details](https://splunkbase.splunk.com/app/3757/#/details) 
 
 Required inputs to be configured:
-* Azure Active Directory Audit
+* Microsoft Entra ID Audit
 
 **Note:** Use index=**azure** for data collection or update the macro definition for `cs_azure` (**Settings > Configuration**).
 
