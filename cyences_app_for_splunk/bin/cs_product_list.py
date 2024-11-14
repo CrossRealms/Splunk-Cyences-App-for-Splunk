@@ -21,6 +21,12 @@ def build_search_query(macro, by, values, first_call=True):
     return search
 
 
+def build_source_latency_search(macro, by, values):
+    return "`{macro}` {by} IN ({values}) | eval diff=(_indextime - _time) / 60 | rename {by} as sources | stats max(diff) as max_delay avg(diff) as avg_delay by sources".format(
+        macro=macro, by=by, values=values
+    )
+
+
 def build_host_reviewer_search(by, values):
     return "| tstats count where index=* {by} IN ({values}) by {by} host | rename {by} as sources".format(
         by=by, values=values
@@ -320,6 +326,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_network_indexes` tag=network tag=communicate | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_network_indexes` tag=network tag=communicate | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_network_indexes` tag=network tag=communicate | table label, data',
+                "source_latency_search": '`cs_network_indexes` tag=network tag=communicate | eval diff=(_indextime - _time) / 60 | stats max(diff) as max_delay avg(diff) as avg_delay by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-4h@h",
                 "latest_time": "now",
             }
@@ -482,6 +489,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | table label, data',
+                "source_latency_search": '`cs_vulnerabilities_indexes` tag=vulnerability tag=report tag=cyences | eval diff=(_indextime - _time) / 60 | stats max(diff) as max_delay avg(diff) as avg_delay by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -602,6 +610,7 @@ PRODUCTS = [
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
                 "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_SOURCE_TYPES, first_call=False),
+                "source_latency_search": build_source_latency_search(macro="cs_windows_idx", by="source", values=WINDOWS_SOURCES) + " | append [ | search " + build_source_latency_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_SOURCE_TYPES) + "]",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -626,6 +635,7 @@ PRODUCTS = [
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_AD_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
                 "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_AD_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES, first_call=False),
+                "source_latency_search": build_source_latency_search(macro="cs_windows_idx", by="source", values=WINDOWS_AD_SOURCES) + " | append [ | search " + build_source_latency_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_AD_SOURCE_TYPES) + "]",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -651,6 +661,7 @@ PRODUCTS = [
                 "host_reviewer_search": build_host_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + " | append [" + build_host_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES) + "]",
                 "sources_reviewer_search": build_source_reviewer_search(by="source", values=WINDOWS_DNS_SOURCES) + build_source_reviewer_search(by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
                 "data_availablity_panel_search": build_data_availablity_panel_search(macro="cs_windows_idx", by="source", values=WINDOWS_DNS_SOURCES) + build_data_availablity_panel_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES, first_call=False),
+                "source_latency_search": build_source_latency_search(macro="cs_windows_idx", by="source", values=WINDOWS_DNS_SOURCES) + " | append [ | search " + build_source_latency_search(macro="cs_windows_idx", by="sourcetype", values=WINDOWS_DNS_SOURCE_TYPES) + "]",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -707,6 +718,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_vpn_indexes` dest_category="vpn_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_vpn_indexes` dest_category="vpn_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_vpn_indexes` dest_category=vpn_auth" | table label, data',
+                "source_latency_search": '`cs_vpn_indexes` dest_category="vpn_auth" | eval diff=(_indextime - _time) / 60 | stats max(diff) as max_delay avg(diff) as avg_delay by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -724,6 +736,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_authentication_indexes` tag=authentication | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_authentication_indexes` tag=authentication | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_authentication_indexes` tag=authentication | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_authentication_indexes`  tag=authentication | table label, data',
+                "source_latency_search": '`cs_authentication_indexes` tag=authentication | eval diff=(_indextime - _time) / 60 | stats max(diff) as max_delay avg(diff) as avg_delay by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -746,6 +759,7 @@ PRODUCTS = [
                 "host_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats count by sourcetype host | rename sourcetype as sources',
                 "sources_reviewer_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | stats dc(host) as host_count values(index) as index by sourcetype | rename sourcetype as sources',
                 "data_availablity_panel_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | head 1 | stats count | eval data=if(count>0, "Data Present", "Data Not Present"), label="`cs_radius_authentication_indexes` dest_category=radius_auth" | table label, data',
+                "source_latency_search": '`cs_radius_authentication_indexes` dest_category="radius_auth" | eval diff=(_indextime - _time) / 60 | stats max(diff) as max_delay avg(diff) as avg_delay by sourcetype | rename sourcetype as sources',
                 "earliest_time": "-7d@d",
                 "latest_time": "now",
             }
@@ -822,5 +836,12 @@ for product in PRODUCTS:
                 by=macro_config["search_by"],
                 values=macro_config["search_values"],
             )
+        if not macro_config.get("source_latency_search"):
+            macro_config["source_latency_search"] = build_source_latency_search(
+                macro=macro_config["macro_name"],
+                by=macro_config["search_by"],
+                values=macro_config["search_values"],
+            )
+
     if not product.get("metadata_count_search"):
         product["metadata_count_search"] = metadata_count_search[:-3]

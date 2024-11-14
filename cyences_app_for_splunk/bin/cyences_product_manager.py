@@ -44,6 +44,7 @@ class CyencesProductManager(GeneratingCommand):
                 host_reviewer_search = ""
                 sources_reviewer_search = ""
                 metadata_count_search = ""
+                source_latency_search = ""
                 data_availablity_panel_search = ""
                 for product in all_products:
                     metadata_count_search = product.get("metadata_count_search")
@@ -53,15 +54,18 @@ class CyencesProductManager(GeneratingCommand):
                                 host_reviewer_search += " | append ["
                                 sources_reviewer_search += " | append ["
                                 data_availablity_panel_search += "| append ["
+                                source_latency_search += "| append [ | search "
 
                             host_reviewer_search += product["macro_configurations"][index].get("host_reviewer_search")
                             sources_reviewer_search += product["macro_configurations"][index].get("sources_reviewer_search")
                             data_availablity_panel_search += product["macro_configurations"][index].get("data_availablity_panel_search")
+                            source_latency_search += product["macro_configurations"][index].get("source_latency_search")
 
                             if index > 0:
                                 host_reviewer_search += "]"
                                 sources_reviewer_search += "]"
                                 data_availablity_panel_search += "]"
+                                source_latency_search += "]"
                         data_availablity_panel_search += " | eval data=if(count>0, \"Data Present\", \"Data Not Present\") | table label, data"
                         break
 
@@ -70,6 +74,7 @@ class CyencesProductManager(GeneratingCommand):
                     "metadata_count_search": metadata_count_search,
                     "sources_reviewer_search": sources_reviewer_search,
                     "data_availablity_panel_search": data_availablity_panel_search,
+                    "source_latency_search": source_latency_search
                 }
 
         except Exception as e:
