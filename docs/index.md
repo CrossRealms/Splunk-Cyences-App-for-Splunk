@@ -16,15 +16,9 @@ Splunkbase Download App:
 ## Overview
 The Cyences App for Splunk was designed to allow users complete visibility of their system's security status. It was created with the intention of becoming a seamless piece of the Blue team arsenal for security engineers and administrators. The forensic interface based on the MITRE ATT&CK framework to quickly identify areas of concern. continuous quarterly enhancements are occurring towards achieving that goal. These updates will continue to improve tool customization and scalability with advanced search features, alerting, machine learning, and AI.
 
-Cyences is one of the core components of the Unified Cyber Management Center (UCMC). It includes SOC (Security Operations Center) and compliance-related security use cases, which are essential for detecting, monitoring, and responding to security threats. These capabilities significantly enhance the UCMC platform’s effectiveness. In addition to Cyences, UCMC also integrates other powerful components like SOC, Compliance  and Countermeasures. Together, these tools provide a comprehensive, all-in-one package for cyber protection, allowing for more efficient management and security of digital assets.
+@CrossRealms International, We utilize the cyences as a part of our Unified Cyber Management Center (UCMC). For more detail, refer [https://crossrealms.com/ucmc/](UCMC Blog).
 
 By default, the Cyences app provides a multitude of alerts and dashboards in the following categories:
-
-* Active Directory / Azure Active Directory 
-* Linux / Unix 
-* Windows
-    * Windows Patch
-    * Sysmon
 
 * Antivirus / Antimalware
     * CrowdStrike  
@@ -33,24 +27,18 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Sophos Endpoint Protection
     * Windows Defender 
 
-* Authentication 
-
 * Cloud Tenancies
     * Amazon Web Services 
     * Google Workspace
     * Microsoft Office 365
         * Microsoft Azure Graph Security Score
 
-* Database
-    * MSSQL
-    * Oracle
-
-* DNS Tracker
-
 * Email
     * Microsoft Office 365
 
-* Lansweeper 
+* Database
+    * MSSQL
+    * Oracle
 
 * Network Devices 
     * Cisco IOS
@@ -60,21 +48,34 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Cisco Meraki
     * F5 BIGIP
 
-* Ransomware
+* Vulnerability Scanners
+    * CrowdStrike Spotlight
+    * Qualys
+    * Tenable
+    * Nessus:Pro (Nessus Professional)
+
+* Active Directory / Azure Active Directory 
+
+* Windows
+    * Windows Patch
+    * Sysmon
+    * Ransomware
+
+* Linux / Unix 
+
+* Authentication 
 
 * VPN
     * Cisco Anyconnect
     * Fortinet FortiGate
     * GlobalProtect (Palo Alto)
 
+* DNS Tracker
+
+* Lansweeper 
+
 * RSA Radius Authentication
     * From Palo Alto system logs
-
-* Vulnerability Scanners
-    * CrowdStrike Spotlight
-    * Qualys
-    * Tenable
-    * Nessus:Pro (Nessus Professional)
 
 
 Apart from alerts and dashboards, the Cyences App also integrates with some other well-known tools to create important dashboards that would add intelligence to your security investigation and auditing processes:
@@ -82,13 +83,6 @@ Apart from alerts and dashboards, the Cyences App also integrates with some othe
 * Intelligence
 * Device Inventory Table
 * User Inventory Table
-
-
-How does the Cyences app differentiate itself from Enterprise Security?
-
-Compared to ES, Cyences is very easy to manage and fully customizable, allowing users to keep only the products relevant to their environment. Also, It contains the product-focused security usecases categorized in SOC and Compliance so that it's easy to review for the respective team memebers.  
-
-For new Splunk users, Enterprise Security requires a lot of fine tuning in order to get the most optimal experience and they may have trouble doing so as there's so much to learn before even reaching that point. For example, users have to configure several correlation searches within Enterprise Security and understand how it ties into specific use cases as well. On the other hand, the Cyences app was created with having one goal in mind and that is to provide an out of the box end-to-end security solution. Meaning, Splunk users don't have to configure all that much in order to get things started right away. Additionally, the alerting feature found within the Cyences app allows users to receive alerts via Slack or by email all while keeping the false positives at a bare minimum.
 
 
 Cyences has other unique first in the market features on Splunk, like Alert Digest, Device Inventory, User Inventory, Network Telemetry, etc.
