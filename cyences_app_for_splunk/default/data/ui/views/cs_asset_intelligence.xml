@@ -459,7 +459,7 @@
       <event>
         <title>Kaspersky Events</title>
         <search>
-          <query>`cs_kaspersky` | rename dst as ip, dest as hostname , ProductName as kaspersky_collected_by, ProductVersion as kaspersky_version ,macaddress as mac_address| search $tkn_filter_main$</query>
+          <query>`cs_kaspersky` | rename dest_ip as ip, dest as hostname , ProductName as kaspersky_collected_by, ProductVersion as kaspersky_version ,macaddress as mac_address| search $tkn_filter_main$</query>
           <earliest>$tkn_timeRange_av_kaspersky.earliest$</earliest>
           <latest>$tkn_timeRange_av_kaspersky.latest$</latest>
         </search>
