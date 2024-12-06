@@ -5,16 +5,16 @@
       <event>
         <title>Event</title>
         <search>
-          <query>index=* sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ </query>
+          <query>index=$tkn_index|s$ sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ </query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
         <option name="list.drilldown">none</option>
       </event>
       <table>
-        <title>Interpretation</title>
+        <title>Event Interpretation</title>
         <search>
-          <query>index=* sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ 
+          <query>index=$tkn_index|s$ sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ 
 | table * 
 | tojson output_field="input"
 | table input 
