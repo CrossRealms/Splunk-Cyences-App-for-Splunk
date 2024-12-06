@@ -44,7 +44,7 @@
       </html>
       <table>
         <search>
-          <query>index=* tag=network tag=communicate | head 1 | stats count | eval data=if(count&gt;0, "Data Present", "Data Not Present"), label="index=* tag=network tag=communicate" | table label, data</query>
+          <query>index=* tag=network tag=communicate | fields sourcetype | stats count by sourcetype | eval data=if(count&gt;0, "Data Present", "Data Not Present") | rename sourcetype as label | table label, data</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
