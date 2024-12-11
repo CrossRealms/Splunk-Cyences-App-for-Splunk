@@ -1,0 +1,31 @@
+<dashboard version="1.1" theme="dark">
+  <label>SOC AI Interpretation</label>
+  <row>
+    <panel>
+      <event>
+        <title>Event</title>
+        <search>
+          <query>index=$tkn_index|s$ sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ </query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="list.drilldown">none</option>
+      </event>
+      <table>
+        <title>Event Interpretation</title>
+        <search>
+          <query>index=$tkn_index|s$ sourcetype=$tkn_sourcetype|s$ _time=$tkn_time$ _raw=$tkn_raw_event|s$ 
+| table * 
+| tojson output_field="input"
+| table input 
+| socaiinterpretation fieldname=input 
+| table Interpretation</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
