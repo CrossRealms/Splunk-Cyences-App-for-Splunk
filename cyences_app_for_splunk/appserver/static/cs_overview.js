@@ -74,13 +74,14 @@ require([
         { token: "sophos_firewall", product: "Sophos Firewall" },
         { token: "cisco_meraki", product: "Cisco Meraki" },
         { token: "f5_bigip", product: "F5 BIGIP" },
+        { token: "cloudflare", product: "Cloudflare" },
         { token: "windows", product: "Windows" },
         { token: "ad_windows", product: "Windows AD" },
         { token: "sysmon", product: "Sysmon" },
         { token: "linux", product: "Linux" },
         { token: "vulnerability", product: "Vulnerability" },
         { token: "db_oracle", product: "Oracle" },
-        { token: "db_mssql", product: "MSSQL" }
+        { token: "db_mssql", product: "MSSQL" },
     ];
 
 
@@ -180,7 +181,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_sophos", "tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_monthly_alerts", "tbl_other_alerts" ];
+    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_sophos", "tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_monthly_alerts", "tbl_other_alerts" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
