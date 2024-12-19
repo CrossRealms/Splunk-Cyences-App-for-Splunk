@@ -116,7 +116,7 @@
       <table>
         <search>
           <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") $tkn_host$
-| eval action_name = coalesce(vendor_action, ACTION_NAME), database_name = coalesce(DB_UNIQUE_NAME, database_name), schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), db_user = coalesce(DB_User, DBUSERNAME), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0, "success", "failure"), db_host = host 
+| eval action_name = coalesce(vendor_action, ACTION_NAME), database_name = coalesce(DB_UNIQUE_NAME, database_name), schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), db_user = coalesce(DB_User, DBUSERNAME), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure"), db_host = host 
 | fillnull value="-" user object_name
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
 | `cs_human_readable_time_format(_time, event_time)`
