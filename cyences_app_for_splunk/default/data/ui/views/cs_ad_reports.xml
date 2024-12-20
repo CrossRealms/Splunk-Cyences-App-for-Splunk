@@ -235,9 +235,9 @@
 | eval User_Domain = if(mvcount(Account_Domain)==2, mvindex(Account_Domain, 1), Account_Domain) 
 | eval User_Name = if(mvcount(Account_Name)==2, mvindex(Account_Name, 1), Account_Name) 
 | rename Workstation_Name as Source_ComputerName 
-| table _time ComputerName User_Name User_Domain Impersonation_Level Source_ComputerName Source_Network_Address Logon_Process Authentication_Package 
+| table _time ComputerName User_Name User_Domain Impersonation_Level Source_ComputerName Source_Network_Address LogonType Logon_Process Authentication_Package 
 | stats count, latest(_time) as _time, values(*) as * by User_Name ComputerName 
-| table _time ComputerName User_Name count User_Domain Impersonation_Level Source_ComputerName Source_Network_Address Logon_Process Authentication_Package</query>
+| table _time ComputerName User_Name count User_Domain Impersonation_Level Source_ComputerName Source_Network_Address LogonType Logon_Process Authentication_Package</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -264,9 +264,9 @@
 | eval User_Name = if(mvcount(Account_Name)==2, mvindex(Account_Name, 1), Account_Name) 
 | rename Workstation_Name as Source_ComputerName 
 | fillnull value="-" Source_ComputerName Source_Network_Address 
-| table _time ComputerName User_Name User_Domain Failure_Reason Source_ComputerName Source_Network_Address Logon_Process Authentication_Package 
+| table _time ComputerName User_Name User_Domain Failure_Reason Source_ComputerName Source_Network_Address LogonType Logon_Process Authentication_Package 
 | stats count, latest(_time) as _time, values(*) as * by User_Name ComputerName 
-| table _time ComputerName User_Name count User_Domain Failure_Reason Source_ComputerName Source_Network_Address Logon_Process Authentication_Package</query>
+| table _time ComputerName User_Name count User_Domain Failure_Reason Source_ComputerName Source_Network_Address LogonType Logon_Process Authentication_Package</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
