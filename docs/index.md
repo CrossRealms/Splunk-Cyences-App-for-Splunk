@@ -47,6 +47,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Sophos Firewall
     * Cisco Meraki
     * F5 BIGIP
+    * Cloudflare
 
 * Vulnerability Scanners
     * CrowdStrike Spotlight
@@ -73,6 +74,8 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
 * DNS Tracker
 
 * Lansweeper 
+
+* DUO
 
 * RSA Radius Authentication
     * From Palo Alto system logs
