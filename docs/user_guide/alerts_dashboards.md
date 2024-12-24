@@ -285,6 +285,10 @@ There are several security related alerts to choose from and they are all locate
     * Blocked Source IPs
     * All Events
     * Attacks by IP
+* Cloudflare Alerts:
+    * Cloudflare - Credential Leaked
+    * Cloudflare - BOT Traffic
+
 
 ## Network Telemetry
 Cyences has a dashboard called "Network Telemetry" which shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability detected by vulnerability scanner in your environment), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
@@ -330,6 +334,7 @@ Dashboard panels:
     * Windows - Certificate is Expiring Soon
     * Windows - Fake Windows Process
     * Windows - Event Log Cleared
+    * Windows - Event Logging Service Shut Down
 * Dashboard panels:
     * Successful Login Events
     * Failed Login Attempts by User
@@ -484,3 +489,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Radius Authentications
     * Radius Authentication Success Rate
     * Radius Authentication Activities
+
+## DUO
+* DUO Alerts:
+    * DUO - User is Locked Out
+    * DUO - User Login Failure

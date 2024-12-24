@@ -88,6 +88,14 @@ Cyences 3.0.0 contains two new email settings to reduce noise:
 * Navigate to **Cyences Settings > Cyences App Configuration > BlockShield API Configuration** section to configure the Username and Password of the BlockShield API to get the IP related information. Contact the BlockShield team in order to get the credentials.
 ![alt]({{ site.baseurl }}/assets/blockshield_api_conf.png)
 
+## SOC AI API Configuration
+
+* Navigate to **Cyences Settings > Cyences App Configuration > SOC AI API Configuration** section to configure the Username and Password of the SOC AI API to get the log interpretation. Contact the SOC AI team in order to get the credentials.
+![alt]({{ site.baseurl }}/assets/soc_ai_api_conf.png)
+
+* To see the meaningful and human readable interpretation of the events, Navigate to the **Event Actions > SOC AI Interpretation** on Search page.
+![alt]({{ site.baseurl }}/assets/soc_ai_workflow.png)
+
 ## Cyences Dependencies
 
 * Navigate to **Cyences Settings > Cyences App Configuration > Cyences Dependencies** section to see the Cyences dependent app installation status.
