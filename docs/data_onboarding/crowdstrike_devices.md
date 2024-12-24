@@ -2,7 +2,7 @@
 layout: default
 title: CrowdStrike Devices
 permalink: /data_onboarding/crowdstrike_devices/
-nav_order: 26
+nav_order: 14
 parent: Data Onboarding
 ---
 

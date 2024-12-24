@@ -2,7 +2,7 @@
 layout: default
 title: DNS Tracker
 permalink: /data_onboarding/dns_tracker/
-nav_order: 22
+nav_order: 9
 parent: Data Onboarding
 ---
 
