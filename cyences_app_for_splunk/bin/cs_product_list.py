@@ -822,6 +822,25 @@ PRODUCTS = [
             }
         ],
     },
+    {
+        "name": "DUO",
+        "app_dependencies": [
+            {
+                "label": "Duo Security",
+                "link": "https://splunkbase.splunk.com/app/3504/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_duo",
+                "label": "DUO Data",
+                "search_by": "source",
+                "search_values": "duo",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
 ]
 
 for product in PRODUCTS:
