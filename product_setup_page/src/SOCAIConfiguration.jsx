@@ -62,7 +62,7 @@ export default function SOCAIConfiguration() {
     return (
         <>
             <SimpleForm key="socai" {...SOCAIFields} onSave={onSave} username={data.username} password={data.password} />
-            <CyencesDocFooter location="install_configure/configuration/#socai-api-configuration"></CyencesDocFooter>
+            <CyencesDocFooter location="install_configure/configuration/#soc-ai-api-configuration"></CyencesDocFooter>
         </>
     );
 }
