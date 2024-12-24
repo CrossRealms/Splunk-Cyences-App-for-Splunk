@@ -8,7 +8,7 @@ parent: Data Onboarding
 
 ## **DUO Data**
 
-The Duo Security is required to collect the data.
+The Duo Security Add-on is required to collect the data.
 
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/3504](https://splunkbase.splunk.com/app/3504) 
@@ -17,7 +17,7 @@ Installation Guide:
 [https://duo.com/docs/splunkapp](https://duo.com/docs/splunkapp) 
 
 
-## How to Install and Configure the Duo Security: 
+## How to Install and Configure the Duo Security Add-on: 
 
 1. Install the Add-on on the Heavy Forwarder.
 
