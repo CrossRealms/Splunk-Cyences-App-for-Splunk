@@ -2,7 +2,7 @@
 layout: default
 title: Active Directory
 permalink: /data_onboarding/active_directory/
-nav_order: 21
+nav_order: 8
 parent: Data Onboarding
 ---
 
