@@ -52,6 +52,6 @@ has_children: true
     * Fixed the drilldown search of **All Inbound Traffic** panel on the **Network Telemetry** dashboard.
 
 
-## Upgrade Guide from 5.0.1 to 5.1.0
+## Upgrade Guide from 5.0.0/5.0.1 to 5.1.0
 
 * Configure the **SOC AI API Configuration** section under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** to see the AI interpretation of any events.
