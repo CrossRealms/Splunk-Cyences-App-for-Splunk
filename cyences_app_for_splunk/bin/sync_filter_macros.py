@@ -1,6 +1,5 @@
 import cs_imports
 import sys
-import json
 
 from splunklib.searchcommands import (
     dispatch,
@@ -9,9 +8,8 @@ from splunklib.searchcommands import (
     Option,
     validators,
 )
-from splunk import rest
-import cs_utils
 
+import cs_utils
 import logging
 import logger_manager
 
@@ -19,6 +17,7 @@ logger = logger_manager.setup_logging("sync_filter_macros", logging.INFO)
 
 FILTER_MACRO_NAME_KEY = "action.cyences_notable_event_action.param.filter_macro_name"
 FILTER_MACRO_VALUE_KEY = "action.cyences_notable_event_action.param.filter_macro_value"
+CY_VERSION_MACRO = "cy_cyences_version"
 
 
 @Configuration()
@@ -44,6 +43,13 @@ class SyncFilterMacros(GeneratingCommand):
 
             savedsearches = self.get_saved_searches()
             macros = self.conf_manger.get_macros_definitions()
+
+            macro_app_version = macros.get(CY_VERSION_MACRO)
+            latest_app_version = self.conf_manger.get_conf_stanza('app', 'launcher')[0]["content"]["version"]
+
+            if macro_app_version != latest_app_version:
+                yield {"msg": "skipping macro sync untill upgrade steps gets completed."}
+                return
 
             run_upgrade_steps = cs_utils.is_true(
                 macros["cy_run_filter_macro_upgrade_steps"]
