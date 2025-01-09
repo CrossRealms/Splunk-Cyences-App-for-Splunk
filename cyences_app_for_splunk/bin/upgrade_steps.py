@@ -104,13 +104,22 @@ def upgrade_4_9_0(session_key, logger):
     handle_results(response, logger)
 
 
-def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro_name, new_alert_name):
+def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro_name, new_macro_name):
     try:
         old_macro_definition = conf_manager.get_macro(old_macro_name)
-        conf_manager.update_savedsearch(new_alert_name, {"action.cyences_notable_event_action.param.filter_macro_value": old_macro_definition})
+        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
         logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
     except:
         logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
+
+
+def alert_renaming_upgrade_steps(conf_manager, logger):
+    try:
+        REVERSE_SYNC_MACRO = 'cy_run_filter_macro_upgrade_steps'
+        conf_manager.update_macro(REVERSE_SYNC_MACRO, {"definition": "1"})
+        logger.info("Updated the {} macro with 1 to sync the filter macro to the savedsearch parameter action.cyences_notable_event_action.param.filter_macro_value".format(REVERSE_SYNC_MACRO))
+    except:
+        logger.error("Error while macro={} update".format(REVERSE_SYNC_MACRO))
 
 
 def upgrade_5_0_0(session_key, logger):
@@ -121,10 +130,10 @@ def upgrade_5_0_0(session_key, logger):
     conf_manager.update_macro(SOC_EMAIL_CONFIG_MACRO, {"definition": default_emails})
     logger.info("Updated the {} macro with the default emails configured for the cyences_send_email_action.".format(SOC_EMAIL_CONFIG_MACRO))
 
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_authentication_vpn_login_attemps_outside_working_hour_filter", "Authentication - VPN Login Attempts Outside Working Hours")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_filter", "O365 - Login Failure Due To MFA")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter", "O365 - Login Failure From Unusual Country Due To MFA")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter", "AWS - Login Failure From Unusual Country Due To MFA")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_authentication_vpn_login_attemps_outside_working_hour_filter", "cs_authentication_vpn_login_attempts_outside_working_hour_filter")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_filter", "cs_o365_failed_login_due_to_mfa_filter")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter", "cs_o365_failed_login_due_to_mfa_from_unusual_country_filter")
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter", "cs_aws_failed_login_due_to_mfa_from_unusual_country_filter")
 
     try:
         enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
@@ -166,6 +175,9 @@ def upgrade_5_0_0(session_key, logger):
             logger.info("Re-enabled the product={}".format(product))
     except Exception as e:
         logger.error("Error while product={} enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(product, str(e)))
+
+    # This function call required when alert renamed (to sync the filter macro value to the savedsearch param.filter_macro_value)
+    alert_renaming_upgrade_steps(conf_manager, logger)
 
     # Renamed the following alerts and it might be present in apps/cyences_app_for_splunk/local/savedsearches.conf, which would constantly generate errors or run searches in all times etc. To avoid this we are disabling all these alerts if they present in the local folder.
     alerts_to_disable = [
@@ -268,14 +280,20 @@ def upgrade_5_0_0(session_key, logger):
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert.
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
 
-
+# TODO - Must add the app version here on every release.
 version_upgrade = (
     ("3.1.0", None),
     ("4.0.0", upgrade_4_0_0),
+    ("4.1.0", None),
+    ("4.2.1", None),
     ("4.3.0", upgrade_4_3_0),
     ("4.4.0", None),
     ("4.5.0", upgrade_4_5_0),
+    ("4.6.0", None),
+    ("4.7.0", None),
     ("4.8.0", upgrade_4_8_0),
     ("4.9.0", upgrade_4_9_0),
     ("5.0.0", upgrade_5_0_0),
+    ("5.0.1", None),
+    ("5.1.0", None)
 )
