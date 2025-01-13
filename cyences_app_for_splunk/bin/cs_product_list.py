@@ -412,7 +412,7 @@ PRODUCTS = [
             },
             {
                 "macro_name": "cs_sophos",
-                "label": "Sophos Firewall Data",
+                "label": "Sophos Firewall Events Data",
                 "search_by": "sourcetype",
                 "search_values": "sophos_events",
                 "earliest_time": "-7d@d",
