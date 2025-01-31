@@ -285,7 +285,7 @@ PRODUCTS = [
                 "macro_name": "cs_azure",
                 "label": "Azure Active Directory Data",
                 "search_by": "sourcetype",
-                "search_values": "azure:aad:audit",
+                "search_values": "azure:aad:audit,azure:aad:signin",
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             },
