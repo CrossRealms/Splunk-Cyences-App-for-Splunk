@@ -46,6 +46,16 @@ In other words, Windows machines are not generating WinEventLog Event ID 4950.
         `cs_wineventlog_security` EventCode=4950 Type="Enable Windows Defender Firewall" Value=No | rename Changed_Profile AS ProfileChanged, Type AS SettingType, Value as SettingValue | table host, EventCode, ProfileChanged, SettingType, SettingValue 
         | `cs_windows_firewall_disabled_filter` 
 
+## Missing Fields for the AD alerts when windows event logs collected in XML format.
+
+* Few fields are missing in xmlwineventlog sourcetype compared to wineventlog sourcetype. We recommend to onboard the windows logs with sourcetype=wineventlog
+
+* Here are the list of the fields that are missing in xmlwineventlog compared to wineventlog.
+
+| EventCode | Field Names |
+| ---------- | --------- |
+| 4740 | Caller_Computer_Name |
+
 
 ## Device Inventory dashboard does not display every device by default. 
 
