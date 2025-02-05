@@ -50,7 +50,7 @@ In other words, Windows machines are not generating WinEventLog Event ID 4950.
 
 * Few fields are missing in xmlwineventlog sourcetype compared to wineventlog sourcetype. We recommend to onboard the windows logs with sourcetype=wineventlog
 
-* Here are the list of the fields that are missing in xmlwineventlog compared to wineventlog.
+* Here are the list of the fields that we have noticed so far that are missing in xmlwineventlog compared to wineventlog.
 
 | EventCode | Field Names |
 | ---------- | --------- |
