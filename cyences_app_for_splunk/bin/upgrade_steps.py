@@ -122,6 +122,14 @@ def alert_renaming_upgrade_steps(conf_manager, logger):
         logger.error("Error while macro={} update".format(REVERSE_SYNC_MACRO))
 
 
+def disable_the_alert(conf_manager, logger, alerts_to_disable):
+    for alert in alerts_to_disable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 1})
+        except Exception as e:
+            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
+
+
 def upgrade_5_0_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
     default_emails = conf_manager.get_conf_stanza('alert_actions', 'cyences_send_email_action')[0]["content"]["param.email_to_default"]
@@ -269,11 +277,21 @@ def upgrade_5_0_0(session_key, logger):
         "Linux - Group Added/Updated/Deleted"
     ]
 
-    for alert in alerts_to_disable:
-        try:
-            conf_manager.update_savedsearch(alert, {"disabled": 1})
-        except Exception as e:
-            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
+    disable_the_alert(conf_manager, logger, alerts_to_disable)
+
+
+def upgrade_5_2_0(session_key, logger):
+    conf_manager = cs_utils.ConfigHandler(logger, session_key)
+
+    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_risky_login_detected_by_microsoft_filter", "cs_azure_risky_login_detected_filter")
+
+    # This function call required when alert renamed (to sync the filter macro value to the savedsearch param.filter_macro_value)
+    alert_renaming_upgrade_steps(conf_manager, logger)
+
+    alerts_to_disable = ["O365 - Risky Login Detected by Microsoft"]
+
+    disable_the_alert(conf_manager, logger, alerts_to_disable)
+
 
 
 # Note:
@@ -295,5 +313,6 @@ version_upgrade = (
     ("4.9.0", upgrade_4_9_0),
     ("5.0.0", upgrade_5_0_0),
     ("5.0.1", None),
-    ("5.1.0", None)
+    ("5.1.0", None),
+    ("5.2.0", upgrade_5_2_0)
 )
