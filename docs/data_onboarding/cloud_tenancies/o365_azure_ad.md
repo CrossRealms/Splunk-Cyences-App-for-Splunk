@@ -19,6 +19,7 @@ Installation and Configuration Guide:
 
 Required inputs to be configured:
 * Microsoft Entra ID Audit
+* Microsoft Entra ID Interactive Sign-ins
 
 **Note:** Use index=**azure** for data collection or update the macro definition for `cs_azure` (**Settings > Configuration**).
 
