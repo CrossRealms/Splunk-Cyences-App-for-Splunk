@@ -130,6 +130,14 @@ def disable_the_alert(conf_manager, logger, alerts_to_disable):
             logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
 
 
+def enable_alert_for_enable_products(conf_manager, logger, alerts_to_enable):
+    for alert in alerts_to_enable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 0})
+        except Exception as e:
+            logger.info("Not able to enable the alert={} error={}".format(alert, str(e)))
+
+
 def upgrade_5_0_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
     default_emails = conf_manager.get_conf_stanza('alert_actions', 'cyences_send_email_action')[0]["content"]["param.email_to_default"]
@@ -292,6 +300,14 @@ def upgrade_5_2_0(session_key, logger):
 
     disable_the_alert(conf_manager, logger, alerts_to_disable)
 
+    # steps when new alert is added
+    o365_alerts_to_enable = ["Azure AD - Risky Login Detected"]
+
+    enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
+    products = [product.strip().lower() for product in enabled_product.split(",")]
+
+    if "Office 365".lower() in products:
+        enable_alert_for_enable_products(conf_manager, logger, o365_alerts_to_enable)
 
 
 # Note:
