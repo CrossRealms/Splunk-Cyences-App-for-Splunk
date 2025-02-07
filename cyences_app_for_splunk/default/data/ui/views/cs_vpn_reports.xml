@@ -232,7 +232,7 @@
       <table>
         <title>Successful Session</title>
         <search>
-          <query>`cs_vpn_indexes` dest_category="vpn_auth" action="added" user IN $User$ dest=$tkn_dest$ src=$tkn_public_ip$ 
+          <query>`cs_vpn_indexes` dest_category="vpn_auth" action IN ("success", "added") user IN $User$ dest=$tkn_dest$ src=$tkn_public_ip$ 
 | fields _time dest user action private_ip src City Country
 | eval private_ip = if(private_ip="0.0.0.0", null(), private_ip) 
 | fillnull value="Unknown" private_ip
