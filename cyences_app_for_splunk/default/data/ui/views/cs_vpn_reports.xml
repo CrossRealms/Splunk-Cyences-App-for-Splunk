@@ -8,6 +8,7 @@
     <query>
       | tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Cyences_Authentication where Authentication.dest_category="vpn_auth" AND `cs_vpn_indexes` by _time Authentication.action Authentication.user Authentication.dest span=1s
       | rename Authentication.* as *
+      | eval action=if(action="added", "success", action)
     </query>
     <earliest>$time.earliest$</earliest>
     <latest>$time.latest$</latest>
@@ -231,7 +232,7 @@
       <table>
         <title>Successful Session</title>
         <search>
-          <query>`cs_vpn_indexes` dest_category="vpn_auth" action="success" user IN $User$ dest=$tkn_dest$ src=$tkn_public_ip$ 
+          <query>`cs_vpn_indexes` dest_category="vpn_auth" action="added" user IN $User$ dest=$tkn_dest$ src=$tkn_public_ip$ 
 | fields _time dest user action private_ip src City Country
 | eval private_ip = if(private_ip="0.0.0.0", null(), private_ip) 
 | fillnull value="Unknown" private_ip

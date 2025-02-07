@@ -339,7 +339,7 @@
         <search>
           <query>| tstats `cs_summariesonly_authentication` values(Authentication.src) as src_ip from datamodel=Cyences_Authentication where Authentication.dest_category="vpn_auth" AND $tkn_filter_authentication$ AND `cs_vpn_indexes` by _time Authentication.action Authentication.user span=1s | rename Authentication.* as *
         | iplocation src_ip
-        | eval Country = if(isnull(Country) OR Country="", "Unknown", Country)
+        | eval Country = if(isnull(Country) OR Country="", "Unknown", Country), action = if(action="added", "success", action)
         | eval City = if(isnull(City) OR City="", "Unknown", City) | fields _time user action src_ip City Country
         | rename user as User, action as Status, src_ip as "SourceIP"
         | sort - _time</query>
