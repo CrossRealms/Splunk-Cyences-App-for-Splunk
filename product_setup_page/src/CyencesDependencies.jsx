@@ -6,13 +6,9 @@ import CyencesDocFooter from './components/CyencesDocFooter';
 
 
 const searchQuery = `| rest /services/apps/local splunk_server=local 
-| search label IN ("ES Content Updates", "Splunk Common Information Model", "Flow Map Viz") 
+| search label IN ("Splunk Common Information Model", "Flow Map Viz") 
 | eval is_installed="Installed" 
 | table label, is_installed, disabled
-| append 
-    [| makeresults count=1 
-    | eval label="ES Content Updates", disabled="-", is_installed="Not Installed", link="https://splunkbase.splunk.com/app/3449/", reason="For some lookups"
-    | table label, is_installed, disabled, link, reason] 
 | append 
     [| makeresults count=1 
     | eval label="Splunk Common Information Model", disabled="-", is_installed="Not Installed", link="https://splunkbase.splunk.com/app/1621/", reason="For data models"
