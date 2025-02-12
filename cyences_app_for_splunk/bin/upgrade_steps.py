@@ -8,6 +8,32 @@ import splunklib.results as results
 from splunk import rest
 
 
+def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro_name, new_macro_name):
+    try:
+        old_macro_definition = conf_manager.get_macro(old_macro_name)
+        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
+        logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
+    except:
+        logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
+
+
+def update_reverse_sync_macro(conf_manager, logger):
+    try:
+        REVERSE_SYNC_MACRO = 'cy_run_filter_macro_upgrade_steps'
+        conf_manager.update_macro(REVERSE_SYNC_MACRO, {"definition": "1"})
+        logger.info("Updated the {} macro with 1 to sync the filter macro to the savedsearch parameter action.cyences_notable_event_action.param.filter_macro_value".format(REVERSE_SYNC_MACRO))
+    except:
+        logger.error("Error while macro={} update".format(REVERSE_SYNC_MACRO))
+
+
+def enable_the_alert(conf_manager, logger, alerts_to_enable):
+    for alert in alerts_to_enable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 0})
+        except Exception as e:
+            logger.info("Not able to enable the alert={} error={}".format(alert, str(e)))
+
+
 def handle_results(response, logger):
     reader = results.JSONResultsReader(response)
     count = 0
@@ -17,6 +43,52 @@ def handle_results(response, logger):
         if isinstance(result, dict):
             count += 1
     logger.info("Total {} rows".format(count))
+
+
+def handle_removed_alerts(conf_manager, logger, alerts_to_disable):
+    for alert in alerts_to_disable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 1})
+        except Exception as e:
+            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
+
+
+def handle_renamed_alerts(conf_manager, logger, list_of_alert_changes):
+    enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
+    products = [product.strip().lower() for product in enabled_product.split(",")]
+
+    for alert_changes in list_of_alert_changes:
+        old_alert = alert_changes[0]
+        old_macro = alert_changes[1]
+        new_alert = alert_changes[2]
+        new_macro = alert_changes[3]
+
+        # If filter macro name also changed
+        if new_macro != old_macro:
+            update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro, new_macro)
+
+        # Disable the old alert name
+        handle_removed_alerts(conf_manager, logger, [old_alert])
+
+        # Enable the new alert name if associated product is enabled for it
+        associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
+
+        if associated_product.lower() in products:
+            enable_the_alert(conf_manager, logger, [new_alert])
+
+    # After upgrade, first time reverse sync from filter macro to savedsearch param
+    update_reverse_sync_macro(conf_manager, logger)
+
+
+def handle_newly_added_alerts(conf_manager, logger, list_of_alerts):
+    enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
+    products = [product.strip().lower() for product in enabled_product.split(",")]
+
+    for new_alert in list_of_alerts:
+        associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
+
+        if associated_product.lower() in products:
+            enable_the_alert(conf_manager, logger, [new_alert])
 
 
 def upgrade_4_0_0(session_key, logger):
@@ -104,40 +176,6 @@ def upgrade_4_9_0(session_key, logger):
     handle_results(response, logger)
 
 
-def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro_name, new_macro_name):
-    try:
-        old_macro_definition = conf_manager.get_macro(old_macro_name)
-        conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
-    except:
-        logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
-
-
-def alert_renaming_upgrade_steps(conf_manager, logger):
-    try:
-        REVERSE_SYNC_MACRO = 'cy_run_filter_macro_upgrade_steps'
-        conf_manager.update_macro(REVERSE_SYNC_MACRO, {"definition": "1"})
-        logger.info("Updated the {} macro with 1 to sync the filter macro to the savedsearch parameter action.cyences_notable_event_action.param.filter_macro_value".format(REVERSE_SYNC_MACRO))
-    except:
-        logger.error("Error while macro={} update".format(REVERSE_SYNC_MACRO))
-
-
-def disable_the_alert(conf_manager, logger, alerts_to_disable):
-    for alert in alerts_to_disable:
-        try:
-            conf_manager.update_savedsearch(alert, {"disabled": 1})
-        except Exception as e:
-            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
-
-
-def enable_alert_for_enable_products(conf_manager, logger, alerts_to_enable):
-    for alert in alerts_to_enable:
-        try:
-            conf_manager.update_savedsearch(alert, {"disabled": 0})
-        except Exception as e:
-            logger.info("Not able to enable the alert={} error={}".format(alert, str(e)))
-
-
 def upgrade_5_0_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
     default_emails = conf_manager.get_conf_stanza('alert_actions', 'cyences_send_email_action')[0]["content"]["param.email_to_default"]
@@ -193,7 +231,7 @@ def upgrade_5_0_0(session_key, logger):
         logger.error("Error while product={} enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(product, str(e)))
 
     # This function call required when alert renamed (to sync the filter macro value to the savedsearch param.filter_macro_value)
-    alert_renaming_upgrade_steps(conf_manager, logger)
+    update_reverse_sync_macro(conf_manager, logger)
 
     # Renamed the following alerts and it might be present in apps/cyences_app_for_splunk/local/savedsearches.conf, which would constantly generate errors or run searches in all times etc. To avoid this we are disabling all these alerts if they present in the local folder.
     alerts_to_disable = [
@@ -285,29 +323,15 @@ def upgrade_5_0_0(session_key, logger):
         "Linux - Group Added/Updated/Deleted"
     ]
 
-    disable_the_alert(conf_manager, logger, alerts_to_disable)
+    handle_removed_alerts(conf_manager, logger, alerts_to_disable)
 
 
 def upgrade_5_2_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
 
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_risky_login_detected_by_microsoft_filter", "cs_azure_risky_login_detected_filter")
+    list_of_alert_changes = [("O365 - Risky Login Detected by Microsoft", "cs_o365_risky_login_detected_by_microsoft_filter", "Azure AD - Risky Login Detected", "cs_azure_risky_login_detected_filter")]
 
-    # This function call required when alert renamed (to sync the filter macro value to the savedsearch param.filter_macro_value)
-    alert_renaming_upgrade_steps(conf_manager, logger)
-
-    alerts_to_disable = ["O365 - Risky Login Detected by Microsoft"]
-
-    disable_the_alert(conf_manager, logger, alerts_to_disable)
-
-    # steps when new alert is added
-    o365_alerts_to_enable = ["Azure AD - Risky Login Detected"]
-
-    enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
-    products = [product.strip().lower() for product in enabled_product.split(",")]
-
-    if "Office 365".lower() in products:
-        enable_alert_for_enable_products(conf_manager, logger, o365_alerts_to_enable)
+    handle_renamed_alerts(conf_manager, logger, list_of_alert_changes)
 
 
 # Note:
