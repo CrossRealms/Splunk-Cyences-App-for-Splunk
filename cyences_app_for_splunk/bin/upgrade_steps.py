@@ -34,6 +34,14 @@ def enable_the_alert(conf_manager, logger, alerts_to_enable):
             logger.info("Not able to enable the alert={} error={}".format(alert, str(e)))
 
 
+def disable_the_alert(conf_manager, logger, alerts_to_disable):
+    for alert in alerts_to_disable:
+        try:
+            conf_manager.update_savedsearch(alert, {"disabled": 1})
+        except Exception as e:
+            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
+
+
 def handle_results(response, logger):
     reader = results.JSONResultsReader(response)
     count = 0
@@ -45,50 +53,41 @@ def handle_results(response, logger):
     logger.info("Total {} rows".format(count))
 
 
-def handle_removed_alerts(conf_manager, logger, alerts_to_disable):
-    for alert in alerts_to_disable:
-        try:
-            conf_manager.update_savedsearch(alert, {"disabled": 1})
-        except Exception as e:
-            logger.info("Not able to disable the alert={} error={}".format(alert, str(e)))
-
-
-def handle_renamed_alerts(conf_manager, logger, list_of_alert_changes):
+def handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes):
     enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
     products = [product.strip().lower() for product in enabled_product.split(",")]
 
-    for alert_changes in list_of_alert_changes:
-        old_alert = alert_changes[0]
-        old_macro = alert_changes[1]
-        new_alert = alert_changes[2]
-        new_macro = alert_changes[3]
+    required_reverse_sync = False
 
-        # If filter macro name also changed
-        if new_macro != old_macro:
+    for alert_changes in alert_and_filter_macro_changes:
+        old_alert = alert_changes.get("old_alert_name", None)
+        old_macro = alert_changes.get("old_macro_name", None)
+        new_alert = alert_changes.get("new_alert_name", None)
+        new_macro = alert_changes.get("new_macro_name", None)
+
+        # If filter macro name changed
+        if old_macro is not None and new_macro is not None and old_macro != new_macro:
             update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old_macro, new_macro)
+            required_reverse_sync = True
+
+        # If alert name changed
+        if old_alert is not None and new_alert is not None and old_alert != new_alert:
+            required_reverse_sync = True
 
         # Disable the old alert name
-        handle_removed_alerts(conf_manager, logger, [old_alert])
+        if old_alert and old_alert != new_alert:
+            disable_the_alert(conf_manager, logger, [old_alert])
 
         # Enable the new alert name if associated product is enabled for it
-        associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
+        if new_alert and old_alert != new_alert:
+            associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
 
-        if associated_product.lower() in products:
-            enable_the_alert(conf_manager, logger, [new_alert])
+            if associated_product.lower() in products:
+                enable_the_alert(conf_manager, logger, [new_alert])
 
     # After upgrade, first time reverse sync from filter macro to savedsearch param
-    update_reverse_sync_macro(conf_manager, logger)
-
-
-def handle_newly_added_alerts(conf_manager, logger, list_of_alerts):
-    enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
-    products = [product.strip().lower() for product in enabled_product.split(",")]
-
-    for new_alert in list_of_alerts:
-        associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
-
-        if associated_product.lower() in products:
-            enable_the_alert(conf_manager, logger, [new_alert])
+    if required_reverse_sync:
+        update_reverse_sync_macro(conf_manager, logger)
 
 
 def upgrade_4_0_0(session_key, logger):
@@ -184,10 +183,28 @@ def upgrade_5_0_0(session_key, logger):
     conf_manager.update_macro(SOC_EMAIL_CONFIG_MACRO, {"definition": default_emails})
     logger.info("Updated the {} macro with the default emails configured for the cyences_send_email_action.".format(SOC_EMAIL_CONFIG_MACRO))
 
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_authentication_vpn_login_attemps_outside_working_hour_filter", "cs_authentication_vpn_login_attempts_outside_working_hour_filter")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_filter", "cs_o365_failed_login_due_to_mfa_filter")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter", "cs_o365_failed_login_due_to_mfa_from_unusual_country_filter")
-    update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter", "cs_aws_failed_login_due_to_mfa_from_unusual_country_filter")
+
+    alert_and_filter_macro_changes = [
+        {
+            "old_macro_name": "cs_authentication_vpn_login_attemps_outside_working_hour_filter",
+            "new_macro_name": "cs_authentication_vpn_login_attempts_outside_working_hour_filter",
+        },
+        {
+            "old_macro_name": "cs_o365_failed_login_due_to_mfs_filter",
+            "new_macro_name": "cs_o365_failed_login_due_to_mfa_filter",
+        },
+        {
+            "old_macro_name": "cs_o365_failed_login_due_to_mfs_from_unusual_country_filter",
+            "new_macro_name": "cs_o365_failed_login_due_to_mfa_from_unusual_country_filter",
+        },
+        {
+            "old_macro_name": "cs_aws_failed_login_due_to_mfs_from_unusual_country_filter",
+            "new_macro_name": "cs_aws_failed_login_due_to_mfa_from_unusual_country_filter",
+        }
+    ]
+
+    handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
+
 
     try:
         enabled_product = conf_manager.get_conf_stanza("cs_configurations", "product_config")[0]["content"].get("enabled_products")
@@ -230,8 +247,6 @@ def upgrade_5_0_0(session_key, logger):
     except Exception as e:
         logger.error("Error while product={} enable/disable. Please manually disable/enable the product on Cyences App Configuration > Product Setup page. error={}".format(product, str(e)))
 
-    # This function call required when alert renamed (to sync the filter macro value to the savedsearch param.filter_macro_value)
-    update_reverse_sync_macro(conf_manager, logger)
 
     # Renamed the following alerts and it might be present in apps/cyences_app_for_splunk/local/savedsearches.conf, which would constantly generate errors or run searches in all times etc. To avoid this we are disabling all these alerts if they present in the local folder.
     alerts_to_disable = [
@@ -323,15 +338,22 @@ def upgrade_5_0_0(session_key, logger):
         "Linux - Group Added/Updated/Deleted"
     ]
 
-    handle_removed_alerts(conf_manager, logger, alerts_to_disable)
+    disable_the_alert(conf_manager, logger, alerts_to_disable)
 
 
 def upgrade_5_2_0(session_key, logger):
     conf_manager = cs_utils.ConfigHandler(logger, session_key)
 
-    list_of_alert_changes = [("O365 - Risky Login Detected by Microsoft", "cs_o365_risky_login_detected_by_microsoft_filter", "Azure AD - Risky Login Detected", "cs_azure_risky_login_detected_filter")]
+    alert_and_filter_macro_changes = [
+        {
+            "old_alert_name": "O365 - Risky Login Detected by Microsoft",
+            "old_macro_name": "cs_o365_risky_login_detected_by_microsoft_filter",
+            "new_alert_name": "Azure AD - Risky Login Detected",
+            "new_macro_name": "cs_azure_risky_login_detected_filter",
+        }
+    ]
 
-    handle_renamed_alerts(conf_manager, logger, list_of_alert_changes)
+    handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
 
 
 # Note:
