@@ -34,7 +34,6 @@ User can check the dependent app list and installtion status on the **Cyences Se
 
 | App Name | Splunkbase Link | What is this used for? |
 |--------|--------|-------------|
-| ES Content Update App | [https://splunkbase.splunk.com/app/3449](https://splunkbase.splunk.com/app/3449) | For some lookups
 | Splunk Common Information Model (CIM) | [https://splunkbase.splunk.com/app/1621/](https://splunkbase.splunk.com/app/1621/) | For data models 
 | Flow Map Viz | [https://splunkbase.splunk.com/app/4657](https://splunkbase.splunk.com/app/4657) | For internal network traffic visualization |
 
