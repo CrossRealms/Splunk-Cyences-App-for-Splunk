@@ -26,7 +26,7 @@ def update_reverse_sync_macro(conf_manager, logger):
         logger.error("Error while macro={} update".format(REVERSE_SYNC_MACRO))
 
 
-def enable_the_alert(conf_manager, logger, alerts_to_enable):
+def enable_alerts(conf_manager, logger, alerts_to_enable):
     for alert in alerts_to_enable:
         try:
             conf_manager.update_savedsearch(alert, {"disabled": 0})
@@ -34,7 +34,7 @@ def enable_the_alert(conf_manager, logger, alerts_to_enable):
             logger.info("Not able to enable the alert={} error={}".format(alert, str(e)))
 
 
-def disable_the_alert(conf_manager, logger, alerts_to_disable):
+def disable_alerts(conf_manager, logger, alerts_to_disable):
     for alert in alerts_to_disable:
         try:
             conf_manager.update_savedsearch(alert, {"disabled": 1})
@@ -76,14 +76,14 @@ def handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filte
 
         # Disable the old alert name
         if old_alert and old_alert != new_alert:
-            disable_the_alert(conf_manager, logger, [old_alert])
+            disable_alerts(conf_manager, logger, [old_alert])
 
         # Enable the new alert name if associated product is enabled for it
         if new_alert and old_alert != new_alert:
             associated_product = conf_manager.get_conf_stanza("savedsearches", new_alert)[0]["content"].get("action.cyences_notable_event_action.products", "")
 
             if associated_product.lower() in products:
-                enable_the_alert(conf_manager, logger, [new_alert])
+                enable_alerts(conf_manager, logger, [new_alert])
 
     # After upgrade, first time reverse sync from filter macro to savedsearch param
     if required_reverse_sync:
@@ -338,7 +338,7 @@ def upgrade_5_0_0(session_key, logger):
         "Linux - Group Added/Updated/Deleted"
     ]
 
-    disable_the_alert(conf_manager, logger, alerts_to_disable)
+    disable_alerts(conf_manager, logger, alerts_to_disable)
 
 
 def upgrade_5_2_0(session_key, logger):
