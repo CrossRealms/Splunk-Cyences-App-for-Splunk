@@ -9,49 +9,34 @@ has_children: true
 # Release Notes
 
 
-## Version 5.1.0 (December 2024)
+## Version 5.2.0 (February 2025)
 
-* ### SOC AI Integration
-    * Added **SOC AI API Configuration** section under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** to configure the SOC AI API credentials.
-    * Added workflow action to display the log/event interpretation. You can view the interpretation of any event by clicking on **Event Actions > SOC AI Interpretation** on the Search page.
+* ### Added new alert for Office 365
+    * O365 - MFA got Disabled for User
 
-    ![alt]({{ site.baseurl }}/assets/soc_ai_workflow.png)
+* ### Added new alert for Cisco IOS
+    * Cisco IOS - CPU Utilization Exceeds the Threshold
 
-* ### Added new alerts for Cloudflare
-    * Cloudflare - Credential Leaked
-    * Cloudflare - BOT Traffic
+* Added field alias for the xml format of windows logs to comply with the standard windows logs.
 
-* ### Added new alerts for DUO
-    * DUO - User is Locked Out
-    * DUO - User Login Failure
-
-* Added **Sources/Sourcetypes Latency** panel on the **Data Reviewer** dashboard to show maximum and average latency in data ingestion.
-
-* Added new alert **Windows - Event Logging Service Shut Down**.
-
+* Removed the "Content Update" app dependency and added useful lookups for the ransomware alerts.
 
 * ### Enhancements
 
-    * Updated the **Windows - Event Log Cleared** alert by removing event logging service shout down events.
+    * Enhanced the **O365 - Risky Login Detected by Microsoft** alert by updating the data source from o365 audit signin logs to azure audit signin logs & renamed the alert to **Azure AD - Risky Login Detected**
 
-    * To display error information, improved the error message on the **Cyences App Configuration** page.
+    * Updated the configs to get accurate results for the Fortigate VPN success authentication logs.
 
-    * Added **LogonType** field to the successful and failed logon panels on the **Active Directory** dashboard.
-
-    * On **Network Telemetry** dashboard, Updated data source panel search to see all network sources availability.
-
-    * Renamed the field **dst** to **dest_ip** for **Kaspersky** alerts and dashboard searches. 
-
-    * Updated Splunk-python-sdk to the latest version.
+    * Enhanced the Bruteforce alert search by removing unnecessary source.
 
 
 * ### Bug Fixes
 
-    * Fixed the configuration to extract the action field for the cisco:ise:syslog sourcetype. 
+    * Fixed the data availability panel search for vulnerability, vpn and authentication data.
 
-    * Fixed the drilldown search of **All Inbound Traffic** panel on the **Network Telemetry** dashboard.
+    * Fixed the action field extraction for the fortigate VPN logs.
 
 
-## Upgrade Guide from 5.0.0/5.0.1 to 5.1.0
+## Upgrade Guide from 5.1.0 to 5.2.0
 
-* Configure the **SOC AI API Configuration** section under **Cyences Settings > Cyences App Configuration > Cyences Alerts Configuration** to see the AI interpretation of any events.
+*
