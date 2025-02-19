@@ -24,10 +24,23 @@ We have created a specific shell script to collect information about which users
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/) 
 
+Use index=`os`, for data collection or update the macro definition for Linux Data (**Settings > Configuration**).
 
-Refer to `A-TA-linux_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
+### Collect AuditD logs from Linux
 
-**Note:** Use index=`os`, for data collection or update the macro definition for Linux Data (**Settings > Configuration**).
+Auditd data is collected via **Linux Auditd Technology Add-On**
+
+Splunkbase Download: 
+[https://splunkbase.splunk.com/app/4232/](https://splunkbase.splunk.com/app/4232/) 
+
+App should be installed on both Heavy Forwarder and Search Head instances.
+
+Use index=`auditd`, for data collection or update the macro definition for Linux Data (**Settings > Configuration**).
+
+**Note:** 
+
+* Refer to `A-TA-linux_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
+
 
 ## Estimated Data Size
 The total data size with the updated stanzas are less than 100MB per Linux host per day. Exclude inputs that are not relevant to your environment.
