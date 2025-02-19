@@ -169,7 +169,8 @@ There are several security related alerts to choose from and they are all locate
     * Azure AD - Role Changes
     * Azure AD - ServicePrincipal Changes
     * Azure AD - User 
-    * O365 - Risky Login Detected by Microsoft
+    * Azure AD - Risky Login Detected
+    * O365 - MFA got Disabled for User
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
     * O365 - DLP event in SharePoint 
@@ -239,6 +240,7 @@ There are several security related alerts to choose from and they are all locate
 * Cisco IOS Alerts:
     * Cisco IOS - Device Failed Login
     * Cisco IOS - New Connection For User
+    * Cisco IOS - CPU Utilization Exceeds the Threshold
 * Fortigate Firewall Alerts:
     * Fortigate - DNS Sinkhole
     * Fortigate - High Threats Alert
@@ -442,6 +444,8 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * Alerts:
     * Linux - User Changes
     * Linux - Group Changes
+    * Linux - Access To Sudoers File
+    * Linux - System Firewall Service Stopped
 * Dashboard panels:
     * Hosts Details
     * Linux Group Added/Updated/Removed
