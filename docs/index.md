@@ -88,7 +88,7 @@ Apart from alerts and dashboards, the Cyences App also integrates with some othe
 * User Inventory Table
 
 
-Cyences has other unique first in the market features on Splunk, like Alert Digest, Device Inventory, User Inventory, Network Telemetry, etc.
+Cyences has other unique first in the market features on Splunk, like Alert Digest, Device Inventory, User Inventory, Network Telemetry, SOC AI Integration etc.
 
 * **Alert Digest and Critical Email Alert**: In Cyences 3.0.0, we introduce a better way to look at alerts from Splunk so user don't get spammed by so many alerts from Splunk and get the critical alerts immediately while keeping the inbox clean. In Cyences user can configure their email address at once and get all the critical events from all the alerts without configuring their email on all of them separately. In addition to that Cyences has an alert called Digest Alert which sends all the medium and high severity notable events from all the alerts as a digest email only once a day. Please refer to [Cyences Email Settings for Alerts]({{ site.baseurl }}/install_configure/configuration/#cyences-email-settings-for-alerts) section for configuration guide and more information.
 
@@ -98,6 +98,7 @@ Cyences has other unique first in the market features on Splunk, like Alert Dige
 
 * **Network Telemetry**: Cyences has a dashboard called "Network Telemetry" which shows a very important information for security team. It shows if there is active traffic on a port on a machine which is vulnerable (or has known vulnerability), showing if vulnerability in your environment is actively being exploited. This is very critical information for security team.
 
+* **SOC AI Integration**: Usually, Splunk events are hard to understand for any user without event logging/domain knowledge. This feature is useful to see the meaningful and human readable interpretation of the compliacted splunk events. Please refer to [SOC AI Integration]({{ site.baseurl }}/install_configure/configuration/#soc-ai-api-configuration) section for configuration guide and more information.
 
 The Cyences App is a contribution-based project that anyone can provide suggestions for. Refer to the following link to offer general feedback or to report an issue: [https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues](https://github.com/CrossRealms/Splunk-Cyences-App-for-Splunk/issues)
 
