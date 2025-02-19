@@ -350,6 +350,18 @@ def upgrade_5_2_0(session_key, logger):
             "old_macro_name": "cs_o365_risky_login_detected_by_microsoft_filter",
             "new_alert_name": "Azure AD - Risky Login Detected",
             "new_macro_name": "cs_azure_risky_login_detected_filter",
+        },
+        {
+            "new_alert_name": "Linux - Access To Sudoers File"
+        },
+        {
+            "new_alert_name": "Linux - System Firewall Service Stopped"
+        },
+        {
+            "new_alert_name": "O365 - MFA got Disabled for User"
+        },
+        {
+            "new_alert_name": "Cisco IOS - CPU Utilization Exceeds the Threshold"
         }
     ]
 
