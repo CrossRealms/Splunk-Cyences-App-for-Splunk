@@ -1,6 +1,6 @@
 {
   "name": "setup_page",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --bail",
     "format": "prettier \"src/main/webapp/**/*.(js|jsx|css)\" --write",
