@@ -711,6 +711,10 @@ PRODUCTS = [
             {
                 "label": "Splunk Add-on for Unix and Linux",
                 "link": "https://splunkbase.splunk.com/app/833/"
+            },
+            {
+                "label": "Linux Auditd Technology Add-On",
+                "link": "https://splunkbase.splunk.com/app/4232/"
             }
         ],
         "label": "Linux/Unix",
