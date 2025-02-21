@@ -1,0 +1,81 @@
+event_id,user_action
+1000,-
+1001,-
+1002,-
+1006,-
+1007,-
+1008,-
+1009,-
+1010,-
+1011,-
+1012,-
+1013,-
+1014,-
+1015,-
+1116,"No action is required. Microsoft Defender Antivirus can suspend and take routine action on this threat. If you want to remove the threat manually, in the Microsoft Defender Antivirus interface, select Clean Computer."
+1117,"No action is necessary. Microsoft Defender Antivirus removed or quarantined a threat."
+1118,"No action is necessary. Microsoft Defender Antivirus failed to complete a task related to the malware remediation. This isn't a critical failure."
+1119,"The Microsoft Defender Antivirus client encountered this error due to critical issues. The endpoint might not be protected. Review the error description then follow the relevant User action steps.
+- Action: Remove User action: Update the definitions then verify that the removal was successful.
+- Action: Clean User action: Update the definitions then verify that the remediation was successful.
+- Action: Quarantine User action: Update the definitions and verify that the user has permission to access the necessary resources.
+- Action: Allow User action: Verify that the user has permission to access the necessary resources.
+If this event persists:
+  - Run the scan again.
+  - If it fails in the same way, go to the Microsoft Support site, enter the error number in the Search box to look for the error code.
+  - Contact Microsoft Technical Support."
+1120,-
+1121,-
+1127,"The user can add the blocked process to the Allowed Process list for CFA, using PowerShell or Windows Security Center."
+1150,"No action is necessary. The Microsoft Defender Antivirus client is in a healthy state. This event is reported on an hourly basis."
+1151,-
+2000,"No action is necessary. The Microsoft Defender Antivirus client is in a healthy state. This event is reported when signatures are successfully updated."
+2001,"This error occurs when there's a problem updating definitions. To troubleshoot this event:
+- Update definitions and force a rescan directly on the endpoint.
+- Review the entries in the %Windir%\WindowsUpdate.log file for more information about this error.
+- Contact Microsoft Technical Support."
+2002,"No action is necessary. The Microsoft Defender Antivirus client is in a healthy state. This event is reported when the antimalware engine is successfully updated."
+2003,"The Microsoft Defender Antivirus client update failed. This event occurs when the client fails to update itself. This event is due to an interruption in network connectivity during an update. To troubleshoot this event:
+- Update definitions and force a rescan directly on the endpoint.
+- Contact Microsoft Technical Support."
+2004,"The Microsoft Defender Antivirus client attempted to download and install the latest definitions file and failed. This error can occur when the client encounters an error while trying to load the definitions, or if the file is corrupt. Microsoft Defender Antivirus attempts to revert back to a known-good set of definitions. To troubleshoot this event:
+- Restart the computer and try again.
+- Download the latest definitions from the Microsoft Security Intelligence site.
+- Note: The size of the definitions file downloaded from the site can exceed 60 MB and shouldn't be used as a long-term solution for updating definitions.
+- Contact Microsoft Technical Support."
+2005,-
+2006,-
+2007,-
+2010,-
+2011,"No action is necessary. The Microsoft Defender Antivirus client is in a healthy state. This event is reported when the Dynamic Signature Service successfully deletes out-of-date dynamic definitions."
+2012,"Check your Internet connectivity settings."
+2013,-
+2020,-
+2021,"Check your Internet connectivity settings. The Microsoft Defender Antivirus client encountered an error when using the Dynamic Signature Service to download the latest definitions to a specific threat. This error is likely caused by a network connectivity issue."
+2030,-
+2031,-
+2040,-
+2041,-
+2042,-
+3002,"You should restart the system then run a full scan because it's possible the system wasn't protected for some time. The Microsoft Defender Antivirus client's real-time protection feature encountered an error because one of the services failed to start. If it's followed by a 3007 event ID, the failure was temporary and the antimalware client recovered from the failure."
+3007,"The real-time protection feature restarted. If this event happens again, contact Microsoft Technical Support."
+5000,-
+5001,-
+5004,-
+5007,-
+5008,"To troubleshoot this event:
+- Try to restart the service.
+  -- For antimalware, antivirus and spyware, at an elevated command prompt, type net stop msmpsvc, and then type net start msmpsvc to restart the antimalware engine.
+  -- For the Network Inspection System, at an elevated command prompt, type net start nissrv, and then type net start nissrv to restart the Network Inspection System engine by using the NiSSRV.exe file.
+  -- If it fails in the same way, look up the error code by accessing the Microsoft Support Site and entering the error number in the Search box, and contact Microsoft Technical Support.
+User action: The Microsoft Defender Antivirus client engine stopped due to an unexpected error. To troubleshoot this event:
+- Run the scan again.
+- If it fails in the same way, go to the Microsoft Support site, enter the error number in the Search box to look for the error code.
+- Contact Microsoft Technical Support."
+5009,-
+5010,-
+5011,-
+5012,-
+5013,-
+5100,-
+5101,-
