@@ -58,7 +58,7 @@
       <title>Attack Detected</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_ATTACK_DETECTED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval AttackName = coalesce(AttackName,EVC_EV_ATTACK_NAME), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME) | table dest  application action AttackName Attack* signature TaskName user user_domain url</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_ATTACK_DETECTED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval AttackName = coalesce(AttackName,EVC_EV_ATTACK_NAME) | table dest  application action AttackName Attack* signature TaskName user user_domain url</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -72,7 +72,7 @@
       <title>Virus Found</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval VirusName = coalesce(VirusName,EVC_EV_VIRUS_NAME), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME), msg = coalesce(msg, EVC_EV_DESC) | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)  | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -85,7 +85,7 @@
       <title>Virus Found and Passed</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval VirusName = coalesce(VirusName,EVC_EV_VIRUS_NAME), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME), msg = coalesce(msg, EVC_EV_DESC) | table _time dest   category  VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest   category  VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -98,7 +98,7 @@
       <title>Virus Found and Blocked</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_BLOCKED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval VirusName = coalesce(VirusName,EVC_EV_VIRUS_NAME), category = coalesce(category,cat), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME), msg = coalesce(msg, EVC_EV_DESC) | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_BLOCKED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval category = coalesce(category,cat) | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -111,7 +111,7 @@
       <title>Application Database Out of Date</title>
       <table>
         <search>
-          <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval ProductName = coalesce(ProductName,EVC_EV_KL_PRODUCT_NAME), ProductVersion = coalesce(ProductVersion, EVC_EV_KL_PRODUCT_VER), msg = coalesce(msg, EVC_EV_DESC) | table  _time dest ProductName ProductVersion msg</query>
+          <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table  _time dest ProductName ProductVersion msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -125,7 +125,7 @@
       <title>Suspicious Object Found</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_SUSPICIOUS_OBJECT_FOUND TERM(GNRL_EV_SUSPICIOUS_OBJECT_FOUND) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval ProductName = coalesce(ProductName,EVC_EV_KL_PRODUCT_NAME), ProductVersion = coalesce(ProductVersion, EVC_EV_KL_PRODUCT_VER), msg = coalesce(msg, EVC_EV_DESC), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME), VirusName = coalesce(VirusName, EVC_EV_VIRUS_NAME) | table  _time dest ProductName ProductVersion  user  VirusName   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_SUSPICIOUS_OBJECT_FOUND TERM(GNRL_EV_SUSPICIOUS_OBJECT_FOUND) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table  _time dest ProductName ProductVersion  user  VirusName   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -138,7 +138,7 @@
       <title>Object Blocked</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_BLOCKED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval msg = coalesce(msg, EVC_EV_DESC), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME) | table _time dest user category action signature TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_BLOCKED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category action signature TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -151,7 +151,7 @@
       <title>Object Deleted</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_DELETED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval msg = coalesce(msg, EVC_EV_DESC), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME) | table _time dest user category action signature TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_DELETED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category action signature TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -164,7 +164,7 @@
       <title>Object Not Cured</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval msg = coalesce(msg, EVC_EV_DESC), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME) | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -177,7 +177,7 @@
       <title>Kaspersky Centralized Server Errors</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | eval msg = coalesce(msg, EVC_EV_DESC), TaskName = coalesce(TaskName, EVC_EV_TASK_NAME) | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -190,7 +190,7 @@
       <title>Kaspersky Runtime Errors</title>
       <table>
         <search>
-          <query>`cs_kaspersky`  log_type IN (KLSRV_RUNTIME_ERROR) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| dedup msg ProductName ProductVersion | eval ProductName = coalesce(ProductName,EVC_EV_KL_PRODUCT_NAME), ProductVersion = coalesce(ProductVersion, EVC_EV_KL_PRODUCT_VER), msg = coalesce(msg, EVC_EV_DESC) | table _time dest ProductName ProductVersion  msg</query>
+          <query>`cs_kaspersky`  log_type IN (KLSRV_RUNTIME_ERROR) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| dedup msg ProductName ProductVersion | table _time dest ProductName ProductVersion  msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
