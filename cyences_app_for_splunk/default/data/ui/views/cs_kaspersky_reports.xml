@@ -72,7 +72,7 @@
       <title>Virus Found</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)  | table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| table _time dest VirusName  category action VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -85,7 +85,7 @@
       <title>Virus Found and Passed</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest   category  VirusName TaskName msg user user_domain</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_VIRUS_FOUND_AND_PASSED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| table _time dest   category  VirusName TaskName msg user user_domain</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -111,7 +111,7 @@
       <title>Application Database Out of Date</title>
       <table>
         <search>
-          <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table  _time dest ProductName ProductVersion msg</query>
+          <query>`cs_kaspersky`  log_type=GNRL_EV_ANTIVIRAL_BASES_EXPIRED TERM(GNRL_EV_ANTIVIRAL_BASES_EXPIRED) dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| table  _time dest ProductName ProductVersion msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -164,7 +164,7 @@
       <title>Object Not Cured</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
@@ -177,7 +177,7 @@
       <title>Kaspersky Centralized Server Errors</title>
       <table>
         <search>
-          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$) | table _time dest user category   TaskName msg</query>
+          <query>`cs_kaspersky` tag=malware tag=attack  log_type=GNRL_EV_OBJECT_NOTCURED dest IN ($tkn_host$) dest_ip IN ($tkn_ip$)| table _time dest user category   TaskName msg</query>
           <earliest>$tkn_timerange.earliest$</earliest>
           <latest>$tkn_timerange.latest$</latest>
         </search>
