@@ -1,4 +1,4 @@
-event_id,user_action,description
+EventCode,User_Action,Description
 1000,-,"An antimalware scan started."
 1001,-,"An antimalware scan finished."
 1002,-,"An antimalware scan was stopped before it finished."
