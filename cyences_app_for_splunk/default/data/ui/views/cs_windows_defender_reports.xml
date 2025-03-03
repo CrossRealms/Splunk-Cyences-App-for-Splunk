@@ -138,7 +138,7 @@
       <table>
         <title>EventCodes=2041, 2042</title>
         <search>
-          <query>`cs_windows_defender` EventCode IN (2041, 2042) $tkn_host$ | stats count, latest(_time) as _time, by host, EventCode
+          <query>`cs_windows_defender` EventCode IN (2041, 2042) $tkn_host$ | stats count, latest(_time) as _time by host, EventCode
 | lookup cs_windows_defender_eventcode_mapping EventCode OUTPUT User_Action, Description
 | table _time, host, EventCode, Description, User_Action, count
 | `cs_windows_defender_antivirus_dropped_support_for_os_filter`</query>
