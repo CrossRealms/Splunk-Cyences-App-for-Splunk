@@ -17,15 +17,18 @@ Splunkbase Download:
 Installation Guide: 
 [https://splunk.paloaltonetworks.com/installation.html](https://splunk.paloaltonetworks.com/installation.html) 
 
-## How to Install and Configure the Palo Alto Add-on: 
+### App Installation
 
-1. Install the Add-on on the Heavy Forwarder.
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Palo Alto Add-on for Splunk | 2757 | Required | Required | Required | - |
 
-2. Configure the Add-on on the Heavy Forwarder.
+**Note** : Create an index named **pan_log** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+## How to Configure the Palo Alto Add-on: 
+
+* Configure the Add-on on the Heavy Forwarder.
     * Getting data into Splunk [https://splunk.paloaltonetworks.com/getting-data-in.html](https://splunk.paloaltonetworks.com/getting-data-in.html).
-    * Create an index named **pan_log** or update the macro definition in Cyences' configuration page.  
-
-3. Install the Add-on on the Search Head.
 
 ## Estimated Data Size  
 The Palo Alto Add-on consumes around 8-10GB of license usage per day. 

@@ -18,11 +18,10 @@ Installation Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon](https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon) 
 
 
-## How to Install and Configure the Cisco Meraki Add-on: 
+### App Installation
 
-1. Install the Add-on on the Heavy Forwarder.
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Cisco Meraki | 5580 | Required | Required | Required | - |
 
-2. Configure the Add-on on the Heavy Forwarder.
-    * Create an index named **cisco_meraki** or update the macro definition in Cyences' configuration page with your index.
-
-3. Install the Add-on on the Search Head.
+**Note** : Create an index named **cisco_meraki** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).

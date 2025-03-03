@@ -16,7 +16,13 @@ Splunkbase Download:
 Installation and Configuration Guide: 
 [https://splunkbase.splunk.com/app/5570](https://splunkbase.splunk.com/app/5570) 
 
-**Note:** Use index=**crowdstrike** for data collection or update the macro definition for `cs_crowdstrike_devices` (**Settings > Configuration**).
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| CrowdStrike Falcon Devices Technical Add-On | 5570 | Required | Required | Required | - |
+
+**Note** : Create an index named **crowdstrike** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size
 
