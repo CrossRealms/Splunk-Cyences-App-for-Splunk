@@ -15,6 +15,12 @@ Splunkbase Download: [https://splunkbase.splunk.com/app/1467](https://splunkbase
 
 Installation and Configuration Guide: [https://splunkbase.splunk.com/app/1467](https://splunkbase.splunk.com/app/1467)
 
-**Note:** Configure the index value for **Cisco IOS Data** under the **Data Source Macros** section in Cyences Configuration page.
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Cisco Networks Add-on for Splunk Enterprise | 1467 | Required | Required | Required | - |
+
+**Note** : Create an index named **Cisco IOS Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 [comment]: <> (TODO_LATER: add estimated data size)

@@ -16,7 +16,14 @@ Sysmon, a component of Microsoft's Sysinternals suite of Windows utilities, is a
 
 This is a fantastic way to collect detailed information about your Windows endpoints in Splunk. Sysmon is free of charge, installs painlessly on many variants of Windows, and integrates well with Splunk deployments. In fact, Mark Russinovich (Sysmon's author) has spoken about Sysmon at the past two RSA conferences and showcases Splunk as an excellent mechanism for the collection and analysis of Sysmon data. 
 
+### App Installation
 
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Sysmon Deploy Add-on for Cyences App | - | Not Required | Required | Required | Required |
+| Splunk Add-on for Sysmon | 5709 | Required | Required | Required | - |
+
+**Note** : Create an index named **epintel** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ### Install and Maintain Sysmon on Windows Machines from Deployment Server
 

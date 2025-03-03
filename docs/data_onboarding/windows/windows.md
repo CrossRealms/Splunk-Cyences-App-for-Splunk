@@ -19,7 +19,15 @@ Installation and Configuration Guide:
 
 Refer to `A-TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
-**Note:** Configure the index value `index IN (wineventlog, windows, msad)` for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Windows | 742 | Required | Required | Required | - |
+
+**Note** : 
+- Create an indexes named **wineventlog** **windows** and **msad** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+- Configure the index value `index IN (wineventlog, windows, msad)` for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 ### Estimated Data Size
 Data size with updated stanzas:

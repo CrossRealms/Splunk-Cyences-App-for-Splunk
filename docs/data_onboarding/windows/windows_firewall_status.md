@@ -17,3 +17,11 @@ Splunkbase Download:
 
 Installation and Configuration Guide:
 [https://splunkbase.splunk.com/app/7012](https://splunkbase.splunk.com/app/7012)
+
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Windows Firewall Status Check Add-on | 7012 | Required | Required | Required | - |
+
+**Note** : Create an index named **windows** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).

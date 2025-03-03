@@ -16,7 +16,13 @@ Splunkbase Download:
 Installation and Configuration Guide: 
 [https://splunkbase.splunk.com/app/5418/#/details](https://splunkbase.splunk.com/app/5418/#/details) 
 
-**Note:** Use index=**lansweeper** for data collection or update the macro definition for `cs_lansweeper` (**Settings > Configuration**).
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Lansweeper Add-on for Splunk | 5418 | Required | Required | Required | - |
+
+**Note** : Create an index named **lansweeper** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size
 

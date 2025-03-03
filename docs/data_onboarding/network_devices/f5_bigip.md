@@ -17,16 +17,13 @@ Splunkbase Download:
 Installation Guide: 
 [https://splunkbase.splunk.com/app/2680/#/details](https://splunkbase.splunk.com/app/2680/#/details) 
 
+### App Installation
 
-## How to Install and Configure the F5 BIGIP Addon: 
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for F5 BIG-IP | 2680 | Required | Required | Required | - |
 
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2680/#/details).
-    * Create an index named **f5** or update the macro definition in Cyences' configuration page.
-
-3. Install the Add-on on the Search Head.
+**Note** : Create an index named **f5** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size  
 

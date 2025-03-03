@@ -15,13 +15,19 @@ Splunkbase Download:
 [https://splunkbase.splunk.com/app/3757/](https://splunkbase.splunk.com/app/3757/) 
 
 Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/3757/#/details](https://splunkbase.splunk.com/app/3757/#/details) 
+[https://splunkbase.splunk.com/app/3757/#/details](https://splunkbase.splunk.com/app/3757/#/details)
 
-Required inputs to be configured:
-* Microsoft Entra ID Audit
-* Microsoft Entra ID Interactive Sign-ins
+### App Installation
 
-**Note:** Use index=**azure** for data collection or update the macro definition for `cs_azure` (**Settings > Configuration**).
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add on for Microsoft Azure | 3757 | Required | Required | Required | - |
+
+**Note** : Create an index named **azure** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+* Required inputs to be configured:
+    * Microsoft Entra ID Audit
+    * Microsoft Entra ID Interactive Sign-ins
 
 ## Estimated Data Size
 

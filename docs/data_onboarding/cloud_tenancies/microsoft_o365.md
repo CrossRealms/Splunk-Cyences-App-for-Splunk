@@ -17,13 +17,20 @@ Splunkbase Download:
 Installation and Configuration Guide:
 [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps)
 
-Required inputs to be configured (If input has "Content Type" dropdown then create input for each Content Type):
-* Management Activity
-* Message Trace
-* Service Health & Communications
-* Cloud Application Security
-* Audit Logs
+### App Installation
 
-**Note:** Configure the index value for **Office 365 Data** under the **Data Source Macros** section in Cyences' Configuration page.
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Microsoft Office 365 | 4055 | Required | Required | Required | - |
+
+**Note** : Create an index named **Office 365 Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+
+* Required inputs to be configured (If input has "Content Type" dropdown then create input for each Content Type):
+    * Management Activity
+    * Message Trace
+    * Service Health & Communications
+    * Cloud Application Security
+    * Audit Logs
 
 [comment]: <> (TODO_LATER: add estimated data size)

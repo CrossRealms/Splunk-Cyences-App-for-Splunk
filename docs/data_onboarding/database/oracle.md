@@ -17,6 +17,14 @@ Splunkbase Download:
 Installation and Configuration Guide: 
 [https://docs.splunk.com/Documentation/AddOns/latest/Oracle/About](https://docs.splunk.com/Documentation/AddOns/latest/Oracle/About)
 
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Oracle Database | 1910 | Required | Required | Required | - |
+
+**Note** : Create an index named **oracle** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
 The Cyences App has support following data collection mechanisms
 
 1) Unified auditing using Splunk DB Connect app (Recommended)
@@ -29,9 +37,6 @@ The Cyences App has support following data collection mechanisms
 
 2) XML logs using File monitoring
 * [https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs](https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs)
-
-**Note:** Use both index=**oracle** for data collection or update the macro definition for `cs_oracle` (**Settings > Configuration**). 
-
 
 ## Estimated Data Size
 

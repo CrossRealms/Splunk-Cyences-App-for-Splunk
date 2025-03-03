@@ -17,4 +17,10 @@ Splunkbase Download:
 Installation Guide: 
 [https://community.sophos.com/sophos-integrations/w/integrations/106/splunk-add-on-for-sophos-next-gen-firewall](https://community.sophos.com/sophos-integrations/w/integrations/106/splunk-add-on-for-sophos-next-gen-firewall) 
 
-**Note:** Configure the index value for **Sophos Firewall Data** under the **Data Source Macros** section in Cyences Configuration page.
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Sophos Next-Gen Firewall | 6187 | Required | Required | Required | - |
+
+**Note** : Create an index named **Sophos Firewall Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).

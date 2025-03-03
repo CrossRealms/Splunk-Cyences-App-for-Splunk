@@ -14,22 +14,19 @@ The "Splunk Add-on for Google Workspace" App is required to collect Google Works
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/5556/](https://splunkbase.splunk.com/app/5556/) 
 
+### App Installation
 
-## How to Install and Configure the Splunk Add-on for Google Workspace: 
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Google Workspace | 5556 | Required | Required | Required | - |
 
-1. Install the Add-on on the Heavy Forwarder. 
+**Note** : Create an index named **google** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
-2. Configure the Add-on on the Heavy Forwarder. 
-    * Configure the Application. 
-    * Create an index named **google** or update the macro **cs_gws** in the Cyences app (**Settings > Configuration**). 
-
-3. Install the Add-on on the Search Head.
-
-The following Apps/Add-ons should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
-* G Suite For Splunk - 
-[https://splunkbase.splunk.com/app/3791/](https://splunkbase.splunk.com/app/3791/) 
-* TA for G Suite App - 
-[https://splunkbase.splunk.com/app/3792/](https://splunkbase.splunk.com/app/3792/) 
+* The following Apps/Add-ons should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
+    * G Suite For Splunk - 
+    [https://splunkbase.splunk.com/app/3791/](https://splunkbase.splunk.com/app/3791/) 
+    * TA for G Suite App - 
+    [https://splunkbase.splunk.com/app/3792/](https://splunkbase.splunk.com/app/3792/) 
 
 
 ## Estimated Data Size
