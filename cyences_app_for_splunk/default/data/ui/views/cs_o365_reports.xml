@@ -176,7 +176,7 @@
       <title>Login by Location</title>
       <map>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation IN("UserLoggedIn", "UserLoginFailed") user!="not available" user_type!="ServicePrincipal" $tkn_host$ 
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation IN("UserLoggedIn", "UserLoginFailed") user!="not available" NOT user_type="ServicePrincipal" $tkn_host$ 
 | iplocation ClientIP 
 | geostats count(UserId) by Operation</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -216,7 +216,7 @@
       </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn user!="not available" user_type!="ServicePrincipal" NOT LogonError=* $tkn_host$ 
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn user!="not available" NOT user_type="ServicePrincipal" NOT LogonError=* $tkn_host$ 
 | fields _time host sourcetype user ClientIP Id user_type authentication_method 
 | append 
     [| search `cs_o365` sourcetype=o365:graph:api source="AuditLogs.SignIns" status.errorCode=0 $tkn_host$
@@ -283,14 +283,14 @@
         <fieldForLabel>LogonError</fieldForLabel>
         <fieldForValue>LogonError</fieldForValue>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed user!="not available" user_type!="ServicePrincipal" $tkn_host$ | dedup LogonError | table LogonError</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed user!="not available" NOT user_type="ServicePrincipal" $tkn_host$ | dedup LogonError | table LogonError</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
       </input>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed user!="not available" user_type!="ServicePrincipal" $tkn_host$ $tkn_logon_error$ 
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoginFailed user!="not available" NOT user_type="ServicePrincipal" $tkn_host$ $tkn_logon_error$ 
 | fields _time host sourcetype user ClientIP Id LogonError user_type authentication_method app ApplicationId ExtendedProperties{}.Name ExtendedProperties{}.Value 
 | eval ExtendedProperties=mvzip('ExtendedProperties{}.Name','ExtendedProperties{}.Value'," : ") 
 | append 
@@ -329,7 +329,7 @@
       <title>Office 365/Azure - Login from Unknown UserId</title>
       <table>
         <search>
-          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn user_type!="ServicePrincipal" (UserId=Unknown OR UserId="Not Available") $tkn_host$| iplocation ClientIP | `cs_human_readable_time_format(_time, time)` | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
+          <query>`cs_o365` sourcetype="o365:management:activity" Workload=AzureActiveDirectory Operation=UserLoggedIn NOT user_type="ServicePrincipal" (UserId=Unknown OR UserId="Not Available") $tkn_host$| iplocation ClientIP | `cs_human_readable_time_format(_time, time)` | stats count, list(time) as time, first(Country) as Country, first(Region) as Region, first(City) as City, first(user) as user by host, ClientIP | fields - time | `cs_o365_login_by_unknown_userid_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
