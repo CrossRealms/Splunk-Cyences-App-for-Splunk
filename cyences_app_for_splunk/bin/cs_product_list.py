@@ -1,5 +1,5 @@
 WINDOWS_SOURCES = '"*WinEventLog:Application","*WinEventLog:Security","*WinEventLog:System","powershell://generate_windows_update_logs"'
-WINDOWS_SOURCE_TYPES = '"Script:ListeningPorts","WinRegistry","WindowsFirewallStatus","windows:certstore:local","DhcpSrvLog","WindowsUpdateLog"'
+WINDOWS_SOURCE_TYPES = '"Script:ListeningPorts","WinRegistry","WindowsFirewallStatus","windows:certstore:local","DhcpSrvLog","WindowsUpdateLog","WMI:Version","WMI:InstalledUpdates"'
 WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin"'
 WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","windows:certstore:ca:issued","ActiveDirectory"'
 WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
