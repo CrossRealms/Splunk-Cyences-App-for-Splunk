@@ -69,6 +69,27 @@
   <row>
     <panel>
       <table>
+        <title>Windows Hotfix Events</title>
+        <search>
+          <query>`cs_windows_idx` sourcetype="WMI:InstalledUpdates" host="$host$" | dedup HotFixID, host | join type=left host [ search `cs_windows_idx` sourcetype="WMI:Version" | table host os_name os_release] 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host os_name os_release HotFixID InstalledOn InstalledBy
+| sort -event_time host </query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Patch Numbers filter won't apply here.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
         <title>Latest Windows Update Events</title>
         <search>
           <query>`cs_wineventlog_system` host="$host$" $tkn_host_filter$ $tkn_patch_numbers$ EventCode=19 SourceName="Microsoft-Windows-WindowsUpdateClient" NOT "Microsoft Endpoint Protection" NOT "Microsoft Defender Antivirus" 
