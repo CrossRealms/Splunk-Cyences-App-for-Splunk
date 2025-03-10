@@ -35,7 +35,7 @@
       </html>
       <table>
         <search>
-          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("User Inventory - Lookup Gen", "User Inventory - Lookup CleanUp", "User Inventory - Merge Similar Users", "User Inventory - Lookup Backfill") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
+          <query>| rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local | search "eai:acl.app"="cyences_app_for_splunk" title IN ("User Inventory - Lookup Gen", "User Inventory - Assign Privileges To AD Domain Admins", "User Inventory - Lookup CleanUp", "User Inventory - Merge Similar Users", "User Inventory - Lookup Backfill") | table title, disabled | rename title as label | eval status=if(disabled=1, "Report is disabled", "Report is enabled") | table label, status</query>
           <earliest>0</earliest>
           <latest></latest>
         </search>
