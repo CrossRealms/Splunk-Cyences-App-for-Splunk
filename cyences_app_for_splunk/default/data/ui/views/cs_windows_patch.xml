@@ -72,8 +72,9 @@
         <title>Windows Hotfix Events</title>
         <search>
           <query>`cs_windows_idx` sourcetype="WMI:InstalledUpdates" host="$host$" | dedup HotFixID, host | join type=left host [ search `cs_windows_idx` sourcetype="WMI:Version" | table host os_name os_release] 
-| table _time host os_name os_release HotFixID InstalledOn InstalledBy
-| sort -_time host | `cs_human_readable_time_format(_time)`</query>
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host os_name os_release HotFixID InstalledOn InstalledBy
+| sort -event_time host </query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
