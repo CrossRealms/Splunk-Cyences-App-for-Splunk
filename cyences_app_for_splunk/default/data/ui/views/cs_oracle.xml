@@ -112,6 +112,32 @@
   </row>
   <row>
     <panel>
+      <title>Privilege Activities</title>
+      <table>
+        <search>
+          <query>`cs_oracle` sourcetype="oracle:audit:xml" $tkn_host$ ACTION IN (4, 5, 8, 12, 17, 18, 22, 41, 51, 52, 53, 54, 108, 109, 114, 115, 203, 229, 230, 231) 
+| fillnull value="-"
+| eval action_name = coalesce(vendor_action, ACTION_NAME), database_name = coalesce(DB_UNIQUE_NAME, database_name), schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), db_user = coalesce(DATABASE_USER, DBUSERNAME), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure") 
+| search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host user db_user action_name schema_name database_name object_name object_type src client_app statement status</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Audit Logs</title>
       <table>
         <search>
