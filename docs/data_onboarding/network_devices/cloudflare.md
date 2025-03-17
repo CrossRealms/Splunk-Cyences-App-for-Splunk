@@ -14,7 +14,10 @@ Cloudflare logs are collected via HEC (HTTP Event Collector) input. Refer the gu
 Splunkbase Download: 
 [https://splunkbase.splunk.com/app/4501](https://splunkbase.splunk.com/app/4501)
 
-* For Field Extraction, Install the App on Heavy Forwarder and Search Head both.
+### App Installation
 
-**Note:** Create an index named **cloudflare** to collect the logs or update the macro definition with your index in Cyences' configuration page.
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Cloudflare App for Splunk | 4501 | Required | Required | Required | - |
 
+**Note** : Create an index named **cloudflare** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).

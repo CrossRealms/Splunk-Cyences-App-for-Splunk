@@ -17,6 +17,13 @@ Splunkbase Download:
 Installation and Configuration Guide: 
 [https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/About](https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/About)
 
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Microsoft SQL Server | 2648 | Required | Required | Required | - |
+
+**Note** : Create an index named **mssql** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 
 The Cyences App has support following data collection mechanisms
@@ -35,9 +42,6 @@ The Cyences App has support following data collection mechanisms
     2. Collect using Azure Event Hub Input: [https://splunk.github.io/splunk-add-on-for-microsoft-cloud-services/Configureeventhubs/](https://splunk.github.io/splunk-add-on-for-microsoft-cloud-services/Configureeventhubs/)
 
         * Use `mssql:audit:json` as sourcetype when creating input
-
-
-**Note:** Use both index=**mssql** for data collection or update the macro definition for `cs_mssql` (**Settings > Configuration**). 
 
 
 ## Estimated Data Size

@@ -15,19 +15,21 @@ Splunkbase Download:
 [https://splunkbase.splunk.com/app/2846/](https://splunkbase.splunk.com/app/2846/) 
 
 Installation Guide: 
-[https://splunkbase.splunk.com/app/2846/#/details](https://splunkbase.splunk.com/app/2846/#/details) 
+[https://splunkbase.splunk.com/app/2846/#/details](https://splunkbase.splunk.com/app/2846/#/details)
 
-## How to Install and Configure the FortiGate Add-on: 
 
-1. Install the Add-on on the Heavy Forwarder.
+### App Installation
 
-2. Configure the Add-on on the Heavy Forwarder.
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Fortinet FortiGate Add-On for Splunk | 2846 | Required | Required | Required | - |
+
+**Note** : Create an index named **fortigate** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+## How to Configure the FortiGate Add-on: 
+
+* Configure the Add-on on the Heavy Forwarder.
     * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2846/#/details).
-    * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
-
-3. Install the Add-on on the Search Head.
-
-**Note:** Update the index value for **VPN data** macro definition in the **Data Source Macros** section in Cyences Configuration page.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
