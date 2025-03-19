@@ -28,6 +28,12 @@ The Cyences App has support following data collection mechanisms
     * [https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration](https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
+    * Details needed from DBA Team:
+        * IP Address or FQDN of DB server
+        * Port number for DB server
+        * DB table name that contains Audit Trail data
+        * Username & Password - Should have Readonly access to the Audit Trail Table in the DB
+
 3. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
 
     1. Enable Audit Log: [https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs](https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs)
