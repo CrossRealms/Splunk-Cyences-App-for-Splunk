@@ -33,6 +33,8 @@ The Cyences App has support following data collection mechanisms
         * Port number for DB server
         * DB table name that contains Audit Trail data
         * Username & Password - Should have Readonly access to the Audit Trail Table in the DB
+        * Default database name and Database name
+        * Timezone on the database server
 
 3. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
 

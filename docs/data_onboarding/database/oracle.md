@@ -31,6 +31,8 @@ The Cyences App has support following data collection mechanisms
     * Port number for DB server
     * Unified Audit Trail DB table name
     * Username & Password - Should have Readonly access to the Audit Trail Table
+    * Default database name and Database name
+    * Timezone on the database server
 
 
 2) XML logs using File monitoring
