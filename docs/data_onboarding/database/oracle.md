@@ -31,6 +31,12 @@ The Cyences App has support following data collection mechanisms
     * Port number for DB server
     * Unified Audit Trail DB table name
     * Username & Password - Should have Readonly access to the Audit Trail Table
+    * Default database name and Database name
+    * Timezone on the database server
+
+* Make sure that you have installed `Splunk_JDBC_oracle` Add-on [https://splunkbase.splunk.com/app/6151](https://splunkbase.splunk.com/app/6151) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
+* Make sure that you have installed `Splunk_TA_oracle` Add-on [https://splunkbase.splunk.com/app/1910](https://splunkbase.splunk.com/app/1910) on both your HF (where DB connect is installed) & on the SH.
+* Make sure to use `oracle:audit:unified` sourcetype when configuring the data input in DB Connect App.
 
 
 2) XML logs using File monitoring
