@@ -260,7 +260,7 @@ PRODUCTS = [
                 "link": "https://splunkbase.splunk.com/app/5693/"
             },
             {
-                "label": "Splunk Add on for Microsoft Azure",
+                "label": "Splunk Add-on for Microsoft Azure",
                 "link": "https://splunkbase.splunk.com/app/3757/"
             }
         ],
