@@ -5,7 +5,7 @@
   </init>
   <search id="base_search_privilege_activities">
     <query>
-      `cs_linux_privilege_events_filter` host=$tkn_host|s$ | fillnull value="-" host app comm dest dvc user res severity | fields host app comm dest dvc user res severity
+      `cs_linux` sourcetype="linux:audit" `cs_linux_privilege_events` host=$tkn_host|s$ | fillnull value="-" host app comm dest dvc user res severity | fields host app comm dest dvc user res severity
     </query>
     <earliest>$timeRange.earliest$</earliest>
     <latest>$timeRange.latest$</latest>
