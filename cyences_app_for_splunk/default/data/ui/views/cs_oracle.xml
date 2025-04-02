@@ -115,7 +115,7 @@
       <title>Privilege Activities</title>
       <table>
         <search>
-          <query>`cs_oracle_privilege_events_filter` $tkn_host$ 
+          <query> `cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") `cs_oracle_privilege_events` $tkn_host$ 
 | fillnull value="-"
 | eval object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure") 
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
@@ -143,12 +143,12 @@
       <table>
         <search>
           <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") $tkn_host$
-| eval schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure"), db_host = host 
+| eval schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure")
 | fillnull value="-" user object_name
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
 | `cs_human_readable_time_format(_time, event_time)`
 | rename vendor_action as action_name, DB_UNIQUE_NAME as database_name, DATABASE_USER as db_user
-| table event_time host db_host user action_name schema_name database_name object_name object_type src db_user client_app statement status</query>
+| table event_time host user action_name schema_name database_name object_name object_type src db_user client_app statement status</query>
           <earliest>$tkn_time.earliest$</earliest>
           <latest>$tkn_time.latest$</latest>
           <sampleRatio>1</sampleRatio>
