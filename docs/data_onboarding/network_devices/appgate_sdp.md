@@ -10,7 +10,7 @@ grand_parent: Data Onboarding
 ## **Appgate SDP Data**
 
 
-Appgate SDP logs are collected vie syslog. Use **json** format for the log format and **appgate:sdp:json** for sourcetype
+Appgate SDP logs are collected via syslog. Use **json** format for the log format and **appgate:sdp:json** for sourcetype
 
 Audit Log Detail: [https://sdphelp.appgate.com/adminguide/v6.4/audit-log-types.html](https://sdphelp.appgate.com/adminguide/v6.4/audit-log-types.html)
 
