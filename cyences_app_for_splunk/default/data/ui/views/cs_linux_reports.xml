@@ -3,6 +3,13 @@
   <init>
     <set token="tkn_product_name_for_data_availability_search">Linux</set>
   </init>
+  <search id="base_search_privilege_activities">
+    <query>
+      `cs_linux` sourcetype="linux:audit" `cs_linux_privilege_events` host=$tkn_host|s$ | fillnull value="-" host app comm dest dvc user res severity | fields host app comm dest dvc user res severity
+    </query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
   <search id="base_search_host_details">
     <query>(`cs_linux_unix_version`) OR (`cs_linux_unix_uptime`) OR (`cs_linux_hardware`) host=$tkn_host|s$ 
   | fields host, machine_architecture_name, os_release, os_name, os_version, SystemUpTime, , RealMemoryMB, SwapMemoryMB, cpu_cores, cpu_freq, cpu_freq_unit, cpu_type  
@@ -147,6 +154,41 @@
       <table>
         <search base="base_search_host_details">
           <query>| search machine_architecture_name IN ($tkn_host_details_machine_architecture_name$) os_release IN ($tkn_host_details_os_release$) os_name IN ($tkn_host_details_os_name$) os_version IN ($tkn_host_details_os_version$) cpu_cores IN ($tkn_host_details_cpu_cores$) cpu_freq IN ($tkn_host_details_cpu_freq$) cpu_type IN ($tkn_host_details_cpu_type$)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Privilege activities</title>
+      <input type="multiselect" token="tkn_user" searchWhenChanged="true">
+        <label>User</label>
+        <choice value="*">All</choice>
+        <fieldForLabel>user</fieldForLabel>
+        <fieldForValue>user</fieldForValue>
+        <search base="base_search_privilege_activities">
+          <query> | dedup user | table user</query>
+        </search>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <delimiter> ,</delimiter>
+      </input>
+      <input type="text" token="tkn_command" searchWhenChanged="true">
+        <label>Command</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <initialValue>*</initialValue>
+      </input>
+      <table>
+        <search base="base_search_privilege_activities">
+          <query> | `cs_human_readable_time_format(_time, event_time)`
+| search user IN ($tkn_user$) comm=$tkn_command|s$
+| rename comm as command, res as response
+| stats count by event_time host app command dest dvc user response severity
+| sort -event_time</query>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
