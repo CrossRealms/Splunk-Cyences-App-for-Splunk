@@ -9,21 +9,14 @@ grand_parent: Data Onboarding
 
 ## **Microsoft Azure Security Score Data**
 
-The Microsoft Graph Security Score Add-on for Splunk is required to collect the Microsoft Azure/O365 Security Score information. 
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5693/](https://splunkbase.splunk.com/app/5693/) 
-
-Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/5693/#/details](https://splunkbase.splunk.com/app/5693/#/details) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Microsoft Graph Security Score Add-on for Splunk | 5693 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Microsoft Graph Security Score Add-on for Splunk](https://splunkbase.splunk.com/app/5693/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5693/#/details) |
 
-**Note** : Create an index named **0365** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : Create an index named **o365** or update the **cs_azure_securityscore** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
+
 
 ## Estimated Data Size
 The Microsoft Graph Security Score Add-on should consume around 5-10MB per day. 

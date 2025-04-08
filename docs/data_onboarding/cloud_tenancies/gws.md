@@ -9,24 +9,19 @@ grand_parent: Data Onboarding
 
 ## **Google Workspace Data**
 
-The "Splunk Add-on for Google Workspace" App is required to collect Google Workspace data. 
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5556/](https://splunkbase.splunk.com/app/5556/) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add-on for Google Workspace | 5556 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Google Workspace](https://splunkbase.splunk.com/app/5556/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunk.github.io/splunk-add-on-for-google-workspace/) & [Google Side Configuration]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws/#google-side-configuration)|
 
-**Note** : Create an index named **google** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : 
+
+* Create an index named **google** or update the **cs_gws** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 * The following Apps/Add-ons should not be installed on a Search Head if the Cyences app is already present due to authentication tagging issues:
-    * G Suite For Splunk - 
-    [https://splunkbase.splunk.com/app/3791/](https://splunkbase.splunk.com/app/3791/) 
-    * TA for G Suite App - 
-    [https://splunkbase.splunk.com/app/3792/](https://splunkbase.splunk.com/app/3792/) 
+    * [G Suite For Splunk](https://splunkbase.splunk.com/app/3791/) 
+    * [TA for G Suite App](https://splunkbase.splunk.com/app/3792/) 
 
 
 ## Estimated Data Size

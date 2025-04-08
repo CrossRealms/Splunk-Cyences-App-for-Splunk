@@ -9,21 +9,13 @@ grand_parent: Data Onboarding
 
 ## **O365 Azure Active Directory Data**
 
-The Splunk Add on for Microsoft Azure is required to collect the O365 Azure Active Directory related activities. 
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/3757/](https://splunkbase.splunk.com/app/3757/) 
-
-Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/3757/#/details](https://splunkbase.splunk.com/app/3757/#/details)
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add on for Microsoft Azure | 3757 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/3757/#/details) |
 
-**Note** : Create an index named **azure** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : Create an index named **azure** or update the **cs_azure** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 * Required inputs to be configured:
     * Microsoft Entra ID Audit
