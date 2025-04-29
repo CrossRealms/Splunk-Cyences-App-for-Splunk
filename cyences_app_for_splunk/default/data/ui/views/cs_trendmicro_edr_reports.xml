@@ -49,10 +49,9 @@
 | spath output=Tactics path=filter.tactics{}
 | spath output=Level path=filter.level
 | sort -detectionTime
-| `cs_human_readable_time_format(detectionTime,Generated)`
 | rename filter.name as Detection, Level as Severity endpoint.name as Endpoint_Name detail.logonUser{} as LoggedIn_User, detail.processFilePath as Processed_FilePath
 | search Endpoint_IP="$tkn_endpoint_ip$" Endpoint_Name="$tkn_endpoint_name$" Severity="$tkn_severity$"
-| table Generated, Detection LoggedIn_User Severity Endpoint_IP Endpoint_Name Techniques Tactics Processed_FilePath
+| table detectionTime Detection LoggedIn_User Severity Endpoint_IP Endpoint_Name Techniques Tactics Processed_FilePath
 | fillnull value="-"</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
@@ -108,8 +107,7 @@
         <search base="audit_log_search">
           <query> | rename loggedTime AS Logged, user AS Account, role AS Role, access AS Source, category AS Category, activity AS Activity, result AS Result
 | search Account="$tkn_account$" Activity="$tkn_activity$" Result="$tkn_result$" Role="$tkn_role$"
-| sort -loggedTime
-| `cs_human_readable_time_format(loggedTime, Logged)` 
+| sort -Logged
           </query>
         </search>
         <option name="count">20</option>
@@ -120,7 +118,7 @@
         <format type="color" field="Result">
           <colorPalette type="map">{"Unsuccessful":#DC4E41,"Successful":#53A051}</colorPalette>
         </format>
-        <fields>["Logged","Account","Role","Source","Category","Activity","Result","Details"]</fields>
+        <fields>["Logged","Account","Role","Source","Category","Activity","Result"]</fields>
       </table>
     </panel>
   </row>
