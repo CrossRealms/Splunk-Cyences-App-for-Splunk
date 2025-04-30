@@ -192,6 +192,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Trendmicro",
+        "app_dependencies": [
+            {
+                "label": "Trend Vision One for Splunk (XDR)",
+                "link": "https://splunkbase.splunk.com/app/5364/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_trendmicro",
+                "label": "Trendmicro Data",
+                "search_by": "sourcetype",
+                "search_values": "xdr_oat,xdr_audit",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Windows Defender",
         "app_dependencies": [
             {
