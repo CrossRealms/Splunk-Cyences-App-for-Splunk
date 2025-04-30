@@ -1,5 +1,5 @@
 <form version="1.1" theme="dark" refresh="60">
-  <label>Trendmicro EDR</label>
+  <label>Trendmicro</label>
   <fieldset submitButton="false">
     <input type="time" token="timerange">
         <label>Time</label>
