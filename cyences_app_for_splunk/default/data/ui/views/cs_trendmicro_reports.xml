@@ -10,7 +10,7 @@
     </input>
   </fieldset>
   <search id="audit_log_search">
-    <query>`cs_trendmicro_edr_idx` sourcetype="xdr_audit" | table loggedTime user role access category activity result </query>
+    <query>`cs_trendmicro` sourcetype="xdr_audit" | table loggedTime user role access category activity result </query>
     <earliest>$timerange.earliest$</earliest>
     <latest>$timerange.latest$</latest>
   </search>
@@ -36,14 +36,14 @@
         <fieldForLabel>severity</fieldForLabel>
         <fieldForValue>severity</fieldForValue>
         <search>
-          <query>`cs_trendmicro_edr_idx` sourcetype="xdr_oat" | spath output=severity path=filter.level | dedup severity | table severity</query>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" | spath output=severity path=filter.level | dedup severity | table severity</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
       </input>
       <table>
         <search>
-          <query>`cs_trendmicro_edr_idx` sourcetype="xdr_oat" 
+          <query>`cs_trendmicro` sourcetype="xdr_oat" 
 | spath output=Endpoint_IP path=endpoint.ips{}
 | spath output=Techniques path=filter.techniques{}
 | spath output=Tactics path=filter.tactics{}
