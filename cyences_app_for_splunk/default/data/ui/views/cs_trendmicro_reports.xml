@@ -16,15 +16,15 @@
   </search>
   <row>
     <panel>
-      <title> Obeserved Attack Techniques </title>
-      <input type="text" token="tkn_endpoint_ip" searchWhenChanged="true">
-        <label>Endpoint_IP</label>
+      <title>Obeserved Attack Techniques</title>
+      <input type="text" token="tkn_device_ip" searchWhenChanged="true">
+        <label>Device IP</label>
         <default>*</default>
         <prefix>*</prefix>
         <suffix>*</suffix>
       </input>
-      <input type="text" token="tkn_endpoint_name" searchWhenChanged="true">
-        <label>Endpoint_Name</label>
+      <input type="text" token="tkn_device_name" searchWhenChanged="true">
+        <label>Device Name</label>
         <default>*</default>
         <prefix>*</prefix>
         <suffix>*</suffix>
@@ -44,14 +44,14 @@
       <table>
         <search>
           <query>`cs_trendmicro` sourcetype="xdr_oat" 
-| spath output=Endpoint_IP path=endpoint.ips{}
+| spath output="Device IP" path=endpoint.ips{}
 | spath output=Techniques path=filter.techniques{}
 | spath output=Tactics path=filter.tactics{}
 | spath output=Level path=filter.level
 | sort -detectionTime
-| rename filter.name as Detection, Level as Severity endpoint.name as Endpoint_Name detail.logonUser{} as LoggedIn_User, detail.processFilePath as Processed_FilePath
-| search Endpoint_IP="$tkn_endpoint_ip$" Endpoint_Name="$tkn_endpoint_name$" Severity="$tkn_severity$"
-| table detectionTime Detection LoggedIn_User Severity Endpoint_IP Endpoint_Name Techniques Tactics Processed_FilePath
+| rename detectionTime as Logged, filter.name as Detection, Level as Severity endpoint.name as "Device Name", detail.logonUser{} as LoggedIn_User, detail.processFilePath as Processed_FilePath
+| search "Device IP"="$tkn_device_ip$" "Device Name"="$tkn_device_name$" Severity="$tkn_severity$"
+| table Logged Detection LoggedIn_User Severity "Device IP" "Device Name" Techniques Tactics Processed_FilePath
 | fillnull value="-"</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
@@ -116,7 +116,7 @@
         <option name="rowNumbers">true</option>
         <option name="totalsRow">false</option>
         <format type="color" field="Result">
-          <colorPalette type="map">{"Unsuccessful":#DC4E41,"Successful":#53A051}</colorPalette>
+          <colorPalette type="map">{"Unsuccessful":#B83C08,"Successful":#008000}</colorPalette>
         </format>
         <fields>["Logged","Account","Role","Source","Category","Activity","Result"]</fields>
       </table>
