@@ -204,7 +204,7 @@ PRODUCTS = [
                 "macro_name": "cs_trendmicro",
                 "label": "Trendmicro Data",
                 "search_by": "sourcetype",
-                "search_values": "xdr_oat,xdr_audit",
+                "search_values": "xdr_oat,xdr_audit,xdr_alerts_wb",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
