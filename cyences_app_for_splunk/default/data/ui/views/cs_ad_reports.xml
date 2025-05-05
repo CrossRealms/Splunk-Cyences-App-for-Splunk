@@ -276,4 +276,178 @@
       </table>
     </panel>
   </row>
+    <row>
+    <panel>
+      <table>
+        <title>AD - New User Created</title>
+        <search>
+          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventID=4720
+| search $tkn_search_common|s$
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, ComputerName, TargetUserName, TargetDomainName, SubjectUserName, SubjectDomainName, DisplayName, UserPrincipalName
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - Deleted user</title>
+        <search>
+          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4726
+| search $tkn_search_common|s$
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time action dvc signature src_user Target_User_Name
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - New Group Created</title>
+        <search>
+          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4731
+| search $tkn_search_common|s$
+| rename Target_User_Name as "Group Name"
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time action dvc signature src_user "Group Name"
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - Deleted Group</title>
+        <search>
+          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4734
+| search $tkn_search_common|s$
+| rename Target_User_Name as "Group Name"
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time action dvc signature src_user "Group Name"
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - A member was added to a security-enabled group</title>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4732
+| search $tkn_search_common|s$
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time LogName EventCode ComputerName src_user change_signature Group_Name
+| rename change_signature as Message, src_user as AccountName
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - Bulk User Creation or Deletion</title>
+        <search ref="AD - Bulk User Creation or Deletion"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Enabled Users</title>
+      <table>
+        <search>
+          <query>`cs_cyences_index` alert_name="AD - User Changes" Action=enabled 
+| search $tkn_search_common|s$
+| table event_time Action Administrator user ComputerName</query>
+          <earliest>$timeRange.ealiest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>AD - Disabled Users</title>
+      <table>
+        <search>
+          <query>`cs_cyences_index` alert_name="AD - User Changes" Action=disabled 
+| search $tkn_search_common|s$
+| table event_time Action Administrator user ComputerName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
