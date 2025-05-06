@@ -161,4 +161,49 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <table>
+        <title>FortiGate Firewall Configuration Changes</title>
+        <search>
+          <query>`cs_fortigate` sourcetype="fortigate_event" action=* logdesc IN ("Attribute Configured", "Object attribute configured")
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time action devname log_action user object_path msg
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>VPN - Multiple Failed VPN Logins</title>
+        <search>
+          <query>`cs_fortigate` sourcetype="fortigate_event" app=ssl-web action=blocked
+| stats count by user
+| sort -count</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
