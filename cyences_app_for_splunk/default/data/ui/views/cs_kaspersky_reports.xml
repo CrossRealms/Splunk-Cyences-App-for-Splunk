@@ -198,4 +198,32 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Kaspersky</title>
+      <table>
+        <title>Kaspersky Critical Host</title>
+        <search>
+          <query>`cs_kaspersky` sourcetype="kaspersky:klsrv" log_type IN (KLSRV_HOST_STATUS_CRITICAL) dest IN ($tkn_host$)
+| rex field=_raw "EVC_EV_DESC=.*: (?<Description>[^.]+)"
+| rex field=_raw "EVC_EV_DESC=.*device '(?<DeviceName>[^']+)'"
+| rex field=_raw "src=(?<SourceIP>\d+\.\d+\.\d+\.\d+)"
+| dedup DeviceName Description
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time Description DeviceName</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>
