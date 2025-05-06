@@ -200,9 +200,8 @@
   </row>
   <row>
     <panel>
-      <title>Kaspersky</title>
+      <title>Kaspersky Critical Host</title>
       <table>
-        <title>Kaspersky Critical Host</title>
         <search>
           <query>`cs_kaspersky` sourcetype="kaspersky:klsrv" log_type IN (KLSRV_HOST_STATUS_CRITICAL) dest IN ($tkn_host$)
 | rex field=_raw "EVC_EV_DESC=.*: (?<Description>[^.]+)"
