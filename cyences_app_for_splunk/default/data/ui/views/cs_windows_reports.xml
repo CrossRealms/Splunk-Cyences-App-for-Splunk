@@ -240,4 +240,104 @@
       </html>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Windows RDP Successful Logons</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=4624 LogonType=RemoteInteractive host=$tkn_host|s$
+| eval User_Domain = if(mvcount(Account_Domain)==2, mvindex(Account_Domain, 1), Account_Domain) 
+| eval User_Name = if(mvcount(Account_Name)==2, mvindex(Account_Name, 1), Account_Name) 
+| rename Workstation_Name as Source_ComputerName 
+| stats count, latest(_time) as _time, values(*) as * by User_Name ComputerName 
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time ComputerName User_Name count User_Domain Impersonation_Level Source_ComputerName Source_Network_Address
+| sort -evnt_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Windows - Disable/Uninstall Critical Agents</title>
+        <search>
+          <query>`cs_wineventlog_security` ( EventCode=11724 OR EventCode=11725) host=$tkn_host|s$
+| rex field=_raw "Product:\s*(?&lt;product&gt;.*?)\s*--\s*Removal" 
+| rex field=_raw "(?&lt;status&gt;Removal\scompleted\ssuccessfully|Removal\sfailed)"
+| eval status=if(status="Removal completed successfully", "success", "failure") 
+| dedup Computer product
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time Computer product user_id status
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Windows - End users tried to open CMD or PowerShell.</title>
+        <search>
+          <query>`cs_wineventlog_security`  EventCode=4688 "C:\\Windows\\System32\\cmd.exe" "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" host=$tkn_host|s$
+| search src_user="03*"
+| `cs_human_readable_time_format(_time,event_time)`
+| table  event_time ComputerName parent_process_name src_user parent_process_path CommandLine 
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Windows - Logins to admin$ share</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=5140 Share_Name=\\*\ADMIN$$ host=$tkn_host|s$
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time Account_Name action app ComputerName file_name Message
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
 </form>
