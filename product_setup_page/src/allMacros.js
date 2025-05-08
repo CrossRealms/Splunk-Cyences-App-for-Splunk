@@ -116,6 +116,12 @@ let allMacros = [
             { name: 'cs_authentication_vpn_session_duration_limit' },
         ]
     },
+    {
+        section: 'Imperva',
+        macros: [
+            { name: 'cs_imperva_password_change_outside_working_hour_definition', description: 'Definition for outside working hours (default setting is set to the weekend plus any weekday after 4pm)' }
+        ]
+    }
 ];
 
 export default allMacros;
