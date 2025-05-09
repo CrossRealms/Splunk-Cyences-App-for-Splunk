@@ -324,7 +324,7 @@
   <row>
     <panel>
       <table>
-        <title>AD - New Group Created</title>
+        <title>AD - Group Created/Deleted</title>
         <search>
           <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode IN (4731,4734)
 | search $tkn_search_common|s$
