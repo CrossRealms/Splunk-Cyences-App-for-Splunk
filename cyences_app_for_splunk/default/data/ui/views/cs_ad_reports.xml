@@ -276,7 +276,7 @@
       </table>
     </panel>
   </row>
-    <row>
+  <row>
     <panel>
       <table>
         <title>AD - New User Created</title>
@@ -299,8 +299,6 @@
         <option name="wrap">true</option>
       </table>
     </panel>
-  </row>
-  <row>
     <panel>
       <table>
         <title>AD - Deleted user</title>
@@ -328,31 +326,7 @@
       <table>
         <title>AD - New Group Created</title>
         <search>
-          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4731
-| search $tkn_search_common|s$
-| rename Target_User_Name as "Group Name"
-| `cs_human_readable_time_format(_time, event_time)`
-| table event_time action dvc signature src_user "Group Name"
-| sort -event_time</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <table>
-        <title>AD - Deleted Group</title>
-        <search>
-          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4734
+          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode IN (4731,4734)
 | search $tkn_search_common|s$
 | rename Target_User_Name as "Group Name"
 | `cs_human_readable_time_format(_time, event_time)`
@@ -409,36 +383,15 @@
   </row>
   <row>
     <panel>
-      <title>AD - Enabled Users</title>
+      <title>AD - Enabled/Disabled Users</title>
       <table>
         <search>
-          <query>`cs_cyences_index` alert_name="AD - User Changes" Action=enabled 
+          <query>`cs_cyences_index` alert_name="AD - User Changes" Action IN (enabled,disabled)
+| `cs_human_readable_time_format(_time,event_time)`
 | search $tkn_search_common|s$
 | table event_time Action Administrator user ComputerName</query>
           <earliest>$timeRange.ealiest$</earliest>
           <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>AD - Disabled Users</title>
-      <table>
-        <search>
-          <query>`cs_cyences_index` alert_name="AD - User Changes" Action=disabled 
-| search $tkn_search_common|s$
-| table event_time Action Administrator user ComputerName</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
