@@ -68,6 +68,49 @@
   </row>
   <row>
     <panel>
+      <title>Windows Hotfix Events</title>
+      <input type="dropdown" token="tkn_os_name" searchWhenChanged="true">
+        <label>OS Name</label>
+        <default>*</default>
+        <fieldForLabel>os_name</fieldForLabel>
+        <fieldForValue>os_name</fieldForValue>
+        <search>
+          <query>`cs_windows_idx` sourcetype="WMI:Version" os_release="$tkn_os_version$" | dedup os_name | table os_name</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
+      <input type="text" token="tkn_os_version" searchWhenChanged="true">
+        <label>OS Version</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <table>
+        <search>
+          <query>`cs_windows_idx` sourcetype="WMI:InstalledUpdates"  
+| dedup HotFixID, host 
+| join type=left host [ search `cs_windows_idx` sourcetype="WMI:Version"  | dedup host | table host os_name os_release] 
+| append [ search `cs_windows_idx` sourcetype="WMI:Version" | dedup host | search NOT [ search `cs_windows_idx` sourcetype="WMI:InstalledUpdates" | dedup host | table host ] | table _time host os_name os_release ]
+| `cs_human_readable_time_format(_time, event_time)`
+| search host="$host$" os_name="$tkn_os_name$" os_release="$tkn_os_version$"
+| table event_time host os_name os_release HotFixID InstalledOn InstalledBy
+| rename os_release as os_version
+| sort -event_time host</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+      </table>
+      <html>
+        <p>Note: Patch Numbers filter won't apply here.</p>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <table>
         <title>Latest Windows Update Events</title>
         <search>

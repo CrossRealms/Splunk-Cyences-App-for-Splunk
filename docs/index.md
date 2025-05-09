@@ -48,6 +48,7 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Cisco Meraki
     * F5 BIGIP
     * Cloudflare
+    * Appgate SDP
 
 * Vulnerability Scanners
     * CrowdStrike Spotlight

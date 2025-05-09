@@ -34,9 +34,29 @@ The Cyences App has support following data collection mechanisms
     * [Monitoring Database Activity with Auditing](https://docs.oracle.com/en/database/oracle/oracle-database/23/dbseg/part_6.html)
     * [Oracle Database Auditing Best practices](https://www.oracle.com/docs/tech/dbsec/oracle-database-auditing-security-and-perf-best-practices.pdf)
 
+* Details needed from DBA Team:
+    * IP Address or FQDN of DB server
+    * Port number for DB server
+    * Unified Audit Trail DB table name
+    * Username & Password - Should have Readonly access to the Audit Trail Table
+    * Default database name and Database name
+    * Timezone on the database server
+
+* Make sure that you have installed `Splunk_JDBC_oracle` Add-on [https://splunkbase.splunk.com/app/6151](https://splunkbase.splunk.com/app/6151) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
+* Make sure that you have installed `Splunk_TA_oracle` Add-on [https://splunkbase.splunk.com/app/1910](https://splunkbase.splunk.com/app/1910) on both your HF (where DB connect is installed) & on the SH.
+* Make sure to use `oracle:audit:unified` sourcetype when configuring the data input in DB Connect App.
+
 
 2) XML logs using File monitoring
 * [https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs](https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs)
+
+* Details needed from DBA Team:
+    * XML Log files path on the DB server.
+    * And you need to install Splunk UF on the DB server in order to monitor the oracle XML log files.
+
+
+**Note:** Use both index=**oracle** for data collection or update the macro definition for `cs_oracle` (**Settings > Configuration**). 
+
 
 ## Estimated Data Size
 
