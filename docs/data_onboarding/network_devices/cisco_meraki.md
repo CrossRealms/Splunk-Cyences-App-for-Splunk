@@ -9,19 +9,15 @@ grand_parent: Data Onboarding
 
 ## **Cisco Meraki Data**
 
-The Splunk Add-on for Cisco Meraki is required to collect the data.
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5580](https://splunkbase.splunk.com/app/5580) 
-
-Installation Guide: 
-[https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon](https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon) 
-
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add-on for Cisco Meraki | 5580 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Cisco Meraki](https://splunkbase.splunk.com/app/5580/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon) |
 
-**Note** : Create an index named **cisco_meraki** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+**Note** : Create an index named **cisco_meraki** or update the **cs_cisco_meraki** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
+
+
+## Estimated Data Size
+TOOD

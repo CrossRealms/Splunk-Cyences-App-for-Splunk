@@ -7,29 +7,16 @@ parent: Network Devices
 grand_parent: Data Onboarding
 ---
 
-## **Fortinet FortiGate VPN Data**
-
-The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/2846/](https://splunkbase.splunk.com/app/2846/) 
-
-Installation Guide: 
-[https://splunkbase.splunk.com/app/2846/#/details](https://splunkbase.splunk.com/app/2846/#/details)
-
+## **Fortinet FortiGate Data**
 
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Fortinet FortiGate Add-On for Splunk | 2846 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Fortinet FortiGate Add-On for Splunk](https://splunkbase.splunk.com/app/2846/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/2846/#/details) |
 
-**Note** : Create an index named **fortigate** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : Create an index named **fortigate** or update the **cs_fortigate** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-## How to Configure the FortiGate Add-on: 
-
-* Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2846/#/details).
 
 ## FortiGate VPN Support and issue with action field extraction 
 
@@ -66,3 +53,7 @@ Installation Guide:
 10. Enable the Acceleration, then click **Save**.  
 
     ![alt]({{ site.baseurl }}/assets/edit_acceleration.png)
+
+
+## Estimated Data Size
+TOOD

@@ -18,12 +18,12 @@ This is a fantastic way to collect detailed information about your Windows endpo
 
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Sysmon Deploy Add-on for Cyences App | - | Not Required | Required | Required | Required |
-| Splunk Add-on for Sysmon | 5709 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Sysmon Deploy Add-on for Cyences App](https://github.com/CrossRealms/Splunk-App-Sysmon-deploy-for-Cyences-App) | - | - | - | Required (only for Windows) | [Installation and Configuration]({{ site.baseurl }}/data_onboarding/windows/sysmon/#install-and-maintain-sysmon-on-windows-machines-from-deployment-server) |
+| [Splunk Add-on for Sysmon](https://splunkbase.splunk.com/app/5709) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/MSSysmon/About) |
 
-**Note** : Create an index named **epintel** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : Create an index named **epintel** or update the **cs_sysmon** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 ### Install and Maintain Sysmon on Windows Machines from Deployment Server
 
@@ -48,14 +48,12 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 ![alt]({{ site.baseurl }}/assets/sysmon_event_codes.png)
 
 
-### Install Splunk Add-on for Sysmon for Parsing and Extraction
-* Install the [Splunk Add-on for Sysmon](https://splunkbase.splunk.com/app/5709) for parsing on the first full Splunk instance (it could be heavy forwarder or indexers in your case) and field extraction on the search heads.
-
-
-
 ### References
 *[https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 
 *[https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/](https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/) 
 
 
 **Note:** Sysmon data action field conflict detected, please look at **Troubleshooting > Sysmon data action field issue** section in the document to make sure your environment does not have the same issue.
+
+## Estimated Data Size
+TODO
