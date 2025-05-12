@@ -278,44 +278,34 @@
   </row>
   <row>
     <panel>
+      <title>AD - User Changes</title>
+      <input type="dropdown" token="tkn_action" searchWhenChanged="true">
+        <label>Action</label>
+        <choice value="4720">Created</choice>
+        <choice value="4726">Deleted</choice>
+        <choice value="4725">Disabled</choice>
+        <choice value="4722">Enabled</choice>
+        <choice value="4720,4722,4725,4726">All</choice>
+        <default>4720,4722,4725,4726</default>
+        <prefix>EventCode IN (</prefix>
+        <suffix>)</suffix>
+      </input>
       <table>
-        <title>AD - New User Created</title>
         <search>
-          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventID=4720
-| search $tkn_search_common|s$
+          <query>`cs_wineventlog_security` $tkn_action$
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, ComputerName, TargetUserName, TargetDomainName, SubjectUserName, SubjectDomainName, DisplayName, UserPrincipalName
+| table event_time, action ,signature, ComputerName, TargetUserName, TargetDomainName, SubjectUserName, SubjectDomainName, DisplayName, UserPrincipalName
 | sort -event_time</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
+          <earliest>-7d@d</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
         <option name="drilldown">none</option>
         <option name="percentagesRow">false</option>
         <option name="refresh.display">progressbar</option>
-        <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
-      </table>
-    </panel>
-    <panel>
-      <table>
-        <title>AD - Deleted user</title>
-        <search>
-          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode=4726
-| search $tkn_search_common|s$
-| `cs_human_readable_time_format(_time, event_time)`
-| table event_time action dvc signature src_user Target_User_Name
-| sort -event_time</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="rowNumbers">true</option>
+        <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
       </table>
@@ -324,9 +314,9 @@
   <row>
     <panel>
       <table>
-        <title>AD - Group Created/Deleted</title>
+        <title>AD - Security Enabled Local Group Created/Deleted</title>
         <search>
-          <query>`cs_windows_idx` sourcetype=XmlWinEventLog EventCode IN (4731,4734)
+          <query>`cs_wineventlog_security` EventCode IN (4731,4734)
 | search $tkn_search_common|s$
 | rename Target_User_Name as "Group Name"
 | `cs_human_readable_time_format(_time, event_time)`
@@ -378,28 +368,6 @@
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>AD - Enabled/Disabled Users</title>
-      <table>
-        <search>
-          <query>`cs_cyences_index` alert_name="AD - User Changes" Action IN (enabled,disabled)
-| `cs_human_readable_time_format(_time,event_time)`
-| search $tkn_search_common|s$
-| table event_time Action Administrator user ComputerName</query>
-          <earliest>$timeRange.ealiest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="count">10</option>
-        <option name="dataOverlayMode">none</option>
-        <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
-        <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
       </table>
     </panel>
   </row>
