@@ -296,10 +296,9 @@
   <row>
     <panel>
       <table>
-        <title>Windows - End users tried to open CMD or PowerShell.</title>
+        <title>Windows - End users tried to open CMD or PowerShell</title>
         <search>
           <query>`cs_wineventlog_security`  EventCode=4688 "C:\\Windows\\System32\\cmd.exe" "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" host=$tkn_host|s$
-| search src_user="03*"
 | `cs_human_readable_time_format(_time,event_time)`
 | table  event_time ComputerName parent_process_name src_user parent_process_path CommandLine 
 | sort -event_time</query>
@@ -322,7 +321,7 @@
       <title>Windows - Logins to admin$ share</title>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode=5140 Share_Name=\\*\ADMIN$$ host=$tkn_host|s$
+          <query>`cs_wineventlog_security` EventCode=5140 Share_Name="\\\\*\\ADMIN$" host=$tkn_host|s$
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time Account_Name action app ComputerName file_name Message
 | sort -event_time</query>
