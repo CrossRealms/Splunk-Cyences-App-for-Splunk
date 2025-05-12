@@ -270,7 +270,7 @@
   <row>
     <panel>
       <table>
-        <title>Windows - Disable/Uninstall Critical Agents</title>
+        <title>Windows - Disable/Uninstall Critical Agents/Softwares</title>
         <search>
           <query>`cs_wineventlog_security` ( EventCode=11724 OR EventCode=11725) host=$tkn_host|s$
 | rex field=_raw "Product:\s*(?&lt;product&gt;.*?)\s*--\s*Removal" 
