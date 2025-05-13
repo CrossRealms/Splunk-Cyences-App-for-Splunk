@@ -479,12 +479,7 @@ PRODUCTS = [
     },
     {
         "name": "Imperva DAM",
-        "app_dependencies": [
-            {
-                "label": "Splunk Add-on for Imperva SecureSphere WAF",
-                "link": "https://splunkbase.splunk.com/app/2874/"
-            }
-        ],
+        "app_dependencies": [],
         "macro_configurations": [
             {
                 "macro_name": "cs_imperva_dam",
