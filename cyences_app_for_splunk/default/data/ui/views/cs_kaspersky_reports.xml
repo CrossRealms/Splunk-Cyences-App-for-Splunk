@@ -209,7 +209,7 @@
 | rex field=_raw "src=(?<SourceIP>\d+\.\d+\.\d+\.\d+)"
 | dedup DeviceName Description
 | `cs_human_readable_time_format(_time,event_time)`
-| table event_time Description DeviceName</query>
+| table event_time DeviceName Description </query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
           <sampleRatio>1</sampleRatio>
