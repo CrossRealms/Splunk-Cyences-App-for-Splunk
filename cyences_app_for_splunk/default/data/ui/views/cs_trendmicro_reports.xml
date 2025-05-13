@@ -122,4 +122,59 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Agent Removed</title>
+        <search ref="Trendmicro - Agent Removed"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Ransomware Bahavior Detected</title>
+        <search ref="Trendmicro - Ransomware Bahavior Detected"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Remote Shell Used</title>
+        <search ref="Trendmicro - Remote Shell Used"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Deletion of Critical Security Artifacts</title>
+        <search ref="Trendmicro - Deletion of Critical Security Artifacts"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Critical Observered Attack Technique Detected</title>
+        <search ref="AD - Bulk User Creation or Deletion"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
 </form>
