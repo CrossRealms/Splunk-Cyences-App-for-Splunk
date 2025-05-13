@@ -1,0 +1,180 @@
+<form version="1.1" theme="dark">
+  <label>Trendmicro</label>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange">
+        <label>Time</label>
+        <default>
+            <earliest>-24h@h</earliest>
+            <latest>now</latest>
+        </default>
+    </input>
+  </fieldset>
+  <search id="audit_log_search">
+    <query>`cs_trendmicro` sourcetype="xdr_audit" | table loggedTime user role access category activity result </query>
+    <earliest>$timerange.earliest$</earliest>
+    <latest>$timerange.latest$</latest>
+  </search>
+  <row>
+    <panel>
+      <title>Obeserved Attack Techniques</title>
+      <input type="text" token="tkn_device_ip" searchWhenChanged="true">
+        <label>Device IP</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_device_name" searchWhenChanged="true">
+        <label>Device Name</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_severity" searchWhenChanged="true">
+        <label>Severity</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>severity</fieldForLabel>
+        <fieldForValue>severity</fieldForValue>
+        <search>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" | spath output=severity path=filter.level | dedup severity | table severity</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" 
+| spath output="Device IP" path=endpoint.ips{}
+| spath output=Techniques path=filter.techniques{}
+| spath output=Tactics path=filter.tactics{}
+| spath output=Level path=filter.level
+| sort -detectionTime
+| rename detectionTime as Logged, filter.name as Detection, Level as Severity endpoint.name as "Device Name", detail.logonUser{} as LoggedIn_User, detail.processFilePath as Processed_FilePath
+| search "Device IP"="$tkn_device_ip$" "Device Name"="$tkn_device_name$" Severity="$tkn_severity$"
+| table Logged Detection LoggedIn_User Severity "Device IP" "Device Name" Techniques Tactics Processed_FilePath
+| fillnull value="-"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Audit Logs</title>
+      <input type="text" token="tkn_account" searchWhenChanged="true">
+        <label>Account</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_activity" searchWhenChanged="true">
+        <label>Activitiy</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>activity</fieldForLabel>
+        <fieldForValue>activity</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup activity | table activity</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_role" searchWhenChanged="true">
+        <label>Role</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>role</fieldForLabel>
+        <fieldForValue>role</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup role | table role</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_result" searchWhenChanged="true">
+        <label>Result</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>result</fieldForLabel>
+        <fieldForValue>result</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup result | table result</query>
+        </search>
+      </input>
+      <table>
+        <search base="audit_log_search">
+          <query> | rename loggedTime AS Logged, user AS Account, role AS Role, access AS Source, category AS Category, activity AS Activity, result AS Result
+| search Account="$tkn_account$" Activity="$tkn_activity$" Result="$tkn_result$" Role="$tkn_role$"
+| sort -Logged
+          </query>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <format type="color" field="Result">
+          <colorPalette type="map">{"Unsuccessful":#B83C08,"Successful":#008000}</colorPalette>
+        </format>
+        <fields>["Logged","Account","Role","Source","Category","Activity","Result"]</fields>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Agent Removed</title>
+        <search ref="Trendmicro - Agent Removed"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Ransomware Bahavior Detected</title>
+        <search ref="Trendmicro - Ransomware Bahavior Detected"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Remote Shell Used</title>
+        <search ref="Trendmicro - Remote Shell Used"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Deletion of Critical Security Artifacts</title>
+        <search ref="Trendmicro - Deletion of Critical Security Artifacts"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Trendmicro - Critical Observered Attack Technique Detected</title>
+        <search ref="AD - Bulk User Creation or Deletion"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+</form>
