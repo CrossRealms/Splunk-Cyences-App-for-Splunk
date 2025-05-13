@@ -34,7 +34,6 @@ let allMacros = [
         section: 'Windows & AD',
         macros: [
             { name: 'cs_ad_bulk_user_creation_deletion_count_limit' },
-            { name: 'cs_ad_password_change_outside_working_hour_definition', description: 'Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm)' },
             { name: 'cs_ad_important_role', description: 'List of important roles. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_policy', description: 'List of important policies. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_user', description: 'List of important users. (e.g. "val1","val2")' },
@@ -114,12 +113,6 @@ let allMacros = [
             { name: 'cs_authentication_excessive_vpn_login_failure_limit' },
             { name: 'cs_authentication_new_location_login_pct_limit' },
             { name: 'cs_authentication_vpn_session_duration_limit' },
-        ]
-    },
-    {
-        section: 'Imperva',
-        macros: [
-            { name: 'cs_imperva_password_change_outside_working_hour_definition', description: 'Definition for outside working hours (default setting is set to the weekend plus any weekday after 4pm)' }
         ]
     }
 ];

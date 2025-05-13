@@ -27,7 +27,8 @@
       <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
       <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
       <view name="cs_cisco_meraki" /><!--Cisco Meraki-->
-      <view name="cs_imperva_reports"/><!--Imperva-->
+      <view name="cs_imperva_waf_reports"/><!--Imperva WAF-->
+      <view name="cs_imperva_dam_reports"/><!--Imperva DAM-->
     </collection>
     <collection label="Windows">
       <view name="cs_windows_reports" /><!--Windows-->

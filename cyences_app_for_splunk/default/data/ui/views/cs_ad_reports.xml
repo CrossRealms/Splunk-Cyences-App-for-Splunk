@@ -165,14 +165,14 @@
           <query>`cs_wineventlog_security` EventCode IN (4624, 4768, 4769) src=* [| search `cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) | dedup ComputerName Subject_Account_Name | table ComputerName Subject_Account_Name |  rename Subject_Account_Name as user] 
 | bin span=1m _time 
 | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) 
-| `cs_ad_password_change_outside_working_hour_definition` 
+| `cs_password_change_outside_working_hour_definition` 
 | table _time ComputerName user src EventCode 
 | rename user as Subject_Account_Name 
 | append 
     [| search `cs_wineventlog_security` EventCode IN (627, 628, 4723, 4724, 4794) 
     | search $tkn_search_common|s$ $tkn_search_password_change_outside_working_hour|s$ 
     | eval date_wday = strftime(_time, "%A"), date_hour = tonumber(strftime(_time, "%H")) 
-    | `cs_ad_password_change_outside_working_hour_definition` ] 
+    | `cs_password_change_outside_working_hour_definition` ] 
 | eventstats values(eval(if(in(EventCode, 4768, 4769), _time."###".src, null()))) as input by ComputerName, Subject_Account_Name 
 | search EventCode IN (627, 628, 4723, 4724, 4794) 
 | timestampbasedcorrelation lookback=300 lookahead=300 
@@ -188,7 +188,7 @@
       </table>
       <html>
         <p>
-          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_ad_password_change_outside_working_hour_definition.</p>
+          <b>Description:</b> The weekend and any weekday before 6am and after 7pm are considered to be after/outside of working hours. The date and time can be adjusted to better accommodate your needs by changing the following macro definition (Settings &gt; Configuration): cs_password_change_outside_working_hour_definition.</p>
       </html>
     </panel>
   </row>

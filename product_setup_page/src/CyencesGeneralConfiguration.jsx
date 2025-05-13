@@ -13,11 +13,14 @@ const EmailConfigurationFields = {
 }
 
 const macroName = "cs_email_subject_prefix"
+const passwordChangeMacro = "cs_password_change_outside_working_hour_definition"
 
 
 export default function CyencesGeneralConfiguration() {
 
     const [prefixValue, setData] = useState('');
+    const [passwordChangeValue, setPasswordChangeValue] = useState('');
+
 
     useEffect(() => {
         axiosCallWrapper({
@@ -35,6 +38,21 @@ export default function CyencesGeneralConfiguration() {
                 }
                 generateToast(`Failed to load Cyences email alert action configuration. error=${error}`, "error");
             })
+        
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-macros/${passwordChangeMacro}`,
+        })
+            .then((resp) => {
+                const content = resp.data.entry[0].content;
+                setPasswordChangeValue(content.definition);
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.messages[0]?.text){
+                    error = error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to load "${passwordChangeMacro}" macro. error=${error}`, "error");
+            });
     }, []);
 
 
@@ -94,7 +112,23 @@ export default function CyencesGeneralConfiguration() {
                 }
                 generateToast(`Failed updated "${macroName}" macro. error=${error}`, "error")
             })
-
+        
+        axiosCallWrapper({
+            endpointUrl: `configs/conf-macros/${passwordChangeMacro}`,
+            body: new URLSearchParams({ 'definition': passwordChangeValue }),
+            customHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            method: "post",
+        })
+            .then(() => {
+                generateToast(`Successfully updated "${passwordChangeMacro}" macro.`, "success");
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.messages[0]?.text){
+                    error = error.response.data.messages[0].text;
+                }
+                generateToast(`Failed to update "${passwordChangeMacro}" macro. error=${error}`, "error");
+            });
     }
 
     return (
@@ -102,6 +136,9 @@ export default function CyencesGeneralConfiguration() {
             <form >
                 <ControlGroup required={true} label={EmailConfigurationFields.emailSubjectLabel} help={EmailConfigurationFields.emaiSubjectHelp} >
                     <Text inline name='subjectPrefix' value={prefixValue} onChange={(e, { value }) => setData(value)} />
+                </ControlGroup>
+                <ControlGroup required={true} label='Password Changed Outside Working Hours Definition' help='Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm)'>
+                    <Text inline name='passwordChangeHours' value={passwordChangeValue} onChange={(e, { value }) => setPasswordChangeValue(value)} />
                 </ControlGroup>
                 <ControlGroup label=''>
                     <Button style={{ maxWidth: '80px' }} type='submit' label="Save" appearance="primary" />
