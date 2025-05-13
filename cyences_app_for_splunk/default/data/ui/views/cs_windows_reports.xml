@@ -270,7 +270,7 @@
   <row>
     <panel>
       <table>
-        <title>Windows - Disable/Uninstall Critical Agents/Softwares</title>
+        <title>Windows - Disable/Uninstall Agents/Softwares</title>
         <search>
           <query>`cs_wineventlog_security` ( EventCode=11724 OR EventCode=11725) host=$tkn_host|s$
 | rex field=_raw "Product:\s*(?&lt;product&gt;.*?)\s*--\s*Removal" 
@@ -318,10 +318,10 @@
   </row>
   <row>
     <panel>
-      <title>Windows - Logins to admin$ share</title>
+      <title>Windows - Shared Network Object Accessed with Privilege</title>
       <table>
         <search>
-          <query>`cs_wineventlog_security` EventCode=5140 Share_Name="\\\\*\\ADMIN$" host=$tkn_host|s$
+          <query>`cs_wineventlog_security` EventCode=5140 Share_Name IN ("\\\\*\\C$","\\\\*\\ADMIN$") host=$tkn_host|s$
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time Account_Name action app ComputerName file_name Message
 | sort -event_time</query>
