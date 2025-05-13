@@ -42,7 +42,7 @@
         <title>Imperva DAM - Logins Outside Working Hours</title>
         <search>
           <query>`cs_imperva` sourcetype=imperva:dam:internal_audit event_type="User admin logged in" 
-| `cs_password_change_outside_working_hour_definition` 
+| `cs_outside_working_hour_definition` 
 | `cs_human_readble_time_format(_time,event_time)`
 | table event_time suser src_ip</query>
           <earliest>$timerange.earliest$</earliest>
