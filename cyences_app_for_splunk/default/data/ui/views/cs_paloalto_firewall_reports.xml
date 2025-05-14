@@ -78,9 +78,10 @@
       <title>Palo Alto Configuration Changes</title>
       <table>
         <search>
-          <query>`cs_palo` sourcetype=pan:log Action!="show"
+          <query>`cs_palo` sourcetype=pan:config
 | `cs_human_readable_time_format(_time,event_time)`
-| table event_time dvc app User Action configuration_path</query>
+| table event_time dvc user command configuration_path
+| rename command as action</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
           <sampleRatio>1</sampleRatio>
