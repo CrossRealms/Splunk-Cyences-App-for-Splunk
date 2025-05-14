@@ -164,7 +164,7 @@
   <row>
     <panel>
       <table>
-        <title>FortiGate Firewall Configuration Changes</title>
+        <title>Firewall Configuration Changes</title>
         <search>
           <query>`cs_fortigate` sourcetype="fortigate_event" action=* logdesc IN ("Attribute Configured", "Object attribute configured")
 | `cs_human_readable_time_format(_time,event_time)`

@@ -288,9 +288,9 @@
   <row>
     <panel>
       <table>
-        <title>Multiple Failed VPN Logins</title>
+        <title>Failed VPN Logins by User</title>
         <search base="bs1">
-          <query>| search action="failure" | stats dc(user) as "Unique Users" by action</query>
+          <query>| search action="failure" | stats count by user</query>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
