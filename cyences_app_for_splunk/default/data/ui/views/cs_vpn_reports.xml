@@ -288,7 +288,7 @@
   <row>
     <panel>
       <table>
-        <title>Failed VPN Logins by User</title>
+        <title>Failed VPN Logins by Users</title>
         <search base="bs1">
           <query>| search action="failure" | stats count by user</query>
         </search>
