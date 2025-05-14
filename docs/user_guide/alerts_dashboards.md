@@ -88,6 +88,20 @@ There are several security related alerts to choose from and they are all locate
     * Unable to Download and Configure Offline Scan
     * Update Errors
     * Windows Defender Health Report
+* Trendmicro Alerts:
+    * Trendmicro - Agent Removed
+    * Trendmicro - Ransomware Bahavior Detected
+    * Trendmicro - Remote Shell Used
+    * Trendmicro - Deletion of Critical Security Artifacts
+    * Trendmicro - Critical Observered Attack Technique Detected
+* Trendmicro Dashboard panels:
+    * Obeserved Attack Techniques
+    * Audit Logs
+    * Trendmicro - Agent Removed
+    * Trendmicro - Ransomware Bahavior Detected
+    * Trendmicro - Remote Shell Used
+    * Trendmicro - Deletion of Critical Security Artifacts
+    * Trendmicro - Critical Observered Attack Technique Detected
 
 
 ## Cloud Tenancies
