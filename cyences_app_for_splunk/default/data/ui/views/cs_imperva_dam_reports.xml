@@ -14,7 +14,7 @@
         <title>Imperva - DAM Alerts</title>
         <table>
             <search>
-                <query>`cs_imperva` sourcetype="imperva:dam:alerts"
+                <query>`cs_imperva_dam` sourcetype="imperva:dam:alerts"
 | dedup  src, dst, cs2 cs5
 | `cs_human_readble_time_format(_time,event_time)`
 | rename dst as "Destination IP", dpt as "Destination Port", duser as "Destination User", src as "Source IP", cs1 as "Policy", cs2 as "Server Group", cs3 as "Service Name", cs4 as "Application Name", spt as "Source Port"
