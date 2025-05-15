@@ -300,6 +300,7 @@ There are several security related alerts to choose from and they are all locate
 * Imperva DAM Dashboard panels:
     * Imperva - DAM Alerts
     * Imperva DAM - Logins Outside Working Hours
+    * Imperva DAM - Failed Logins by User
 
 
 ## Network Telemetry
