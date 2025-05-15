@@ -290,6 +290,16 @@ There are several security related alerts to choose from and they are all locate
 * Cloudflare Alerts:
     * Cloudflare - Credential Leaked
     * Cloudflare - BOT Traffic
+* Imperva WAF Alerts:
+    * Imperva WAF - High volume of attacks from a source IP
+    * Imperva WAF - Not Blocked Attacks
+* Imperva WAF Dashboard panels:
+    * Imperva WAF - Audit Logs
+* Imperva DAM Alerts:
+    * Imperva DAM - Logins Outside Working Hours
+* Imperva DAM Dashboard panels:
+    * Imperva - DAM Alerts
+    * Imperva DAM - Logins Outside Working Hours
 
 
 ## Network Telemetry
