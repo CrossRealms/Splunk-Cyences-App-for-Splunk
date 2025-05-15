@@ -20,6 +20,12 @@ let allMacros = [
         ]
     },
     {
+        section: 'Imperva WAF',
+        macros: [
+            {name: 'cs_imperva_waf_attack_from_source_threshold'}
+        ]
+    },
+    {
         section: 'Lansweeper Dashboard',
         macros: [
             { name: 'cs_lansweeper_timerange', description: 'The Lansweeper dashboard searches Lansweeper data in the specified timerange' },

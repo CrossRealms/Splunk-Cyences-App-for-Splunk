@@ -16,8 +16,6 @@
             <search>
                 <query>`cs_imperva` sourcetype="imperva:dam:alerts"
 | dedup  src, dst, cs2 cs5
-| rex "cs5=(?<Description>.*)\scs5Label"
-| rex "CEF\:\d\|[^\|]*\|[^\|]*\|[^\|]*\|[^\|]*\|(?<policy>[^\|]*)\|(?<severity>[^\|]*)\|"
 | `cs_human_readble_time_format(_time,event_time)`
 | rename dst as "Destination IP", dpt as "Destination Port", duser as "Destination User", src as "Source IP", cs1 as "Policy", cs2 as "Server Group", cs3 as "Service Name", cs4 as "Application Name", spt as "Source Port"
 | table event_time "Source IP" "Destination IP" "Source Port" "Destination Port" "Destination User" "Description" "policy" "Server Group" "Service Name" severity </query>
@@ -40,23 +38,11 @@
     <panel>
       <table>
         <title>Imperva DAM - Logins Outside Working Hours</title>
-        <search>
-          <query>`cs_imperva` sourcetype=imperva:dam:internal_audit event_type="User admin logged in" 
-| `cs_outside_working_hour_definition` 
-| `cs_human_readble_time_format(_time,event_time)`
-| table event_time suser src_ip</query>
-          <earliest>$timerange.earliest$</earliest>
-          <latest>$timerange.earliest$</latest>
-          <sampleRatio>1</sampleRatio>
-        </search>
-        <option name="count">10</option>
-        <option name="dataOverlayMode">none</option>
+        <search ref="Imperva DAM - Logins Outside Working Hours"></search>
         <option name="drilldown">none</option>
-        <option name="percentagesRow">false</option>
         <option name="rowNumbers">true</option>
-        <option name="totalsRow">false</option>
-        <option name="wrap">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
-</row>
+  </row>
 </form>
