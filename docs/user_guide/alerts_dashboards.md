@@ -74,20 +74,6 @@ There are several security related alerts to choose from and they are all locate
     * Update Errors
     * Web Control Violation
     * Web Filtering Blocked
-* Windows Defender Alerts:
-    * Windows Defender - Endpoint Not Protected
-    * Windows Defender - RealTime Protection Disabled or Failed
-    * Windows Defender - Malware Detected
-* Windows Defender Dashboard panels:
-    * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
-    * Antimalware will Drop Support for Operating System Soon 
-    * Antimalware will Expire Soon 
-    * Antivirus Expired
-    * Antivirus Scan Failed
-    * Malware Detected
-    * Unable to Download and Configure Offline Scan
-    * Update Errors
-    * Windows Defender Health Report
 * Trendmicro Alerts:
     * Trendmicro - Agent Removed
     * Trendmicro - Ransomware Bahavior Detected
@@ -102,7 +88,20 @@ There are several security related alerts to choose from and they are all locate
     * Trendmicro - Remote Shell Used
     * Trendmicro - Deletion of Critical Security Artifacts
     * Trendmicro - Critical Observered Attack Technique Detected
-
+* Windows Defender Alerts:
+    * Windows Defender - Endpoint Not Protected
+    * Windows Defender - RealTime Protection Disabled or Failed
+    * Windows Defender - Malware Detected
+* Windows Defender Dashboard panels:
+    * Antimalware Dropped Support for OS or Antimalware Engine Dropped Support for OS
+    * Antimalware will Drop Support for Operating System Soon 
+    * Antimalware will Expire Soon 
+    * Antivirus Expired
+    * Antivirus Scan Failed
+    * Malware Detected
+    * Unable to Download and Configure Offline Scan
+    * Update Errors
+    * Windows Defender Health Report
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
