@@ -1,0 +1,48 @@
+<form version="1.1" theme="dark">
+<label>Imperva DAM</label>
+<fieldset submitButton="false">
+    <input type="time" token="timerange">
+        <label>Time</label>
+        <default>
+            <earliest>-24h@h</earliest>
+            <latest>now</latest>
+        </default>
+    </input>
+</fieldset>
+<row>
+    <panel>
+        <title>Imperva - DAM Alerts</title>
+        <table>
+            <search>
+                <query>`cs_imperva_dam` sourcetype="imperva:dam:alerts"
+| dedup  src, dst, cs2 cs5
+| `cs_human_readble_time_format(_time,event_time)`
+| rename dst as "Destination IP", dpt as "Destination Port", duser as "Destination User", src as "Source IP", cs1 as "Policy", cs2 as "Server Group", cs3 as "Service Name", cs4 as "Application Name", spt as "Source Port"
+| table event_time "Source IP" "Destination IP" "Source Port" "Destination Port" "Destination User" "Description" "policy" "Server Group" "Service Name" severity </query>
+                <earliest>$timerange.earliest$</earliest>
+                <latest>$timerange.latest$</latest>
+                <sampleRatio>1</sampleRatio>
+            </search>
+            <option name="count">10</option>
+            <option name="dataOverlayMode">none</option>
+            <option name="drilldown">none</option>
+            <option name="percentagesRow">false</option>
+            <option name="refresh.display">progressbar</option>
+            <option name="rowNumbers">true</option>
+            <option name="totalsRow">false</option>
+            <option name="wrap">true</option>
+        </table>
+    </panel>
+</row>
+<row>
+    <panel>
+      <table>
+        <title>Imperva DAM - Logins Outside Working Hours</title>
+        <search ref="Imperva DAM - Logins Outside Working Hours"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+</form>
