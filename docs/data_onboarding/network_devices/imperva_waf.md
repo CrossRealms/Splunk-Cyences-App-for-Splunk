@@ -19,6 +19,6 @@ grand_parent: Data Onboarding
 
 
 ## Estimated Data Size
-The license usage is less than 100MB per Imperva tenant per day.
 
-The total amount of data varies based on the size of your organization
+* Events: 2500-3000 (daily)
+* Licensing: less than 100 MB (daily)

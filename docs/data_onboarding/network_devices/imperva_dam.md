@@ -13,7 +13,5 @@ grand_parent: Data Onboarding
 
 
 ## Estimated Data Size
-The total amount of data varies based on the size of your organization.
 
-* Events:  350000-400000(daily)
 * Licensing: less than 500 MB (daily)
