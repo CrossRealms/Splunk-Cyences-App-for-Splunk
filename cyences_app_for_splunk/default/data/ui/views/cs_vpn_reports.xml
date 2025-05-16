@@ -290,7 +290,7 @@
       <table>
         <title>Failed VPN Logins by Users</title>
         <search base="bs1">
-          <query>| search action="failure" | stats count by user</query>
+          <query>| search action="failure" | stats count by user | sort -count</query>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
