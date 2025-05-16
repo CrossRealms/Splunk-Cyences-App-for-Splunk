@@ -276,4 +276,15 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <table>
+        <title>AD - Bulk User Creation or Deletion</title>
+        <search ref="AD - Bulk User Creation or Deletion"></search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
 </form>
