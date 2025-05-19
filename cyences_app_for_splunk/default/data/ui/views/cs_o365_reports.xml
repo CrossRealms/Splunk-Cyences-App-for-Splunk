@@ -1110,11 +1110,10 @@
           <query>`cs_o365` sourcetype="o365:management:activity" Operation="TIMailData" $tkn_host$
 | `cs_human_readable_time_format(_time,event_time)`
 | table event_time DetectionMethod PolicyAction P2Sender Recipients{} Subject AttachmentData{}.FileName AttachmentData{}.FileType
-| rename Recipients{} as Receipients, AttachmentData{}.FileName as Attachment_Filename, AttachmentData{}.FileType as Attachment_Filetype
+| rename Recipients{} as Receipients, AttachmentData{}.FileName as Attachment_Filename, AttachmentData{}.FileType as Attachment_Filetype, P2Sender as Sender
 | sort -event_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
@@ -1128,7 +1127,7 @@
     </panel>
     <panel>
       <table>
-        <title>Accessing External URL</title>
+        <title>External URL was Accessed</title>
         <search>
           <query>`cs_o365` sourcetype="o365:management:activity" Operation="TIUrlClickData" $tkn_host$
 | dedup user Url
@@ -1137,7 +1136,6 @@
 | sort -event_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
@@ -1162,7 +1160,6 @@
 | sort -event_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
