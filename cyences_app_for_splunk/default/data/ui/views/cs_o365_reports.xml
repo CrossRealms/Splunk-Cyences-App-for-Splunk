@@ -1132,7 +1132,8 @@
           <query>`cs_o365` sourcetype="o365:management:activity" Operation="TIUrlClickData" $tkn_host$
 | dedup user Url
 | `cs_human_readable_time_format(_time,event_time)`
-| table event_time user status Url
+| `cs_user_privilege_mapping(user)`
+| table event_time user status Url is_privileged_user
 | sort -event_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -1155,8 +1156,9 @@
           <query>`cs_azure` sourcetype="azure:aad:audit" category=UserManagement loggedByService="Authentication Methods" Command="User deleted security info" $tkn_host$
 | dedup Actor, resultReason
 | `cs_human_readable_time_format(_time, event_time)`
+| `cs_user_privilege_mapping(Actor)`
 | rename Actor as User,activityDisplayName as Action, ipAddress as "IP address",initiatedBy.user.ipAddress as Src_ip, resultReason as modified_property
-| table event_time, User, Action,Src_ip ,result, modified_property
+| table event_time, User, Action,Src_ip ,result, modified_property, is_privileged_user
 | sort -event_time</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
