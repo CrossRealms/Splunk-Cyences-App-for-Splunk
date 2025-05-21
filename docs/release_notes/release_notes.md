@@ -8,42 +8,81 @@ has_children: true
 
 # Release Notes
 
+## Version 5.3.0 (May 2025)
 
-## Version 5.2.0 (February 2025)
+* ### Integrated and Added dashboards panels/alerts for Trendmicro
+    * #### Alerts
+        * Trendmicro - Agent Removed
+        * Trendmicro - Ransomware Bahavior Detected
+        * Trendmicro - Remote Shell Used
+        * Trendmicro - Deletion of Critical Security Artifacts
+        * Trendmicro - Critical Observered Attack Technique Detected
+    * #### Dashboard Panels
+        * Obeserved Attack Techniques
+        * Audit Logs
+        * Trendmicro - Agent Removed
+        * Trendmicro - Ransomware Bahavior Detected
+        * Trendmicro - Remote Shell Used
+        * Trendmicro - Deletion of Critical Security Artifacts
+        * Trendmicro - Critical Observered Attack Technique Detected
 
-* ### Added new alerts for Linux
-    * Linux - Access To Sudoers File
-    * Linux - System Firewall Service Stopped
+* ### Integrated and Added dashboards panels/alerts for Imperva WAF
+    * #### Alerts
+        * Imperva WAF - High volume of attacks from a source IP
+        * Imperva WAF - Not Blocked Attacks
+    * #### Dashboard Panels
+        * Imperva WAF - Audit Logs
 
-* ### Added new alert for Office 365
-    * O365 - MFA got Disabled for User
+* ### Integrated and Added dashboards panels/alerts for Imperva DAM
+    * #### Alerts
+        * Imperva DAM - Logins Outside Working Hours
+    * #### Dashboard Panels
+        * Imperva - DAM Alerts
+        * Imperva DAM - Logins Outside Working Hours
+        * Imperva DAM - Failed Logins by User
 
-* ### Added new alert for Cisco IOS
-    * Cisco IOS - CPU Utilization Exceeds the Threshold
+* ### Added new dashboards panels/alerts for Windows
+    * #### Alerts
+        * Windows - Disable or Uninstall Software or Agent
+        * Windows - Shared Network Object Accessed with Privilege
+    * #### Dashboard Panels
+        * Windows RDP Successful Logons
+        * Windows - Disable or Uninstall Software or Agent
+        * Windows - End users tried to open CMD or PowerShell
+        * Windows - Shared Network Object Accessed with Privilege
 
-* Added field aliases for the XML windows event logs to correlate with the standard windows event logs.
+* ### Added new dashboards panels/alerts for O365
+    * #### Alerts
+        * O365 - Rejected/Quarantined Emails
+        * O365 - External URL was Accessed
+        * O365 - User Deleted Security Info 
+    * #### Dashboard Panels
+        * O365: Rejected/Quarantined Emails
+        * O365: External URL was Accessed
+        * O365: User Deleted Security Info
 
-* Removed the **ES Content Update** app dependency and added useful lookups for ransomware alerts.
+* ### Added new dashboards panels/alerts for Kaspersky
+    * #### Alerts
+        * Kaspersky - Critical Host Found
+    * #### Dashboard Panels
+        * Critical Host Found
 
+* ### Added new dashboard panels for Windows AD
+    * AD - Bulk User Creation or Deletion
+
+* ### Added new dashboard panels for VPN
+    * Failed VPN Logins by Users
+
+* ### Added new dashboards panels for Palo Alto Networks
+    * Palo Alto Configuration Changes
+
+* ### Added new dashboards panels for Fortigate Firewall
+    * Firewall Configuration Changes
 
 * ### Enhancements
+    * Added support of leef format logs for kaspersky.
+    * Added user action field for windows defender.
+    * Added version hotfix information in windows patch dashboard.
+    * Added privilege activity panel and alert for oracle.
+    * Added Privilege activities panel and alert for Linux.
 
-    * Enhanced the **O365 - Risky Login Detected by Microsoft** alert by updating the data source from office 365 audit signin logs to azure audit signin logs & Renamed the alert to **Azure AD - Risky Login Detected**.
-
-    * Updated the configs to get accurate results for the Fortigate VPN success authentication logs.
-
-    * Enhanced the Bruteforce alert search by removing unnecessary sources.
-
-
-* ### Bug Fixes
-
-    * Fixed the data availability panel search for vulnerability, VPN and authentication data.
-
-    * Fixed the **action** field extraction for the Fortigate VPN logs.
-
-
-## Upgrade Guide from 5.1.0 to 5.2.0
-
-* Onboard Azure Audit SignIn logs to utilize the related alerts. For more details, refer to [Azure Active Directory Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/o365_azure_ad)
-
-* Onboard Auditd logs if service is enabled for the Linux server in order to utilize the related alerts. For more details, refer to [Linux Data Onboarding]({{ site.baseurl }}/data_onboarding/linux)
