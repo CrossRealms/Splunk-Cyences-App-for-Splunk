@@ -1151,9 +1151,9 @@
   <row>
     <panel>
       <table>
-        <title>O365 - User Deleted Security Info</title>
+        <title>Azure AD - User Deleted Security Info</title>
         <search>
-          <query>`cs_azure` sourcetype="azure:aad:audit" category=UserManagement loggedByService="Authentication Methods" Command="User deleted security info" $tkn_host$
+          <query>`cs_azure_ad_changes("UserManagement")` loggedByService="Authentication Methods" Command="User deleted security info" $tkn_host$
 | dedup Actor, resultReason
 | `cs_human_readable_time_format(_time, event_time)`
 | `cs_user_privilege_mapping(Actor)`
