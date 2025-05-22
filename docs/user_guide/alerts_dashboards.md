@@ -173,6 +173,7 @@ There are several security related alerts to choose from and they are all locate
     * Azure AD - ServicePrincipal Changes
     * Azure AD - User 
     * Azure AD - Risky Login Detected
+    * Azure AD - User Deleted Security Info 
     * O365 - MFA got Disabled for User
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
@@ -190,7 +191,6 @@ There are several security related alerts to choose from and they are all locate
     * O365 - OneDrive or SharePoint Link Accessed By External User
     * O365 - Rejected/Quarantined Emails
     * O365 - External URL was Accessed
-    * O365 - User Deleted Security Info 
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Changes
     * Azure Active Directory - AuthorizationPolicy Changes
@@ -207,15 +207,15 @@ There are several security related alerts to choose from and they are all locate
     * Login by Location
     * O365: Activity Over World (Unique Users)
     * O365: Security & Compliance Center: Alert Details
-    * O365: Rejected/Quarantined Emails
-    * O365: External URL was Accessed
-    * O365: User Deleted Security Info
     * Office 365: Service Status 
     * Office 365/Azure - Failed Logins
     * Office 365/Azure - Login from Unknown UserId 
     * Office 365/Azure - Successful Logins
     * OneDrive or SharePoint File Sharing with External User
     * OneDrive or SharePoint Link Accessed By External User
+    * O365: Rejected/Quarantined Emails
+    * O365: External URL was Accessed
+    * Azure AD: User Deleted Security Info
 
 ## Database
 

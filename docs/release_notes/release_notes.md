@@ -80,9 +80,24 @@ has_children: true
     * Firewall Configuration Changes
 
 * ### Enhancements
+    * Added Windows EventCode-User_Action mapping lookup.
     * Added support of leef format logs for kaspersky.
-    * Added user action field for windows defender.
+    * Added fortigate success login source for **Usual Login Location Lookup Gen** alert.
+    * Removed service principal user logins from O365 alrts.
+    * Removed dependency from content update app.
+    * Added report that assigns the privileges to the active directory domain admin group members if not assigned already.
     * Added version hotfix information in windows patch dashboard.
-    * Added privilege activity panel and alert for oracle.
-    * Added Privilege activities panel and alert for Linux.
+    * Added privilege activity panel and alert for oracle and linux.
+    * Updated frequency of following alerts:
+        * O365 authentication blocked by conditional access policy : from every hour to every half an hour.
+        * AD password change outside working hours: from every day to every half an hour.
+    * Excluded VPN logs from bruteforce alerts.
+    * Added Appgate SDP VPN event support.
+
+* ### Bug fixes
+    * Fixed SERVICE_START and SERVICE_STOP event consideration issue for linux system firewall alert.
+    * Fixed O365 success loign from unusual location alert by adding entries if we have diff country for same IP.
+
+
+
 
