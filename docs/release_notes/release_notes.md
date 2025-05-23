@@ -10,7 +10,7 @@ has_children: true
 
 ## Version 5.3.0 (May 2025)
 
-* ### Integrated and Added dashboards panels/alerts for Trendmicro
+* ### New Integration for TrendMicro
     * #### Alerts
         * Trendmicro - Agent Removed
         * Trendmicro - Ransomware Bahavior Detected
@@ -26,14 +26,14 @@ has_children: true
         * Trendmicro - Deletion of Critical Security Artifacts
         * Trendmicro - Critical Observered Attack Technique Detected
 
-* ### Integrated and Added dashboards panels/alerts for Imperva WAF
+* ### New Integration for Imperva WAF
     * #### Alerts
         * Imperva WAF - High volume of attacks from a source IP
         * Imperva WAF - Not Blocked Attacks
     * #### Dashboard Panels
         * Imperva WAF - Audit Logs
 
-* ### Integrated and Added dashboards panels/alerts for Imperva DAM
+* ### New Integration for Imperva DAM
     * #### Alerts
         * Imperva DAM - Logins Outside Working Hours
     * #### Dashboard Panels
