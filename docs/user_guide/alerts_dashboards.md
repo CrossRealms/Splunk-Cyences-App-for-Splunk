@@ -35,6 +35,8 @@ There are several security related alerts to choose from and they are all locate
 * CrowdStrike Dashboard panels:
     * Suspicious Activity or Malware Detected
     * Suspicious Activity or Malware Prevented 
+* Kaspersky Alerts:
+    * Kaspersky - Critical Host Found
 * Kaspersky Dashboard panels:
     * Attack Detected
     * Application Database Out of Date
@@ -48,6 +50,7 @@ There are several security related alerts to choose from and they are all locate
     * Virus Found
     * Virus Found and Blocked
     * Virus Found and Passed
+    * Critical Host Found
 * Office 365 Defender ATP Alerts:
     * Defender ATP - Alerts
     * Defender ATP - System is Offboarded
@@ -170,6 +173,7 @@ There are several security related alerts to choose from and they are all locate
     * Azure AD - ServicePrincipal Changes
     * Azure AD - User 
     * Azure AD - Risky Login Detected
+    * Azure AD - User Deleted Security Info 
     * O365 - MFA got Disabled for User
     * O365 - Authentication Blocked by Conditional Access Policy
     * O365 - DLP event in Exchange 
@@ -185,6 +189,8 @@ There are several security related alerts to choose from and they are all locate
     * O365 - Failed Login From Unusual Country
     * O365 - OneDrive or SharePoint File Sharing with External User
     * O365 - OneDrive or SharePoint Link Accessed By External User
+    * O365 - Rejected/Quarantined Emails
+    * O365 - External URL was Accessed
 * Microsoft Office 365 Dashboard panels: 
     * Azure Active Directory - Application Changes
     * Azure Active Directory - AuthorizationPolicy Changes
@@ -207,6 +213,9 @@ There are several security related alerts to choose from and they are all locate
     * Office 365/Azure - Successful Logins
     * OneDrive or SharePoint File Sharing with External User
     * OneDrive or SharePoint Link Accessed By External User
+    * O365: Rejected/Quarantined Emails
+    * O365: External URL was Accessed
+    * Azure AD: User Deleted Security Info
 
 ## Database
 
@@ -249,6 +258,7 @@ There are several security related alerts to choose from and they are all locate
     * List of Firewall Devices
     * Fortigate Firewall Login Failures
     * System Alerts and Threats
+    * Firewall Configuration Changes
 * Palo Alto Networks Alerts:
     * Palo Alto - Commits 
     * Palo Alto - DNS Sinkhole
@@ -260,6 +270,7 @@ There are several security related alerts to choose from and they are all locate
     * List of Firewall Devices
     * Palo Alto Firewall Login Failures
     * System Alerts and Threats
+    * Palo Alto Configuration Changes
 * Sophos Firewall Alerts:
     * Sophos Firewall - Lost Connection to Sophos Central
     * Sophos Firewall - VPN Tunnel Down
@@ -337,6 +348,8 @@ Dashboard panels:
     * Windows - Fake Windows Process
     * Windows - Event Log Cleared
     * Windows - Event Logging Service Shut Down
+    * Windows - Disable or Uninstall Software or Agent
+    * Windows - Shared Network Object Accessed with Privilege
 * Dashboard panels:
     * Successful Login Events
     * Failed Login Attempts by User
@@ -350,6 +363,10 @@ Dashboard panels:
     * Approved Certificate Request
     * Issued Certificates on CA
     * Local Certificates On Servers
+    * Windows RDP Successful Logons
+    * Windows - Disable or Uninstall Software or Agent
+    * Windows - End users tried to open CMD or PowerShell
+    * Windows - Shared Network Object Accessed with Privilege
 
 
 ## Active Directory
@@ -373,6 +390,7 @@ Dashboard panels:
     * AD - User Changed
     * Failed Logons
     * Successful Logons
+    * AD - Bulk User Creation or Deletion
 
 
 ## DNS Tracker
@@ -482,6 +500,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Successful Session
     * Successful vs Failed Logins
     * Unique Users by Country
+    * Failed VPN Logins by Users
 
 
 ## RSA Radius Authentication
