@@ -1,5 +1,8 @@
 <form version="1.1" theme="dark">
   <label>Trendmicro</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Trendmicro</set>
+  </init>
   <fieldset submitButton="false">
     <input type="time" token="timerange">
         <label>Time</label>
@@ -9,8 +12,27 @@
         </default>
     </input>
   </fieldset>
+   <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/5364/" target="_blank">Trend Vision One for Splunk (XDR)</a> for collecting Trendmicro data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
   <search id="audit_log_search">
-    <query>`cs_trendmicro` sourcetype="xdr_audit" | table loggedTime user role access category activity result </query>
+    <query>`cs_trendmicro` sourcetype="xdr_audit" | sort -loggedTime | eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z") | `cs_user_privilege_mapping(user)` | table event_time user role access category activity result is_privileged_user</query>
     <earliest>$timerange.earliest$</earliest>
     <latest>$timerange.latest$</latest>
   </search>
@@ -33,10 +55,10 @@
         <label>Severity</label>
         <choice value="*">All</choice>
         <default>*</default>
-        <fieldForLabel>severity</fieldForLabel>
-        <fieldForValue>severity</fieldForValue>
+        <fieldForLabel>Severity</fieldForLabel>
+        <fieldForValue>Severity</fieldForValue>
         <search>
-          <query>`cs_trendmicro` sourcetype="xdr_oat" | spath output=severity path=filter.level | dedup severity | table severity</query>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" | rename "filter.level" as Severity | dedup Severity | table Severity</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>
@@ -44,14 +66,11 @@
       <table>
         <search>
           <query>`cs_trendmicro` sourcetype="xdr_oat" 
-| spath output="Device IP" path=endpoint.ips{}
-| spath output=Techniques path=filter.techniques{}
-| spath output=Tactics path=filter.tactics{}
-| spath output=Level path=filter.level
+| search "endpoint.ips{}"="$tkn_device_ip$" "endpoint.name"="$tkn_device_name$" "filter.level"="$tkn_severity$"
 | sort -detectionTime
-| rename detectionTime as Logged, filter.name as Detection, Level as Severity endpoint.name as "Device Name", detail.logonUser{} as LoggedIn_User, detail.processFilePath as Processed_FilePath
-| search "Device IP"="$tkn_device_ip$" "Device Name"="$tkn_device_name$" Severity="$tkn_severity$"
-| table Logged Detection LoggedIn_User Severity "Device IP" "Device Name" Techniques Tactics Processed_FilePath
+| eval event_time = strftime(strptime(detectionTime, "%FT%TZ"), "%F %T %Z")
+| table event_time "filter.name" "detail.logonUser{}" "filter.level" "endpoint.ips{}" "Device Name" "filter.techniques{}" "filter.tactics{}" "detail.processFilePath"
+| rename "filter.name" as Detection, "detail.logonUser{}" as LoggedIn_User, "filter.level" as Severity, "endpoint.ips{}" as "Device IP", endpoint.name as "Device Name", "filter.techniques{}" as Techniques, "filter.tactics{}" as Tactics, "detail.processFilePath" as Processed_FilePath
 | fillnull value="-"</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
@@ -105,9 +124,8 @@
       </input>
       <table>
         <search base="audit_log_search">
-          <query> | rename loggedTime AS Logged, user AS Account, role AS Role, access AS Source, category AS Category, activity AS Activity, result AS Result
+          <query> | rename user AS Account, role AS Role, access AS Source, category AS Category, activity AS Activity, result AS Result
 | search Account="$tkn_account$" Activity="$tkn_activity$" Result="$tkn_result$" Role="$tkn_role$"
-| sort -Logged
           </query>
         </search>
         <option name="count">20</option>
@@ -125,8 +143,16 @@
   <row>
     <panel>
       <table>
-        <title>Trendmicro - Agent Removed</title>
-        <search ref="Trendmicro - Agent Removed"></search>
+        <title>Agent Removed</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remove agent" role != "Master Administrator"
+| `cs_user_privilege_mapping(user)`
+| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| table event_time "details.Deleted agents{}.hostname" "details.Deleted agents{}.xdrDeviceId" category result role user is_privileged_user
+| rename loggedTime as Loggeed, "details.Deleted agents{}.hostname" as "Device Name", "details.Deleted agents{}.xdrDeviceId" as "Device ID"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
@@ -136,8 +162,14 @@
   <row>
     <panel>
       <table>
-        <title>Trendmicro - Ransomware Bahavior Detected</title>
-        <search ref="Trendmicro - Ransomware Bahavior Detected"></search>
+        <title>Ransomware Bahavior Detected</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_alerts_wb signature="Ransomware Behavior Detection" | dedup id | search status="Open"
+| eval event_time = strftime(strptime(createdDateTime, "%FT%TZ"), "%F %T %Z")
+| table app event_time dest incidentId score status</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
@@ -147,8 +179,16 @@
   <row>
     <panel>
       <table>
-        <title>Trendmicro - Remote Shell Used</title>
-        <search ref="Trendmicro - Remote Shell Used"></search>
+        <title>Remote Shell Used</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remote Shell" role != "Master Administrator"
+| `cs_user_privilege_mapping(user)`
+| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| table event_time "details.Activity" "details.Command{}" "details.Host name" role result user is_privileged_user
+| rename "details.Activity" as Activity, "details.Command{}" as Command, "details.Host name" as HostName</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
@@ -158,8 +198,20 @@
   <row>
     <panel>
       <table>
-        <title>Trendmicro - Deletion of Critical Security Artifacts</title>
-        <search ref="Trendmicro - Deletion of Critical Security Artifacts"></search>
+        <title>Deletion of Critical Security Artifacts</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity IN ("Delete API Key", "Delete suspicious object", "Delete workspace")
+| `cs_user_privilege_mapping(user)`
+| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| fillnull value="-"
+| spath output=suspicious_object path=details.udso{}
+| spath output=api_key_name path=details.Name{}
+| spath output=api_key_id path=details.apikeyId.tid{}
+| table event_time "details.Workspace guid" "details.Workspace name" api_key_name api_key_id suspicious_object role user result activity is_privileged_user
+| rename "details.Workspace guid" as "Workspace guid", "details.Workspace name" as "Workspace name"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
@@ -169,8 +221,16 @@
   <row>
     <panel>
       <table>
-        <title>Trendmicro - Critical Observered Attack Technique Detected</title>
-        <search ref="AD - Bulk User Creation or Deletion"></search>
+        <title>Critical Observered Attack Technique Detected</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_oat filter.level IN (critical)
+| eval event_time = strftime(strptime(detectionTime, "%FT%TZ"), "%F %T %Z")
+| table event_time "filter.name" "endpoint.ips{}" "endpoint.name" "filter.techniques{}" "filter.tactics{}" "detail.processFilePath"
+| rename filter.name as Detection, endpoint.name as "Device Name", detail.processFilePath as Processed_FilePath
+| fillnull value="-"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>
