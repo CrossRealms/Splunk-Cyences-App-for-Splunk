@@ -181,7 +181,7 @@
   <row>
     <panel>
       <table>
-        <title>Uninstall attempt for Software or Agent (EventCode="11724,11725") </title>
+        <title>Uninstall Attempt for Software or Agent (EventCode="11724,11725") </title>
         <search>
           <query>`cs_wineventlog_security` ( EventCode=11724 OR EventCode=11725) host=$tkn_host|s$
 | rex field=_raw "Product:\s*(?&lt;product&gt;.*?)\s*--\s*Removal" 
@@ -229,7 +229,7 @@
   </row>
   <row>
     <panel>
-      <title>Privileged Network shared object was accessed (EventCode=5140)</title>
+      <title>Privileged Network shared object was Accessed (EventCode=5140)</title>
       <table>
         <search>
           <query>`cs_wineventlog_security` EventCode=5140 Share_Name IN ("\\\\*\\C$","\\\\*\\ADMIN$") host=$tkn_host|s$ Account_Name=$tkn_user|s$ Account_Name!="*$"
