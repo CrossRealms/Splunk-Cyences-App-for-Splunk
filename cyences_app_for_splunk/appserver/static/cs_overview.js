@@ -27,6 +27,7 @@ require([
         { id: 'cs_kaspersky_reports', title: 'Kaspersky' },
         { id: 'cs_o365_defender_atp', title: 'Defender ATP' },
         { id: 'cs_sophos_reports', title: 'Sophos Endpoint Protection' },
+        { id: 'cs_trendmicro_reports', title: 'Trendmicro'},
         { id: 'cs_windows_defender_reports', title: 'Windows Defender' },
         { id: 'cs_aws_user_activity', title: 'AWS' },
         { id: 'cs_gws_reports', title: 'Google Workspace' },
@@ -62,6 +63,7 @@ require([
         { token: "crowdstrike_eventstream", product: "CrowdStrike EventStream" },
         { token: "kaspersky", product: "Kaspersky"},
         { token: "sophos", product: "Sophos Endpoint Protection" },
+        { token: "trendmicro", product: "Trendmicro"},
         { token: "windows_defender", product: "Windows Defender" },
         { token: "o365_defender_atp", product: "Office 365 Defender ATP" },
         { token: "aws", product: "AWS" },
@@ -183,7 +185,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_duo", "tbl_monthly_alerts", "tbl_other_alerts" ];
+    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_trendmicro", "tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_duo", "tbl_monthly_alerts", "tbl_other_alerts" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
