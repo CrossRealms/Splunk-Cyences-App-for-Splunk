@@ -1101,4 +1101,77 @@
       </table>
     </panel>
   </row>
+  <row>
+    <title>O365 - Email Security</title>
+    <panel>
+      <table>
+        <title>Rejected/Quarantined Emails</title>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Operation="TIMailData" $tkn_host$
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time DetectionMethod PolicyAction P2Sender Recipients{} Subject AttachmentData{}.FileName AttachmentData{}.FileType
+| rename Recipients{} as Receipients, AttachmentData{}.FileName as Attachment_Filename, AttachmentData{}.FileType as Attachment_Filetype, P2Sender as Sender
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>External URL was Accessed</title>
+        <search>
+          <query>`cs_o365` sourcetype="o365:management:activity" Operation="TIUrlClickData" $tkn_host$
+| dedup user Url
+| `cs_human_readable_time_format(_time,event_time)`
+| `cs_user_privilege_mapping(user)`
+| table event_time user status Url is_privileged_user
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Azure AD - User Deleted Security Info</title>
+        <search>
+          <query>`cs_azure_ad_changes("UserManagement")` loggedByService="Authentication Methods" Command="User deleted security info" $tkn_host$
+| dedup Actor, resultReason
+| `cs_human_readable_time_format(_time, event_time)`
+| `cs_user_privilege_mapping(Actor)`
+| rename Actor as User,activityDisplayName as Action, ipAddress as "IP address",initiatedBy.user.ipAddress as Src_ip, resultReason as modified_property
+| table event_time, User, Action,Src_ip ,result, modified_property, is_privileged_user
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
 </form>

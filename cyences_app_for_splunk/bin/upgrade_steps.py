@@ -12,7 +12,7 @@ def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old
     try:
         old_macro_definition = conf_manager.get_macro(old_macro_name)
         conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
+        logger.info("Old macro ({}) value has been successfully migrated to the new filter macro={} ".format(old_macro_name, new_macro_name))
     except:
         logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
 
