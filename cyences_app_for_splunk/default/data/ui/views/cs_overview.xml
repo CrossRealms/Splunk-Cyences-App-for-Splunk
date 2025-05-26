@@ -641,6 +641,8 @@
         </drilldown>
       </table>
     </panel>
+  </row>
+  <row>
     <panel depends="$f5_bigip$">
       <title>F5 BIGIP</title>
       <table id="tbl_f5_bigip">

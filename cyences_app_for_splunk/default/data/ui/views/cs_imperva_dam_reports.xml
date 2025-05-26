@@ -1,5 +1,8 @@
 <form version="1.1" theme="dark">
 <label>Imperva DAM</label>
+<init>
+    <set token="tkn_product_name_for_data_availability_search">Imperva DAM</set>
+</init>
 <fieldset submitButton="false">
     <input type="time" token="timerange">
         <label>Time</label>
@@ -11,17 +14,32 @@
 </fieldset>
 <row>
     <panel>
-        <title>Imperva - DAM Alerts</title>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+</row>
+<row>
+    <panel>
+        <title>Alerts</title>
         <table>
             <search>
                 <query>`cs_imperva_dam` sourcetype="imperva:dam:alerts"
-| dedup  src, dst, cs2 cs5
-| `cs_human_readble_time_format(_time,event_time)`
-| rename dst as "Destination IP", dpt as "Destination Port", duser as "Destination User", src as "Source IP", cs1 as "Policy", cs2 as "Server Group", cs3 as "Service Name", cs4 as "Application Name", spt as "Source Port"
-| table event_time "Source IP" "Destination IP" "Source Port" "Destination Port" "Destination User" "Description" "policy" "Server Group" "Service Name" severity </query>
+| dedup  src, dst, ServerGroup 
+| `cs_human_readable_time_format(_time,event_time)` 
+| rename dst as "Destination IP", dpt as "Destination Port", duser as "Destination User", src as "Source IP", spt as "Source Port"
+| table event_time "ApplicationName" "Source IP" "Destination IP" "Source Port" "Destination Port" "Destination User" "description" "Policy" "ServerGroup" "ServiceName" Severity </query>
                 <earliest>$timerange.earliest$</earliest>
                 <latest>$timerange.latest$</latest>
-                <sampleRatio>1</sampleRatio>
             </search>
             <option name="count">10</option>
             <option name="dataOverlayMode">none</option>
@@ -37,8 +55,16 @@
 <row>
     <panel>
       <table>
-        <title>Imperva DAM - Logins Outside Working Hours</title>
-        <search ref="Imperva DAM - Logins Outside Working Hours"></search>
+        <title>Logins Outside Working Hours</title>
+        <search>
+            <query>`cs_imperva_dam` sourcetype=imperva:dam:internal_audit event_type="User admin logged in"
+| `cs_outside_working_hour_definition`
+| `cs_human_readable_time_format(_time,event_time)`
+| `cs_user_privilege_mapping(suser)`
+| table event_time suser src_ip is_privileged_user</query>
+            <earliest>$timerange.earliest$</earliest>
+            <latest>$timerange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="rowNumbers">true</option>
         <option name="count">10</option>

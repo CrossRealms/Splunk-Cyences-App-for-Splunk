@@ -1,4 +1,7 @@
 <form version="1.1" theme="dark">
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Imperva WAF</set>
+  </init>
   <label>Imperva WAF</label>
     <fieldset submitButton="false">
         <input type="time" token="timerange">
@@ -11,8 +14,27 @@
     </fieldset>
     <row>
         <panel>
+        <html>
+            <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/2874/" target="_blank">Splunk Add-on for Imperva SecureSphere WAF</a> for collecting Imperva WAF data.</p>
+        </html>
+        <table>
+            <search>
+            <query>$tkn_data_availablity_search$</query>
+            <earliest>$timerange.earliest$</earliest>
+            <latest>$timerange.latest$</latest>
+            </search>
+            <option name="drilldown">none</option>
+            <option name="refresh.display">progressbar</option>
+            <format type="color" field="data">
+            <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+            </format>
+        </table>
+        </panel>
+    </row>
+    <row>
+        <panel>
             <table>
-            <title>Imperva WAF - Audit Logs</title>
+            <title>Audit Logs</title>
             <search>
                 <query>`cs_imperva_waf` sourcetype="imperva:waf"
 | spath path=event.provider output=provider 
@@ -20,9 +42,10 @@
 | spath path=imperva.audit_trail.event_action output=event_action 
 | spath path=imperva.audit_trail.event_action_description output=event_action_description 
 | spath path=user.email output=user_email 
+| `cs_user_privilege_mapping(user_email)`
 | where  dataset="AUDIT_TRAIL" 
-| `cs_human_readble_time_format(_time, event_time)`
-| table event_time provider event_action event_action_description user_email</query>
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time provider event_action event_action_description user_email is_privileged_user</query>
                 <earliest>$timerange.earliest$</earliest>
                 <latest>$timerange.latest$</latest>
                 <sampleRatio>1</sampleRatio>

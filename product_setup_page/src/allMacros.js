@@ -26,6 +26,12 @@ let allMacros = [
         ]
     },
     {
+        section: 'Imperva DAM',
+        macros: [
+            {name: 'cs_imperva_dam_multiple_failed_login_threshold'}
+        ]
+    },
+    {
         section: 'Lansweeper Dashboard',
         macros: [
             { name: 'cs_lansweeper_timerange', description: 'The Lansweeper dashboard searches Lansweeper data in the specified timerange' },

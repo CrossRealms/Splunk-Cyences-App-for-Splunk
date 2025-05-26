@@ -53,8 +53,8 @@ require([
         { id: 'cs_mssql', title: 'MSSQL' },
         { id: 'cs_oracle', title: 'Oracle' },
         { id: 'cs_f5_bigip_asm', title: 'F5 BIGIP' },
-        { id: 'cs_imperva_waf', title: 'Imperva WAF'},
-        { id: 'cs_imperva_dam', title: 'Imperva DAM'},
+        { id: 'cs_imperva_waf_reports', title: 'Imperva WAF'},
+        { id: 'cs_imperva_dam_reports', title: 'Imperva DAM'},
     ]
 
     let panel_depends_tokens = [
