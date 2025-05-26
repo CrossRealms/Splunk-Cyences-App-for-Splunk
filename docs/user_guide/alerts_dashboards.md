@@ -75,7 +75,7 @@ There are several security related alerts to choose from and they are all locate
     * Web Control Violation
     * Web Filtering Blocked
 * Trendmicro Alerts:
-    * Trendmicro - Agent Removed
+    * Trendmicro - Agent Removed by Non-Admin User
     * Trendmicro - Ransomware Bahavior Detected
     * Trendmicro - Remote Shell Used
     * Trendmicro - Deletion of Critical Security Artifacts
@@ -83,11 +83,11 @@ There are several security related alerts to choose from and they are all locate
 * Trendmicro Dashboard panels:
     * Obeserved Attack Techniques
     * Audit Logs
-    * Trendmicro - Agent Removed
-    * Trendmicro - Ransomware Bahavior Detected
-    * Trendmicro - Remote Shell Used
-    * Trendmicro - Deletion of Critical Security Artifacts
-    * Trendmicro - Critical Observered Attack Technique Detected
+    * Agent Removed by Non-Admin User
+    * Ransomware Bahavior Detected
+    * Remote Shell Used
+    * Deletion of Critical Security Artifacts
+    * Critical Observered Attack Technique Detected
 * Windows Defender Alerts:
     * Windows Defender - Endpoint Not Protected
     * Windows Defender - RealTime Protection Disabled or Failed
