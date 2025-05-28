@@ -14,4 +14,4 @@ grand_parent: Data Onboarding
 
 ## Estimated Data Size
 
-* Licensing: less than 500 MB (daily)
+* Licensing: less than 500 MB (daily for Imerva DAM internal logs and alerts) 
