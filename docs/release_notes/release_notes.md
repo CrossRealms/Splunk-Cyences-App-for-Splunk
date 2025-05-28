@@ -12,7 +12,7 @@ has_children: true
 
 * ### New Integration for TrendMicro
     * #### Alerts
-        * Trendmicro - Agent Removed
+        * Trendmicro - Agent Removed by Non-Admin User
         * Trendmicro - Ransomware Bahavior Detected
         * Trendmicro - Remote Shell Used
         * Trendmicro - Deletion of Critical Security Artifacts
@@ -20,52 +20,51 @@ has_children: true
     * #### Dashboard Panels
         * Obeserved Attack Techniques
         * Audit Logs
-        * Trendmicro - Agent Removed
-        * Trendmicro - Ransomware Bahavior Detected
-        * Trendmicro - Remote Shell Used
-        * Trendmicro - Deletion of Critical Security Artifacts
-        * Trendmicro - Critical Observered Attack Technique Detected
+        * Agent Removed By Non-Admin User
+        * Ransomware Bahavior Detected
+        * Remote Shell Used
+        * Deletion of Critical Security Artifacts
+        * Critical Observered Attack Technique Detected
 
 * ### New Integration for Imperva WAF
     * #### Alerts
         * Imperva WAF - High volume of attacks from a source IP
         * Imperva WAF - Not Blocked Attacks
     * #### Dashboard Panels
-        * Imperva WAF - Audit Logs
+        * Audit Logs
 
 * ### New Integration for Imperva DAM
     * #### Alerts
         * Imperva DAM - Logins Outside Working Hours
+        * Imperva DAM - Multiple Failed Logins
     * #### Dashboard Panels
-        * Imperva - DAM Alerts
-        * Imperva DAM - Logins Outside Working Hours
-        * Imperva DAM - Failed Logins by User
+        * Alerts
+        * Logins Outside Working Hours
 
 * ### Added new dashboards panels/alerts for Windows
     * #### Alerts
-        * Windows - Disable or Uninstall Software or Agent
-        * Windows - Shared Network Object Accessed with Privilege
+        * Windows - Uninstall Attempt for Software or Agent
+        * Windows - Privileged Network shared object was Accessed
     * #### Dashboard Panels
-        * Windows RDP Successful Logons
-        * Windows - Disable or Uninstall Software or Agent
-        * Windows - End users tried to open CMD or PowerShell
-        * Windows - Shared Network Object Accessed with Privilege
+        * Uninstall Attempt for Software or Agent (EventCode="11724,11725")
+        * End users tried to open CMD or PowerShell (EventCode=4688)
+        * Privileged Network shared object was Accessed (EventCode=5140)
 
 * ### Added new dashboards panels/alerts for O365
     * #### Alerts
         * O365 - Rejected/Quarantined Emails
         * O365 - External URL was Accessed
-        * O365 - User Deleted Security Info 
+        * Azure AD - User Deleted Security Info 
     * #### Dashboard Panels
-        * O365: Rejected/Quarantined Emails
-        * O365: External URL was Accessed
-        * O365: User Deleted Security Info
+        * Rejected/Quarantined Emails
+        * External URL was Accessed
+        * User Deleted Security Info
 
 * ### Added new dashboards panels/alerts for Kaspersky
     * #### Alerts
         * Kaspersky - Critical Host Found
     * #### Dashboard Panels
-        * Critical Host Found
+        * Kaspersky Critical Host Found
 
 * ### Added new dashboard panels for Windows AD
     * AD - Bulk User Creation or Deletion
