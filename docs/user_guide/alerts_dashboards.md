@@ -294,13 +294,13 @@ There are several security related alerts to choose from and they are all locate
     * Imperva WAF - High volume of attacks from a source IP
     * Imperva WAF - Not Blocked Attacks
 * Imperva WAF Dashboard panels:
-    * Imperva WAF - Audit Logs
+    * Audit Logs
 * Imperva DAM Alerts:
     * Imperva DAM - Logins Outside Working Hours
+    * Imperva DAM - Multiple Failed Logins
 * Imperva DAM Dashboard panels:
-    * Imperva - DAM Alerts
-    * Imperva DAM - Logins Outside Working Hours
-    * Imperva DAM - Failed Logins by User
+    * Alerts
+    * Logins Outside Working Hours
 
 
 ## Network Telemetry
