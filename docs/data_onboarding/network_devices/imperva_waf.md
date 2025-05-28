@@ -20,5 +20,4 @@ grand_parent: Data Onboarding
 
 ## Estimated Data Size
 
-* Events: 2500-3000 (daily)
-* Licensing: less than 100 MB (daily)
+* Licensing: less than 100 MB (daily for WAF audit logs)
