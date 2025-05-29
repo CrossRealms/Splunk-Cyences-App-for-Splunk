@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Imperva DAM
-permalink: /data_onboarding/network_devices/imperva_waf/
+permalink: /data_onboarding/network_devices/imperva_dam/
 nav_order: 10
 parent: Network Devices
 grand_parent: Data Onboarding
