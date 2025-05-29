@@ -77,7 +77,7 @@ There are several security related alerts to choose from and they are all locate
 * Trendmicro Alerts:
     * Trendmicro - Agent Removed by Non-Admin User
     * Trendmicro - Ransomware Bahavior Detected
-    * Trendmicro - Remote Shell Used
+    * Trendmicro - Remote Shell Used by Non-Admin User
     * Trendmicro - Deletion of Critical Security Artifacts
     * Trendmicro - Critical Observered Attack Technique Detected
 * Trendmicro Dashboard panels:
