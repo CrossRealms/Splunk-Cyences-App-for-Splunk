@@ -95,8 +95,10 @@
         <title>Successful Login Events (EventCode=4624)</title>
         <search>
           <query>`cs_wineventlog_security`  EventCode="4624" host=$tkn_host|s$ $tkn_logon_type$ ComputerName=$tkn_computer_name|s$ user=$tkn_user|s$ user!="*$"
+| eval User_Domain = if(mvcount(Account_Domain)==2, mvindex(Account_Domain, 1), Account_Domain) 
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, user, LogonType, ComputerName, signature, user_type</query>
+| `cs_user_privilege_mapping(user)`
+| table event_time, user, User_Domain, LogonType, ComputerName, Source_Network_Address, signature, user_type, is_privileged_user</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -173,6 +175,78 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Uninstall Attempt for Software or Agent (EventCode="11724,11725") </title>
+        <search>
+          <query>`cs_wineventlog_security` ( EventCode=11724 OR EventCode=11725) host=$tkn_host|s$
+| rex field=_raw "Product:\s*(?&lt;product&gt;.*?)\s*--\s*Removal" 
+| rex field=_raw "(?&lt;status&gt;Removal\scompleted\ssuccessfully|Removal\sfailed)"
+| eval status=if(status="Removal completed successfully", "success", "failure") 
+| dedup Computer product
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time product user_id status Computer
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>End users tried to open CMD or PowerShell (EventCode=4688)</title>
+        <search>
+          <query>`cs_wineventlog_security`  EventCode=4688 "C:\\Windows\\System32\\cmd.exe" "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" NOT src_user IN ("SplunkForwarder", "*$") host=$tkn_host|s$
+| `cs_human_readable_time_format(_time,event_time)`
+| table  event_time ComputerName parent_process_name src_user parent_process_path CommandLine 
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Privileged Network shared object was Accessed (EventCode=5140)</title>
+      <table>
+        <search>
+          <query>`cs_wineventlog_security` EventCode=5140 Share_Name IN ("\\\\*\\C$","\\\\*\\ADMIN$") host=$tkn_host|s$ Account_Name=$tkn_user|s$ Account_Name!="*$"
+| `cs_human_readable_time_format(_time, event_time)`
+| `cs_user_privilege_mapping(Account_Name)`
+| table event_time Account_Name file_name action app ComputerName  Message is_privileged_user
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
       </table>
     </panel>
   </row>
