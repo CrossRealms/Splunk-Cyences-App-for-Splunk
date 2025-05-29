@@ -147,7 +147,8 @@
         <search>
           <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remove agent" role != "Master Administrator"
 | `cs_user_privilege_mapping(user)`
-| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
 | table event_time "details.Deleted agents{}.hostname" "details.Deleted agents{}.xdrDeviceId" category result role user is_privileged_user
 | rename loggedTime as Loggeed, "details.Deleted agents{}.hostname" as "Device Name", "details.Deleted agents{}.xdrDeviceId" as "Device ID"</query>
           <earliest>$timerange.earliest$</earliest>
@@ -165,7 +166,8 @@
         <title>Ransomware Bahavior Detected</title>
         <search>
           <query>`cs_trendmicro` sourcetype=xdr_alerts_wb signature="Ransomware Behavior Detection" | dedup id | search status="Open"
-| eval event_time = strftime(strptime(createdDateTime, "%FT%TZ"), "%F %T %Z")
+| eval event_strptime = strptime(createdDateTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
 | table app event_time dest incidentId score status</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
@@ -179,11 +181,12 @@
   <row>
     <panel>
       <table>
-        <title>Remote Shell Used</title>
+        <title>Remote Shell Used by Non-Admin User</title>
         <search>
           <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remote Shell" role != "Master Administrator"
 | `cs_user_privilege_mapping(user)`
-| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
 | table event_time "details.Activity" "details.Command{}" "details.Host name" role result user is_privileged_user
 | rename "details.Activity" as Activity, "details.Command{}" as Command, "details.Host name" as HostName</query>
           <earliest>$timerange.earliest$</earliest>
@@ -202,7 +205,8 @@
         <search>
           <query>`cs_trendmicro` sourcetype=xdr_audit activity IN ("Delete API Key", "Delete suspicious object", "Delete workspace")
 | `cs_user_privilege_mapping(user)`
-| eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z")
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
 | fillnull value="-"
 | table event_time "details.Workspace guid" "details.Workspace name" "details.Name{}" "details.apikeyId.tid{}" "details.udso{}.*" role user result activity is_privileged_user
 | rename "details.Workspace guid" as "Workspace guid", "details.Workspace name" as "Workspace name", "details.Name{}" as api_key_name, "details.apikeyId.tid{}" as api_key_id, "details.udso{}.*" as "*"</query>
@@ -221,7 +225,8 @@
         <title>Critical Observered Attack Technique Detected</title>
         <search>
           <query>`cs_trendmicro` sourcetype=xdr_oat filter.level IN (critical)
-| eval event_time = strftime(strptime(detectionTime, "%FT%TZ"), "%F %T %Z")
+| eval event_strptime = strptime(detectionTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
 | table event_time "filter.name" "endpoint.ips{}" "endpoint.name" "filter.techniques{}" "filter.tactics{}" "detail.processFilePath"
 | rename filter.name as Detection, endpoint.name as "Device Name", detail.processFilePath as Processed_FilePath, "endpoint.ips{}" as "Device IP", "filter.techniques{}" as Techniques, "filter.tactics{}" as Tactics
 | fillnull value="-"</query>
