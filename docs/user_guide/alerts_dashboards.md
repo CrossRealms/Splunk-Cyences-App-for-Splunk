@@ -85,7 +85,7 @@ There are several security related alerts to choose from and they are all locate
     * Audit Logs
     * Agent Removed by Non-Admin User
     * Ransomware Bahavior Detected
-    * Remote Shell Used
+    * Remote Shell Used by Non-Admin User
     * Deletion of Critical Security Artifacts
     * Critical Observered Attack Technique Detected
 * Windows Defender Alerts:
