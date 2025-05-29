@@ -9,11 +9,14 @@ grand_parent: Data Onboarding
 
 ## **Windows Firewall Status Data**
 
-Configure the Windows Firewall Status Check Add-on to collect windows firewall status data. 
+### App Installation
+
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Windows Firewall Status Check Add-on](https://splunkbase.splunk.com/app/7012/) | Required | - | - | Required (only for Windows) | [Installation Guide](https://splunkbase.splunk.com/app/7012/#/details) |
+
+**Note** : Create an index named **windows** or update the **cs_windows_idx** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 
-Splunkbase Download:
-[https://splunkbase.splunk.com/app/7012](https://splunkbase.splunk.com/app/7012)
-
-Installation and Configuration Guide:
-[https://splunkbase.splunk.com/app/7012](https://splunkbase.splunk.com/app/7012)
+## Estimated Data Size
+TODO
