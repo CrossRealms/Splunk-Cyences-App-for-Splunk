@@ -478,6 +478,39 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Imperva WAF",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Imperva SecureSphere WAF",
+                "link": "https://splunkbase.splunk.com/app/2874/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_waf",
+                "label": "Imperva WAF Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:waf",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Imperva DAM",
+        "app_dependencies": [],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_dam",
+                "label": "Imperva DAM Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:dam:alerts,imperva:dam:internal_audit",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Cloudflare",
         "app_dependencies": [
             {
