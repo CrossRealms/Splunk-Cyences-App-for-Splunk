@@ -112,8 +112,8 @@ has_children: true
 
 ## Upgrade Guide from 5.2.0 to 5.3.0
 
-* Onboard Trendmicro logs to utilize the related alerts. For more details, refer to [Trendmicro Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/trendmicro)
+* Onboard Trendmicro logs to utilize the related alerts. For more details, refer to [Trendmicro Data Onboarding]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/trendmicro)
 
-* Onboard Imperva WAF logs to utilize the related alerts. For more details, refer to [Imperva WAF Data Onboarding]({{ site.baseurl }}/data_onboarding/imperva_waf)
+* Onboard Imperva WAF logs to utilize the related alerts. For more details, refer to [Imperva WAF Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/imperva_waf)
 
-* Onboard Imperva DAM logs to utilize the related alerts. For more details, refer to [Imperva DAM Data Onboarding]({{ site.baseurl }}/data_onboarding/imperva_dam)
+* Onboard Imperva DAM logs to utilize the related alerts. For more details, refer to [Imperva DAM Data Onboarding]({{ site.baseurl }}/data_onboarding/network_devices/imperva_dam)
