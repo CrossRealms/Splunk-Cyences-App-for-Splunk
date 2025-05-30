@@ -79,7 +79,7 @@ has_children: true
     * Firewall Configuration Changes
 
 * ### Enhancements
-    * Added Windows EventCode-User_Action mapping lookup.
+    * Added lookup `cs_windows_defender_eventcode_mapping` to map Windows EventCode to User Action.
     * Added support of leef format logs for kaspersky.
     * Added fortigate success login source for **Usual Login Location Lookup Gen** alert.
     * Removed service principal user logins from O365 alrts.
