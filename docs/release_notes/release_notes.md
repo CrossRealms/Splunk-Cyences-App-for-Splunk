@@ -78,13 +78,13 @@ has_children: true
 * ### Added new dashboards panels for Fortigate Firewall
     * Firewall Configuration Changes
 
-* ### Added new dashboards panels for for oracle.
+* ### Added new dashboards panel/alert for for Oracle.
     * #### Alerts
         * Oracle - Privilege Activities
     * #### Dashboard Panels
         * Privilege Activities
 
-* ### Added new dashboards panels for for linux.
+* ### Added new dashboards panel/alert for for Linux/Unix.
     * #### Alerts
         * Linux - Privilege Activities
     * #### Dashboard Panels
