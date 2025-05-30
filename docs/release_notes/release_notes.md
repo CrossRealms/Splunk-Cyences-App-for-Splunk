@@ -91,7 +91,6 @@ has_children: true
         * Privilege Activities
 
 * Added Appgate SDP VPN event support.
-* Enhanced the **Linux - System Firewall Service Stopped** alert by removing system restart incident which generates the false positives.
 
 * ### Enhancements
     * Added lookup `cs_windows_defender_eventcode_mapping` to map Windows EventCode to User Action and Description.
@@ -104,6 +103,7 @@ has_children: true
         * O365 authentication blocked by conditional access policy : from every hour to every half an hour.
         * AD password change outside working hours: from every day to every half an hour.
     * Excluded VPN logs from bruteforce alerts as we already have a separate alert for the VPN logins.
+    * Enhanced the **Linux - System Firewall Service Stopped** alert by removing system restart incident which generates the false positives.
 
 * ### Bug fixes
     * Fixed O365 success loign from unusual location alert by adding entries if we have diff country for same IP.
