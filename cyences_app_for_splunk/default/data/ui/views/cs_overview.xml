@@ -289,6 +289,27 @@
         </drilldown>
       </table>
     </panel>
+    <panel depends="$trendmicro$">
+      <title>Trendmicro</title>
+      <table id="tbl_trendmicro">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Trendmicro")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
     <panel depends="$windows_defender$">
       <title>Windows Defender</title>
       <table id="tbl_windows_defender">
@@ -641,11 +662,55 @@
         </drilldown>
       </table>
     </panel>
+  </row>
+  <row>
     <panel depends="$f5_bigip$">
       <title>F5 BIGIP</title>
       <table id="tbl_f5_bigip">
         <search base="basesearch">
           <query>| `cs_filter_savedsearches("F5 BIGIP")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$imperva_waf$">
+      <title>Imperva WAF</title>
+      <table id="tbl_imperva_waf">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Imperva WAF")`</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">row</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="disabled">
+          <colorPalette type="map">{"1":#F7BC38}</colorPalette>
+        </format>
+        <format type="color" field="is_scheduled">
+          <colorPalette type="map">{"0":#F7BC38}</colorPalette>
+        </format>
+        <fields>["Name","Notable Events"]</fields>
+        <drilldown>
+          <link target="_blank">/app/cyences_app_for_splunk/cs_forensics?form.tkn_savedsearch=$row.savedsearch_name$&amp;form.timeRange.earliest=$timeRange.earliest$&amp;form.timeRange.latest=$timeRange.latest$&amp;form.tkn_severity=$row.cyences_severity$&amp;$tkn_status_drilldown|n$</link>
+        </drilldown>
+      </table>
+    </panel>
+    <panel depends="$imperva_dam$">
+      <title>Imperva DAM</title>
+      <table id="tbl_imperva_dam">
+        <search base="basesearch">
+          <query>| `cs_filter_savedsearches("Imperva DAM")`</query>
         </search>
         <option name="count">10</option>
         <option name="drilldown">row</option>

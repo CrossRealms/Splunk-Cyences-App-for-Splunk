@@ -77,6 +77,20 @@ There are several security related alerts to choose from and they are all locate
     * Update Errors
     * Web Control Violation
     * Web Filtering Blocked
+* Trendmicro Alerts:
+    * Trendmicro - Agent Removed by Non-Admin User
+    * Trendmicro - Ransomware Bahavior Detected
+    * Trendmicro - Remote Shell Used by Non-Admin User
+    * Trendmicro - Deletion of Critical Security Artifacts
+    * Trendmicro - Critical Observered Attack Technique Detected
+* Trendmicro Dashboard panels:
+    * Obeserved Attack Techniques
+    * Audit Logs
+    * Agent Removed by Non-Admin User
+    * Ransomware Bahavior Detected
+    * Remote Shell Used by Non-Admin User
+    * Deletion of Critical Security Artifacts
+    * Critical Observered Attack Technique Detected
 * Windows Defender Alerts:
     * Windows Defender - Endpoint Not Protected
     * Windows Defender - RealTime Protection Disabled or Failed
@@ -91,7 +105,6 @@ There are several security related alerts to choose from and they are all locate
     * Unable to Download and Configure Offline Scan
     * Update Errors
     * Windows Defender Health Report
-
 
 ## Cloud Tenancies
 * Amazone Web Services Alerts:
@@ -303,6 +316,17 @@ There are several security related alerts to choose from and they are all locate
 * Cloudflare Alerts:
     * Cloudflare - Credential Leaked
     * Cloudflare - BOT Traffic
+* Imperva WAF Alerts:
+    * Imperva WAF - High volume of attacks from a source IP
+    * Imperva WAF - Not Blocked Attacks
+* Imperva WAF Dashboard panels:
+    * Audit Logs
+* Imperva DAM Alerts:
+    * Imperva DAM - Logins Outside Working Hours
+    * Imperva DAM - Multiple Failed Logins
+* Imperva DAM Dashboard panels:
+    * Alerts
+    * Logins Outside Working Hours
 
 
 ## Network Telemetry

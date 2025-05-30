@@ -192,6 +192,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Trendmicro",
+        "app_dependencies": [
+            {
+                "label": "Trend Vision One for Splunk (XDR)",
+                "link": "https://splunkbase.splunk.com/app/5364/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_trendmicro",
+                "label": "Trendmicro Data",
+                "search_by": "sourcetype",
+                "search_values": "xdr_oat,xdr_audit,xdr_alerts_wb",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Windows Defender",
         "app_dependencies": [
             {
@@ -453,6 +472,39 @@ PRODUCTS = [
                 "label": "F5 BIGIP Data",
                 "search_by": "sourcetype",
                 "search_values": "f5:bigip:syslog,f5:bigip:asm:syslog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Imperva WAF",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Imperva SecureSphere WAF",
+                "link": "https://splunkbase.splunk.com/app/2874/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_waf",
+                "label": "Imperva WAF Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:waf",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Imperva DAM",
+        "app_dependencies": [],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_dam",
+                "label": "Imperva DAM Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:dam:alerts,imperva:dam:internal_audit",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
