@@ -100,7 +100,6 @@ has_children: true
     * Removed the ES Content Update app dependency and added useful lookup for Windows - Fake Windows Process alert.
     * Added report that assigns the privileges to the active directory domain admin group members if not assigned already.
     * Added version hotfix information in windows patch dashboard.
-    * Added privilege activity panel and alert for oracle and linux.
     * Updated frequency of following alerts:
         * O365 authentication blocked by conditional access policy : from every hour to every half an hour.
         * AD password change outside working hours: from every day to every half an hour.
