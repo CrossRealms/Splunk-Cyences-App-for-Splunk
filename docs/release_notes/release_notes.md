@@ -96,7 +96,7 @@ has_children: true
     * Added lookup `cs_windows_defender_eventcode_mapping` to map Windows EventCode to User Action and Description.
     * Added support of leef format logs for kaspersky.
     * Removed service principal user logins from Office 365 alerts.
-    * Removed the ES Content Update app dependency and added useful lookup for Windows - Fake Windows Process alert.
+    * Removed the ES Content Update app dependency and added useful lookup for **Windows - Fake Windows Process** alert.
     * Added report that assigns the privileges to the active directory domain admin group members if not assigned already.
     * Added version hotfix information in windows patch dashboard.
     * Updated frequency of following alerts:
@@ -106,5 +106,5 @@ has_children: true
     * Enhanced the **Linux - System Firewall Service Stopped** alert by removing system restart incident which generates the false positives.
 
 * ### Bug fixes
-    * Fixed O365 success loign from unusual location alert by adding entries if we have diff country for same IP.
+    * Fixed the usual login location details by adding FortiGate success login source to Usual Login Location Lookup Gen report.
     * To avoid false positives, added additional entry to the Usual Login Location Lookup for the same IP for which we have diff country names in event and output of iplocation command.
