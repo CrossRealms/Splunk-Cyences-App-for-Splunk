@@ -50,6 +50,8 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * F5 BIGIP
     * Cloudflare
     * Appgate SDP
+    * Imperva WAF
+    * Imperva DAM
 
 * Vulnerability Scanners
     * CrowdStrike Spotlight
