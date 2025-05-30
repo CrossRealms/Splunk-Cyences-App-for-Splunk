@@ -14,7 +14,7 @@ has_children: true
     * #### Alerts
         * Trendmicro - Agent Removed by Non-Admin User
         * Trendmicro - Ransomware Bahavior Detected
-        * Trendmicro - Remote Shell Used
+        * Trendmicro - Remote Shell Used by Non-Admin User
         * Trendmicro - Deletion of Critical Security Artifacts
         * Trendmicro - Critical Observered Attack Technique Detected
     * #### Dashboard Panels
@@ -22,7 +22,7 @@ has_children: true
         * Audit Logs
         * Agent Removed By Non-Admin User
         * Ransomware Bahavior Detected
-        * Remote Shell Used
+        * Remote Shell Used by Non-Admin User
         * Deletion of Critical Security Artifacts
         * Critical Observered Attack Technique Detected
 
@@ -96,7 +96,3 @@ has_children: true
 * ### Bug fixes
     * Fixed SERVICE_START and SERVICE_STOP event consideration issue for linux system firewall alert.
     * Fixed O365 success loign from unusual location alert by adding entries if we have diff country for same IP.
-
-
-
-
