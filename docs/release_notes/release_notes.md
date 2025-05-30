@@ -78,21 +78,34 @@ has_children: true
 * ### Added new dashboards panels for Fortigate Firewall
     * Firewall Configuration Changes
 
+* ### Added new dashboards panels for for oracle.
+    * #### Alerts
+        * Oracle - Privilege Activities
+    * #### Dashboard Panels
+        * Privilege Activities
+
+* ### Added new dashboards panels for for linux.
+    * #### Alerts
+        * Linux - Privilege Activities
+    * #### Dashboard Panels
+        * Privilege Activities
+
+* Added Appgate SDP VPN event support.
+* Enhanced the **Linux - System Firewall Service Stopped** alert by removing system restart incident which generates the false positives.
+
 * ### Enhancements
-    * Added lookup `cs_windows_defender_eventcode_mapping` to map Windows EventCode to User Action.
+    * Added lookup `cs_windows_defender_eventcode_mapping` to map Windows EventCode to User Action and Description.
     * Added support of leef format logs for kaspersky.
-    * Added fortigate success login source for **Usual Login Location Lookup Gen** alert.
-    * Removed service principal user logins from O365 alrts.
-    * Removed dependency from content update app.
+    * Removed service principal user logins from Office 365 alerts.
+    * Removed the ES Content Update app dependency and added useful lookup for Windows - Fake Windows Process alert.
     * Added report that assigns the privileges to the active directory domain admin group members if not assigned already.
     * Added version hotfix information in windows patch dashboard.
     * Added privilege activity panel and alert for oracle and linux.
     * Updated frequency of following alerts:
         * O365 authentication blocked by conditional access policy : from every hour to every half an hour.
         * AD password change outside working hours: from every day to every half an hour.
-    * Excluded VPN logs from bruteforce alerts.
-    * Added Appgate SDP VPN event support.
+    * Excluded VPN logs from bruteforce alerts as we already have a separate alert for the VPN logins.
 
 * ### Bug fixes
-    * Fixed SERVICE_START and SERVICE_STOP event consideration issue for linux system firewall alert.
     * Fixed O365 success loign from unusual location alert by adding entries if we have diff country for same IP.
+    * To avoid false positives, added additional entry to the Usual Login Location Lookup for the same IP for which we have diff country names in event and output of iplocation command.

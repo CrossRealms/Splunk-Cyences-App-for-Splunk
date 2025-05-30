@@ -229,8 +229,10 @@ There are several security related alerts to choose from and they are all locate
     * Oracle - User Changes
     * Oracle - Database Changes
     * Oracle - Role Changes
+    * Oracle - Privilege Activities
 * Oracle Dashboard panels:
     * Audit Logs
+    * Privilege Activities
 
 ## Email
 * Alerts:
@@ -464,6 +466,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Linux - Group Changes
     * Linux - Access To Sudoers File
     * Linux - System Firewall Service Stopped
+    * Linux - Privilege Activities
 * Dashboard panels:
     * Hosts Details
     * Linux Group Added/Updated/Removed
@@ -475,6 +478,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
     * Mount Points on Hosts
     * Listening Ports on Host
     * List of Services on Hosts
+    * Privilege Activities
 
 
 ## VPN
