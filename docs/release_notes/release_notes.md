@@ -108,3 +108,12 @@ has_children: true
 * ### Bug fixes
     * Fixed the usual login location details by adding FortiGate success login source to Usual Login Location Lookup Gen report.
     * To avoid false positives, added additional entry to the Usual Login Location Lookup for the same IP for which we have diff country names in event and output of iplocation command.
+
+
+## Upgrade Guide from 5.2.0 to 5.3.0
+
+* Onboard Trendmicro logs to utilize the related alerts. For more details, refer to [Trendmicro Data Onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/trendmicro)
+
+* Onboard Imperva WAF logs to utilize the related alerts. For more details, refer to [Imperva WAF Data Onboarding]({{ site.baseurl }}/data_onboarding/imperva_waf)
+
+* Onboard Imperva DAM logs to utilize the related alerts. For more details, refer to [Imperva DAM Data Onboarding]({{ site.baseurl }}/data_onboarding/imperva_dam)
