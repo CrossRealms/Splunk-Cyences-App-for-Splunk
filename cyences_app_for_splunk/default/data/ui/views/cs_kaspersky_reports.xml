@@ -207,9 +207,8 @@
 | dedup DeviceName Description
 | `cs_human_readable_time_format(_time,event_time)`
 | table event_time DeviceName Description </query>
-          <earliest>$timerange.earliest$</earliest>
-          <latest>$timerange.latest$</latest>
-          <sampleRatio>1</sampleRatio>
+          <earliest>$tkn_timerange.earliest$</earliest>
+          <latest>$tkn_timerange.latest$</latest>
         </search>
         <option name="count">10</option>
         <option name="dataOverlayMode">none</option>
