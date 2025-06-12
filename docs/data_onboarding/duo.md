@@ -16,12 +16,10 @@ Splunkbase Download:
 Installation Guide: 
 [https://duo.com/docs/splunkapp](https://duo.com/docs/splunkapp) 
 
+### App Installation
 
-## How to Install and Configure the Duo Security Add-on: 
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Duo Security Add-on | 3504 | Required | Required | Required | - |
 
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Create an index named **duo** or update the macro definition in Cyences' configuration page with your index.
-
-3. Install the Add-on on the Search Head.
+**Note** : Create an index named **duo** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
