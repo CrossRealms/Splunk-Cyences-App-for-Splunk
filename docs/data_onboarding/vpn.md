@@ -33,7 +33,7 @@ If your organization uses FortiGate VPN, then the required data can be collected
 
 If your organization is using GlobalProtect VPN, then the required data can be collected via Palo Alto's logs. Refer to the [Data Onboarding > Network Devices > Palo Alto Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/palo_alto) section for more information regarding the data collection process.
 
-## pfsense VPN Data
+## pfsense OpenVPN Data
 
 The Technology Add-on for pfSense is required for field extractions.
 
