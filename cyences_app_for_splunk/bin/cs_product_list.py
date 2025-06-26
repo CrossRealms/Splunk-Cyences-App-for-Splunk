@@ -425,7 +425,7 @@ PRODUCTS = [
                 "macro_name": "cs_sophos_firewall",
                 "label": "Sophos Firewall Data",
                 "search_by": "sourcetype",
-                "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp",
+                "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp,sophos:xg:event",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             },
