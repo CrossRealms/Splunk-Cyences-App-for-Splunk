@@ -409,6 +409,44 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Palo Alto",
+        "app_dependencies": [
+            {
+                "label": "Palo Alto Networks Add-on",
+                "link": "https://splunkbase.splunk.com/app/2757/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_palo",
+                "label": "Palo Alto Data",
+                "search_by": "sourcetype",
+                "search_values": "pan:config,pan:globalprotect,pan:system,pan:threat,pan:traffic",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "pfSense",
+        "app_dependencies": [
+            {
+                "label": "Technology Add-on for pfSense",
+                "link": "https://splunkbase.splunk.com/app/1527/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_pfsense",
+                "label": "pfSense Data",
+                "search_by": "sourcetype",
+                "search_values": "pfsense,pfsense:filterlog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Sophos Firewall",
         "app_dependencies": [
             {

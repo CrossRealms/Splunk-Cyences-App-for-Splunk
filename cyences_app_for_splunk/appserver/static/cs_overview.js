@@ -35,6 +35,7 @@ require([
         { id: 'cs_network_reports', title: 'Network Telemetry' },
         { id: 'cs_fortigate_firewall', title: 'Fortigate Firewall' },
         { id: 'cs_paloalto_firewall_reports', title: 'Palo Alto Firewall' },
+        { id: 'cs_pfsense_firewall_reports', title: 'pfSense Firewall' },
         { id: 'cs_sophos_firewall', title: 'Sophos Firewall' },
         { id: 'cs_cisco_meraki', title: 'Cisco Meraki' },
         { id: 'cs_windows_reports', title: 'Windows' },
@@ -76,6 +77,7 @@ require([
         { token: "cisco_ios", product: "Cisco IOS" },
         { token: "fortigate", product: "FortiGate" },
         { token: "palo_alto", product: "Palo Alto" },
+        { token: "pfsense", product: "pfSense" },
         { token: "sophos_firewall", product: "Sophos Firewall" },
         { token: "cisco_meraki", product: "Cisco Meraki" },
         { token: "f5_bigip", product: "F5 BIGIP" },
@@ -189,7 +191,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_trendmicro","tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_imperva_waf", "tbl_imperva_dam", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_duo", "tbl_monthly_alerts", "tbl_other_alerts" ];
+    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_trendmicro","tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_pfsense", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_imperva_waf", "tbl_imperva_dam", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_duo", "tbl_monthly_alerts", "tbl_other_alerts" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {

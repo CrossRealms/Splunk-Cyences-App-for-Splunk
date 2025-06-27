@@ -26,6 +26,7 @@
       <view name="cs_f5_bigip_asm" /><!--F5 BIGIP-->
       <view name="cs_fortigate_firewall" /><!--FortiGate-->
       <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
+      <view name="cs_pfsense_firewall_reports" /><!--pfSense-->
       <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
       <view name="cs_cisco_meraki" /><!--Cisco Meraki-->
       <view name="cs_imperva_waf_reports"/><!--Imperva WAF-->
