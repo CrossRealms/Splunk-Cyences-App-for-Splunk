@@ -47,3 +47,7 @@ Splunkbase Download Add-on:
 [pfsense]
 SEDCMD-event_cleaner3 = 
 ```
+
+## Sophos Firewall VPN Data
+
+If your organization is using Sophos Firewall as VPN, then the required data can be collected via sophos firewall's logs. Refer to the [Data Onboarding > Network Devices > Sophos Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall) section for more information regarding the data collection process.
