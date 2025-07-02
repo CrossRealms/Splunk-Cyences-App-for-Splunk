@@ -40,4 +40,10 @@ The Technology Add-on for pfSense is required for field extractions.
 Splunkbase Download Add-on:
 [https://splunkbase.splunk.com/app/1527](https://splunkbase.splunk.com/app/1527)
 
-**Note:** : Create an index named **pfsense** or update the **cs_pfsense** macro definition from Splunk UI (**Settings > Advanced Search > Search macros**) or update the **cs_vpn_indexes** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup > VPN**).
+**Note:** : 
+* Create an index named **pfsense** or update the **cs_pfsense** macro definition from Splunk UI (**Settings > Advanced Search > Search macros**) or update the **cs_vpn_indexes** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup > VPN**).
+* Create props.conf in local folder of `TA-pfsense` add-on and add following configuration in it to properly work field extractions.
+```
+[pfsense]
+SEDCMD-event_cleaner3 = 
+```
