@@ -36,6 +36,18 @@ The Cyences App has support following data collection mechanisms
         * Default database name and Database name
         * Timezone on the database server
 
+    * While creating input on DB connect app, follow the below steps:
+        1. Select the appropriate **Connection** form left hand side panel.
+        2. Try to build query by selecting  Catalog, Schema and Table values from dropdown OR write query manually as mentioned below and run it.
+            ```
+            SELECT *
+            FROM <<TABLE>>;
+            ```
+            * Replace **<<TABLE>>** with table name.
+        3. Once query runs successfully, select Type "Rising" on right hand side panel. (This step is required to get only latest data.)
+        4. After selecting type "Rising", follow the all steps mentioned on the right hand side panel and run the search and click on "Next".
+        5. Set appropriate index, source and sourcetype and execution frequency (interval after which input invokes everytime) and click on "Finish".
+
 
 * Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
 * Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
@@ -52,17 +64,21 @@ The Cyences App has support following data collection mechanisms
         * Timezone on the database server
         * File path where *.sqlaudit files are located
 
-    **NOTE:** While creating input on DB connect app, use the following search to read the logs from *.sqlaudit files.
-
-    ```
-    SELECT *
-    FROM sys.fn_get_audit_file(
-    '<<FILE_PATH>>',
-    DEFAULT,
-    DEFAULT
-    )
-    ```
-    * Replace **<<FILE_PATH>>** with appropriate path where *.sqlaudit files are located.
+    * While creating input on DB connect app, follow the below steps:
+        1. Select the appropriate **Connection** form left hand side panel.
+        2. Add following search and run it.
+            ```
+            SELECT *
+            FROM sys.fn_get_audit_file(
+            '<<FILE_PATH>>',
+            DEFAULT,
+            DEFAULT
+            )
+            ```
+            * Replace **<<FILE_PATH>>** with appropriate path where *.sqlaudit files are located.
+        3. Once query runs successfully, select Type "Rising" on right hand side panel. (This step is required to get only latest data.)
+        4. After selecting type "Rising", follow the all steps mentioned on the right hand side panel and run the search and click on "Next".
+        5. Set appropriate index, source and sourcetype and execution frequency (interval after which input invokes everytime) and click on "Finish".
 
 * Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
 * Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
