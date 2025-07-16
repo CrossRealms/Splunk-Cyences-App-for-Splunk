@@ -24,20 +24,35 @@ The Cyences App has support following data collection mechanisms
 1. Window Application log using Splunk Add-on for Microsoft Windows (Recommended)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
-2. By reading **Audit table** or reading ***.sqlaudit** files using Splunk DB Connect app 
+2. By reading Audit table using Splunk DB Connect app 
     * [https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration](https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
-    * Details needed from DBA Team:
+    * Details needed from DBA Team to configure identity and connection on DB connect app:
         * IP Address or FQDN of DB server
         * Port number for DB server
-        * DB table name that contains Audit Trail data (Required only if you have to read logs from table)
+        * DB table name that contains Audit Trail data
         * Username & Password - Should have Readonly access to the Audit Trail Table in the DB
         * Default database name and Database name
         * Timezone on the database server
-        * File path where *.sqlaudit files are located (Required only if you have to read logs from files)
 
-    **NOTE:** While creating input on DB connect app, create appropriate MSSQL query to read the audit table. If you are reading *.sqlaudit file then use the following MSSQL search:
+
+* Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
+* Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
+* Make sure to use `mssql:audit` sourcetype when configuring the data input in DB Connect App.
+
+3. By reading ***.sqlaudit** files using Splunk DB Connect app.
+    * Audit logs stored in *.sqlaudit files are in binary format hence we can't read it using splunk monitor input and need to read it via DB connect app.
+
+    * Details needed from DBA Team to configure identity and connection on DB connect app:
+        * IP Address or FQDN of DB server
+        * Port number for DB server
+        * Username & Password - Should have permission as mentioned [here](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/sys-fn-get-audit-file-transact-sql?view=sql-server-ver17&tabs=sqlserver#permissions)
+        * Default Database name
+        * Timezone on the database server
+        * File path where *.sqlaudit files are located
+
+    **NOTE:** While creating input on DB connect app, use the following search to read the logs from *.sqlaudit files.
 
     ```
     SELECT *
@@ -54,7 +69,7 @@ The Cyences App has support following data collection mechanisms
 * Make sure to use `mssql:audit` sourcetype when configuring the data input in DB Connect App.
 
 
-3. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
+4. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
 
     1. Enable Audit Log: [https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs](https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs)
 
