@@ -24,18 +24,30 @@ The Cyences App has support following data collection mechanisms
 1. Window Application log using Splunk Add-on for Microsoft Windows (Recommended)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
-2. Audit table using Splunk DB Connect app 
+2. By reading **Audit table** or reading ***.sqlaudit** files using Splunk DB Connect app 
     * [https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration](https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
     * Details needed from DBA Team:
         * IP Address or FQDN of DB server
         * Port number for DB server
-        * DB table name that contains Audit Trail data
+        * DB table name that contains Audit Trail data (Required only if you have to read logs from table)
         * Username & Password - Should have Readonly access to the Audit Trail Table in the DB
         * Default database name and Database name
         * Timezone on the database server
+        * File path where *.sqlaudit files are located (Required only if you have to read logs from files)
 
+    **NOTE:** While creating input on DB connect app, create appropriate MSSQL query to read the audit table. If you are reading *.sqlaudit file then use the following MSSQL search:
+
+    ```
+    SELECT *
+    FROM sys.fn_get_audit_file(
+    '<<FILE_PATH>>',
+    DEFAULT,
+    DEFAULT
+    )
+    ```
+    * Replace **<<FILE_PATH>>** with appropriate path where *.sqlaudit files are located.
 
 * Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
 * Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
