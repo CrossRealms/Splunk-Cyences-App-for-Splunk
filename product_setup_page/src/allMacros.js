@@ -17,6 +17,7 @@ let allMacros = [
             {name: 'cs_customer_own_public_ips', description: "Provide comma separated list of customer own public IPs. Ex. (20.x.x.x, 120.x.x.x, 101.x.x.x) " },
             {name: 'cs_network_home_location_lat', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map" },
             {name: 'cs_network_home_location_lon', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map" },
+            {name: 'cs_basic_network_scanning_threshold', description: "Configure the threshold value for each host to visit different destination IPs and ports in an hour." },
         ]
     },
     {
