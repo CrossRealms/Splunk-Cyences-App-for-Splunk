@@ -57,8 +57,8 @@
       <default>*</default>
       <initialValue>*</initialValue>
       <choice value="*">All</choice>
-      <fieldForLabel>vendor_action</fieldForLabel>
-      <fieldForValue>vendor_action</fieldForValue>
+      <fieldForLabel>action_name</fieldForLabel>
+      <fieldForValue>action_name</fieldForValue>
       <search>
         <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields vendor_action, ACTION_NAME | eval action_name=coalesce(vendor_action,ACTION_NAME) | stats count by action_name</query>
         <earliest>$tkn_time.earliest$</earliest>
