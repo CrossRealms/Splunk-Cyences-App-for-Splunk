@@ -75,6 +75,7 @@
           <query>`ms_obj_changes_base_cat_customised("groupmembershipchanged")`
 | search $tkn_search_common|s$ $tkn_search_group_membership_changed|s$
 | `ms_obj_groupmembership_change_out`
+| search NOT group_obj_nm = "NA"
 | rename  group_obj_nm as "Target_Group",MSADGroupClass as "Class",msad_action AS "Action",member AS "Target Member",member_obj_lkp AS "Target Member Lookup",MSADGroupType as "Type",adminuser as "Admin User",MSADChanges as "Changes"
 | `cs_ad_group_membership_changed_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
