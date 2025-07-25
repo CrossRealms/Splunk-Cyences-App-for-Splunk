@@ -49,8 +49,8 @@ Instead of having to manually install Microsoft Sysmon on each and every Windows
 
 
 ### References
-*[https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 
-*[https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/](https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/) 
+* [https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon](https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon) 
+* [https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/](https://docs.splunksecurityessentials.com/data-onboarding-guides/microsoft-sysmon/) 
 
 
 **Note:** Sysmon data action field conflict detected, please look at **Troubleshooting > Sysmon data action field issue** section in the document to make sure your environment does not have the same issue.
