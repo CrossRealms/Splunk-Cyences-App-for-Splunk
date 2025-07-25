@@ -25,7 +25,8 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * Kaspersky
     * Office 365 Defender ATP
     * Sophos Endpoint Protection
-    * Windows Defender 
+    * Trendmicro
+    * Windows Defender
 
 * Cloud Tenancies
     * Amazon Web Services 
@@ -49,6 +50,8 @@ By default, the Cyences app provides a multitude of alerts and dashboards in the
     * F5 BIGIP
     * Cloudflare
     * Appgate SDP
+    * Imperva WAF
+    * Imperva DAM
 
 * Vulnerability Scanners
     * CrowdStrike Spotlight

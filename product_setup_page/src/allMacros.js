@@ -17,6 +17,19 @@ let allMacros = [
             {name: 'cs_customer_own_public_ips', description: "Provide comma separated list of customer own public IPs. Ex. (20.x.x.x, 120.x.x.x, 101.x.x.x) " },
             {name: 'cs_network_home_location_lat', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this latitude on the map" },
             {name: 'cs_network_home_location_lon', description: "Private IP's (10.x.x.x, 192.168.x.x, 172.16.x.x) will be displayed at this longitude on the map" },
+            {name: 'cs_basic_network_scanning_threshold', description: "Configure the threshold value for each host to visit different destination IPs and ports in an hour." },
+        ]
+    },
+    {
+        section: 'Imperva WAF',
+        macros: [
+            {name: 'cs_imperva_waf_attack_from_source_threshold'}
+        ]
+    },
+    {
+        section: 'Imperva DAM',
+        macros: [
+            {name: 'cs_imperva_dam_multiple_failed_login_threshold'}
         ]
     },
     {
@@ -34,7 +47,6 @@ let allMacros = [
         section: 'Windows & AD',
         macros: [
             { name: 'cs_ad_bulk_user_creation_deletion_count_limit' },
-            { name: 'cs_ad_password_change_outside_working_hour_definition', description: 'Definition for outside working hours (default setting is set to the weekend plus any weekday before 6am and after 7pm)' },
             { name: 'cs_ad_important_role', description: 'List of important roles. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_policy', description: 'List of important policies. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_user', description: 'List of important users. (e.g. "val1","val2")' },
@@ -115,7 +127,7 @@ let allMacros = [
             { name: 'cs_authentication_new_location_login_pct_limit' },
             { name: 'cs_authentication_vpn_session_duration_limit' },
         ]
-    },
+    }
 ];
 
 export default allMacros;
