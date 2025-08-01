@@ -16,7 +16,17 @@ This data is required for Active Directory related alerts/dashboards (Group Chan
 
 Refer to `A-TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
-Reference for admon input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
+Reference for add-on input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
+
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Windows | 742 | Required | Required | Required | - |
+
+**Note** : 
+- Create an index named **wineventlog, windows, msad** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+- Configure the index value `index IN (wineventlog, windows, msad)` for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 
 ## Estimated Data Size
@@ -36,22 +46,25 @@ Splunkbase Download:
 Installation Guide: 
 [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) 
 
-## How to Install and Configure the Splunk Add-on for Microsoft Office 365: 
+### App Installation
 
-1. Install the Add-on on the Heavy Forwarder. 
-    * [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Install). 
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Splunk Add-on for Microsoft Office 365 | 4055 | Required | Required | Required | - |
 
-2. Configure the Add-on on the Heavy Forwarder. 
+**Note** : Create an index named **0365** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+## How to Configure the Splunk Add-on for Microsoft Office 365: 
+
+1. Configure the Add-on on the Heavy Forwarder. 
     * Configure Integration Application: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureappinAzureAD). 
     * Configure Tenant: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configuretenant). 
 
-3. Configure the Inputs on the Heavy Forwarder. 
+2. Configure the Inputs on the Heavy Forwarder. 
     * Configure Management Activity input: [https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Configureinputs) and [https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI](https://docs.splunk.com/Documentation/AddOns/released/MSO365/ConfigureinputsmanagementAPI). 
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 dashboards to work only the input data for Management Activity is required. 
-
-4. Install the Add-on on the Search Head. 
 
 ## Estimated Data Size
 It consumes around 80-100MB of license usage per day. 
