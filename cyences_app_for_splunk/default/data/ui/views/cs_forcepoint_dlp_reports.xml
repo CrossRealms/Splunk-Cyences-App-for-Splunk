@@ -62,10 +62,11 @@
         <search>
           <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" Action=Blocked
 | eval Severity = lower(Severity)
+| `cs_user_privilege_mapping(user)`
 | search SourceIP="$tkn_source_ip$" Source="$tkn_user$" Severity="$tkn_severity$"
 | sort -_time
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, Severity, MessageDetails, Username, Source, SourceIP, Channel, Destination, Attachment
+| table event_time, Severity, MessageDetails, Username, Source, SourceIP, Channel, Destination, Attachment, is_privileged_user
 | rename Username as UserID , Source as Username
 | fillnull value="-"</query>
           <earliest>$timerange.earliest$</earliest>
