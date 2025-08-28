@@ -12,7 +12,7 @@ The Cyences Add-on for Splunk is a Splunk Add-on/App to provide some custom inpu
 * Build - 1
 * Creates Index - False
 * Compatible with:
-   * Splunk Enterprise version: 10.0, 9.4, 9.3, 9.2, 9.1, 9.0, 8.2
+   * Splunk Enterprise version: 10.0, 9.4, 9.3, 9.2, 9.1, 9.0
    * OS: Platform Independent
 
 
