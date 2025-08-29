@@ -19,7 +19,14 @@ Splunkbase Download App:
 Installation and Configuration Guide:
 [https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html](https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html)
 
-**Note:** Configure the index value for **VPN Data** under the **Data Source Macros** section in Cyences' Configuration page.
+### App Installation
+
+| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
+| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| Cisco Endpoint Security Analytics (CESA) Add-On for Splunk | 4221 | Required | Required | Required | - |
+| Cisco Endpoint Security Analytics (CESA) | 2992 | Required | Not Required | Not Required | - |
+
+**Note** : Create an index **VPN Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 [comment]: <> (TODO_LATER: add estimated data size)
 
