@@ -79,7 +79,7 @@
   </row>
   <row>
     <panel>
-      <title>Blocked Events</title>
+      <title>Forcepoint DLP Events</title>
       <input type="text" token="tkn_source_ip" searchWhenChanged="true">
         <label>Source IP</label>
         <default>*</default>
@@ -104,12 +104,24 @@
           <latest>$timerange.latest$</latest>
         </search>
       </input>
+      <input type="dropdown" token="tkn_action" searchWhenChanged="true">
+        <label>Action</label>
+        <choice value="*">All</choice>
+        <default>Blocked</default>
+        <fieldForLabel>Action</fieldForLabel>
+        <fieldForValue>Action</fieldForValue>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | dedup Action | table Action</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
       <table>
         <search>
-          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" Action=Blocked
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" Action="$tkn_action$" SourceIP="$tkn_source_ip$" Source="$tkn_user$"
 | eval Severity = lower(Severity)
+| search Severity="$tkn_severity$"
 | `cs_user_privilege_mapping(user)`
-| search SourceIP="$tkn_source_ip$" Source="$tkn_user$" Severity="$tkn_severity$"
 | sort -_time
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time, Severity, MessageDetails, Username, Source, SourceIP, Channel, Destination, Attachment, is_privileged_user
