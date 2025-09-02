@@ -36,7 +36,7 @@
       <title>DLP events over Time</title>
       <chart>
         <search>
-          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | timechart count span=1d</query>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | timechart count</query>
           <earliest>$timerange.earliest$</earliest>
           <latest>$timerange.latest$</latest>
         </search>

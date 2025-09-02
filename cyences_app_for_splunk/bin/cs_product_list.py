@@ -901,7 +901,7 @@ PRODUCTS = [
         "name": "Forcepoint DLP",
         "app_dependencies": [
             {
-                "label": "Splunk Add-on for Forcepoint DLP",
+                "label": "Forcepoint DLP",
                 "link": "https://splunkbase.splunk.com/app/6507"
             }
         ],
