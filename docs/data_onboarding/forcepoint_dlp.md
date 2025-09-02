@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Forcepoint DLP
-permalink: /data_onboarding/duo/
+permalink: /data_onboarding/forcepoint_dlp/
 nav_order: 16
 parent: Data Onboarding
 ---
@@ -10,7 +10,7 @@ parent: Data Onboarding
 
 The Forcepoint DLP Add-on is required to collect the data.
 
-Splunkbase Download: 
+* Splunkbase Download: 
 [https://splunkbase.splunk.com/app/6507](https://splunkbase.splunk.com/app/6507) 
 
 * Forcepoint DLP logs can be forwarded via UDP/TCP : [steps to perform on forcepoint portal](https://dnif.it/kb/device-integration/forcepoint-dlp/)
@@ -22,3 +22,7 @@ Splunkbase Download:
 | Forcepoint DLP | 6507 | Required | Required | Required | - |
 
 **Note** : Create an index named **forcepoint_dlp** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+
+### Estimated Data Size
+
+TODO
