@@ -1,0 +1,141 @@
+<form version="1.1" theme="dark">
+  <label>Forcepoint DLP</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Forcepoint DLP</set>
+  </init>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange">
+        <label>Time</label>
+        <default>
+            <earliest>-24h@h</earliest>
+            <latest>now</latest>
+        </default>
+    </input>
+  </fieldset>
+   <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/6507/" target="_blank">Splunk Add-on for Forcepoint DLP</a> for collecting Forcepoint DLP data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DLP events over Time</title>
+      <chart>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | timechart count</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>DLP events by Action</title>
+      <chart>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | stats count by Action</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>DLP events by User</title>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | stats count by Source,Action | rename Source as User | xyseries User Action count</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.masterLegend">null</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">User</option>
+        <option name="charting.axisTitleY.text">Action</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Forcepoint DLP Events</title>
+      <input type="text" token="tkn_source_ip" searchWhenChanged="true">
+        <label>Source IP</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_user" searchWhenChanged="true">
+        <label>User</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_severity" searchWhenChanged="true">
+        <label>Severity</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>Severity</fieldForLabel>
+        <fieldForValue>Severity</fieldForValue>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | eval Severity = lower(Severity) | dedup Severity | table Severity</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_action" searchWhenChanged="true">
+        <label>Action</label>
+        <choice value="*">All</choice>
+        <default>Blocked</default>
+        <fieldForLabel>Action</fieldForLabel>
+        <fieldForValue>Action</fieldForValue>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" | dedup Action | table Action</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_forcepoint_dlp` sourcetype="FP_DLP" Action="$tkn_action$" SourceIP="$tkn_source_ip$" Source="$tkn_user$"
+| eval Severity = lower(Severity)
+| search Severity="$tkn_severity$"
+| `cs_user_privilege_mapping(user)`
+| sort -_time
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time, Severity, MessageDetails, Username, Source, SourceIP, Channel, Destination, Attachment, is_privileged_user
+| rename Username as UserID , Source as Username
+| fillnull value="-"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+      </table>
+    </panel>
+  </row>
+</form>

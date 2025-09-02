@@ -897,6 +897,25 @@ PRODUCTS = [
             }
         ],
     },
+    {
+        "name": "Forcepoint DLP",
+        "app_dependencies": [
+            {
+                "label": "Forcepoint DLP",
+                "link": "https://splunkbase.splunk.com/app/6507"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_forcepoint_dlp",
+                "label": "Forcepoint DLP Data",
+                "search_by": "sourcetype",
+                "search_values": "FP_DLP",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
 ]
 
 for product in PRODUCTS:

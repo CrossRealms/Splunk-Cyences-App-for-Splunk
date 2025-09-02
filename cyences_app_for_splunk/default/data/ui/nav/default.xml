@@ -43,6 +43,7 @@
     <view name="cs_linux_reports" /><!--Linux-->
     <view name="cs_vpn_reports" /><!--VPN-->
     <view name="cs_radius_authentication" /><!--Radius Authentication-->
+    <view name="cs_forcepoint_dlp_reports" /><!--Forcepoint DLP-->
   </collection>
   <collection label="Intelligence">
     <view name="cs_device_inventory_table" />
