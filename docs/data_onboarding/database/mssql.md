@@ -101,6 +101,10 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add-on for Microsoft Cloud Services](https://splunkbase.splunk.com/app/3110/) | Required | - | Required | - | [Enable Audit Log](https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs) & [Collect using Azure Event Hub input](https://splunk.github.io/splunk-add-on-for-microsoft-cloud-services/Configureeventhubs/) & * Use `mssql:audit:json` as sourcetype when creating input |
 
+* Important sourcetypes to be collected
+    * mssql:audit
+    * mssql:audit:json
+
 **Note** : Create an index named **mssql** or update the **cs_mssql** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 ## Estimated Data Size

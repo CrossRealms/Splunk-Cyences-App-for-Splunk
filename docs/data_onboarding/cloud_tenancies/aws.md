@@ -15,9 +15,11 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add-on for Amazon Web Services (AWS)](https://splunkbase.splunk.com/app/1876/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description) |
 
+* Important inputs to be configured
+    * Cloudtrail
+
 **Note**:
 * Create an index named **aws** or update the **cs_aws** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
-* Use both index=**aws** and index=**summary** for data collection.
 
 
 ## Estimated Data Size

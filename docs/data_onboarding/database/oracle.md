@@ -46,6 +46,10 @@ grand_parent: Data Onboarding
 * Details needed from DBA Team:
     * XML Log files path on the DB server.
 
+* Important sourcetypes to be collected
+    * oracle:audit:xml
+    * oracle:audit:unified
+
 **Note** : Create an index named **oracle** or update the **cs_oracle** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 

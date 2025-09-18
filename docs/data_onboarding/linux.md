@@ -10,17 +10,12 @@ parent: Data Onboarding
 
 Linux/Unix data is collected via the Splunk Add-on for Linux and Unix (*nix).  
 
-Splunkbase Download:
-[https://splunkbase.splunk.com/app/833/](https://splunkbase.splunk.com/app/833/) 
-
-Installation and Configuration Guide:
-[https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About](https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add-on for Linux and Unix | 833 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Linux and Unix](https://splunkbase.splunk.com/app/833/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/UnixLinux/About) |
+
 
 **Note** : Create an indexes named **os**  and **linux** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
@@ -28,14 +23,11 @@ Installation and Configuration Guide:
 
 We have created a specific shell script to collect information about which users have sudo privileges via a user list which has normal login privileges. And another script that collects information about groups on the Linux/Unix machines. Download the Cyences Add-on for Splunk to enable this feature.
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5659/](https://splunkbase.splunk.com/app/5659/) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Cyences Add-on for Splunk | 5659 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Cyences Add-on for Splunk](https://splunkbase.splunk.com/app/5659/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5659/) |
 
 **Note** : Create an index named **os** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
@@ -48,14 +40,23 @@ Splunkbase Download:
 
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Linux Auditd Technology Add-On | 4232 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Linux Auditd Technology Add-On](https://splunkbase.splunk.com/app/4232/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/4232/) |
 
 **Note** : 
 * Create an index named **auditd** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
  
 * Refer to `A-TA-linux_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
+
+* Important sourcetypes to be collected
+    * usersWithLoginPrivs
+    * cyences:linux:groups
+    * cyences:linux:users
+    * interfaces
+    * Unix:ListeningPorts
+    * Unix:Service
+    * Unix:Version
 
 
 ## Estimated Data Size

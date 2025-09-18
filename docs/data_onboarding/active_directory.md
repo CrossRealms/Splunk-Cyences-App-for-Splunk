@@ -10,19 +10,13 @@ parent: Data Onboarding
 
 ## **Windows Active Directory Data** 
 
-Use the Windows Add-on to collect Active Directory related logs [https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows).
+ ### App Installation
 
-This data is required for Active Directory related alerts/dashboards (Group Changes, Group Policy Changes, and User Changes) and it is only compatible with plain text formatted events. 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Windows](https://splunkbase.splunk.com/app/742/) | Required | - | - | Required (only for Windows) | [collect Active Directory related logs](https://docs.splunk.com/Documentation/WindowsAddOn/latest/User/AbouttheSplunkAdd-onforWindows) |
+| [A-TA-ad_inputs](https://github.com/CrossRealms/Cyences-Input-Apps) | - | - | - | Required (only for Windows) | [Reference for add-on input creation](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) |
 
-Refer to `A-TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
-
-Reference for add-on input creation:[https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory](https://docs.splunk.com/Documentation/Splunk/8.1.3/Data/MonitorActiveDirectory) 
-
-### App Installation
-
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add-on for Windows | 742 | Required | Required | Required | - |
 
 **Note** : 
 - Create an index named **wineventlog, windows, msad** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
@@ -38,19 +32,11 @@ Data size with updated stanzas:
 
 ## **Microsoft Office 365 Management Activities Data**
 
-The Splunk Add-on for Microsoft Office 365 will be required in order to collect management activity data. 
-
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/4055/](https://splunkbase.splunk.com/app/4055/) 
-
-Installation Guide: 
-[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Splunk Add-on for Microsoft Office 365 | 4055 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Microsoft Office 365](https://splunkbase.splunk.com/app/4055/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) |
 
 **Note** : Create an index named **0365** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
@@ -65,6 +51,17 @@ Installation Guide:
         * For the input use o365 as the index name.  
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 dashboards to work only the input data for Management Activity is required. 
+
+* Important sourcetypes to be collected
+    * WinEventLog:DFS Replication
+    * WinEventLog:Directory Service
+    * WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin
+    * MSAD:NT6:Netlogon
+    * MSAD:NT6:Replication
+    * MSAD:NT6:Health
+    * MSAD:NT6:SiteInfo
+    * windows:certstore:ca:issued
+    * ActiveDirectory
 
 ## Estimated Data Size
 It consumes around 80-100MB of license usage per day. 

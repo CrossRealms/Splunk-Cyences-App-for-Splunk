@@ -10,17 +10,11 @@ parent: Data Onboarding
 
 The Lansweeper Add-on for Splunk is required to collect information about the assets from Lansweeper. 
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5418/](https://splunkbase.splunk.com/app/5418/) 
-
-Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/5418/#/details](https://splunkbase.splunk.com/app/5418/#/details) 
-
 ### App Installation
 
-| App Title | App ID |  Search Head (etc/apps) | Indexer/Intermediate Forwarder (etc/manager-apps or etc/apps) | Heavy Forwarder (etc/apps) | Server / UF / Deployment Server (etc/deployment-apps) | 
-| --------- | ------ | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Lansweeper Add-on for Splunk | 5418 | Required | Required | Required | - |
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Lansweeper Add-on for Splunk](https://splunkbase.splunk.com/app/5418/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5418/#/details) |
 
 **Note** : Create an index named **lansweeper** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
