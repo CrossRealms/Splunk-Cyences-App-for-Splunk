@@ -8,12 +8,6 @@ parent: Data Onboarding
 
 ## **Forcepoint DLP Data**
 
-The Forcepoint DLP Add-on is required to collect the data.
-
-* Splunkbase Download: 
-[https://splunkbase.splunk.com/app/6507](https://splunkbase.splunk.com/app/6507) 
-
-
 ### App Installation
 
 | App |  Search Head | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
