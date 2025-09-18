@@ -20,6 +20,9 @@ The Forcepoint DLP Add-on is required to collect the data.
 | ---------  | ----------------------- | ------------------------------------------------------------- | -------------------------- | ----------------------------------------------------- | ------------------------ |
 | [Forcepoint DLP](https://splunkbase.splunk.com/app/6507/) | Required | - | Required | - | [Steps to perform on forcepoint portal to forward the DLP logs via UDP/TCP](https://dnif.it/kb/device-integration/forcepoint-dlp/)
 
+* Important sourcetypes to be collected
+    * FP_DLP
+
 **Note** : Create an index named **forcepoint_dlp** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ### Estimated Data Size
