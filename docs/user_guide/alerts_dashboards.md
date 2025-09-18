@@ -545,3 +545,12 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * DUO Alerts:
     * DUO - User is Locked Out
     * DUO - User Login Failure
+
+## Forcepoint DLP
+* Alerts:
+    * Forcepoint DLP - Blocked Events
+* Dashboard Panels:
+    * DLP events over Time
+    * DLP events by Action
+    * DLP events by User
+    * Forcepoint DLP Events
