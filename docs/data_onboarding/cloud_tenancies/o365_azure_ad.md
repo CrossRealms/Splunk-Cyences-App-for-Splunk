@@ -15,9 +15,9 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/3757/#/details) |
 
-* Important inputs to be configured:
-    * Microsoft Entra ID Audit
-    * Microsoft Entra ID Interactive Sign-ins
+#### Important inputs to be configured:
+* Microsoft Entra ID Audit
+* Microsoft Entra ID Interactive Sign-ins
 
 **Note** : Create an index named **azure** or update the **cs_azure** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 

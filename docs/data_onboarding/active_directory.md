@@ -52,16 +52,7 @@ Data size with updated stanzas:
         * The index can be renamed, but the default value for this app is o365. 
     * Enable other inputs based on your needs, but in order for Office 365 dashboards to work only the input data for Management Activity is required. 
 
-* Important sourcetypes to be collected
-    * WinEventLog:DFS Replication
-    * WinEventLog:Directory Service
-    * WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin
-    * MSAD:NT6:Netlogon
-    * MSAD:NT6:Replication
-    * MSAD:NT6:Health
-    * MSAD:NT6:SiteInfo
-    * windows:certstore:ca:issued
-    * ActiveDirectory
+* Refer to `A-TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
 ## Estimated Data Size
 It consumes around 80-100MB of license usage per day. 

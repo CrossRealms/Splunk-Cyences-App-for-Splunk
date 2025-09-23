@@ -14,6 +14,10 @@ parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5570/#/details) |
 
+#### Important inputs to be configured
+* CrowdStrike Device Flight Control JSON
+* CrowdStrike Device JSON
+
 **Note** : Create an index named **crowdstrike** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size

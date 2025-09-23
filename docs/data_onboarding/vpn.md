@@ -19,8 +19,6 @@ The Cisco Endpoint Security Analytics (CESA) Add-on and App are both required fo
 
 **Note** : Create an index **VPN Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
-[comment]: <> (TODO_LATER: add estimated data size)
-
 
 ## Fortinet FortiGate Data
 
@@ -34,3 +32,6 @@ If your organization is using GlobalProtect VPN, then the required data can be c
 ## Sophos Firewall VPN Data
 
 If your organization is using Sophos Firewall as VPN, then the required data can be collected via sophos firewall's logs. Refer to the [Data Onboarding > Network Devices > Sophos Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall) section for more information regarding the data collection process.
+
+## Estimated Data Size
+TODO

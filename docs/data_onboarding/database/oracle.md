@@ -41,14 +41,10 @@ grand_parent: Data Onboarding
 
 | App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
-| [Splunk Add-on for Oracle Database](https://splunkbase.splunk.com/app/1910/) | Required | - | Required | Required (On DB server) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs) |
+| [Splunk Add-on for Oracle Database](https://splunkbase.splunk.com/app/1910/) | Required | - | Required | Required (On DB server) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Oracle/Configuremonitorinputs)  & Make sure to use `oracle:audit:xml` sourcetype when configuring the data input. |
 
 * Details needed from DBA Team:
     * XML Log files path on the DB server.
-
-* Important sourcetypes to be collected
-    * oracle:audit:xml
-    * oracle:audit:unified
 
 **Note** : Create an index named **oracle** or update the **cs_oracle** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 

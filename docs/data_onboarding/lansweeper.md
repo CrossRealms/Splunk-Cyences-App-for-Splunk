@@ -16,6 +16,9 @@ The Lansweeper Add-on for Splunk is required to collect information about the as
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Lansweeper Add-on for Splunk](https://splunkbase.splunk.com/app/5418/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5418/#/details) |
 
+#### Important inputs to be configured
+* Lansweeper Input
+
 **Note** : Create an index named **lansweeper** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size

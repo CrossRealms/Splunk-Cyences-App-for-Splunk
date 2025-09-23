@@ -15,10 +15,10 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Fortinet FortiGate Add-On for Splunk](https://splunkbase.splunk.com/app/2846/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/2846/#/details) |
 
-* Important sourcetypes to be collected
-    * fortigate_event
-    * fortigate_traffic
-    * fortigate_utm
+#### Important sourcetypes to be collected
+* fortigate_event
+* fortigate_traffic
+* fortigate_utm
 
 **Note** : Create an index named **fortigate** or update the **cs_fortigate** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
@@ -61,4 +61,4 @@ grand_parent: Data Onboarding
 
 
 ## Estimated Data Size
-TOOD
+TODO

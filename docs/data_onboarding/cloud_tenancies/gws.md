@@ -15,11 +15,11 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add-on for Google Workspace](https://splunkbase.splunk.com/app/5556/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunk.github.io/splunk-add-on-for-google-workspace/) & [Google Side Configuration]({{ site.baseurl }}/data_onboarding/cloud_tenancies/gws/#google-side-configuration)|
 
-* Important inputs to be configured
-    * Activity Report
-    * Gmail Logs
-    * Gmail Logs Migrated
-    * Alert Center
+#### Important inputs to be configured
+* Activity Report
+* Gmail Logs
+* Gmail Logs Migrated
+* Alert Center
 
 **Note** : 
 

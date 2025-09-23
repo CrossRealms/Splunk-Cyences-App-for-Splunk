@@ -15,12 +15,12 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Palo Alto Add-on for Splunk](https://splunkbase.splunk.com/app/2757/) | Required | - | Required | - | [Installation Guide](https://splunk.paloaltonetworks.com/installation.html) & [Configuration Guide](https://pan.dev/splunk/docs/getting-data-in/) |
 
-* Important sourcetypes to be collected
-    * pan:config
-    * pan:globalprotect
-    * pan:system
-    * pan:threat
-    * pan:traffic
+#### Important sourcetypes to be collected
+* pan:config
+* pan:globalprotect
+* pan:system
+* pan:threat
+* pan:traffic
 
 **Note** : Create an index named **pan_log** or update the **cs_palo** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 

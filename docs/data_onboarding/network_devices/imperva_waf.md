@@ -15,8 +15,8 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add-on for Imperva SecureSphere WAF](https://splunkbase.splunk.com/app/2874/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/2874/#/details) |
 
-* Important sourcetypes to be collected
-    * imperva:waf
+#### Important sourcetypes to be collected
+* imperva:waf
 
 **Note** : Create an index named **imperva_waf** or update the **cs_imperva_waf** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 

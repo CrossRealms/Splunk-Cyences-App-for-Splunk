@@ -15,6 +15,9 @@ grand_parent: Data Onboarding
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Microsoft Graph Security Score Add-on for Splunk](https://splunkbase.splunk.com/app/5693/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5693/#/details) |
 
+#### Important inputs to be configured
+* Graph Security Score Input
+
 **Note** : Create an index named **o365** or update the **cs_azure_securityscore** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 

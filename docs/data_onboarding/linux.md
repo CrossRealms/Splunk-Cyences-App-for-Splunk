@@ -35,9 +35,6 @@ We have created a specific shell script to collect information about which users
 
 Auditd data is collected via **Linux Auditd Technology Add-On**
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/4232/](https://splunkbase.splunk.com/app/4232/) 
-
 ### App Installation
 
 | App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
@@ -48,16 +45,6 @@ Splunkbase Download:
 * Create an index named **auditd** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
  
 * Refer to `A-TA-linux_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
-
-* Important sourcetypes to be collected
-    * usersWithLoginPrivs
-    * cyences:linux:groups
-    * cyences:linux:users
-    * interfaces
-    * Unix:ListeningPorts
-    * Unix:Service
-    * Unix:Version
-
 
 ## Estimated Data Size
 The total data size with the updated stanzas are less than 100MB per Linux host per day. Exclude inputs that are not relevant to your environment.
