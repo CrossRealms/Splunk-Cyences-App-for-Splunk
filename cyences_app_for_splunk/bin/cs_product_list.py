@@ -204,7 +204,7 @@ PRODUCTS = [
                 "macro_name": "cs_trendmicro",
                 "label": "Trendmicro Data",
                 "search_by": "sourcetype",
-                "search_values": "xdr_oat,xdr_audit,xdr_alerts_wb",
+                "search_values": "xdr_oat,xdr_audit,xdr_alerts_wb,xdr_detection",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -892,6 +892,25 @@ PRODUCTS = [
                 "label": "DUO Data",
                 "search_by": "source",
                 "search_values": "duo",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Forcepoint DLP",
+        "app_dependencies": [
+            {
+                "label": "Forcepoint DLP",
+                "link": "https://splunkbase.splunk.com/app/6507"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_forcepoint_dlp",
+                "label": "Forcepoint DLP Data",
+                "search_by": "sourcetype",
+                "search_values": "FP_DLP",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }

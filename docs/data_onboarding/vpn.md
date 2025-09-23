@@ -29,6 +29,21 @@ If your organization uses FortiGate VPN, then the required data can be collected
 
 If your organization is using GlobalProtect VPN, then the required data can be collected via Palo Alto's logs. Refer to the [Data Onboarding > Network Devices > Palo Alto Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/palo_alto) section for more information regarding the data collection process.
 
+## OpenVPN Data from pfsense Firewall
+
+The Technology Add-on for pfSense is required for field extractions.
+
+Splunkbase Download Add-on:
+[https://splunkbase.splunk.com/app/1527](https://splunkbase.splunk.com/app/1527)
+
+**Note:** : 
+* Create an index named **pfsense** or update the **cs_pfsense** macro definition from Splunk UI (**Settings > Advanced Search > Search macros**) or update the **cs_vpn_indexes** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup > VPN**).
+* Create props.conf in `local folder` of `TA-pfsense` add-on and add following configuration in it to properly work field extractions.
+```
+[pfsense]
+SEDCMD-event_cleaner3 = 
+```
+
 ## Sophos Firewall VPN Data
 
 If your organization is using Sophos Firewall as VPN, then the required data can be collected via sophos firewall's logs. Refer to the [Data Onboarding > Network Devices > Sophos Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall) section for more information regarding the data collection process.
