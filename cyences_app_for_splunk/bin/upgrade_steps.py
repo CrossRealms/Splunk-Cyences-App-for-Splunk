@@ -380,6 +380,15 @@ def upgrade_5_3_0(session_key, logger):
 
     handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
 
+
+def upgrade_5_4_0(session_key, logger):
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+
+    LINUX_GROUP_LOOKUP_CLEANUP_SEARCH = '| outputlookup cs_linux_groups'
+    logger.info("Cleaning up the cs_linux_groups lookup as there was an issue with the invalid and missing entries for few groups.")
+    response = service.jobs.oneshot(LINUX_GROUP_LOOKUP_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert.
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -401,5 +410,7 @@ version_upgrade = (
     ("5.0.1", None),
     ("5.1.0", None),
     ("5.2.0", upgrade_5_2_0),
-    ("5.3.0", upgrade_5_3_0)
+    ("5.3.0", upgrade_5_3_0),
+# TODO - Uncomment following line on 5.4.0 release
+    # ("5.4.0", upgrade_5_4_0)
 )
