@@ -33,8 +33,6 @@ We have created a specific shell script to collect information about which users
 
 ### Collect AuditD logs from Linux
 
-Auditd data is collected via **Linux Auditd Technology Add-On**
-
 ### App Installation
 
 | App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |

@@ -38,9 +38,10 @@ Data size with updated stanzas:
 | ---- | ------ | ------------ | -------------- | -------------------- | ------ |
 | [Splunk Add-on for Microsoft Office 365](https://splunkbase.splunk.com/app/4055/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) |
 
-* Refer to `A-TA-ad_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
+#### Important inputs to be configured
+* Management Activity - Audit.AzureActiveDirectory
 
-**Note** : Create an index named **0365** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
+**Note** : Create an index named **o365** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 
 ## Estimated Data Size
