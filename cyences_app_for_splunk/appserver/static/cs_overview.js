@@ -52,6 +52,7 @@ require([
         { id: 'cs_user_inventory_table', title: 'User Inventory' },
         { id: 'cs_malicious_ip_list', title: 'Malicious IP List' },
         { id: 'cs_mssql', title: 'MSSQL' },
+        { id: 'cs_mysql', title: 'MySQL' },
         { id: 'cs_oracle', title: 'Oracle' },
         { id: 'cs_f5_bigip_asm', title: 'F5 BIGIP' },
         { id: 'cs_imperva_waf_reports', title: 'Imperva WAF'},
@@ -90,6 +91,7 @@ require([
         { token: "vulnerability", product: "Vulnerability" },
         { token: "db_oracle", product: "Oracle" },
         { token: "db_mssql", product: "MSSQL" },
+        { token: "db_mysql", product: "MySQL" },
         { token: "duo", product: "DUO" },
         { token: "forcepoint_dlp", product: "Forcepoint DLP"}
     ];
@@ -191,7 +193,7 @@ require([
         }
     });
 
-    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_trendmicro","tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_imperva_waf", "tbl_imperva_dam", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_duo", "tbl_forcepoint_dlp", "tbl_monthly_alerts", "tbl_other_alerts" ];
+    var tableIDs = ["tbl_authentication", "tbl_vpn", "tbl_radius_authentication", "tbl_crowdstrike_eventstream", "tbl_kaspersky", "tbl_sophos", "tbl_trendmicro","tbl_windows_defender", "tbl_o365_defender_atp", "tbl_aws", "tbl_gws", "tbl_o365", "tbl_email", "tbl_network_compromise", "tbl_cisco_ios", "tbl_fortigate", "tbl_palo_alto", "tbl_sophos_firewall", "tbl_cisco_meraki", "tbl_f5_bigip", "tbl_imperva_waf", "tbl_imperva_dam", "tbl_cloudflare", "tbl_windows", "tbl_ad_windows", "tbl_sysmon", "tbl_linux", "tbl_vulnerability", "tbl_db_oracle", "tbl_db_mssql", "tbl_db_mysql", "tbl_duo", "tbl_forcepoint_dlp", "tbl_monthly_alerts", "tbl_other_alerts" ];
     for (let i=0;i<tableIDs.length;i++) {
         var sh = mvc.Components.getInstance(tableIDs[i]);
         if(typeof(sh)!="undefined") {
