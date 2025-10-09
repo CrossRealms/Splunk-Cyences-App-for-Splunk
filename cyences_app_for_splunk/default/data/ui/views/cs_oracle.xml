@@ -144,7 +144,7 @@
         <search>
           <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") $tkn_host$
 | eval schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure")
-| fillnull value="-" user object_name
+| fillnull value="-" user object_name object_type
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
 | `cs_human_readable_time_format(_time, event_time)`
 | rename vendor_action as action_name, DB_UNIQUE_NAME as database_name, DATABASE_USER as db_user
