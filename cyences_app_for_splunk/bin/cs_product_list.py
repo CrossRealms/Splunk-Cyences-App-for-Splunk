@@ -882,16 +882,16 @@ PRODUCTS = [
         "name": "DUO",
         "app_dependencies": [
             {
-                "label": "Duo Security",
-                "link": "https://splunkbase.splunk.com/app/3504/"
+                "label": "Cisco Security Cloud",
+                "link": "https://splunkbase.splunk.com/app/7404/"
             }
         ],
         "macro_configurations": [
             {
                 "macro_name": "cs_duo",
                 "label": "DUO Data",
-                "search_by": "source",
-                "search_values": "duo",
+                "search_by": "sourcetype",
+                "search_values": "cisco:duo:authentication",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
