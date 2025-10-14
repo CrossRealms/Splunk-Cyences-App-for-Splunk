@@ -16,8 +16,10 @@ There are several security related alerts to choose from and they are all locate
 * Alerts:
     * Authentication - Bruteforce Attempt for a User
     * Authentication - Bruteforce Attempt from a Source
+    * Authentication - Bruteforce Attempt for the Destination
     * Authentication - Excessive Failed VPN Logins for a User
     * Authentication - Excessive Failed VPN Logins from a Source
+    * Authentication - Excessive Failed VPN Logins for the Destination
     * Authentication - Long Running VPN Session Disconnected
     * Authentication - Successful VPN Login From Unusual Country
     * Authentication - VPN Login Attempts Outside Working Hours
@@ -376,6 +378,7 @@ Dashboard panels:
     * Windows - Event Logging Service Shut Down
     * Windows - Disable or Uninstall Software or Agent
     * Windows - Shared Network Object Accessed with Privilege
+    * Windows - Multiple Failed Logins by User
 * Dashboard panels:
     * Successful Login Events
     * Failed Login Attempts by User
@@ -407,6 +410,7 @@ Dashboard panels:
     * AD - User Locked Out
     * AD - Login Failure Due to Password Expired
     * AD - Login Failure Due To Credential Revoked
+    * AD - User Account Disabled
 * Dashboard panels:
     * AD - Group Changed
     * AD - Group Membership Changed
@@ -545,3 +549,12 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 * DUO Alerts:
     * DUO - User is Locked Out
     * DUO - User Login Failure
+
+## Forcepoint DLP
+* Alerts:
+    * Forcepoint DLP - Blocked Events
+* Dashboard panels:
+    * DLP events over Time
+    * DLP events by Action
+    * DLP events by User
+    * Forcepoint DLP Events
