@@ -396,6 +396,9 @@ def upgrade_5_4_0(session_key, logger):
             "new_alert_name": "Forcepoint DLP - Blocked Events"
         },
         {
+            "new_alert_name": "Authentication - Bruteforce Attempt for the Destination"
+        },
+        {
             "new_alert_name": "Authentication - Excessive Failed VPN Logins for the Destination"
         },
         {
