@@ -59,4 +59,4 @@ has_children: true
 ## Upgrade Guide from 5.3.0 to 5.4.0
 
 * Onboard Forcepoint DLP logs to utilize the related alerts. For more details, refer to [Forcepoint DLP Data Onboarding]({{ site.baseurl }}/data_onboarding/antivirus_antimalware/forcepoint_dlp)
-* Migrate to new cisco app [Cisco Security Cloud](https://splunkbase.splunk.com/app/7404) in order to collect DUO data as older app [Duo Splunk Connector](https://splunkbase.splunk.com/app/3504) is deprecated.
+* Migrate to new cisco app [Cisco Security Cloud](https://splunkbase.splunk.com/app/7404) in order to collect DUO data as older app [Duo Splunk Connector](https://splunkbase.splunk.com/app/3504) is deprecated. For more details, refer to [DUO Data Onboarding]({{ site.baseurl }}/data_onboarding/duo/)
