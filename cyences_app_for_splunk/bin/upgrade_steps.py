@@ -12,7 +12,7 @@ def update_new_filter_macro_value_with_old_macro_value(conf_manager, logger, old
     try:
         old_macro_definition = conf_manager.get_macro(old_macro_name)
         conf_manager.update_macro(new_macro_name, {"definition": old_macro_definition})
-        logger.info("Old macro ({}) value has been successfully migrated to the filter macro of the alert={} ".format(old_macro_name, new_alert_name))
+        logger.info("Old macro ({}) value has been successfully migrated to the new filter macro={} ".format(old_macro_name, new_macro_name))
     except:
         logger.info("Old macro ({}) value does not exist in the user environment, skipping the upgrade step.".format(old_macro_name))
 
@@ -368,6 +368,18 @@ def upgrade_5_2_0(session_key, logger):
     handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
 
 
+def upgrade_5_3_0(session_key, logger):
+    conf_manager = cs_utils.ConfigHandler(logger, session_key)
+
+    alert_and_filter_macro_changes = [
+        {
+            "old_macro_name": "cs_ad_password_change_outside_working_hour_definition",
+            "new_macro_name": "cs_outside_working_hour_definition",
+        }
+    ]
+
+    handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert.
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -388,5 +400,6 @@ version_upgrade = (
     ("5.0.0", upgrade_5_0_0),
     ("5.0.1", None),
     ("5.1.0", None),
-    ("5.2.0", upgrade_5_2_0)
+    ("5.2.0", upgrade_5_2_0),
+    ("5.3.0", upgrade_5_3_0)
 )

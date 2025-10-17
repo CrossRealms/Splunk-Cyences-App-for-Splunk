@@ -24,11 +24,68 @@ The Cyences App has support following data collection mechanisms
 1. Window Application log using Splunk Add-on for Microsoft Windows (Recommended)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
-2. Audit table using Splunk DB Connect app 
+2. By reading Audit table using Splunk DB Connect app 
     * [https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration](https://docs.splunk.com/Documentation/AddOns/released/MSSQLServer/SQLServerconfiguration)
     * [https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx](https://www.ultimatewindowssecurity.com/sqlserver/auditlog/auditobject.aspx)
 
-3. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
+    * Details needed from DBA Team to configure identity and connection on DB connect app:
+        * IP Address or FQDN of DB server
+        * Port number for DB server
+        * DB table name that contains Audit Trail data
+        * Username & Password - Should have Readonly access to the Audit Trail Table in the DB
+        * Default database name and Database name
+        * Timezone on the database server
+
+    * While creating input on DB connect app, follow the below steps:
+        1. Select the appropriate **Connection** form left hand side panel.
+        2. Try to build query by selecting  Catalog, Schema and Table values from dropdown OR write query manually as mentioned below and run it.
+            ```
+            SELECT *
+            FROM <<TABLE>>;
+            ```
+            * Replace **<<TABLE>>** with table name.
+        3. Once query runs successfully, select Type "Rising" on right hand side panel. (This step is required to get only latest data.)
+        4. After selecting type "Rising", follow the all steps mentioned on the right hand side panel and run the search and click on "Next".
+        5. Set appropriate index, source and sourcetype and execution frequency (interval after which input invokes everytime) and click on "Finish".
+
+
+* Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
+* Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
+* Make sure to use `mssql:audit` sourcetype when configuring the data input in DB Connect App.
+
+3. By reading ***.sqlaudit** files using Splunk DB Connect app.
+    * Audit logs stored in *.sqlaudit files are in binary format hence we can't read it using splunk monitor input and need to read it via DB connect app.
+
+    * Details needed from DBA Team to configure identity and connection on DB connect app:
+        * IP Address or FQDN of DB server
+        * Port number for DB server
+        * Username & Password - Should have permission as mentioned [here](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/sys-fn-get-audit-file-transact-sql?view=sql-server-ver17&tabs=sqlserver#permissions)
+        * Default Database name
+        * Timezone on the database server
+        * File path where *.sqlaudit files are located
+
+    * While creating input on DB connect app, follow the below steps:
+        1. Select the appropriate **Connection** form left hand side panel.
+        2. Add following search and run it.
+            ```
+            SELECT *
+            FROM sys.fn_get_audit_file(
+            '<<FILE_PATH>>',
+            DEFAULT,
+            DEFAULT
+            )
+            ```
+            * Replace **<<FILE_PATH>>** with appropriate path where *.sqlaudit files are located.
+        3. Once query runs successfully, select Type "Rising" on right hand side panel. (This step is required to get only latest data.)
+        4. After selecting type "Rising", follow the all steps mentioned on the right hand side panel and run the search and click on "Next".
+        5. Set appropriate index, source and sourcetype and execution frequency (interval after which input invokes everytime) and click on "Finish".
+
+* Make sure that you have installed `Splunk_JDBC_mssql` Add-on [https://splunkbase.splunk.com/app/6150](https://splunkbase.splunk.com/app/6150) on your HF (where DB connect is installed). This is requirement for DB Connect App for database driver availability for Oracle.
+* Make sure that you have installed `Splunk_TA_microsoft-sqlserver` Add-on [https://splunkbase.splunk.com/app/2648](https://splunkbase.splunk.com/app/2648) on both your HF (where DB connect is installed) & on the SH.
+* Make sure to use `mssql:audit` sourcetype when configuring the data input in DB Connect App.
+
+
+4. Azure MSSQL using Splunk Add-on for Microsoft Cloud Services
 
     1. Enable Audit Log: [https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs](https://learn.microsoft.com/en-us/azure/mysql/single-server/concepts-audit-logs)
 

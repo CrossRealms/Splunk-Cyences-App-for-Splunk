@@ -10,6 +10,7 @@
       <view name="cs_o365_defender_atp" /><!--Office 365 Defender ATP-->
       <view name="cs_sophos_reports" /><!--Sophos Endpoint Protection -->
       <view name="cs_windows_defender_reports" /><!--Windows Defender-->
+      <view name="cs_trendmicro_reports"/><!--Trendmicro-->
     </collection>
     <collection label="Cloud Tenancies">
       <view name="cs_aws_user_activity" /><!--AWS-->
@@ -27,6 +28,8 @@
       <view name="cs_paloalto_firewall_reports" /><!--Palo Alto-->
       <view name="cs_sophos_firewall" /><!--Sophos Firewall-->
       <view name="cs_cisco_meraki" /><!--Cisco Meraki-->
+      <view name="cs_imperva_waf_reports"/><!--Imperva WAF-->
+      <view name="cs_imperva_dam_reports"/><!--Imperva DAM-->
     </collection>
     <collection label="Windows">
       <view name="cs_windows_reports" /><!--Windows-->
@@ -40,6 +43,7 @@
     <view name="cs_linux_reports" /><!--Linux-->
     <view name="cs_vpn_reports" /><!--VPN-->
     <view name="cs_radius_authentication" /><!--Radius Authentication-->
+    <view name="cs_forcepoint_dlp_reports" /><!--Forcepoint DLP-->
   </collection>
   <collection label="Intelligence">
     <view name="cs_device_inventory_table" />

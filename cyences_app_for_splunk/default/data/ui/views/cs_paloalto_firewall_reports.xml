@@ -75,6 +75,30 @@
   </row>
   <row>
     <panel>
+      <title>Palo Alto Configuration Changes</title>
+      <table>
+        <search>
+          <query>`cs_palo` sourcetype=pan:config
+| `cs_human_readable_time_format(_time,event_time)`
+| table event_time dvc user command configuration_path
+| rename command as action</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>System Alerts and Threats</title>
       <input type="multiselect" token="tkn_threat_severity">
         <label>Severity</label>

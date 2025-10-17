@@ -1,0 +1,242 @@
+<form version="1.1" theme="dark">
+  <label>Trendmicro</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">Trendmicro</set>
+  </init>
+  <fieldset submitButton="false">
+    <input type="time" token="timerange">
+        <label>Time</label>
+        <default>
+            <earliest>-24h@h</earliest>
+            <latest>now</latest>
+        </default>
+    </input>
+  </fieldset>
+   <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/5364/" target="_blank">Trend Vision One for Splunk (XDR)</a> for collecting Trendmicro data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <search id="audit_log_search">
+    <query>`cs_trendmicro` sourcetype="xdr_audit" | sort -loggedTime | eval event_time = strftime(strptime(loggedTime, "%FT%TZ"), "%F %T %Z") | `cs_user_privilege_mapping(user)` | table event_time user role access category activity result is_privileged_user</query>
+    <earliest>$timerange.earliest$</earliest>
+    <latest>$timerange.latest$</latest>
+  </search>
+  <row>
+    <panel>
+      <title>Obeserved Attack Techniques</title>
+      <input type="text" token="tkn_device_ip" searchWhenChanged="true">
+        <label>Device IP</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="text" token="tkn_device_name" searchWhenChanged="true">
+        <label>Device Name</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_severity" searchWhenChanged="true">
+        <label>Severity</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>Severity</fieldForLabel>
+        <fieldForValue>Severity</fieldForValue>
+        <search>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" | rename "filter.level" as Severity | dedup Severity | table Severity</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query>`cs_trendmicro` sourcetype="xdr_oat" 
+| search "endpoint.ips{}"="$tkn_device_ip$" "endpoint.name"="$tkn_device_name$" "filter.level"="$tkn_severity$"
+| sort -detectionTime
+| eval event_time = strftime(strptime(detectionTime, "%FT%TZ"), "%F %T %Z")
+| table event_time "filter.name" "detail.logonUser{}" "filter.level" "endpoint.ips{}" "Device Name" "filter.techniques{}" "filter.tactics{}" "detail.processFilePath"
+| rename "filter.name" as Detection, "detail.logonUser{}" as LoggedIn_User, "filter.level" as Severity, "endpoint.ips{}" as "Device IP", endpoint.name as "Device Name", "filter.techniques{}" as Techniques, "filter.tactics{}" as Tactics, "detail.processFilePath" as Processed_FilePath
+| fillnull value="-"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Audit Logs</title>
+      <input type="text" token="tkn_account" searchWhenChanged="true">
+        <label>Account</label>
+        <default>*</default>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+      </input>
+      <input type="dropdown" token="tkn_activity" searchWhenChanged="true">
+        <label>Activitiy</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>activity</fieldForLabel>
+        <fieldForValue>activity</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup activity | table activity</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_role" searchWhenChanged="true">
+        <label>Role</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>role</fieldForLabel>
+        <fieldForValue>role</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup role | table role</query>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_result" searchWhenChanged="true">
+        <label>Result</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>result</fieldForLabel>
+        <fieldForValue>result</fieldForValue>
+        <search base="audit_log_search">
+          <query> | dedup result | table result</query>
+        </search>
+      </input>
+      <table>
+        <search base="audit_log_search">
+          <query> | rename user AS Account, role AS Role, access AS Source, category AS Category, activity AS Activity, result AS Result
+| search Account="$tkn_account$" Activity="$tkn_activity$" Result="$tkn_result$" Role="$tkn_role$"
+          </query>
+        </search>
+        <option name="count">20</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">true</option>
+        <option name="totalsRow">false</option>
+        <format type="color" field="Result">
+          <colorPalette type="map">{"Unsuccessful":#B83C08,"Successful":#008000}</colorPalette>
+        </format>
+        <fields>["Logged","Account","Role","Source","Category","Activity","Result"]</fields>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Agent Removed by Non-Admin User</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remove agent" role != "Master Administrator"
+| `cs_user_privilege_mapping(user)`
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
+| table event_time "details.Deleted agents{}.hostname" "details.Deleted agents{}.xdrDeviceId" category result role user is_privileged_user
+| rename loggedTime as Loggeed, "details.Deleted agents{}.hostname" as "Device Name", "details.Deleted agents{}.xdrDeviceId" as "Device ID"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Ransomware Bahavior Detected</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_alerts_wb signature="Ransomware Behavior Detection" | dedup id | search status="Open"
+| eval event_strptime = strptime(createdDateTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
+| table app event_time dest incidentId score status</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Remote Shell Used by Non-Admin User</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity="Remote Shell" role != "Master Administrator"
+| `cs_user_privilege_mapping(user)`
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
+| table event_time "details.Activity" "details.Command{}" "details.Host name" role result user is_privileged_user
+| rename "details.Activity" as Activity, "details.Command{}" as Command, "details.Host name" as HostName</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Deletion of Critical Security Artifacts</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_audit activity IN ("Delete API Key", "Delete suspicious object", "Delete workspace")
+| `cs_user_privilege_mapping(user)`
+| eval event_strptime = strptime(loggedTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
+| fillnull value="-"
+| table event_time "details.Workspace guid" "details.Workspace name" "details.Name{}" "details.apikeyId.tid{}" "details.udso{}.*" role user result activity is_privileged_user
+| rename "details.Workspace guid" as "Workspace guid", "details.Workspace name" as "Workspace name", "details.Name{}" as api_key_name, "details.apikeyId.tid{}" as api_key_id, "details.udso{}.*" as "*"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Critical Observered Attack Technique Detected</title>
+        <search>
+          <query>`cs_trendmicro` sourcetype=xdr_oat filter.level IN (critical)
+| eval event_strptime = strptime(detectionTime, "%FT%TZ")
+| `cs_human_readable_time_format(event_strptime, event_time)`
+| table event_time "filter.name" "endpoint.ips{}" "endpoint.name" "filter.techniques{}" "filter.tactics{}" "detail.processFilePath"
+| rename filter.name as Detection, endpoint.name as "Device Name", detail.processFilePath as Processed_FilePath, "endpoint.ips{}" as "Device IP", "filter.techniques{}" as Techniques, "filter.tactics{}" as Tactics
+| fillnull value="-"</query>
+          <earliest>$timerange.earliest$</earliest>
+          <latest>$timerange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+</form>

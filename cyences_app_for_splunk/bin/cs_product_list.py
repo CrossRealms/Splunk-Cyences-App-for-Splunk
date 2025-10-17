@@ -1,5 +1,5 @@
 WINDOWS_SOURCES = '"*WinEventLog:Application","*WinEventLog:Security","*WinEventLog:System","powershell://generate_windows_update_logs"'
-WINDOWS_SOURCE_TYPES = '"Script:ListeningPorts","WinRegistry","WindowsFirewallStatus","windows:certstore:local","DhcpSrvLog","WindowsUpdateLog"'
+WINDOWS_SOURCE_TYPES = '"Script:ListeningPorts","WinRegistry","WindowsFirewallStatus","windows:certstore:local","DhcpSrvLog","WindowsUpdateLog","WMI:Version","WMI:InstalledUpdates"'
 WINDOWS_AD_SOURCES = '"WinEventLog:DFS Replication","WinEventLog:Directory Service","WinEventLog:Microsoft-AzureADPasswordProtection-DCAgent/Admin"'
 WINDOWS_AD_SOURCE_TYPES = '"MSAD:NT6:Netlogon","MSAD:NT6:Replication","MSAD:NT6:Health","MSAD:NT6:SiteInfo","windows:certstore:ca:issued","ActiveDirectory"'
 WINDOWS_DNS_SOURCES = '"WinEventLog:DNS Server"'
@@ -192,6 +192,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "Trendmicro",
+        "app_dependencies": [
+            {
+                "label": "Trend Vision One for Splunk (XDR)",
+                "link": "https://splunkbase.splunk.com/app/5364/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_trendmicro",
+                "label": "Trendmicro Data",
+                "search_by": "sourcetype",
+                "search_values": "xdr_oat,xdr_audit,xdr_alerts_wb,xdr_detection",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Windows Defender",
         "app_dependencies": [
             {
@@ -260,7 +279,7 @@ PRODUCTS = [
                 "link": "https://splunkbase.splunk.com/app/5693/"
             },
             {
-                "label": "Splunk Add on for Microsoft Azure",
+                "label": "Splunk Add-on for Microsoft Azure",
                 "link": "https://splunkbase.splunk.com/app/3757/"
             }
         ],
@@ -406,7 +425,7 @@ PRODUCTS = [
                 "macro_name": "cs_sophos_firewall",
                 "label": "Sophos Firewall Data",
                 "search_by": "sourcetype",
-                "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp",
+                "search_values": "sophos:xg:firewall,sophos:xg:heartbeat,sophos:xg:system_health,sophos:xg:atp,sophos:xg:idp,sophos:xg:event",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             },
@@ -453,6 +472,39 @@ PRODUCTS = [
                 "label": "F5 BIGIP Data",
                 "search_by": "sourcetype",
                 "search_values": "f5:bigip:syslog,f5:bigip:asm:syslog",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Imperva WAF",
+        "app_dependencies": [
+            {
+                "label": "Splunk Add-on for Imperva SecureSphere WAF",
+                "link": "https://splunkbase.splunk.com/app/2874/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_waf",
+                "label": "Imperva WAF Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:waf",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Imperva DAM",
+        "app_dependencies": [],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_imperva_dam",
+                "label": "Imperva DAM Data",
+                "search_by": "sourcetype",
+                "search_values": "imperva:dam:alerts,imperva:dam:internal_audit",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
@@ -830,16 +882,35 @@ PRODUCTS = [
         "name": "DUO",
         "app_dependencies": [
             {
-                "label": "Duo Security",
-                "link": "https://splunkbase.splunk.com/app/3504/"
+                "label": "Cisco Security Cloud",
+                "link": "https://splunkbase.splunk.com/app/7404/"
             }
         ],
         "macro_configurations": [
             {
                 "macro_name": "cs_duo",
                 "label": "DUO Data",
-                "search_by": "source",
-                "search_values": "duo",
+                "search_by": "sourcetype",
+                "search_values": "cisco:duo:authentication",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
+        "name": "Forcepoint DLP",
+        "app_dependencies": [
+            {
+                "label": "Forcepoint DLP",
+                "link": "https://splunkbase.splunk.com/app/6507"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_forcepoint_dlp",
+                "label": "Forcepoint DLP Data",
+                "search_by": "sourcetype",
+                "search_values": "FP_DLP",
                 "earliest_time": "-1d@d",
                 "latest_time": "now",
             }
