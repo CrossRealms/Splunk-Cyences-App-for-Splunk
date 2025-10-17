@@ -45,6 +45,9 @@ To uninstall the app, the users can follow the below steps:
 
 RELEASE NOTES
 -------------
+Version 1.1.4 (October 2025)
+* Added group input for AIX servers.
+
 Version 1.1.3 (August 2025)
 * Minor document changes.
 
@@ -76,6 +79,8 @@ CONTRIBUTORS
 ------------
 * Vatsal Jagani
 * Bhavik Bhalodia
+* Hardik Dholariya
+* Madhav Pandya
 
 
 SUPPORT
