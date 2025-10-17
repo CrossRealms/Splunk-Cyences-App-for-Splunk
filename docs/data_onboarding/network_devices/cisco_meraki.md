@@ -9,20 +9,20 @@ grand_parent: Data Onboarding
 
 ## **Cisco Meraki Data**
 
-The Splunk Add-on for Cisco Meraki is required to collect the data.
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5580](https://splunkbase.splunk.com/app/5580) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Cisco Meraki](https://splunkbase.splunk.com/app/5580/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon) |
 
-Installation Guide: 
-[https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon](https://docs.splunk.com/Documentation/AddOns/released/Meraki/AboutAddon) 
+#### Important inputs to be configured
+
+* Organization > Organization Security
+* Organization > Audit
 
 
-## How to Install and Configure the Cisco Meraki Add-on: 
+**Note** : Create an index named **cisco_meraki** or update the **cs_cisco_meraki** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-1. Install the Add-on on the Heavy Forwarder.
 
-2. Configure the Add-on on the Heavy Forwarder.
-    * Create an index named **cisco_meraki** or update the macro definition in Cyences' configuration page with your index.
-
-3. Install the Add-on on the Search Head.
+## Estimated Data Size
+TODO

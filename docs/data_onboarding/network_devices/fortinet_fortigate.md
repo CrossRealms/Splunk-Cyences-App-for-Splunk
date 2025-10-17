@@ -7,27 +7,21 @@ parent: Network Devices
 grand_parent: Data Onboarding
 ---
 
-## **Fortinet FortiGate VPN Data**
+## **Fortinet FortiGate Data**
 
-The Fortinet FortiGate Add-On for Splunk is required to collect firewall logs from FortiGate servers. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/2846/](https://splunkbase.splunk.com/app/2846/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Fortinet FortiGate Add-On for Splunk](https://splunkbase.splunk.com/app/2846/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/2846/#/details) |
 
-Installation Guide: 
-[https://splunkbase.splunk.com/app/2846/#/details](https://splunkbase.splunk.com/app/2846/#/details) 
+#### Important sourcetypes to be collected
+* fortigate_event
+* fortigate_traffic
+* fortigate_utm
 
-## How to Install and Configure the FortiGate Add-on: 
+**Note** : Create an index named **fortigate** or update the **cs_fortigate** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2846/#/details).
-    * Create an index named **fortigate** or update the macro definition in Cyences' configuration page.
-
-3. Install the Add-on on the Search Head.
-
-**Note:** Update the index value for **VPN data** macro definition in the **Data Source Macros** section in Cyences Configuration page.
 
 ## FortiGate VPN Support and issue with action field extraction 
 
@@ -64,3 +58,7 @@ Installation Guide:
 10. Enable the Acceleration, then click **Save**.  
 
     ![alt]({{ site.baseurl }}/assets/edit_acceleration.png)
+
+
+## Estimated Data Size
+TODO

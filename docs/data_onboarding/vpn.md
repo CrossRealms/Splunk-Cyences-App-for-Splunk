@@ -10,18 +10,14 @@ parent: Data Onboarding
 
 The Cisco Endpoint Security Analytics (CESA) Add-on and App are both required for Splunk administrators to analyze and correlate user and endpoint behavior in the Cyences app. 
 
-Splunkbase Download Add-on:
-[https://splunkbase.splunk.com/app/4221](https://splunkbase.splunk.com/app/4221)
+### App Installation
 
-Splunkbase Download App:
-[https://splunkbase.splunk.com/app/2992](https://splunkbase.splunk.com/app/2992)
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Cisco Endpoint Security Analytics (CESA) Add-On for Splunk](https://splunkbase.splunk.com/app/4221/) | Required | - | Required | - | [Installation and Configuration Guide](https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html) |
+| [Cisco Endpoint Security Analytics (CESA)](https://splunkbase.splunk.com/app/2992/) | Required | - | - | - | - |
 
-Installation and Configuration Guide:
-[https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html](https://www.cisco.com/c/en/us/support/docs/security/anyconnect-secure-mobility-client/200600-Install-and-Configure-Cisco-Network-Visi.html)
-
-**Note:** Configure the index value for **VPN Data** under the **Data Source Macros** section in Cyences' Configuration page.
-
-[comment]: <> (TODO_LATER: add estimated data size)
+**Note** : Create an index **VPN Data** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 
 ## Fortinet FortiGate Data
@@ -51,3 +47,6 @@ SEDCMD-event_cleaner3 =
 ## Sophos Firewall VPN Data
 
 If your organization is using Sophos Firewall as VPN, then the required data can be collected via sophos firewall's logs. Refer to the [Data Onboarding > Network Devices > Sophos Firewall Logs]({{ site.baseurl }}/data_onboarding/network_devices/sophos_firewall) section for more information regarding the data collection process.
+
+## Estimated Data Size
+TODO

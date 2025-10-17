@@ -8,20 +8,18 @@ parent: Data Onboarding
 
 ## **DUO Data**
 
-The Duo Security Add-on is required to collect the data.
+The Cisco Security Cloud Add-on is required to collect the data.
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/3504](https://splunkbase.splunk.com/app/3504) 
+### App Installation
 
-Installation Guide: 
-[https://duo.com/docs/splunkapp](https://duo.com/docs/splunkapp) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Cisoco Security Cloud](https://splunkbase.splunk.com/app/7404/) | Required | - | Required | - | [Installation and Configuration Guide](https://www.cisco.com/c/en/us/td/docs/security/cisco-secure-cloud-app/user-guide/cisco-security-cloud-user-guide/m_configure_cisco_products_in_cisco_security_cloud.html#configure-an-application) |
 
+#### Important inputs to be configured
+* Cisco DUO
 
-## How to Install and Configure the Duo Security Add-on: 
+**Note** : 
 
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Create an index named **duo** or update the macro definition in Cyences' configuration page with your index.
-
-3. Install the Add-on on the Search Head.
+* Configure Duo app from configuration page of the Cisco Security Cloud Add-on.
+* Create an index named **duo** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).

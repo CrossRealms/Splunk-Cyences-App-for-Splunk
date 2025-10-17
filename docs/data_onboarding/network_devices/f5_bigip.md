@@ -7,27 +7,20 @@ parent: Network Devices
 grand_parent: Data Onboarding
 ---
 
-## **F5 BIGIP Data**
+## **F5 BIGIP ASM Data**
 
-The **Splunk Add-on for F5 BIG-IP** addon is required to collect the F5 BIGIP ASM logs. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/2680/](https://splunkbase.splunk.com/app/2680/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for F5 BIG-IP](https://splunkbase.splunk.com/app/2680/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/2680/#/details) |
 
-Installation Guide: 
-[https://splunkbase.splunk.com/app/2680/#/details](https://splunkbase.splunk.com/app/2680/#/details) 
+#### Important sourcetypes to be collected
+* f5:bigip:syslog
+* f5:bigip:asm:syslog
+
+**Note** : Create an index named **f5** or update the **cs_f5_bigip** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 
-## How to Install and Configure the F5 BIGIP Addon: 
-
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [Reference](https://splunkbase.splunk.com/app/2680/#/details).
-    * Create an index named **f5** or update the macro definition in Cyences' configuration page.
-
-3. Install the Add-on on the Search Head.
-
-## Estimated Data Size  
-
-[comment]: <> (TODO_LATER: add estimated data size)
+## Estimated Data Size
+TODO

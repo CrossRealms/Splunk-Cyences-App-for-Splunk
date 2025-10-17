@@ -8,15 +8,17 @@ parent: Data Onboarding
 
 ## **CrowdStrike Devices Data**
 
-CrowdStrike Falcon Devices Technical Add-On is required to collect information about the assets from CrowdStrike. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/5570](https://splunkbase.splunk.com/app/5570) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [CrowdStrike Falcon Devices Technical Add-On](https://splunkbase.splunk.com/app/5570/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/5570/#/details) |
 
-Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/5570](https://splunkbase.splunk.com/app/5570) 
+#### Important inputs to be configured
+* CrowdStrike Device Flight Control JSON
+* CrowdStrike Device JSON
 
-**Note:** Use index=**crowdstrike** for data collection or update the macro definition for `cs_crowdstrike_devices` (**Settings > Configuration**).
+**Note** : Create an index named **crowdstrike** or update the macro definition in Cyences app configuration page (**Cyences Settings > Cyences App Configuration**).
 
 ## Estimated Data Size
 
