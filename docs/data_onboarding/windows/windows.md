@@ -16,9 +16,10 @@ has_children: true
 | [Splunk Add-on for Windows](https://splunkbase.splunk.com/app/742/) | Required | - | - | Required (only for Windows) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview) |
 | [A-TA-windows_inputs](https://github.com/CrossRealms/Cyences-Input-Apps) | - | - | - | Required (only for Windows) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview) |
 
+* Refer to this [link](https://sematext.com/docs/integration/how-to-enable-windows-security-logs/) to enable windows security logging for important policies.
 * Refer to `A-TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
-**Note** : Create an index named **wineventlog** **windows** and **msad** or update the **cs_windows_idx** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
+**Note** : Create an index named **wineventlog**, **windows** and **msad** or update the **cs_windows_idx** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 
 ### Estimated Data Size
