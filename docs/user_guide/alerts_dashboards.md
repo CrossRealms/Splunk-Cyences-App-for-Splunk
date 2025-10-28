@@ -553,7 +553,7 @@ The Lansweeper dashboard also provides information about whether the IT asset is
 ## Forcepoint DLP
 * Alerts:
     * Forcepoint DLP - Blocked Events
-* Dashboard panels:
+* Dashboard Panels:
     * DLP events over Time
     * DLP events by Action
     * DLP events by User
