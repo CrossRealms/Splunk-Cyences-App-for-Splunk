@@ -775,7 +775,7 @@ PRODUCTS = [
                 "macro_name": "cs_linux",
                 "label": "Linux Data",
                 "search_by": "sourcetype",
-                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit",
+                "search_values": "usersWithLoginPrivs,cyences:linux:groups,cyences:linux:users,cyences:aix:groups,interfaces,df,Unix:ListeningPorts,Unix:Service,Unix:Version,Unix:Uptime,hardware,linux_secure,linux:audit",
                 "earliest_time": "-2d@d",
                 "latest_time": "now",
             }

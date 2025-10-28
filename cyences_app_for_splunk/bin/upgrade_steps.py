@@ -380,6 +380,36 @@ def upgrade_5_3_0(session_key, logger):
 
     handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
 
+
+def upgrade_5_4_0(session_key, logger):
+    service = client.connect(token=session_key, app=cs_utils.APP_NAME)
+    conf_manager = cs_utils.ConfigHandler(logger, session_key)
+
+    LINUX_GROUP_LOOKUP_CLEANUP_SEARCH = '| outputlookup cs_linux_groups'
+    logger.info("Cleaning up the cs_linux_groups lookup as there was an issue with the invalid and missing entries for few groups.")
+    response = service.jobs.oneshot(LINUX_GROUP_LOOKUP_CLEANUP_SEARCH, output_mode="json", earliest_time='now', latest_time='+1m')
+    handle_results(response, logger)
+    
+    # New alerts are added
+    alert_and_filter_macro_changes = [
+        {
+            "new_alert_name": "Forcepoint DLP - Blocked Events"
+        },
+        {
+            "new_alert_name": "Authentication - Bruteforce Attempt for the Destination"
+        },
+        {
+            "new_alert_name": "Authentication - Excessive Failed VPN Logins for the Destination"
+        },
+        {
+            "new_alert_name": "AD - User Account Disabled"
+        },
+        {
+            "new_alert_name": "Windows - Multiple Failed Logins by User"
+        }
+    ]
+    handle_alerts_and_filter_macro_changes(conf_manager, logger, alert_and_filter_macro_changes)
+
 # Note:
 # When the new alerts are introduced, we need to manually check whether the product is enabled for that alert.
 # If product is enabled then, we need to manually enable the alert in the upgrade steps.
@@ -401,5 +431,6 @@ version_upgrade = (
     ("5.0.1", None),
     ("5.1.0", None),
     ("5.2.0", upgrade_5_2_0),
-    ("5.3.0", upgrade_5_3_0)
+    ("5.3.0", upgrade_5_3_0),
+    ("5.4.0", upgrade_5_4_0)
 )
