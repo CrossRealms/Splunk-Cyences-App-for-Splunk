@@ -10,6 +10,8 @@ has_children: true
 
 ## Version 5.4.0 (October 2025)
 
+**NOTE**: Make sure to upgrade TA-cyences (v1.1.4) before upgrading cyences to v5.4.0.
+
 * ### New Integration for Forcepoint DLP
     * #### Alerts
         * Forcepoint DLP - Blocked Events
