@@ -9,12 +9,17 @@ grand_parent: Data Onboarding
 
 ## Cisco IOS Data
 
-The Cisco Networks Add-on for Splunk Enterprise is required for the Cisco IOS logs collection. 
+### App Installation
 
-Splunkbase Download: [https://splunkbase.splunk.com/app/1467](https://splunkbase.splunk.com/app/1467)
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Cisco Networks Add-on for Splunk Enterprise](https://splunkbase.splunk.com/app/1467/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/1467/#/details) |
 
-Installation and Configuration Guide: [https://splunkbase.splunk.com/app/1467](https://splunkbase.splunk.com/app/1467)
+#### Important sourcetypes to be collected
+* cisco:ios
 
-**Note:** Configure the index value for **Cisco IOS Data** under the **Data Source Macros** section in Cyences Configuration page.
+**Note** : Create an index named **cisco_ios** or update the **cs_cisco_ios** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-[comment]: <> (TODO_LATER: add estimated data size)
+
+## Estimated Data Size
+TODO

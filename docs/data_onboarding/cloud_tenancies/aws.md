@@ -9,15 +9,18 @@ grand_parent: Data Onboarding
 
 ## **Amazon Web Services Data**
 
-The Splunk Add-on for Amazon Web Services is required to collect Amazon Web Services data. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/1876/](https://splunkbase.splunk.com/app/1876/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Amazon Web Services (AWS)](https://splunkbase.splunk.com/app/1876/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description) |
 
-Installation and Configuration Guide: 
-[https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description](https://docs.splunk.com/Documentation/AddOns/latest/AWS/Description) 
+#### Important inputs to be configured
+* Cloudtrail
 
-**Note:** Use both index=**aws** and index=**summary** for data collection or update the macro definition for `cs_aws` (**Settings > Configuration**). 
+**Note**:
+* Create an index named **aws** or update the **cs_aws** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
+
 
 ## Estimated Data Size
 

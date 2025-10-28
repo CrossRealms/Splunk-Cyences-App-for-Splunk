@@ -9,23 +9,21 @@ grand_parent: Data Onboarding
 
 ## **Palo Alto Firewall Data**
 
-The Palo Alto Add-on for Splunk is required to collect the firewall logs from the Palo Alto. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/2757/](https://splunkbase.splunk.com/app/2757/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Palo Alto Add-on for Splunk](https://splunkbase.splunk.com/app/2757/) | Required | - | Required | - | [Installation Guide](https://splunk.paloaltonetworks.com/installation.html) & [Configuration Guide](https://pan.dev/splunk/docs/getting-data-in/) |
 
-Installation Guide: 
-[https://splunk.paloaltonetworks.com/installation.html](https://splunk.paloaltonetworks.com/installation.html) 
+#### Important sourcetypes to be collected
+* pan:config
+* pan:globalprotect
+* pan:system
+* pan:threat
+* pan:traffic
 
-## How to Install and Configure the Palo Alto Add-on: 
+**Note** : Create an index named **pan_log** or update the **cs_palo** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-1. Install the Add-on on the Heavy Forwarder.
-
-2. Configure the Add-on on the Heavy Forwarder.
-    * Getting data into Splunk [https://splunk.paloaltonetworks.com/getting-data-in.html](https://splunk.paloaltonetworks.com/getting-data-in.html).
-    * Create an index named **pan_log** or update the macro definition in Cyences' configuration page.  
-
-3. Install the Add-on on the Search Head.
 
 ## Estimated Data Size  
 The Palo Alto Add-on consumes around 8-10GB of license usage per day. 

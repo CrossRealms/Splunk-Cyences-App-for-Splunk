@@ -9,19 +9,17 @@ grand_parent: Data Onboarding
 
 ## **O365 Azure Active Directory Data**
 
-The Splunk Add on for Microsoft Azure is required to collect the O365 Azure Active Directory related activities. 
+### App Installation
 
-Splunkbase Download: 
-[https://splunkbase.splunk.com/app/3757/](https://splunkbase.splunk.com/app/3757/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add on for Microsoft Azure](https://splunkbase.splunk.com/app/3757/) | Required | - | Required | - | [Installation and Configuration Guide](https://splunkbase.splunk.com/app/3757/#/details) |
 
-Installation and Configuration Guide: 
-[https://splunkbase.splunk.com/app/3757/#/details](https://splunkbase.splunk.com/app/3757/#/details) 
-
-Required inputs to be configured:
+#### Important inputs to be configured:
 * Microsoft Entra ID Audit
 * Microsoft Entra ID Interactive Sign-ins
 
-**Note:** Use index=**azure** for data collection or update the macro definition for `cs_azure` (**Settings > Configuration**).
+**Note** : Create an index named **azure** or update the **cs_azure** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 ## Estimated Data Size
 

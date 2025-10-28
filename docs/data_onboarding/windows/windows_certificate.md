@@ -9,12 +9,14 @@ grand_parent: Data Onboarding
 
 ## **Windows Certificate Store Data**
 
+### App Installation
 
-Configure the Windows Certificate Store Add-on to collect windows certificate store data. 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Windows Certificate Store Add-on for Splunk](https://splunkbase.splunk.com/app/7013/) | Required | - | - | Required (only for Windows) | [Installation Guide](https://splunkbase.splunk.com/app/7013/#/details) |
 
-Splunkbase Download:
-[https://splunkbase.splunk.com/app/7013](https://splunkbase.splunk.com/app/7013)
+**Note** : Create an index named **wincerts** or update the **cs_windows_cert_store_idx** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-Installation and Configuration Guide:
-[https://splunkbase.splunk.com/app/7013](https://splunkbase.splunk.com/app/7013)
 
+## Estimated Data Size
+TODO

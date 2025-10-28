@@ -9,17 +9,18 @@ has_children: true
 
 ## **Windows Data**
 
-Configure the Splunk Add-on for Windows to collect field extractions related to Active Directory and Windows data. 
+### App Installation
 
-Splunkbase Download:
-[https://splunkbase.splunk.com/app/742/](https://splunkbase.splunk.com/app/742/) 
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Windows](https://splunkbase.splunk.com/app/742/) | Required | - | - | Required (only for Windows) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview) |
+| [A-TA-windows_inputs](https://github.com/CrossRealms/Cyences-Input-Apps) | - | - | - | Required (only for Windows) | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview) |
 
-Installation and Configuration Guide:
-[https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview](https://docs.splunk.com/Documentation/AddOns/released/Windows/Installationoverview)
+* Refer to this [link](https://sematext.com/docs/integration/how-to-enable-windows-security-logs/) to enable windows security logging for important policies.
+* Refer to `A-TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
 
-Refer to `A-TA-windows_inputs` App on [this GitHub Repo](https://github.com/CrossRealms/Cyences-Input-Apps) for inputs.conf reference.
+**Note** : Create an index named **wineventlog**, **windows** and **msad** or update the **cs_windows_idx** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-**Note:** Configure the index value `index IN (wineventlog, windows, msad)` for both **WinEventLog Security Data** and **WinEventLog System Data** under the **Data Source Macros** section in Cyences' Configuration page.
 
 ### Estimated Data Size
 Data size with updated stanzas:

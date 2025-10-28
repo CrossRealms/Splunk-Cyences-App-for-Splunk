@@ -9,21 +9,20 @@ grand_parent: Data Onboarding
 
 ## **Microsoft Office 365 Data**
 
-The Splunk Add-on for Microsoft Office 365 is required to pull service status, service messages, management activity logs, and Message Trace (from the Add-on version 4.2.0) data from the Office 365 Management API. 
+### App Installation
 
-Splunkbase Download:
-[https://splunkbase.splunk.com/app/4055](https://splunkbase.splunk.com/app/4055)
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Microsoft Office 365](https://splunkbase.splunk.com/app/4055/) | Required | - | Required | - | [Installation and Configuration Guide](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps) |
 
-Installation and Configuration Guide:
-[https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps](https://docs.splunk.com/Documentation/AddOns/released/MSO365/Installationsteps)
-
-Required inputs to be configured (If input has "Content Type" dropdown then create input for each Content Type):
-* Management Activity
+#### Important inputs to be configured (If input has "Content Type" dropdown then create input for each Content Type):
+* Management Activity - Audit.AzureActiveDirectory, Audit.Exchange, Audit.SharePoint, Audit.General, DLP.All
 * Message Trace
-* Service Health & Communications
-* Cloud Application Security
+* Service Health & Communications - Service Health
 * Audit Logs
 
-**Note:** Configure the index value for **Office 365 Data** under the **Data Source Macros** section in Cyences' Configuration page.
+**Note** : Create an index named **o365** or update the **cs_o365** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-[comment]: <> (TODO_LATER: add estimated data size)
+
+## Estimated Data Size
+TODO

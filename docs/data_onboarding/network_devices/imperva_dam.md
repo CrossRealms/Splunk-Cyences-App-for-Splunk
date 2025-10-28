@@ -9,6 +9,13 @@ grand_parent: Data Onboarding
 
 ## **Imperva DAM Data**
 
+### App Installation
+* Not Required.
+
+#### Important sourcetypes to be collected
+* imperva:dam:alerts
+* imperva:dam:internal_audit
+
 **Note** : Create an index named **imperva_dam** or update the **cs_imperva_dam** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
 

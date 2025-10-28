@@ -11,8 +11,16 @@ grand_parent: Data Onboarding
 
 The Splunk Add-on for Microsoft Office 365 v4.2.0 supports Email Message Trace data collection
 
-Refer [Microsoft Office 365]({{ site.baseurl }}/data_onboarding/cloud_tenancies/microsoft_o365/) for data onboarding guide.
+### App Installation
 
-**Note:** Configure the index value for **Office 365 Data** under the **Data Source Macros** section in Cyences' Configuration page.
+| App |  Search Head  | Indexer | Heavy Forwarder | UF / Deployment Server | Additional Details |
+| ---- | ------ | ------------ | -------------- | -------------------- | ------ |
+| [Splunk Add-on for Microsoft Office 365](https://splunkbase.splunk.com/app/4055/) | Required | - | Required | - | Check [Microsoft Office 365 data onboarding]({{ site.baseurl }}/data_onboarding/cloud_tenancies/microsoft_o365/) |
 
-[comment]: <> (TODO_LATER: add estimated data size)
+#### Important inputs to be configured
+* Message Trace
+
+**Note** : Create an index named **o365** or update the **cs_o365** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
+
+## Estimated Data Size
+TODO
