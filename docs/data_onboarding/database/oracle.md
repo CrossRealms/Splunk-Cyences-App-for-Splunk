@@ -9,6 +9,8 @@ grand_parent: Data Onboarding
 
 ## **Oracle Data**
 
+* To utilize the Oracle alerts and dashboards, ensure that the database server is configured to log DDL (Data Definition Language) command activities, privileged activities, and database authentication events.
+
 ## The Cyences app supports following data collection mechanisms:
 
 ### 1. Unified auditing using Splunk DB Connect app (Recommended)

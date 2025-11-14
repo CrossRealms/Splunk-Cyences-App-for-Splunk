@@ -9,6 +9,8 @@ grand_parent: Data Onboarding
 
 ## **MSSQL Data**
 
+* To utilize the MSSQL alerts and dashboards, ensure that the database server is configured to log DDL (Data Definition Language) command activities, privileged activities, and database authentication events.
+
 ## The Cyences app supports following data collection mechanisms:
 
 ### 1. Window Application log using Splunk Add-on for Microsoft Windows (Recommended)
