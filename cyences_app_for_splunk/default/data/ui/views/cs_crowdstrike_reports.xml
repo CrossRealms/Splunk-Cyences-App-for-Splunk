@@ -60,9 +60,10 @@
       <title>Suspicious Activity or Malware Detected</title>
       <table>
         <search>
-          <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("DetectionSummaryEvent","EppDetectionSummaryEvent") action="allowed" $tkn_host$
+          <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("DetectionSummaryEvent","EppDetectionSummaryEvent") action="allowed"
 | `cs_user_privilege_mapping(event.UserName)`
 | eval cyences_severity = case('event.SeverityName'=="Critical" or is_privileged_user="Yes", "critical", 'event.SeverityName'=="High", "high", 'event.SeverityName'=="Medium", "medium", 'event.SeverityName'=="Low", "low", 'event.SeverityName'=="Informational" or 'event.SeverityName'=="Info", "info", 1==1, "medium") , Description = coalesce('event.DetectDesciption','event.Description'), DetectionName = coalesce('event.DetectName','event.Name'), ComputerName = coalesce('event.Hostname','event.ComputerName')
+| search $tkn_host$
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time, metadata.eventType, ComputerName, action, event.LocalIP, event.UserName, Description, DetectionName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, cyences_severity, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime, is_privileged_user
 | rename event.* as * , metadata.* as *
@@ -73,6 +74,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
@@ -95,6 +98,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
@@ -115,6 +120,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
@@ -137,6 +144,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
@@ -157,6 +166,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
@@ -177,6 +188,8 @@
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
