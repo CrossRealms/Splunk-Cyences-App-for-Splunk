@@ -25,7 +25,20 @@ This is a fantastic way to collect detailed information about your Windows endpo
 
 **Note** : Create an index named **epintel** or update the **cs_sysmon** macro definition from Cyences app configuration page (**Cyences Settings > Cyences App Configuration > Products Setup**).
 
-### Install and Maintain Sysmon on Windows Machines from Deployment Server
+### Sysmon Deploy Options
+
+User would have two option to install and upgrade Sysmon on their environment.
+
+1. Use Sysmon Deploy App mentioned above and install/upgrade Sysmon as well as maintain Sysmon configuration
+2. Use other automation or manual approach to maintain Sysmon and its configuration outside Splunk configuration management
+
+
+#### 1. Use Sysmon Deploy App - Deployed via Deployment Server (DS)
+
+**NOTE** - In order for this App to install Sysmon and maintain its configuration, Splunk UF must be running as Windows Local Account. But as of Splunk version 9.x.y Splunk UF installs by default with service account, so user needs to manually change it once on all Windows servers. 
+    * This can be done from `Services` > `Splunk Forwarder Service` > `Properties` > `Log On`
+    * And Change it to `Local System account`
+    * ![alt]({{ site.baseurl }}/assets/windows_uf_run_as.png)
 
 Instead of having to manually install Microsoft Sysmon on each and every Windows server in your environment, it would be optimal to install Sysmon on Windows machines via the Deployment Server (to learn more about the deployment server, click here). You can still manually install Sysmon, but that would be an exhaustive and time-consuming task if your environment contains tons of Windows servers.
 
