@@ -62,10 +62,9 @@
         <search>
           <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("DetectionSummaryEvent","EppDetectionSummaryEvent") action="allowed"
 | `cs_user_privilege_mapping(event.UserName)`
-| eval cyences_severity = case('event.SeverityName'=="Critical" or is_privileged_user="Yes", "critical", 'event.SeverityName'=="High", "high", 'event.SeverityName'=="Medium", "medium", 'event.SeverityName'=="Low", "low", 'event.SeverityName'=="Informational" or 'event.SeverityName'=="Info", "info", 1==1, "medium") , Description = coalesce('event.DetectDesciption','event.Description'), DetectionName = coalesce('event.DetectName','event.Name'), ComputerName = coalesce('event.Hostname','event.ComputerName')
 | search $tkn_host$
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, metadata.eventType, ComputerName, action, event.LocalIP, event.UserName, Description, DetectionName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, cyences_severity, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime, is_privileged_user
+| table event_time, metadata.eventType, ComputerName, action, event.LocalIP, event.UserName, Description, DetectionName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime, is_privileged_user
 | rename event.* as * , metadata.* as *
 | `cs_human_readable_time_format(ProcessStartTime)` | `cs_human_readable_time_format(ProcessEndTime)`
 | `cs_crowdstrike_malware_detected_alert_filter`</query>
@@ -86,10 +85,9 @@
         <search>
           <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("DetectionSummaryEvent","EppDetectionSummaryEvent") action="blocked"
 | `cs_user_privilege_mapping(event.UserName)`
-| eval cyences_severity = case('event.SeverityName'=="Critical" or is_privileged_user="Yes", "critical", 'event.SeverityName'=="High", "high", 'event.SeverityName'=="Medium", "medium", 'event.SeverityName'=="Low", "low", 'event.SeverityName'=="Informational" or 'event.SeverityName'=="Info", "info", 1==1, "medium") , Description = coalesce('event.DetectDesciption','event.Description'), DetectionName = coalesce('event.DetectName','event.Name'), ComputerName = coalesce('event.Hostname','event.ComputerName')
 | search $tkn_host$
 | `cs_human_readable_time_format(_time, event_time)`
-| table event_time, metadata.eventType, ComputerName, action, event.LocalIP, event.UserName, Description, DetectionName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, cyences_severity, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime, is_privileged_user
+| table event_time, metadata.eventType, ComputerName, action, event.LocalIP, event.UserName, Description, DetectionName, event.CommandLine, event.MD5String, event.SHA256String, event.ProcessId, event.PatternDispositionDescription, event.ParentCommandLine, event.Objective, event.DetectId, event.FalconHostLink, event.SeverityName, event.Tactic, event.Technique, event.ProcessStartTime, event.ProcessEndTime, is_privileged_user
 | rename event.* as * , metadata.* as *
 | `cs_human_readable_time_format(ProcessStartTime)` | `cs_human_readable_time_format(ProcessEndTime)`
 | `cs_crowdstrike_malware_prevented_filter`</query>
@@ -105,7 +103,7 @@
   </row>
   <row>
     <panel>
-      <title>Unauthorized API usage or Activity Detected</title>
+      <title>API usage or User Activity Events</title>
       <table>
         <search>
           <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("APIActivityAuditEvent","AuthActivityAuditEvent","UserActivityAuditEvent","LoginAuditEvent")
@@ -113,8 +111,7 @@
 | `cs_human_readable_time_format(_time, event_time)`
 | table event_time, metadata.eventType, event.OperationName, event.ServiceName, event.Success, event.UserId, event.UserIp, is_privileged_user
 | rename event.* as *, metatdata.* as *
-| eval cyences_severity = if(is_privileged_user="Yes", "critical","medium")
-| `cs_crowdstrike_unauthorized_api_usage_or_activity_detected_alert_filter`</query>
+| `cs_crowdstrike_api_usage_or_user_activity_events_alert_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -137,7 +134,6 @@
 | `cs_human_readable_time_format(event.IncidentStartTime, IncidentStartTime)`
 | table event_time, event.HostID, event.IncidentID, IncidentStartTime, event.FineScore
 | rename event.* as *
-| eval cyences_severity =  "medium"
 | `cs_crowdstrike_incident_is_reported_alert_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
@@ -157,8 +153,7 @@
           <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("IdentityProtectionEvent")
 | `cs_human_readable_time_format(_time, event_time)`
 | `cs_user_privilege_mapping(event.UserName)`
-| eval cyences_severity = case('event.SeverityName'=="CRITICAL" or is_privileged_user="Yes", "critical", 'event.SeverityName'=="HIGH", "high", 'event.SeverityName'=="MEDIUM", "medium", 'event.SeverityName'=="LOW", "low", 'event.SeverityName'=="INFO", "info", 1==1, "medium")
-| table event_time, event.EndpointName, event.IdentityProtectionIncidentId, event.IncidentDescription, event.IncidentType, event.UserName, event.NumberOfCompromisedEntities, event.NumbersOfAlerts, event.SeverityName, cyences_severity, is_privileged_user
+| table event_time, event.EndpointName, event.IdentityProtectionIncidentId, event.IncidentDescription, event.IncidentType, event.UserName, event.NumberOfCompromisedEntities, event.NumbersOfAlerts, event.SeverityName, is_privileged_user
 | rename event.* as *
 | `cs_crowdstrike_identity_anomalies_detected_alert_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
@@ -179,8 +174,7 @@
           <query>`cs_crowdstrike_eventstream` "metadata.eventType" IN ("DataProtectionDetectionSummaryEvent")
 | `cs_human_readable_time_format(_time, event_time)`
 | `cs_user_privilege_mapping(event.UserName)`
-| eval cyences_severity = case('event.SeverityName'=="Critical" or is_privileged_user="Yes", "critical", 'event.SeverityName'=="High", "high", 'event.SeverityName'=="Medium", "medium", 'event.SeverityName'=="Low", "low", 'event.SeverityName'=="Informational", "info", 1==1, "medium")
-| table event_time, event.Name, event.Description, event.Hostname, event.UserSid, event.UserName, event.UserTitle, event.UserDepartment, event.Platform, event.DetectionType, event.Tactic, event.Technique event.SeverityName, cyences_severity, is_privileged_user
+| table event_time, event.Name, event.Description, event.Hostname, event.UserSid, event.UserName, event.UserTitle, event.UserDepartment, event.Platform, event.DetectionType, event.Tactic, event.Technique event.SeverityName, is_privileged_user
 | rename event.* as *
 | `cs_crowdstrike_dlp_violations_detected_alert_filter`</query>
           <earliest>$timeRange.earliest$</earliest>
