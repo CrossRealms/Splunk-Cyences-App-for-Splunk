@@ -28,6 +28,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-is": "^19.1.1",
+    "react-toast-notifications": "^2.5.1",
     "recharts": "^3.1.2",
     "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.11",

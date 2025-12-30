@@ -16,3 +16,5 @@ __pycache__/
 
 .DS_store
 cyences_app_for_splunk/metadata/local.meta
+custom_alert/package-lock.json
+product_setup_page/package-lock.json

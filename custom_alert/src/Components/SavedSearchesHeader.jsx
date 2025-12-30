@@ -12,7 +12,7 @@ export default function SavedSearchesHeader({ filter, onFilterChange, refetch })
       <div className="flex flex-wrap justify-between items-center gap-4">
         <div>
           <h1 className="text-xl font-semibold">
-            Custom Alerts & Reports
+            Custom Alerts
           </h1>
           {/* <p className="text-sm text-gray-500">
             Searches, reports, and alerts are saved searches created from pivot or the search page.
