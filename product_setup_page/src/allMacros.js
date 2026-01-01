@@ -128,6 +128,12 @@ let allMacros = [
             { name: 'cs_authentication_new_location_login_pct_limit' },
             { name: 'cs_authentication_vpn_session_duration_limit' },
         ]
+    },
+    {
+        section: 'Linux',
+        macros: [
+            { name: 'cs_linux_multiple_failed_ssh_login_limit' },
+        ]
     }
 ];
 
