@@ -330,10 +330,7 @@ export default function CustomAlertCreate({ mode = "add",
 
             const uniqueTeams = [...new Set(rawTeams)];
 
-            const formatted = uniqueTeams.map(t => ({
-                label: t.charAt(0).toUpperCase() + t.slice(1), // capitalize
-                value: t
-            }));
+            const formatted = uniqueTeams.map(t => ({label: t, value: t}));
 
             setTeamsList(formatted);
         }
@@ -465,9 +462,8 @@ export default function CustomAlertCreate({ mode = "add",
                             Date.now() - start > noResultGraceMs
                         ) {
                             return resolve({
-                                ok: false,
+                                ok: true,
                                 results: [],
-                                error: "No results returned. Please check your search query."
                             });
                         }
 
@@ -813,13 +809,13 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                             {/* Teams */}
                             <FormControl fullWidth>
                                 <Select
-                                    multiple
                                     value={teams}
                                     onChange={(e) => setTeams(e.target.value)}
-                                    renderValue={(selected) =>
-                                        Array.isArray(selected) ? selected.join(", ") : ""
-                                    }
-                                >
+                                    displayEmpty
+                                >   
+                                    <MenuItem disabled value="">
+                                        Select Team
+                                    </MenuItem>
                                     {teamsList.map((team) => (
                                         <MenuItem key={team.value} value={team.value}>
                                             {team.label}
