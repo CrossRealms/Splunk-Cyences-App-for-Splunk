@@ -143,8 +143,8 @@ export default function CustomAlertCreate({ mode = "add",
     initialData, onClose, savedSearchName, refetch }) {
     const { showToast } = useToast();
     const [query, setQuery] = useState(null);
-    const [earliest, setEarliest] = useState(null);
-    const [latest, setLatest] = useState(null);
+    // const [earliest, setEarliest] = useState(null);
+    // const [latest, setLatest] = useState(null);
     const { results, fields, loading } = useSplunkSearch(query);
 
     // refs to access latest results/loading/fields inside async callbacks
@@ -197,11 +197,14 @@ export default function CustomAlertCreate({ mode = "add",
     const [showSaveDialog, setShowSaveDialog] = useState(false);
     const [productsList, setProductsList] = useState([]);
     const [teamsList, setTeamsList] = useState([]);
+    const attackerSearchRef = useRef(null);
+    const attackerDrillRef = useRef(null);
+    const systemSearchRef = useRef(null);
+    const systemDrillRef = useRef(null);
 
     // Products search
     const {
-        results: productResults,
-        loading: loadingProducts
+        results: productResults
     } = useSplunkSearch(`
     | rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local
     | fields "action.cyences_notable_event_action.products"
@@ -212,7 +215,6 @@ export default function CustomAlertCreate({ mode = "add",
     // Teams search
     const {
         results: teamResults,
-        loading: loadingTeams
     } = useSplunkSearch(`
     | rest /servicesNS/-/cyences_app_for_splunk/saved/searches count=0 splunk_server=local
     | fields "action.cyences_notable_event_action.teams"
@@ -222,7 +224,7 @@ export default function CustomAlertCreate({ mode = "add",
 
     const hydrateForm = (data) => {
 
-        setTitle(savedSearchName|| "");
+        setTitle(savedSearchName || "");
         setDescription(data.description || "");
         setSearch(data.search || "");
         setCronExpr(data.cron_schedule || "");
@@ -305,20 +307,20 @@ export default function CustomAlertCreate({ mode = "add",
     }, [mode, initialData]);
 
     useEffect(() => {
-    if (productResults?.length > 0) {
-        const cleaned = productResults
-            .map(r => r.alert_products)
-            .filter(Boolean)
-            .map(p => p.trim())
-            .map(p => ({ label: p, value: p }));
+        if (productResults?.length > 0) {
+            const cleaned = productResults
+                .map(r => r.alert_products)
+                .filter(Boolean)
+                .map(p => p.trim())
+                .map(p => ({ label: p, value: p }));
 
-        //  Add static "Others" option
-        setProductsList([
-            ...cleaned,
-            { label: "Others", value: "Others" }
-        ]);
-    }
-}, [productResults]);
+            //  Add static "Others" option
+            setProductsList([
+                ...cleaned,
+                { label: "Others", value: "Others" }
+            ]);
+        }
+    }, [productResults]);
 
 
     useEffect(() => {
@@ -368,8 +370,8 @@ export default function CustomAlertCreate({ mode = "add",
         setEmailsToExclude("");
 
         // dispatch values
-        setEarliest("");
-        setLatest("");
+        // setEarliest("");
+        // setLatest("");
 
         // clear errors
         setErrors({});
@@ -379,6 +381,32 @@ export default function CustomAlertCreate({ mode = "add",
     };
 
     //teams mulit search
+
+    function validatePairedSearch({
+        search,
+        drill,
+        searchKey,
+        drillKey,
+        label,
+        errors,
+        focusRef
+    }) {
+        const hasSearch = search.trim().length > 0;
+        const hasDrill = drill.trim().length > 0;
+
+        if (hasSearch && !hasDrill) {
+            errors[drillKey] = `${label} Drilldown is required when ${label} Search is provided`;
+            focusRef?.current?.focus?.();
+        }
+
+        if (hasDrill && !hasSearch) {
+            errors[searchKey] = `${label} Search is required when ${label} Drilldown is provided`;
+            focusRef?.current?.focus?.();
+        }
+
+        return hasSearch;
+    }
+
 
     function validateForm() {
         const errors = {};
@@ -405,17 +433,60 @@ export default function CustomAlertCreate({ mode = "add",
         }
 
         // Notable Event mandatory fields
+        // Notable Event mandatory fields
         if (addNotable) {
-            if (!contributingEvents.trim()) {
-                errors.contributingEvents = "Contributing Events is required";
-            }
+            let hasAnySearch = false;
+
+            // Filter macro pairing
             if (filterMacroName && !filterMacroValue) {
                 errors.filterMacroValue = "Macro Value is required when Macro Name is filled";
             }
             if (filterMacroValue && !filterMacroName) {
                 errors.filterMacroName = "Macro Name is required when Macro Value is filled";
             }
+
+            // 🔁 Attacker pair
+            hasAnySearch =
+                validatePairedSearch({
+                    search: attackerSearch,
+                    drill: attackerSearchDrill,
+                    searchKey: "attackerSearch",
+                    drillKey: "attackerSearchDrill",
+                    label: "Attacker",
+                    errors,
+                    focusRef: attackerSearch ? attackerDrillRef : attackerSearchRef
+                }) || hasAnySearch;
+
+            // 🔁 System compromised pair
+            hasAnySearch =
+                validatePairedSearch({
+                    search: systemCompromisedSearch,
+                    drill: systemCompromisedDrill,
+                    searchKey: "systemCompromisedSearch",
+                    drillKey: "systemCompromisedDrill",
+                    label: "System Compromised",
+                    errors,
+                    focusRef: systemCompromisedSearch ? systemDrillRef : systemSearchRef
+                }) || hasAnySearch;
+
+            // ⚠️ Contributing Events required if ANY search exists
+            if (hasAnySearch && !contributingEvents.trim()) {
+                errors.contributingEvents =
+                    "Contributing Events is required when Attacker or System Compromised search is present";
+            }
+
+            // 📦 Product required
+            if (!product || !product.trim()) {
+                errors.product = "Product is required when Add Notable Event is enabled";
+            }
+
+            // 👥 At least one team required
+            if (!Array.isArray(teams) || teams.length === 0) {
+                errors.teams = "At least one team must be selected when Add Notable Event is enabled";
+            }
         }
+
+
 
         setErrors(errors);
 
@@ -518,8 +589,8 @@ export default function CustomAlertCreate({ mode = "add",
 
         try {
             const { earliest: e, latest: l } = getEarliestLatest(selectedTimeRange);
-            setEarliest(e);
-            setLatest(l);
+            // setEarliest(e);
+            // setLatest(l);
 
             const toArray = (v) => (Array.isArray(v) ? v : v ? [v] : []);
 
@@ -558,7 +629,7 @@ export default function CustomAlertCreate({ mode = "add",
                 await createOrUpdateSavedSearch(savedSearchName, payload);
                 showToast(`Alert "${title}" updated successfully`, "success");
             } else {
-                const payload1 = { name: title, ...payload};
+                const payload1 = { name: title, ...payload };
                 await createOrUpdateSavedSearch(undefined, payload1);
                 showToast(`Alert "${title}" created successfully`, "success");
             }
@@ -607,9 +678,7 @@ export default function CustomAlertCreate({ mode = "add",
             <form>
                 <Stack spacing={3}>
 
-                    {/* =========================
-        BASIC SETTINGS
-    ==========================*/}
+                    {/* ========================= BASIC SETTINGS ==========================*/}
                     <Typography variant="h6">Settings</Typography>
 
                     {/* Title */}
@@ -622,7 +691,6 @@ export default function CustomAlertCreate({ mode = "add",
                         helperText={errors?.title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
-
 
                     {/* Description */}
                     <TextField
@@ -767,10 +835,16 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                 multiline
                                 minRows={3}
                                 value={systemCompromisedDrill}
+                                inputRef={systemDrillRef}
+                                // disabled={!systemCompromisedSearch.trim()}
                                 error={!!errors?.systemCompromisedDrill}
                                 helperText={errors?.systemCompromisedDrill}
-                                onChange={(e) => setSystemCompromisedDrill(e.target.value)}
+                                onChange={(e) => {
+                                    setSystemCompromisedDrill(e.target.value);
+                                    setErrors(prev => ({ ...prev, systemCompromisedDrill: null }));
+                                }}
                             />
+
 
                             <TextField
                                 label="Attacker Search"
@@ -787,16 +861,25 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                 multiline
                                 minRows={3}
                                 value={attackerSearchDrill}
+                                inputRef={attackerDrillRef}
+                                // disabled={!attackerSearch.trim()}
                                 error={!!errors?.attackerSearchDrill}
                                 helperText={errors?.attackerSearchDrill}
-                                onChange={(e) => setAttackerSearchDrill(e.target.value)}
+                                onChange={(e) => {
+                                    setAttackerSearchDrill(e.target.value);
+                                    setErrors(prev => ({ ...prev, attackerSearchDrill: null }));
+                                }}
                             />
 
+
                             {/* Products */}
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors?.product}>
                                 <Select
                                     value={product}
-                                    onChange={(e) => setProduct(e.target.value)}
+                                    onChange={(e) => {
+                                        setProduct(e.target.value);
+                                        setErrors(prev => ({ ...prev, product: null }));
+                                    }}
                                     displayEmpty
                                 >
                                     <MenuItem disabled value="">
@@ -808,25 +891,38 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors?.product && (
+                                    <FormHelperText>{errors.product}</FormHelperText>
+                                )}
                             </FormControl>
 
                             {/* Teams */}
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors?.teams}>
                                 <Select
                                     multiple
                                     value={teams}
-                                    onChange={(e) => setTeams(e.target.value)}
+                                    onChange={(e) => {
+                                        setTeams(e.target.value);
+                                        setErrors(prev => ({ ...prev, teams: null }));
+                                    }}
                                     renderValue={(selected) =>
                                         Array.isArray(selected) ? selected.join(", ") : ""
                                     }
                                 >
+                                    <MenuItem disabled value="">
+                                        Select Team
+                                    </MenuItem>
                                     {teamsList.map((team) => (
                                         <MenuItem key={team.value} value={team.value}>
                                             {team.label}
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors?.teams && (
+                                    <FormHelperText>{errors.teams}</FormHelperText>
+                                )}
                             </FormControl>
+
                         </Stack>
                     )}
 
