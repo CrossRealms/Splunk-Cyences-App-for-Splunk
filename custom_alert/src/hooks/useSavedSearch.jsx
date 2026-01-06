@@ -17,7 +17,7 @@ export default function useSavedSearches(options = {}) {
         count: 0,
         add_orphan_field: true,
         ...options,
-        search: `eai:acl.app="cyences_app_for_splunk"`
+        search: `(eai:acl.app="cyences_app_for_splunk") AND ((is_scheduled=1 AND (alert_type!=always OR alert.track=1 OR (actions="*" AND actions!=""))))`
       }, showToast);
 
       const entries = response?.data?.entry || [];
