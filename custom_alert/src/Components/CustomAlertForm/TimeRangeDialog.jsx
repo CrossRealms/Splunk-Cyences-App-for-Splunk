@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
   Box,
+  Divider,
 } from "@mui/material";
 
 const presetsLeft = [
@@ -40,7 +41,6 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
   const [earliest, setEarliest] = useState("");
   const [latest, setLatest] = useState("");
 
-  // M/D/YY H:mm:ss.SSS AM/PM
   const dateRegex =
     /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{2}\s(0?[1-9]|1[0-2]):[0-5][0-9]:[0-5][0-9]\.\d{3}\s(AM|PM)$/i;
 
@@ -52,21 +52,25 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
   const isLatestInvalid = latest && !dateRegex.test(latest);
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-    >
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       {/* HEADER */}
-      <DialogTitle>Select Time Range</DialogTitle>
+      <DialogTitle className="pb-2">
+        <Typography variant="h6" fontWeight={600}>
+          Select Time Range
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Choose a preset or define a custom time window
+        </Typography>
+      </DialogTitle>
+
+      <Divider />
 
       {/* BODY */}
-      <DialogContent dividers>
+      <DialogContent className="pt-3">
         <Tabs
           value={active}
           onChange={handleTabChange}
-          sx={{ mb: 2 }}
+          sx={{ mb: 3 }}
         >
           <Tab label="Presets" value="presets" />
           <Tab label="Advanced" value="advanced" />
@@ -74,91 +78,77 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
 
         {/* ================= PRESETS ================= */}
         {active === "presets" && (
-          <Box className="grid grid-cols-2 gap-10 p-4 pt-2">
-            <div>
-              <Typography
-                variant="caption"
-                sx={{ fontWeight: 600, color: "text.secondary" }}
-              >
-                RELATIVE
-              </Typography>
-
-              <div className="flex flex-col gap-1 mt-2">
-                {presetsLeft.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      onSelect(item);
-                      onClose();
-                    }}
-                    className="text-blue-600 text-sm text-left hover:underline"
+          <Box className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {[["Relative", presetsLeft], ["Other", presetsRight]].map(
+              ([title, list]) => (
+                <div key={title}>
+                  <Typography
+                    variant="caption"
+                    className="text-gray-500"
+                    fontWeight={600}
                   >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
+                    {title.toUpperCase()}
+                  </Typography>
 
-            <div>
-              <Typography
-                variant="caption"
-                sx={{ fontWeight: 600, color: "text.secondary" }}
-              >
-                OTHER
-              </Typography>
-
-              <div className="flex flex-col gap-1 mt-2">
-                {presetsRight.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      onSelect(item);
-                      onClose();
-                    }}
-                    className="text-blue-600 text-sm text-left hover:underline"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
+                  <div className="mt-2 space-y-1">
+                    {list.map((item) => (
+                      <button
+                        key={item}
+                        onClick={() => {
+                          onSelect(item);
+                          onClose();
+                        }}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-left text-sm
+                          text-gray-800 hover:bg-blue-50 hover:border-blue-300
+                          transition"
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )
+            )}
           </Box>
         )}
 
         {/* ================= ADVANCED ================= */}
         {active === "advanced" && (
-          <Box className="p-5">
-            <Box mb={3}>
-              <TextField
-                label="Earliest"
-                fullWidth
-                value={earliest}
-                onChange={(e) => setEarliest(e.target.value)}
-                error={isEarliestInvalid}
-                helperText={
-                  isEarliestInvalid
-                    ? "Date must be like: 1/1/70 5:30:00.000 AM"
-                    : ""
-                }
-              />
-            </Box>
+          <Box className="space-y-4 px-1">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+            >
+              Enter exact start and end times using the required format.
+            </Typography>
 
-            <Box>
-              <TextField
-                label="Latest"
-                fullWidth
-                value={latest}
-                onChange={(e) => setLatest(e.target.value)}
-                error={isLatestInvalid}
-                helperText={
-                  isLatestInvalid
-                    ? "Date must be like: 1/1/70 5:30:00.000 AM"
-                    : ""
-                }
-              />
-            </Box>
+            <TextField
+              label="Earliest"
+              fullWidth
+              value={earliest}
+              onChange={(e) => setEarliest(e.target.value)}
+              error={isEarliestInvalid}
+              helperText={
+                isEarliestInvalid
+                  ? "Example: 1/1/70 5:30:00.000 AM"
+                  : " "
+              }
+            />
 
-            <Box className="mt-6 flex justify-end">
+            <TextField
+              label="Latest"
+              fullWidth
+              value={latest}
+              onChange={(e) => setLatest(e.target.value)}
+              error={isLatestInvalid}
+              helperText={
+                isLatestInvalid
+                  ? "Example: 1/1/70 5:30:00.000 AM"
+                  : " "
+              }
+            />
+
+            <div className="flex justify-end pt-2">
               <Button
                 variant="contained"
                 disabled={
@@ -173,18 +163,16 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
                   onClose();
                 }}
               >
-                Apply
+                Apply Time Range
               </Button>
-            </Box>
+            </div>
           </Box>
         )}
       </DialogContent>
 
       {/* FOOTER */}
-      <DialogActions>
-        <Button variant="outlined" onClick={onClose}>
-          Back
-        </Button>
+      <DialogActions className="px-6 pb-4">
+        <Button onClick={onClose}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );

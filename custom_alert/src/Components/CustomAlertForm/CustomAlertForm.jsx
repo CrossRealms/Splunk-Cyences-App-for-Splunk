@@ -10,13 +10,19 @@ import {
     FormControlLabel,
     Typography,
     Stack,
+    Dialog,
+    DialogTitle,
+    Divider,
+    DialogContent,
+    Alert,
+    DialogActions,
 } from "@mui/material";
 import TimeRangeDialog from './TimeRangeDialog';
 import useSplunkSearch from '../../hooks/useSplunkSearch';
 import { createOrUpdateSavedSearch } from '../../utils/api';
 import { useToast } from '../../SnackbarProvider';
 import { resolveTimeRange } from '../resolveTimeRange';
-
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const presetTimeMap = {
     "Today": { earliest: "-24h", latest: "now" },
@@ -332,7 +338,7 @@ export default function CustomAlertCreate({ mode = "add",
 
             const uniqueTeams = [...new Set(rawTeams)];
 
-            const formatted = uniqueTeams.map(t => ({label: t, value: t}));
+            const formatted = uniqueTeams.map(t => ({ label: t, value: t }));
 
             setTeamsList(formatted);
         }
@@ -995,36 +1001,75 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                 onSelect={(value) => setSelectedTimeRange(value)}
             />
             {showSaveDialog && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-                    <div style={{ background: '#fff', padding: 20, width: 520, borderRadius: 6, boxShadow: '0 6px 24px rgba(0,0,0,0.2)' }}>
-                        <h3 style={{ marginTop: 0 }}>Verify before saving</h3>
-                        <p style={{ marginTop: 8 }}>You should verify the search query to ensure required fields <b>cyences_severity</b> and <b>_time</b> are present. Do you want to verify now before saving?</p>
-                        {errors?.api && <div style={{ color: 'red', marginTop: 8 }}>{errors.api}</div>}
-                        {errors?.search && <div style={{ color: 'red', marginTop: 8 }}>{errors.search}</div>}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 18 }}>
-                            <Button appearance="primary" onClick={async () => {
+                <Dialog
+                    open={showSaveDialog}
+                    onClose={() => {
+                        setShowSaveDialog(false);
+                        setErrors({});
+                    }}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    {/* Header */}
+                    <DialogTitle className="flex items-center gap-2">
+                        <WarningAmberIcon className="text-amber-500" />
+                        <Typography fontWeight={600}>
+                            Verify before saving
+                        </Typography>
+                    </DialogTitle>
+
+                    <Divider />
+
+                    {/* Content */}
+                    <DialogContent className="space-y-3 pt-4">
+                        <Typography variant="body2" color="text.secondary" className='pb-1'>
+                            To ensure this alert works correctly, please verify the
+                            search query before saving.
+                        </Typography>
+
+                        <Alert severity="info" variant="outlined">
+                            The search must include required fields:
+                            <strong> cyences_severity</strong> and
+                            <strong> _time</strong>
+                        </Alert>
+
+                        {errors?.api && (
+                            <Alert severity="error">{errors.api}</Alert>
+                        )}
+
+                        {errors?.search && (
+                            <Alert severity="error">{errors.search}</Alert>
+                        )}
+                    </DialogContent>
+
+                    {/* Actions */}
+                    <DialogActions className="px-6 pb-4">
+                        <Button
+                            onClick={() => {
+                                setShowSaveDialog(false);
+                                setErrors({});
+                            }}
+                            disabled={isSaving || isVerifying}
+                        >
+                            Cancel
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            onClick={async () => {
                                 setIsVerifying(true);
                                 const ok = await verifySearch();
                                 setIsVerifying(false);
                                 if (ok) {
-                                    // verified — proceed to save
                                     await doSave();
                                 }
-                            }} disabled={isVerifying || isSaving}>
-                                {isVerifying ? 'Verifying...' : 'Verify & Save'}
-                            </Button>
-
-                            {/* <Button appearance="warning" onClick={async () => {
-                                // Save without verification
-                                await doSave();
-                            }} disabled={isSaving || isVerifying}>
-                                {isSaving ? 'Saving...' : 'Save '}
-                            </Button> */}
-
-                            <Button onClick={() => { setShowSaveDialog(false); setErrors({}); }} disabled={isSaving || isVerifying}>Cancel</Button>
-                        </div>
-                    </div>
-                </div>
+                            }}
+                            disabled={isVerifying || isSaving}
+                        >
+                            {isVerifying ? "Verifying…" : "Verify & Save"}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             )}
         </div >
     );
