@@ -168,7 +168,7 @@ export default function CustomAlertCreate({ mode = "add",
     const [search, setSearch] = useState('');
 
     // Add Notable Event Section
-    const [addNotable, setAddNotable] = useState(false);
+    const [addNotable, setAddNotable] = useState(true);
     const [filterMacroName, setFilterMacroName] = useState('');
     const [filterMacroValue, setFilterMacroValue] = useState('');
     const [contributingEvents, setContributingEvents] = useState('');
@@ -177,11 +177,11 @@ export default function CustomAlertCreate({ mode = "add",
     const [attackerSearch, setAttackerSearch] = useState('');
     const [attackerSearchDrill, setAttackerSearchDrill] = useState('');
     const [product, setProduct] = useState('');
-    const [teams, setTeams] = useState([]);
+    const [teams, setTeams] = useState('');
 
 
     // Send Email Section
-    const [sendEmail, setSendEmail] = useState(false);
+    const [sendEmail, setSendEmail] = useState(true);
     const [includeSev, setIncludeSev] = useState('');
     const [excludeSev, setExcludeSev] = useState('');
     const [additionalEmails, setAdditionalEmails] = useState('');
@@ -269,15 +269,8 @@ export default function CustomAlertCreate({ mode = "add",
         setProduct(
             data["action.cyences_notable_event_action.products"] || ""
         );
-        const rawTeams =
-            data["action.cyences_notable_event_action.teams"];
-
         setTeams(
-            Array.isArray(rawTeams)
-                ? rawTeams
-                : typeof rawTeams === "string"
-                    ? rawTeams.split(",").map(t => t.trim())
-                    : []
+            data["action.cyences_notable_event_action.teams"] || ""
         );
 
 
@@ -348,7 +341,7 @@ export default function CustomAlertCreate({ mode = "add",
         setSelectedTimeRange("");
 
         // notable fields
-        setAddNotable(false);
+        setAddNotable(true);
         setFilterMacroName("");
         setFilterMacroValue("");
         setContributingEvents("");
@@ -357,10 +350,10 @@ export default function CustomAlertCreate({ mode = "add",
         setAttackerSearch("");
         setAttackerSearchDrill("");
         setProduct("");
-        setTeams([]);
+        setTeams("");
 
         // email fields
-        setSendEmail(false);
+        setSendEmail(true);
         setIncludeSev("");
         setExcludeSev("");
         setAdditionalEmails("");
@@ -392,7 +385,7 @@ export default function CustomAlertCreate({ mode = "add",
         const hasDrill = drill.trim().length > 0;
 
         if (hasSearch && !hasDrill) {
-            errors[drillKey] = `${label} Drilldown is required when ${label} Search is provided`;
+            errors[drillKey] = `${label} Search Drilldown is required when ${label} Search is provided`;
             focusRef?.current?.focus?.();
         }
 
@@ -478,7 +471,7 @@ export default function CustomAlertCreate({ mode = "add",
             }
 
             // 👥 At least one team required
-            if (!Array.isArray(teams) || teams.length === 0) {
+            if (!teams || !teams.trim()) {
                 errors.teams = "At least one team must be selected when Add Notable Event is enabled";
             }
         }
@@ -827,7 +820,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                             />
 
                             <TextField
-                                label="System Compromised Drilldown"
+                                label="System Compromised Search Drilldown"
                                 multiline
                                 minRows={3}
                                 value={systemCompromisedDrill}
@@ -900,9 +893,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                         setTeams(e.target.value);
                                         setErrors(prev => ({ ...prev, teams: null }));
                                     }}
-                                    renderValue={(selected) =>
-                                        Array.isArray(selected) ? selected.join(", ") : ""
-                                    }
+                                    displayEmpty
                                 >
                                     <MenuItem disabled value="">
                                         Select Team
