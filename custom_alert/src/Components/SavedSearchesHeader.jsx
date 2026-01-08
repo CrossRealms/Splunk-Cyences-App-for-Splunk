@@ -15,10 +15,10 @@ export default function SavedSearchesHeader({ filter, onFilterChange, refetch })
           {/* Title Section */}
           <div>
             <h1 className="text-lg font-semibold text-gray-900 sm:text-xl">
-              Custom Alerts
+              Cyences Alerts
             </h1>
             <p className="mt-1 text-sm text-gray-500">
-              Manage saved searches and alert configurations
+              Manage alert configurations
             </p>
           </div>
 

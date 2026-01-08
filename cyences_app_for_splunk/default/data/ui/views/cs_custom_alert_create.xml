@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <view template="cyences_app_for_splunk:/templates/cs_custom_alert_create.html" type="html" isDashboard="False">
-	<label>Custom Alerts</label>
+	<label>Cyences Alerts</label>
 </view>

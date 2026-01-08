@@ -790,7 +790,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                         <Stack spacing={2}>
                             <TextField
                                 label="Filter Macro Name"
-                                required={filterMacroValue.length > 0}
+                                required
                                 value={filterMacroName}
                                 error={!!errors?.filterMacroName}
                                 helperText={errors?.filterMacroName}
@@ -799,7 +799,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
 
                             <TextField
                                 label="Filter Macro Value"
-                                required={filterMacroName.length > 0}
+                                required
                                 value={filterMacroValue}
                                 error={!!errors?.filterMacroValue}
                                 helperText={errors?.filterMacroValue}
@@ -808,7 +808,6 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
 
                             <TextField
                                 label="Contributing Events"
-                                required
                                 value={contributingEvents}
                                 error={!!errors?.contributingEvents}
                                 helperText={errors?.contributingEvents}
