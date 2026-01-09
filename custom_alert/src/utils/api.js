@@ -1,6 +1,7 @@
 import { axiosCallWrapper } from './axiosCallWrapper';
 
 const SAVED_SEARCH_ENDPOINT = 'saved/searches';
+const MACROS_ENDPOINT = "data/macros";
 
 async function fetchSavedSearches(params = {},showToast) {
   return await axiosCallWrapper({
@@ -18,6 +19,20 @@ async function fetchSavedSearchesByname(name, params = {}, showToast) {
     params,   // axiosCallWrapper should map this to query params
     method: 'get',
     showToast
+  });
+}
+
+async function createOrUpdateMacro(name, definition, showToast) {
+  const body = new URLSearchParams();
+
+  body.append("name", name);
+  body.append("definition", definition);
+
+  return await axiosCallWrapper({
+    endpointUrl: MACROS_ENDPOINT,
+    body,
+    method: "post",
+    showToast,
   });
 }
 
@@ -75,4 +90,4 @@ async function deleteSavedSearchByName(name, showToast) {
 }
 
 
-export { fetchSavedSearches, createOrUpdateSavedSearch, fetchSavedSearchesByname, deleteSavedSearchByName };
+export { fetchSavedSearches, createOrUpdateSavedSearch, fetchSavedSearchesByname, deleteSavedSearchByName, createOrUpdateMacro};

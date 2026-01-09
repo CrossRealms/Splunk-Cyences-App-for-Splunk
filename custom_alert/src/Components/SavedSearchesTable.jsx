@@ -160,7 +160,8 @@ export default function SavedSearchesTable({ rows, refetch }) {
         sortable: false,
         align: "right",
         headerAlign: "right",
-        renderCell: (params) => (
+        renderCell: (params) => {
+          return (
           <Stack direction="row" spacing={0.5}>
             <Tooltip title="Edit alert">
               <IconButton
@@ -175,6 +176,7 @@ export default function SavedSearchesTable({ rows, refetch }) {
               <IconButton
                 size="small"
                 color="error"
+               disabled={params?.row?.severity !== 6}
                 onClick={() =>
                   handleDeleteClick(params.row)
                 }
@@ -183,7 +185,7 @@ export default function SavedSearchesTable({ rows, refetch }) {
               </IconButton>
             </Tooltip>
           </Stack>
-        ),
+        )}
       },
     ],
     [togglingId]

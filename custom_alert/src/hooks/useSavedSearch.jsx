@@ -41,6 +41,7 @@ export default function useSavedSearches(options = {}) {
           Sharing: acl.sharing,
           Status: content.disabled ? 'Disabled' : 'Enabled',
           orphaned: content.orphaned === 1,
+          severity: content['alert.severity'] || 3,
         };
       });
 

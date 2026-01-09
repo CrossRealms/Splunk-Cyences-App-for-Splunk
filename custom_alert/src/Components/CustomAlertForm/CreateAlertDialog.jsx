@@ -30,15 +30,27 @@ export default function CreateAlertDialog({
       onClose={onClose}
       fullWidth
       maxWidth="md"
+      PaperProps={{
+        sx: {
+          mt: "80px",
+          alignSelf: "flex-start",
+        },
+      }}
     >
-      <DialogTitle className="flex justify-between items-center">
+      <DialogTitle className="flex justify-between items-center" sx={{
+        fontSize: "1rem", 
+        fontWeight: 600,
+        py: 1.5,
+      }}>
         {mode === "edit" ? "Edit Alert" : "Create Alert"}
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
         </IconButton>
       </DialogTitle>
 
-      <DialogContent dividers>
+      <DialogContent dividers sx={{
+        fontSize: "0.875rem", 
+      }}>
         {/* ⏳ Loading state for Edit */}
         {mode === "edit" && loading && (
           <Box className="flex justify-center py-10">

@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import TimeRangeDialog from './TimeRangeDialog';
 import useSplunkSearch from '../../hooks/useSplunkSearch';
-import { createOrUpdateSavedSearch } from '../../utils/api';
+import { createOrUpdateMacro, createOrUpdateSavedSearch } from '../../utils/api';
 import { useToast } from '../../SnackbarProvider';
 import { resolveTimeRange } from '../resolveTimeRange';
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
@@ -403,6 +403,9 @@ export default function CustomAlertCreate({ mode = "add",
         return hasSearch;
     }
 
+    const isValidFilterMacroName = (value) =>
+        /^[a-zA-Z0-9_-]+(\(\d+\))?$/.test(value);
+
 
     function validateForm() {
         const errors = {};
@@ -434,11 +437,16 @@ export default function CustomAlertCreate({ mode = "add",
             let hasAnySearch = false;
 
             // Filter macro pairing
-            if (filterMacroName && !filterMacroValue) {
-                errors.filterMacroValue = "Macro Value is required when Macro Name is filled";
+            if (!filterMacroName || filterMacroName.trim() === "") {
+                errors.filterMacroName = "Filter Macro Name is required";
+            } else if (!isValidFilterMacroName(filterMacroName.trim())) {
+                errors.filterMacroName =
+                    "Only letters, numbers, '-' and '_' are allowed. Optional numeric arguments are allowed only at the end, e.g. macro_name(1)";
             }
-            if (filterMacroValue && !filterMacroName) {
-                errors.filterMacroName = "Macro Name is required when Macro Value is filled";
+
+
+            if (!filterMacroValue || filterMacroValue.trim() === "") {
+                errors.filterMacroValue = "Filter Macro Value is required";
             }
 
             // 🔁 Attacker pair
@@ -618,6 +626,7 @@ export default function CustomAlertCreate({ mode = "add",
                     'action.cyences_send_email_action.param.email_to_include': toArray(additionalEmails).join(','),
                     'action.cyences_send_email_action.param.email_to_exclude': toArray(emailsToExclude).join(','),
                 } : {}),
+                'alert.severity': 6
             };
 
             if (mode === "edit") {
@@ -627,6 +636,12 @@ export default function CustomAlertCreate({ mode = "add",
                 const payload1 = { name: title, ...payload };
                 await createOrUpdateSavedSearch(undefined, payload1);
                 showToast(`Alert "${title}" created successfully`, "success");
+            }
+            if (addNotable && filterMacroName && filterMacroValue) {
+                await createOrUpdateMacro(
+                    filterMacroName,
+                    filterMacroValue
+                );
             }
 
             resetForm();
@@ -674,7 +689,6 @@ export default function CustomAlertCreate({ mode = "add",
                 <Stack spacing={3}>
 
                     {/* ========================= BASIC SETTINGS ==========================*/}
-                    <Typography variant="h6">Settings</Typography>
 
                     {/* Title */}
                     <TextField
@@ -867,6 +881,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
 
 
                             {/* Products */}
+                            <label>Product</label>
                             <FormControl fullWidth error={!!errors?.product}>
                                 <Select
                                     value={product}
@@ -891,6 +906,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                             </FormControl>
 
                             {/* Teams */}
+                            <label>Teams</label>
                             <FormControl fullWidth error={!!errors?.teams}>
                                 <Select
                                     value={teams}

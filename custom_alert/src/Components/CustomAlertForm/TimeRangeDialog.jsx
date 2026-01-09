@@ -52,7 +52,12 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
   const isLatestInvalid = latest && !dateRegex.test(latest);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth PaperProps={{
+        sx: {
+          mt: "80px",
+          alignSelf: "flex-start",
+        },
+      }}>
       {/* HEADER */}
       <DialogTitle className="pb-2">
         <Typography variant="h6" fontWeight={600}>
