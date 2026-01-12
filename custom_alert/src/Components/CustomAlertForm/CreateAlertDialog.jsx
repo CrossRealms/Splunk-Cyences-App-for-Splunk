@@ -34,11 +34,14 @@ export default function CreateAlertDialog({
         sx: {
           mt: "80px",
           alignSelf: "flex-start",
+          maxHeight: "calc(100vh - 120px)",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
       <DialogTitle className="flex justify-between items-center" sx={{
-        fontSize: "1.5rem", 
+        fontSize: "1.5rem",
         fontWeight: 600,
         py: 1.5,
       }}>
@@ -49,7 +52,8 @@ export default function CreateAlertDialog({
       </DialogTitle>
 
       <DialogContent dividers sx={{
-        fontSize: "0.875rem", 
+        fontSize: "0.875rem",
+        overflowY: "auto",
       }}>
         {/* ⏳ Loading state for Edit */}
         {mode === "edit" && loading && (
@@ -77,7 +81,13 @@ export default function CreateAlertDialog({
         )}
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions
+        sx={{
+          fontSize: "1.1rem", 
+          fontWeight: 600,
+          py: 1.25,
+        }}
+      >
         <Button onClick={onClose} variant="outlined">
           Cancel
         </Button>
