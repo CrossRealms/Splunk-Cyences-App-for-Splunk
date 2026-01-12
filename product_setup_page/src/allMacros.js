@@ -52,7 +52,8 @@ let allMacros = [
             { name: 'cs_ad_important_user', description: 'List of important users. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_group', description: 'List of important groups. (e.g. "val1","val2")' },
             { name: 'cs_windows_multiple_failed_logins_by_user_threshold' },
-            { name: 'cs_windows_failed_logins_across_multiple_hosts_threshold' }
+            { name: 'cs_windows_failed_logins_across_multiple_hosts_threshold' },
+            { name: 'cs_windows_logins_to_mutiple_systems_from_the_same_ip_threshold' }
         ]
     },
     {
