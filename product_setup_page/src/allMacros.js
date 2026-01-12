@@ -58,6 +58,8 @@ let allMacros = [
         section: 'O365',
         macros: [
             { name: 'cs_o365_failed_login_outside_country_filter' },
+            { name: 'cs_o365_password_reset_threshold' },
+            { name: 'cs_o365_multiple_failed_login_threshold' }
         ]
     },
     {
