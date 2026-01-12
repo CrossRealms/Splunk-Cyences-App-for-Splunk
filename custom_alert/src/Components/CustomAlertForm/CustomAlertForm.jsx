@@ -788,7 +788,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                     {/* =========================
         ADD NOTABLE EVENT
     ==========================*/}
-                    <Typography variant="h6">Add Notable Event</Typography>
+                    <Typography variant="h7">Add Notable Event</Typography>
 
                     <FormControlLabel
                         control={
@@ -798,6 +798,11 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                             />
                         }
                         label="Add Notable Event"
+                        sx={{
+                            '& .MuiFormControlLabel-label': {
+                                fontSize: '0.85rem', // 14px
+                            },
+                        }}
                     />
 
                     {addNotable && (
@@ -936,7 +941,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                     {/* =========================
                       SEND EMAIL
                     ==========================*/}
-                    <Typography variant="h6">Send Email</Typography>
+                    <Typography variant="h7">Send Email</Typography>
 
                     <FormControlLabel
                         control={
@@ -946,6 +951,11 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                             />
                         }
                         label="Send Email"
+                        sx={{
+                            '& .MuiFormControlLabel-label': {
+                                fontSize: '0.85rem', // 14px
+                            },
+                        }}
                     />
 
                     {sendEmail && (

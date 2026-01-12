@@ -38,7 +38,7 @@ export default function CreateAlertDialog({
       }}
     >
       <DialogTitle className="flex justify-between items-center" sx={{
-        fontSize: "1rem", 
+        fontSize: "1.5rem", 
         fontWeight: 600,
         py: 1.5,
       }}>
