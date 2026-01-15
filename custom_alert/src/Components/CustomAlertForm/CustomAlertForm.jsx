@@ -695,6 +695,7 @@ export default function CustomAlertCreate({ mode = "add",
                     {/* Title */}
                     <TextField
                         label="Title"
+                        size='small'
                         required
                         disabled={mode === "edit"}
                         value={title}
@@ -707,6 +708,7 @@ export default function CustomAlertCreate({ mode = "add",
                     <TextField
                         label="Description"
                         multiline
+                        size='small'
                         minRows={3}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -717,6 +719,7 @@ export default function CustomAlertCreate({ mode = "add",
                     <TextField
                         label="Search"
                         required
+                        size='small'
                         multiline
                         minRows={4}
                         value={search}
@@ -744,6 +747,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                         <Button
                             variant="outlined"
                             onClick={() => setOpenTimeRange(true)}
+                            size='small'
                             sx={{ justifyContent: "flex-start", height: 56 }}
                         >
                             {selectedTimeRange || "Select Time Range"}
@@ -756,6 +760,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                     <Button
                         variant="contained"
                         onClick={verifySearch}
+                        size='small'
                         disabled={isVerifying || verified || !search || !selectedTimeRange}
                     >
                         {isVerifying
@@ -779,6 +784,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                     {/* Cron */}
                     <TextField
                         label="Cron Expression"
+                        size='small'
                         placeholder="*/15 * * * *"
                         value={cronExpr}
                         error={!!errors?.cronExpr}
@@ -792,7 +798,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
     ==========================*/}
                     {/* <Typography variant="h7">Add Notable Event</Typography> */}
 
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={
                             <Switch
                                 checked={addNotable}
@@ -805,192 +811,202 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                 fontSize: '1rem', // 14px
                             },
                         }}
-                    />
+                    /> */}
 
-                    {addNotable && (
-                        <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
-                            <CardContent>
-                                <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                                    Notable Event Configuration
-                                </Typography>
+                    <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
+                        <CardContent>
+                            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                                Notable Event Configuration
+                            </Typography>
 
-                                <Divider sx={{ mb: 2 }} />
-                                <Stack spacing={2}>
-                                    <TextField
-                                        label="Filter Macro Name"
-                                        required
-                                        value={filterMacroName}
-                                        error={!!errors?.filterMacroName}
-                                        helperText={errors?.filterMacroName}
-                                        onChange={(e) => setFilterMacroName(e.target.value)}
-                                    />
+                            <Divider sx={{ mb: 2 }} />
+                            <Stack spacing={2}>
+                                <TextField
+                                    label="Filter Macro Name"
+                                    required
+                                    size='small'
+                                    value={filterMacroName}
+                                    error={!!errors?.filterMacroName}
+                                    helperText={errors?.filterMacroName}
+                                    onChange={(e) => setFilterMacroName(e.target.value)}
+                                />
 
-                                    <TextField
-                                        label="Filter Macro Value"
-                                        required
-                                        value={filterMacroValue}
-                                        error={!!errors?.filterMacroValue}
-                                        helperText={errors?.filterMacroValue}
-                                        onChange={(e) => setFilterMacroValue(e.target.value)}
-                                    />
+                                <TextField
+                                    label="Filter Macro Value"
+                                    required
+                                    size='small'
+                                    value={filterMacroValue}
+                                    error={!!errors?.filterMacroValue}
+                                    helperText={errors?.filterMacroValue}
+                                    onChange={(e) => setFilterMacroValue(e.target.value)}
+                                />
 
-                                    <TextField
-                                        label="Contributing Events"
-                                        value={contributingEvents}
-                                        error={!!errors?.contributingEvents}
-                                        helperText={errors?.contributingEvents}
-                                        onChange={(e) => setContributingEvents(e.target.value)}
-                                    />
+                                <TextField
+                                    label="Contributing Events"
+                                    size='small'
+                                    value={contributingEvents}
+                                    error={!!errors?.contributingEvents}
+                                    helperText={errors?.contributingEvents}
+                                    onChange={(e) => setContributingEvents(e.target.value)}
+                                />
 
-                                    <TextField
-                                        label="System Compromised Search"
-                                        multiline
-                                        minRows={3}
-                                        value={systemCompromisedSearch}
-                                        error={!!errors?.systemCompromisedSearch}
-                                        helperText={errors?.systemCompromisedSearch}
-                                        onChange={(e) => setSystemCompromisedSearch(e.target.value)}
-                                    />
+                                <TextField
+                                    label="System Compromised Search"
+                                    multiline
+                                    size='small'
+                                    minRows={3}
+                                    value={systemCompromisedSearch}
+                                    error={!!errors?.systemCompromisedSearch}
+                                    helperText={errors?.systemCompromisedSearch}
+                                    onChange={(e) => setSystemCompromisedSearch(e.target.value)}
+                                />
 
-                                    <TextField
-                                        label="System Compromised Search Drilldown"
-                                        multiline
-                                        minRows={3}
-                                        value={systemCompromisedDrill}
-                                        inputRef={systemDrillRef}
-                                        // disabled={!systemCompromisedSearch.trim()}
-                                        error={!!errors?.systemCompromisedDrill}
-                                        helperText={errors?.systemCompromisedDrill}
+                                <TextField
+                                    label="System Compromised Search Drilldown"
+                                    multiline
+                                    size='small'
+                                    minRows={3}
+                                    value={systemCompromisedDrill}
+                                    inputRef={systemDrillRef}
+                                    // disabled={!systemCompromisedSearch.trim()}
+                                    error={!!errors?.systemCompromisedDrill}
+                                    helperText={errors?.systemCompromisedDrill}
+                                    onChange={(e) => {
+                                        setSystemCompromisedDrill(e.target.value);
+                                        setErrors(prev => ({ ...prev, systemCompromisedDrill: null }));
+                                    }}
+                                />
+
+
+                                <TextField
+                                    label="Attacker Search"
+                                    multiline
+                                    size='small'
+                                    minRows={3}
+                                    value={attackerSearch}
+                                    error={!!errors?.attackerSearch}
+                                    helperText={errors?.attackerSearch}
+                                    onChange={(e) => setAttackerSearch(e.target.value)}
+                                />
+
+                                <TextField
+                                    label="Attacker Search Drilldown"
+                                    multiline
+                                    size='small'
+                                    minRows={3}
+                                    value={attackerSearchDrill}
+                                    inputRef={attackerDrillRef}
+                                    // disabled={!attackerSearch.trim()}
+                                    error={!!errors?.attackerSearchDrill}
+                                    helperText={errors?.attackerSearchDrill}
+                                    onChange={(e) => {
+                                        setAttackerSearchDrill(e.target.value);
+                                        setErrors(prev => ({ ...prev, attackerSearchDrill: null }));
+                                    }}
+                                />
+
+
+                                {/* Products */}
+                                <label>Product</label>
+                                <FormControl fullWidth error={!!errors?.product}>
+                                    <Select
+                                        size='small'
+                                        value={product}
                                         onChange={(e) => {
-                                            setSystemCompromisedDrill(e.target.value);
-                                            setErrors(prev => ({ ...prev, systemCompromisedDrill: null }));
+                                            setProduct(e.target.value);
+                                            setErrors(prev => ({ ...prev, product: null }));
                                         }}
-                                    />
+                                        displayEmpty
+                                    >
+                                        <MenuItem disabled value="">
+                                            Select Product
+                                        </MenuItem>
+                                        {productsList.map((item) => (
+                                            <MenuItem key={item.value} value={item.value}>
+                                                {item.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {errors?.product && (
+                                        <FormHelperText>{errors.product}</FormHelperText>
+                                    )}
+                                </FormControl>
 
-
-                                    <TextField
-                                        label="Attacker Search"
-                                        multiline
-                                        minRows={3}
-                                        value={attackerSearch}
-                                        error={!!errors?.attackerSearch}
-                                        helperText={errors?.attackerSearch}
-                                        onChange={(e) => setAttackerSearch(e.target.value)}
-                                    />
-
-                                    <TextField
-                                        label="Attacker Search Drilldown"
-                                        multiline
-                                        minRows={3}
-                                        value={attackerSearchDrill}
-                                        inputRef={attackerDrillRef}
-                                        // disabled={!attackerSearch.trim()}
-                                        error={!!errors?.attackerSearchDrill}
-                                        helperText={errors?.attackerSearchDrill}
+                                {/* Teams */}
+                                <label>Teams</label>
+                                <FormControl fullWidth error={!!errors?.teams}>
+                                    <Select
+                                        size='small'
+                                        value={teams}
                                         onChange={(e) => {
-                                            setAttackerSearchDrill(e.target.value);
-                                            setErrors(prev => ({ ...prev, attackerSearchDrill: null }));
+                                            setTeams(e.target.value);
+                                            setErrors(prev => ({ ...prev, teams: null }));
                                         }}
-                                    />
-
-
-                                    {/* Products */}
-                                    <label>Product</label>
-                                    <FormControl fullWidth error={!!errors?.product}>
-                                        <Select
-                                            value={product}
-                                            onChange={(e) => {
-                                                setProduct(e.target.value);
-                                                setErrors(prev => ({ ...prev, product: null }));
-                                            }}
-                                            displayEmpty
-                                        >
-                                            <MenuItem disabled value="">
-                                                Select Product
+                                        displayEmpty
+                                    >
+                                        <MenuItem disabled value="">
+                                            Select Team
+                                        </MenuItem>
+                                        {teamsList.map((team) => (
+                                            <MenuItem key={team.value} value={team.value}>
+                                                {team.label}
                                             </MenuItem>
-                                            {productsList.map((item) => (
-                                                <MenuItem key={item.value} value={item.value}>
-                                                    {item.label}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                        {errors?.product && (
-                                            <FormHelperText>{errors.product}</FormHelperText>
-                                        )}
-                                    </FormControl>
+                                        ))}
+                                    </Select>
+                                    {errors?.teams && (
+                                        <FormHelperText>{errors.teams}</FormHelperText>
+                                    )}
+                                </FormControl>
 
-                                    {/* Teams */}
-                                    <label>Teams</label>
-                                    <FormControl fullWidth error={!!errors?.teams}>
-                                        <Select
-                                            value={teams}
-                                            onChange={(e) => {
-                                                setTeams(e.target.value);
-                                                setErrors(prev => ({ ...prev, teams: null }));
-                                            }}
-                                            displayEmpty
-                                        >
-                                            <MenuItem disabled value="">
-                                                Select Team
-                                            </MenuItem>
-                                            {teamsList.map((team) => (
-                                                <MenuItem key={team.value} value={team.value}>
-                                                    {team.label}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                        {errors?.teams && (
-                                            <FormHelperText>{errors.teams}</FormHelperText>
-                                        )}
-                                    </FormControl>
-
-                                </Stack>
-                            </CardContent>
-                        </Card>
-                    )}
+                            </Stack>
+                        </CardContent>
+                    </Card>
 
                     {/* =========================
                       SEND EMAIL
                     ==========================*/}
                     {/* <Typography variant="h7">Send Email</Typography> */}
 
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={sendEmail}
-                                onChange={() => setSendEmail(!sendEmail)}
-                            />
-                        }
-                        label="Send Email"
-                        sx={{
-                            '& .MuiFormControlLabel-label': {
-                                fontSize: '1rem', // 14px
-                            },
-                        }}
-                    />
 
-                    {sendEmail && (
-                        <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
-                            <CardContent>
-                                <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+
+
+                    <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
+                        <CardContent>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={sendEmail}
+                                        onChange={() => setSendEmail(!sendEmail)}
+                                    />
+                                }
+                                label={<Typography variant="subtitle1" fontWeight={600} gutterBottom>
                                     Email Notification Settings
-                                </Typography>
-
-                                <Divider sx={{ mb: 2 }} />
+                                </Typography>}
+                                sx={{
+                                    '& .MuiFormControlLabel-label': {
+                                        fontSize: '1rem', // 14px
+                                    },
+                                }}
+                            />
+                            <Divider sx={{ mb: 2 }} />
+                            {sendEmail && (
                                 <Stack spacing={2}>
                                     <TextField
+                                        size='small'
                                         label="Severities to include"
                                         value={includeSev}
                                         onChange={(e) => setIncludeSev(e.target.value)}
                                     />
 
                                     <TextField
+                                        size='small'
                                         label="Severities to exclude"
                                         value={excludeSev}
                                         onChange={(e) => setExcludeSev(e.target.value)}
                                     />
 
                                     <TextField
+                                        size='small'
                                         label="Additional emails"
                                         multiline
                                         minRows={2}
@@ -999,6 +1015,7 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                     />
 
                                     <TextField
+                                        size='small'
                                         label="Emails to exclude"
                                         multiline
                                         minRows={2}
@@ -1006,9 +1023,10 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                                         onChange={(e) => setEmailsToExclude(e.target.value)}
                                     />
                                 </Stack>
-                            </CardContent>
-                        </Card>
-                    )}
+                            )}
+                        </CardContent>
+                    </Card>
+
 
                     {/* =========================
                     ACTION BUTTONS
