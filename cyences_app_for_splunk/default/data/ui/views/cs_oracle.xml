@@ -24,7 +24,7 @@
       <fieldForLabel>host</fieldForLabel>
       <fieldForValue>host</fieldForValue>
       <search>
-        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields host | stats count by host</query>
+        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") | fields host | stats count by host</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -42,7 +42,7 @@
       <fieldForLabel>user</fieldForLabel>
       <fieldForValue>user</fieldForValue>
       <search>
-        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields user | stats count by user</query>
+        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") | fields user | stats count by user</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -60,7 +60,7 @@
       <fieldForLabel>action_name</fieldForLabel>
       <fieldForValue>action_name</fieldForValue>
       <search>
-        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields vendor_action, ACTION_NAME | eval action_name=coalesce(vendor_action,ACTION_NAME) | stats count by action_name</query>
+        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") | fields vendor_action, ACTION_NAME | eval action_name=coalesce(vendor_action,ACTION_NAME) | stats count by action_name</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -78,7 +78,7 @@
       <fieldForLabel>object_type</fieldForLabel>
       <fieldForValue>object_type</fieldForValue>
       <search>
-        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified") | fields object_category, AUDIT_TYPE | eval object_type = coalesce(object_category, AUDIT_TYPE) | stats count by object_type</query>
+        <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") | fields object_category, AUDIT_TYPE | eval object_type = coalesce(object_category, AUDIT_TYPE) | stats count by object_type</query>
         <earliest>$tkn_time.earliest$</earliest>
         <latest>$tkn_time.latest$</latest>
       </search>
@@ -115,7 +115,7 @@
       <title>Privilege Activities</title>
       <table>
         <search>
-          <query> `cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") `cs_oracle_privilege_events` $tkn_host$ 
+          <query> `cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") `cs_oracle_privilege_events` $tkn_host$ 
 | fillnull value="-"
 | eval object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure") 
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
@@ -142,7 +142,7 @@
       <title>Audit Logs</title>
       <table>
         <search>
-          <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified") $tkn_host$
+          <query>`cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") $tkn_host$
 | eval schema_name = coalesce(OBJECT_SCHEMA, schema_name), object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), client_app = coalesce(CLIENT_PROGRAM_NAME, client_app), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure")
 | fillnull value="-" user object_name object_type
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
