@@ -116,8 +116,8 @@
       <table>
         <search>
           <query> `cs_oracle` (sourcetype="oracle:audit:xml" OR  sourcetype="oracle:audit:unified" OR  sourcetype="oracle:audit:text") `cs_oracle_privilege_events` $tkn_host$ 
-| fillnull value="-"
 | eval object_name = coalesce(object, OBJECT_NAME), object_type = coalesce(object_category, AUDIT_TYPE), statement = coalesce(command, SQL_TEXT), status = if(RETURNCODE==0 or RETURN_CODE==0, "success", "failure") 
+| fillnull value="-"
 | search $tkn_user$ $tkn_action_name$ $tkn_object_type$ $tkn_object$
 | `cs_human_readable_time_format(_time, event_time)`
 | rename vendor_action as action_name, DB_UNIQUE_NAME as database_name, DATABASE_USER as db_user
