@@ -56,6 +56,7 @@
     <view name="cs_decommision_host" />
     <view name="cs_sysmon_deploy_audit" /><!--Sysmon-->
     <view name="cs_o365_defender_atp_audit" /><!--Office 365 Defender ATP-->
+    <view name="cs_custom_alert_create" />
     <a href="/manager/cyences_app_for_splunk/saved/searches?app=cyences_app_for_splunk&amp;count=100&amp;offset=0&amp;itemType=&amp;owner=&amp;search=">Settings &gt; Searches, Reports and Alerts</a>
     <a href="https://cyences.com" target="_blank" rel="noopener noreferrer">Cyences Documentation</a>
   </collection>
