@@ -19,6 +19,7 @@
     </collection>
     <collection label="Database">
       <view name="cs_mssql" /><!--MSSQL-->
+      <view name="cs_mysql" /><!--MySQL-->
       <view name="cs_oracle" /><!--Oracle-->
     </collection>
     <collection label="Network Devices">

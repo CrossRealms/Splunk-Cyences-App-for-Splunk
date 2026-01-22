@@ -860,6 +860,25 @@ PRODUCTS = [
         ],
     },
     {
+        "name": "MySQL",
+        "app_dependencies": [
+            {
+                "label": "TODO-MySQL",
+                "link": "https://splunkbase.splunk.com/app/TODO-MySQL/"
+            }
+        ],
+        "macro_configurations": [
+            {
+                "macro_name": "cs_mysql",
+                "label": "MySQL Data",
+                "search_by": "sourcetype",
+                "search_values": "TODO-MySQL",
+                "earliest_time": "-1d@d",
+                "latest_time": "now",
+            }
+        ],
+    },
+    {
         "name": "Oracle",
         "app_dependencies": [
             {
