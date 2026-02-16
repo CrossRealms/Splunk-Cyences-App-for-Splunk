@@ -6,7 +6,7 @@
       <title>High and Critical Cyences Alerts (Real-Time in 5 min window)</title>
       <single>
         <search>
-          <query>index=cyences cyences_severity IN ("critical", "high")
+          <query>`scm_cyences_index` cyences_severity IN ("critical", "high")
 | `scm_lookup_environment(splunk_server)`
 | stats count by environment</query>
           <earliest>rt-5m</earliest>
@@ -91,7 +91,7 @@
       <title>Total no. of Alerts triggered Today</title>
       <single>
         <search>
-          <query>index=cyences $tkn_severity$ earliest=-7d latest=now() 
+          <query>`scm_cyences_index` $tkn_severity$ earliest=-7d latest=now() 
 | `scm_lookup_environment(splunk_server)` 
 | search $tkn_environment$ 
 | timechart span=1d limit=0 count by environment</query>
@@ -118,7 +118,7 @@
       <title>Alerts by Severity</title>
       <chart>
         <search>
-          <query>index=cyences $tkn_severity$
+          <query>`scm_cyences_index` $tkn_severity$
 | `scm_lookup_environment(splunk_server)` 
 | search $tkn_environment$ 
 | chart count by environment cyences_severity
@@ -152,7 +152,7 @@
       <title>Alerts by Search name</title>
       <chart>
         <search>
-          <query>index=cyences $tkn_severity$
+          <query>`scm_cyences_index` $tkn_severity$
 | `scm_lookup_environment(splunk_server)` 
 | search $tkn_environment$ 
 | stats count by environment search_name</query>
