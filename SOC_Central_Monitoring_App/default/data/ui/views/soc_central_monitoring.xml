@@ -23,23 +23,9 @@
         <option name="trellis.size">medium</option>
         <option name="useColors">1</option>
         <drilldown>
-          <set token="tkn_env_1">$trellis.value$</set>
+          <set token="tkn_env">$trellis.value$</set>
         </drilldown>
       </single>
-    </panel>
-  </row>
-  <row depends="$hidden1$">
-    <panel>
-      <table>
-        <search>
-          <done>
-            <link target="_blank">$result.sh_url|n$</link>
-          </done>
-          <query>| inputlookup environment_mapping where environment=$tkn_env_1|s$ | dedup environment | table sh_url </query>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
     </panel>
   </row>
   <row depends="$hidden$">
