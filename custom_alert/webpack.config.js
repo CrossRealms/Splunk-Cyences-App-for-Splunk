@@ -23,5 +23,5 @@ module.exports = merge(baseConfig, {
     },
     plugins: [
     ],
-    devtool: dev ? 'inline-source-map' : false
+    devtool: dev ? 'eval-source-map' : false
 });

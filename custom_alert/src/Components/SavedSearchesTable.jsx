@@ -1,10 +1,6 @@
 import React, { useMemo, useState } from "react";
+import { DataGrid, GridOverlay } from "@mui/x-data-grid";
 import {
-  DataGrid,
-  GridOverlay,
-} from "@mui/x-data-grid";
-import {
-  Button,
   Link,
   IconButton,
   Tooltip,
@@ -23,11 +19,9 @@ import { useToast } from "../SnackbarProvider";
 function EmptyState() {
   return (
     <GridOverlay>
-      <div className="flex h-full flex-col items-center justify-center text-gray-500">
-        <div className="text-sm font-medium">No alerts found</div>
-        <div className="text-xs mt-1">
-          Create a new alert to get started
-        </div>
+      <div className="flex h-full flex-col items-center justify-center text-slate-500">
+        <div className="text-sm font-semibold text-slate-700">No alerts found</div>
+        <div className="mt-1 text-xs text-slate-500">Create a new alert to get started</div>
       </div>
     </GridOverlay>
   );
@@ -56,15 +50,9 @@ export default function SavedSearchesTable({ rows, refetch }) {
 
     try {
       setTogglingId(row.id);
-      await createOrUpdateSavedSearch(
-        row.id,
-        { disabled: isEnabled },
-        showToast
-      );
+      await createOrUpdateSavedSearch(row.id, { disabled: isEnabled }, showToast);
       showToast(
-        `Alert "${row.title}" ${
-          isEnabled ? "disabled" : "enabled"
-        } successfully`,
+        `Alert "${row.title}" ${isEnabled ? "disabled" : "enabled"} successfully`,
         "success"
       );
       refetch();
@@ -94,7 +82,8 @@ export default function SavedSearchesTable({ rows, refetch }) {
               component="button"
               underline="hover"
               fontSize={14}
-              fontWeight={500}
+              style={{color: 'black'}}
+              fontWeight={600}
               onClick={(e) => {
                 e.stopPropagation();
                 handleOpenSearch(params);
@@ -104,7 +93,7 @@ export default function SavedSearchesTable({ rows, refetch }) {
             </Link>
 
             {params?.row?.description && (
-              <div className="mt-0.5 text-xs text-gray-500 line-clamp-2">
+              <div className="mt-0.5 line-clamp-2 text-xs text-slate-500">
                 {params.row.description}
               </div>
             )}
@@ -116,11 +105,11 @@ export default function SavedSearchesTable({ rows, refetch }) {
         headerName: "Next Scheduled Time",
         flex: 1.4,
         valueGetter: (value) => value || "—",
-      }, 
+      },
       {
         field: "Status",
         headerName: "Status",
-        width: 170,
+        width: 190,
         renderCell: (params) => {
           const isEnabled = params.value === "Enabled";
           const isLoading = togglingId === params.row.id;
@@ -133,19 +122,18 @@ export default function SavedSearchesTable({ rows, refetch }) {
                 <Switch
                   size="small"
                   checked={isEnabled}
-                  onChange={() =>
-                    handleToggleStatus(params.row)
-                  }
+                  onChange={() => handleToggleStatus(params.row)}
                   color="success"
                 />
               )}
 
               <span
-                className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                className={[
+                  "rounded-full px-2 py-0.5 text-xs font-semibold",
                   isEnabled
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
+                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                    : "bg-rose-50 text-rose-700 ring-1 ring-rose-200",
+                ].join(" ")}
               >
                 {isEnabled ? "Enabled" : "Disabled"}
               </span>
@@ -156,19 +144,15 @@ export default function SavedSearchesTable({ rows, refetch }) {
       {
         field: "actions",
         headerName: "Actions",
-        width: 120,
+        width: 130,
         sortable: false,
         align: "right",
         headerAlign: "right",
-        renderCell: (params) => {
-          return (
+        renderCell: (params) => (
           <Stack direction="row" spacing={0.5}>
             <Tooltip title="Edit alert">
-              <IconButton
-                size="small"
-                onClick={() => handleEdit(params.row)}
-              >
-                <EditIcon fontSize="small" />
+              <IconButton size="small" onClick={() => handleEdit(params.row)}>
+                <EditIcon style={{color: 'black'}} fontSize="small" />
               </IconButton>
             </Tooltip>
 
@@ -176,16 +160,14 @@ export default function SavedSearchesTable({ rows, refetch }) {
               <IconButton
                 size="small"
                 color="error"
-               disabled={params?.row?.severity !== 6}
-                onClick={() =>
-                  handleDeleteClick(params.row)
-                }
+                disabled={params?.row?.severity !== 6}
+                onClick={() => handleDeleteClick(params.row)}
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>
             </Tooltip>
           </Stack>
-        )}
+        ),
       },
     ],
     [togglingId]
@@ -193,8 +175,30 @@ export default function SavedSearchesTable({ rows, refetch }) {
 
   return (
     <>
-      {/* Table Card */}
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
+      {/* Modern Table Card */}
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm animate-[fadeUp_.22s_ease-out_both]">
+        {/* Card header */}
+        <div className="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <div className="text-sm font-extrabold text-slate-900">Alerts</div>
+            <div className="mt-0.5 text-xs text-slate-500">
+              Click an alert name to open the search. Use the toggle to enable/disable.
+            </div>
+          </div>
+
+          <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+            {rows?.length ?? 0} alert{(rows?.length ?? 0) === 1 ? "" : "s"}
+          </span>
+        </div>
+
+        {/* Grid area (fixed height, internal scroll only) */}
         <div className="h-[600px] w-full">
           <DataGrid
             rows={rows}
@@ -203,15 +207,13 @@ export default function SavedSearchesTable({ rows, refetch }) {
             pageSizeOptions={[10, 20, 50]}
             slots={{ noRowsOverlay: EmptyState }}
             initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10, page: 0 },
-              },
+              pagination: { paginationModel: { pageSize: 10, page: 0 } },
             }}
             sx={{
               border: 0,
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "#f8fafc",
-                fontWeight: 600,
+                backgroundColor: "#ffffff",
+                fontWeight: 700,
                 borderBottom: "1px solid #e5e7eb",
               },
               "& .MuiDataGrid-row": {
@@ -223,12 +225,16 @@ export default function SavedSearchesTable({ rows, refetch }) {
               "& .MuiDataGrid-cell": {
                 outline: "none !important",
               },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "1px solid #e5e7eb",
+                background: "#fff",
+              },
             }}
           />
         </div>
       </div>
 
-      {/* Dialogs */}
+      {/* Dialogs (unchanged) */}
       {openAlertDialog && (
         <CreateAlertDialog
           open={openAlertDialog}

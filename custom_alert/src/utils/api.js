@@ -2,6 +2,22 @@ import { axiosCallWrapper } from './axiosCallWrapper';
 
 const SAVED_SEARCH_ENDPOINT = 'saved/searches';
 const MACROS_ENDPOINT = "data/macros";
+const PRODUCT_CONFIG_ENDPOINT = 'CyencesProductConfiguration/product_config';
+
+async function fetchProducts() {
+    return await axiosCallWrapper({
+        endpointUrl: PRODUCT_CONFIG_ENDPOINT,
+    })
+}
+
+async function saveProductConfig(payload) {
+    const body = new URLSearchParams({ 'data': JSON.stringify(payload) })
+    return await axiosCallWrapper({
+        endpointUrl: PRODUCT_CONFIG_ENDPOINT,
+        body: body,
+        method: 'post'
+    })
+}
 
 async function fetchSavedSearches(params = {},showToast) {
   return await axiosCallWrapper({
@@ -90,4 +106,4 @@ async function deleteSavedSearchByName(name, showToast) {
 }
 
 
-export { fetchSavedSearches, createOrUpdateSavedSearch, fetchSavedSearchesByname, deleteSavedSearchByName, createOrUpdateMacro};
+export { fetchProducts, saveProductConfig, fetchSavedSearches, createOrUpdateSavedSearch, fetchSavedSearchesByname, deleteSavedSearchByName, createOrUpdateMacro};

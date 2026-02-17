@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -36,13 +36,33 @@ const presetsRight = [
   "All time",
 ];
 
+function PresetButton({ label, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-sm
+                 text-slate-800 hover:bg-slate-50 hover:border-slate-300
+                 active:scale-[0.99] transition"
+      style={{
+        outline: "none",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function TimeRangeDialog({ open, onClose, onSelect }) {
   const [active, setActive] = useState("presets");
   const [earliest, setEarliest] = useState("");
   const [latest, setLatest] = useState("");
 
-  const dateRegex =
-    /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{2}\s(0?[1-9]|1[0-2]):[0-5][0-9]:[0-5][0-9]\.\d{3}\s(AM|PM)$/i;
+  const dateRegex = useMemo(
+    () =>
+      /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{2}\s(0?[1-9]|1[0-2]):[0-5][0-9]:[0-5][0-9]\.\d{3}\s(AM|PM)$/i,
+    []
+  );
 
   const handleTabChange = useCallback((_, value) => {
     setActive(value);
@@ -52,30 +72,92 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
   const isLatestInvalid = latest && !dateRegex.test(latest);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth PaperProps={{
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
         sx: {
           mt: "80px",
           alignSelf: "flex-start",
+          borderRadius: "16px",
+          border: "1px solid #e5e7eb",
+          boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
+          overflow: "hidden",
         },
-      }}>
+      }}
+    >
       {/* HEADER */}
-      <DialogTitle className="pb-2">
-        <Typography variant="h6" fontWeight={600}>
-          Select Time Range
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Choose a preset or define a custom time window
-        </Typography>
+      <DialogTitle
+        sx={{
+          py: 2,
+          px: 2.5,
+          background: "#fff",
+        }}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: "#0f172a" }}>
+              Select time range
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#64748b", mt: 0.25 }}>
+              Choose a preset or define a custom time window.
+            </Typography>
+          </div>
+
+          <Button
+            onClick={onClose}
+            variant="outlined"
+            size="small"
+            sx={{
+              borderRadius: "12px",
+              textTransform: "none",
+              fontWeight: 700,
+              borderColor: "#e5e7eb",
+              color: "#0f172a",
+              background: "#fff",
+              "&:hover": { background: "#f8fafc", borderColor: "#e2e8f0" },
+            }}
+          >
+            Close
+          </Button>
+        </div>
       </DialogTitle>
 
       <Divider />
 
       {/* BODY */}
-      <DialogContent className="pt-3">
+      <DialogContent
+        sx={{
+          p: 2.5,
+          background: "#fff",
+        }}
+      >
         <Tabs
           value={active}
           onChange={handleTabChange}
-          sx={{ mb: 3 }}
+          sx={{
+            mb: 2,
+            minHeight: 40,
+            "& .MuiTab-root": {
+              minHeight: 40,
+              textTransform: "none",
+              fontWeight: 800,
+              borderRadius: "12px",
+              px: 2,
+            },
+            "& .MuiTabs-indicator": { display: "none" },
+            "& .MuiTab-root.Mui-selected": {
+              background: "#0f172a",
+              color: "#fff",
+            },
+            "& .MuiTab-root:not(.Mui-selected)": {
+              background: "#f8fafc",
+              color: "#0f172a",
+              border: "1px solid #e5e7eb",
+            },
+          }}
         >
           <Tab label="Presets" value="presets" />
           <Tab label="Advanced" value="advanced" />
@@ -84,91 +166,93 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
         {/* ================= PRESETS ================= */}
         {active === "presets" && (
           <Box className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {[["Relative", presetsLeft], ["Other", presetsRight]].map(
-              ([title, list]) => (
-                <div key={title}>
+            {[
+              ["Relative", presetsLeft],
+              ["Other", presetsRight],
+            ].map(([title, list]) => (
+              <div key={title} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                <div className="px-1 pb-2">
                   <Typography
                     variant="caption"
-                    className="text-gray-500"
-                    fontWeight={600}
+                    sx={{ fontWeight: 900, color: "#64748b", letterSpacing: 0.8 }}
                   >
-                    {title.toUpperCase()}
+                    {String(title).toUpperCase()}
                   </Typography>
-
-                  <div className="mt-2 space-y-1">
-                    {list.map((item) => (
-                      <button
-                        key={item}
-                        onClick={() => {
-                          onSelect(item);
-                          onClose();
-                        }}
-                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-left text-sm
-                          text-gray-800 hover:bg-blue-50 hover:border-blue-300
-                          transition"
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
                 </div>
-              )
-            )}
+
+                <div className="space-y-2">
+                  {list.map((item) => (
+                    <PresetButton
+                      key={item}
+                      label={item}
+                      onClick={() => {
+                        onSelect(item);
+                        onClose();
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </Box>
         )}
 
         {/* ================= ADVANCED ================= */}
         {active === "advanced" && (
-          <Box className="space-y-4 px-1">
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
+          <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <Typography variant="body2" sx={{ color: "#64748b", mb: 2 }}>
               Enter exact start and end times using the required format.
             </Typography>
 
-            <TextField
-              label="Earliest"
-              fullWidth
-              value={earliest}
-              onChange={(e) => setEarliest(e.target.value)}
-              error={isEarliestInvalid}
-              helperText={
-                isEarliestInvalid
-                  ? "Example: 1/1/70 5:30:00.000 AM"
-                  : " "
-              }
-            />
+            <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
+              <TextField
+                label="Earliest"
+                fullWidth
+                value={earliest}
+                onChange={(e) => setEarliest(e.target.value)}
+                error={isEarliestInvalid}
+                helperText={
+                  isEarliestInvalid ? "Example: 1/1/70 5:30:00.000 AM" : " "
+                }
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": { borderRadius: "12px", background: "#fff" },
+                }}
+              />
 
-            <TextField
-              label="Latest"
-              fullWidth
-              value={latest}
-              onChange={(e) => setLatest(e.target.value)}
-              error={isLatestInvalid}
-              helperText={
-                isLatestInvalid
-                  ? "Example: 1/1/70 5:30:00.000 AM"
-                  : " "
-              }
-            />
+              <TextField
+                label="Latest"
+                fullWidth
+                value={latest}
+                onChange={(e) => setLatest(e.target.value)}
+                error={isLatestInvalid}
+                helperText={
+                  isLatestInvalid ? "Example: 1/1/70 5:30:00.000 AM" : " "
+                }
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": { borderRadius: "12px", background: "#fff" },
+                }}
+              />
+            </div>
 
             <div className="flex justify-end pt-2">
               <Button
                 variant="contained"
-                disabled={
-                  !earliest ||
-                  !latest ||
-                  isEarliestInvalid ||
-                  isLatestInvalid
-                }
+                disabled={!earliest || !latest || isEarliestInvalid || isLatestInvalid}
                 onClick={() => {
                   const finalValue = `${earliest} - ${latest}`;
                   onSelect(finalValue);
                   onClose();
                 }}
+                sx={{
+                  borderRadius: "12px",
+                  textTransform: "none",
+                  fontWeight: 900,
+                  px: 2,
+                }}
               >
-                Apply Time Range
+                Apply time range
               </Button>
             </div>
           </Box>
@@ -176,8 +260,28 @@ export default function TimeRangeDialog({ open, onClose, onSelect }) {
       </DialogContent>
 
       {/* FOOTER */}
-      <DialogActions className="px-6 pb-4">
-        <Button onClick={onClose}>Cancel</Button>
+      <DialogActions
+        sx={{
+          px: 2.5,
+          py: 2,
+          background: "#fff",
+          borderTop: "1px solid #e5e7eb",
+        }}
+      >
+        <Button
+          onClick={onClose}
+          variant="outlined"
+          sx={{
+            borderRadius: "12px",
+            textTransform: "none",
+            fontWeight: 800,
+            borderColor: "#e5e7eb",
+            color: "#0f172a",
+            "&:hover": { background: "#f8fafc", borderColor: "#e2e8f0" },
+          }}
+        >
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -684,447 +684,589 @@ export default function CustomAlertCreate({ mode = "add",
     };
     console.log('error', errors);
 
+    const ui = {
+  page: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    minHeight: 0,
+  },
+  container: {
+    flex: "1 1 auto",
+    minHeight: 0,
+  },
+  formWrap: {
+    width: "100%",
+    maxWidth: 980,
+    margin: "0 auto",
+  },
+  sectionCard: {
+    border: "1px solid #e5e7eb",
+    borderRadius: "16px",
+    background: "#fff",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+    transition: "transform 160ms ease, box-shadow 160ms ease",
+  },
+  sectionHeader: {
+    px: 2,
+    py: 1.5,
+    borderBottom: "1px solid #e5e7eb",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    marginRight: 4,
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: 800,
+    color: "#0f172a",
+  },
+  sectionSub: {
+    marginTop: 2,
+    fontSize: 12,
+    color: "#64748b",
+  },
+  sectionBody: {
+    p: 2,
+  },
+  stickyActions: {
+    position: "sticky",
+    bottom: 0,
+    zIndex: 2,
+    background: "#fff",
+    borderTop: "1px solid #e5e7eb",
+    padding: "12px 16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  badge: (kind) => ({
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 6,
+    padding: "4px 10px",
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: 700,
+    border: "1px solid #e5e7eb",
+    background:
+      kind === "success"
+        ? "#ecfdf5"
+        : kind === "warning"
+        ? "#fffbeb"
+        : "#f8fafc",
+    color:
+      kind === "success"
+        ? "#047857"
+        : kind === "warning"
+        ? "#b45309"
+        : "#334155",
+  }),
+};
 
-    return (
-        <div style={{ padding: 20, maxWidth: 800 }}>
-            <form>
-                <Stack spacing={3}>
+   return (
+  <div style={ui.page}>
+    <div style={ui.container}>
+      <div style={ui.formWrap}>
+        <form>
+          <Stack spacing={2.25}>
 
-                    {/* ========================= BASIC SETTINGS ==========================*/}
+            {/* ===== BASIC SETTINGS ===== */}
+            <Card variant="outlined" sx={ui.sectionCard}>
+              <div style={ui.sectionHeader}>
+                <div className='ml-4'>
+                  <div style={ui.sectionTitle}>Basic settings</div>
+                  <div style={ui.sectionSub}>
+                    Name, description, SPL query and schedule basics.
+                  </div>
+                </div>
 
-                    {/* Title */}
-                    <TextField
-                        label="Title"
-                        size='small'
-                        required
-                        disabled={mode === "edit"}
-                        value={title}
-                        error={!!errors?.title}
-                        helperText={errors?.title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {verified ? (
+                    <span style={ui.badge("success")}>Verified</span>
+                  ) : (
+                    <span style={ui.badge("warning")}>Not verified</span>
+                  )}
+                </div>
+              </div>
 
-                    {/* Description */}
-                    <TextField
-                        label="Description"
-                        multiline
-                        size='small'
-                        minRows={3}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        fullWidth
-                    />
+              <CardContent sx={ui.sectionBody}>
+                <Stack spacing={2}>
+                  <TextField
+                    label="Title"
+                    size="small"
+                    required
+                    disabled={mode === "edit"}
+                    value={title}
+                    error={!!errors?.title}
+                    helperText={errors?.title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    fullWidth
+                  />
 
-                    {/* Search */}
-                    <TextField
-                        label="Search"
-                        required
-                        size='small'
-                        multiline
-                        minRows={4}
-                        value={search}
-                        error={!!errors?.search}
-                        onChange={(e) => {
-                            verifyCancelRef.current = true;
-                            setVerified(false);
-                            setErrors({ ...errors, search: null });
-                            setSearch(e.target.value);
-                            resultsRef.current = [];
-                        }}
-                        helperText={
-                            errors?.search ||
-                            `Required fields: cyences_severity, event_time/_time.
+                  <TextField
+                    label="Description"
+                    multiline
+                    size="small"
+                    minRows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    fullWidth
+                  />
+
+                  <TextField
+                    label="Search"
+                    required
+                    size="small"
+                    multiline
+                    minRows={5}
+                    value={search}
+                    error={!!errors?.search}
+                    onChange={(e) => {
+                      verifyCancelRef.current = true;
+                      setVerified(false);
+                      setErrors({ ...errors, search: null });
+                      setSearch(e.target.value);
+                      resultsRef.current = [];
+                    }}
+                    helperText={
+                      errors?.search ||
+                      `Required fields: cyences_severity, event_time/_time.
 Severity: info | low | medium | high | critical.
 Time format: YYYY-MM-DD HH:MM:SS TZ`
-                        }
+                    }
+                    fullWidth
+                  />
+                </Stack>
+              </CardContent>
+            </Card>
+
+            {/* ===== TIME RANGE + VERIFY ===== */}
+            <Card variant="outlined" sx={ui.sectionCard}>
+              <div style={ui.sectionHeader}>
+                <div className='ml-4'>
+                  <div style={ui.sectionTitle}>Time range & verification</div>
+                  <div style={ui.sectionSub}>
+                    Pick time range, verify SPL output shape, then schedule with cron.
+                  </div>
+                </div>
+
+                {verifyInfo ? (
+                  <span style={ui.badge(verified ? "success" : "warning")}>
+                    {verified
+                      ? `OK • ${verifyInfo.count} events`
+                      : `${verifyInfo.count} events`}
+                  </span>
+                ) : null}
+              </div>
+
+              <CardContent sx={ui.sectionBody}>
+                <Stack spacing={2}>
+                  <FormControl fullWidth error={!!errors?.timeRange}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setOpenTimeRange(true)}
+                      size="small"
+                      sx={{
+                        justifyContent: "flex-start",
+                        borderRadius: "12px",
+                        height: 44,
+                        borderColor: "#e5e7eb",
+                        color: "#0f172a",
+                        background: "#fff",
+                        textTransform: "none",
+                      }}
+                    >
+                      {selectedTimeRange || "Select Time Range"}
+                    </Button>
+                    {errors?.timeRange && (
+                      <FormHelperText>{errors.timeRange}</FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <Button
+                      variant="contained"
+                      onClick={verifySearch}
+                      size="small"
+                      disabled={isVerifying || verified || !search || !selectedTimeRange}
+                      sx={{
+                        borderRadius: "12px",
+                        textTransform: "none",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {isVerifying
+                        ? "Verifying search..."
+                        : verified
+                          ? "Verified"
+                          : "Verify Search Query"}
+                    </Button>
+
+                    <TextField
+                      label="Cron Expression"
+                      size="small"
+                      placeholder="*/15 * * * *"
+                      value={cronExpr}
+                      error={!!errors?.cronExpr}
+                      helperText={errors?.cronExpr}
+                      onChange={(e) => setCronExpr(e.target.value)}
+                      sx={{ minWidth: 260 }}
+                    />
+                  </div>
+                </Stack>
+              </CardContent>
+            </Card>
+
+            {/* ===== NOTABLE EVENT CONFIG ===== */}
+            <Card variant="outlined" sx={ui.sectionCard}>
+              <div style={ui.sectionHeader}>
+                <div className='ml-4'>
+                  <div style={ui.sectionTitle}>Notable event configuration</div>
+                  <div style={ui.sectionSub}>
+                    Used by cyences_notable_event_action to enrich alert context.
+                  </div>
+                </div>
+
+                {addNotable ? (
+                  <span style={ui.badge("success")}>Enabled</span>
+                ) : (
+                  <span style={ui.badge("warning")}>Disabled</span>
+                )}
+              </div>
+
+              <CardContent sx={ui.sectionBody}>
+                <Stack spacing={2}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <TextField
+                      label="Filter Macro Name"
+                      required
+                      size="small"
+                      value={filterMacroName}
+                      error={!!errors?.filterMacroName}
+                      helperText={errors?.filterMacroName}
+                      onChange={(e) => setFilterMacroName(e.target.value)}
+                      fullWidth
                     />
 
+                    <TextField
+                      label="Filter Macro Value"
+                      required
+                      size="small"
+                      value={filterMacroValue}
+                      error={!!errors?.filterMacroValue}
+                      helperText={errors?.filterMacroValue}
+                      onChange={(e) => setFilterMacroValue(e.target.value)}
+                      fullWidth
+                    />
+                  </div>
 
-                    {/* ========================
-        TIME RANGE + VERIFY
-    =========================*/}
-                    <FormControl fullWidth error={!!errors?.timeRange}>
-                        <Button
-                            variant="outlined"
-                            onClick={() => setOpenTimeRange(true)}
-                            size='small'
-                            sx={{ justifyContent: "flex-start", height: 56 }}
-                        >
-                            {selectedTimeRange || "Select Time Range"}
-                        </Button>
-                        {errors?.timeRange && (
-                            <FormHelperText>{errors.timeRange}</FormHelperText>
-                        )}
+                  <TextField
+                    label="Contributing Events"
+                    size="small"
+                    value={contributingEvents}
+                    error={!!errors?.contributingEvents}
+                    helperText={errors?.contributingEvents}
+                    onChange={(e) => setContributingEvents(e.target.value)}
+                    fullWidth
+                  />
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <TextField
+                      label="System Compromised Search"
+                      multiline
+                      size="small"
+                      minRows={3}
+                      value={systemCompromisedSearch}
+                      error={!!errors?.systemCompromisedSearch}
+                      helperText={errors?.systemCompromisedSearch}
+                      onChange={(e) => setSystemCompromisedSearch(e.target.value)}
+                      fullWidth
+                    />
+
+                    <TextField
+                      label="System Compromised Drilldown"
+                      multiline
+                      size="small"
+                      minRows={3}
+                      value={systemCompromisedDrill}
+                      inputRef={systemDrillRef}
+                      error={!!errors?.systemCompromisedDrill}
+                      helperText={errors?.systemCompromisedDrill}
+                      onChange={(e) => {
+                        setSystemCompromisedDrill(e.target.value);
+                        setErrors((prev) => ({ ...prev, systemCompromisedDrill: null }));
+                      }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <TextField
+                      label="Attacker Search"
+                      multiline
+                      size="small"
+                      minRows={3}
+                      value={attackerSearch}
+                      error={!!errors?.attackerSearch}
+                      helperText={errors?.attackerSearch}
+                      onChange={(e) => setAttackerSearch(e.target.value)}
+                      fullWidth
+                    />
+
+                    <TextField
+                      label="Attacker Drilldown"
+                      multiline
+                      size="small"
+                      minRows={3}
+                      value={attackerSearchDrill}
+                      inputRef={attackerDrillRef}
+                      error={!!errors?.attackerSearchDrill}
+                      helperText={errors?.attackerSearchDrill}
+                      onChange={(e) => {
+                        setAttackerSearchDrill(e.target.value);
+                        setErrors((prev) => ({ ...prev, attackerSearchDrill: null }));
+                      }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <FormControl fullWidth error={!!errors?.product}>
+                      <Typography variant="caption" sx={{ fontWeight: 700, color: "#0f172a" }}>
+                        Product
+                      </Typography>
+                      <Select
+                        size="small"
+                        value={product}
+                        onChange={(e) => {
+                          setProduct(e.target.value);
+                          setErrors((prev) => ({ ...prev, product: null }));
+                        }}
+                        displayEmpty
+                        sx={{ borderRadius: "12px" }}
+                      >
+                        <MenuItem disabled value="">
+                          Select Product
+                        </MenuItem>
+                        {productsList.map((item) => (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors?.product && <FormHelperText>{errors.product}</FormHelperText>}
                     </FormControl>
 
-                    <Button
-                        variant="contained"
-                        onClick={verifySearch}
-                        size='small'
-                        disabled={isVerifying || verified || !search || !selectedTimeRange}
-                    >
-                        {isVerifying
-                            ? "Verifying search..."
-                            : verified
-                                ? "Verified"
-                                : "Verify Search Query"}
-                    </Button>
+                    <FormControl fullWidth error={!!errors?.teams}>
+                      <Typography variant="caption" sx={{ fontWeight: 700, color: "#0f172a" }}>
+                        Teams
+                      </Typography>
+                      <Select
+                        size="small"
+                        value={teams}
+                        onChange={(e) => {
+                          setTeams(e.target.value);
+                          setErrors((prev) => ({ ...prev, teams: null }));
+                        }}
+                        displayEmpty
+                        sx={{ borderRadius: "12px" }}
+                      >
+                        <MenuItem disabled value="">
+                          Select Team
+                        </MenuItem>
+                        {teamsList.map((team) => (
+                          <MenuItem key={team.value} value={team.value}>
+                            {team.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors?.teams && <FormHelperText>{errors.teams}</FormHelperText>}
+                    </FormControl>
+                  </div>
+                </Stack>
+              </CardContent>
+            </Card>
 
-                    {verifyInfo && (
-                        <Typography
-                            variant="caption"
-                            color={verified ? "success.main" : "warning.main"}
-                        >
-                            {verified
-                                ? `Verification passed (${verifyInfo.count} events)`
-                                : `Verification: ${verifyInfo.count} events found`}
-                        </Typography>
-                    )}
+            {/* ===== EMAIL SETTINGS ===== */}
+            <Card variant="outlined" sx={ui.sectionCard}>
+              <div style={ui.sectionHeader}>
+                <div className='ml-4'>
+                  <div style={ui.sectionTitle}>Email notification settings</div>
+                  <div style={ui.sectionSub}>
+                    Controls cyences_send_email_action recipients and severities.
+                  </div>
+                </div>
 
-                    {/* Cron */}
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={sendEmail}
+                      onChange={() => setSendEmail(!sendEmail)}
+                    />
+                  }
+                  label={
+                    <span style={{ fontSize: 12, fontWeight: 800, color: "#0f172a" }}>
+                      {sendEmail ? "Enabled" : "Disabled"}
+                    </span>
+                  }
+                  sx={{ m: 0 }}
+                />
+              </div>
+
+              <CardContent sx={ui.sectionBody}>
+                {sendEmail ? (
+                  <Stack spacing={2}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <TextField
+                        size="small"
+                        label="Severities to include"
+                        value={includeSev}
+                        onChange={(e) => setIncludeSev(e.target.value)}
+                        fullWidth
+                      />
+
+                      <TextField
+                        size="small"
+                        label="Severities to exclude"
+                        value={excludeSev}
+                        onChange={(e) => setExcludeSev(e.target.value)}
+                        fullWidth
+                      />
+                    </div>
+
                     <TextField
-                        label="Cron Expression"
-                        size='small'
-                        placeholder="*/15 * * * *"
-                        value={cronExpr}
-                        error={!!errors?.cronExpr}
-                        helperText={errors?.cronExpr}
-                        onChange={(e) => setCronExpr(e.target.value)}
+                      size="small"
+                      label="Additional emails"
+                      multiline
+                      minRows={2}
+                      value={additionalEmails}
+                      onChange={(e) => setAdditionalEmails(e.target.value)}
+                      fullWidth
                     />
 
+                    <TextField
+                      size="small"
+                      label="Emails to exclude"
+                      multiline
+                      minRows={2}
+                      value={emailsToExclude}
+                      onChange={(e) => setEmailsToExclude(e.target.value)}
+                      fullWidth
+                    />
+                  </Stack>
+                ) : (
+                  <Typography variant="body2" sx={{ color: "#64748b" }}>
+                    Email notifications are disabled for this alert.
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
 
-                    {/* =========================
-        ADD NOTABLE EVENT
-    ==========================*/}
-                    {/* <Typography variant="h7">Add Notable Event</Typography> */}
+            {/* API error */}
+            {errors.api ? (
+              <Alert severity="error" variant="outlined">
+                {errors.api}
+              </Alert>
+            ) : null}
 
-                    {/* <FormControlLabel
-                        control={
-                            <Switch
-                                checked={addNotable}
-                                onChange={() => setAddNotable(!addNotable)}
-                            />
-                        }
-                        label="Add Notable Event"
-                        sx={{
-                            '& .MuiFormControlLabel-label': {
-                                fontSize: '1rem', // 14px
-                            },
-                        }}
-                    /> */}
+            {/* Sticky bottom actions */}
+            <div style={ui.stickyActions}>
+              <div style={{ fontSize: 12, color: "#64748b" }}>
+                {mode === "edit" ? `Editing: ${savedSearchName || "—"}` : " "}
+              </div>
 
-                    <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
-                        <CardContent>
-                            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                                Notable Event Configuration
-                            </Typography>
+              <Button
+                variant="contained"
+                onClick={handleSave}
+                disabled={isSaving}
+                sx={{ borderRadius: "12px", textTransform: "none", fontWeight: 800 }}
+              >
+                {isSaving ? "Saving..." : mode === "edit" ? "Update Alert" : "Create Alert"}
+              </Button>
+            </div>
+          </Stack>
+        </form>
 
-                            <Divider sx={{ mb: 2 }} />
-                            <Stack spacing={2}>
-                                <TextField
-                                    label="Filter Macro Name"
-                                    required
-                                    size='small'
-                                    value={filterMacroName}
-                                    error={!!errors?.filterMacroName}
-                                    helperText={errors?.filterMacroName}
-                                    onChange={(e) => setFilterMacroName(e.target.value)}
-                                />
+        {/* dialogs unchanged */}
+        <TimeRangeDialog
+          open={openTimeRange}
+          onClose={() => setOpenTimeRange(false)}
+          onSelect={(value) => setSelectedTimeRange(value)}
+        />
 
-                                <TextField
-                                    label="Filter Macro Value"
-                                    required
-                                    size='small'
-                                    value={filterMacroValue}
-                                    error={!!errors?.filterMacroValue}
-                                    helperText={errors?.filterMacroValue}
-                                    onChange={(e) => setFilterMacroValue(e.target.value)}
-                                />
+        {showSaveDialog && (
+          <Dialog
+            open={showSaveDialog}
+            onClose={() => {
+              setShowSaveDialog(false);
+              setErrors({});
+            }}
+            maxWidth="sm"
+            fullWidth
+            PaperProps={{
+              sx: {
+                borderRadius: "16px",
+                border: "1px solid #e5e7eb",
+                boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
+              },
+            }}
+          >
+            <DialogTitle className="flex items-center gap-2">
+              <WarningAmberIcon className="text-amber-500" />
+              <Typography fontWeight={800}>Verify before saving</Typography>
+            </DialogTitle>
 
-                                <TextField
-                                    label="Contributing Events"
-                                    size='small'
-                                    value={contributingEvents}
-                                    error={!!errors?.contributingEvents}
-                                    helperText={errors?.contributingEvents}
-                                    onChange={(e) => setContributingEvents(e.target.value)}
-                                />
+            <Divider />
 
-                                <TextField
-                                    label="System Compromised Search"
-                                    multiline
-                                    size='small'
-                                    minRows={3}
-                                    value={systemCompromisedSearch}
-                                    error={!!errors?.systemCompromisedSearch}
-                                    helperText={errors?.systemCompromisedSearch}
-                                    onChange={(e) => setSystemCompromisedSearch(e.target.value)}
-                                />
+            <DialogContent className="space-y-3 pt-4">
+              <Typography variant="body2" color="text.secondary" className="pb-1">
+                To ensure this alert works correctly, please verify the search query before saving.
+              </Typography>
 
-                                <TextField
-                                    label="System Compromised Search Drilldown"
-                                    multiline
-                                    size='small'
-                                    minRows={3}
-                                    value={systemCompromisedDrill}
-                                    inputRef={systemDrillRef}
-                                    // disabled={!systemCompromisedSearch.trim()}
-                                    error={!!errors?.systemCompromisedDrill}
-                                    helperText={errors?.systemCompromisedDrill}
-                                    onChange={(e) => {
-                                        setSystemCompromisedDrill(e.target.value);
-                                        setErrors(prev => ({ ...prev, systemCompromisedDrill: null }));
-                                    }}
-                                />
+              <Alert severity="info" variant="outlined">
+                The search must include required fields:
+                <strong> cyences_severity</strong> and <strong> _time</strong>
+              </Alert>
 
+              {errors?.api && <Alert severity="error">{errors.api}</Alert>}
+              {errors?.search && <Alert severity="error">{errors.search}</Alert>}
+            </DialogContent>
 
-                                <TextField
-                                    label="Attacker Search"
-                                    multiline
-                                    size='small'
-                                    minRows={3}
-                                    value={attackerSearch}
-                                    error={!!errors?.attackerSearch}
-                                    helperText={errors?.attackerSearch}
-                                    onChange={(e) => setAttackerSearch(e.target.value)}
-                                />
+            <DialogActions className="px-6 pb-4">
+              <Button
+                onClick={() => {
+                  setShowSaveDialog(false);
+                  setErrors({});
+                }}
+                disabled={isSaving || isVerifying}
+                sx={{ borderRadius: "12px", textTransform: "none" }}
+              >
+                Cancel
+              </Button>
 
-                                <TextField
-                                    label="Attacker Search Drilldown"
-                                    multiline
-                                    size='small'
-                                    minRows={3}
-                                    value={attackerSearchDrill}
-                                    inputRef={attackerDrillRef}
-                                    // disabled={!attackerSearch.trim()}
-                                    error={!!errors?.attackerSearchDrill}
-                                    helperText={errors?.attackerSearchDrill}
-                                    onChange={(e) => {
-                                        setAttackerSearchDrill(e.target.value);
-                                        setErrors(prev => ({ ...prev, attackerSearchDrill: null }));
-                                    }}
-                                />
-
-
-                                {/* Products */}
-                                <label>Product</label>
-                                <FormControl fullWidth error={!!errors?.product}>
-                                    <Select
-                                        size='small'
-                                        value={product}
-                                        onChange={(e) => {
-                                            setProduct(e.target.value);
-                                            setErrors(prev => ({ ...prev, product: null }));
-                                        }}
-                                        displayEmpty
-                                    >
-                                        <MenuItem disabled value="">
-                                            Select Product
-                                        </MenuItem>
-                                        {productsList.map((item) => (
-                                            <MenuItem key={item.value} value={item.value}>
-                                                {item.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors?.product && (
-                                        <FormHelperText>{errors.product}</FormHelperText>
-                                    )}
-                                </FormControl>
-
-                                {/* Teams */}
-                                <label>Teams</label>
-                                <FormControl fullWidth error={!!errors?.teams}>
-                                    <Select
-                                        size='small'
-                                        value={teams}
-                                        onChange={(e) => {
-                                            setTeams(e.target.value);
-                                            setErrors(prev => ({ ...prev, teams: null }));
-                                        }}
-                                        displayEmpty
-                                    >
-                                        <MenuItem disabled value="">
-                                            Select Team
-                                        </MenuItem>
-                                        {teamsList.map((team) => (
-                                            <MenuItem key={team.value} value={team.value}>
-                                                {team.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors?.teams && (
-                                        <FormHelperText>{errors.teams}</FormHelperText>
-                                    )}
-                                </FormControl>
-
-                            </Stack>
-                        </CardContent>
-                    </Card>
-
-                    {/* =========================
-                      SEND EMAIL
-                    ==========================*/}
-                    {/* <Typography variant="h7">Send Email</Typography> */}
-
-
-
-
-                    <Card variant="outlined" sx={{ bgcolor: "#fafafa" }}>
-                        <CardContent>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={sendEmail}
-                                        onChange={() => setSendEmail(!sendEmail)}
-                                    />
-                                }
-                                label={<Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                                    Email Notification Settings
-                                </Typography>}
-                                sx={{
-                                    '& .MuiFormControlLabel-label': {
-                                        fontSize: '1rem', // 14px
-                                    },
-                                }}
-                            />
-                            <Divider sx={{ mb: 2 }} />
-                            {sendEmail && (
-                                <Stack spacing={2}>
-                                    <TextField
-                                        size='small'
-                                        label="Severities to include"
-                                        value={includeSev}
-                                        onChange={(e) => setIncludeSev(e.target.value)}
-                                    />
-
-                                    <TextField
-                                        size='small'
-                                        label="Severities to exclude"
-                                        value={excludeSev}
-                                        onChange={(e) => setExcludeSev(e.target.value)}
-                                    />
-
-                                    <TextField
-                                        size='small'
-                                        label="Additional emails"
-                                        multiline
-                                        minRows={2}
-                                        value={additionalEmails}
-                                        onChange={(e) => setAdditionalEmails(e.target.value)}
-                                    />
-
-                                    <TextField
-                                        size='small'
-                                        label="Emails to exclude"
-                                        multiline
-                                        minRows={2}
-                                        value={emailsToExclude}
-                                        onChange={(e) => setEmailsToExclude(e.target.value)}
-                                    />
-                                </Stack>
-                            )}
-                        </CardContent>
-                    </Card>
-
-
-                    {/* =========================
-                    ACTION BUTTONS
-                    ==========================*/}
-                    {errors.api && (
-                        <Typography color="error" variant="caption">
-                            {errors.api}
-                        </Typography>
-                    )}
-
-                    <Button variant="contained" onClick={handleSave} disabled={isSaving}>
-                        {isSaving
-                            ? "Saving..."
-                            : mode === "edit"
-                                ? "Update Alert"
-                                : "Create Alert"}
-                    </Button>
-
-
-                </Stack>
-            </form>
-
-            <TimeRangeDialog
-                open={openTimeRange}
-                onClose={() => setOpenTimeRange(false)}
-                onSelect={(value) => setSelectedTimeRange(value)}
-            />
-            {showSaveDialog && (
-                <Dialog
-                    open={showSaveDialog}
-                    onClose={() => {
-                        setShowSaveDialog(false);
-                        setErrors({});
-                    }}
-                    maxWidth="sm"
-                    fullWidth
-                >
-                    {/* Header */}
-                    <DialogTitle className="flex items-center gap-2">
-                        <WarningAmberIcon className="text-amber-500" />
-                        <Typography fontWeight={600}>
-                            Verify before saving
-                        </Typography>
-                    </DialogTitle>
-
-                    <Divider />
-
-                    {/* Content */}
-                    <DialogContent className="space-y-3 pt-4">
-                        <Typography variant="body2" color="text.secondary" className='pb-1'>
-                            To ensure this alert works correctly, please verify the
-                            search query before saving.
-                        </Typography>
-
-                        <Alert severity="info" variant="outlined">
-                            The search must include required fields:
-                            <strong> cyences_severity</strong> and
-                            <strong> _time</strong>
-                        </Alert>
-
-                        {errors?.api && (
-                            <Alert severity="error">{errors.api}</Alert>
-                        )}
-
-                        {errors?.search && (
-                            <Alert severity="error">{errors.search}</Alert>
-                        )}
-                    </DialogContent>
-
-                    {/* Actions */}
-                    <DialogActions className="px-6 pb-4">
-                        <Button
-                            onClick={() => {
-                                setShowSaveDialog(false);
-                                setErrors({});
-                            }}
-                            disabled={isSaving || isVerifying}
-                        >
-                            Cancel
-                        </Button>
-
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                setIsVerifying(true);
-                                const ok = await verifySearch();
-                                setIsVerifying(false);
-                                if (ok) {
-                                    await doSave();
-                                }
-                            }}
-                            disabled={isVerifying || isSaving}
-                        >
-                            {isVerifying ? "Verifying…" : "Verify & Save"}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            )}
-        </div >
-    );
+              <Button
+                variant="contained"
+                onClick={async () => {
+                  setIsVerifying(true);
+                  const ok = await verifySearch();
+                  setIsVerifying(false);
+                  if (ok) {
+                    await doSave();
+                  }
+                }}
+                disabled={isVerifying || isSaving}
+                sx={{ borderRadius: "12px", textTransform: "none", fontWeight: 800 }}
+              >
+                {isVerifying ? "Verifying…" : "Verify & Save"}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </div>
+    </div>
+  </div>
+);
 }

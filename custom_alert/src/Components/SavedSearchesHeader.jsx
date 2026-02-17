@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import CreateAlertDialog from "./CustomAlertForm/CreateAlertDialog";
@@ -9,38 +9,43 @@ export default function SavedSearchesHeader({ filter, onFilterChange, refetch })
 
   return (
     <>
-      {/* Header Container */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white px-4 py-4 shadow-sm sm:px-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Title Section */}
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900 sm:text-xl">
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden animate-[fadeUp_.22s_ease-out_both]">
+        {/* Top row */}
+        <div className="px-4 py-3 sm:px-5 border-b border-slate-200 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <div className="text-base sm:text-lg font-extrabold text-slate-900">
               Cyences Alerts
-            </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            </div>
+            <div className="mt-1 text-xs sm:text-sm text-slate-500">
               Manage alert configurations
-            </p>
+            </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
+            <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+              {filter?.trim() ? "Filtered" : "All alerts"}
+            </span>
+
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               size="small"
               onClick={() => setOpenAlertDialog(true)}
-              className="!rounded-lg"
+              sx={{
+                backgroundColor: "black",
+                borderRadius: "12px",
+                textTransform: "none",
+                fontWeight: 700,
+                boxShadow: "none",
+              }}
             >
               New Alert
             </Button>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="my-4 h-px bg-gray-100" />
-
-        {/* Filter Bar */}
-        <div className="flex justify-end">
+        {/* Filter row */}
+        <div className="px-3 py-3 sm:px-5 flex justify-end">
           <TextField
             size="small"
             placeholder="Search alerts…"
@@ -48,12 +53,15 @@ export default function SavedSearchesHeader({ filter, onFilterChange, refetch })
             onChange={(e) => onFilterChange(e.target.value)}
             InputProps={{
               startAdornment: (
-                <SearchIcon className="mr-2 text-gray-400" fontSize="small" />
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" className="text-slate-400" />
+                </InputAdornment>
               ),
             }}
             sx={{
-              width: { xs: "100%", sm: 260 },
+              width: { xs: "100%", sm: 320 },
               backgroundColor: "#fff",
+              "& .MuiOutlinedInput-root": { borderRadius: "12px" },
             }}
           />
         </div>
@@ -66,6 +74,14 @@ export default function SavedSearchesHeader({ filter, onFilterChange, refetch })
         mode="add"
         refetch={refetch}
       />
+
+      {/* tiny keyframes (safe even if tailwind config doesn’t include it) */}
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </>
   );
 }
