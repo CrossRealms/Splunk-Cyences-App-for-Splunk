@@ -642,7 +642,9 @@ export default function CustomAlertCreate({ mode = "add",
             if (addNotable && filterMacroName && filterMacroValue) {
                 await createOrUpdateMacro(
                     filterMacroName,
-                    filterMacroValue
+                    filterMacroValue,
+                    null,
+                    mode
                 );
             }
 

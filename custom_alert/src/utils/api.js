@@ -38,14 +38,16 @@ async function fetchSavedSearchesByname(name, params = {}, showToast) {
   });
 }
 
-async function createOrUpdateMacro(name, definition, showToast) {
+async function createOrUpdateMacro(name, definition, showToast, mode) {
   const body = new URLSearchParams();
-
-  body.append("name", name);
+const endpointUrl = mode === "add"
+        ? MACROS_ENDPOINT
+        : `${MACROS_ENDPOINT}/${encodeURIComponent(name)}`;
+  if(mode !== "edit") body.append("name", name);
   body.append("definition", definition);
 
   return await axiosCallWrapper({
-    endpointUrl: MACROS_ENDPOINT,
+    endpointUrl: endpointUrl,
     body,
     method: "post",
     showToast,
