@@ -59,7 +59,6 @@ let allMacros = [
         macros: [
             { name: 'cs_o365_failed_login_outside_country_filter' },
             { name: 'cs_o365_password_reset_threshold' },
-            { name: 'cs_o365_multiple_failed_login_threshold' }
         ]
     },
     {
@@ -123,6 +122,7 @@ let allMacros = [
         section: 'Authentication',
         macros: [
             { name: 'cs_authentication_app_filter' },
+            { name: 'cs_authentication_multiple_failed_logins_by_user_limit' },
             { name: 'cs_bruteforce_from_user_additional_filter' },
             { name: 'cs_bruteforce_from_source_additional_filter' },
             { name: 'cs_authentication_bruteforce_attempt_limit' },
