@@ -76722,15 +76722,6 @@ html, body, #root {
       gap: "12px"
     },
     contentTitle: { fontSize: "16px", fontWeight: 700, margin: 0, color: "#111827" },
-    pill: {
-      fontSize: "12px",
-      color: "#111827",
-      background: "#f3f4f6",
-      border: "1px solid #e5e7eb",
-      borderRadius: "999px",
-      padding: "6px 10px",
-      whiteSpace: "nowrap"
-    },
     //  the ONLY scroll area for product content
     contentScroll: {
       flex: "1 1 auto",
@@ -76794,7 +76785,6 @@ html, body, #root {
     if (!products || products.length === 0) {
       return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles$1.stateBox, children: "No products found in configuration." });
     }
-    const activeLabel = activeTabId || getTabId(products[0]);
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles$1.wrap, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles$1.shell, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("aside", { style: styles$1.sidebarCard, children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles$1.sidebarHeader, children: [
@@ -76813,13 +76803,7 @@ html, body, #root {
         ) })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { style: styles$1.contentCard, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles$1.contentHeader, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: styles$1.contentTitle, children: "Product Setup" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { style: styles$1.pill, children: [
-            "Active: ",
-            activeLabel
-          ] })
-        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles$1.contentHeader, children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: styles$1.contentTitle, children: "Product Setup" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles$1.contentScroll, children: [
           products.map((productInfo) => {
             const id2 = getTabId(productInfo);
