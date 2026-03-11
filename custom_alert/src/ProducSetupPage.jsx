@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 import CyencesGeneralConfiguration from "./CyencesGeneralConfiguration";
 import ProductSetupApp from "./ProductSetupApp";
@@ -25,8 +25,6 @@ const TABS = [
 
 export default function ProductSetupPage() {
     const [activeTabId, setActiveTabId] = useState(TABS[0]);
-
-    // NEW: collapse state
     const [isMainNavCollapsed, setIsMainNavCollapsed] = useState(false);
 
     const handleChange = useCallback((e, { selectedTabId }) => {

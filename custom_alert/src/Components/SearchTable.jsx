@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@splunk/react-ui/Table";
 import SearchJob from "@splunk/search-job";
 import { app } from "@splunk/splunk-utils/config";
@@ -87,7 +87,7 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
     };
   }, [searchQuery, earliestTime, latestTime]);
 
-  const rowCount = useMemo(() => (Array.isArray(data.results) ? data.results.length : 0), [data.results]);
+  // const rowCount = useMemo(() => (Array.isArray(data.results) ? data.results.length : 0), [data.results]);
 
   // Loading
   if (data.results === undefined && !errorMsg) {
@@ -152,7 +152,7 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
       `}</style>
 
       {/* Header bar (pure UI) */}
-      <div
+      {/* <div
         style={{
           padding: "10px 12px",
           borderBottom: "1px solid #e5e7eb",
@@ -165,7 +165,7 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
       >
         <div style={{ fontSize: 13, fontWeight: 900, color: "#111827" }}>Results</div>
         <Pill>{rowCount} row{rowCount === 1 ? "" : "s"}</Pill>
-      </div>
+      </div> */}
 
       {/* Horizontal scroll if many columns */}
       <div style={{ overflowX: "auto" }}>

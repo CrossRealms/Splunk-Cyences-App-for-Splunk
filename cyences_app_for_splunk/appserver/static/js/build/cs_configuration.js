@@ -908,46 +908,39 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --color-red-50: oklch(97.1% .013 17.38);
-    --color-red-100: oklch(93.6% .032 17.717);
     --color-red-600: oklch(57.7% .245 27.325);
-    --color-red-700: oklch(50.5% .213 27.518);
     --color-amber-500: oklch(76.9% .188 70.08);
-    --color-green-100: oklch(96.2% .044 156.743);
-    --color-green-700: oklch(52.7% .154 150.069);
-    --color-blue-50: oklch(97% .014 254.604);
-    --color-blue-300: oklch(80.9% .105 251.813);
+    --color-emerald-50: oklch(97.9% .021 166.113);
+    --color-emerald-200: oklch(90.5% .093 164.15);
+    --color-emerald-700: oklch(50.8% .118 165.612);
+    --color-rose-50: oklch(96.9% .015 12.422);
+    --color-rose-200: oklch(89.2% .058 10.001);
+    --color-rose-700: oklch(51.4% .222 16.935);
     --color-slate-50: oklch(98.4% .003 247.858);
     --color-slate-100: oklch(96.8% .007 247.896);
     --color-slate-200: oklch(92.9% .013 255.508);
+    --color-slate-300: oklch(86.9% .022 252.894);
     --color-slate-400: oklch(70.4% .04 256.788);
     --color-slate-500: oklch(55.4% .046 257.417);
     --color-slate-600: oklch(44.6% .043 257.281);
     --color-slate-700: oklch(37.2% .044 257.287);
     --color-slate-800: oklch(27.9% .041 260.031);
     --color-slate-900: oklch(20.8% .042 265.755);
-    --color-gray-100: oklch(96.7% .003 264.542);
-    --color-gray-200: oklch(92.8% .006 264.531);
-    --color-gray-400: oklch(70.7% .022 261.325);
-    --color-gray-500: oklch(55.1% .027 264.364);
-    --color-gray-700: oklch(37.3% .034 259.733);
-    --color-gray-800: oklch(27.8% .033 256.848);
-    --color-gray-900: oklch(21% .034 264.665);
-    --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
     --text-xs: .75rem;
     --text-xs--line-height: calc(1 / .75);
     --text-sm: .875rem;
     --text-sm--line-height: calc(1.25 / .875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
-    --text-xl: 1.25rem;
-    --text-xl--line-height: calc(1.75 / 1.25);
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
     --leading-tight: 1.25;
-    --radius-lg: .5rem;
     --radius-xl: .75rem;
     --radius-2xl: 1rem;
     --ease-out: cubic-bezier(0, 0, .2, 1);
@@ -1209,10 +1202,6 @@
 @layer components;
 
 @layer utilities {
-  .collapse {
-    visibility: collapse;
-  }
-
   .visible {
     visibility: visible;
   }
@@ -1233,16 +1222,38 @@
     position: sticky;
   }
 
-  .inset-0 {
-    inset: calc(var(--spacing) * 0);
+  .container {
+    width: 100%;
   }
 
-  .z-10 {
-    z-index: 10;
+  @media (min-width: 40rem) {
+    .container {
+      max-width: 40rem;
+    }
   }
 
-  .my-4 {
-    margin-block: calc(var(--spacing) * 4);
+  @media (min-width: 48rem) {
+    .container {
+      max-width: 48rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .container {
+      max-width: 64rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .container {
+      max-width: 80rem;
+    }
+  }
+
+  @media (min-width: 96rem) {
+    .container {
+      max-width: 96rem;
+    }
   }
 
   .mt-0\\.5 {
@@ -1253,24 +1264,12 @@
     margin-top: calc(var(--spacing) * 1);
   }
 
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
-  }
-
-  .mt-3 {
-    margin-top: calc(var(--spacing) * 3);
-  }
-
-  .mr-2 {
-    margin-right: calc(var(--spacing) * 2);
-  }
-
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
   }
 
-  .mb-6 {
-    margin-bottom: calc(var(--spacing) * 6);
+  .ml-4 {
+    margin-left: calc(var(--spacing) * 4);
   }
 
   .line-clamp-2 {
@@ -1312,10 +1311,6 @@
     height: calc(var(--spacing) * 4);
   }
 
-  .h-8 {
-    height: calc(var(--spacing) * 8);
-  }
-
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
@@ -1326,14 +1321,6 @@
 
   .h-full {
     height: 100%;
-  }
-
-  .h-px {
-    height: 1px;
-  }
-
-  .w-8 {
-    width: calc(var(--spacing) * 8);
   }
 
   .w-24 {
@@ -1352,8 +1339,16 @@
     width: 100%;
   }
 
+  .min-w-0 {
+    min-width: calc(var(--spacing) * 0);
+  }
+
   .transform {
     transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+  }
+
+  .animate-\\[fadeUp_\\.22s_ease-out_both\\] {
+    animation: .22s ease-out both fadeUp;
   }
 
   .cursor-not-allowed {
@@ -1408,12 +1403,12 @@
     gap: calc(var(--spacing) * 3);
   }
 
-  .gap-4 {
-    gap: calc(var(--spacing) * 4);
-  }
-
   .gap-6 {
     gap: calc(var(--spacing) * 6);
+  }
+
+  .gap-12 {
+    gap: calc(var(--spacing) * 12);
   }
 
   :where(.space-y-1 > :not(:last-child)) {
@@ -1428,16 +1423,16 @@
     margin-block-end: calc(calc(var(--spacing) * 1.5) * calc(1 - var(--tw-space-y-reverse)));
   }
 
+  :where(.space-y-2 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
   :where(.space-y-3 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
-  }
-
-  :where(.space-y-4 > :not(:last-child)) {
-    --tw-space-y-reverse: 0;
-    margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
-    margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
   }
 
   :where(.space-y-5 > :not(:last-child)) {
@@ -1446,8 +1441,8 @@
     margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
   }
 
-  .\\!rounded-lg {
-    border-radius: var(--radius-lg) !important;
+  .overflow-hidden {
+    overflow: hidden;
   }
 
   .rounded {
@@ -1462,10 +1457,6 @@
     border-radius: 3.40282e38px;
   }
 
-  .rounded-lg {
-    border-radius: var(--radius-lg);
-  }
-
   .rounded-xl {
     border-radius: var(--radius-xl);
   }
@@ -1475,32 +1466,21 @@
     border-width: 1px;
   }
 
-  .border-gray-200 {
-    border-color: var(--color-gray-200);
-  }
-
-  .border-red-100 {
-    border-color: var(--color-red-100);
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
   }
 
   .border-slate-200 {
     border-color: var(--color-slate-200);
   }
 
-  .bg-gray-100 {
-    background-color: var(--color-gray-100);
+  .bg-emerald-50 {
+    background-color: var(--color-emerald-50);
   }
 
-  .bg-green-100 {
-    background-color: var(--color-green-100);
-  }
-
-  .bg-red-50 {
-    background-color: var(--color-red-50);
-  }
-
-  .bg-red-100 {
-    background-color: var(--color-red-100);
+  .bg-rose-50 {
+    background-color: var(--color-rose-50);
   }
 
   .bg-slate-50 {
@@ -1523,26 +1503,12 @@
     background-color: var(--color-white);
   }
 
-  .bg-white\\/60 {
-    background-color: #fff9;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-white\\/60 {
-      background-color: color-mix(in oklab, var(--color-white) 60%, transparent);
-    }
-  }
-
   .p-3 {
     padding: calc(var(--spacing) * 3);
   }
 
   .p-4 {
     padding: calc(var(--spacing) * 4);
-  }
-
-  .p-6 {
-    padding: calc(var(--spacing) * 6);
   }
 
   .px-1 {
@@ -1569,6 +1535,10 @@
     padding-block: calc(var(--spacing) * .5);
   }
 
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
+  }
+
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
@@ -1577,20 +1547,16 @@
     padding-block: calc(var(--spacing) * 2.5);
   }
 
-  .py-4 {
-    padding-block: calc(var(--spacing) * 4);
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
   }
 
-  .py-10 {
-    padding-block: calc(var(--spacing) * 10);
+  .\\!pt-4 {
+    padding-top: calc(var(--spacing) * 4) !important;
   }
 
   .pt-2 {
     padding-top: calc(var(--spacing) * 2);
-  }
-
-  .pt-3 {
-    padding-top: calc(var(--spacing) * 3);
   }
 
   .pt-4 {
@@ -1617,9 +1583,9 @@
     text-align: left;
   }
 
-  .text-lg {
-    font-size: var(--text-lg);
-    line-height: var(--tw-leading, var(--text-lg--line-height));
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
   }
 
   .text-sm {
@@ -1637,6 +1603,16 @@
     line-height: var(--leading-tight);
   }
 
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .font-extrabold {
+    --tw-font-weight: var(--font-weight-extrabold);
+    font-weight: var(--font-weight-extrabold);
+  }
+
   .font-medium {
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
@@ -1651,36 +1627,20 @@
     color: var(--color-amber-500);
   }
 
-  .text-gray-400 {
-    color: var(--color-gray-400);
-  }
-
-  .text-gray-500 {
-    color: var(--color-gray-500);
-  }
-
-  .text-gray-700 {
-    color: var(--color-gray-700);
-  }
-
-  .text-gray-800 {
-    color: var(--color-gray-800);
-  }
-
-  .text-gray-900 {
-    color: var(--color-gray-900);
-  }
-
-  .text-green-700 {
-    color: var(--color-green-700);
+  .text-emerald-700 {
+    color: var(--color-emerald-700);
   }
 
   .text-red-600 {
     color: var(--color-red-600);
   }
 
-  .text-red-700 {
-    color: var(--color-red-700);
+  .text-rose-700 {
+    color: var(--color-rose-700);
+  }
+
+  .text-slate-400 {
+    color: var(--color-slate-400);
   }
 
   .text-slate-500 {
@@ -1716,6 +1676,19 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
+  .ring-1 {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .ring-emerald-200 {
+    --tw-ring-color: var(--color-emerald-200);
+  }
+
+  .ring-rose-200 {
+    --tw-ring-color: var(--color-rose-200);
+  }
+
   .outline {
     outline-style: var(--tw-outline-style);
     outline-width: 1px;
@@ -1747,12 +1720,8 @@
   }
 
   @media (hover: hover) {
-    .hover\\:border-blue-300:hover {
-      border-color: var(--color-blue-300);
-    }
-
-    .hover\\:bg-blue-50:hover {
-      background-color: var(--color-blue-50);
+    .hover\\:border-slate-300:hover {
+      border-color: var(--color-slate-300);
     }
 
     .hover\\:bg-slate-50:hover {
@@ -1766,6 +1735,10 @@
 
   .focus\\:border-slate-400:focus {
     border-color: var(--color-slate-400);
+  }
+
+  .active\\:scale-\\[0\\.99\\]:active {
+    scale: .99;
   }
 
   @media (min-width: 40rem) {
@@ -1793,25 +1766,18 @@
       padding: calc(var(--spacing) * 6);
     }
 
-    .sm\\:px-6 {
-      padding-inline: calc(var(--spacing) * 6);
+    .sm\\:px-5 {
+      padding-inline: calc(var(--spacing) * 5);
     }
 
-    .sm\\:text-xl {
-      font-size: var(--text-xl);
-      line-height: var(--tw-leading, var(--text-xl--line-height));
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .dark\\:bg-black\\/40 {
-      background-color: #0006;
+    .sm\\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .dark\\:bg-black\\/40 {
-        background-color: color-mix(in oklab, var(--color-black) 40%, transparent);
-      }
+    .sm\\:text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
   }
 }
@@ -2520,7 +2486,7 @@ html, body, #root {
     react_production.useTransition = function() {
       return ReactSharedInternals.H.useTransition();
     };
-    react_production.version = "19.2.3";
+    react_production.version = "19.2.4";
     return react_production;
   }
   var hasRequiredReact;
@@ -2949,7 +2915,7 @@ html, body, #root {
     reactDom_production.useFormStatus = function() {
       return ReactSharedInternals.H.useHostTransitionStatus();
     };
-    reactDom_production.version = "19.2.3";
+    reactDom_production.version = "19.2.4";
     return reactDom_production;
   }
   var hasRequiredReactDom;
@@ -14393,12 +14359,12 @@ html, body, #root {
       }
     };
     var isomorphicReactPackageVersion$jscomp$inline_1840 = React2.version;
-    if ("19.2.3" !== isomorphicReactPackageVersion$jscomp$inline_1840)
+    if ("19.2.4" !== isomorphicReactPackageVersion$jscomp$inline_1840)
       throw Error(
         formatProdErrorMessage(
           527,
           isomorphicReactPackageVersion$jscomp$inline_1840,
-          "19.2.3"
+          "19.2.4"
         )
       );
     ReactDOMSharedInternals.findDOMNode = function(componentOrElement) {
@@ -14416,10 +14382,10 @@ html, body, #root {
     };
     var internals$jscomp$inline_2347 = {
       bundleType: 0,
-      version: "19.2.3",
+      version: "19.2.4",
       rendererPackageName: "react-dom",
       currentDispatcherRef: ReactSharedInternals,
-      reconcilerVersion: "19.2.3"
+      reconcilerVersion: "19.2.4"
     };
     if ("undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__) {
       var hook$jscomp$inline_2348 = __REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -14486,7 +14452,7 @@ html, body, #root {
       listenToAllSupportedEvents(container);
       return new ReactDOMHydrationRoot(initialChildren);
     };
-    reactDomClient_production.version = "19.2.3";
+    reactDomClient_production.version = "19.2.4";
     return reactDomClient_production;
   }
   var hasRequiredClient;
@@ -18372,9 +18338,6 @@ html, body, #root {
         interactiveColorAccentErrorStrong: "#852d24",
         interactiveColorAccentErrorWeak: "#ea958d"
       };
-      var backgrounds = {
-        draggableBackground: "url('data:image/png;base64,".concat(dragHandle, "') 0 0 / 8px 8px repeat")
-      };
       var sansFontFamily = "'Splunk Platform Sans', 'Proxima Nova', Roboto, Droid, 'Helvetica Neue', Helvetica, Arial, sans-serif";
       var typography2 = {
         sansFontFamily,
@@ -18393,6 +18356,7 @@ html, body, #root {
         fontWeightBold: 700,
         fontWeightHeavy: 800,
         fontWeightExtraBold: 900,
+        lineLengthMinimum: "34ch",
         lineLength: "80ch",
         lineHeight: "1.5",
         lineHeightSingle: "1",
@@ -18587,9 +18551,10 @@ html, body, #root {
         statusColorHighStrong: deprecatedEnterpriseColors.errorColorD10,
         statusColorCritical: deprecatedEnterpriseColors.errorColorD10,
         statusColorCriticalWeak: deprecatedEnterpriseColors.errorColor,
-        statusColorCriticalStrong: deprecatedEnterpriseColors.errorColorD20
+        statusColorCriticalStrong: deprecatedEnterpriseColors.errorColorD20,
+        draggableBackground: "url('data:image/png;base64,".concat(dragHandle, "') 0 0 / 8px 8px repeat")
       };
-      var theme = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, deprecatedEnterpriseColors), backgroundColors), actionColors), neutralColors), notificationColors), severityColors), elevationShadows), syntaxColors), usageColors), backgrounds), shadows), typography2), contentColors), interactiveColors), zindexes), _dataViz["default"]), deprecated2);
+      var theme = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, deprecatedEnterpriseColors), backgroundColors), actionColors), neutralColors), notificationColors), severityColors), elevationShadows), syntaxColors), usageColors), shadows), typography2), contentColors), interactiveColors), zindexes), _dataViz["default"]), deprecated2);
       var _default = theme;
       exports$1["default"] = _default;
     })(light$1);
@@ -18793,9 +18758,6 @@ html, body, #root {
         backgroundColorSection: "#1E2427",
         backgroundColorSidebar: _light["default"].black
       };
-      var backgrounds = {
-        draggableBackground: "url('data:image/png;base64,".concat(dragHandleDark, "') 0 0 / 8px 8px repeat")
-      };
       var shadows = {
         focusShadow: "0 0 0 2px ".concat(backgroundColors.backgroundColorPage, ", 0 0 0 5px ").concat(_light["default"].focusColor),
         focusShadowInset: "inset 0 0 0 3px ".concat(_light["default"].focusColor),
@@ -18848,9 +18810,10 @@ html, body, #root {
         statusColorHighStrong: _light["default"].errorColorL10,
         statusColorCritical: _light["default"].errorColorD10,
         statusColorCriticalWeak: _light["default"].errorColorD20,
-        statusColorCriticalStrong: _light["default"].errorColor
+        statusColorCriticalStrong: _light["default"].errorColor,
+        draggableBackground: "url('data:image/png;base64,".concat(dragHandleDark, "') 0 0 / 8px 8px repeat")
       };
-      var theme = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _light["default"]), dark2), actionColors), notificationColors), severityColors), backgroundColors), neutralColors), syntaxColors), contentColors), shadows), interactiveColors), deprecated2), backgrounds);
+      var theme = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, _light["default"]), dark2), actionColors), notificationColors), severityColors), backgroundColors), neutralColors), syntaxColors), contentColors), shadows), interactiveColors), deprecated2);
       var _default = theme;
       exports$1["default"] = _default;
     })(dark$1);
@@ -20570,7 +20533,7 @@ html, body, #root {
         backgroundColorScrim: "rgba(255, 255, 255, 0.75)"
       };
       var borderColors = {
-        borderColor: " #8f8f8f",
+        borderColor: "#8f8f8f",
         borderColorWeak: "#e0e0e0",
         borderColorStrong: "#6b6b6b"
       };
@@ -20695,7 +20658,7 @@ html, body, #root {
       var syntaxColors = {
         syntaxBlue: "#0e6e8b",
         syntaxBrown: "#8b5804",
-        syntaxGray: "#666",
+        syntaxGray: "#666666",
         syntaxGreen: "#556f0b",
         syntaxOrange: "#a64708",
         syntaxPink: "#b9139e",
@@ -20821,9 +20784,6 @@ html, body, #root {
           borderColorWeak: "".concat(colorSchemeVars.borderColorWeak),
           borderColorStrong: "".concat(colorSchemeVars.borderColorStrong)
         };
-        var backgrounds = {
-          draggableBackground: "radial-gradient(circle at 1px 1px, ".concat(colorSchemeVars.contentColorMuted, ", ").concat(colorSchemeVars.contentColorMuted, " 1px, transparent 1px) 0 0 / 4px 6px")
-        };
         var sansFontFamily = "'Splunk Platform Sans', 'Splunk Data Sans', Roboto, Droid, 'Helvetica Neue', Helvetica, Arial, sans-serif";
         var typography2 = {
           sansFontFamily,
@@ -20843,6 +20803,7 @@ html, body, #root {
           fontWeightHeavy: 800,
           fontWeightExtraBold: 900,
           lineHeight: "1.5",
+          lineLengthMinimum: "34ch",
           lineLength: "80ch",
           lineHeightNormal: "1.5",
           lineHeightSingle: "1",
@@ -20861,10 +20822,11 @@ html, body, #root {
           zindexToastMessages: 2e3
         };
         var deprecated2 = {
+          draggableBackground: "radial-gradient(circle at 1px 1px, ".concat(colorSchemeVars.contentColorMuted, ", ").concat(colorSchemeVars.contentColorMuted, " 1px, transparent 1px) 0 0 / 4px 6px"),
           hoverShadow: "0 0 0 2px ".concat(colorSchemeVars.backgroundColorPage, ", 0 0 0 5px ").concat(colorSchemeVars.interactiveColorOverlayHover),
           linkColor: colorSchemeVars.interactiveColorPrimary
         };
-        return _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, typography2), usageColors), _dataViz["default"]), shadows), borders), backgrounds), zindexes), deprecated2);
+        return _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, typography2), usageColors), _dataViz["default"]), shadows), borders), zindexes), deprecated2);
       }
       var _default = createPrismaBase;
       exports$1["default"] = _default;
@@ -21079,7 +21041,7 @@ html, body, #root {
         var isCompact = density === "compact";
         var isDark = colorScheme === "dark";
         var isLight = colorScheme === "light";
-        return Object.freeze(_objectSpread({
+        var utilVariables = {
           colorScheme,
           density,
           family,
@@ -21089,7 +21051,8 @@ html, body, #root {
           isCompact,
           isDark,
           isLight
-        }, family === "enterprise" ? (0, _enterprise["default"])({
+        };
+        return Object.freeze(_objectSpread(_objectSpread({}, utilVariables), family === "enterprise" ? (0, _enterprise["default"])({
           colorScheme,
           density
         }) : (0, _prisma["default"])({
@@ -21352,7 +21315,7 @@ html, body, #root {
         }, _typeof(o2);
       }
       function _templateObject() {
-        var data = _taggedTemplateLiteral(["\n        /* TODO: should this also be a variable? */\n        min-width: 34ch;\n        max-width: ", ";\n\n        /*\n        * Word spacing: 0.16em\n        * Letter spacing (i.e., tracking): 0.12em\n        */\n\n        /*\n        * Style all block-level elements to be 1.5 margin-bottom by default\n        * wcag requirement 1.4.12\n        */\n        & *:is(", "):not(:last-child) {\n            margin-block-end: 1lh;\n        }\n\n        /*\n        * Separate h1 and h2 into individual rules to avoid ts-styled-plugin’s parser\n        * error on comma-separated, multi-line interpolations at the start of a selector.\n        */\n        ", ":where(h1):not(:first-child) {\n            margin-block-start: 1lh;\n        }\n\n        ", ":where(h2):not(:first-child) {\n            margin-block-start: 1lh;\n        }\n\n        ", ":where(img) {\n            max-width: 100%;\n        }\n\n        ", ":where(ol), ", ":where(ul) {\n            padding-inline-start: 2rem;\n        }\n    "]);
+        var data = _taggedTemplateLiteral(["\n        min-width: ", ";\n        max-width: ", ";\n\n        /*\n        * Word spacing: 0.16em\n        * Letter spacing (i.e., tracking): 0.12em\n        */\n\n        /*\n        * Style all block-level elements to be 1.5 margin-bottom by default\n        * wcag requirement 1.4.12\n        */\n        & *:is(", "):not(:last-child) {\n            margin-block-end: 1lh;\n        }\n\n        /*\n        * Separate h1 and h2 into individual rules to avoid ts-styled-plugin’s parser\n        * error on comma-separated, multi-line interpolations at the start of a selector.\n        */\n        ", ":where(h1):not(:first-child) {\n            margin-block-start: 1lh;\n        }\n\n        ", ":where(h2):not(:first-child) {\n            margin-block-start: 1lh;\n        }\n\n        ", ":where(img) {\n            max-width: 100%;\n        }\n\n        ", ":where(ol), ", ":where(ul) {\n            padding-inline-start: 2rem;\n        }\n    "]);
         _templateObject = function _templateObject2() {
           return data;
         };
@@ -21423,7 +21386,7 @@ html, body, #root {
         var selectors = _objectSpread(_objectSpread({}, defaultElementSelectors), elementSelectors);
         var allSelectors = Array.from(new Set(Object.values(selectors))).join(",");
         return function() {
-          return (0, _styledComponents.css)(_templateObject(), _variables["default"].lineLength, allSelectors, selectors.h1, selectors.h2, selectors.img, selectors.ol, selectors.ul);
+          return (0, _styledComponents.css)(_templateObject(), _variables["default"].lineLengthMinimum, _variables["default"].lineLength, allSelectors, selectors.h1, selectors.h2, selectors.img, selectors.ol, selectors.ul);
         };
       }
       var _default = prose2;
@@ -25043,7 +25006,7 @@ html, body, #root {
           statusColorNormalWeak: pickMagnetic("positive-bg-medium-default"),
           syntaxBlue: currentTheme.colorScheme === "light" ? "#0f7190" : "#6cd0f0",
           syntaxBrown: currentTheme.colorScheme === "light" ? "#8b5804" : "#fccf87",
-          syntaxGray: currentTheme.colorScheme === "light" ? "#666" : "#909090",
+          syntaxGray: currentTheme.colorScheme === "light" ? "#666666" : "#909090",
           syntaxGreen: currentTheme.colorScheme === "light" ? "#556f0b" : "#cef06c",
           syntaxOrange: currentTheme.colorScheme === "light" ? "#a64708" : "#f7933f",
           syntaxPink: currentTheme.colorScheme === "light" ? "#b9139e" : "#f494e5",
@@ -25487,85 +25450,85 @@ html, body, #root {
         /**
          * Default text color for Primary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentPrimary: "",
         /**
          * Disabled text color for Primary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentPrimaryDisabled: "",
         /**
          * Default text color for Secondary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentSecondary: "",
         /**
          * Disabled text color for Secondary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentSecondaryDisabled: "",
         /**
          * Active text color for Subtle Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentSubtleActive: "",
         /**
          * Hover text color for Subtle Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentSubtleHover: "",
         /**
          * Default text color for Standalone Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentStandalone: "",
         /**
          * Active (pressed) text color for Standalone Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentStandaloneActive: "",
         /**
          * Disabled text color for Standalone Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentStandaloneDisabled: "",
         /**
          * Hover text color for Standalone Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentStandaloneHover: "",
         /**
          * Default text color for Destructive Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentDestructive: "",
         /**
          * Disabled text color for Destructive Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentDestructiveDisabled: "",
         /**
          * Default text color for Destructive Secondary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentDestructiveSecondary: "",
         /**
          * Disabled text color for Destructive Secondary Buttons.
          *
-         * @categoryFont
+         * @previewType font
          */
         actionColorContentDestructiveSecondaryDisabled: ""
       };
@@ -26212,313 +26175,497 @@ html, body, #root {
         return ("string" === r2 ? String : Number)(t2);
       }
       var deprecated2 = {
+        /** @deprecated */
         contentColorInfo: "",
+        /** @deprecated */
         contentColorWarning: "",
+        /** @deprecated */
         contentColorPositive: "",
+        /** @deprecated */
         contentColorNegativeStrong: "",
         /**
-         * Use a more specific token based on the semantic use case:
-         * [`interactiveColorAccent`](#interactiveColorAccent), [`contentColorAccent`](#contentColorAccent), or [`focusColor`](#focusColor).
+         * @deprecated  Use a more specific token based on the semantic use case: [`interactiveColorAccent`](#interactiveColorAccent), [`contentColorAccent`](#contentColorAccent), or [`focusColor`](#focusColor).
          */
         interactiveColorPrimary: "",
         /**
-         * Use `statusColorNormal`, `accentColor`, or ...
+         * @deprecated Use `statusColorNormal`, `accentColor`, or ...
          */
         accentColorPositive: "",
+        /** @deprecated */
         accentColorWarning: "",
+        /** @deprecated */
         accentColorAlert: "",
+        /** @deprecated */
         accentColorNegative: "",
         /**
-         * Use `contentColorDefault`
+         * @deprecated Use `contentColorDefault`
          */
         textColor: "",
         /**
-         * Use `contentColorMuted`
+         * @deprecated Use `contentColorMuted`
          */
         textGray: "",
         /**
-         * Use [`contentColorLink`](#contentColorLink) instead.
+         * @deprecated Use [`contentColorLink`](#contentColorLink) instead.
          */
         linkColor: "",
         /**
-         * `Link` hover interaction should use `text-decoration: underline`, color should not change
+         * @deprecated `Link` hover interaction should use `text-decoration: underline`, color should not change
          */
         linkColorHover: "",
         /**
-         * Use `borderColorWeak`
+         * @deprecated Use `borderColorWeak`
          */
         borderLightColor: "",
         /**
-         * Use `contentColorDisabled`
+         * @deprecated Use `contentColorDisabled`
          */
         textDisabledColor: "",
         /**
-         * Use `spacingXSmall`
+         * @deprecated Use `spacingXSmall`
+         * @category dimension
+         * @previewType spacing
          */
         spacingQuarter: "",
         /**
-         * Use `spacingSmall`
+         * @deprecated Use `spacingSmall`
+         * @category dimension
+         * @previewType spacing
          */
         spacingHalf: "",
         /**
-         * Use `spacingLarge`
+         * @deprecated Use `spacingLarge`
+         * @category dimension
+         * @previewType spacing
          */
         spacing: "",
         /**
-         * Use `backgroundColorPage`
+         * @deprecated Use `backgroundColorPage`
          */
         backgroundColor: "",
         /**
-         * Set border using CSS and [borderColor](#borderColor).
+         * @category border
+         * @deprecated Set border using CSS and [borderColor](#borderColor).
          */
         border: "",
         /**
-         * Set border using CSS and [borderColorStrong](#borderColorStrong).
+         * @category border
+         * @deprecated Set border using CSS and [borderColorStrong](#borderColorStrong).
          */
         borderDark: "",
         /**
-         * Set border using CSS and [borderColorWeak](#borderColorWeak).
+         * @category border
+         * @deprecated Set border using CSS and [borderColorWeak](#borderColorWeak).
          */
         borderLight: "",
         /**
-         * Use `interactiveColorBorderActive` for Data Entry components or `actionColorBorderSecondaryActive` for Buttons.
+         * @deprecated Use `interactiveColorBorderActive` for Data Entry components or `actionColorBorderSecondaryActive` for Buttons.
          */
         borderActiveColor: "",
         /**
-         * Use `interactiveColorOverlayHover` for Data Entry components or `actionColorBackgroundSecondaryHover` for Buttons.
+         * @deprecated Use `interactiveColorOverlayHover` for Data Entry components or `actionColorBackgroundSecondaryHover` for Buttons.
          */
         backgroundColorHover: "",
         /**
-         * Don't use hover shadows - see notes on backgroundColorHover for hover affordances.
+         * @category shadow
+         * @deprecated Don't use hover shadows - see notes on backgroundColorHover for hover affordances.
          */
         hoverShadow: "",
         /**
-         *  Use `notificationColorInfo` or `severityColorInfo`
+         * @deprecated Use `notificationColorInfo` or `severityColorInfo`
          */
         statusColorInfo: "",
         /**
-         *  Use `notificationColorInfoWeak`
+         * @deprecated Use `notificationColorInfoWeak`
          */
         statusColorInfoWeak: "",
         /**
-         *  Use `notificationColorInfoStrong`
+         * @deprecated Use `notificationColorInfoStrong`
          */
         statusColorInfoStrong: "",
         /**
-         * Use `notificationColorPositive` or `severityColorNormal`
+         * @deprecated Use `notificationColorPositive` or `severityColorNormal`
          */
         statusColorNormal: "",
         /**
-         * Use `notificationColorPositiveWeak`
+         * @deprecated Use `notificationColorPositiveWeak`
          */
         statusColorNormalWeak: "",
         /**
-         * Use `notificationColorPositiveStrong`
+         * @deprecated Use `notificationColorPositiveStrong`
          */
         statusColorNormalStrong: "",
         /**
-         * Use `notificationColorCaution` or `severityColorNotice`
+         * @deprecated Use `notificationColorCaution` or `severityColorNotice`
          */
         statusColorLow: "",
         /**
-         * Use `notificationColorCautionWeak`
+         * @deprecated Use `notificationColorCautionWeak`
          */
         statusColorLowWeak: "",
         /**
-         * Use `notificationColorCautionStrong`
+         * @deprecated Use `notificationColorCautionStrong`
          */
         statusColorLowStrong: "",
         /**
-         * Use `severityColorWarning`
+         * @deprecated Use `severityColorWarning`
          */
         statusColorMedium: "",
+        /** @deprecated */
         statusColorMediumWeak: "",
+        /** @deprecated */
         statusColorMediumStrong: "",
         /**
-         * Use `notificationColorNegative` or `severityColorAlert`
+         * @deprecated Use `notificationColorNegative` or `severityColorAlert`
          */
         statusColorHigh: "",
         /**
-         * Use `notificationColorNegativeWeak`
+         * @deprecated Use `notificationColorNegativeWeak`
          */
         statusColorHighWeak: "",
         /**
-         * Use `notificationColorNegativeStrong`
+         * @deprecated Use `notificationColorNegativeStrong`
          */
         statusColorHighStrong: "",
         /**
-         * Default color for critical alerts or urgent messages.
+         * @deprecated Default color for critical alerts or urgent messages.
          */
         statusColorCritical: "",
         /**
-         * Weaker, less prominent critical color, does not pass 3:1 graphical or 4.5:1 text contrast.
+         * @deprecated Weaker, less prominent critical color, does not pass 3:1 graphical or 4.5:1 text contrast.
          */
         statusColorCriticalWeak: "",
         /**
-         * Brighter, more prominent critical color.
+         * @deprecated Brighter, more prominent critical color.
          */
         statusColorCriticalStrong: "",
+        /** @deprecated */
         brandColorL50: "",
+        /** @deprecated */
         brandColorL40: "",
+        /** @deprecated */
         brandColorL30: "",
+        /** @deprecated */
         brandColorL20: "",
+        /** @deprecated */
         brandColorL10: "",
+        /** @deprecated */
         brandColor: "",
+        /** @deprecated */
         brandColorD10: "",
+        /** @deprecated */
         brandColorD20: "",
+        /** @deprecated */
         brandColorD30: "",
+        /** @deprecated */
         brandColorD40: "",
+        /** @deprecated */
         brandColorD50: "",
+        /** @deprecated */
         gray98: "",
+        /** @deprecated */
         gray96: "",
+        /** @deprecated */
         gray92: "",
+        /** @deprecated */
         gray80: "",
+        /** @deprecated */
         gray60: "",
+        /** @deprecated */
         gray45: "",
+        /** @deprecated */
         gray30: "",
+        /** @deprecated */
         gray25: "",
+        /** @deprecated */
         gray22: "",
+        /** @deprecated */
         gray20: "",
+        /** @deprecated */
         accentColorL50: "",
+        /** @deprecated */
         accentColorL40: "",
+        /** @deprecated */
         accentColorL30: "",
+        /** @deprecated */
         accentColorL20: "",
+        /** @deprecated */
         accentColorL10: "",
+        /** @deprecated */
         accentColor: "",
+        /** @deprecated */
         accentColorD10: "",
+        /** @deprecated */
         accentColorD20: "",
+        /** @deprecated */
         accentColorD30: "",
+        /** @deprecated */
         accentColorD40: "",
+        /** @deprecated */
         accentColorD50: "",
+        /** @deprecated */
         errorColorL50: "",
+        /** @deprecated */
         errorColorL40: "",
+        /** @deprecated */
         errorColorL30: "",
+        /** @deprecated */
         errorColorL20: "",
+        /** @deprecated */
         errorColorL10: "",
+        /** @deprecated */
         errorColor: "",
+        /** @deprecated */
         errorColorD10: "",
+        /** @deprecated */
         errorColorD20: "",
+        /** @deprecated */
         errorColorD30: "",
+        /** @deprecated */
         errorColorD40: "",
+        /** @deprecated */
         errorColorD50: "",
+        /** @deprecated */
         alertColorL50: "",
+        /** @deprecated */
         alertColorL40: "",
+        /** @deprecated */
         alertColorL30: "",
+        /** @deprecated */
         alertColorL20: "",
+        /** @deprecated */
         alertColorL10: "",
+        /** @deprecated */
         alertColor: "",
+        /** @deprecated */
         alertColorD10: "",
+        /** @deprecated */
         alertColorD20: "",
+        /** @deprecated */
         alertColorD30: "",
+        /** @deprecated */
         alertColorD40: "",
+        /** @deprecated */
         alertColorD50: "",
+        /** @deprecated */
         warningColorL50: "",
+        /** @deprecated */
         warningColorL40: "",
+        /** @deprecated */
         warningColorL30: "",
+        /** @deprecated */
         warningColorL20: "",
+        /** @deprecated */
         warningColorL10: "",
+        /** @deprecated */
         warningColor: "",
+        /** @deprecated */
         warningColorD10: "",
+        /** @deprecated */
         warningColorD20: "",
+        /** @deprecated */
         warningColorD30: "",
+        /** @deprecated */
         warningColorD40: "",
+        /** @deprecated */
         warningColorD50: "",
+        /** @deprecated */
         successColorL50: "",
+        /** @deprecated */
         successColorL40: "",
+        /** @deprecated */
         successColorL30: "",
+        /** @deprecated */
         successColorL20: "",
+        /** @deprecated */
         successColorL10: "",
+        /** @deprecated */
         successColor: "",
+        /** @deprecated */
         successColorD10: "",
+        /** @deprecated */
         successColorD20: "",
+        /** @deprecated */
         successColorD30: "",
+        /** @deprecated */
         successColorD40: "",
+        /** @deprecated */
         successColorD50: "",
+        /** @deprecated */
         infoColorL50: "",
+        /** @deprecated */
         infoColorL40: "",
+        /** @deprecated */
         infoColorL30: "",
+        /** @deprecated */
         infoColorL20: "",
+        /** @deprecated */
         infoColorL10: "",
+        /** @deprecated */
         infoColor: "",
+        /** @deprecated */
         infoColorD10: "",
+        /** @deprecated */
         infoColorD20: "",
+        /** @deprecated */
         infoColorD30: "",
+        /** @deprecated */
         infoColorD40: "",
+        /** @deprecated */
         infoColorD50: "",
+        /** @deprecated */
         diverging1ColorA: "",
+        /** @deprecated */
         diverging1ColorB: "",
+        /** @deprecated */
         diverging2ColorA: "",
+        /** @deprecated */
         diverging2ColorB: "",
+        /** @deprecated */
         diverging3ColorA: "",
+        /** @deprecated */
         diverging3ColorB: "",
+        /** @deprecated */
         diverging4ColorA: "",
+        /** @deprecated */
         diverging4ColorB: "",
+        /** @deprecated */
         diverging5ColorA: "",
+        /** @deprecated */
         diverging5ColorB: "",
+        /** @deprecated */
         cat1Color: "",
+        /** @deprecated */
         cat1ColorL: "",
+        /** @deprecated */
         cat2Color: "",
+        /** @deprecated */
         cat2ColorL: "",
+        /** @deprecated */
         cat3Color: "",
+        /** @deprecated */
         cat3ColorL: "",
+        /** @deprecated */
         cat4Color: "",
+        /** @deprecated */
         cat4ColorL: "",
+        /** @deprecated */
         cat5Color: "",
+        /** @deprecated */
         cat5ColorL: "",
+        /** @deprecated */
         cat6Color: "",
+        /** @deprecated */
         cat6ColorL: "",
+        /** @deprecated */
         cat7Color: "",
+        /** @deprecated */
         cat7ColorL: "",
+        /** @deprecated */
         cat8Color: "",
+        /** @deprecated */
         cat8ColorL: "",
+        /** @deprecated */
         cat9Color: "",
+        /** @deprecated */
         cat9ColorL: "",
+        /** @deprecated */
         cat10Color: "",
+        /** @deprecated */
         cat10ColorL: "",
+        /** @deprecated */
         cat11Color: "",
+        /** @deprecated */
         cat11ColorL: "",
+        /** @deprecated */
         cat12Color: "",
+        /** @deprecated */
         cat12ColorL: "",
+        /** @deprecated */
         cat13Color: "",
+        /** @deprecated */
         cat13ColorL: "",
+        /** @deprecated */
         cat14Color: "",
+        /** @deprecated */
         cat14ColorL: "",
+        /** @deprecated */
         cat15Color: "",
+        /** @deprecated */
         cat15ColorL: "",
+        /** @deprecated */
         cat16Color: "",
+        /** @deprecated */
         cat16ColorL: "",
+        /** @deprecated */
         cat17Color: "",
+        /** @deprecated */
         cat17ColorL: "",
+        /** @deprecated */
         cat18Color: "",
+        /** @deprecated */
         cat18ColorL: "",
+        /** @deprecated */
         cat19Color: "",
+        /** @deprecated */
         cat19ColorL: "",
+        /** @deprecated */
         cat20Color: "",
+        /** @deprecated */
         cat20ColorL: "",
+        /** @deprecated */
         cat21Color: "",
+        /** @deprecated */
         cat21ColorL: "",
+        /** @deprecated */
         cat22Color: "",
+        /** @deprecated */
         cat22ColorL: "",
+        /** @deprecated */
         cat23Color: "",
+        /** @deprecated */
         cat23ColorL: "",
+        /** @deprecated */
         cat24Color: "",
+        /** @deprecated */
         cat24ColorL: "",
+        /** @deprecated */
         cat25Color: "",
+        /** @deprecated */
         cat25ColorL: "",
+        /** @deprecated */
         cat26Color: "",
+        /** @deprecated */
         cat26ColorL: "",
+        /** @deprecated */
         cat27Color: "",
+        /** @deprecated */
         cat27ColorL: "",
+        /** @deprecated */
         cat28Color: "",
+        /** @deprecated */
         cat28ColorL: "",
+        /** @deprecated */
         cat29Color: "",
+        /** @deprecated */
         cat29ColorL: "",
+        /** @deprecated */
         cat30Color: "",
+        /** @deprecated */
         cat30ColorL: "",
+        /** @deprecated */
         syntaxBlueLight: "",
+        /** @deprecated */
         syntaxGreenLight: "",
+        /** @deprecated */
         syntaxPurpleLight: "",
-        syntaxRedLight: ""
+        /** @deprecated */
+        syntaxRedLight: "",
+        /**
+         * @deprecated
+         * @category gradient
+         */
+        draggableBackground: ""
       };
       var _default = _objectSpread({}, deprecated2);
       exports$1["default"] = _default;
@@ -26595,8 +26742,7 @@ html, body, #root {
         dragShadow: "",
         modalShadow: "",
         focusShadow: "",
-        focusShadowInset: "",
-        draggableBackground: ""
+        focusShadowInset: ""
       };
       var elevation2 = _objectSpread(_objectSpread({}, zIndexes), elevationShadows);
       var _default = elevation2;
@@ -26765,8 +26911,17 @@ html, body, #root {
         /**
          * Use to improve readability and [accessibility](https://www.w3.org/WAI/WCAG21/Understanding/visual-presentation.html)
          * in blocks of text by preventing overly long lines.
+         *
+         * @category dimension
+         * @previewType none
          */
         lineLength: "",
+        /**
+         * Minimum line length for optimal readability.
+         * @category dimension
+         * @previewType none
+         */
+        lineLengthMinimum: "",
         /**
          * Default line height.
          */
@@ -28489,7 +28644,12 @@ html, body, #root {
     kind === "object" && isFunction$2(thing.toString) && thing.toString() === "[object FormData]"));
   };
   const isURLSearchParams = kindOfTest("URLSearchParams");
-  const [isReadableStream, isRequest, isResponse, isHeaders] = ["ReadableStream", "Request", "Response", "Headers"].map(kindOfTest);
+  const [isReadableStream, isRequest, isResponse, isHeaders] = [
+    "ReadableStream",
+    "Request",
+    "Response",
+    "Headers"
+  ].map(kindOfTest);
   const trim = (str) => str.trim ? str.trim() : str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
   function forEach(obj, fn, { allOwnKeys = false } = {}) {
     if (obj === null || typeof obj === "undefined") {
@@ -28542,6 +28702,9 @@ html, body, #root {
     const { caseless, skipUndefined } = isContextDefined(this) && this || {};
     const result = {};
     const assignValue = (val, key2) => {
+      if (key2 === "__proto__" || key2 === "constructor" || key2 === "prototype") {
+        return;
+      }
       const targetKey = caseless && findKey(result, key2) || key2;
       if (isPlainObject(result[targetKey]) && isPlainObject(val)) {
         result[targetKey] = merge$5(result[targetKey], val);
@@ -28559,13 +28722,27 @@ html, body, #root {
     return result;
   }
   const extend$1 = (a2, b2, thisArg, { allOwnKeys } = {}) => {
-    forEach(b2, (val, key2) => {
-      if (thisArg && isFunction$2(val)) {
-        a2[key2] = bind(val, thisArg);
-      } else {
-        a2[key2] = val;
-      }
-    }, { allOwnKeys });
+    forEach(
+      b2,
+      (val, key2) => {
+        if (thisArg && isFunction$2(val)) {
+          Object.defineProperty(a2, key2, {
+            value: bind(val, thisArg),
+            writable: true,
+            enumerable: true,
+            configurable: true
+          });
+        } else {
+          Object.defineProperty(a2, key2, {
+            value: val,
+            writable: true,
+            enumerable: true,
+            configurable: true
+          });
+        }
+      },
+      { allOwnKeys }
+    );
     return a2;
   };
   const stripBOM = (content) => {
@@ -28574,9 +28751,17 @@ html, body, #root {
     }
     return content;
   };
-  const inherits = (constructor, superConstructor, props, descriptors2) => {
-    constructor.prototype = Object.create(superConstructor.prototype, descriptors2);
-    constructor.prototype.constructor = constructor;
+  const inherits = (constructor, superConstructor, props, descriptors) => {
+    constructor.prototype = Object.create(
+      superConstructor.prototype,
+      descriptors
+    );
+    Object.defineProperty(constructor.prototype, "constructor", {
+      value: constructor,
+      writable: true,
+      enumerable: false,
+      configurable: true
+    });
     Object.defineProperty(constructor, "super", {
       value: superConstructor.prototype
     });
@@ -28647,19 +28832,16 @@ html, body, #root {
   };
   const isHTMLForm = kindOfTest("HTMLFormElement");
   const toCamelCase = (str) => {
-    return str.toLowerCase().replace(
-      /[-_\s]([a-z\d])(\w*)/g,
-      function replacer(m2, p1, p2) {
-        return p1.toUpperCase() + p2;
-      }
-    );
+    return str.toLowerCase().replace(/[-_\s]([a-z\d])(\w*)/g, function replacer(m2, p1, p2) {
+      return p1.toUpperCase() + p2;
+    });
   };
   const hasOwnProperty = (({ hasOwnProperty: hasOwnProperty2 }) => (obj, prop) => hasOwnProperty2.call(obj, prop))(Object.prototype);
   const isRegExp = kindOfTest("RegExp");
   const reduceDescriptors = (obj, reducer2) => {
-    const descriptors2 = Object.getOwnPropertyDescriptors(obj);
+    const descriptors = Object.getOwnPropertyDescriptors(obj);
     const reducedDescriptors = {};
-    forEach(descriptors2, (descriptor, name) => {
+    forEach(descriptors, (descriptor, name) => {
       let ret;
       if ((ret = reducer2(descriptor, name, obj)) !== false) {
         reducedDescriptors[name] = ret || descriptor;
@@ -28736,20 +28918,21 @@ html, body, #root {
       return setImmediate;
     }
     return postMessageSupported ? ((token2, callbacks) => {
-      _global.addEventListener("message", ({ source, data }) => {
-        if (source === _global && data === token2) {
-          callbacks.length && callbacks.shift()();
-        }
-      }, false);
+      _global.addEventListener(
+        "message",
+        ({ source, data }) => {
+          if (source === _global && data === token2) {
+            callbacks.length && callbacks.shift()();
+          }
+        },
+        false
+      );
       return (cb) => {
         callbacks.push(cb);
         _global.postMessage(token2, "*");
       };
     })(`axios@${Math.random()}`, []) : (cb) => setTimeout(cb);
-  })(
-    typeof setImmediate === "function",
-    isFunction$2(_global.postMessage)
-  );
+  })(typeof setImmediate === "function", isFunction$2(_global.postMessage));
   const asap$1 = typeof queueMicrotask !== "undefined" ? queueMicrotask.bind(_global) : typeof process !== "undefined" && process.nextTick || _setImmediate;
   const isIterable = (thing) => thing != null && isFunction$2(thing[iterator$1]);
   const utils$1 = {
@@ -28812,25 +28995,38 @@ html, body, #root {
     asap: asap$1,
     isIterable
   };
-  function AxiosError$1(message, code, config2, request, response) {
-    Error.call(this);
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    } else {
-      this.stack = new Error().stack;
+  let AxiosError$1 = class AxiosError2 extends Error {
+    static from(error, code, config2, request, response, customProps) {
+      const axiosError = new AxiosError2(error.message, code || error.code, config2, request, response);
+      axiosError.cause = error;
+      axiosError.name = error.name;
+      customProps && Object.assign(axiosError, customProps);
+      return axiosError;
     }
-    this.message = message;
-    this.name = "AxiosError";
-    code && (this.code = code);
-    config2 && (this.config = config2);
-    request && (this.request = request);
-    if (response) {
-      this.response = response;
-      this.status = response.status ? response.status : null;
+    /**
+     * Create an Error with the specified message, config, error code, request and response.
+     *
+     * @param {string} message The error message.
+     * @param {string} [code] The error code (for example, 'ECONNABORTED').
+     * @param {Object} [config] The config.
+     * @param {Object} [request] The request.
+     * @param {Object} [response] The response.
+     *
+     * @returns {Error} The created error.
+     */
+    constructor(message, code, config2, request, response) {
+      super(message);
+      this.name = "AxiosError";
+      this.isAxiosError = true;
+      code && (this.code = code);
+      config2 && (this.config = config2);
+      request && (this.request = request);
+      if (response) {
+        this.response = response;
+        this.status = response.status;
+      }
     }
-  }
-  utils$1.inherits(AxiosError$1, Error, {
-    toJSON: function toJSON() {
+    toJSON() {
       return {
         // Standard
         message: this.message,
@@ -28849,45 +29045,19 @@ html, body, #root {
         status: this.status
       };
     }
-  });
-  const prototype$1 = AxiosError$1.prototype;
-  const descriptors = {};
-  [
-    "ERR_BAD_OPTION_VALUE",
-    "ERR_BAD_OPTION",
-    "ECONNABORTED",
-    "ETIMEDOUT",
-    "ERR_NETWORK",
-    "ERR_FR_TOO_MANY_REDIRECTS",
-    "ERR_DEPRECATED",
-    "ERR_BAD_RESPONSE",
-    "ERR_BAD_REQUEST",
-    "ERR_CANCELED",
-    "ERR_NOT_SUPPORT",
-    "ERR_INVALID_URL"
-    // eslint-disable-next-line func-names
-  ].forEach((code) => {
-    descriptors[code] = { value: code };
-  });
-  Object.defineProperties(AxiosError$1, descriptors);
-  Object.defineProperty(prototype$1, "isAxiosError", { value: true });
-  AxiosError$1.from = (error, code, config2, request, response, customProps) => {
-    const axiosError = Object.create(prototype$1);
-    utils$1.toFlatObject(error, axiosError, function filter2(obj) {
-      return obj !== Error.prototype;
-    }, (prop) => {
-      return prop !== "isAxiosError";
-    });
-    const msg = error && error.message ? error.message : "Error";
-    const errCode = code == null && error ? error.code : code;
-    AxiosError$1.call(axiosError, msg, errCode, config2, request, response);
-    if (error && axiosError.cause == null) {
-      Object.defineProperty(axiosError, "cause", { value: error, configurable: true });
-    }
-    axiosError.name = error && error.name || "Error";
-    customProps && Object.assign(axiosError, customProps);
-    return axiosError;
   };
+  AxiosError$1.ERR_BAD_OPTION_VALUE = "ERR_BAD_OPTION_VALUE";
+  AxiosError$1.ERR_BAD_OPTION = "ERR_BAD_OPTION";
+  AxiosError$1.ECONNABORTED = "ECONNABORTED";
+  AxiosError$1.ETIMEDOUT = "ETIMEDOUT";
+  AxiosError$1.ERR_NETWORK = "ERR_NETWORK";
+  AxiosError$1.ERR_FR_TOO_MANY_REDIRECTS = "ERR_FR_TOO_MANY_REDIRECTS";
+  AxiosError$1.ERR_DEPRECATED = "ERR_DEPRECATED";
+  AxiosError$1.ERR_BAD_RESPONSE = "ERR_BAD_RESPONSE";
+  AxiosError$1.ERR_BAD_REQUEST = "ERR_BAD_REQUEST";
+  AxiosError$1.ERR_CANCELED = "ERR_CANCELED";
+  AxiosError$1.ERR_NOT_SUPPORT = "ERR_NOT_SUPPORT";
+  AxiosError$1.ERR_INVALID_URL = "ERR_INVALID_URL";
   const httpAdapter = null;
   function isVisitable(thing) {
     return utils$1.isPlainObject(thing) || utils$1.isArray(thing);
@@ -29039,17 +29209,15 @@ html, body, #root {
       return url2;
     }
     const _encode = options && options.encode || encode;
-    if (utils$1.isFunction(options)) {
-      options = {
-        serialize: options
-      };
-    }
-    const serializeFn = options && options.serialize;
+    const _options = utils$1.isFunction(options) ? {
+      serialize: options
+    } : options;
+    const serializeFn = _options && _options.serialize;
     let serializedParams;
     if (serializeFn) {
-      serializedParams = serializeFn(params, options);
+      serializedParams = serializeFn(params, _options);
     } else {
-      serializedParams = utils$1.isURLSearchParams(params) ? params.toString() : new AxiosURLSearchParams(params, options).toString(_encode);
+      serializedParams = utils$1.isURLSearchParams(params) ? params.toString() : new AxiosURLSearchParams(params, _options).toString(_encode);
     }
     if (serializedParams) {
       const hashmarkIndex = url2.indexOf("#");
@@ -29069,6 +29237,7 @@ html, body, #root {
      *
      * @param {Function} fulfilled The function to handle `then` for a `Promise`
      * @param {Function} rejected The function to handle `reject` for a `Promise`
+     * @param {Object} options The options for the interceptor, synchronous and runWhen
      *
      * @return {Number} An ID used to remove interceptor later
      */
@@ -29124,7 +29293,8 @@ html, body, #root {
   const transitionalDefaults = {
     silentJSONParsing: true,
     forcedJSONParsing: true,
-    clarifyTimeoutError: false
+    clarifyTimeoutError: false,
+    legacyInterceptorReqResOrdering: true
   };
   const URLSearchParams$1 = typeof URLSearchParams !== "undefined" ? URLSearchParams : AxiosURLSearchParams;
   const FormData$1 = typeof FormData !== "undefined" ? FormData : null;
@@ -29609,13 +29779,22 @@ html, body, #root {
   function isCancel$1(value) {
     return !!(value && value.__CANCEL__);
   }
-  function CanceledError$1(message, config2, request) {
-    AxiosError$1.call(this, message == null ? "canceled" : message, AxiosError$1.ERR_CANCELED, config2, request);
-    this.name = "CanceledError";
-  }
-  utils$1.inherits(CanceledError$1, AxiosError$1, {
-    __CANCEL__: true
-  });
+  let CanceledError$1 = class CanceledError extends AxiosError$1 {
+    /**
+     * A `CanceledError` is an object that is thrown when an operation is canceled.
+     *
+     * @param {string=} message The message.
+     * @param {Object=} config The config.
+     * @param {Object=} request The request.
+     *
+     * @returns {CanceledError} The created error.
+     */
+    constructor(message, config2, request) {
+      super(message == null ? "canceled" : message, AxiosError$1.ERR_CANCELED, config2, request);
+      this.name = "CanceledError";
+      this.__CANCEL__ = true;
+    }
+  };
   function settle(resolve, reject, response) {
     const validateStatus = response.config.validateStatus;
     if (!response.status || !validateStatus || validateStatus(response.status)) {
@@ -29784,6 +29963,9 @@ html, body, #root {
     }
   );
   function isAbsoluteURL(url2) {
+    if (typeof url2 !== "string") {
+      return false;
+    }
     return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url2);
   }
   function combineURLs(baseURL, relativeURL) {
@@ -29867,11 +30049,16 @@ html, body, #root {
       validateStatus: mergeDirectKeys,
       headers: (a2, b2, prop) => mergeDeepProperties(headersToObject(a2), headersToObject(b2), prop, true)
     };
-    utils$1.forEach(Object.keys({ ...config1, ...config2 }), function computeConfigValue(prop) {
-      const merge2 = mergeMap2[prop] || mergeDeepProperties;
-      const configValue = merge2(config1[prop], config2[prop], prop);
-      utils$1.isUndefined(configValue) && merge2 !== mergeDirectKeys || (config3[prop] = configValue);
-    });
+    utils$1.forEach(
+      Object.keys({ ...config1, ...config2 }),
+      function computeConfigValue(prop) {
+        if (prop === "__proto__" || prop === "constructor" || prop === "prototype")
+          return;
+        const merge2 = utils$1.hasOwnProp(mergeMap2, prop) ? mergeMap2[prop] : mergeDeepProperties;
+        const configValue = merge2(config1[prop], config2[prop], prop);
+        utils$1.isUndefined(configValue) && merge2 !== mergeDirectKeys || (config3[prop] = configValue);
+      }
+    );
     return config3;
   }
   const resolveConfig = (config2) => {
@@ -30052,7 +30239,7 @@ html, body, #root {
       };
       let timer2 = timeout2 && setTimeout(() => {
         timer2 = null;
-        onabort(new AxiosError$1(`timeout ${timeout2} of ms exceeded`, AxiosError$1.ETIMEDOUT));
+        onabort(new AxiosError$1(`timeout of ${timeout2}ms exceeded`, AxiosError$1.ETIMEDOUT));
       }, timeout2);
       const unsubscribe = () => {
         if (signals) {
@@ -30323,13 +30510,13 @@ html, body, #root {
         unsubscribe && unsubscribe();
         if (err && err.name === "TypeError" && /Load failed|fetch/i.test(err.message)) {
           throw Object.assign(
-            new AxiosError$1("Network Error", AxiosError$1.ERR_NETWORK, config2, request),
+            new AxiosError$1("Network Error", AxiosError$1.ERR_NETWORK, config2, request, err && err.response),
             {
               cause: err.cause || err
             }
           );
         }
-        throw AxiosError$1.from(err, err && err.code, config2, request);
+        throw AxiosError$1.from(err, err && err.code, config2, request, err && err.response);
       }
     };
   };
@@ -30458,7 +30645,7 @@ html, body, #root {
       return Promise.reject(reason);
     });
   }
-  const VERSION$1 = "1.13.2";
+  const VERSION$1 = "1.13.5";
   const validators$1 = {};
   ["object", "boolean", "number", "function", "string", "symbol"].forEach((type, i2) => {
     validators$1[type] = function validator2(thing) {
@@ -30571,7 +30758,8 @@ html, body, #root {
         validator.assertOptions(transitional, {
           silentJSONParsing: validators.transitional(validators.boolean),
           forcedJSONParsing: validators.transitional(validators.boolean),
-          clarifyTimeoutError: validators.transitional(validators.boolean)
+          clarifyTimeoutError: validators.transitional(validators.boolean),
+          legacyInterceptorReqResOrdering: validators.transitional(validators.boolean)
         }, false);
       }
       if (paramsSerializer != null) {
@@ -30615,7 +30803,13 @@ html, body, #root {
           return;
         }
         synchronousRequestInterceptors = synchronousRequestInterceptors && interceptor.synchronous;
-        requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
+        const transitional2 = config2.transitional || transitionalDefaults;
+        const legacyInterceptorReqResOrdering = transitional2 && transitional2.legacyInterceptorReqResOrdering;
+        if (legacyInterceptorReqResOrdering) {
+          requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
+        } else {
+          requestInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
+        }
       });
       const responseInterceptorChain = [];
       this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
@@ -32137,10 +32331,32 @@ html, body, #root {
     if (hasRequired_baseUnset) return _baseUnset;
     hasRequired_baseUnset = 1;
     var castPath = require_castPath(), last2 = requireLast$3(), parent = require_parent(), toKey = require_toKey();
+    var objectProto = Object.prototype;
+    var hasOwnProperty2 = objectProto.hasOwnProperty;
     function baseUnset(object, path) {
       path = castPath(path, object);
-      object = parent(object, path);
-      return object == null || delete object[toKey(last2(path))];
+      var index = -1, length2 = path.length;
+      if (!length2) {
+        return true;
+      }
+      var isRootPrimitive = object == null || typeof object !== "object" && typeof object !== "function";
+      while (++index < length2) {
+        var key2 = path[index];
+        if (typeof key2 !== "string") {
+          continue;
+        }
+        if (key2 === "__proto__" && !hasOwnProperty2.call(object, "__proto__")) {
+          return false;
+        }
+        if (key2 === "constructor" && index + 1 < length2 && typeof path[index + 1] === "string" && path[index + 1] === "prototype") {
+          if (isRootPrimitive && index === 0) {
+            continue;
+          }
+          return false;
+        }
+      }
+      var obj = parent(object, path);
+      return obj == null || delete obj[toKey(last2(path))];
     }
     _baseUnset = baseUnset;
     return _baseUnset;
@@ -32606,10 +32822,10 @@ html, body, #root {
       var w2 = c2()(S2()).withConfig({
         displayName: "LinkStyles__StyledClickable",
         componentId: "sc-1hhltcf-0"
-      })(["", ";text-decoration:none;font-size:inherit;font-weight:inherit;line-height:inherit;color:", ";", " &:not([disabled],[aria-disabled='true']){cursor:pointer;&:hover,&:active,&:focus{color:", ";text-decoration:underline;text-decoration-thickness:2px;}&:focus{box-shadow:", ";outline:0;&:active{box-shadow:none;}}}&[disabled],&[aria-disabled='true']{color:", ";}", ""], v2.mixins.reset("inline"), v2.variables.contentColorLink, (0, v2.pickVariant)("$appearance", {
+      })(["", ";text-decoration:none;font-size:inherit;font-weight:inherit;line-height:inherit;color:", ";", " &:focus{box-shadow:", ";outline:0;&:active{box-shadow:none;}}&:not([disabled],[aria-disabled='true']){cursor:pointer;&:hover,&:active,&:focus{color:", ";text-decoration:underline;text-decoration-thickness:2px;}}&[disabled],&[aria-disabled='true']{color:", ";}", ""], v2.mixins.reset("inline"), v2.variables.contentColorLink, (0, v2.pickVariant)("$appearance", {
         inline: (0, d2.css)(["text-decoration:underline;"]),
         standalone: (0, d2.css)(["font-weight:", ";"], v2.variables.fontWeightSemiBold)
-      }), v2.variables.contentColorLink, v2.variables.focusShadow, v2.variables.contentColorLinkDisabled, (function(e3) {
+      }), v2.variables.focusShadow, v2.variables.contentColorLink, v2.variables.contentColorLinkDisabled, (function(e3) {
         var n3 = e3.$enableVisitedStyling;
         return n3 && (0, d2.css)(["&:visited{color:", ";}&:where([disabled],[aria-disabled='true']):visited{color:", ";}"], v2.variables.contentColorLinkVisited, v2.variables.contentColorLinkVisitedDisabled);
       }));
@@ -33208,7 +33424,6 @@ html, body, #root {
         style: {
           flex: "1 1 auto",
           minHeight: 0,
-          // critical
           display: "flex",
           flexDirection: "column",
           overflow: "hidden"
@@ -33236,7 +33451,7 @@ html, body, #root {
             /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-10 w-24 rounded-xl bg-slate-100" })
           ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-sm font-medium text-slate-900", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-sm font-medium  font-bold", children: [
                 EmailConfigurationFields.emailSubjectLabel,
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-600", children: " *" })
               ] }),
@@ -33247,12 +33462,12 @@ html, body, #root {
                   value: prefixValue,
                   onChange: (e2) => setPrefixValue(e2.target.value),
                   placeholder: "e.g., Prod, Staging, Customer-X",
-                  className: "w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                  className: "w-full rounded-xl border border-black-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
                 }
               )
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-sm font-medium text-slate-900", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-sm font-medium  font-bold", children: [
                 "Outside Working Hours ",
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-red-600", children: " *" })
               ] }),
@@ -33263,7 +33478,7 @@ html, body, #root {
                   value: outsideWorkingHourValue,
                   onChange: (e2) => setOutsideWorkingHourValue(e2.target.value),
                   rows: 3,
-                  className: "w-full resize-y rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                  className: "w-full resize-y rounded-xl border border-black-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
                 }
               )
             ] }),
@@ -33345,7 +33560,7 @@ html, body, #root {
             onClick: () => fireChange(handleChange, item),
             style: {
               borderRadius: 999,
-              padding: "8px 12px",
+              padding: "8px 14px",
               fontSize: 13,
               border: "1px solid #e5e7eb",
               background: active ? "#111827" : "#fff",
@@ -34564,22 +34779,36 @@ html, body, #root {
       e2.d(n2, {
         default: () => (
           /* reexport */
-          v2
+          h2
         )
       });
       const t2 = requireReact();
       var r2 = e2.n(t2);
-      const l2 = /* @__PURE__ */ requirePropTypes();
-      var i2 = e2.n(l2);
-      const o2 = require$$21;
-      var a2 = e2.n(o2);
+      const a2 = /* @__PURE__ */ requirePropTypes();
+      var o2 = e2.n(a2);
+      const i2 = require$$21;
+      var l2 = e2.n(i2);
       const f2 = requireThemes();
-      var d2 = a2().div.withConfig({
+      var d2 = l2().div.withConfig({
         displayName: "BoxStyles__Styled",
         componentId: "sc-1h4b5f6-0"
       })(["", ";align-items:stretch;align-content:stretch;flex-flow:row nowrap;flex-grow:0;flex-shrink:0;justify-content:flex-start;width:auto;max-width:100%;&[data-inline]{display:inline-block;vertical-align:middle;}&[data-flex]{display:flex;}&[data-flex][data-inline]{display:inline-flex;}"], f2.mixins.reset("block"));
-      function s2() {
-        return s2 = Object.assign ? Object.assign.bind() : function(e3) {
+      function s2(e3, n3) {
+        if (e3) {
+          if (typeof e3 === "function") {
+            e3(n3);
+          } else {
+            e3.current = n3;
+          }
+        }
+      }
+      var p2 = function e3(n3) {
+        var r3 = n3.additionalMessage, a3 = r3 === void 0 ? "" : r3, o3 = n3.componentName, i3 = n3.propName, l3 = n3.propValue;
+        (0, t2.useEffect)((function() {
+        }), [a3, o3, i3, l3]);
+      };
+      function m2() {
+        return m2 = Object.assign ? Object.assign.bind() : function(e3) {
           for (var n3 = 1; n3 < arguments.length; n3++) {
             var t3 = arguments[n3];
             for (var r3 in t3) {
@@ -34587,20 +34816,20 @@ html, body, #root {
             }
           }
           return e3;
-        }, s2.apply(null, arguments);
+        }, m2.apply(null, arguments);
       }
-      function c2(e3, n3) {
+      function y2(e3, n3) {
         if (null == e3) return {};
-        var t3, r3, l3 = u2(e3, n3);
+        var t3, r3, a3 = b2(e3, n3);
         if (Object.getOwnPropertySymbols) {
-          var i3 = Object.getOwnPropertySymbols(e3);
-          for (r3 = 0; r3 < i3.length; r3++) {
-            t3 = i3[r3], -1 === n3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (l3[t3] = e3[t3]);
+          var o3 = Object.getOwnPropertySymbols(e3);
+          for (r3 = 0; r3 < o3.length; r3++) {
+            t3 = o3[r3], -1 === n3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (a3[t3] = e3[t3]);
           }
         }
-        return l3;
+        return a3;
       }
-      function u2(e3, n3) {
+      function b2(e3, n3) {
         if (null == e3) return {};
         var t3 = {};
         for (var r3 in e3) {
@@ -34611,24 +34840,34 @@ html, body, #root {
         }
         return t3;
       }
-      var p2 = {
-        children: i2().node,
-        elementRef: i2().oneOfType([i2().func, i2().object]),
-        flex: i2().bool,
-        inline: i2().bool
+      var g2 = {
+        children: o2().node,
+        elementRef: o2().oneOfType([o2().func, o2().object]),
+        flex: o2().bool,
+        inline: o2().bool
       };
-      function y2(e3) {
-        var n3 = e3.children, t3 = e3.elementRef, l3 = e3.flex, i3 = l3 === void 0 ? false : l3, o3 = e3.tag, a3 = o3 === void 0 ? "div" : o3, f3 = e3.inline, u3 = f3 === void 0 ? false : f3, p3 = c2(e3, ["children", "elementRef", "flex", "tag", "inline"]);
-        return r2().createElement(d2, s2({
-          as: a3,
-          ref: t3
-        }, p3, {
-          "data-inline": u3 || void 0,
-          "data-flex": i3 || void 0
-        }), n3);
-      }
-      y2.propTypes = p2;
-      const v2 = y2;
+      var x2 = r2().forwardRef((function(e3, n3) {
+        var a3 = e3.children, o3 = e3.elementRef, i3 = e3.flex, l3 = i3 === void 0 ? false : i3, f3 = e3.tag, c2 = f3 === void 0 ? "div" : f3, u2 = e3.inline, v2 = u2 === void 0 ? false : u2, b3 = y2(e3, ["children", "elementRef", "flex", "tag", "inline"]);
+        p2({
+          additionalMessage: "Use `ref` instead.",
+          componentName: "Box",
+          propName: "elementRef",
+          propValue: o3
+        });
+        var g3 = (0, t2.useCallback)((function(e4) {
+          s2(o3, e4);
+          s2(n3, e4);
+        }), [o3, n3]);
+        return r2().createElement(d2, m2({
+          as: c2,
+          ref: g3
+        }, b3, {
+          "data-inline": v2 || void 0,
+          "data-flex": l3 || void 0
+        }), a3);
+      }));
+      x2.propTypes = g2;
+      const h2 = x2;
       Box.exports = n2;
     })();
     return Box.exports;
@@ -34784,14 +35023,14 @@ html, body, #root {
         displayName: "SwitchStyles__StyledToggleClickable",
         componentId: "sc-844ieu-5"
       })(["", ""], E2);
-      var R2 = u2().label.withConfig({
+      var L2 = u2().label.withConfig({
         displayName: "SwitchStyles__StyledLabel",
         componentId: "sc-844ieu-6"
       })(["", " flex:1 1 auto;color:inherit;line-height:", ";", ";"], k2.mixins.reset("inline-block"), k2.variables.lineHeight, (function(e3) {
         var r3 = e3.$disabled;
         return !r3 && (0, s2.css)(["cursor:pointer;"]);
       }));
-      function L2(e3, r3) {
+      function R2(e3, r3) {
         if (e3) {
           if (typeof e3 === "function") {
             e3(r3);
@@ -34952,7 +35191,7 @@ html, body, #root {
           });
         }), [p3, B3, m3]);
         var q3 = (0, a2.useCallback)((function(e4) {
-          L2(S3, e4);
+          R2(S3, e4);
         }), [S3]);
         var E3 = m3 === "some" ? "mixed" : m3;
         var _3 = {
@@ -34984,7 +35223,7 @@ html, body, #root {
           "data-test-error": u3 ? true : void 0,
           "data-error": u3 ? true : void 0,
           "data-test-disabled": n3 ? "disabled" : void 0,
-          elementRef: s3,
+          ref: s3,
           $disabled: n3 || false
         }, O3), o3 === "toggle" ? i2().createElement(W2, A2({
           disabled: n3 || false,
@@ -34993,7 +35232,7 @@ html, body, #root {
           error: u3 || false,
           disabled: n3 || false,
           selected: m3
-        }, T2)), j2 && i2().createElement(c2(), null, _3["".concat(m3)]), t3 && i2().createElement(R2, {
+        }, T2)), j2 && i2().createElement(c2(), null, _3["".concat(m3)]), t3 && i2().createElement(L2, {
           $disabled: n3 || false,
           "data-test": "label",
           id: I3,
@@ -39034,7 +39273,7 @@ html, body, #root {
     (function(module, exports$1) {
       (function() {
         var undefined$1;
-        var VERSION2 = "4.17.21";
+        var VERSION2 = "4.17.23";
         var LARGE_ARRAY_SIZE = 200;
         var CORE_ERROR_TEXT = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", FUNC_ERROR_TEXT = "Expected a function", INVALID_TEMPL_VAR_ERROR_TEXT = "Invalid `variable` option passed into `_.template`";
         var HASH_UNDEFINED = "__lodash_hash_undefined__";
@@ -40962,8 +41201,28 @@ html, body, #root {
           }
           function baseUnset(object, path) {
             path = castPath(path, object);
-            object = parent(object, path);
-            return object == null || delete object[toKey(last2(path))];
+            var index = -1, length2 = path.length;
+            if (!length2) {
+              return true;
+            }
+            var isRootPrimitive = object == null || typeof object !== "object" && typeof object !== "function";
+            while (++index < length2) {
+              var key2 = path[index];
+              if (typeof key2 !== "string") {
+                continue;
+              }
+              if (key2 === "__proto__" && !hasOwnProperty2.call(object, "__proto__")) {
+                return false;
+              }
+              if (key2 === "constructor" && index + 1 < length2 && typeof path[index + 1] === "string" && path[index + 1] === "prototype") {
+                if (isRootPrimitive && index === 0) {
+                  continue;
+                }
+                return false;
+              }
+            }
+            var obj = parent(object, path);
+            return obj == null || delete obj[toKey(last2(path))];
           }
           function baseUpdate(object, path, updater, customizer) {
             return baseSet(object, path, updater(baseGet(object, path)), customizer);
@@ -45108,6 +45367,7 @@ html, body, #root {
             w3 = f3 - r3.left;
           }
         }
+        var R3 = (S3 === "above" || S3 === "below") && i3.offsetWidth <= w3 ? i3.offsetWidth : 0;
         return {
           placement: S3,
           maxHeight: P3,
@@ -45115,7 +45375,8 @@ html, body, #root {
           outerContainerStyle: {
             top: b3,
             left: g3,
-            bottom: y3
+            bottom: y3,
+            minWidth: R3
           }
         };
       }
@@ -46915,9 +47176,9 @@ html, body, #root {
       const t2 = requireReact();
       var n2 = e2.n(t2);
       const o2 = /* @__PURE__ */ requirePropTypes();
-      var l2 = e2.n(o2);
-      const i2 = requireScreenReaderContent();
-      var a2 = e2.n(i2);
+      var i2 = e2.n(o2);
+      const l2 = requireScreenReaderContent();
+      var a2 = e2.n(l2);
       const s2 = requireUsePrevious();
       var c2 = e2.n(s2);
       const u2 = requireId();
@@ -46941,7 +47202,7 @@ html, body, #root {
       })(["", ";word-wrap:break-word;"], g2.mixins.typography("body", {
         color: "active"
       }));
-      var I2 = y2()(b2()).withConfig({
+      var x2 = y2()(b2()).withConfig({
         displayName: "ControlGroupStyles__StyledBox",
         componentId: "wjnyif-2"
       })(["", " max-width:600px;margin-block-end:", ";&:last-child{margin-block-end:0;}", " ", ""], g2.mixins.reset("flex"), g2.variables.spacingLarge, (function(e3) {
@@ -46959,7 +47220,7 @@ html, body, #root {
           g2.variables.contentColorDisabled
         );
       }));
-      var x2 = y2().div.withConfig({
+      var I2 = y2().div.withConfig({
         displayName: "ControlGroupStyles__StyledLabelWrapper",
         componentId: "wjnyif-3"
       })(["display:inline-flex;align-items:flex-start;gap:", ";flex-shrink:0;"], g2.variables.spacingXSmall);
@@ -46995,7 +47256,7 @@ html, body, #root {
       var P2 = y2()(b2()).withConfig({
         displayName: "ControlGroupStyles__StyledControlsWrapper",
         componentId: "wjnyif-7"
-      })(["gap:", ";", ""], g2.variables.spacingMedium, (0, g2.pickVariant)("$controlsLayout", {
+      })(["position:relative;z-index:1;gap:", ";", ""], g2.variables.spacingMedium, (0, g2.pickVariant)("$controlsLayout", {
         fillJoin: (0, f2.css)(["gap:0;"]),
         stack: (0, f2.css)(["flex-direction:column;"])
       }));
@@ -47025,9 +47286,9 @@ html, body, #root {
         if (null == e3) return {};
         var t3, n3, o3 = G2(e3, r3);
         if (Object.getOwnPropertySymbols) {
-          var l3 = Object.getOwnPropertySymbols(e3);
-          for (n3 = 0; n3 < l3.length; n3++) {
-            t3 = l3[n3], -1 === r3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (o3[t3] = e3[t3]);
+          var i3 = Object.getOwnPropertySymbols(e3);
+          for (n3 = 0; n3 < i3.length; n3++) {
+            t3 = i3[n3], -1 === r3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (o3[t3] = e3[t3]);
           }
         }
         return o3;
@@ -47045,7 +47306,7 @@ html, body, #root {
       }
       var A2 = (0, _2._)("Error: ");
       var $2 = {
-        children: l2().node.isRequired
+        children: i2().node.isRequired
       };
       function W2(e3) {
         var r3 = e3.children, t3 = B2(e3, ["children"]);
@@ -47074,18 +47335,18 @@ html, body, #root {
           return e3;
         }, X2.apply(null, arguments);
       }
-      function H2(e3, r3) {
+      function z2(e3, r3) {
         if (null == e3) return {};
-        var t3, n3, o3 = J2(e3, r3);
+        var t3, n3, o3 = H2(e3, r3);
         if (Object.getOwnPropertySymbols) {
-          var l3 = Object.getOwnPropertySymbols(e3);
-          for (n3 = 0; n3 < l3.length; n3++) {
-            t3 = l3[n3], -1 === r3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (o3[t3] = e3[t3]);
+          var i3 = Object.getOwnPropertySymbols(e3);
+          for (n3 = 0; n3 < i3.length; n3++) {
+            t3 = i3[n3], -1 === r3.indexOf(t3) && {}.propertyIsEnumerable.call(e3, t3) && (o3[t3] = e3[t3]);
           }
         }
         return o3;
       }
-      function J2(e3, r3) {
+      function H2(e3, r3) {
         if (null == e3) return {};
         var t3 = {};
         for (var n3 in e3) {
@@ -47096,7 +47357,7 @@ html, body, #root {
         }
         return t3;
       }
-      function V2(e3, r3) {
+      function J2(e3, r3) {
         var t3 = Object.keys(e3);
         if (Object.getOwnPropertySymbols) {
           var n3 = Object.getOwnPropertySymbols(e3);
@@ -47106,12 +47367,12 @@ html, body, #root {
         }
         return t3;
       }
-      function z2(e3) {
+      function V2(e3) {
         for (var r3 = 1; r3 < arguments.length; r3++) {
           var t3 = null != arguments[r3] ? arguments[r3] : {};
-          r3 % 2 ? V2(Object(t3), true).forEach((function(r4) {
+          r3 % 2 ? J2(Object(t3), true).forEach((function(r4) {
             K2(e3, r4, t3[r4]);
-          })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(t3)) : V2(Object(t3)).forEach((function(r4) {
+          })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(t3)) : J2(Object(t3)).forEach((function(r4) {
             Object.defineProperty(e3, r4, Object.getOwnPropertyDescriptor(t3, r4));
           }));
         }
@@ -47162,18 +47423,18 @@ html, body, #root {
       function te2(e3, r3) {
         var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
         if (null != t3) {
-          var n3, o3, l3, i3, a3 = [], s3 = true, c3 = false;
+          var n3, o3, i3, l3, a3 = [], s3 = true, c3 = false;
           try {
-            if (l3 = (t3 = t3.call(e3)).next, 0 === r3) {
+            if (i3 = (t3 = t3.call(e3)).next, 0 === r3) {
               if (Object(t3) !== t3) return;
               s3 = false;
-            } else for (; !(s3 = (n3 = l3.call(t3)).done) && (a3.push(n3.value), a3.length !== r3); s3 = true) {
+            } else for (; !(s3 = (n3 = i3.call(t3)).done) && (a3.push(n3.value), a3.length !== r3); s3 = true) {
             }
           } catch (e4) {
             c3 = true, o3 = e4;
           } finally {
             try {
-              if (!s3 && null != t3["return"] && (i3 = t3["return"](), Object(i3) !== i3)) return;
+              if (!s3 && null != t3["return"] && (l3 = t3["return"](), Object(l3) !== l3)) return;
             } finally {
               if (c3) throw o3;
             }
@@ -47185,24 +47446,24 @@ html, body, #root {
         if (Array.isArray(e3)) return e3;
       }
       var oe2 = {
-        children: l2().node,
-        controlsLayout: l2().oneOf(["fill", "fillJoin", "none", "stack"]),
-        elementRef: l2().oneOfType([l2().func, l2().object]),
-        error: l2().oneOfType([l2().bool, l2().string]),
-        help: l2().node,
-        hideLabel: l2().bool,
-        label: l2().string.isRequired,
-        labelFor: l2().string,
-        labelPosition: l2().oneOf(["left", "top"]),
-        labelWidth: l2().oneOfType([l2().number, l2().string]),
-        required: l2().bool,
-        tooltip: l2().node,
-        tooltipDefaultPlacement: l2().oneOf(["above", "below", "left", "right"])
+        children: i2().node,
+        controlsLayout: i2().oneOf(["fill", "fillJoin", "none", "stack"]),
+        elementRef: i2().oneOfType([i2().func, i2().object]),
+        error: i2().oneOfType([i2().bool, i2().string]),
+        help: i2().node,
+        hideLabel: i2().bool,
+        label: i2().string.isRequired,
+        labelFor: i2().string,
+        labelPosition: i2().oneOf(["left", "top"]),
+        labelWidth: i2().oneOfType([i2().number, i2().string]),
+        required: i2().bool,
+        tooltip: i2().node,
+        tooltipDefaultPlacement: i2().oneOf(["above", "below", "left", "right"])
       };
-      var le2 = {
+      var ie2 = {
         flexGrow: 1
       };
-      function ie2(e3) {
+      function le2(e3) {
         return e3.type && e3.type.propTypes && Object.prototype.hasOwnProperty.call(e3.type.propTypes, "inputId");
       }
       function ae2(e3, r3) {
@@ -47218,9 +47479,9 @@ html, body, #root {
         var t3 = e3.length;
         var n3 = 0;
         e3.forEach((function(e4, t4) {
-          if (ie2(e4) && e4.props.inputId == null) {
-            var o3 = ae2("input-id", t4), l3 = o3.childKey, i3 = o3.value;
-            r3[l3] = i3;
+          if (le2(e4) && e4.props.inputId == null) {
+            var o3 = ae2("input-id", t4), i3 = o3.childKey, l3 = o3.value;
+            r3[i3] = l3;
           } else if (e4.props.id == null) {
             var a3 = ae2("id", t4), s3 = a3.childKey, c3 = a3.value;
             r3[s3] = c3;
@@ -47249,75 +47510,75 @@ html, body, #root {
         var n3 = e3.find((function(e4) {
           return e4.type && e4.type.componentType === "Text";
         }));
-        var o3 = ie2(t3);
-        var l3 = t3.props, i3 = l3.id, a3 = l3.inputId;
+        var o3 = le2(t3);
+        var i3 = t3.props, l3 = i3.id, a3 = i3.inputId;
         if (e3.length === 1 && (t3 === null || t3 === void 0 ? void 0 : t3.props)) {
-          return o3 ? a3 : i3;
+          return o3 ? a3 : l3;
         }
         if (n3 === null || n3 === void 0 ? void 0 : n3.props) {
           return n3.props.inputId;
         }
         if (t3.props) {
-          return o3 ? a3 : i3;
+          return o3 ? a3 : l3;
         }
         return void 0;
       }
       function de(e3, r3, o3) {
-        var l3 = e3.props, i3 = l3.disabled, a3 = l3.error, s3 = l3.id, c3 = l3.inputId, u3 = l3.style, d3 = l3.children;
-        var p3 = o3.childIds, f3 = o3.controlsLayout, y3 = o3.help, v3 = o3.helpId, b3 = o3.error, m3 = o3.errorId, h3 = o3.label, g3 = o3.labelFor, w3 = o3.labelId, O3 = o3.numChildren, S3 = o3.required, I3 = o3.showErrorText;
-        var x3 = {
+        var i3 = e3.props, l3 = i3.disabled, a3 = i3.error, s3 = i3.id, c3 = i3.inputId, u3 = i3.style, d3 = i3.children;
+        var p3 = o3.childIds, f3 = o3.controlsLayout, y3 = o3.help, v3 = o3.helpId, b3 = o3.error, m3 = o3.errorId, h3 = o3.label, g3 = o3.labelFor, w3 = o3.labelId, O3 = o3.numChildren, S3 = o3.required, x3 = o3.showErrorText;
+        var I3 = {
           key: e3.key || r3,
           labelledBy: w3
         };
         if (f3 === "fillJoin") {
           if (r3 > 0) {
-            x3.prepend = true;
+            I3.prepend = true;
           }
           if (r3 < O3 - 1) {
-            x3.append = true;
+            I3.append = true;
           }
-          if (x3.prepend || x3.append) {
-            x3.inline = false;
+          if (I3.prepend || I3.append) {
+            I3.inline = false;
           }
         }
         if (f3 === "fill" && O3 > 1) {
-          x3.inline = true;
+          I3.inline = true;
         }
         if (f3 === "stack") {
-          x3.inline = false;
+          I3.inline = false;
         }
         if (y3 && typeof b3 === "boolean") {
-          x3.describedBy = v3;
+          I3.describedBy = v3;
         } else if (y3 && typeof b3 === "string") {
-          x3.describedBy = "".concat(v3, " ").concat(m3);
+          I3.describedBy = "".concat(v3, " ").concat(m3);
         } else if (!y3 && typeof b3 === "string") {
-          x3.describedBy = m3;
+          I3.describedBy = m3;
         }
         if (S3) {
-          x3.required = true;
+          I3.required = true;
         }
         if (e3.type.componentType === "Multiselect") {
           var C3 = e3;
           if (!C3.props.compact) {
-            x3.labelText = h3;
+            I3.labelText = h3;
           }
         } else {
-          x3.labelText = h3;
+          I3.labelText = h3;
         }
         if (O3 === 1 && (f3 === "fillJoin" || f3 === "fill")) {
-          x3.style = u3 ? z2(z2({}, u3), le2) : le2;
+          I3.style = u3 ? V2(V2({}, u3), ie2) : ie2;
         }
         if (!g3 && e3) {
-          if (ie2(e3)) {
-            x3.inputId = c3 || ce2("input-id", r3, p3);
+          if (le2(e3)) {
+            I3.inputId = c3 || ce2("input-id", r3, p3);
           } else {
-            x3.id = s3 || ce2("id", r3, p3);
+            I3.id = s3 || ce2("id", r3, p3);
           }
         }
-        if (I3 && a3 === true) {
-          x3["aria-errormessage"] = m3;
+        if (x3 && a3 === true) {
+          I3["aria-errormessage"] = m3;
         }
-        var j3 = i3 !== null && i3 !== void 0 ? i3 : false;
+        var j3 = l3 !== null && l3 !== void 0 ? l3 : false;
         var E3 = e3.type.componentType === "RadioBar" || e3.type.componentType === "RadioList";
         if (E3 && !e3.props.disabled) {
           j3 = n2().Children.toArray(d3).every((function(e4) {
@@ -47326,31 +47587,31 @@ html, body, #root {
           }));
         }
         return {
-          child: (0, t2.cloneElement)(e3, x3),
+          child: (0, t2.cloneElement)(e3, I3),
           childDisabled: j3
         };
       }
       function pe(e3, r3) {
         var t3 = e3.length;
         var n3 = 0;
-        var o3 = z2({
+        var o3 = V2({
           numChildren: t3
         }, r3);
-        var l3 = e3.map((function(e4, r4) {
-          var t4 = de(e4, r4, o3), l4 = t4.child, i3 = t4.childDisabled;
-          if (i3 === true) {
+        var i3 = e3.map((function(e4, r4) {
+          var t4 = de(e4, r4, o3), i4 = t4.child, l3 = t4.childDisabled;
+          if (l3 === true) {
             n3 += 1;
           }
-          return l4;
+          return i4;
         }));
         return {
-          childrenFormatted: l3,
+          childrenFormatted: i3,
           controlGroupDisabled: n3 === t3
         };
       }
       var fe2 = 120;
       function ye2(e3) {
-        var r3 = e3.children, o3 = e3.controlsLayout, l3 = o3 === void 0 ? "fill" : o3, i3 = e3.error, s3 = i3 === void 0 ? false : i3, d3 = e3.help, f3 = e3.hideLabel, y3 = e3.label, v3 = e3.labelFor, b3 = e3.labelPosition, m3 = b3 === void 0 ? "top" : b3, h3 = e3.labelWidth, g3 = h3 === void 0 ? fe2 : h3, w3 = e3.required, _3 = w3 === void 0 ? false : w3, T3 = e3.tooltip, q3 = e3.tooltipDefaultPlacement, D3 = H2(e3, ["children", "controlsLayout", "error", "help", "hideLabel", "label", "labelFor", "labelPosition", "labelWidth", "required", "tooltip", "tooltipDefaultPlacement"]);
+        var r3 = e3.children, o3 = e3.controlsLayout, i3 = o3 === void 0 ? "fill" : o3, l3 = e3.error, s3 = l3 === void 0 ? false : l3, d3 = e3.help, f3 = e3.hideLabel, y3 = e3.label, v3 = e3.labelFor, b3 = e3.labelPosition, m3 = b3 === void 0 ? "top" : b3, h3 = e3.labelWidth, g3 = h3 === void 0 ? fe2 : h3, w3 = e3.required, _3 = w3 === void 0 ? false : w3, T3 = e3.tooltip, q3 = e3.tooltipDefaultPlacement, D3 = z2(e3, ["children", "controlsLayout", "error", "help", "hideLabel", "label", "labelFor", "labelPosition", "labelWidth", "required", "tooltip", "tooltipDefaultPlacement"]);
         var M3 = (0, t2.useState)((function() {
           return {
             errorId: (0, u2.createDOMID)("error"),
@@ -47358,11 +47619,11 @@ html, body, #root {
             labelId: (0, u2.createDOMID)("label")
           };
         })), L3 = Y2(M3, 1), N3 = L3[0], B3 = N3.errorId, G3 = N3.helpId, A3 = N3.labelId;
-        var $3 = (0, t2.useState)({}), W3 = Y2($3, 2), R3 = W3[0], J3 = W3[1];
-        var V3 = (0, t2.useState)(false), z3 = Y2(V3, 2), K3 = z3[0], U3 = z3[1];
+        var $3 = (0, t2.useState)({}), W3 = Y2($3, 2), R3 = W3[0], H3 = W3[1];
+        var J3 = (0, t2.useState)(false), V3 = Y2(J3, 2), K3 = V3[0], U3 = V3[1];
         var Q3 = c2()(n2().Children.count(r3));
         var Z3 = (0, t2.useCallback)((function(e4) {
-          J3(e4);
+          H3(e4);
         }), []);
         var ee3 = (0, t2.useCallback)((function(e4) {
           U3(e4);
@@ -47376,11 +47637,11 @@ html, body, #root {
         }), [m3, g3]);
         (0, t2.useEffect)((function() {
           if (Q3 != null && n2().Children.count(r3) !== Q3) {
-            J3({});
+            H3({});
           }
           if (Object.keys(R3).length === 0 && !v3 && !K3) {
             var e4 = se2(re3), t3 = e4.newChildIds, o4 = e4.allChildrenHaveId;
-            J3(t3);
+            H3(t3);
             U3(o4);
           }
         }), [K3, R3, r3, v3, Q3, Z3, ee3, re3]);
@@ -47394,13 +47655,13 @@ html, body, #root {
         }), [y3, A3]);
         var ne3 = typeof s3 === "string";
         var oe3 = ne3 && s3 !== "";
-        var le3 = Number.isFinite(g3) ? "".concat(g3, "px") : g3;
-        var ie3 = m3 === "left" ? {
-          width: le3
+        var ie3 = Number.isFinite(g3) ? "".concat(g3, "px") : g3;
+        var le3 = m3 === "left" ? {
+          width: ie3
         } : void 0;
         var ae3 = pe(re3, {
           childIds: R3,
-          controlsLayout: l3,
+          controlsLayout: i3,
           help: d3,
           helpId: G3,
           error: s3,
@@ -47414,8 +47675,8 @@ html, body, #root {
         var ye3 = (0, t2.useMemo)((function() {
           return v3 || ue2(ce3);
         }), [ce3, v3]);
-        var ve3 = n2().createElement(x2, {
-          style: ie3,
+        var ve3 = n2().createElement(I2, {
+          style: le3,
           $labelPosition: m3
         }, n2().createElement(C2, {
           $labelPosition: m3
@@ -47431,7 +47692,7 @@ html, body, #root {
           defaultPlacement: q3,
           "aria-hidden": "true"
         })));
-        return n2().createElement(I2, X2({
+        return n2().createElement(x2, X2({
           "data-test": "control-group",
           "data-test-required": _3,
           "data-test-children-disabled": de2,
@@ -47441,11 +47702,11 @@ html, body, #root {
         }, D3), n2().createElement(p2.Provider, {
           value: te3
         }, f3 ? n2().createElement(a2(), null, ve3) : ve3, n2().createElement(E2, {
-          $controlsLayout: l3
+          $controlsLayout: i3
         }, n2().createElement(P2, {
-          $controlsLayout: l3,
+          $controlsLayout: i3,
           "data-test": "controls",
-          flex: l3 !== "none"
+          flex: i3 !== "none"
         }, ce3), oe3 && n2().createElement(F2, {
           "data-test": "error",
           id: B3
@@ -47614,18 +47875,18 @@ html, body, #root {
         }, _2(e3);
       }
       function N2(e3) {
-        return H2(e3) || F2(e3) || X2(e3) || R2();
+        return M2(e3) || H2(e3) || X2(e3) || F2();
       }
-      function R2() {
+      function F2() {
         throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
       }
-      function F2(e3) {
+      function H2(e3) {
         if ("undefined" != typeof Symbol && null != e3[Symbol.iterator] || null != e3["@@iterator"]) return Array.from(e3);
       }
-      function H2(e3) {
+      function M2(e3) {
         if (Array.isArray(e3)) return J2(e3);
       }
-      function M2(e3, r3) {
+      function R2(e3, r3) {
         var t3 = Object.keys(e3);
         if (Object.getOwnPropertySymbols) {
           var n3 = Object.getOwnPropertySymbols(e3);
@@ -47638,9 +47899,9 @@ html, body, #root {
       function z2(e3) {
         for (var r3 = 1; r3 < arguments.length; r3++) {
           var t3 = null != arguments[r3] ? arguments[r3] : {};
-          r3 % 2 ? M2(Object(t3), true).forEach((function(r4) {
+          r3 % 2 ? R2(Object(t3), true).forEach((function(r4) {
             V2(e3, r4, t3[r4]);
-          })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(t3)) : M2(Object(t3)).forEach((function(r4) {
+          })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(t3)) : R2(Object(t3)).forEach((function(r4) {
             Object.defineProperty(e3, r4, Object.getOwnPropertyDescriptor(t3, r4));
           }));
         }
@@ -47791,7 +48052,7 @@ html, body, #root {
       });
       function ne2(e3) {
         var r3;
-        var o3 = e3.append, i3 = o3 === void 0 ? false : o3, u3 = e3.autoCapitalize, c3 = e3.autoComplete, d3 = e3.autoCorrect, v3 = e3.autoFocus, b3 = v3 === void 0 ? false : v3, p3 = e3.canClear, y3 = p3 === void 0 ? false : p3, g3 = e3.children, x3 = e3.defaultValue, S3 = e3.disabled, O3 = S3 === void 0 ? false : S3, j3 = e3.describedBy, E3 = e3.elementRef, A3 = e3.endAdornment, B3 = e3.error, I3 = B3 === void 0 ? false : B3, _3 = e3.inline, R3 = _3 === void 0 ? false : _3, F3 = e3.inputClassName, H3 = e3.inputId, M3 = e3.inputRef, V3 = e3.labelledBy, K3 = e3.maxLength, L3 = e3.name, U3 = e3.onBlur, X3 = e3.onChange, J3 = e3.onClick, Q3 = e3.onFocus, Y3 = e3.onKeyDown, ee3 = e3.onSelect, re3 = e3.passwordVisibilityToggle, ne3 = re3 === void 0 ? false : re3, oe3 = e3.placeholder, ae2 = e3.prepend, ie2 = ae2 === void 0 ? false : ae2, le2 = e3.required, ue2 = e3.spellCheck, se2 = e3.startAdornment, ce2 = e3.tabIndex, de = ce2 === void 0 ? 0 : ce2, ve2 = e3.title, be2 = e3.type, pe = be2 === void 0 ? "text" : be2, fe2 = e3.value, ye2 = Z2(e3, ["append", "autoCapitalize", "autoComplete", "autoCorrect", "autoFocus", "canClear", "children", "defaultValue", "disabled", "describedBy", "elementRef", "endAdornment", "error", "inline", "inputClassName", "inputId", "inputRef", "labelledBy", "maxLength", "name", "onBlur", "onChange", "onClick", "onFocus", "onKeyDown", "onSelect", "passwordVisibilityToggle", "placeholder", "prepend", "required", "spellCheck", "startAdornment", "tabIndex", "title", "type", "value"]);
+        var o3 = e3.append, i3 = o3 === void 0 ? false : o3, u3 = e3.autoCapitalize, c3 = e3.autoComplete, d3 = e3.autoCorrect, v3 = e3.autoFocus, b3 = v3 === void 0 ? false : v3, p3 = e3.canClear, y3 = p3 === void 0 ? false : p3, g3 = e3.children, x3 = e3.defaultValue, S3 = e3.disabled, O3 = S3 === void 0 ? false : S3, j3 = e3.describedBy, E3 = e3.elementRef, A3 = e3.endAdornment, B3 = e3.error, I3 = B3 === void 0 ? false : B3, _3 = e3.inline, F3 = _3 === void 0 ? false : _3, H3 = e3.inputClassName, M3 = e3.inputId, R3 = e3.inputRef, V3 = e3.labelledBy, K3 = e3.maxLength, L3 = e3.name, U3 = e3.onBlur, X3 = e3.onChange, J3 = e3.onClick, Q3 = e3.onFocus, Y3 = e3.onKeyDown, ee3 = e3.onSelect, re3 = e3.passwordVisibilityToggle, ne3 = re3 === void 0 ? false : re3, oe3 = e3.placeholder, ae2 = e3.prepend, ie2 = ae2 === void 0 ? false : ae2, le2 = e3.required, ue2 = e3.spellCheck, se2 = e3.startAdornment, ce2 = e3.tabIndex, de = ce2 === void 0 ? 0 : ce2, ve2 = e3.title, be2 = e3.type, pe = be2 === void 0 ? "text" : be2, fe2 = e3.value, ye2 = Z2(e3, ["append", "autoCapitalize", "autoComplete", "autoCorrect", "autoFocus", "canClear", "children", "defaultValue", "disabled", "describedBy", "elementRef", "endAdornment", "error", "inline", "inputClassName", "inputId", "inputRef", "labelledBy", "maxLength", "name", "onBlur", "onChange", "onClick", "onFocus", "onKeyDown", "onSelect", "passwordVisibilityToggle", "placeholder", "prepend", "required", "spellCheck", "startAdornment", "tabIndex", "title", "type", "value"]);
         var me = (0, t2.useContext)(h2.ControlGroupContext);
         var ge2 = k2()({
           componentName: "Text",
@@ -47860,15 +48121,15 @@ html, body, #root {
         }), [Y3]);
         var Ne2 = (0, t2.useCallback)((function(e4) {
           Ce2.current = e4;
-          D2(M3, e4);
-        }), [M3, Ce2]);
-        var Re2 = (0, t2.useCallback)((function(e4) {
+          D2(R3, e4);
+        }), [R3, Ce2]);
+        var Fe2 = (0, t2.useCallback)((function(e4) {
           ee3 === null || ee3 === void 0 ? void 0 : ee3(e4);
         }), [ee3]);
-        var Fe2 = (0, t2.useCallback)((function() {
+        var He2 = (0, t2.useCallback)((function() {
           Ee2(!je2);
         }), [je2]);
-        var He2 = (0, t2.useCallback)((function() {
+        var Me2 = (0, t2.useCallback)((function() {
           var e4;
           var r4 = {
             $disabled: !!O3,
@@ -47887,7 +48148,7 @@ html, body, #root {
               appearance: "secondary",
               "data-test": "password-toggle",
               inline: false,
-              onClick: Fe2,
+              onClick: He2,
               type: "button",
               icon: t3,
               "aria-label": o4
@@ -47905,8 +48166,8 @@ html, body, #root {
             }));
           }
           return void 0;
-        }), [y3, (r3 = me.labelAttrs) === null || r3 === void 0 ? void 0 : r3.text, O3, Ae2, A3, $e2, Pe2, Fe2, je2, ne3]);
-        var Me2 = (0, t2.useCallback)((function() {
+        }), [y3, (r3 = me.labelAttrs) === null || r3 === void 0 ? void 0 : r3.text, O3, Ae2, A3, $e2, Pe2, He2, je2, ne3]);
+        var Re2 = (0, t2.useCallback)((function() {
           var e4 = {
             $disabled: !!O3,
             $position: "start"
@@ -47946,13 +48207,13 @@ html, body, #root {
           autoComplete: c3,
           autoCorrect: d3,
           autoFocus: b3,
-          className: F3,
-          id: H3,
+          className: H3,
+          id: M3,
           maxLength: K3,
           name: L3,
           onChange: Ie2,
           onKeyDown: _e2,
-          onSelect: Re2,
+          onSelect: Fe2,
           onClick: Te2,
           onFocus: De2,
           onBlur: Be2,
@@ -47974,13 +48235,13 @@ html, body, #root {
           "data-test": "text",
           "data-test-value": We2,
           "data-test-disabled": O3 === "dimmed" && "dimmed" || O3 && "disabled" || void 0,
-          elementRef: E3,
+          ref: E3,
           flex: true,
-          inline: R3,
+          inline: F3,
           onClick: qe2,
           $disabled: !!O3
-        }, Ve2), Me2(), O3 ? n2().createElement(q2, G2({
-          className: F3,
+        }, Ve2), Re2(), O3 ? n2().createElement(q2, G2({
+          className: H3,
           "data-test": "textbox",
           disabled: O3 === true,
           placeholder: oe3,
@@ -47989,7 +48250,7 @@ html, body, #root {
           value: Ae2
         }, ze2)) : n2().createElement(q2, G2({}, Ge2, {
           onClick: Te2
-        })), g3, He2());
+        })), g3, Me2());
       }
       ne2.propTypes = re2;
       ne2.componentType = "Text";
@@ -75976,23 +76237,6 @@ html, body, #root {
   }
   var SearchJobExports = requireSearchJob();
   const SearchJob = /* @__PURE__ */ getDefaultExportFromCjs(SearchJobExports);
-  function Pill({ children }) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "span",
-      {
-        style: {
-          fontSize: 12,
-          color: "#111827",
-          background: "#f3f4f6",
-          border: "1px solid #e5e7eb",
-          borderRadius: 999,
-          padding: "4px 10px",
-          whiteSpace: "nowrap"
-        },
-        children
-      }
-    );
-  }
   function StateBox({ variant = "neutral", title, children }) {
     const palette = variant === "error" ? { border: "#fecaca", bg: "#fff1f2", fg: "#991b1b" } : { border: "#e5e7eb", bg: "#fafafa", fg: "#6b7280" };
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -76047,7 +76291,6 @@ html, body, #root {
         }
       };
     }, [searchQuery2, earliestTime, latestTime]);
-    const rowCount = reactExports.useMemo(() => Array.isArray(data.results) ? data.results.length : 0, [data.results]);
     if (data.results === void 0 && !errorMsg) {
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
@@ -76091,28 +76334,6 @@ html, body, #root {
           /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
         @keyframes cyencesFadeUp { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform: translateY(0);} }
       ` }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "div",
-            {
-              style: {
-                padding: "10px 12px",
-                borderBottom: "1px solid #e5e7eb",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 10,
-                background: "#fafafa"
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 13, fontWeight: 900, color: "#111827" }, children: "Results" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(Pill, { children: [
-                  rowCount,
-                  " row",
-                  rowCount === 1 ? "" : "s"
-                ] })
-              ]
-            }
-          ),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Table, { stripeRows: true, children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx(Table.Head, { children: data.fields?.map((field) => /* @__PURE__ */ jsxRuntimeExports.jsx(
               Table.HeadCell,
@@ -76431,10 +76652,7 @@ html, body, #root {
           ]
         }
       ),
-      showDependencies ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Card$3, { title: "App dependencies", subtitle: "Apps required by this product configuration.", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Heading, { children: "App Dependencies" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(SearchTable, { searchQuery: dependencyQuery })
-      ] }) : null
+      showDependencies ? /* @__PURE__ */ jsxRuntimeExports.jsx(Card$3, { className: "!pt-4", title: "App dependencies", subtitle: "Apps required by this product configuration.", children: /* @__PURE__ */ jsxRuntimeExports.jsx(SearchTable, { searchQuery: dependencyQuery }) }) : null
     ] });
   }
   function getTabId(productInfo) {
@@ -76550,21 +76768,18 @@ html, body, #root {
           if (cancelled) return;
           setProducts(data);
           const first2 = data?.[0];
-          const firstTab = first2 ? getTabId(first2) : "";
-          setActiveTabId(firstTab);
+          setActiveTabId(first2 ? getTabId(first2) : "");
         } catch (err) {
           if (cancelled) return;
           console.error(err);
-          setErrorMsg(err?.message ? String(err.message) : "Failed to load products.");
+          setErrorMsg(err?.message ?? "Failed to load products.");
           setProducts([]);
         } finally {
           if (!cancelled) setIsLoading(false);
         }
       }
       load();
-      return () => {
-        cancelled = true;
-      };
+      return () => cancelled = true;
     }, []);
     const items = reactExports.useMemo(() => (products ?? []).map(getTabId).filter(Boolean), [products]);
     if (isLoading) {
@@ -76749,6 +76964,12 @@ html, body, #root {
         { name: "cs_authentication_new_location_login_pct_limit" },
         { name: "cs_authentication_vpn_session_duration_limit" }
       ]
+    },
+    {
+      section: "Linux",
+      macros: [
+        { name: "cs_linux_multiple_failed_ssh_login_limit" }
+      ]
     }
   ];
   function extractSplunkError$3(error) {
@@ -76902,10 +77123,7 @@ html, body, #root {
         },
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { minWidth: 0 }, children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 13, fontWeight: 800, color: "#111827" }, children: macroName2 }),
-              description ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { marginTop: 4, fontSize: 12, color: "#6b7280" }, children: description }) : null
-            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { minWidth: 0 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: 13, fontWeight: 800, color: "#111827" }, children: macroName2 }) }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               Button,
               {
@@ -76917,16 +77135,19 @@ html, body, #root {
               }
             )
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { marginTop: 10 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ControlGroup, { label: "", help: "", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Text,
-            {
-              inline: false,
-              value: isLoading ? "Loading..." : macro,
-              onChange: (e2, { value }) => setMacro(value),
-              disabled: isLoading,
-              style: { width: "100%" }
-            }
-          ) }) })
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { marginTop: 10 }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ControlGroup, { label: "", help: "", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              Text,
+              {
+                inline: false,
+                value: isLoading ? "Loading..." : macro,
+                onChange: (e2, { value }) => setMacro(value),
+                disabled: isLoading,
+                style: { width: "100%" }
+              }
+            ) }),
+            description ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { marginTop: 4, fontSize: 12, color: "#6b7280" }, children: description }) : null
+          ] })
         ]
       }
     );

@@ -247,7 +247,9 @@ export default function CustomAlertCreate({ mode = "add",
             ).latest}`
         );
 
-        const actions = (data.actions || "").split(",");
+        const actions = (data.actions || "")
+          .split(",")
+          .map(a => a.trim().toLowerCase());
 
         setAddNotable(actions.includes("cyences_notable_event_action"));
         setSendEmail(actions.includes("cyences_send_email_action"));
@@ -278,7 +280,9 @@ export default function CustomAlertCreate({ mode = "add",
             data["action.cyences_notable_event_action.products"] || ""
         );
         setTeams(
-            data["action.cyences_notable_event_action.teams"] || ""
+            (data["action.cyences_notable_event_action.teams"] || "")
+            .trim()
+            .toLowerCase()
         );
 
 
@@ -733,7 +737,7 @@ export default function CustomAlertCreate({ mode = "add",
     p: 2,
   },
   stickyActions: {
-    position: "sticky",
+    // position: "sticky",
     bottom: 0,
     zIndex: 2,
     background: "#fff",
@@ -741,7 +745,7 @@ export default function CustomAlertCreate({ mode = "add",
     padding: "12px 16px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "end",
     gap: 12,
   },
   badge: (kind) => ({
@@ -775,6 +779,13 @@ export default function CustomAlertCreate({ mode = "add",
         <form>
           <Stack spacing={2.25}>
 
+            {/* API error */}
+            {errors.api ? (
+              <Alert severity="error" variant="outlined">
+                {errors.api}
+              </Alert>
+            ) : null}
+            
             {/* ===== BASIC SETTINGS ===== */}
             <Card variant="outlined" sx={ui.sectionCard}>
               <div style={ui.sectionHeader}>
@@ -803,8 +814,9 @@ export default function CustomAlertCreate({ mode = "add",
                     disabled={mode === "edit"}
                     value={title}
                     error={!!errors?.title}
-                    helperText={errors?.title}
                     onChange={(e) => setTitle(e.target.value)}
+                    inputProps={{ maxLength: 100 }}
+                    helperText={errors?.title || `${100 - title.length} characters remaining`}
                     fullWidth
                   />
 
@@ -1167,18 +1179,12 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
               </CardContent>
             </Card>
 
-            {/* API error */}
-            {errors.api ? (
-              <Alert severity="error" variant="outlined">
-                {errors.api}
-              </Alert>
-            ) : null}
-
+            <hr/>
             {/* Sticky bottom actions */}
             <div style={ui.stickyActions}>
-              <div style={{ fontSize: 12, color: "#64748b" }}>
+              {/* <div style={{ fontSize: 12, color: "#64748b" }}>
                 {mode === "edit" ? `Editing: ${savedSearchName || "—"}` : " "}
-              </div>
+              </div> */}
 
               <Button
                 variant="contained"
@@ -1187,6 +1193,10 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
                 sx={{ borderRadius: "12px", textTransform: "none", fontWeight: 800 }}
               >
                 {isSaving ? "Saving..." : mode === "edit" ? "Update Alert" : "Create Alert"}
+              </Button>
+
+              <Button onClick={onClose} variant="outlined" sx={{ borderRadius: "12px" }}>
+                Cancel
               </Button>
             </div>
           </Stack>

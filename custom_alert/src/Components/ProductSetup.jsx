@@ -216,8 +216,7 @@ export default function ProductSetup({ productInfo }) {
 
       {/* Dependencies */}
       {showDependencies ? (
-        <Card title="App dependencies" subtitle="Apps required by this product configuration.">
-          <Heading>App Dependencies</Heading>
+        <Card className="!pt-4" title="App dependencies" subtitle="Apps required by this product configuration.">
           <SearchTable searchQuery={dependencyQuery} />
         </Card>
       ) : null}

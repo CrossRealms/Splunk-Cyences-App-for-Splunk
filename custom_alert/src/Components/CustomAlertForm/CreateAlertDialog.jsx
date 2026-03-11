@@ -138,7 +138,7 @@ export default function CreateAlertDialog({
       </DialogContent>
 
       {/* Footer (sticky) */}
-      <DialogActions
+      {/* <DialogActions
         sx={{
           px: 2,
           py: 1.25,
@@ -158,7 +158,7 @@ export default function CreateAlertDialog({
         <Button onClick={onClose} variant="outlined" sx={{ borderRadius: "12px" }}>
           Cancel
         </Button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
   );
 }

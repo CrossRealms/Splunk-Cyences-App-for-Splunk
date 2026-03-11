@@ -19,6 +19,7 @@ export default function NavBar({
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {list.map((item) => {
             const active = item === activeTabId;
+
             return (
               <button
                 key={item}
@@ -26,7 +27,7 @@ export default function NavBar({
                 onClick={() => fireChange(handleChange, item)}
                 style={{
                   borderRadius: 999,
-                  padding: "8px 12px",
+                  padding: "8px 14px",
                   fontSize: 13,
                   border: "1px solid #e5e7eb",
                   background: active ? "#111827" : "#fff",
@@ -77,6 +78,7 @@ export default function NavBar({
                   cursor: "pointer",
                 }}
               >
+                {/* Indicator Dot */}
                 <span
                   style={{
                     height: 8,

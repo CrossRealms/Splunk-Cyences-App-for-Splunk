@@ -160,7 +160,7 @@ export default function CyencesGeneralConfiguration() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Environment Name */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-900">
+                <label className="text-sm font-medium  font-bold">
                   {EmailConfigurationFields.emailSubjectLabel}
                   <span className="text-red-600"> *</span>
                 </label>
@@ -169,13 +169,13 @@ export default function CyencesGeneralConfiguration() {
                   value={prefixValue}
                   onChange={(e) => setPrefixValue(e.target.value)}
                   placeholder="e.g., Prod, Staging, Customer-X"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                  className="w-full rounded-xl border border-black-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
                 />
               </div>
 
               {/* Outside Working Hours */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-900">
+                <label className="text-sm font-medium  font-bold">
                   Outside Working Hours <span className="text-red-600"> *</span>
                 </label>
                 <p className="text-xs text-slate-500">
@@ -186,7 +186,7 @@ export default function CyencesGeneralConfiguration() {
                   value={outsideWorkingHourValue}
                   onChange={(e) => setOutsideWorkingHourValue(e.target.value)}
                   rows={3}
-                  className="w-full resize-y rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
+                  className="w-full resize-y rounded-xl border border-black-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-400"
                 />
               </div>
 

@@ -176,9 +176,7 @@ export function MacroSetup({ macroName, description = "" }) {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#111827" }}>{macroName}</div>
-          {description ? (
-            <div style={{ marginTop: 4, fontSize: 12, color: "#6b7280" }}>{description}</div>
-          ) : null}
+         
         </div>
 
         <Button
@@ -201,6 +199,9 @@ export function MacroSetup({ macroName, description = "" }) {
             style={{ width: "100%" }}
           />
         </ControlGroup>
+         {description ? (
+            <div style={{ marginTop: 4, fontSize: 12, color: "#6b7280" }}>{description}</div>
+          ) : null}
       </div>
     </div>
   );

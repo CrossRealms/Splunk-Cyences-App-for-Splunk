@@ -127,12 +127,11 @@ export default function ProductSetupApp() {
         setProducts(data);
 
         const first = data?.[0];
-        const firstTab = first ? getTabId(first) : "";
-        setActiveTabId(firstTab);
+        setActiveTabId(first ? getTabId(first) : "");
       } catch (err) {
         if (cancelled) return;
         console.error(err);
-        setErrorMsg(err?.message ? String(err.message) : "Failed to load products.");
+        setErrorMsg(err?.message ?? "Failed to load products.");
         setProducts([]);
       } finally {
         if (!cancelled) setIsLoading(false);
@@ -140,9 +139,7 @@ export default function ProductSetupApp() {
     }
 
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => (cancelled = true);
   }, []);
 
   const items = useMemo(() => (products ?? []).map(getTabId).filter(Boolean), [products]);
@@ -164,7 +161,6 @@ export default function ProductSetupApp() {
     return <div style={styles.stateBox}>No products found in configuration.</div>;
   }
 
-  const activeLabel = activeTabId || getTabId(products[0]);
 
   return (
     <div style={styles.wrap}>
@@ -191,7 +187,7 @@ export default function ProductSetupApp() {
         <main style={styles.contentCard}>
           <div style={styles.contentHeader}>
             <p style={styles.contentTitle}>Product Setup</p>
-            <span style={styles.pill}>Active: {activeLabel}</span>
+            {/* <span style={styles.pill}>Active: {activeLabel}</span> */}
           </div>
 
           <div style={styles.contentScroll}>
