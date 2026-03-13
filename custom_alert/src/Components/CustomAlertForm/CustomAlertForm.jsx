@@ -847,9 +847,7 @@ export default function CustomAlertCreate({ mode = "add",
                     }}
                     helperText={
                       errors?.search ||
-                      `Required fields: cyences_severity, event_time/_time.
-Severity: info | low | medium | high | critical.
-Time format: YYYY-MM-DD HH:MM:SS TZ`
+                      `Required fields: cyences_severity (info | low | medium | high | critical), event_time/_time (%F %T %Z)`
                     }
                     fullWidth
                   />
