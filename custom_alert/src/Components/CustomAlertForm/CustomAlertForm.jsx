@@ -116,14 +116,13 @@ function getEarliestLatest(selectedRange) {
 }
 
 function validateResultFields(resultEvents = []) {
+    // If no events → considered verified
     if (!Array.isArray(resultEvents) || resultEvents.length === 0) {
-        return { ok: false, error: "No events received yet" };
+        return { ok: true };
     }
 
     const validSeverities = ["info", "low", "medium", "high", "critical"];
     const timeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/;
-
-    let hasValidEvent = false;
 
     for (const event of resultEvents) {
         if (!event || typeof event !== "object") continue;
@@ -136,14 +135,11 @@ function validateResultFields(resultEvents = []) {
             timeKey &&
             timeRegex.test(String(event[timeKey]))
         ) {
-            hasValidEvent = true;
-            break;
+            return { ok: true };
         }
     }
 
-    return hasValidEvent
-        ? { ok: true }
-        : { ok: false, error: "No valid events found yet" };
+    return { ok: false, error: "Missing/Invalid severity or time format." };
 }
 
 
@@ -154,9 +150,12 @@ export default function CustomAlertCreate({ mode = "add",
     // const [earliest, setEarliest] = useState(null);
     // const [latest, setLatest] = useState(null);
     const { results, fields, loading } = useSplunkSearch(query);
+    console.log('new resule', results)
 
     // refs to access latest results/loading/fields inside async callbacks
     const resultsRef = useRef(results);
+    console.log('new resultsRef', resultsRef)
+
     const loadingRef = useRef(loading);
     const fieldsRef = useRef(fields);
     const verifyCancelRef = useRef(false);
@@ -505,88 +504,104 @@ export default function CustomAlertCreate({ mode = "add",
 
     // current error state is in `errors`
     // Verification helper: runs the search and checks for required fields
-    const verifySearch = async (timeoutMs = 40000) => {
-        verifyCancelRef.current = false;
-        setErrors({});
-        setVerified(false);
+   const verifySearch = async () => {
+    verifyCancelRef.current = false;
+    setErrors({});
+    setVerified(false);
 
-        if (!search || !selectedTimeRange) {
-            setErrors({ search: 'Provide both Search and Time Range before verifying.' });
-            return false;
-        }
+    if (!search || !selectedTimeRange) {
+        setErrors({ search: 'Provide both Search and Time Range before verifying.' });
+        return false;
+    }
 
-        setIsVerifying(true);
+    setIsVerifying(true);
 
-        try {
-            const { earliest: vEarliest, latest: vLatest } =
-                getEarliestLatest(selectedTimeRange);
+    try {
+        const { earliest: vEarliest, latest: vLatest } =
+            getEarliestLatest(selectedTimeRange);
 
-            const finalQuery = `${search} earliest=${vEarliest} latest=${vLatest}`;
-            setQuery(finalQuery);
+        const finalQuery = `${search} earliest=${vEarliest} latest=${vLatest} | head 5`;
 
-            const waitForValid = () =>
-                new Promise((resolve) => {
-                    const start = Date.now();
-                    const noResultGraceMs = 10000;
+        // reset previous search state
+        resultsRef.current = [];
+        loadingRef.current = true;
 
-                    const check = () => {
-                        if (verifyCancelRef.current) {
-                            return resolve({
-                                ok: false,
-                                results: [],
-                                error: "Verification cancelled"
-                            });
-                        }
+        setQuery(finalQuery);
 
-                        const latestResults = resultsRef.current || [];
+       const waitForValid = () =>
+        new Promise((resolve) => {
+          let searchCompleted = false;
 
-                        // 🔴 HARD FAIL: no results after grace period
-                        if (
-                            latestResults.length === 0 &&
-                            Date.now() - start > noResultGraceMs
-                        ) {
-                            return resolve({
-                                ok: true,
-                                results: [],
-                            });
-                        }
-
-                        const validation = validateResultFields(latestResults);
-
-                        if (validation.ok) {
-                            return resolve({ ok: true, results: latestResults });
-                        }
-
-                        // ⏱ timeout
-                        if (Date.now() - start >= timeoutMs) {
-                            return resolve({
-                                ok: false,
-                                results: latestResults,
-                                error: validation.error || "Verification timed out"
-                            });
-                        }
-
-                        setTimeout(check, 1000);
-                    };
-
-                    check();
-                });
-
-            const res = await waitForValid();
-
-            if (res.ok) {
-                setVerified(true);
-                setVerifyInfo({ count: res.results.length });
-                return true;
+          const check = () => {
+            if (verifyCancelRef.current) {
+              return resolve({
+                ok: false,
+                results: [],
+                error: "Verification cancelled",
+              });
             }
 
-            setErrors({ search: `Verification failed: ${res.error}` });
-            return false;
+            const latestResults = resultsRef.current || [];
+            const isLoading = loadingRef.current;
 
-        } finally {
-            setIsVerifying(false);
+            console.log("loading:", isLoading);
+            console.log("results:", latestResults);
+
+            // wait while search running
+            if (isLoading) {
+              return setTimeout(check, 800);
+            }
+
+            // mark search finished once
+            if (!isLoading && !searchCompleted) {
+              searchCompleted = true;
+              return setTimeout(check, 10000);
+            }
+
+            // CASE 1: no events
+            if (latestResults.length === 0) {
+              return resolve({
+                ok: true,
+                results: [],
+                message: "No events found — verified",
+              });
+            }
+
+            // CASE 2: validate severity
+            const validation = validateResultFields(latestResults);
+
+            if (validation.ok) {
+              return resolve({
+                ok: true,
+                results: latestResults,
+              });
+            }
+
+            return resolve({
+              ok: false,
+              results: latestResults,
+              error: validation.error || "Invalid severity",
+            });
+          };
+
+          check();
+        });
+
+        const res = await waitForValid();
+
+        if (res.ok) {
+            setVerified(true);
+            setVerifyInfo({ count: res.results.length });
+            return true;
         }
-    };
+
+        setErrors({ search: `Verification failed: ${res.error}` });
+        return false;
+
+    } finally {
+        setIsVerifying(false);
+    }
+};
 
 
     // --- inside component ---
@@ -1179,7 +1194,6 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
               </CardContent>
             </Card>
 
-            <hr/>
             {/* Sticky bottom actions */}
             <div style={ui.stickyActions}>
               {/* <div style={{ fontSize: 12, color: "#64748b" }}>
@@ -1206,7 +1220,11 @@ Time format: YYYY-MM-DD HH:MM:SS TZ`
         <TimeRangeDialog
           open={openTimeRange}
           onClose={() => setOpenTimeRange(false)}
-          onSelect={(value) => setSelectedTimeRange(value)}
+          onSelect={(value) => {
+            verifyCancelRef.current = true;
+            setVerified(false);       
+            setVerifyInfo(null); 
+            setSelectedTimeRange(value)}}
         />
 
         {showSaveDialog && (
