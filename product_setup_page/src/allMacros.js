@@ -52,12 +52,15 @@ let allMacros = [
             { name: 'cs_ad_important_user', description: 'List of important users. (e.g. "val1","val2")' },
             { name: 'cs_ad_important_group', description: 'List of important groups. (e.g. "val1","val2")' },
             { name: 'cs_windows_multiple_failed_logins_by_user_threshold' },
+            { name: 'cs_windows_failed_logins_across_multiple_hosts_threshold' },
+            { name: 'cs_windows_logins_to_mutiple_systems_from_the_same_ip_threshold' }
         ]
     },
     {
         section: 'O365',
         macros: [
             { name: 'cs_o365_failed_login_outside_country_filter' },
+            { name: 'cs_o365_password_reset_threshold' },
         ]
     },
     {
@@ -121,6 +124,7 @@ let allMacros = [
         section: 'Authentication',
         macros: [
             { name: 'cs_authentication_app_filter' },
+            { name: 'cs_authentication_multiple_failed_logins_by_user_limit' },
             { name: 'cs_bruteforce_from_user_additional_filter' },
             { name: 'cs_bruteforce_from_source_additional_filter' },
             { name: 'cs_authentication_bruteforce_attempt_limit' },
