@@ -904,6 +904,7 @@
     --color-slate-700: oklch(37.2% .044 257.287);
     --color-slate-800: oklch(27.9% .041 260.031);
     --color-slate-900: oklch(20.8% .042 265.755);
+    --color-gray-200: oklch(92.8% .006 264.531);
     --color-white: #fff;
     --spacing: .25rem;
     --text-xs: .75rem;
@@ -1444,9 +1445,18 @@
     border-width: 1px;
   }
 
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
+  }
+
+  .border-gray-200 {
+    border-color: var(--color-gray-200);
   }
 
   .border-slate-200 {
@@ -77090,7 +77100,7 @@ html, body, #root {
           description ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { marginTop: 4, fontSize: 12, color: "#6b7280" }, children: description }) : null
         ] })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("hr", {})
+      /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { className: "border-t border-gray-200" })
     ] });
   }
   function MacroSetupApp() {

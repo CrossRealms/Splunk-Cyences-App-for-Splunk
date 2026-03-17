@@ -199,7 +199,7 @@ export function MacroSetup({ macroName, description = "" }) {
           ) : null}
       </div>
     </div>
-    <hr/>
+    <hr className="border-t border-gray-200" />
     </>
   );
 }
