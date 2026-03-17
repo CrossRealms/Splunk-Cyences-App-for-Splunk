@@ -34,25 +34,3 @@
     -webkit-animation: spin .8s linear infinite;
     animation: spin .8s linear infinite;
 }
-
-/* Force toggle ON color to black (override Splunk default green) */
-.blackToggle .splunk-switch--toggle [aria-checked="true"],
-.blackToggle .splunk-switch--toggle button[aria-checked="true"],
-.blackToggle .splunk-switch--toggle .splunk-switch__track[aria-checked="true"] {
-  background: #111 !important;
-  border-color: #111 !important;
-}
-
-/* Optional: OFF state (dark gray) */
-.blackToggle .splunk-switch--toggle [aria-checked="false"],
-.blackToggle .splunk-switch--toggle button[aria-checked="false"],
-.blackToggle .splunk-switch--toggle .splunk-switch__track[aria-checked="false"] {
-  background: #444 !important;
-  border-color: #444 !important;
-}
-
-/* Optional: knob */
-.blackToggle .splunk-switch--toggle .splunk-switch__thumb,
-.blackToggle .splunk-switch--toggle [class*="thumb"] {
-  background: #fff !important;
-}

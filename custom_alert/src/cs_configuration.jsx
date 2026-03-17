@@ -8,13 +8,7 @@ import "./index.css"
 
 layout(
     <SplunkThemeProvider family="enterprise" colorScheme="light" density="comfortable">
-        {/* <ToastProvider
-            placement="top-right"
-            autoDismiss
-            autoDismissTimeout={4000}
-        > */}
- <ToastContainer position="top-right" autoClose={3000} />
+            <ToastContainer position="top-right" autoClose={3000} />
             <ProductSetupPage />
-        {/* </ToastProvider> */}
     </SplunkThemeProvider>
 );

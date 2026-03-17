@@ -752,7 +752,7 @@ export default function CustomAlertCreate({ mode = "add",
     p: 2,
   },
   stickyActions: {
-    // position: "sticky",
+    position: "sticky",
     bottom: 0,
     zIndex: 2,
     background: "#fff",

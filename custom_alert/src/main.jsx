@@ -1,3 +1,4 @@
+//These file is not in use, we need it as it is in next.js folder structure
 import React from 'react'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

@@ -61,7 +61,7 @@ const styles = {
   },
   contentHeader: {
     flex: "0 0 auto",
-    padding: "12px 16px",
+    padding: "12px 8px",
     borderBottom: "1px solid #e5e7eb",
     display: "flex",
     alignItems: "center",
@@ -82,7 +82,7 @@ const styles = {
     flex: "1 1 auto",
     minHeight: 0,
     overflowY: "auto",
-    padding: 16,
+    padding: 8,
   },
 
   sectionCard: {
@@ -98,7 +98,7 @@ const styles = {
   },
   sectionName: { margin: 0, fontSize: 14, fontWeight: 800, color: "#111827" },
   sectionHint: { margin: "4px 0 0", fontSize: 12, color: "#6b7280" },
-  sectionBody: { padding: 16 },
+  sectionBody: { padding: 8 },
 
   empty: {
     border: "1px dashed #e5e7eb",
@@ -165,14 +165,8 @@ export function MacroSetup({ macroName, description = "" }) {
   }
 
   return (
-    <div
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: 14,
-        padding: 12,
-        background: "#fff",
-      }}
-    >
+    <>
+    <div>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#111827" }}>{macroName}</div>
@@ -182,7 +176,8 @@ export function MacroSetup({ macroName, description = "" }) {
         <Button
           label={isSaving ? "Updating..." : "Update"}
           appearance="primary"
-          style={{ maxWidth: 110, background: "#111827", borderColor: "#111827" }}
+          size="small"
+          style={{ maxWidth: 80, background: "#111827", borderColor: "#111827" }}
           onClick={updateMacro}
           disabled={isLoading || isSaving}
         />
@@ -204,6 +199,8 @@ export function MacroSetup({ macroName, description = "" }) {
           ) : null}
       </div>
     </div>
+    <hr/>
+    </>
   );
 }
 
@@ -250,9 +247,8 @@ export default function MacroSetupApp() {
 
         <div style={styles.contentScroll}>
           {activeSection ? (
-            <div style={styles.sectionCard}>
+            <div>
               <div style={styles.sectionHead}>
-                <p style={styles.sectionName}>Edit macros</p>
                 <p style={styles.sectionHint}>
                   Update definitions and save each macro individually.
                 </p>

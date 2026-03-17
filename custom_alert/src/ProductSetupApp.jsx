@@ -85,7 +85,7 @@ const styles = {
   contentScroll: {
     flex: "1 1 auto",
     overflowY: "auto",
-    padding: "16px",
+    padding: "8px",
     minHeight: 0,
   },
 

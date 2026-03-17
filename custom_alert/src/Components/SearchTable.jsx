@@ -149,23 +149,7 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
     >
       <style>{`
         @keyframes cyencesFadeUp { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform: translateY(0);} }
-      `}</style>
-
-      {/* Header bar (pure UI) */}
-      {/* <div
-        style={{
-          padding: "10px 12px",
-          borderBottom: "1px solid #e5e7eb",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-          background: "#fafafa",
-        }}
-      >
-        <div style={{ fontSize: 13, fontWeight: 900, color: "#111827" }}>Results</div>
-        <Pill>{rowCount} row{rowCount === 1 ? "" : "s"}</Pill>
-      </div> */}
+      `}</style>  
 
       {/* Horizontal scroll if many columns */}
       <div style={{ overflowX: "auto" }}>

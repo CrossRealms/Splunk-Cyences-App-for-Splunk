@@ -108,23 +108,6 @@ export default function SavedSearchesPage() {
       <div style={{ height: "100%", minHeight: 0, overflowY: "auto", paddingRight: 8 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {/* Page header card */}
-          {/* <div
-            style={{
-              border: "1px solid #e5e7eb",
-              borderRadius: 16,
-              background: "#fff",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-              padding: 16,
-              animation: "cyencesFadeUp 220ms ease-out both",
-            }}
-          >
-            <div style={{ fontSize: 18, fontWeight: 900, color: "#111827" }}>
-              Saved Searches
-            </div>
-            <div style={{ marginTop: 6, fontSize: 12, color: "#6b7280" }}>
-              View and manage saved searches. Use the filter to quickly find a search by title.
-            </div>
-          </div> */}
 
           {/* Error state */}
           {error ? (
@@ -136,8 +119,6 @@ export default function SavedSearchesPage() {
           {/* Main content card */}
           {!error ? (
             <Card
-              // title="Saved Searches"
-              // subtitle="Filter, refresh, and manage saved search entries."
               delayMs={60}
             >
               {/* keep exact components/props */}

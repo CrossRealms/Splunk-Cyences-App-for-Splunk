@@ -136,29 +136,6 @@ export default function CreateAlertDialog({
           />
         )}
       </DialogContent>
-
-      {/* Footer (sticky) */}
-      {/* <DialogActions
-        sx={{
-          px: 2,
-          py: 1.25,
-          borderTop: "1px solid #e5e7eb",
-          background: "#fff",
-          position: "sticky",
-          bottom: 0,
-          zIndex: 2,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="text-xs text-slate-500">
-          {mode === "edit" ? `Editing: ${savedSearchName || "—"}` : " "}
-        </div>
-
-        <Button onClick={onClose} variant="outlined" sx={{ borderRadius: "12px" }}>
-          Cancel
-        </Button>
-      </DialogActions> */}
     </Dialog>
   );
 }

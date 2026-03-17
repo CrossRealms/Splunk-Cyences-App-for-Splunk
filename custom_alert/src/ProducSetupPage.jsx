@@ -36,7 +36,7 @@ export default function ProductSetupPage() {
         width: "100%",
         display: "grid",
         gridTemplateColumns: isMainNavCollapsed ? "64px 1fr" : "280px 1fr",
-        gap: "16px",
+        gap: "8px",
         alignItems: "stretch",
         overflow: "hidden",
         minHeight: 0,
@@ -117,7 +117,7 @@ export default function ProductSetupPage() {
                 style={{
                     flex: "1 1 auto",
                     minHeight: 0,
-                    padding: 16,
+                    padding: 8,
                     maxWidth: 1400,
                     width: "100%",
                     height: "100%",
@@ -165,7 +165,8 @@ export default function ProductSetupPage() {
 
                     {/* CONTENT */}
                     <main style={contentCard}>
-                        <div style={contentHeader}>
+                        {activeTabId !== TABS[1] && activeTabId !== TABS[2]? (
+                    <div style={contentHeader}>
                             <div style={{ fontSize: 16, fontWeight: 800, color: "#111827" }}>
                                 {activeTabId}
                             </div>
@@ -180,9 +181,9 @@ export default function ProductSetupPage() {
                                     Expand menu
                                 </button>
                             ) : null}
-                        </div>
+                        </div>) : null}
 
-                        <div style={{ flex: "1 1 auto", overflow: "hidden", padding: 16, minHeight: 0 }}>
+                        <div style={{ flex: "1 1 auto", overflow: "hidden", padding: 8, minHeight: 0 }}>
                             <div style={{ height: "100%", minHeight: 0 }}>
 
                                 {/* Mode A: keep all mounted, just hide via display */}

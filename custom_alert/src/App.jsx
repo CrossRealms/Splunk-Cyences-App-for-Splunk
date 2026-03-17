@@ -1,5 +1,5 @@
+//These file is not in use, we need it as it is in next.js folder structure
 import React from 'react'
-import './App.css'
 import "./index.css"
 import SavedSearchesPage from './SavedSearchesPage';
 

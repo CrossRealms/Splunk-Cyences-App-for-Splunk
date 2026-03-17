@@ -46,12 +46,6 @@ export default function DataMacroConfiguration(props) {
 
   return (
     <div
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: "14px",
-        background: "#fff",
-        padding: "14px",
-      }}
     >
       {/* Header */}
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "12px" }}>

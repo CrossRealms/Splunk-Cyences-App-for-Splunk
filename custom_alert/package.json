@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "build:alert": "vite build --config vite.alert.config.js",
     "build:configuration": "vite build --config vite.setup.config.js",
-    "build:all": "npm run build:alert"
+    "build:all": "npm run build:alert && npm run build:configuration"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -29,7 +29,6 @@
     "react-dom": "^19.2.4",
     "react-is": "^19.2.4",
     "react-toastify": "^11.0.5",
-    "recharts": "^3.1.2",
     "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.11",
     "vite-plugin-css-injected-by-js": "^3.5.2"
