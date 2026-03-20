@@ -111,22 +111,21 @@ export default function ProductSetupPage() {
                 display: "flex",
                 flexDirection: "column",
             }}
+            className="tw"
         >
 
-            <div
-                style={{
-                    flex: "1 1 auto",
-                    minHeight: 0,
-                    padding: 8,
-                    maxWidth: 1400,
-                    width: "100%",
-                    height: "100%",
-                    margin: "0 auto",
-                    overflow: "hidden",
-                    boxSizing: "border-box",
-                    display: "flex",
-                }}
-            >
+                <div
+                    style={{
+                        flex: "1 1 auto",
+                        minHeight: 0,
+                        padding: 8,
+                        width: "100%",
+                        height: "100%",
+                        overflow: "hidden",
+                        boxSizing: "border-box",
+                        display: "flex",
+                    }}
+                >
 
 
                 <div style={shell}>

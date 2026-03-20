@@ -4,3 +4,12 @@
 html, body, #root {
   font-family: 'Inter', sans-serif !important;
 }
+
+@layer base {
+  *, ::before, ::after {
+    box-sizing: content-box;   /* or remove effect */
+    border: initial;
+    margin: initial;
+    padding: initial;
+  }
+}

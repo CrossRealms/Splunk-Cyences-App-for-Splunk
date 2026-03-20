@@ -1176,6 +1176,13 @@
   [hidden]:where(:not([hidden="until-found"])) {
     display: none !important;
   }
+
+  *, :before, :after {
+    box-sizing: content-box;
+    border: initial;
+    margin: initial;
+    padding: initial;
+  }
 }
 
 @layer components;
@@ -76329,8 +76336,14 @@ html, body, #root {
                 style: {
                   position: "sticky",
                   top: 0,
-                  zIndex: 1,
-                  background: "#fff"
+                  zIndex: 2,
+                  background: "#fff",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  color: "#111827",
+                  padding: "12px 14px",
+                  borderBottom: "2px solid #e5e7eb",
+                  letterSpacing: "0.3px"
                 },
                 children: field.name
               },
@@ -78118,6 +78131,7 @@ html, body, #root {
           display: "flex",
           flexDirection: "column"
         },
+        className: "tw",
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           "div",
           {
@@ -78125,10 +78139,8 @@ html, body, #root {
               flex: "1 1 auto",
               minHeight: 0,
               padding: 8,
-              maxWidth: 1400,
               width: "100%",
               height: "100%",
-              margin: "0 auto",
               overflow: "hidden",
               boxSizing: "border-box",
               display: "flex"

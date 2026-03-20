@@ -158,11 +158,17 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
             {data.fields?.map((field) => (
               <Table.HeadCell
                 key={field.name}
-                style={{
+                 style={{
                   position: "sticky",
                   top: 0,
-                  zIndex: 1,
+                  zIndex: 2,
                   background: "#fff",
+                  fontWeight: 700,         
+                  fontSize: 14,            
+                  color: "#111827",
+                  padding: "12px 14px",
+                  borderBottom: "2px solid #e5e7eb",
+                  letterSpacing: "0.3px",
                 }}
               >
                 {field.name}

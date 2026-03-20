@@ -78,7 +78,7 @@ export default function SavedSearchesPage() {
   }, [data, filter]);
 
   return (
-    <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }}>
+    <div style={{ height: "100%", minHeight: 0, overflow: "hidden" }} className="tw">
       <style>{`
         @keyframes cyencesFadeUp {
           from { opacity: 0; transform: translateY(6px); }
