@@ -22,7 +22,7 @@ This project includes multiple build targets for different modules like **Alert*
 ### 1. Install Dependencies
 
 ```bash
-`cd custom_alert`
+`cd cyences_configuration`
 npm install --force
 ```
 
