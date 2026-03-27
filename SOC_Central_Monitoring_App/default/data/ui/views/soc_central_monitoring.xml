@@ -1,0 +1,179 @@
+<form version="1.1" theme="dark">
+  <label>SOC Central Monitoring</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <title>High and Critical Cyences Alerts (Real-Time in 5 min window)</title>
+      <single>
+        <search>
+          <query>`scm_cyences_index` cyences_severity IN ("critical", "high")
+| `scm_lookup_environment(splunk_server)`
+| stats count by environment</query>
+          <earliest>rt-5m</earliest>
+          <latest>rt</latest>
+        </search>
+        <option name="colorBy">trend</option>
+        <option name="colorMode">none</option>
+        <option name="drilldown">all</option>
+        <option name="height">415</option>
+        <option name="rangeColors">["0x53a051","0xcba700","0xf1813f","0xd94e17","0xd41f1f"]</option>
+        <option name="rangeValues">[5,15,30,50]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="tkn_env">$trellis.value$</set>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row depends="$hidden$">
+    <panel>
+      <table>
+        <search>
+          <done>
+            <link target="_blank">$result.sh_url|n$</link>
+          </done>
+          <query>| inputlookup environment_mapping where environment=$tkn_env|s$ | dedup environment | table sh_url </query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Alerts in Last 24 hours</title>
+      <input type="time" token="tkn_time" searchWhenChanged="true">
+        <label>Time</label>
+        <default>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </default>
+      </input>
+      <input type="dropdown" token="tkn_environment">
+        <label>Environment</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>environment</fieldForLabel>
+        <fieldForValue>environment</fieldForValue>
+        <search>
+          <query>| inputlookup environment_mapping 
+| dedup environment 
+| table environment</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <prefix>environment="</prefix>
+        <suffix>"</suffix>
+      </input>
+      <input type="multiselect" token="tkn_severity" searchWhenChanged="true">
+        <label>Severities</label>
+        <choice value="critical">Critical</choice>
+        <choice value="high">High</choice>
+        <choice value="medium">Medium</choice>
+        <choice value="low">Low</choice>
+        <choice value="info">Informational</choice>
+        <default>critical,high,medium,low,info</default>
+        <prefix>cyences_severity IN (</prefix>
+        <suffix>)</suffix>
+        <initialValue>critical,high,medium,low,info</initialValue>
+        <valuePrefix>"</valuePrefix>
+        <valueSuffix>"</valueSuffix>
+        <delimiter>, </delimiter>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Total no. of Alerts triggered Today</title>
+      <single>
+        <search>
+          <query>`scm_cyences_index` $tkn_severity$ earliest=-7d latest=now() 
+| `scm_lookup_environment(splunk_server)` 
+| search $tkn_environment$ 
+| timechart span=1d limit=0 count by environment</query>
+        </search>
+        <option name="colorBy">trend</option>
+        <option name="colorMode">none</option>
+        <option name="drilldown">all</option>
+        <option name="height">587</option>
+        <option name="rangeColors">["0x53a051","0x1182f3","0xcba700","0xd94e17","0xd41f1f"]</option>
+        <option name="rangeValues">[50,100,150,200]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">inverse</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="tkn_env">$trellis.value$</set>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Alerts by Severity</title>
+      <chart>
+        <search>
+          <query>`scm_cyences_index` $tkn_severity$
+| `scm_lookup_environment(splunk_server)` 
+| search $tkn_environment$ 
+| chart count by environment cyences_severity
+| eval environmentX=environment
+| stats sum(critical) as critical sum(high) as high sum(medium) as medium  sum(low) as low sum(info) as info by environment environmentX</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"critical": "#d41f1f", "high": "#d94e17", "medium": "#f1813f", "low": "#cba700", "info": "#53a051"}</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="height">1126</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">0</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Alerts by Search name</title>
+      <chart>
+        <search>
+          <query>`scm_cyences_index` $tkn_severity$
+| `scm_lookup_environment(splunk_server)` 
+| search $tkn_environment$ 
+| stats count by environment search_name</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.axisY.scale">log</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="height">1126</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </chart>
+    </panel>
+  </row>
+</form>

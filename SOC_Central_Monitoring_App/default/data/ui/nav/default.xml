@@ -1,0 +1,4 @@
+<nav search_view="search">
+  <view name="soc_central_monitoring" default='true' />
+  <view name="search" />
+</nav>
