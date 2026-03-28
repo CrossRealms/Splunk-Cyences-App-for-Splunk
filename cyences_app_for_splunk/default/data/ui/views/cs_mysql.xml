@@ -1,0 +1,142 @@
+# TODO-MySQL - Update entire dashboard when MySQL sourcetypes are available
+<form version="1.1" theme="dark">
+  <label>MySQL</label>
+  <init>
+    <set token="tkn_product_name_for_data_availability_search">MySQL</set>
+  </init>
+  <fieldset submitButton="false">
+    <input type="time" token="tkn_time" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="multiselect" token="tkn_host" searchWhenChanged="true">
+      <label>Host</label>
+      <prefix>host IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>(`cs_mysql` (sourcetype="mysql:audit" OR sourcetype="mysql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields host | stats count by host</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="multiselect" token="tkn_user" searchWhenChanged="true">
+      <label>User</label>
+      <prefix>server_principal_name IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>server_principal_name</fieldForLabel>
+      <fieldForValue>server_principal_name</fieldForValue>
+      <search>
+        <query>(`cs_mysql` (sourcetype="mysql:audit" OR sourcetype="mysql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields server_principal_name | stats count by server_principal_name</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="multiselect" token="tkn_action_name" searchWhenChanged="true">
+      <label>Action Name</label>
+      <prefix>action_name IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>action_name</fieldForLabel>
+      <fieldForValue>action_name</fieldForValue>
+      <search>
+        <query>(`cs_mysql` (sourcetype="mysql:audit" OR sourcetype="mysql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields action_name | stats count by action_name</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="multiselect" token="tkn_class_type" searchWhenChanged="true">
+      <label>Object Type</label>
+      <prefix>class_type_desc IN (</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>"</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>, </delimiter>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <choice value="*">All</choice>
+      <fieldForLabel>class_type_desc</fieldForLabel>
+      <fieldForValue>class_type_desc</fieldForValue>
+      <search>
+        <query>(`cs_mysql` (sourcetype="mysql:audit" OR sourcetype="mysql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) | fields class_type_desc | stats count by class_type_desc</query>
+        <earliest>$tkn_time.earliest$</earliest>
+        <latest>$tkn_time.latest$</latest>
+      </search>
+    </input>
+    <input type="text" token="tkn_object" searchWhenChanged="true">
+      <label>Object Name</label>
+      <default>*</default>
+      <prefix>object_name="</prefix>
+      <suffix>"</suffix>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <p><b>Data Collection:</b> Use <a href="https://splunkbase.splunk.com/app/2648/" target="_blank">Splunk Add-on for Microsoft SQL Server</a> for collecting MySQL data.</p>
+      </html>
+      <table>
+        <search>
+          <query>$tkn_data_availablity_search$</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <format type="color" field="data">
+          <colorPalette type="map">{"Data Present": #008000, "Data Not Present": #B83C08}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Audit Logs</title>
+      <table>
+        <search>
+          <query>(`cs_mysql` (sourcetype="mysql:audit" OR sourcetype="mysql:audit:json")) OR (`cs_windows_idx` source="WinEventLog:Application" EventCode=33205 ) $tkn_host$ | rename properties.* as *  
+| fillnull value="-" server_principal_name object_name
+| search $tkn_user$ $tkn_action_name$ $tkn_class_type$ $tkn_object$
+| eval status = if(succeeded==1 or succeeded=="true", "success", "failure") 
+| rename server_instance_name as db_host, server_principal_name as user, class_type_desc as object_type, client_ip as src, database_principal_name as db_user, application_name as client_app
+| `cs_human_readable_time_format(_time, event_time)`
+| table event_time host db_host user action_name schema_name database_name object_name object_type src db_user client_app statement status 
+</query>
+          <earliest>$tkn_time.earliest$</earliest>
+          <latest>$tkn_time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>
