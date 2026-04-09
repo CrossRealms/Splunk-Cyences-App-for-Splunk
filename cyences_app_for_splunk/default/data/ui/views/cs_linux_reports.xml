@@ -162,6 +162,52 @@
   </row>
   <row>
     <panel>
+      <title>Package Details</title>
+      <input type="dropdown" token="tkn_action" searchWhenChanged="true">
+        <label>Action</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>action</fieldForLabel>
+        <fieldForValue>action</fieldForValue>
+        <search>
+          <query>`cs_linux` sourcetype="linux:package" host=$tkn_host|s$ 
+          | eval action = case(action IN ("install","installed"),"Install", action IN ("upgrade","Upgraded","Updated"), "Update", action IN ("Erased","Removed","remove"), "Remove",1==1,action)
+          | stats count by action</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="tkn_package" searchWhenChanged="true">
+        <label>Package</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>package</fieldForLabel>
+        <fieldForValue>package</fieldForValue>
+        <search>
+          <query>`cs_linux` sourcetype="linux:package" host=$tkn_host|s$ | stats count by package</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </input>
+      <table>
+        <search>
+          <query> `cs_linux` sourcetype="linux:package" host=$tkn_host|s$
+| eval action = case(action IN ("install","installed"),"Install", action IN ("upgrade","Upgraded","Updated"), "Update", action IN ("Erased","Removed","remove"), "Remove",1==1,action)
+| search action=$tkn_action|s$ package=$tkn_package|s$
+| `cs_human_readable_time_format(_time, event_time)`
+| rename new_version as version
+| table event_time, host, package, action, version, arch
+| sort -event_time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
       <title>Privilege activities</title>
       <input type="multiselect" token="tkn_user" searchWhenChanged="true">
         <label>User</label>
