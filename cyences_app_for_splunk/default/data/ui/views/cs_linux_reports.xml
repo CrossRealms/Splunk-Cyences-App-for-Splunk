@@ -185,8 +185,8 @@
         <fieldForValue>package</fieldForValue>
         <search>
           <query>`cs_linux` sourcetype="linux:package" host=$tkn_host|s$ | stats count by package</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
       </input>
       <table>
