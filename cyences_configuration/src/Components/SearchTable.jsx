@@ -3,6 +3,8 @@ import Table from "@splunk/react-ui/Table";
 import SearchJob from "@splunk/search-job";
 import { app } from "@splunk/splunk-utils/config";
 import Link from "@splunk/react-ui/Link";
+import Tooltip from "@mui/material/Tooltip";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function Pill({ children }) {
   return (
@@ -49,6 +51,28 @@ function StateBox({ variant = "neutral", title, children }) {
 export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
   const [data, setData] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
+
+const parseImportantFields = (importantFields = []) => {
+  return importantFields.map((item) => {
+    const [field, field_count, distinct_count, values, coverage, min_coverage] = item.split("||");
+
+    let parsedValues = [];
+    try {
+      parsedValues = JSON.parse(values || "[]");
+    } catch {
+      parsedValues = [];
+    }
+
+    return {
+      field,
+      field_count,
+      distinct_count,
+      values: parsedValues,
+      coverage,
+      min_coverage
+    };
+  });
+};
 
   useEffect(() => {
     let isCancelled = false;
@@ -137,6 +161,33 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
     );
   }
 
+  const getChipStyle = (coverage, minCoverage) => {
+  if (coverage === "-") {
+    return {
+      background: "#e5e7eb",
+      color: "#374151",
+      border: "1px solid #d1d5db",
+    };
+  }
+
+  const cov = parseFloat(coverage);
+  const minCov = parseFloat(minCoverage);
+
+  if (cov >= minCov) {
+    return {
+      background: "#dcfce7",
+      color: "#166534",
+      border: "1px solid #86efac",
+    };
+  }
+
+  return {
+    background: "#fee2e2",
+    color: "#991b1b",
+    border: "1px solid #fca5a5",
+  };
+};
+
   return (
     <div
       style={{
@@ -177,26 +228,89 @@ export default function SearchTable({ searchQuery, earliestTime, latestTime }) {
           </Table.Head>
 
           <Table.Body>
-            {data.results?.map((row, index) => (
-              <Table.Row key={index}>
-                {data.fields?.map((field) => {
-                  const key = `${index}-${field.name}`;
-                  const val = row?.[field.name];
+            {data.results?.map((row, index) => {
+              const importantFields = row?.important_fields || [];
+              const parsedFields = parseImportantFields(importantFields);
 
-                  if (field.name === "Splunkbase Link" && val) {
-                    return (
-                      <Table.Cell key={key}>
-                        <Link to={val} openInNewContext>
-                          {val}
-                        </Link>
-                      </Table.Cell>
-                    );
-                  }
+              return (
+                <React.Fragment key={index}>
+                  {/* MAIN ROW */}
+                  <Table.Row>
+                    {data.fields
+                      ?.filter((field) => field.name !== "important_fields") 
+                      .map((field) => {
+                        const key = `${index}-${field.name}`;
+                        const val = row?.[field.name];
 
-                  return <Table.Cell key={key}>{val ?? ""}</Table.Cell>;
-                })}
-              </Table.Row>
-            ))}
+                        return <Table.Cell key={key}>{val ?? ""}</Table.Cell>;
+                      })}
+
+                    {/* NEW COLUMN BUTTON */}
+                    {importantFields.length > 0 && (
+                    <Table.Cell>
+                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                        {parsedFields.map((item, i) => {
+                          const chipStyle = getChipStyle(item.coverage, item.min_coverage);
+
+                          return (
+                            <Tooltip
+                              key={i}
+                              arrow
+                              placement="top"
+                              title={
+                                <div style={{ padding: 8, maxWidth: 260 }}>
+                                  <div style={{ fontSize: 12, marginBottom: 6 }}>
+                                    <strong>Distinct Count:</strong> {item.distinct_count}
+                                  </div>
+                                  <div style={{ fontSize: 12, marginBottom: 6 }}>
+                                    <strong>Field Values:</strong>
+                                  </div>
+                                  <div style={{ maxHeight: 150, overflowY: "auto" }}>
+                                    {item.values.map((val, idx) => (
+                                      <div key={idx} style={{ fontSize: 12 }}>
+                                        {val.value} ({val.count})
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              }
+                            >
+                              <span
+                                style={{
+                                  ...chipStyle,
+                                  fontSize: 11,
+                                  borderRadius: 999,
+                                  padding: "4px 7px",
+                                  cursor: "pointer",
+                                  whiteSpace: "nowrap",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {item.field} - {Number(item.coverage).toFixed(0)}%
+                              </span>
+                            </Tooltip>
+                          );
+                        })}
+                      </div>
+                    </Table.Cell>
+                    )}
+                  </Table.Row>
+
+                  
+                  <Table.Row>
+                    <Table.Cell colSpan={data.fields.length + 1} style={{ padding: 0 }}>
+                      <div
+                        style={{
+                          height: 1,
+                          background: "#e5e7eb",
+                          width: "100%",
+                        }}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                </React.Fragment>
+              );
+            })}
           </Table.Body>
         </Table>
       </div>
